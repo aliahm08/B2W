@@ -119,6 +119,10 @@ interface LandingPhase {
   alert: { title: string; status: string };
 }
 
+interface PlatformPageProps {
+  setPage: Dispatch<SetStateAction<Page>>;
+}
+
 // --- Shared UI Components ---
 
 const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className = '', onClick, size = 'md' }) => {
@@ -708,6 +712,112 @@ const SignalIndicator = () => (
   </div>
 );
 
+interface HeroStatProps {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  accent?: string;
+}
+
+const HeroStat: React.FC<HeroStatProps> = ({ label, value, icon: Icon, accent = 'text-white' }) => (
+  <div className="p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 flex items-center gap-3">
+    <div className={`p-2 rounded-lg bg-white/5 ${accent}`}>
+      <Icon size={16} />
+    </div>
+    <div className="leading-tight">
+      <p className="text-[11px] uppercase tracking-wide text-zinc-500">{label}</p>
+      <p className="text-sm text-white font-semibold">{value}</p>
+    </div>
+  </div>
+);
+
+const BatteryIcon = () => (
+  <div className="flex items-center gap-1 text-amber-300">
+    <div className="relative w-8 h-4 border border-amber-300 rounded-sm">
+      <div className="absolute right-[-4px] top-[6px] w-1 h-2 bg-amber-300 rounded-sm" />
+      <div className="h-full bg-amber-300/40 w-[82%]" />
+    </div>
+  </div>
+);
+
+const MilesHero = () => {
+  return (
+    <div className="relative w-full flex items-center justify-center">
+      <div className="absolute -z-10 w-[420px] h-[420px] bg-gradient-to-br from-blue-500/20 via-cyan-400/10 to-transparent blur-3xl rounded-full" />
+      <div className="relative w-[320px] h-[620px] bg-zinc-950 border border-zinc-800 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
+        <div className="h-12 px-5 flex items-center justify-between text-xs text-zinc-400 border-b border-zinc-800 bg-black/60 backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <Fingerprint size={14} className="text-blue-400" />
+            <span className="text-white font-semibold">Miles</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <SignalIndicator />
+            <Clock size={14} />
+          </div>
+        </div>
+
+        <div className="flex-1 p-6 space-y-5 bg-gradient-to-b from-zinc-900/40 to-black">
+          <div className="p-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 flex items-start gap-3">
+            <Siren className="text-amber-400" size={18} />
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wider text-amber-400">Active Alert</p>
+              <p className="text-sm text-white">Work Zone ingress detected on Track 12.</p>
+              <p className="text-xs text-zinc-500">Haptic pulse sent to crew. SOP readback pending.</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <HeroStat label="Shift Status" value="Authenticated" icon={ShieldCheck} accent="text-green-400" />
+            <HeroStat label="Bodycam" value="Streaming" icon={Monitor} accent="text-blue-400" />
+            <HeroStat label="Vitals" value="Stable" icon={Gauge} accent="text-emerald-400" />
+            <HeroStat label="Battery" value="82%" icon={BatteryIcon} accent="text-amber-300" />
+          </div>
+
+          <div className="p-4 rounded-2xl border border-zinc-800 bg-zinc-950/60 space-y-3">
+            <div className="flex justify-between items-center text-xs text-zinc-400">
+              <span className="flex items-center gap-2"><RadioReceiver size={14} className="text-cyan-400" /> Live Comms</span>
+              <span className="text-[10px] px-2 py-1 bg-green-500/10 text-green-400 rounded-full border border-green-500/20">Online</span>
+            </div>
+            <div className="space-y-2 font-mono text-[11px] text-zinc-300">
+              <p className="text-zinc-500">[09:42:12] Dispatch: "Hold at Signal 42."</p>
+              <p className="text-white">[09:42:18] MOW-402: "Copy. Holding at 42."</p>
+              <p className="text-red-400">[09:42:22] &gt;&gt; Missing authority ID. Flagged.</p>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl border border-zinc-800 bg-zinc-900/80 flex items-center justify-between text-sm text-white">
+            <div className="flex items-center gap-3">
+              <User className="text-blue-400" size={18} />
+              <div>
+                <p className="text-xs text-zinc-400">Crew Lead</p>
+                <p className="font-semibold">J. Morales</p>
+              </div>
+            </div>
+            <Button className="px-4 py-2 text-xs" variant="secondary">
+              <Send size={14} /> Check-in
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const OptioHero = SaaSInterface;
+// --- Pages ---
+
+const FeaturesPage = () => (
+  <div className="pt-32 px-6 pb-20 animate-in slide-in-from-bottom-8 duration-700">
+    <div className="max-w-7xl mx-auto">
+      <SectionHeading 
+        badge="Capabilities"
+        title="Designed for high-stakes transit."
+        subtitle="Tools built specifically for safety teams where accuracy and speed prevent accidents."
+      />
+    ))}
+  </div>
+);
+
 // --- NEW MILES PLATFORM HERO (Software Dashboard) ---
 
 const MilesPlatformHero = () => {
@@ -766,6 +876,60 @@ const MilesPlatformHero = () => {
                     </div>
                 </div>
 
+            <div className="grid md:grid-cols-3 gap-8">
+                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+                    <Mic className="text-blue-500 mb-4" size={32} />
+                    <h3 className="text-xl font-bold text-white mb-2">Ambient Logging</h3>
+                    <p className="text-zinc-400">Hands-free data intake. Operators speak naturally; Miles structures the data.</p>
+                </div>
+                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+                    <Zap className="text-amber-500 mb-4" size={32} />
+                    <h3 className="text-xl font-bold text-white mb-2">Haptic Warnings</h3>
+                    <p className="text-zinc-400">GPS-fenced hazard alerts vibrate the device when crews enter fouling points.</p>
+                </div>
+                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
+                    <Fingerprint className="text-green-500 mb-4" size={32} />
+                    <h3 className="text-xl font-bold text-white mb-2">Biometric Check-in</h3>
+                    <p className="text-zinc-400">Secure shift authentication ensuring only qualified personnel access track rights.</p>
+                </div>
+            </div>
+
+            <div className="mt-16 grid md:grid-cols-3 gap-8">
+                <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
+                    <h4 className="text-lg font-semibold text-white mb-3">Readiness Matrix</h4>
+                    <ul className="space-y-2 text-sm text-zinc-400">
+                        <li className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16}/> FRA roadway worker prompts out of the box</li>
+                        <li className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16}/> Dual-language call-and-response enforcement</li>
+                        <li className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16}/> Offline cache with auto-sync on network regain</li>
+                    </ul>
+                </div>
+                <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
+                    <h4 className="text-lg font-semibold text-white mb-3">Device Footprint</h4>
+                    <p className="text-zinc-400 mb-4">Runs on consumer iOS/Android and intrinsically safe ATEX-rated handsets.</p>
+                    <div className="flex flex-wrap gap-2">
+                        {['Sonim XP10', 'Samsung XCover', 'iPhone 14', 'Kyocera Dura', 'Getac F110'].map((device) => (
+                            <span key={device} className="px-3 py-1 rounded-full bg-zinc-950 border border-zinc-800 text-xs text-zinc-400">{device}</span>
+                        ))}
+                    </div>
+                </div>
+                <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
+                    <h4 className="text-lg font-semibold text-white mb-3">Command Links</h4>
+                    <p className="text-zinc-400 mb-4">Miles syncs live status to Optio so dispatch sees who acknowledged and who is overdue.</p>
+                    <div className="space-y-3 text-sm text-zinc-300">
+                        <div className="flex items-center justify-between">
+                            <span className="text-zinc-500">Crew check-ins synced</span>
+                            <span className="px-2 py-1 rounded-lg bg-blue-500/10 text-blue-400 font-semibold">22</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-zinc-500">Late readbacks flagged</span>
+                            <span className="px-2 py-1 rounded-lg bg-amber-500/10 text-amber-300 font-semibold">4</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <span className="text-zinc-500">Escalations to Praetor</span>
+                            <span className="px-2 py-1 rounded-lg bg-purple-500/10 text-purple-300 font-semibold">2</span>
+                        </div>
+                    </div>
+                </div>
                 {/* COL 2: Predictive Maintenance */}
                 <div className="flex flex-col h-full bg-zinc-900/30 rounded-xl border border-zinc-800/50 overflow-hidden relative">
                     <div className="p-3 border-b border-zinc-800 flex items-center gap-2 bg-zinc-900/50">
@@ -981,6 +1145,39 @@ const OptioPage = () => (
                     </div>
                 </div>
             </div>
+
+            <div className="mt-16 grid lg:grid-cols-3 gap-8">
+                <div className="col-span-2 p-8 bg-zinc-900 border border-zinc-800 rounded-3xl">
+                    <h4 className="text-lg font-semibold text-white mb-4">LiveOps Board</h4>
+                    <div className="grid md:grid-cols-3 gap-4">
+                        {[{ label: 'Channels Monitoring', value: '12', color: 'text-green-400', bg: 'bg-green-500/10' }, { label: 'Stuck Dispatches', value: '3', color: 'text-amber-300', bg: 'bg-amber-500/10' }, { label: 'Escalations', value: '1', color: 'text-purple-300', bg: 'bg-purple-500/10' }].map((metric) => (
+                            <div key={metric.label} className={`p-4 rounded-2xl border border-zinc-800 ${metric.bg}`}>
+                                <div className="text-xs uppercase text-zinc-400 tracking-wider mb-2">{metric.label}</div>
+                                <div className={`text-4xl font-bold ${metric.color}`}>{metric.value}</div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-6 grid md:grid-cols-2 gap-4 text-sm text-zinc-300">
+                        <div className="p-4 rounded-xl bg-black/40 border border-zinc-800 flex items-center gap-3">
+                            <ListFilter size={16} className="text-green-400" />
+                            Automated anomaly rules filter 184k daily calls for SOP breaks.
+                        </div>
+                        <div className="p-4 rounded-xl bg-black/40 border border-zinc-800 flex items-center gap-3">
+                            <Gauge size={16} className="text-amber-300" />
+                            Station dwell over-threshold alerts stream in under 3 seconds from detection.
+                        </div>
+                    </div>
+                </div>
+                <div className="p-8 bg-zinc-900 border border-zinc-800 rounded-3xl">
+                    <h4 className="text-lg font-semibold text-white mb-3">Radio-to-Policy Bridge</h4>
+                    <p className="text-zinc-400 mb-4">Optio turns free-form audio into structured policy events.</p>
+                    <ul className="space-y-3 text-sm text-zinc-300">
+                        <li className="flex items-start gap-2"><Sparkles size={16} className="text-green-400" /> Auto-classifies directives and readbacks into FRA 49 CFR taxonomies.</li>
+                        <li className="flex items-start gap-2"><Workflow size={16} className="text-blue-400" /> Routes non-compliant events straight to Praetor investigations.</li>
+                        <li className="flex items-start gap-2"><Send size={16} className="text-purple-300" /> Pushes live page-outs to Miles when crews are in the geofence.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 );
@@ -1027,6 +1224,50 @@ const PraetorPage = () => (
                     <BrainCircuit className="text-pink-500 mb-4" size={32} />
                     <h3 className="text-xl font-bold text-white mb-2">Predictive Governance</h3>
                     <p className="text-zinc-400">Identify SOP gaps and training deficiencies before they lead to accidents.</p>
+                </div>
+            </div>
+
+            <div className="mt-16 grid lg:grid-cols-3 gap-8">
+                <div className="col-span-2 p-8 bg-zinc-900 border border-zinc-800 rounded-3xl">
+                    <h4 className="text-lg font-semibold text-white mb-4">Governance Workbench</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-2xl bg-black/40 border border-zinc-800">
+                            <div className="text-xs uppercase text-zinc-400 tracking-wider mb-2">Active investigations</div>
+                            <div className="text-4xl font-bold text-purple-300 mb-3">7</div>
+                            <p className="text-sm text-zinc-400">Linked to root-cause graphs with contributing assets and staff.</p>
+                        </div>
+                        <div className="p-4 rounded-2xl bg-black/40 border border-zinc-800">
+                            <div className="text-xs uppercase text-zinc-400 tracking-wider mb-2">Policies with AI monitors</div>
+                            <div className="text-4xl font-bold text-green-300 mb-3">42</div>
+                            <p className="text-sm text-zinc-400">Monitors map to Optio streams and Miles confirmations automatically.</p>
+                        </div>
+                    </div>
+                    <div className="mt-6 grid md:grid-cols-3 gap-4 text-sm text-zinc-300">
+                        <div className="p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 flex items-start gap-3">
+                            <ClipboardCheck size={16} className="text-purple-400" />
+                            Audit packs export to FRA/FTA with voice transcripts attached.
+                        </div>
+                        <div className="p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-start gap-3">
+                            <Siren size={16} className="text-amber-300" />
+                            Automatic severity scoring recommends corrective actions.
+                        </div>
+                        <div className="p-4 rounded-xl bg-green-500/5 border border-green-500/20 flex items-start gap-3">
+                            <Workflow size={16} className="text-green-400" />
+                            Close-loop with Miles acknowledgements to verify training.
+                        </div>
+                    </div>
+                </div>
+                <div className="p-8 bg-zinc-900 border border-zinc-800 rounded-3xl">
+                    <h4 className="text-lg font-semibold text-white mb-3">Risk Register</h4>
+                    <p className="text-zinc-400 mb-4">Praetor keeps a living register synced with your network topology.</p>
+                    <ul className="space-y-3 text-sm text-zinc-300">
+                        <li className="flex items-start gap-2"><AlertTriangle size={16} className="text-red-400" /> Pattern: braking infringements on Red Line during wet weather.</li>
+                        <li className="flex items-start gap-2"><Lightbulb size={16} className="text-amber-300" /> Recommendation: issue seasonal speed bulletins via Miles push-to-talk.</li>
+                        <li className="flex items-start gap-2"><FileCheck size={16} className="text-green-400" /> Mitigations tracked with proof of crew acknowledgment and supervisor sign-off.</li>
+                    </ul>
+                    <div className="mt-6 p-4 rounded-xl bg-black/40 border border-zinc-800 text-xs text-zinc-400 font-mono">
+                        Last board review: 2024-10-12 • Next: 2024-11-09 • Owner: Ops Safety
+                    </div>
                 </div>
             </div>
         </div>
@@ -1235,6 +1476,16 @@ const PraetorHero = () => {
 const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
   const [phaseIndex, setPhaseIndex] = useState(0);
 
+  const phases = useMemo<LandingPhase[]>(
+    () => [
+      { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
+      { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
+      { id: 'train', label: 'Rail', icon: Train, alert: { title: 'Signal Loss', status: 'Track 4B' } },
+      { id: 'software', label: 'Ops', icon: Server, alert: { title: 'Data Latency', status: 'Packet Loss' } },
+      { id: 'agency', label: 'Compliance', icon: ShieldCheck, alert: { title: 'SOP Violation', status: 'Reviewing' } }
+    ],
+    []
+  );
   const phases: LandingPhase[] = [
     { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
     { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
@@ -1248,7 +1499,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
       setPhaseIndex((prev) => (prev + 1) % phases.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [phases.length]);
 
   const activePhase = phases[phaseIndex];
 
@@ -1384,10 +1635,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
   );
 };
 
-const PlatformPage = () => (
+const PlatformPage: React.FC<PlatformPageProps> = ({ setPage }) => (
   <div className="pt-32 px-6 pb-20 animate-in slide-in-from-bottom-8 duration-700">
     <div className="max-w-7xl mx-auto">
-       <SectionHeading 
+       <SectionHeading
         center={true}
         badge="The Tenentes Suite"
         title="One platform. Three distinct powers."
@@ -1397,7 +1648,10 @@ const PlatformPage = () => (
       {/* 3x3 Matrix / Unified View */}
       <div className="grid md:grid-cols-3 gap-6 mb-32">
           {/* Miles Card */}
-          <div className="group bg-zinc-900 border border-zinc-800 rounded-3xl p-8 hover:border-blue-500/50 transition-all cursor-pointer relative overflow-hidden">
+          <div
+            className="group bg-zinc-900 border border-zinc-800 rounded-3xl p-8 hover:border-blue-500/50 transition-all cursor-pointer relative overflow-hidden"
+            onClick={() => setPage('miles')}
+          >
               <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                   <Smartphone size={120} />
               </div>
@@ -1416,7 +1670,10 @@ const PlatformPage = () => (
           </div>
 
           {/* Optio Card */}
-          <div className="group bg-zinc-900 border border-zinc-800 rounded-3xl p-8 hover:border-green-500/50 transition-all cursor-pointer relative overflow-hidden">
+          <div
+            className="group bg-zinc-900 border border-zinc-800 rounded-3xl p-8 hover:border-green-500/50 transition-all cursor-pointer relative overflow-hidden"
+            onClick={() => setPage('optio')}
+          >
               <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                   <Monitor size={120} />
               </div>
@@ -1435,7 +1692,10 @@ const PlatformPage = () => (
           </div>
 
           {/* Praetor Card */}
-          <div className="group bg-zinc-900 border border-zinc-800 rounded-3xl p-8 hover:border-purple-500/50 transition-all cursor-pointer relative overflow-hidden">
+          <div
+            className="group bg-zinc-900 border border-zinc-800 rounded-3xl p-8 hover:border-purple-500/50 transition-all cursor-pointer relative overflow-hidden"
+            onClick={() => setPage('praetor')}
+          >
               <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
                   <Scale size={120} />
               </div>
@@ -1579,7 +1839,7 @@ const App = () => {
       {/* Main Content */}
       <main className="min-h-screen">
         {currentPage === 'home' && <LandingPage setPage={setCurrentPage} />}
-        {currentPage === 'platform' && <PlatformPage />}
+        {currentPage === 'platform' && <PlatformPage setPage={setCurrentPage} />}
         {currentPage === 'miles' && <MilesPage />}
         {currentPage === 'optio' && <OptioPage />}
         {currentPage === 'praetor' && <PraetorPage />}
