@@ -1,18 +1,20 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { 
-  Mic, 
-  Activity, 
-  ShieldCheck, 
-  Cpu, 
-  Radio, 
-  Zap, 
-  ArrowRight, 
-  Menu, 
-  X, 
-  Database, 
-  MessageSquareText, 
-  FileText, 
-  Lock, 
+import React, { useEffect, useMemo, useState } from 'react';
+import type { Dispatch, MouseEventHandler, ReactNode, SetStateAction } from 'react';
+import type { LucideIcon } from 'lucide-react';
+import {
+  Mic,
+  Activity,
+  ShieldCheck,
+  Cpu,
+  Radio,
+  Zap,
+  ArrowRight,
+  Menu,
+  X,
+  Database,
+  MessageSquareText,
+  FileText,
+  Lock,
   Globe,
   Search,
   CheckCircle2,
@@ -55,24 +57,87 @@ import {
   FileCheck
 } from 'lucide-react';
 
+type ButtonVariant = 'primary' | 'secondary' | 'outline';
+type ButtonSize = 'sm' | 'md' | 'lg';
+type VoxelPhaseId = 'city' | 'bus' | 'train' | 'software' | 'agency';
+type Page = 'home' | 'features' | 'integration' | 'miles' | 'optio' | 'praetor' | 'platform';
+
+interface ButtonProps {
+  children: ReactNode;
+  variant?: ButtonVariant;
+  className?: string;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  size?: ButtonSize;
+}
+
+interface SectionHeadingProps {
+  badge: string;
+  title: string;
+  subtitle: string;
+  center?: boolean;
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+type BentoCardSize = 'sm' | 'md' | 'lg';
+
+interface BentoCardProps {
+  title: string;
+  desc: string;
+  icon?: LucideIcon;
+  size?: BentoCardSize;
+  graphic?: ReactNode;
+}
+
+interface VoxelPhase {
+  map: number[][];
+  color: string;
+}
+
+interface VoxelGridProps {
+  activePhase: VoxelPhaseId;
+}
+
+interface LandingPageProps {
+  setPage: Dispatch<SetStateAction<Page>>;
+}
+
+interface LandingPhase {
+  id: VoxelPhaseId;
+  label: string;
+  icon: LucideIcon;
+  alert: { title: string; status: string };
+}
+
 // --- Shared UI Components ---
 
-const Button = ({ children, variant = 'primary', className = '', onClick }) => {
-  const baseStyle = "px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2 relative overflow-hidden group";
-  const variants = {
-    primary: "bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.3)]",
-    secondary: "bg-zinc-900 text-white border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800",
-    outline: "border border-zinc-700 text-zinc-300 hover:text-white hover:border-white"
+const Button: React.FC<ButtonProps> = ({ children, variant = 'primary', className = '', onClick, size = 'md' }) => {
+  const sizeClass: Record<ButtonSize, string> = {
+    sm: 'px-4 py-2 text-xs',
+    md: 'px-6 py-3 text-sm',
+    lg: 'px-8 py-4 text-base'
   };
 
+  const baseStyle = `${sizeClass[size]} rounded-full font-medium transition-all duration-300 flex items-center gap-2 relative overflow-hidden group`;
+  const variants: Record<ButtonVariant, string> = {
+    primary: 'bg-white text-black hover:bg-zinc-200 shadow-[0_0_20px_rgba(255,255,255,0.3)]',
+    secondary: 'bg-zinc-900 text-white border border-zinc-800 hover:border-zinc-600 hover:bg-zinc-800',
+    outline: 'border border-zinc-700 text-zinc-300 hover:text-white hover:border-white'
+  };
+
+  const variantClass = variants[variant] ?? variants.primary;
+
   return (
-    <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`}>
+    <button onClick={onClick} className={`${baseStyle} ${variantClass} ${className}`}>
       <span className="relative z-10 flex items-center gap-2">{children}</span>
     </button>
   );
 };
 
-const SectionHeading = ({ badge, title, subtitle, center = false }) => (
+const SectionHeading: React.FC<SectionHeadingProps> = ({ badge, title, subtitle, center = false }) => (
   <div className={`mb-16 md:mb-24 ${center ? 'text-center flex flex-col items-center' : ''}`}>
     <span className="inline-block py-1 px-3 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-semibold tracking-wider text-zinc-400 uppercase mb-6">
       {badge}
@@ -86,7 +151,7 @@ const SectionHeading = ({ badge, title, subtitle, center = false }) => (
   </div>
 );
 
-const Modal = ({ isOpen, onClose }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
@@ -120,8 +185,8 @@ const Modal = ({ isOpen, onClose }) => {
   );
 };
 
-const BentoCard = ({ title, desc, icon: Icon, size = 'sm', graphic }) => {
-  const sizeClasses = {
+const BentoCard: React.FC<BentoCardProps> = ({ title, desc, icon: Icon, size = 'sm', graphic }) => {
+  const sizeClasses: Record<BentoCardSize, string> = {
     sm: "col-span-1 md:col-span-1",
     md: "col-span-1 md:col-span-2",
     lg: "col-span-1 md:col-span-3",
@@ -252,9 +317,9 @@ const SummarizationBlock = () => (
 
 // --- 3D Hero Components ---
 
-const VoxelGrid = ({ activePhase }) => {
+const VoxelGrid: React.FC<VoxelGridProps> = ({ activePhase }) => {
   const gridSize = 8;
-  const phases = useMemo(() => ({
+  const phases = useMemo<Record<VoxelPhaseId, VoxelPhase>>(() => ({
     city: {
       map: [
         [0,0,0,0,0,0,0,0],
@@ -322,8 +387,9 @@ const VoxelGrid = ({ activePhase }) => {
     }
   }), []);
 
-  const currentMap = phases[activePhase]?.map || phases.city.map;
-  const mainColor = phases[activePhase]?.color || 'bg-zinc-500';
+  const currentPhase = phases[activePhase] ?? phases.city;
+  const currentMap = currentPhase.map;
+  const mainColor = currentPhase.color;
 
   return (
     <div className="w-[300px] h-[300px] md:w-[400px] md:h-[400px] relative preserve-3d rotate-x-60 rotate-z-45 transform-style-3d transition-transform duration-1000">
@@ -495,159 +561,111 @@ const SaaSInterface = () => {
     );
 };
 
-// --- Pages ---
+const SignalIndicator = () => (
+  <div className="flex items-center gap-0.5">
+    {[1, 2, 3, 4].map((bar) => (
+      <div
+        key={bar}
+        className={`w-1.5 rounded-sm ${bar < 4 ? 'bg-green-500/40' : 'bg-green-400'} transition-colors`}
+        style={{ height: `${4 + bar * 4}px` }}
+      />
+    ))}
+  </div>
+);
 
-const LandingPage = ({ setPage }) => {
-  const [phaseIndex, setPhaseIndex] = useState(0);
+interface HeroStatProps {
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  accent?: string;
+}
 
-  const phases = [
-    { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
-    { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
-    { id: 'train', label: 'Rail', icon: Train, alert: { title: 'Signal Loss', status: 'Track 4B' } },
-    { id: 'software', label: 'Ops', icon: Server, alert: { title: 'Data Latency', status: 'Packet Loss' } },
-    { id: 'agency', label: 'Compliance', icon: ShieldCheck, alert: { title: 'SOP Violation', status: 'Reviewing' } }
-  ];
+const HeroStat: React.FC<HeroStatProps> = ({ label, value, icon: Icon, accent = 'text-white' }) => (
+  <div className="p-3 rounded-xl border border-zinc-800 bg-zinc-900/60 flex items-center gap-3">
+    <div className={`p-2 rounded-lg bg-white/5 ${accent}`}>
+      <Icon size={16} />
+    </div>
+    <div className="leading-tight">
+      <p className="text-[11px] uppercase tracking-wide text-zinc-500">{label}</p>
+      <p className="text-sm text-white font-semibold">{value}</p>
+    </div>
+  </div>
+);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPhaseIndex((prev) => (prev + 1) % phases.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+const BatteryIcon = () => (
+  <div className="flex items-center gap-1 text-amber-300">
+    <div className="relative w-8 h-4 border border-amber-300 rounded-sm">
+      <div className="absolute right-[-4px] top-[6px] w-1 h-2 bg-amber-300 rounded-sm" />
+      <div className="h-full bg-amber-300/40 w-[82%]" />
+    </div>
+  </div>
+);
 
-  const activePhase = phases[phaseIndex];
-
+const MilesHero = () => {
   return (
-    <div className="animate-in fade-in duration-700">
-      <style>{`
-        .rotate-x-60 { transform: rotateX(60deg); }
-        .rotate-z-45 { transform: rotateZ(45deg); }
-        .preserve-3d { transform-style: preserve-3d; }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-      `}</style>
-      
-      {/* Dynamic 3D Hero */}
-      <section className="pt-24 pb-12 md:pt-32 md:pb-24 px-6 overflow-hidden min-h-[80vh] flex flex-col justify-center relative">
-        <div className="max-w-7xl mx-auto w-full flex flex-col items-center gap-12 lg:gap-20">
-          
-          {/* Text Content */}
-          <div className="relative z-20 flex flex-col items-center text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-400 mb-8 animate-[fadeIn_0.5s_ease-out]">
-               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"/>
-               SYSTEM ACTIVE
-            </div>
-            
-            <h1 className="text-6xl md:text-8xl font-semibold tracking-tighter text-white mb-8 leading-[0.9]">
-              Control your <br />
-              <span className="text-zinc-500 transition-all duration-500 inline-block min-w-[300px]">
-                {activePhase.label}.
-              </span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-zinc-400 max-w-xl mb-12 font-light leading-relaxed">
-              Tenentes unifies communication and compliance. We turn raw radio chatter into organized operational intelligence for transit safety.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center w-full">
-              <Button onClick={() => document.dispatchEvent(new CustomEvent('openModal'))}>
-                Test platform now <ArrowRight size={16} />
-              </Button>
-              <Button variant="outline" onClick={() => setPage('features')}>Explore capabilities</Button>
+    <div className="relative w-full flex items-center justify-center">
+      <div className="absolute -z-10 w-[420px] h-[420px] bg-gradient-to-br from-blue-500/20 via-cyan-400/10 to-transparent blur-3xl rounded-full" />
+      <div className="relative w-[320px] h-[620px] bg-zinc-950 border border-zinc-800 rounded-[2rem] shadow-2xl overflow-hidden flex flex-col">
+        <div className="h-12 px-5 flex items-center justify-between text-xs text-zinc-400 border-b border-zinc-800 bg-black/60 backdrop-blur-sm">
+          <div className="flex items-center gap-2">
+            <Fingerprint size={14} className="text-blue-400" />
+            <span className="text-white font-semibold">Miles</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <SignalIndicator />
+            <Clock size={14} />
+          </div>
+        </div>
+
+        <div className="flex-1 p-6 space-y-5 bg-gradient-to-b from-zinc-900/40 to-black">
+          <div className="p-4 rounded-2xl border border-zinc-800 bg-zinc-900/50 flex items-start gap-3">
+            <Siren className="text-amber-400" size={18} />
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-wider text-amber-400">Active Alert</p>
+              <p className="text-sm text-white">Work Zone ingress detected on Track 12.</p>
+              <p className="text-xs text-zinc-500">Haptic pulse sent to crew. SOP readback pending.</p>
             </div>
           </div>
 
-          {/* 3D Animation Container */}
-          <div className="relative w-full h-[400px] md:h-[600px] flex items-center justify-center perspective-[1000px]">
-             
-             {/* The Voxel Grid */}
-             <div className="relative z-10 scale-75 md:scale-100">
-                <VoxelGrid activePhase={activePhase.id} />
-             </div>
-
-             {/* Floating Safety Alert Card */}
-             <div 
-               key={activePhase.id} 
-               className="absolute top-1/4 right-0 lg:right-1/4 z-30 animate-[slideIn_0.5s_ease-out_forwards]"
-               style={{ animation: 'float 4s ease-in-out infinite' }}
-             >
-                <div className="bg-zinc-900/80 backdrop-blur-md border border-zinc-700/50 p-4 rounded-xl shadow-2xl w-64">
-                   <div className="flex justify-between items-start mb-3">
-                      <div className="p-2 rounded-lg bg-red-500/20 text-red-400">
-                        <AlertTriangle size={16} />
-                      </div>
-                      <span className="text-[10px] font-mono text-zinc-500 uppercase">Risk Detected</span>
-                   </div>
-                   <h4 className="text-white font-medium mb-1">{activePhase.alert.title}</h4>
-                   <div className="flex items-center gap-2 text-xs text-zinc-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"/>
-                      {activePhase.alert.status}
-                   </div>
-                   
-                   {/* Decorative Scan Line */}
-                   <div className="absolute inset-x-0 top-0 h-full bg-gradient-to-b from-transparent via-white/5 to-transparent animate-[scan_2s_linear_infinite] pointer-events-none" />
-                </div>
-             </div>
-
-             {/* Background Glow */}
-             <div className="absolute inset-0 bg-gradient-to-tr from-zinc-900/0 via-zinc-800/10 to-zinc-500/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="grid grid-cols-2 gap-3">
+            <HeroStat label="Shift Status" value="Authenticated" icon={ShieldCheck} accent="text-green-400" />
+            <HeroStat label="Bodycam" value="Streaming" icon={Monitor} accent="text-blue-400" />
+            <HeroStat label="Vitals" value="Stable" icon={Gauge} accent="text-emerald-400" />
+            <HeroStat label="Battery" value="82%" icon={BatteryIcon} accent="text-amber-300" />
           </div>
 
-        </div>
-      </section>
+          <div className="p-4 rounded-2xl border border-zinc-800 bg-zinc-950/60 space-y-3">
+            <div className="flex justify-between items-center text-xs text-zinc-400">
+              <span className="flex items-center gap-2"><RadioReceiver size={14} className="text-cyan-400" /> Live Comms</span>
+              <span className="text-[10px] px-2 py-1 bg-green-500/10 text-green-400 rounded-full border border-green-500/20">Online</span>
+            </div>
+            <div className="space-y-2 font-mono text-[11px] text-zinc-300">
+              <p className="text-zinc-500">[09:42:12] Dispatch: "Hold at Signal 42."</p>
+              <p className="text-white">[09:42:18] MOW-402: "Copy. Holding at 42."</p>
+              <p className="text-red-400">[09:42:22] &gt;&gt; Missing authority ID. Flagged.</p>
+            </div>
+          </div>
 
-      {/* Industries */}
-      <section className="border-y border-zinc-900 bg-zinc-950/50 overflow-hidden">
-        <div className="max-w-7xl mx-auto py-12 px-6">
-          <p className="text-center text-zinc-500 text-sm uppercase tracking-widest mb-8">Trusted by safety teams in</p>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-              {['Municipal Rail', 'Bus Fleets', 'High Speed Rail', 'Federal Transport', 'Emergency Response', 'Port Authority'].map((ind) => (
-                  <span key={ind} className="text-xl font-semibold text-white hover:text-white cursor-default transition-colors">{ind}</span>
-              ))}
+          <div className="p-3 rounded-xl border border-zinc-800 bg-zinc-900/80 flex items-center justify-between text-sm text-white">
+            <div className="flex items-center gap-3">
+              <User className="text-blue-400" size={18} />
+              <div>
+                <p className="text-xs text-zinc-400">Crew Lead</p>
+                <p className="font-semibold">J. Morales</p>
+              </div>
+            </div>
+            <Button className="px-4 py-2 text-xs" variant="secondary">
+              <Send size={14} /> Check-in
+            </Button>
           </div>
         </div>
-      </section>
-
-      {/* Value Props Grid - Enhanced with Generative Animation */}
-      <section className="py-24 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <BentoCard 
-                  size="md"
-                  title="Audio Intake" 
-                  desc="Seamless integration with dispatch radios. We ingest raw field audio, filter background noise, and transcribe instantly using transit-specific acoustic models."
-                  icon={Radio}
-                  graphic={<AudioWaveform />}
-              />
-              <BentoCard 
-                  size="sm"
-                  title="RAG Compliance" 
-                  desc="Answers grounded in FTA/FRA regulations and agency SOPs."
-                  icon={Database}
-                  graphic={<RAGVisualizer />}
-              />
-              <BentoCard 
-                  size="sm"
-                  title="Live Investigation" 
-                  desc="Query your operational logs and safety reports using natural language."
-                  icon={Search}
-                  graphic={<InvestigationTerminal />}
-              />
-              <BentoCard 
-                  size="md"
-                  title="Automated Summarization" 
-                  desc="Our prompt-engineered models turn radio chatter into structured datasets. Grouping incidents by route, vehicle ID, and severity."
-                  icon={FileText}
-                  graphic={<SummarizationBlock />}
-              />
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };
+
+const OptioHero = SaaSInterface;
+// --- Pages ---
 
 const FeaturesPage = () => (
   <div className="pt-32 px-6 pb-20 animate-in slide-in-from-bottom-8 duration-700">
@@ -1069,347 +1087,10 @@ const PraetorHero = () => {
 };
 
 
-const MilesPage = () => (
-    <div className="pt-32 px-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
-                <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-medium text-blue-400 mb-6">
-                        <Smartphone size={12} /> Tenentes Miles
-                    </div>
-                    <h1 className="text-5xl md:text-7xl font-semibold text-white mb-6 tracking-tighter">
-                        Field Safety & Readiness.
-                    </h1>
-                    <p className="text-xl text-zinc-400 leading-relaxed mb-8">
-                        Equip your frontline with an intelligent guardian. Tenentes Miles brings voice-activated logging, haptic hazard alerts, and instant protocol checks to the mobile device.
-                    </p>
-                    <div className="flex gap-4">
-                        <Button>Deploy Miles</Button>
-                        <Button variant="outline">View Hardware Support</Button>
-                    </div>
-                </div>
-                <MilesHero />
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                    <Mic className="text-blue-500 mb-4" size={32} />
-                    <h3 className="text-xl font-bold text-white mb-2">Ambient Logging</h3>
-                    <p className="text-zinc-400">Hands-free data intake. Operators speak naturally; Miles structures the data.</p>
-                </div>
-                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                    <Zap className="text-amber-500 mb-4" size={32} />
-                    <h3 className="text-xl font-bold text-white mb-2">Haptic Warnings</h3>
-                    <p className="text-zinc-400">GPS-fenced hazard alerts vibrate the device when crews enter fouling points.</p>
-                </div>
-                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                    <Fingerprint className="text-green-500 mb-4" size={32} />
-                    <h3 className="text-xl font-bold text-white mb-2">Biometric Check-in</h3>
-                    <p className="text-zinc-400">Secure shift authentication ensuring only qualified personnel access track rights.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-const OptioPage = () => (
-    <div className="pt-32 px-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col items-center text-center mb-20">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-xs font-medium text-green-400 mb-6">
-                    <Monitor size={12} /> Tenentes Optio
-                </div>
-                <h1 className="text-5xl md:text-7xl font-semibold text-white mb-6 tracking-tighter max-w-4xl">
-                    Operational Visibility & Response.
-                </h1>
-                <p className="text-xl text-zinc-400 leading-relaxed max-w-2xl">
-                    The central nervous system of your transit network. Monitor live dispatch streams, visualize assets in real-time, and catch protocol violations before they become incidents.
-                </p>
-            </div>
-            
-            <div className="mb-32">
-                <OptioHero />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-8">
-                <div className="p-10 bg-zinc-900 border border-zinc-800 rounded-3xl flex flex-col justify-center group hover:border-green-500/30 transition-colors">
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-green-400 transition-colors">Semantic Protocol Enforcement</h3>
-                    <p className="text-zinc-400 mb-6">
-                        Optio listens to radio traffic. If a dispatcher issues a mandatory directive but fails to get a proper readback, the system flags the channel instantly.
-                    </p>
-                    <div className="bg-black/50 p-4 rounded-xl border border-zinc-800 font-mono text-xs">
-                        <div className="text-green-500 mb-2">&gt;&gt; Listening Channel 4...</div>
-                        <div className="text-zinc-500">Disp: "Hold at Signal 42."</div>
-                        <div className="text-zinc-500">Unit: "Copy."</div>
-                        <div className="text-red-500 mt-2">&gt;&gt; ALERT: Readback incomplete. Flagged.</div>
-                    </div>
-                </div>
-                <div className="p-10 bg-zinc-900 border border-zinc-800 rounded-3xl flex flex-col justify-center group hover:border-blue-500/30 transition-colors">
-                    <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">Unified Asset Map</h3>
-                    <p className="text-zinc-400 mb-6">
-                        See every bus, train, and MOW crew on a single pane of glass. Filter by risk level, maintenance status, or active communication.
-                    </p>
-                    <div className="h-40 bg-zinc-800 rounded-xl relative overflow-hidden">
-                        <div className="absolute inset-0 bg-[radial-gradient(#4ade80_1px,transparent_1px)] [background-size:16px_16px] opacity-20" />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full animate-ping" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-const PraetorPage = () => (
-    <div className="pt-32 px-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="max-w-7xl mx-auto">
-            {/* Reordered Layout: Hero First (Left), Content Second (Right) on Desktop */}
-            <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
-                
-                {/* 1. Hero Graphic (Now First) */}
-                <PraetorHero />
-
-                {/* 2. Text Content (Now Second) */}
-                <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/20 text-xs font-medium text-purple-400 mb-6">
-                        <Scale size={12} /> Tenentes Praetor
-                    </div>
-                    <h1 className="text-5xl md:text-7xl font-semibold text-white mb-6 tracking-tighter">
-                        Strategic Governance & Intelligence.
-                    </h1>
-                    <p className="text-xl text-zinc-400 leading-relaxed mb-8">
-                        Turn operational chaos into federal compliance. Tenentes Praetor automates NTD reporting, analyzes long-term risk trends, and provides an AI-powered legal memory for your agency.
-                    </p>
-                    <div className="flex gap-4">
-                        <Button>Start Audit</Button>
-                        <Button variant="outline">Learn More</Button>
-                    </div>
-                </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                    <FileOutput className="text-purple-500 mb-4" size={32} />
-                    <h3 className="text-xl font-bold text-white mb-2">Auto-NTD Reporting</h3>
-                    <p className="text-zinc-400">Generates federal S&S-40 and S&S-50 forms automatically from incident logs.</p>
-                </div>
-                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                    <History className="text-zinc-200 mb-4" size={32} />
-                    <h3 className="text-xl font-bold text-white mb-2">Incident Replay</h3>
-                    <p className="text-zinc-400">Reconstruct timelines with synchronized audio, map data, and logs for post-mortems.</p>
-                </div>
-                <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
-                    <BrainCircuit className="text-pink-500 mb-4" size={32} />
-                    <h3 className="text-xl font-bold text-white mb-2">Predictive Governance</h3>
-                    <p className="text-zinc-400">Identify SOP gaps and training deficiencies before they lead to accidents.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-);
-
-const PraetorHero = () => {
-    // 0: Dashboard, 1: Deviation Monitoring, 2: RCA & Intelligence
-    const [activeTab, setActiveTab] = useState(0); 
-
-    // Auto-cycle tabs logic
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveTab(prev => (prev + 1) % 3);
-        }, 7000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const tabs = [
-        { id: 0, label: 'Safety KPIs', icon: BarChart3 },
-        { id: 1, label: 'Monitoring', icon: Eye },
-        { id: 2, label: 'Intelligence', icon: BrainCircuit }
-    ];
-
-    return (
-        <div className="relative w-full h-[600px] flex items-center justify-center">
-            {/* Main Application Window */}
-            <div className="relative z-10 w-[90%] max-w-4xl h-[550px] bg-white text-zinc-900 rounded-xl shadow-2xl border border-zinc-200 overflow-hidden flex flex-col transition-all duration-700">
-                
-                {/* Header / Nav */}
-                <div className="h-16 border-b border-zinc-100 flex items-center justify-between px-6 bg-white shrink-0">
-                    <div className="flex items-center gap-2 text-zinc-900 font-bold tracking-tight">
-                        <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white"><Scale size={18}/></div>
-                        <span>Praetor Governance</span>
-                    </div>
-                    <div className="flex bg-zinc-100 p-1 rounded-lg">
-                        {tabs.map(tab => (
-                            <button 
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`px-4 py-2 rounded-md text-xs font-medium flex items-center gap-2 transition-all ${activeTab === tab.id ? 'bg-white shadow-sm text-purple-700' : 'text-zinc-500 hover:text-zinc-700'}`}
-                            >
-                                <tab.icon size={14} />
-                                {tab.label}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Content Body */}
-                <div className="flex-1 relative bg-zinc-50/50 p-6 overflow-hidden">
-                    
-                    {/* --- TAB 0: KPI DASHBOARD --- */}
-                    <div className={`absolute inset-0 p-6 flex flex-col gap-6 transition-all duration-500 ${activeTab === 0 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full pointer-events-none'}`}>
-                        <div className="grid grid-cols-3 gap-6">
-                            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm flex flex-col items-center text-center">
-                                <div className="text-zinc-400 text-xs uppercase tracking-wider font-semibold mb-2">Safety Score</div>
-                                <div className="text-5xl font-bold text-zinc-900 tracking-tighter mb-2">88</div>
-                                <div className="text-green-600 text-xs font-medium flex items-center gap-1"><ArrowRight size={10} className="-rotate-45"/> +2.4% vs last month</div>
-                            </div>
-                            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm flex flex-col items-center text-center">
-                                <div className="text-zinc-400 text-xs uppercase tracking-wider font-semibold mb-2">Compliance Rate</div>
-                                <div className="text-5xl font-bold text-purple-600 tracking-tighter mb-2">94%</div>
-                                <div className="text-zinc-500 text-xs">Target: 98%</div>
-                            </div>
-                            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm flex flex-col justify-center gap-3">
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="text-zinc-500">Open Audits</span>
-                                    <span className="font-bold">3</span>
-                                </div>
-                                <div className="w-full bg-zinc-100 h-2 rounded-full overflow-hidden"><div className="w-3/4 h-full bg-amber-500" /></div>
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="text-zinc-500">Resolved</span>
-                                    <span className="font-bold">12</span>
-                                </div>
-                                <div className="w-full bg-zinc-100 h-2 rounded-full overflow-hidden"><div className="w-full h-full bg-green-500" /></div>
-                            </div>
-                        </div>
-                        <div className="flex-1 bg-white rounded-2xl border border-zinc-100 shadow-sm p-6 relative">
-                            <h3 className="text-sm font-bold text-zinc-800 mb-6">Incident Trend Analysis (6 Months)</h3>
-                            <div className="flex items-end justify-between h-32 px-4 gap-4">
-                                {/* Simulated bar chart animation */}
-                                {[40, 65, 45, 30, 25, 15].map((h, i) => (
-                                    <div key={i} className="flex-1 bg-zinc-100 rounded-t-lg relative group">
-                                        <div 
-                                            className="absolute bottom-0 w-full bg-purple-500 rounded-t-lg transition-all duration-1000 ease-out group-hover:bg-purple-600" 
-                                            style={{ height: `${h}%`, transitionDelay: `${i * 100}ms` }} 
-                                        />
-                                        <div className="absolute -bottom-6 w-full text-center text-[10px] text-zinc-400">
-                                            {['MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT'][i]}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* --- TAB 1: DEVIATION MONITORING --- */}
-                    <div className={`absolute inset-0 p-6 flex flex-col gap-6 transition-all duration-500 ${activeTab === 1 ? 'opacity-100 translate-x-0' : activeTab < 1 ? 'opacity-0 translate-x-full pointer-events-none' : 'opacity-0 -translate-x-full pointer-events-none'}`}>
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <h3 className="text-lg font-bold text-zinc-900">Live Policy Checks</h3>
-                                <p className="text-xs text-zinc-500">Real-time scans against Agency SOP v4.2</p>
-                            </div>
-                            <div className="bg-red-50 text-red-600 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-2 border border-red-100">
-                                <AlertTriangle size={14} /> 1 Critical Deviation Found
-                            </div>
-                        </div>
-
-                        <div className="bg-white rounded-2xl border border-red-200 shadow-sm overflow-hidden">
-                            <div className="bg-red-50/50 p-4 border-b border-red-100 flex justify-between items-center">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 bg-white rounded-lg border border-red-100 text-red-500"><Siren size={20}/></div>
-                                    <div>
-                                        <div className="text-sm font-bold text-zinc-900">Excessive Speed in Work Zone</div>
-                                        <div className="text-xs text-red-500">Rule 202 Violation • Sector 4</div>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-xs text-zinc-400 uppercase">Detected</div>
-                                    <div className="text-sm font-mono text-zinc-700">10:42 AM</div>
-                                </div>
-                            </div>
-                            <div className="p-6 grid grid-cols-2 gap-8">
-                                <div>
-                                    <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Evidence Snapshot</div>
-                                    <div className="p-3 bg-zinc-50 rounded-lg border border-zinc-100 text-xs font-mono text-zinc-600 leading-relaxed">
-                                        <span className="text-zinc-400 block mb-2">// TELEMETRY LOG</span>
-                                        UNIT_ID: BUS-402<br/>
-                                        SPEED: 45 MPH<br/>
-                                        LIMIT: 25 MPH<br/>
-                                        STATUS: ACTIVE_WORK_ZONE
-                                    </div>
-                                </div>
-                                <div>
-                                    <div className="text-xs text-zinc-400 uppercase tracking-wider mb-2">Proactive Hazard ID</div>
-                                    <div className="flex items-start gap-2 text-sm text-zinc-600">
-                                        <BrainCircuit size={16} className="text-purple-500 shrink-0 mt-0.5"/>
-                                        <p>AI correlates this deviation with 3 prior warnings in this sector. Risk of collision elevated by 40%.</p>
-                                    </div>
-                                    <button className="mt-4 w-full py-2 bg-zinc-900 text-white text-xs font-medium rounded-lg hover:bg-zinc-800">Initiate Intervention</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* --- TAB 2: INTELLIGENCE (RCA) --- */}
-                    <div className={`absolute inset-0 p-6 flex flex-col gap-4 transition-all duration-500 ${activeTab === 2 ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full pointer-events-none'}`}>
-                        <div className="flex items-center gap-2 mb-2">
-                            <Sparkles size={16} className="text-purple-600"/>
-                            <h3 className="text-sm font-bold text-zinc-900">Root Cause Analysis Engine</h3>
-                        </div>
-                        
-                        <div className="flex-1 bg-white rounded-2xl border border-zinc-200 shadow-sm p-6 relative overflow-hidden flex flex-col items-center justify-center">
-                            {/* Node Graph Visualization */}
-                            <div className="absolute top-10 flex items-center gap-8">
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center text-red-600 border border-red-200"><AlertTriangle size={20}/></div>
-                                    <div className="text-[10px] font-bold text-zinc-600 uppercase bg-white px-2 py-1 rounded border border-zinc-100">Incident</div>
-                                </div>
-                                <div className="h-px w-16 bg-zinc-300 relative"><div className="absolute right-0 -top-1 w-2 h-2 border-t border-r border-zinc-300 rotate-45"/></div>
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 border border-purple-200 animate-pulse"><BrainCircuit size={20}/></div>
-                                    <div className="text-[10px] font-bold text-zinc-600 uppercase bg-white px-2 py-1 rounded border border-zinc-100">Analysis</div>
-                                </div>
-                                <div className="h-px w-16 bg-zinc-300 relative"><div className="absolute right-0 -top-1 w-2 h-2 border-t border-r border-zinc-300 rotate-45"/></div>
-                                <div className="flex flex-col items-center gap-2">
-                                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-green-600 border border-green-200"><Lightbulb size={20}/></div>
-                                    <div className="text-[10px] font-bold text-zinc-600 uppercase bg-white px-2 py-1 rounded border border-zinc-100">Root Cause</div>
-                                </div>
-                            </div>
-
-                            <div className="mt-24 w-full max-w-md bg-zinc-50 rounded-xl border border-zinc-100 p-4">
-                                <div className="flex justify-between items-center mb-3">
-                                    <span className="text-xs font-bold text-zinc-700">AI Findings</span>
-                                    <span className="text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">Confidence: 92%</span>
-                                </div>
-                                <p className="text-sm text-zinc-600 mb-4 leading-relaxed">
-                                    Primary deviation caused by <span className="font-semibold text-zinc-900">Training Gap</span>. Operator was recently transferred to Sector 4 and has not completed the "Work Zone Safety" refresher module.
-                                </p>
-                                <div className="flex gap-2">
-                                    <div className="flex-1 p-2 bg-white rounded border border-zinc-200 flex items-center gap-2 text-xs text-zinc-600">
-                                        <Workflow size={14} className="text-blue-500"/> Recommendation: Schedule Module 4B
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 flex items-center gap-4 w-full max-w-md">
-                                <button className="flex-1 py-2 bg-black text-white text-xs font-medium rounded-lg hover:bg-zinc-800 flex items-center justify-center gap-2">
-                                    <FileCheck size={14}/> Generate Report PDF
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            
-            {/* Background elements */}
-            <div className="absolute -z-10 w-full h-full bg-gradient-to-br from-purple-50 via-white to-white rounded-3xl" />
-        </div>
-    );
-};
-
-
-const LandingPage = ({ setPage }) => {
+const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
   const [phaseIndex, setPhaseIndex] = useState(0);
 
-  const phases = [
+  const phases: LandingPhase[] = [
     { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
     { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
     { id: 'train', label: 'Rail', icon: Train, alert: { title: 'Signal Loss', status: 'Track 4B' } },
@@ -1653,7 +1334,7 @@ const PlatformPage = () => (
 // --- Main Layout ---
 
 const App = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState<Page>('home');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPlatformMenuOpen, setIsPlatformMenuOpen] = useState(false);
