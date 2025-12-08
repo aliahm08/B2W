@@ -54,7 +54,14 @@ import {
   Gauge,
   Lightbulb,
   Workflow,
-  FileCheck
+  FileCheck,
+  Video,
+  HardDrive,
+  Camera,
+  Wifi,
+  Binary,
+  ActivitySquare,
+  Waves
 } from 'lucide-react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline';
@@ -216,6 +223,137 @@ const BentoCard: React.FC<BentoCardProps> = ({ title, desc, icon: Icon, size = '
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
     </div>
   );
+};
+
+// --- Graphics Components (Refactored from MilesHero for re-use) ---
+
+const GraphicTelemetry = () => (
+    <div className="w-full h-full bg-zinc-950 rounded-xl border border-zinc-800 shadow-xl overflow-hidden flex flex-col">
+        <div className="bg-zinc-900/50 px-3 py-2 border-b border-zinc-800 flex justify-between items-center h-8 shrink-0">
+            <span className="text-[10px] font-mono text-zinc-500 tracking-wider">BUS-204 TELEMETRY</span>
+            <Wifi size={12} className="text-emerald-500" />
+        </div>
+        <div className="p-3 flex-1 flex flex-col justify-between gap-2">
+            <div className="flex justify-between items-start">
+                <div className="space-y-0.5">
+                    <div className="text-[8px] text-zinc-500 uppercase tracking-widest">Status</div>
+                    <div className="text-xs font-medium text-emerald-400">Normal</div>
+                </div>
+                <div className="space-y-0.5 text-right">
+                    <div className="text-[8px] text-zinc-500 uppercase tracking-widest">Var</div>
+                    <div className="text-xs font-medium text-yellow-400">4%</div>
+                </div>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-1.5">
+                    {['FL: 104', 'FR: 104', 'RL: 98', 'RR: 105'].map((val, i) => (
+                        <div key={i} className={`bg-zinc-900 rounded border border-zinc-800 py-1 px-1 text-center ${val.includes('98') ? 'border-yellow-900/50 text-yellow-500' : 'text-zinc-300'}`}>
+                            <span className="text-[9px] font-mono">{val}</span>
+                        </div>
+                    ))}
+            </div>
+        </div>
+    </div>
+);
+
+const GraphicDashCam = () => (
+    <div className="w-full h-full bg-black rounded-lg border-2 border-zinc-700/50 overflow-hidden relative group">
+        <img 
+        src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=600&auto=format&fit=crop" 
+        alt="Dashcam View" 
+        className="absolute inset-0 w-full h-full object-cover opacity-80"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+        
+        {/* UI Overlays */}
+        <div className="absolute top-2 left-2 flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]" />
+            <span className="text-[8px] font-mono text-white/90 font-bold drop-shadow-md">REC • 10:42:15</span>
+        </div>
+        
+        <div className="absolute bottom-2 left-2 space-y-0.5">
+            <div className="text-[8px] font-mono text-white/80 drop-shadow-md">SPD: <span className="text-white font-bold">24 MPH</span></div>
+        </div>
+        
+        {/* AI Bounding Boxes */}
+        <div className="absolute top-[35%] left-[45%] w-[18%] h-[25%] border border-yellow-400 rounded-sm shadow-[0_0_15px_rgba(250,204,21,0.2)]">
+            <div className="absolute -top-3 left-0 bg-yellow-400 text-black text-[6px] font-bold px-1 rounded-sm">PED</div>
+        </div>
+        <div className="absolute top-[40%] right-[15%] w-[25%] h-[20%] border border-blue-500 rounded-sm shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+            <div className="absolute -top-3 right-0 bg-blue-500 text-white text-[6px] font-bold px-1 rounded-sm">VEH 99%</div>
+        </div>
+    </div>
+);
+
+// --- NEW GRAPHIC: EDGE ANALYSIS (Replaces Walkie Talkie) ---
+const GraphicEdgeAnalysis = () => {
+    return (
+        <div className="w-full h-full flex items-center justify-center relative overflow-hidden">
+            {/* Background Grid */}
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
+            
+            <div className="relative z-10 flex items-center gap-4 md:gap-8">
+                {/* Inputs (Left Side) */}
+                <div className="flex flex-col gap-4">
+                    {/* Input 1: Audio */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-20 h-8 bg-zinc-900/80 rounded border border-zinc-700 flex items-center justify-center gap-0.5 px-2 shadow-sm">
+                            {[...Array(8)].map((_, i) => (
+                                <div key={i} className="w-1 bg-blue-500 rounded-full animate-[pulse_1s_ease-in-out_infinite]" style={{ height: `${Math.random() * 100}%`, animationDelay: `${i * 0.1}s` }} />
+                            ))}
+                        </div>
+                        <div className="h-px w-4 bg-zinc-700 relative">
+                            <div className="absolute right-0 -top-0.5 w-1 h-1 bg-blue-500 rounded-full animate-[ping_1.5s_linear_infinite]" />
+                        </div>
+                    </div>
+
+                    {/* Input 2: Vibration/Telemetry */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-20 h-8 bg-zinc-900/80 rounded border border-zinc-700 flex items-center justify-center overflow-hidden relative shadow-sm">
+                             <div className="absolute inset-0 flex items-center">
+                                <svg viewBox="0 0 80 32" className="w-full h-full stroke-emerald-500 fill-none stroke-[1.5]">
+                                    <path d="M0 16 Q 10 16, 15 10 T 30 16 T 45 22 T 60 16 T 80 16" className="animate-[dash_3s_linear_infinite]" strokeDasharray="100" strokeDashoffset="100" />
+                                </svg>
+                             </div>
+                        </div>
+                        <div className="h-px w-4 bg-zinc-700 relative">
+                             <div className="absolute right-0 -top-0.5 w-1 h-1 bg-emerald-500 rounded-full animate-[ping_1.5s_linear_infinite_300ms]" />
+                        </div>
+                    </div>
+
+                    {/* Input 3: Binary/Data */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-20 h-8 bg-zinc-900/80 rounded border border-zinc-700 flex items-center justify-center gap-1 text-[8px] font-mono text-zinc-400 shadow-sm">
+                            <span className="animate-pulse">010</span>
+                            <span className="animate-pulse delay-75">110</span>
+                            <span className="animate-pulse delay-150">001</span>
+                        </div>
+                        <div className="h-px w-4 bg-zinc-700 relative">
+                             <div className="absolute right-0 -top-0.5 w-1 h-1 bg-purple-500 rounded-full animate-[ping_1.5s_linear_infinite_600ms]" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Processing Core (Center) */}
+                <div className="relative">
+                    <div className="w-20 h-20 bg-zinc-900 rounded-xl border border-zinc-700 flex items-center justify-center shadow-2xl relative z-20">
+                        <Cpu size={32} className="text-white relative z-10" />
+                        <div className="absolute inset-0 bg-blue-500/10 rounded-xl animate-pulse" />
+                    </div>
+                    {/* Glowing Ring */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 border border-blue-500/30 rounded-full animate-[spin_10s_linear_infinite]" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-zinc-800 rounded-full" />
+                </div>
+
+                {/* Output (Right Side) */}
+                <div className="hidden md:flex flex-col gap-2">
+                    <div className="px-3 py-1.5 bg-zinc-900/90 border border-zinc-700 rounded-md text-[9px] font-mono text-green-400 flex items-center gap-2 shadow-lg animate-[slideIn_0.5s_ease-out]">
+                        <CheckCircle2 size={10} /> VALIDATED
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 };
 
 // --- Animated Visual Components ---
@@ -428,10 +566,8 @@ const VoxelGrid: React.FC<VoxelGridProps> = ({ activePhase }) => {
 const SaaSInterface = () => {
     return (
         <div className="w-full flex flex-col xl:flex-row items-center justify-center py-12 scale-[0.85] md:scale-100 origin-top transform-gpu">
-            
             {/* 1. DESKTOP: Data Intake (Back Layer) */}
             <div className="relative z-10 w-[700px] h-[450px] bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col shrink-0 transition-transform duration-500 hover:scale-[1.01] hover:z-40 group">
-                {/* Header */}
                 <div className="h-9 border-b border-zinc-800 flex items-center px-4 gap-2 bg-zinc-900/50">
                     <div className="flex gap-1.5">
                         <div className="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/50" />
@@ -442,7 +578,6 @@ const SaaSInterface = () => {
                         tenentes.os/dispatch
                     </div>
                 </div>
-                {/* Body */}
                 <div className="flex flex-1 overflow-hidden">
                     <div className="w-48 border-r border-zinc-800 bg-zinc-900/30 p-4 flex flex-col gap-1.5">
                         {['Live Channels', 'Protocol Flags', 'Field Units', 'Map View', 'Shift Logs'].map((item, i) => (
@@ -679,102 +814,67 @@ const FeaturesPage = () => (
         title="Designed for high-stakes transit."
         subtitle="Tools built specifically for safety teams where accuracy and speed prevent accidents."
       />
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <BentoCard 
-            title="Radio Integration"
-            desc="Direct frequency monitoring. We digitize the analog workflow without changing operator behavior."
-            icon={Radio}
-        />
-        <BentoCard 
-            title="Contextual Intelligence"
-            desc="The AI understands transit jargon. From 'deadhead' to 'block signal', the context is preserved."
-            icon={Cpu}
-        />
-        <BentoCard 
-            title="Regulatory Guardrails"
-            desc="RAG models are constantly updated with latest standards (FTA, FRA, OSHA) to ensure compliance."
-            icon={ShieldCheck}
-        />
-        <BentoCard 
-            title="Mobile Field App"
-            desc="For track inspectors and station staff, a simplified push-to-talk interface that feeds into central command."
-            icon={Zap}
-        />
-        <BentoCard 
-            title="Incident Replay"
-            desc="Reconstruct timelines of safety events by querying the conversation history of multiple channels instantly."
-            icon={Activity}
-            size="md"
-        />
-      </div>
-    </div>
+    ))}
   </div>
 );
 
-const IntegrationPage = () => (
-  <div className="pt-32 px-6 pb-20 animate-in slide-in-from-bottom-8 duration-700">
-    <div className="max-w-7xl mx-auto">
-       <SectionHeading 
-        badge="Ecosystem"
-        title="Fits your existing stack."
-        subtitle="Tenentes is an aggregation layer, not a replacement for your core scheduling or dispatch software."
-      />
+// --- NEW MILES PLATFORM HERO (Software Dashboard) ---
 
-      <div className="grid md:grid-cols-2 gap-12 mt-16">
-        <div className="space-y-8">
-            <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
-                <h3 className="text-2xl font-semibold text-white mb-4">Input Sources</h3>
-                <div className="flex flex-wrap gap-3">
-                    {['Motorola Solutions', 'Kenwood', 'iOS', 'Android', 'VoIP', 'RoIP Gateways'].map(tag => (
-                        <span key={tag} className="px-4 py-2 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 text-sm">{tag}</span>
-                    ))}
-                </div>
-            </div>
-             <div className="p-8 rounded-3xl bg-zinc-900 border border-zinc-800">
-                <h3 className="text-2xl font-semibold text-white mb-4">Export & Visualization</h3>
-                <div className="flex flex-wrap gap-3">
-                    {['Tableau', 'PowerBI', 'Trapeze', 'Hastus', 'Oracle', 'Custom API'].map(tag => (
-                        <span key={tag} className="px-4 py-2 rounded-full bg-zinc-950 border border-zinc-800 text-zinc-400 text-sm">{tag}</span>
-                    ))}
-                </div>
-            </div>
-        </div>
-        
-        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-10 flex flex-col justify-center items-center text-center">
-            <Lock size={48} className="text-white mb-6" />
-            <h3 className="text-3xl font-semibold text-white mb-4">GovCloud Ready</h3>
-            <p className="text-zinc-400 mb-8">SOC2 Type II Compliant. End-to-end encryption for all audio. Private LLM deployment options available for Federal and State agencies.</p>
-            <Button variant="secondary">View Security Whitepaper</Button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-// --- Sub-Pages ---
-
-const MilesPage = () => (
-    <div className="pt-32 px-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
-        <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
-                <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-medium text-blue-400 mb-6">
-                        <Smartphone size={12} /> Tenentes Miles
+const MilesPlatformHero = () => {
+    return (
+        <div className="relative w-full max-w-5xl aspect-[16/10] md:aspect-[16/9] bg-zinc-950 rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col">
+            {/* Window Header */}
+            <div className="h-10 bg-zinc-900 border-b border-zinc-800 flex items-center justify-between px-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-zinc-700" />
+                        <div className="w-3 h-3 rounded-full bg-zinc-700" />
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-semibold text-white mb-6 tracking-tighter">
-                        Field Safety & Readiness.
-                    </h1>
-                    <p className="text-xl text-zinc-400 leading-relaxed mb-8">
-                        Equip your frontline with an intelligent guardian. Tenentes Miles brings voice-activated logging, haptic hazard alerts, and instant protocol checks to the mobile device.
-                    </p>
-                    <div className="flex gap-4">
-                        <Button>Deploy Miles</Button>
-                        <Button variant="outline">View Hardware Support</Button>
+                    <div className="ml-4 h-6 px-3 bg-zinc-950 rounded flex items-center text-[10px] font-mono text-zinc-500">
+                        Tenentes Miles | Field Command v2.4
                     </div>
                 </div>
-                <MilesHero />
+                <div className="flex items-center gap-3 text-zinc-500">
+                    <Wifi size={14} className="text-green-500" />
+                    <span className="text-[10px] font-mono">ONLINE</span>
+                </div>
             </div>
+
+            {/* Dashboard Content - 3 Column Grid */}
+            <div className="flex-1 p-6 grid grid-cols-1 md:grid-cols-3 gap-6 bg-zinc-950/50">
+                
+                {/* COL 1: Sensor Ingestion (Edge AI) */}
+                <div className="flex flex-col h-full bg-zinc-900/30 rounded-xl border border-zinc-800/50 overflow-hidden">
+                    <div className="p-3 border-b border-zinc-800 flex items-center gap-2 bg-zinc-900/50">
+                        <Cpu size={14} className="text-blue-400" />
+                        <span className="text-xs font-bold text-zinc-300 uppercase tracking-wide">Edge Validation</span>
+                    </div>
+                    <div className="p-4 flex-1 flex flex-col gap-3 font-mono text-[10px]">
+                        <div className="flex justify-between text-zinc-500 mb-2">
+                            <span>SOURCE</span>
+                            <span>STATUS</span>
+                        </div>
+                        {[
+                            { id: 'BUS-402', type: 'Vibration', val: 'VALID', color: 'text-green-400' },
+                            { id: 'TRK-112', type: 'Temp', val: 'VALID', color: 'text-green-400' },
+                            { id: 'STA-09', type: 'Audio', val: 'FILTERING', color: 'text-blue-400' },
+                            { id: 'BUS-105', type: 'LiDAR', val: 'SYNCING', color: 'text-yellow-400' },
+                            { id: 'MOW-22', type: 'GPS', val: 'VALID', color: 'text-green-400' },
+                        ].map((item, i) => (
+                            <div key={i} className="flex justify-between items-center bg-zinc-950/50 p-2 rounded border border-zinc-800">
+                                <div>
+                                    <div className="text-zinc-300 font-bold">{item.id}</div>
+                                    <div className="text-zinc-500">{item.type}</div>
+                                </div>
+                                <div className={`${item.color} bg-white/5 px-2 py-1 rounded`}>{item.val}</div>
+                            </div>
+                        ))}
+                        <div className="mt-auto pt-2 border-t border-zinc-800 text-zinc-500 flex items-center gap-2 animate-pulse">
+                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                            Ingesting 42 streams/sec
+                        </div>
+                    </div>
+                </div>
 
             <div className="grid md:grid-cols-3 gap-8">
                 <div className="p-8 bg-zinc-900/50 border border-zinc-800 rounded-3xl">
@@ -830,7 +930,174 @@ const MilesPage = () => (
                         </div>
                     </div>
                 </div>
+                {/* COL 2: Predictive Maintenance */}
+                <div className="flex flex-col h-full bg-zinc-900/30 rounded-xl border border-zinc-800/50 overflow-hidden relative">
+                    <div className="p-3 border-b border-zinc-800 flex items-center gap-2 bg-zinc-900/50">
+                        <Activity size={14} className="text-yellow-400" />
+                        <span className="text-xs font-bold text-zinc-300 uppercase tracking-wide">Fleet Health</span>
+                    </div>
+                    <div className="p-4 flex-1 relative">
+                        {/* Map/Grid BG */}
+                        <div className="absolute inset-0 opacity-10 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.1)_50%,transparent_75%)] bg-[length:10px_10px]" />
+                        
+                        {/* Vehicle Status */}
+                        <div className="relative z-10 flex flex-col gap-4 items-center justify-center h-full">
+                            <div className="w-32 h-32 rounded-full border-4 border-zinc-800 flex items-center justify-center relative">
+                                <div className="absolute top-0 right-0 w-8 h-8 bg-zinc-900 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-500"><Wifi size={12}/></div>
+                                <div className="text-center">
+                                    <div className="text-2xl font-bold text-white">94%</div>
+                                    <div className="text-[9px] text-zinc-500 uppercase">Fleet Ready</div>
+                                </div>
+                            </div>
+                            
+                            {/* Alert Card */}
+                            <div className="w-full bg-red-950/20 border border-red-900/50 p-3 rounded-lg flex items-start gap-3">
+                                <AlertTriangle size={16} className="text-red-500 mt-0.5 shrink-0" />
+                                <div>
+                                    <div className="text-xs font-bold text-red-200">Prediction Alert</div>
+                                    <div className="text-[10px] text-red-400/80 leading-snug mt-1">
+                                        Axle anomaly detected on <span className="font-mono font-bold text-white">BUS-204</span>. 85% probability of failure within 48h.
+                                    </div>
+                                    <button className="mt-2 text-[9px] bg-red-900/50 hover:bg-red-900 text-white px-2 py-1 rounded border border-red-800 transition-colors">
+                                        Schedule Inspection
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* COL 3: Incident Log (Media) */}
+                <div className="flex flex-col h-full bg-zinc-900/30 rounded-xl border border-zinc-800/50 overflow-hidden">
+                    <div className="p-3 border-b border-zinc-800 flex items-center gap-2 bg-zinc-900/50">
+                        <Video size={14} className="text-purple-400" />
+                        <span className="text-xs font-bold text-zinc-300 uppercase tracking-wide">Incident Media</span>
+                    </div>
+                    <div className="p-4 flex-1 flex flex-col gap-3">
+                        <div className="relative aspect-video bg-black rounded-lg border border-zinc-800 overflow-hidden group cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=400&auto=format&fit=crop" className="opacity-60 group-hover:opacity-80 transition-opacity w-full h-full object-cover" alt="Dashcam" />
+                            <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                                <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+                                <span className="text-[8px] text-white font-mono">LIVE FEED</span>
+                            </div>
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="bg-black/50 p-2 rounded-full backdrop-blur">
+                                    <Eye size={16} className="text-white"/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="flex-1 overflow-y-auto pr-1 space-y-2">
+                            <div className="text-[9px] text-zinc-500 uppercase tracking-widest mb-1">Recent Logs</div>
+                            {[
+                                { title: 'Passenger Incident', time: '2m ago', user: 'D. Ray', type: 'Mobile Upload' },
+                                { title: 'Signal Crossing', time: '15m ago', user: 'Auto-Tag', type: 'Dashcam' },
+                                { title: 'Maintenance Req', time: '1h ago', user: 'System', type: 'IoT Alert' },
+                            ].map((log, i) => (
+                                <div key={i} className="bg-zinc-950 p-2 rounded border border-zinc-800 flex justify-between items-center group hover:border-zinc-600 transition-colors cursor-pointer">
+                                    <div>
+                                        <div className="text-[10px] text-white font-medium">{log.title}</div>
+                                        <div className="text-[9px] text-zinc-500">{log.user} • {log.type}</div>
+                                    </div>
+                                    <div className="text-[9px] text-zinc-600 font-mono">{log.time}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
+    );
+};
+
+// --- Sub-Pages ---
+
+const MilesPage = () => (
+    <div className="pt-32 px-6 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="max-w-7xl mx-auto">
+            {/* Header / Intro */}
+            <div className="flex flex-col items-center text-center mb-24">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-xs font-medium text-blue-400 mb-6">
+                    <Radio size={12} /> Tenentes Miles
+                </div>
+                <h1 className="text-5xl md:text-7xl font-semibold text-white mb-6 tracking-tighter max-w-4xl">
+                    Field Safety & Readiness Platform.
+                </h1>
+                <p className="text-xl text-zinc-400 leading-relaxed mb-12 max-w-2xl">
+                    Triangulate the truth. Tenentes Miles fuses voice logs, dash cam vision, and IoT telemetry into a single, unassailable source of operational reality.
+                </p>
+                
+                {/* NEW HERO GRAPHIC - SOFTWARE DASHBOARD */}
+                <MilesPlatformHero />
+                
+                <div className="flex gap-4 mt-12">
+                    <Button>Deploy Miles</Button>
+                    <Button variant="outline">View Hardware Support</Button>
+                </div>
+            </div>
+
+            {/* Benefit Trio Section */}
+            <div className="mb-32">
+                 <div className="text-center mb-16">
+                    <h2 className="text-3xl font-semibold text-white mb-4">Three pillars of field intelligence.</h2>
+                    <p className="text-zinc-400 max-w-2xl mx-auto">
+                        In a safety event, silence is liability. We ensure every angle is captured, analyzed, and ready for review.
+                    </p>
+                 </div>
+
+                 <div className="grid md:grid-cols-3 gap-8">
+                    {/* 1. SENSOR / COMMS (Edge Analysis Graphic) */}
+                    <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl relative overflow-hidden group hover:border-blue-500/30 transition-colors flex flex-col h-full">
+                        <div className="mb-6 h-64 flex items-center justify-center bg-zinc-950/50 rounded-2xl border border-zinc-800/50 relative overflow-hidden">
+                            <GraphicEdgeAnalysis />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3">Sensor Ingestion (Edge AI)</h3>
+                        <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                            We process noise on the device, not the cloud. Audio streams and sensor data are validated locally to ensure only high-fidelity alerts reach dispatch.
+                        </p>
+                        <ul className="mt-auto space-y-2">
+                             <li className="flex items-center gap-2 text-xs text-zinc-500"><CheckCircle2 size={12} className="text-blue-500"/> Local Signal Validation</li>
+                             <li className="flex items-center gap-2 text-xs text-zinc-500"><CheckCircle2 size={12} className="text-blue-500"/> &lt;100ms Latency</li>
+                        </ul>
+                    </div>
+
+                    {/* 2. MAINTENANCE (Telemetry Graphic) */}
+                    <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl relative overflow-hidden group hover:border-green-500/30 transition-colors flex flex-col h-full">
+                         <div className="mb-6 h-64 flex items-center justify-center p-4 bg-zinc-950/50 rounded-2xl border border-zinc-800/50">
+                            <div className="w-full h-full scale-90">
+                                <GraphicTelemetry />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3">Predictive Maintenance</h3>
+                        <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                            Predictive maintenance triggered by real-time IoT. Know a part is failing before it stops the route.
+                        </p>
+                        <ul className="mt-auto space-y-2">
+                             <li className="flex items-center gap-2 text-xs text-zinc-500"><CheckCircle2 size={12} className="text-green-500"/> Telemetry Anomaly Detection</li>
+                             <li className="flex items-center gap-2 text-xs text-zinc-500"><CheckCircle2 size={12} className="text-green-500"/> Remote Diagnostics</li>
+                        </ul>
+                    </div>
+
+                    {/* 3. MULTIMEDIA (Dash Cam Graphic) */}
+                    <div className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-3xl relative overflow-hidden group hover:border-yellow-500/30 transition-colors flex flex-col h-full">
+                         <div className="mb-6 h-64 flex items-center justify-center p-4 bg-zinc-950/50 rounded-2xl border border-zinc-800/50">
+                            <div className="w-full aspect-video shadow-2xl">
+                                <GraphicDashCam />
+                            </div>
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-3">Multimedia Capture</h3>
+                        <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                            Instant context. When an incident occurs, Miles stitches radio logs, video, and telemetry into a single timeline.
+                        </p>
+                         <ul className="mt-auto space-y-2">
+                             <li className="flex items-center gap-2 text-xs text-zinc-500"><CheckCircle2 size={12} className="text-yellow-500"/> Objective Truth Reconstruction</li>
+                             <li className="flex items-center gap-2 text-xs text-zinc-500"><CheckCircle2 size={12} className="text-yellow-500"/> Incident Logging App</li>
+                        </ul>
+                    </div>
+                 </div>
+            </div>
+
         </div>
     </div>
 );
@@ -1219,6 +1486,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
     ],
     []
   );
+  const phases: LandingPhase[] = [
+    { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
+    { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
+    { id: 'train', label: 'Rail', icon: Train, alert: { title: 'Signal Loss', status: 'Track 4B' } },
+    { id: 'software', label: 'Ops', icon: Server, alert: { title: 'Data Latency', status: 'Packet Loss' } },
+    { id: 'agency', label: 'Compliance', icon: ShieldCheck, alert: { title: 'SOP Violation', status: 'Reviewing' } }
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -1383,7 +1657,7 @@ const PlatformPage: React.FC<PlatformPageProps> = ({ setPage }) => (
               </div>
               <div className="relative z-10">
                   <div className="w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-500 mb-6 border border-blue-500/20">
-                      <Smartphone size={24} />
+                      <Radio size={24} />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-2">Tenentes Miles</h3>
                   <p className="text-sm text-zinc-400 mb-6">Field Safety & Readiness</p>
@@ -1509,7 +1783,7 @@ const App = () => {
                         </button>
                         <div className="h-px bg-zinc-800 my-1 mx-2" />
                         <button onClick={() => {setCurrentPage('miles'); setIsPlatformMenuOpen(false)}} className="p-3 hover:bg-zinc-800 rounded-xl text-left flex items-start gap-3">
-                            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500"><Smartphone size={16}/></div>
+                            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500"><Radio size={16}/></div>
                             <div>
                                 <div className="text-white font-medium text-sm">Tenentes Miles</div>
                                 <div className="text-zinc-500 text-xs">Field Safety & Readiness</div>
