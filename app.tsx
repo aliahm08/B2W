@@ -1209,20 +1209,23 @@ const PraetorHero = () => {
 const LandingPage: React.FC<LandingPageProps> = ({ setPage }) => {
   const [phaseIndex, setPhaseIndex] = useState(0);
 
-  const phases: LandingPhase[] = [
-    { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
-    { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
-    { id: 'train', label: 'Rail', icon: Train, alert: { title: 'Signal Loss', status: 'Track 4B' } },
-    { id: 'software', label: 'Ops', icon: Server, alert: { title: 'Data Latency', status: 'Packet Loss' } },
-    { id: 'agency', label: 'Compliance', icon: ShieldCheck, alert: { title: 'SOP Violation', status: 'Reviewing' } }
-  ];
+  const phases = useMemo<LandingPhase[]>(
+    () => [
+      { id: 'city', label: 'Network', icon: Building2, alert: { title: 'Grid Congestion', status: 'Rerouting' } },
+      { id: 'bus', label: 'Fleet', icon: Bus, alert: { title: 'Engine Temp High', status: 'Vehicle 404' } },
+      { id: 'train', label: 'Rail', icon: Train, alert: { title: 'Signal Loss', status: 'Track 4B' } },
+      { id: 'software', label: 'Ops', icon: Server, alert: { title: 'Data Latency', status: 'Packet Loss' } },
+      { id: 'agency', label: 'Compliance', icon: ShieldCheck, alert: { title: 'SOP Violation', status: 'Reviewing' } }
+    ],
+    []
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPhaseIndex((prev) => (prev + 1) % phases.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [phases.length]);
 
   const activePhase = phases[phaseIndex];
 
