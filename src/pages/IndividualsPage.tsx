@@ -1,147 +1,170 @@
 import { motion, Variants } from 'framer-motion';
-import { Bot, ChevronRight, MessageSquare, Smartphone, Zap } from 'lucide-react';
+import { ArrowRight, MessageSquareText, PanelsTopLeft, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const capabilities = [
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } }
+};
+
+const offerings = [
   {
-    icon: Smartphone,
-    title: 'WhatsApp Native',
-    body: 'Text your agent natural language commands directly in WhatsApp. It parses intent, connects to your APIs, and executes tasks silently.'
+    icon: MessageSquareText,
+    title: 'Communication Optimization',
+    body: 'Improve how you prepare updates, frame decisions, and align stakeholders through AI-assisted communication systems.'
   },
   {
-    icon: MessageSquare,
-    title: 'Slack & Teams',
-    body: 'Add the agent to your enterprise channels. It listens for actionable context and flags risks before they escalate.'
+    icon: PanelsTopLeft,
+    title: 'Personal Workflow Design',
+    body: 'Build lightweight AI workflows for planning, synthesis, follow-up, and execution using the tools you already use.'
   },
   {
-    icon: Zap,
-    title: 'Proactive Alerting',
-    body: 'Stop querying dashboards. The agent monitors the delta in your live data and pushes push-notifications only when a threshold is breached.'
+    icon: Target,
+    title: 'Decision Clarity Coaching',
+    body: 'Translate noisy inputs into clear next actions with structured prompts, reviews, and repeatable templates.'
   }
 ];
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
-};
-
-export function DemoPlaceholder() {
-  const messages = [
-    "Agent: [AWS-Hosted Demo Init]",
-    "Agent: Listening to live data stream...",
-    "Agent: ⚠️ Anomaly detected in East Region.",
-    "User: Mitigate immediately.",
-    "Agent: ✅ Mitigation protocol executed."
-  ];
-
-  return (
-    <div style={{
-      width: '100%',
-      maxWidth: '600px',
-      margin: '0 auto',
-      background: '#050505',
-      borderRadius: '16px',
-      padding: '1.5rem',
-      border: '1px solid rgba(255,255,255,0.1)',
-      boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-      fontFamily: '"JetBrains Mono", monospace, sans-serif'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '1rem', marginBottom: '1rem' }}>
-        <Bot color="#45e1cb" size={20} />
-        <span style={{ color: '#fff', fontSize: '0.875rem' }}>B2W Agent • AWS Live Instance</span>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', minHeight: '200px' }}>
-        {messages.map((msg, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 1.5, duration: 0.5 }}
-            style={{
-              color: msg.startsWith('User:') ? '#888' : '#fff',
-              fontSize: '0.875rem',
-              background: msg.startsWith('User:') ? 'transparent' : 'rgba(255,255,255,0.05)',
-              padding: msg.startsWith('User:') ? '0' : '0.5rem 0.75rem',
-              borderRadius: '8px',
-              width: 'fit-content',
-              alignSelf: msg.startsWith('User:') ? 'flex-end' : 'flex-start'
-            }}
-          >
-            {msg}
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
+const engagement = [
+  {
+    phase: 'Week 1',
+    title: 'Clarity Sprint',
+    body: 'Identify top communication bottlenecks and define the highest-leverage AI opportunities.'
+  },
+  {
+    phase: 'Weeks 2-3',
+    title: 'Workflow Build',
+    body: 'Implement and test personal workflows with real tasks and measurable checkpoints.'
+  },
+  {
+    phase: 'Weeks 4+',
+    title: 'Performance Loop',
+    body: 'Refine, scale, and maintain your operating system through a repeatable feedback rhythm.'
+  }
+];
 
 export default function IndividualsPage() {
   return (
-    <>
-      <motion.section
-        className="hero-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-      >
-        <p className="eyebrow" style={{ color: 'var(--text)' }}>Personal AI Agents</p>
-        <h1>
-          Your workflow.<br />
-          Automated.
-        </h1>
-        <p className="hero-copy">
-          We deploy specialized AI agents directly into the apps you already use—WhatsApp, Slack, and MS Teams. Stop managing tools and start commanding action.
+    <div className="page-stack">
+      <motion.section className="sub-hero surface-panel" initial="hidden" animate="visible" variants={reveal}>
+        <p className="eyebrow">Individuals</p>
+        <h1>AI support for professionals who need better signal and faster follow-through.</h1>
+        <p>
+          B2W helps you integrate AI into daily execution so communication becomes clearer, priorities stay aligned, and
+          actions are easier to ship.
         </p>
-      </motion.section>
 
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeUp}
-        style={{ padding: '0 1rem' }}
-      >
-        <DemoPlaceholder />
-      </motion.section>
-
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeUp}
-      >
-        <div className="section-header">
-          <p className="eyebrow">Agent Capabilities</p>
-          <h2>Intelligence on your terms.</h2>
+        <div className="sub-hero-metrics">
+          <article className="mini-metric">
+            <p className="metric-value">2x</p>
+            <p>Faster weekly planning and recap cycles</p>
+          </article>
+          <article className="mini-metric">
+            <p className="metric-value">Higher</p>
+            <p>Confidence in turning insight into action</p>
+          </article>
+          <article className="mini-metric">
+            <p className="metric-value">Clearer</p>
+            <p>Cross-functional updates and stakeholder alignment</p>
+          </article>
         </div>
-        <div className="bento-grid">
-          {capabilities.map((item) => (
-            <div key={item.title} className="bento-item" style={{ gridColumn: 'span 4', minHeight: '260px', alignItems: 'flex-start' }}>
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'var(--bg)', marginBottom: '1.5rem', border: '1px solid var(--line)' }}>
-                <item.icon size={24} color="var(--text)" />
+      </motion.section>
+
+      <motion.section
+        className="section-block surface-panel"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
+      >
+        <header className="section-head">
+          <p className="eyebrow">What You Get</p>
+          <h2>Designed for high-agency operators</h2>
+        </header>
+
+        <div className="feature-grid">
+          {offerings.map((item) => (
+            <article key={item.title} className="feature-card">
+              <div className="feature-icon">
+                <item.icon size={19} />
               </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{item.title}</h3>
-              <p style={{ color: 'var(--muted)', flex: 1, fontSize: '1.125rem', lineHeight: 1.6 }}>{item.body}</p>
-            </div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
           ))}
         </div>
       </motion.section>
 
       <motion.section
-        className="cta-section"
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <p className="eyebrow">Deploy Today</p>
-        <h2>Ready to integrate your agent?</h2>
-        <p>Connect your WhatsApp or Slack workspace in seconds and experience zero-latency intelligence.</p>
-        <Link className="btn" to="/enterprises" style={{ marginTop: '1.5rem' }}>
-          Explore Enterprise SaaS <ChevronRight size={18} style={{ marginLeft: '0.25rem' }} />
+        <header className="section-head">
+          <p className="eyebrow">Engagement Rhythm</p>
+          <h2>Simple structure, compounding outcomes</h2>
+        </header>
+
+        <div className="timeline-grid">
+          {engagement.map((step, index) => (
+            <article key={step.title} className="timeline-card">
+              <div className="step-top">
+                <span className="step-badge">0{index + 1}</span>
+                <p className="timeline-time">{step.phase}</p>
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </article>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="section-block surface-panel"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
+      >
+        <div className="checklist-grid">
+          <article className="checklist-card">
+            <h3>Best fit if you are</h3>
+            <ul className="bullet-list">
+              <li>Leading projects that depend on clear cross-team communication</li>
+              <li>Managing high context loads and frequent priority changes</li>
+              <li>Looking for practical AI workflows instead of generic prompt tips</li>
+            </ul>
+          </article>
+          <article className="checklist-card">
+            <h3>Expected outcomes</h3>
+            <ul className="bullet-list">
+              <li>Personal AI system mapped to your real weekly cadence</li>
+              <li>Reusable templates for updates, decisions, and follow-through</li>
+              <li>A clear plan to keep improving after initial setup</li>
+            </ul>
+          </article>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="cta-banner"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
+      >
+        <div>
+          <p className="eyebrow">Progression</p>
+          <h2>Need to scale beyond personal workflows?</h2>
+          <p>Move from individual systems to cross-functional enterprise operating models.</p>
+        </div>
+        <Link className="btn" to="/enterprises">
+          Explore Enterprise Path
+          <ArrowRight size={16} />
         </Link>
       </motion.section>
-    </>
+    </div>
   );
 }

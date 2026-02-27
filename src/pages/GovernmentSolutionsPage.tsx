@@ -1,116 +1,170 @@
 import { motion, Variants } from 'framer-motion';
-import { ArrowLeft, FileKey, Fingerprint, Lock } from 'lucide-react';
+import { ArrowLeft, FileCheck2, Lock, Scale } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } }
+};
 
 const priorities = [
   {
-    icon: FileKey,
-    title: 'Mission Protocol',
-    body: 'Map LLM interactions strictly to service outcomes, accuracy thresholds, and citizen data confidentiality standards.'
+    icon: Scale,
+    title: 'Mission-Aligned Design',
+    body: 'Link every AI workflow to service outcomes, decision quality, and communication reliability requirements.'
   },
   {
-    icon: Fingerprint,
-    title: 'Deny by Default',
-    body: 'Architect networks with reviewable loops, transparent decision logs, and immutable accountability traces.'
+    icon: FileCheck2,
+    title: 'Transparent Governance',
+    body: 'Create reviewable decision pathways with clear role ownership, policy boundaries, and audit visibility.'
   },
   {
     icon: Lock,
-    title: 'Zero-Trust Deploy',
-    body: 'Structure all components around rigid risk controls, phased sandboxing, and continuous compliance auditing.'
+    title: 'Secure Implementation',
+    body: 'Run phased pilots with strong controls, defensible risk posture, and durable operational documentation.'
   }
 ];
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
-};
+const delivery = [
+  {
+    phase: 'Phase 1',
+    title: 'Program Discovery',
+    body: 'Align stakeholders on mission goals, risk constraints, and suitable AI use cases.'
+  },
+  {
+    phase: 'Phase 2',
+    title: 'Controlled Pilot',
+    body: 'Deploy a scoped pilot with governance checkpoints and transparent performance reporting.'
+  },
+  {
+    phase: 'Phase 3',
+    title: 'Institutional Scale',
+    body: 'Expand proven workflows with training, policy integration, and long-term oversight structure.'
+  }
+];
 
 export default function GovernmentSolutionsPage() {
   return (
-    <>
-      <motion.section
-        className="hero-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-      >
-        <p className="eyebrow" style={{ color: 'var(--text)' }}>For Federal</p>
-        <h1>
-          Secured intelligence.<br />
-          Mission critical.
-        </h1>
-        <p className="hero-copy">
-          B2W architectures empower agencies and federal partners to scale decision-making securely, maintaining the highest standard of data governance and rigorous compliance logic.
+    <div className="page-stack">
+      <motion.section className="sub-hero surface-panel" initial="hidden" animate="visible" variants={reveal}>
+        <p className="eyebrow">Government Solutions</p>
+        <h1>Trusted AI modernization for public sector programs and mission teams.</h1>
+        <p>
+          B2W helps agencies improve communication clarity and decision quality while meeting governance, risk, and
+          accountability expectations.
         </p>
+
+        <div className="sub-hero-metrics">
+          <article className="mini-metric">
+            <p className="metric-value">Secure</p>
+            <p>Staged implementation with strict control boundaries</p>
+          </article>
+          <article className="mini-metric">
+            <p className="metric-value">Transparent</p>
+            <p>Reviewable decision pathways and clear ownership</p>
+          </article>
+          <article className="mini-metric">
+            <p className="metric-value">Practical</p>
+            <p>Mission-first workflows that improve service outcomes</p>
+          </article>
+        </div>
       </motion.section>
 
       <motion.section
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <div className="section-header">
-          <p className="eyebrow">Public Sector Spec</p>
-          <h2>Hardened focus areas.</h2>
-        </div>
-        <div className="bento-grid">
+        <header className="section-head">
+          <p className="eyebrow">Focus Areas</p>
+          <h2>Where B2W supports public sector programs</h2>
+        </header>
+
+        <div className="feature-grid">
           {priorities.map((item) => (
-            <div key={item.title} className="bento-item" style={{ gridColumn: 'span 4', minHeight: '260px', alignItems: 'flex-start' }}>
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'var(--bg)', marginBottom: '1.5rem', border: '1px solid var(--line)' }}>
-                <item.icon size={24} color="var(--text)" />
+            <article key={item.title} className="feature-card">
+              <div className="feature-icon">
+                <item.icon size={19} />
               </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{item.title}</h3>
-              <p style={{ color: 'var(--muted)', flex: 1, fontSize: '1.125rem', lineHeight: 1.6 }}>{item.body}</p>
-            </div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
           ))}
         </div>
       </motion.section>
 
       <motion.section
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <div className="section-header">
-          <p className="eyebrow">Node Specs</p>
-          <h2>Why B2W for Federal.</h2>
-        </div>
-        <div className="bento-grid">
-          <div className="bento-item" style={{ gridColumn: 'span 4' }}>
-            <p style={{ fontSize: '2.5rem', fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.04em' }}>30 Years</p>
-            <p className="eyebrow" style={{ marginTop: '0.5rem' }}>Legacy</p>
-            <p style={{ marginTop: '1rem', color: 'var(--muted)', lineHeight: 1.6 }}>Combined operations across high-stakes, maximum-security institutions and classified technical programs.</p>
-          </div>
-          <div className="bento-item" style={{ gridColumn: 'span 4' }}>
-            <p style={{ fontSize: '2.5rem', fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.04em' }}>Full-Stack</p>
-            <p className="eyebrow" style={{ marginTop: '0.5rem' }}>Integration</p>
-            <p style={{ marginTop: '1rem', color: 'var(--muted)', lineHeight: 1.6 }}>Engineers, cryptographers, and product leads compiling solutions under a single operational namespace.</p>
-          </div>
-          <div className="bento-item" style={{ gridColumn: 'span 4' }}>
-            <p style={{ fontSize: '2.5rem', fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.04em' }}>100%</p>
-            <p className="eyebrow" style={{ marginTop: '0.5rem' }}>Deterministic</p>
-            <p style={{ marginTop: '1rem', color: 'var(--muted)', lineHeight: 1.6 }}>Every query mapped directly to next-step clearance and operational ownership paths.</p>
-          </div>
+        <header className="section-head">
+          <p className="eyebrow">Delivery Cadence</p>
+          <h2>Governed rollout from pilot to institutional use</h2>
+        </header>
+
+        <div className="timeline-grid">
+          {delivery.map((step, index) => (
+            <article key={step.title} className="timeline-card">
+              <div className="step-top">
+                <span className="step-badge">0{index + 1}</span>
+                <p className="timeline-time">{step.phase}</p>
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.body}</p>
+            </article>
+          ))}
         </div>
       </motion.section>
 
       <motion.section
-        className="cta-section"
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <p className="eyebrow">Dispatching</p>
-        <h2>Initialize mission-aligned deployment.</h2>
-        <p>We scope for security, total transparency, and hardware-level durability from day zero.</p>
-        <Link className="btn" to="/" style={{ marginTop: '1.5rem' }}>
-          <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Return Home
+        <div className="checklist-grid">
+          <article className="checklist-card">
+            <h3>Why teams choose B2W</h3>
+            <ul className="bullet-list">
+              <li>30 years of combined experience across complex institutions</li>
+              <li>Cross-disciplinary delivery team with engineering, design, and product depth</li>
+              <li>Implementation plans tied to accountable next-step ownership</li>
+            </ul>
+          </article>
+          <article className="checklist-card">
+            <h3>Engagement outcomes</h3>
+            <ul className="bullet-list">
+              <li>Mission-aligned pilot with measurable service impact</li>
+              <li>Clear governance operating model and review cadence</li>
+              <li>Scalable adoption roadmap across participating teams</li>
+            </ul>
+          </article>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="cta-banner"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
+      >
+        <div>
+          <p className="eyebrow">Return</p>
+          <h2>Ready to plan your first mission-aligned AI pilot?</h2>
+          <p>Start with a focused briefing and we will shape a secure path from concept to measurable outcomes.</p>
+        </div>
+        <Link className="btn" to="/">
+          <ArrowLeft size={16} />
+          Back to Home
         </Link>
       </motion.section>
-    </>
+    </div>
   );
 }

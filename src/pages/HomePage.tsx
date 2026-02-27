@@ -1,166 +1,251 @@
 import { motion, Variants } from 'framer-motion';
-import { ArrowRight, Bot, ShieldCheck, Activity } from 'lucide-react';
+import {
+  ArrowRight,
+  BrainCircuit,
+  Building2,
+  Landmark,
+  Sparkles,
+  Users2,
+  Workflow
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const proofPoints = ['Live Demo', 'WhatsApp Integration', 'Slack Bot', 'MS Teams Ready', 'AWS Hosted', 'SOC2 Compliant'];
+const reveal: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } }
+};
 
-const solutionCards = [
+const proofPoints = ['NASA', 'Waymo', 'GE Electric', 'Autodesk', 'GWU', 'CMU', 'Columbia'];
+
+const pathCards = [
   {
-    icon: Bot,
-    title: 'Proactive AI Agents',
-    body: 'Automate your day with a personal AI agent accessible via WhatsApp, Slack, or MS Teams. Get alerted before critical events happen and execute tasks on command.',
+    icon: Users2,
+    title: 'Individuals',
+    audience: 'Professionals and team leads',
+    body: 'Create AI-enabled communication habits that reduce noise and improve day-to-day decision quality.',
+    outcomes: ['Weekly planning in half the time', 'Clearer stakeholder updates', 'Personalized action workflows'],
     href: '/individuals'
   },
   {
-    icon: ShieldCheck,
-    title: 'SaaS Risk Analytics',
-    body: 'A full SaaS enterprise application prioritizing safety mitigation. Connect live data streams and derive actionable insights within a highly secure analytic environment.',
+    icon: Building2,
+    title: 'Enterprises',
+    audience: 'Cross-functional organizations',
+    body: 'Deploy practical AI operations that improve alignment across product, engineering, design, and leadership.',
+    outcomes: ['Operational handoffs with less friction', 'Prioritized implementation roadmap', 'Measurable productivity gains'],
     href: '/enterprises'
   },
   {
-    icon: Activity,
-    title: 'Public Sector Safety',
-    body: 'For defense and civilian agencies requiring compliant risk assessments, secure data handling, and transparent accountability frameworks.',
+    icon: Landmark,
+    title: 'Government Solutions',
+    audience: 'Public sector and mission teams',
+    body: 'Modernize service workflows with accountable AI governance, transparent decisioning, and resilient execution.',
+    outcomes: ['Mission-aligned pilots', 'Audit-friendly governance flow', 'Secure adoption playbooks'],
     href: '/government-solutions'
   }
 ];
 
-const operatingModel = [
+const deliverySteps = [
   {
-    title: 'Connect Live Data',
-    body: 'Seamlessly plug into your existing data streams. Our agents process your live feeds instantly, removing the latency between event and analysis.'
+    label: 'Discover',
+    detail: 'Map communication bottlenecks and decision latency across critical workflows.',
+    timeframe: 'Week 1',
+    icon: BrainCircuit
   },
   {
-    title: 'Proactive Alerts',
-    body: 'Stop reacting. Your customized agent monitors your feeds 24/7 and pings you on your preferred channel (WhatsApp, Slack) minutes before a risk materializes.'
+    label: 'Design',
+    detail: 'Co-create a focused AI operating plan with engineering, design, and product leadership.',
+    timeframe: 'Weeks 2-3',
+    icon: Workflow
   },
   {
-    title: 'Take Action',
-    body: 'Respond directly from your chat client or jump into our SaaS platform to mitigate risks in real-time. Turn insights into deterministic action.'
+    label: 'Deploy',
+    detail: 'Launch scoped pilots with clear owners, instrumentation, and adoption support.',
+    timeframe: 'Weeks 4-8',
+    icon: Sparkles
   }
 ];
 
-// Utility for scroll animations
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
-};
+const faqs = [
+  {
+    question: 'What makes B2W different from a typical AI workshop?',
+    answer:
+      'We do not stop at education. Every engagement is tied to operational workflows, ownership, and implementation milestones.'
+  },
+  {
+    question: 'Do you only support large organizations?',
+    answer:
+      'No. We support individual operators, growth-stage companies, enterprise teams, and government programs with fit-for-purpose scopes.'
+  },
+  {
+    question: 'How quickly can we start?',
+    answer:
+      'Most engagements begin with a short discovery sprint and move into pilot design within the first two weeks.'
+  }
+];
 
 export default function HomePage() {
   return (
-    <>
-      <motion.section
-        className="hero-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-      >
-        <p className="eyebrow">The Future of Action</p>
-        <h1>
-          Agents that alert.<br />Systems that protect.
-        </h1>
-        <p className="hero-copy">
-          From a personal AI assistant in your WhatsApp to a full SaaS risk-analytics operations center. B2W builds technology that anticipates problems and executes solutions autonomously.
-        </p>
-        <div className="hero-actions">
-          <Link className="btn" to="/individuals">
-            Meet Your Agent
-          </Link>
-          <a className="btn btn-subtle" href="mailto:team@b2w-ai.com">
-            Request Enterprise Demo
-          </a>
+    <div className="page-stack">
+      <motion.section className="hero-grid surface-panel" initial="hidden" animate="visible" variants={reveal}>
+        <div className="hero-copy-block">
+          <p className="eyebrow">B2W-AI.COM</p>
+          <h1>
+            AI consulting for businesses that need
+            <span> better communication and better execution.</span>
+          </h1>
+          <p>
+            B2W develops AI to improve communication and optimize actionable insights. Our team blends engineering,
+            design, and product leadership to help organizations run better.
+          </p>
+          <div className="hero-actions">
+            <Link className="btn" to="/enterprises">
+              Explore Solutions
+              <ArrowRight size={16} />
+            </Link>
+            <a className="btn btn-subtle" href="mailto:team@b2w-ai.com?subject=B2W%20Discovery%20Call">
+              Book Strategy Call
+            </a>
+          </div>
         </div>
+
+        <aside className="hero-insight-card">
+          <p className="panel-label">Track Record</p>
+          <p className="panel-stat">30 years</p>
+          <p className="panel-copy">Combined experience adding value across complex institutions and programs.</p>
+          <div className="chip-wrap">
+            {proofPoints.map((point) => (
+              <span key={point} className="chip">
+                {point}
+              </span>
+            ))}
+          </div>
+        </aside>
       </motion.section>
 
       <motion.section
-        className="trust-strip"
+        className="metrics-row"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <p>Available instantly across your workflow</p>
-        <div className="logo-strip">
-          {proofPoints.map((point) => (
-            <span key={point}>{point}</span>
-          ))}
-        </div>
+        <article className="metric-card">
+          <p className="metric-value">3</p>
+          <p className="metric-label">Solution paths tailored to business context</p>
+        </article>
+        <article className="metric-card">
+          <p className="metric-value">2-8 weeks</p>
+          <p className="metric-label">Typical timeline from discovery to pilot launch</p>
+        </article>
+        <article className="metric-card">
+          <p className="metric-value">Cross-functional</p>
+          <p className="metric-label">Engineers, designers, and product leaders in one team</p>
+        </article>
       </motion.section>
 
       <motion.section
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <div className="section-header">
-          <p className="eyebrow">Product Suite</p>
-          <h2>Intelligence scaled for you or your entire organization.</h2>
-        </div>
+        <header className="section-head">
+          <p className="eyebrow">Choose Your Path</p>
+          <h2>Engagement models designed for how your team operates</h2>
+        </header>
 
-        <div className="bento-grid">
-          {solutionCards.map((card, idx) => (
-            <div key={card.title} className="bento-item" style={{ gridColumn: idx === 2 ? 'span 12' : 'span 6', minHeight: '260px', alignItems: 'flex-start' }}>
-              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'var(--bg)', marginBottom: '1.5rem', border: '1px solid var(--line)' }}>
-                <card.icon size={24} color="var(--text)" />
+        <div className="feature-grid">
+          {pathCards.map((card) => (
+            <article key={card.title} className="feature-card">
+              <div className="feature-icon">
+                <card.icon size={19} />
               </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{card.title}</h3>
-              <p style={{ color: 'var(--muted)', flex: 1, fontSize: '1.125rem', lineHeight: 1.6 }}>{card.body}</p>
-              <Link to={card.href} className="text-link" style={{ marginTop: '2rem' }}>
-                Open Spec <ArrowRight size={16} />
+              <p className="feature-kicker">{card.audience}</p>
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+              <ul className="bullet-list">
+                {card.outcomes.map((outcome) => (
+                  <li key={outcome}>{outcome}</li>
+                ))}
+              </ul>
+              <Link className="text-link" to={card.href}>
+                View {card.title}
+                <ArrowRight size={15} />
               </Link>
-            </div>
+            </article>
           ))}
         </div>
       </motion.section>
 
       <motion.section
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <div className="section-header" style={{ marginBottom: '2rem' }}>
-          <p className="eyebrow">The B2W Flow</p>
-          <h2>How our agents keep you ahead of the curve.</h2>
-        </div>
-        <div>
-          {operatingModel.map((step, index) => (
-            <motion.article
-              key={step.title}
-              className="step-card"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-            >
-              <span className="step-number">0{index + 1}</span>
-              <div className="step-content">
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
+        <header className="section-head">
+          <p className="eyebrow">How We Deliver</p>
+          <h2>A practical sequence from insight to implementation</h2>
+        </header>
+
+        <div className="timeline-grid">
+          {deliverySteps.map((step, index) => (
+            <article key={step.label} className="timeline-card">
+              <div className="step-top">
+                <span className="step-badge">0{index + 1}</span>
+                <step.icon size={18} />
               </div>
-            </motion.article>
+              <h3>{step.label}</h3>
+              <p>{step.detail}</p>
+              <p className="timeline-time">{step.timeframe}</p>
+            </article>
           ))}
         </div>
       </motion.section>
 
       <motion.section
-        className="cta-section"
+        className="section-block surface-panel"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
       >
-        <p className="eyebrow">Initialize</p>
-        <h2>Ready to deploy your agent?</h2>
-        <p>
-          Connect your accounts and watch your localized AI handle tasks and surface alerts before they become emergencies.
-        </p>
-        <Link className="btn" to="/individuals" style={{ marginTop: '1.5rem' }}>
-          View Live Demo
-        </Link>
+        <header className="section-head">
+          <p className="eyebrow">FAQ</p>
+          <h2>Common questions before starting with B2W</h2>
+        </header>
+
+        <div className="faq-list">
+          {faqs.map((faq) => (
+            <details key={faq.question}>
+              <summary>{faq.question}</summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
+        </div>
       </motion.section>
-    </>
+
+      <motion.section
+        className="cta-banner"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-80px' }}
+        variants={reveal}
+      >
+        <div>
+          <p className="eyebrow">Next Step</p>
+          <h2>Explore how your business can run better with B2W</h2>
+          <p>
+            Bring us one high-friction communication or decision workflow. We will show you how to move from scattered
+            information to consistent action.
+          </p>
+        </div>
+        <a className="btn" href="mailto:team@b2w-ai.com?subject=B2W%20Consulting%20Inquiry">
+          Start the Conversation
+        </a>
+      </motion.section>
+    </div>
   );
 }
