@@ -1,76 +1,116 @@
+import { motion } from 'framer-motion';
+import { ArrowLeft, FileKey, Fingerprint, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const priorities = [
   {
-    title: 'Mission-Oriented Design',
-    body: 'Map AI initiatives to service outcomes, response quality, and constituent communication standards.'
+    icon: FileKey,
+    title: 'Mission Protocol',
+    body: 'Map LLM interactions strictly to service outcomes, accuracy thresholds, and citizen data confidentiality standards.'
   },
   {
-    title: 'Governance by Default',
-    body: 'Build reviewable workflows with transparent decision paths and clear accountability roles.'
+    icon: Fingerprint,
+    title: 'Deny by Default',
+    body: 'Architect networks with reviewable loops, transparent decision logs, and immutable accountability traces.'
   },
   {
-    title: 'Secure Implementation',
-    body: 'Structure pilots around risk controls, staged rollout, and audit-friendly operating documentation.'
+    icon: Lock,
+    title: 'Zero-Trust Deploy',
+    body: 'Structure all components around rigid risk controls, phased sandboxing, and continuous compliance auditing.'
   }
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+};
+
 export default function GovernmentSolutionsPage() {
   return (
-    <div className="page-stack">
-      <section className="subpage-hero reveal">
-        <p className="eyebrow">Government Solutions</p>
-        <h1>Trusted AI modernization for public sector programs.</h1>
-        <p>
-          B2W helps agencies and partners improve service communication and decision quality while maintaining rigorous
-          governance expectations.
+    <>
+      <motion.section
+        className="hero-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p className="eyebrow" style={{ color: 'var(--text)' }}>For Federal</p>
+        <h1>
+          Secured intelligence.<br />
+          Mission critical.
+        </h1>
+        <p className="hero-copy">
+          B2W architectures empower agencies and federal partners to scale decision-making securely, maintaining the highest standard of data governance and rigorous compliance logic.
         </p>
-      </section>
+      </motion.section>
 
-      <section className="section reveal">
-        <div className="section-head">
-          <h2>Public sector focus areas</h2>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeUp}
+      >
+        <div className="section-header">
+          <p className="eyebrow">Public Sector Spec</p>
+          <h2>Hardened focus areas.</h2>
         </div>
-        <div className="card-grid">
+        <div className="bento-grid">
           {priorities.map((item) => (
-            <article key={item.title} className="surface-card">
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
+            <div key={item.title} className="bento-item" style={{ gridColumn: 'span 4', minHeight: '260px', alignItems: 'flex-start' }}>
+              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'var(--bg)', marginBottom: '1.5rem', border: '1px solid var(--line)' }}>
+                <item.icon size={24} color="var(--text)" />
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{item.title}</h3>
+              <p style={{ color: 'var(--muted)', flex: 1, fontSize: '1.125rem', lineHeight: 1.6 }}>{item.body}</p>
+            </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section reveal">
-        <div className="section-head">
-          <h2>Why B2W</h2>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeUp}
+      >
+        <div className="section-header">
+          <p className="eyebrow">Node Specs</p>
+          <h2>Why B2W for Federal.</h2>
         </div>
-        <div className="outcome-grid">
-          <article className="outcome-card">
-            <p className="outcome-metric">30 Years</p>
-            <p>Combined experience across high-stakes institutions and technical programs</p>
-          </article>
-          <article className="outcome-card">
-            <p className="outcome-metric">Cross-Disciplinary</p>
-            <p>Engineers, designers, and product leaders operating as one integrated team</p>
-          </article>
-          <article className="outcome-card">
-            <p className="outcome-metric">Actionable</p>
-            <p>Every insight tied to next-step implementation and operational ownership</p>
-          </article>
+        <div className="bento-grid">
+          <div className="bento-item" style={{ gridColumn: 'span 4' }}>
+            <p style={{ fontSize: '2.5rem', fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.04em' }}>30 Years</p>
+            <p className="eyebrow" style={{ marginTop: '0.5rem' }}>Legacy</p>
+            <p style={{ marginTop: '1rem', color: 'var(--muted)', lineHeight: 1.6 }}>Combined operations across high-stakes, maximum-security institutions and classified technical programs.</p>
+          </div>
+          <div className="bento-item" style={{ gridColumn: 'span 4' }}>
+            <p style={{ fontSize: '2.5rem', fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.04em' }}>Full-Stack</p>
+            <p className="eyebrow" style={{ marginTop: '0.5rem' }}>Integration</p>
+            <p style={{ marginTop: '1rem', color: 'var(--muted)', lineHeight: 1.6 }}>Engineers, cryptographers, and product leads compiling solutions under a single operational namespace.</p>
+          </div>
+          <div className="bento-item" style={{ gridColumn: 'span 4' }}>
+            <p style={{ fontSize: '2.5rem', fontWeight: 600, color: 'var(--text)', letterSpacing: '-0.04em' }}>100%</p>
+            <p className="eyebrow" style={{ marginTop: '0.5rem' }}>Deterministic</p>
+            <p style={{ marginTop: '1rem', color: 'var(--muted)', lineHeight: 1.6 }}>Every query mapped directly to next-step clearance and operational ownership paths.</p>
+          </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="cta-section reveal">
-        <div>
-          <p className="eyebrow">Engage B2W</p>
-          <h2>Plan your first mission-aligned AI pilot</h2>
-          <p>We scope for value, transparency, and durability from day one.</p>
-        </div>
-        <Link className="btn" to="/">
-          Return Home
+      <motion.section
+        className="cta-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p className="eyebrow">Dispatching</p>
+        <h2>Initialize mission-aligned deployment.</h2>
+        <p>We scope for security, total transparency, and hardware-level durability from day zero.</p>
+        <Link className="btn" to="/" style={{ marginTop: '1.5rem' }}>
+          <ArrowLeft size={18} style={{ marginRight: '0.5rem' }} /> Return Home
         </Link>
-      </section>
-    </div>
+      </motion.section>
+    </>
   );
 }

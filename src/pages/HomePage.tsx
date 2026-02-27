@@ -1,134 +1,166 @@
+import { motion } from 'framer-motion';
+import { ArrowRight, Bot, ShieldCheck, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const proofPoints = ['NASA', 'Waymo', 'GE Electric', 'Autodesk', 'GWU', 'CMU', 'Columbia'];
+const proofPoints = ['Live Demo', 'WhatsApp Integration', 'Slack Bot', 'MS Teams Ready', 'AWS Hosted', 'SOC2 Compliant'];
 
 const solutionCards = [
   {
-    title: 'Individuals',
-    body: 'For founders and leaders building AI literacy, communication clarity, and practical decision support.',
+    icon: Bot,
+    title: 'Proactive AI Agents',
+    body: 'Automate your day with a personal AI agent accessible via WhatsApp, Slack, or MS Teams. Get alerted before critical events happen and execute tasks on command.',
     href: '/individuals'
   },
   {
-    title: 'Enterprises',
-    body: 'For organizations that need production-ready AI workflows, better alignment, and measurable operating gains.',
+    icon: ShieldCheck,
+    title: 'SaaS Risk Analytics',
+    body: 'A full SaaS enterprise application prioritizing safety mitigation. Connect live data streams and derive actionable insights within a highly secure analytic environment.',
     href: '/enterprises'
   },
   {
-    title: 'Government Solutions',
-    body: 'For public sector teams modernizing service delivery with trusted AI implementation and accountable governance.',
+    icon: Activity,
+    title: 'Public Sector Safety',
+    body: 'For defense and civilian agencies requiring compliant risk assessments, secure data handling, and transparent accountability frameworks.',
     href: '/government-solutions'
   }
 ];
 
 const operatingModel = [
   {
-    title: 'Discover',
-    body: 'We map communication bottlenecks, workflow friction, and the specific decisions that drive business performance.'
+    title: 'Connect Live Data',
+    body: 'Seamlessly plug into your existing data streams. Our agents process your live feeds instantly, removing the latency between event and analysis.'
   },
   {
-    title: 'Design',
-    body: 'Engineers, designers, and product leaders co-create a focused AI plan tied to operational outcomes.'
+    title: 'Proactive Alerts',
+    body: 'Stop reacting. Your customized agent monitors your feeds 24/7 and pings you on your preferred channel (WhatsApp, Slack) minutes before a risk materializes.'
   },
   {
-    title: 'Deploy',
-    body: 'We ship quickly, instrument impact, and help teams sustain adoption with clear ownership and feedback loops.'
+    title: 'Take Action',
+    body: 'Respond directly from your chat client or jump into our SaaS platform to mitigate risks in real-time. Turn insights into deterministic action.'
   }
 ];
 
+// Utility for scroll animations
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+};
+
 export default function HomePage() {
   return (
-    <div className="page-stack">
-      <section className="hero reveal">
-        <div className="hero-content">
-          <p className="eyebrow">B2W-AI.COM</p>
-          <h1>
-            AI consulting that helps your business
-            <span> communicate better and run better.</span>
-          </h1>
-          <p className="hero-copy">
-            B2W develops AI to improve communication and optimize actionable insights. We are a consulting team of
-            engineers, designers, and product leaders focused on measurable business outcomes.
-          </p>
-          <div className="hero-actions">
-            <Link className="btn" to="/enterprises">
-              Explore Solutions
-            </Link>
-            <a className="btn btn-subtle" href="mailto:team@b2w-ai.com">
-              Book Strategy Call
-            </a>
-          </div>
+    <>
+      <motion.section
+        className="hero-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p className="eyebrow">The Future of Action</p>
+        <h1>
+          Agents that alert.<br />Systems that protect.
+        </h1>
+        <p className="hero-copy">
+          From a personal AI assistant in your WhatsApp to a full SaaS risk-analytics operations center. B2W builds technology that anticipates problems and executes solutions autonomously.
+        </p>
+        <div className="hero-actions">
+          <Link className="btn" to="/individuals">
+            Meet Your Agent
+          </Link>
+          <a className="btn btn-subtle" href="mailto:team@b2w-ai.com">
+            Request Enterprise Demo
+          </a>
         </div>
+      </motion.section>
 
-        <aside className="hero-panel reveal-delayed">
-          <p className="panel-label">Track Record</p>
-          <p className="panel-stat">30 years</p>
-          <p className="panel-copy">Combined experience delivering value in complex organizations.</p>
-          <div className="chip-row">
-            {proofPoints.slice(0, 4).map((point) => (
-              <span key={point} className="chip">
-                {point}
-              </span>
-            ))}
-          </div>
-        </aside>
-      </section>
-
-      <section className="trust-strip reveal">
-        <p>Built across teams and institutions including:</p>
+      <motion.section
+        className="trust-strip"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p>Available instantly across your workflow</p>
         <div className="logo-strip">
           {proofPoints.map((point) => (
             <span key={point}>{point}</span>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section reveal">
-        <div className="section-head">
-          <p className="eyebrow">Where We Help</p>
-          <h2>Three pathways to smarter execution</h2>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeUp}
+      >
+        <div className="section-header">
+          <p className="eyebrow">Product Suite</p>
+          <h2>Intelligence scaled for you or your entire organization.</h2>
         </div>
-        <div className="card-grid">
-          {solutionCards.map((card) => (
-            <article key={card.title} className="surface-card">
-              <h3>{card.title}</h3>
-              <p>{card.body}</p>
-              <Link to={card.href} className="text-link">
-                View {card.title}
+
+        <div className="bento-grid">
+          {solutionCards.map((card, idx) => (
+            <div key={card.title} className="bento-item" style={{ gridColumn: idx === 2 ? 'span 12' : 'span 6', minHeight: '260px', alignItems: 'flex-start' }}>
+              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'var(--bg)', marginBottom: '1.5rem', border: '1px solid var(--line)' }}>
+                <card.icon size={24} color="var(--text)" />
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{card.title}</h3>
+              <p style={{ color: 'var(--muted)', flex: 1, fontSize: '1.125rem', lineHeight: 1.6 }}>{card.body}</p>
+              <Link to={card.href} className="text-link" style={{ marginTop: '2rem' }}>
+                Open Spec <ArrowRight size={16} />
               </Link>
-            </article>
+            </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section reveal">
-        <div className="section-head">
-          <p className="eyebrow">How B2W Works</p>
-          <h2>Execution structure that keeps momentum</h2>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeUp}
+      >
+        <div className="section-header" style={{ marginBottom: '2rem' }}>
+          <p className="eyebrow">The B2W Flow</p>
+          <h2>How our agents keep you ahead of the curve.</h2>
         </div>
-        <div className="path-grid">
-          {operatingModel.map((step, index) => (
-            <article key={step.title} className="path-card">
-              <p className="path-index">0{index + 1}</p>
-              <h3>{step.title}</h3>
-              <p>{step.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="cta-section reveal">
         <div>
-          <p className="eyebrow">Get Started</p>
-          <h2>Explore how your business can run better with B2W</h2>
-          <p>
-            Bring us your highest-friction communication and decision workflows. We will help your team move from
-            scattered data to clear action.
-          </p>
+          {operatingModel.map((step, index) => (
+            <motion.article
+              key={step.title}
+              className="step-card"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+            >
+              <span className="step-number">0{index + 1}</span>
+              <div className="step-content">
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </div>
+            </motion.article>
+          ))}
         </div>
-        <a className="btn" href="mailto:team@b2w-ai.com">
-          Start the Conversation
-        </a>
-      </section>
-    </div>
+      </motion.section>
+
+      <motion.section
+        className="cta-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p className="eyebrow">Initialize</p>
+        <h2>Ready to deploy your agent?</h2>
+        <p>
+          Connect your accounts and watch your localized AI handle tasks and surface alerts before they become emergencies.
+        </p>
+        <Link className="btn" to="/individuals" style={{ marginTop: '1.5rem' }}>
+          View Live Demo
+        </Link>
+      </motion.section>
+    </>
   );
 }

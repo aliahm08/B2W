@@ -1,88 +1,154 @@
+import { motion } from 'framer-motion';
+import { Activity, BarChart3, ChevronRight, ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const capabilities = [
   {
-    title: 'AI Workflow Architecture',
-    body: 'Design systems that connect internal knowledge, communication channels, and key decisions.'
+    icon: ShieldAlert,
+    title: 'Safety Mitigation',
+    body: 'Automated compliance checks and real-time safety guardrails. The system prevents high-risk actions before they execute.'
   },
   {
-    title: 'Cross-Functional Adoption',
-    body: 'Align executives, product, engineering, and operations around shared AI practices and outcomes.'
+    icon: Activity,
+    title: 'Live Data Streams',
+    body: 'Connect directly to your AWS instances, internal databases, or external APIs. The SaaS platform processes live telemetry at scale.'
   },
   {
-    title: 'Outcome Instrumentation',
-    body: 'Track productivity and quality metrics so AI performance is visible and accountable.'
+    icon: BarChart3,
+    title: 'Risk Analytics',
+    body: 'Turn unstructured noise into actionable risk matrices. Command your operations center with deterministic insight cards.'
   }
 ];
 
-const roadmap = [
-  {
-    title: '30-Day Diagnostic',
-    body: 'Assess communication and insight bottlenecks, then define high-value use cases with clear owners.'
-  },
-  {
-    title: '60-Day Pilot Layer',
-    body: 'Deploy focused pilots across selected teams with enablement sessions and rapid iteration loops.'
-  },
-  {
-    title: '90-Day Scale Plan',
-    body: 'Roll out operating playbooks, governance checks, and expansion roadmap for sustained impact.'
-  }
-];
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
+};
+
+export function DashboardPlaceholder() {
+  return (
+    <div style={{
+      width: '100%',
+      maxWidth: '900px',
+      margin: '0 auto',
+      background: '#fff',
+      borderRadius: '16px',
+      padding: '2rem',
+      border: '1px solid var(--line)',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.05)',
+      display: 'grid',
+      gridTemplateColumns: '1fr 2fr',
+      gap: '2rem'
+    }}>
+      <div style={{ borderRight: '1px solid var(--line)', paddingRight: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div>
+          <p className="eyebrow" style={{ color: 'var(--muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Live AWS Connector</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 8px rgba(16, 185, 129, 0.5)' }} />
+            <span style={{ fontWeight: 600, fontSize: '0.875rem' }}>us-east-1 // Connected</span>
+          </div>
+        </div>
+        <div>
+          <p className="eyebrow" style={{ color: 'var(--muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Global Risk Index</p>
+          <div style={{ fontSize: '2.5rem', fontWeight: 600, letterSpacing: '-0.04em' }}>14.2%</div>
+        </div>
+      </div>
+      <div>
+        <p className="eyebrow" style={{ color: 'var(--muted)', fontSize: '0.75rem', marginBottom: '1rem' }}>Active Mitigation Events</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {[
+            { tag: 'CRITICAL', text: 'Anomalous traffic spike in API gateway. Agent applied rate limits.', color: '#EF4444' },
+            { tag: 'WARNING', text: 'Database latency exceeded 200ms threshold.', color: '#F59E0B' },
+            { tag: 'INFO', text: 'Routine snapshot completed successfully.', color: '#3B82F6' }
+          ].map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.2, duration: 0.4 }}
+              style={{ display: 'flex', gap: '1rem', padding: '1rem', background: 'var(--bg)', borderRadius: '8px', border: '1px solid var(--line)' }}
+            >
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: item.color, padding: '0.25rem 0.5rem', background: `${item.color}15`, borderRadius: '4px', height: 'fit-content' }}>
+                {item.tag}
+              </span>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text)', margin: 0 }}>{item.text}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function EnterprisesPage() {
   return (
-    <div className="page-stack">
-      <section className="subpage-hero reveal">
-        <p className="eyebrow">Enterprises</p>
-        <h1>Operational AI consulting for organizations that need real adoption.</h1>
-        <p>
-          B2W helps enterprises deploy AI responsibly across teams while improving communication velocity and execution
-          quality.
+    <>
+      <motion.section
+        className="hero-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p className="eyebrow" style={{ color: 'var(--text)' }}>Enterprise SaaS</p>
+        <h1>
+          Total visibility.<br />
+          Instant mitigation.
+        </h1>
+        <p className="hero-copy">
+          A full-stack SaaS application built for engineering and operations leaders. Connect your data, monitor live risk analytics, and let B2W safeguard your systems in real-time.
         </p>
-      </section>
+      </motion.section>
 
-      <section className="section reveal">
-        <div className="section-head">
-          <h2>Enterprise capabilities</h2>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeUp}
+        style={{ padding: '0 1rem' }}
+      >
+        <DashboardPlaceholder />
+      </motion.section>
+
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={fadeUp}
+      >
+        <div className="section-header">
+          <p className="eyebrow">Platform Capabilities</p>
+          <h2>The operations center you deserve.</h2>
         </div>
-        <div className="card-grid">
+        <div className="bento-grid">
           {capabilities.map((item) => (
-            <article key={item.title} className="surface-card">
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </article>
+            <div key={item.title} className="bento-item" style={{ gridColumn: 'span 4', minHeight: '260px', alignItems: 'flex-start' }}>
+              <div style={{ padding: '0.75rem', borderRadius: '12px', background: 'var(--bg)', marginBottom: '1.5rem', border: '1px solid var(--line)' }}>
+                <item.icon size={24} color="var(--text)" />
+              </div>
+              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.75rem' }}>{item.title}</h3>
+              <p style={{ color: 'var(--muted)', flex: 1, fontSize: '1.125rem', lineHeight: 1.6 }}>{item.body}</p>
+            </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section reveal">
-        <div className="section-head">
-          <h2>Engagement roadmap</h2>
-        </div>
-        <div className="path-grid">
-          {roadmap.map((step, index) => (
-            <article key={step.title} className="path-card">
-              <p className="path-index">0{index + 1}</p>
-              <h3>{step.title}</h3>
-              <p>{step.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="cta-section reveal">
-        <div>
-          <p className="eyebrow">Briefing</p>
-          <h2>Bring B2W into your next quarter planning cycle</h2>
-          <p>
-            We partner with engineering, design, and product leadership to deliver high-confidence AI operating gains.
-          </p>
-        </div>
-        <Link className="btn" to="/government-solutions">
-          View Government Solutions
+      <motion.section
+        className="cta-section"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <p className="eyebrow">Command Center</p>
+        <h2>Connect your AWS environment today.</h2>
+        <p>
+          Experience the B2W SaaS platform with a live, sandboxed integration using your own secure data streams.
+        </p>
+        <Link className="btn" to="/government-solutions" style={{ marginTop: '1.5rem' }}>
+          View Security Specs <ChevronRight size={18} style={{ marginLeft: '0.25rem' }} />
         </Link>
-      </section>
-    </div>
+      </motion.section>
+    </>
   );
 }
