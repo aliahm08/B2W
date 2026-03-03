@@ -1,25 +1,43 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
+import { ArrowUpRight, Menu, Moon, Sun, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 
 const primaryNav = [
-  { to: '/', label: 'Home' },
   { to: '/individuals', label: 'Individuals' },
   { to: '/enterprises', label: 'Enterprises' },
   { to: '/government-solutions', label: 'Government' }
 ];
 
-const solutionNav = primaryNav.filter((item) => item.to !== '/');
+type Theme = 'light' | 'dark';
+
+function getInitialTheme(): Theme {
+  if (typeof window === 'undefined') {
+    return 'light';
+  }
+
+  const savedTheme = window.localStorage.getItem('b2w-theme');
+  if (savedTheme === 'light' || savedTheme === 'dark') {
+    return savedTheme;
+  }
+
+  return 'light';
+}
 
 export default function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const location = useLocation();
 
   useEffect(() => {
     setMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
+
+  useEffect(() => {
+    document.body.setAttribute('data-theme', theme);
+    window.localStorage.setItem('b2w-theme', theme);
+  }, [theme]);
 
   return (
     <div className="site-shell">
@@ -44,39 +62,37 @@ export default function SiteLayout() {
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
 
-        <nav id="primary-navigation" className={`site-nav ${menuOpen ? 'is-open' : ''}`} aria-label="Primary">
-          {primaryNav.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-            >
-              {item.label}
-            </NavLink>
-          ))}
+        <div className={`nav-container ${menuOpen ? 'is-open' : ''}`}>
+          <nav id="primary-navigation" className="site-nav" aria-label="Primary">
+            {primaryNav.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+        </div>
 
-          <a className="btn btn-compact nav-cta" href="mailto:team@b2w-ai.com?subject=B2W%20Intro%20Call">
+        <div className="header-actions">
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={() => setTheme((current) => (current === 'light' ? 'dark' : 'light'))}
+            aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+            title={theme === 'light' ? 'Dark mode' : 'Light mode'}
+          >
+            {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
+
+          <a className="btn btn-compact header-cta" href="mailto:team@b2w-ai.com?subject=B2W%20Intro%20Call">
             Book Intro Call
             <ArrowUpRight size={15} />
           </a>
-        </nav>
-      </header>
-
-      <div className="solution-switcher" aria-label="Solutions quick links">
-        <p className="switcher-label">Solutions</p>
-        <div className="switcher-links">
-          {solutionNav.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) => (isActive ? 'switcher-link active' : 'switcher-link')}
-            >
-              {item.label}
-            </NavLink>
-          ))}
         </div>
-      </div>
+      </header>
 
       <main id="main-content">
         <AnimatePresence mode="wait">
@@ -94,7 +110,7 @@ export default function SiteLayout() {
 
       <footer className="site-footer">
         <div>
-          <p className="footer-title">B2W AI Consulting</p>
+          <p className="footer-title">B2W AI</p>
           <p className="footer-copy">
             AI systems that improve communication and optimize actionable insights for individuals, enterprises, and
             public sector teams.

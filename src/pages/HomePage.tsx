@@ -1,250 +1,210 @@
 import { motion, Variants } from 'framer-motion';
+import { useState } from 'react';
 import {
-  ArrowRight,
-  BrainCircuit,
   Building2,
-  Landmark,
-  Sparkles,
-  Users2,
-  Workflow
+  Camera,
+  CheckCircle2,
+  Database,
+  FileText,
+  Mic,
+  SendHorizontal,
+  ShieldAlert,
+  TerminalSquare
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const reveal: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } }
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }
 };
 
-const proofPoints = ['NASA', 'Waymo', 'GE Electric', 'Autodesk', 'GWU', 'CMU', 'Columbia'];
-
-const pathCards = [
-  {
-    icon: Users2,
-    title: 'Individuals',
-    audience: 'Professionals and team leads',
-    body: 'Create AI-enabled communication habits that reduce noise and improve day-to-day decision quality.',
-    outcomes: ['Weekly planning in half the time', 'Clearer stakeholder updates', 'Personalized action workflows'],
-    href: '/individuals'
-  },
-  {
-    icon: Building2,
-    title: 'Enterprises',
-    audience: 'Cross-functional organizations',
-    body: 'Deploy practical AI operations that improve alignment across product, engineering, design, and leadership.',
-    outcomes: ['Operational handoffs with less friction', 'Prioritized implementation roadmap', 'Measurable productivity gains'],
-    href: '/enterprises'
-  },
-  {
-    icon: Landmark,
-    title: 'Government Solutions',
-    audience: 'Public sector and mission teams',
-    body: 'Modernize service workflows with accountable AI governance, transparent decisioning, and resilient execution.',
-    outcomes: ['Mission-aligned pilots', 'Audit-friendly governance flow', 'Secure adoption playbooks'],
-    href: '/government-solutions'
-  }
-];
-
-const deliverySteps = [
-  {
-    label: 'Discover',
-    detail: 'Map communication bottlenecks and decision latency across critical workflows.',
-    timeframe: 'Week 1',
-    icon: BrainCircuit
-  },
-  {
-    label: 'Design',
-    detail: 'Co-create a focused AI operating plan with engineering, design, and product leadership.',
-    timeframe: 'Weeks 2-3',
-    icon: Workflow
-  },
-  {
-    label: 'Deploy',
-    detail: 'Launch scoped pilots with clear owners, instrumentation, and adoption support.',
-    timeframe: 'Weeks 4-8',
-    icon: Sparkles
-  }
-];
-
-const faqs = [
-  {
-    question: 'What makes B2W different from a typical AI workshop?',
-    answer:
-      'We do not stop at education. Every engagement is tied to operational workflows, ownership, and implementation milestones.'
-  },
-  {
-    question: 'Do you only support large organizations?',
-    answer:
-      'No. We support individual operators, growth-stage companies, enterprise teams, and government programs with fit-for-purpose scopes.'
-  },
-  {
-    question: 'How quickly can we start?',
-    answer:
-      'Most engagements begin with a short discovery sprint and move into pilot design within the first two weeks.'
-  }
-];
-
 export default function HomePage() {
+  const [activeTab, setActiveTab] = useState<'individuals' | 'enterprise' | 'gov'>('individuals');
+
   return (
-    <div className="page-stack">
-      <motion.section className="hero-grid surface-panel" initial="hidden" animate="visible" variants={reveal}>
+    <div className="page-stack" style={{ gap: '4rem', marginTop: '2rem' }}>
+      <motion.section className="hero-grid" initial="hidden" animate="visible" variants={reveal}>
         <div className="hero-copy-block">
-          <p className="eyebrow">B2W-AI.COM</p>
           <h1>
-            AI consulting for businesses that need
-            <span> better communication and better execution.</span>
+            AI solutions to improve communications
+            <span>and optimize operational insights.</span>
           </h1>
           <p>
-            B2W develops AI to improve communication and optimize actionable insights. Our team blends engineering,
-            design, and product leadership to help organizations run better.
+            B2W builds AI services for individuals, consulting for enterprise clients,
+            and platforms for federal agencies.
           </p>
           <div className="hero-actions">
-            <Link className="btn" to="/enterprises">
-              Explore Solutions
-              <ArrowRight size={16} />
-            </Link>
-            <a className="btn btn-subtle" href="mailto:team@b2w-ai.com?subject=B2W%20Discovery%20Call">
-              Book Strategy Call
+            <a className="btn" href="mailto:team@b2w-ai.com?subject=B2W%20Discovery%20Call">
+              Get Started
+            </a>
+            <a className="btn btn-subtle" href="mailto:team@b2w-ai.com?subject=B2W%20Demo%20Request">
+              Book a Demo
             </a>
           </div>
         </div>
-
-        <aside className="hero-insight-card">
-          <p className="panel-label">Track Record</p>
-          <p className="panel-stat">30 years</p>
-          <p className="panel-copy">Combined experience adding value across complex institutions and programs.</p>
-          <div className="chip-wrap">
-            {proofPoints.map((point) => (
-              <span key={point} className="chip">
-                {point}
-              </span>
-            ))}
-          </div>
-        </aside>
       </motion.section>
 
       <motion.section
-        className="metrics-row"
+        className="demo-showcase-container"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-80px' }}
         variants={reveal}
       >
-        <article className="metric-card">
-          <p className="metric-value">3</p>
-          <p className="metric-label">Solution paths tailored to business context</p>
-        </article>
-        <article className="metric-card">
-          <p className="metric-value">2-8 weeks</p>
-          <p className="metric-label">Typical timeline from discovery to pilot launch</p>
-        </article>
-        <article className="metric-card">
-          <p className="metric-value">Cross-functional</p>
-          <p className="metric-label">Engineers, designers, and product leaders in one team</p>
-        </article>
-      </motion.section>
+        <div className="demo-tabs">
+          <button
+            className={`demo-tab-btn ${activeTab === 'individuals' ? 'active' : ''}`}
+            onClick={() => setActiveTab('individuals')}
+          >
+            Individuals
+          </button>
+          <button
+            className={`demo-tab-btn ${activeTab === 'enterprise' ? 'active' : ''}`}
+            onClick={() => setActiveTab('enterprise')}
+          >
+            Enterprises
+          </button>
+          <button
+            className={`demo-tab-btn ${activeTab === 'gov' ? 'active' : ''}`}
+            onClick={() => setActiveTab('gov')}
+          >
+            Government Solutions
+          </button>
+        </div>
 
-      <motion.section
-        className="section-block surface-panel"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
-        variants={reveal}
-      >
-        <header className="section-head">
-          <p className="eyebrow">Choose Your Path</p>
-          <h2>Engagement models designed for how your team operates</h2>
-        </header>
-
-        <div className="feature-grid">
-          {pathCards.map((card) => (
-            <article key={card.title} className="feature-card">
-              <div className="feature-icon">
-                <card.icon size={19} />
+        <div className="demo-content-area" style={{ maxWidth: '900px', margin: '0 auto', border: 'none', background: 'transparent', boxShadow: 'none' }}>
+          {activeTab === 'individuals' && (
+            <motion.article
+              className="phone-shell"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{ margin: '0 auto' }}
+            >
+              <div className="phone-notch" />
+              <div className="chat-app">
+                <header className="chat-header">
+                  <div className="chat-contact">
+                    <span className="chat-avatar">B2W</span>
+                    <div>
+                      <p className="chat-name">B2W Assistant</p>
+                      <p className="chat-status">Online now</p>
+                    </div>
+                  </div>
+                </header>
+                <div className="chat-thread">
+                  <div className="msg msg-user">
+                    Just received the supplier invoice and onboarded Acme Corp. Can you update the tracker?
+                  </div>
+                  <div className="msg msg-ai">
+                    Processing your updates.
+                  </div>
+                  <div className="msg msg-ai action-msg">
+                    <p>Actions completed:</p>
+                    <ul>
+                      <li><CheckCircle2 size={13} /> Logged Invoice #1024 to Q3 Expenses</li>
+                      <li><CheckCircle2 size={13} /> Triggered Acme Corp Welcome Flow</li>
+                      <li><CheckCircle2 size={13} /> Drafted follow-up for tomorrow 9 AM</li>
+                    </ul>
+                  </div>
+                </div>
+                <footer className="chat-input">
+                  <button type="button" className="input-icon"><Camera size={15} /></button>
+                  <button type="button" className="input-icon"><Mic size={15} /></button>
+                  <p>Message...</p>
+                  <button type="button" className="send-btn"><SendHorizontal size={14} /></button>
+                </footer>
               </div>
-              <p className="feature-kicker">{card.audience}</p>
-              <h3>{card.title}</h3>
-              <p>{card.body}</p>
-              <ul className="bullet-list">
-                {card.outcomes.map((outcome) => (
-                  <li key={outcome}>{outcome}</li>
-                ))}
-              </ul>
-              <Link className="text-link" to={card.href}>
-                View {card.title}
-                <ArrowRight size={15} />
-              </Link>
-            </article>
-          ))}
-        </div>
-      </motion.section>
+            </motion.article>
+          )}
 
-      <motion.section
-        className="section-block surface-panel"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
-        variants={reveal}
-      >
-        <header className="section-head">
-          <p className="eyebrow">How We Deliver</p>
-          <h2>A practical sequence from insight to implementation</h2>
-        </header>
-
-        <div className="timeline-grid">
-          {deliverySteps.map((step, index) => (
-            <article key={step.label} className="timeline-card">
-              <div className="step-top">
-                <span className="step-badge">0{index + 1}</span>
-                <step.icon size={18} />
+          {activeTab === 'enterprise' && (
+            <motion.article
+              className="dashboard-window"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{ margin: '0 auto', border: '1px solid var(--line)', boxShadow: 'var(--shadow)' }}
+            >
+              <header className="dashboard-header">
+                <div className="mac-dots">
+                  <span /> <span /> <span />
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#8faac8', marginLeft: '1rem', fontWeight: 600 }}>
+                  B2W SaaS Risk Analytics
+                </div>
+              </header>
+              <div className="dashboard-body">
+                <aside className="dashboard-sidebar">
+                  <div className="dash-icon active"><Building2 size={14} color="#55d9c2" /></div>
+                  <div className="dash-icon"><Database size={14} color="#a5bee0" /></div>
+                  <div className="dash-icon"><FileText size={14} color="#a5bee0" /></div>
+                  <div className="dash-icon"><ShieldAlert size={14} color="#a5bee0" /></div>
+                </aside>
+                <main className="dashboard-main">
+                  <div className="dash-widget full">
+                    <span className="widget-title">Cross-org Alignment Index</span>
+                    <span className="widget-val">87.4%</span>
+                    <div className="widget-chart-bar"><div className="widget-chart-fill" style={{ width: '87.4%' }} /></div>
+                  </div>
+                  <div className="dash-widget">
+                    <span className="widget-title">Delivery Latency</span>
+                    <span className="widget-val">-1.2 days</span>
+                  </div>
+                  <div className="dash-widget">
+                    <span className="widget-title">Risk Anomalies</span>
+                    <span className="widget-val" style={{ color: '#ffbd2e' }}>2 detected</span>
+                  </div>
+                </main>
               </div>
-              <h3>{step.label}</h3>
-              <p>{step.detail}</p>
-              <p className="timeline-time">{step.timeframe}</p>
-            </article>
-          ))}
-        </div>
-      </motion.section>
+            </motion.article>
+          )}
 
-      <motion.section
-        className="section-block surface-panel"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
-        variants={reveal}
-      >
-        <header className="section-head">
-          <p className="eyebrow">FAQ</p>
-          <h2>Common questions before starting with B2W</h2>
-        </header>
-
-        <div className="faq-list">
-          {faqs.map((faq) => (
-            <details key={faq.question}>
-              <summary>{faq.question}</summary>
-              <p>{faq.answer}</p>
-            </details>
-          ))}
+          {activeTab === 'gov' && (
+            <motion.article
+              className="secure-terminal"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              style={{ margin: '0 auto', maxWidth: '650px', border: '1px solid var(--line)', boxShadow: 'var(--shadow)' }}
+            >
+              <header className="terminal-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <TerminalSquare size={14} /> Mission Decisioning Gateway v4.2
+                </div>
+                <div className="terminal-status">
+                  <span className="terminal-badge" /> EXECUTING
+                </div>
+              </header>
+              <div className="terminal-body" style={{ height: '300px' }}>
+                <div className="log-entry">
+                  <span className="log-time">[14:02:01]</span>
+                  <span className="log-level info">INFO</span>
+                  <span className="log-msg">Connecting to secure intelligence feed... OK</span>
+                </div>
+                <div className="log-entry">
+                  <span className="log-time">[14:02:05]</span>
+                  <span className="log-level info">INFO</span>
+                  <span className="log-msg">Scanning operational policy constraints...</span>
+                </div>
+                <div className="log-entry">
+                  <span className="log-time">[14:02:06]</span>
+                  <span className="log-level warn">WARN</span>
+                  <span className="log-msg">Clearance level mismatch detected on node 4. Rerouting...</span>
+                </div>
+                <div className="log-entry">
+                  <span className="log-time">[14:02:08]</span>
+                  <span className="log-level success">PASS</span>
+                  <span className="log-msg">Audit log generated. Action pathway approved.</span>
+                </div>
+                <div className="log-entry">
+                  <span className="log-time">[14:02:10]</span>
+                  <span className="log-level info">INFO</span>
+                  <span className="log-msg">Awaiting next instruction..._</span>
+                </div>
+              </div>
+            </motion.article>
+          )}
         </div>
-      </motion.section>
-
-      <motion.section
-        className="cta-banner"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
-        variants={reveal}
-      >
-        <div>
-          <p className="eyebrow">Next Step</p>
-          <h2>Explore how your business can run better with B2W</h2>
-          <p>
-            Bring us one high-friction communication or decision workflow. We will show you how to move from scattered
-            information to consistent action.
-          </p>
-        </div>
-        <a className="btn" href="mailto:team@b2w-ai.com?subject=B2W%20Consulting%20Inquiry">
-          Start the Conversation
-        </a>
       </motion.section>
     </div>
   );
