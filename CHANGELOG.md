@@ -15,3 +15,17 @@ All notable product-facing and documentation-facing updates should be recorded h
   - `Mission.md`
   - `Design_Strategy.md`
   - `CHANGELOG.md` (new)
+
+## 2026-03-03 (Mission-Strict Product SaaS Reset)
+
+- Canonical route model set to:
+  - `/`, `/individuals`, `/enterprises`, `/government`
+- Added compatibility redirects from legacy paths:
+  - `/business-owners`, `/federal-agencies`, `/government-solutions`
+- Rebuilt all pages with strict mission-aligned product surfaces.
+- Removed fabricated demo visuals, fake metrics, and fake logs.
+- Standardized CTA label/target across header and page sections.
+- Reduced footer to mission line only and removed duplicated nav link clusters.
+- Enforced light-only UI with smooth scrolling and subtle fade-in motion.
+- Replaced slide-like content stacks with structured product-surface layouts on all pages.
+- Added reduced-motion handling for page transitions and section reveals.

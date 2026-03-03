@@ -2,8 +2,8 @@ export const missionStatement = 'B2W builds AI solutions to improve communicatio
 
 export const missionPillars = [
   {
-    label: 'AI services for business owners',
-    path: '/business-owners'
+    label: 'AI services for Individuals',
+    path: '/individuals'
   },
   {
     label: 'AI consulting for enterprise clients',
@@ -11,7 +11,7 @@ export const missionPillars = [
   },
   {
     label: 'AI platforms for federal agencies',
-    path: '/federal-agencies'
+    path: '/government'
   }
 ] as const;
 

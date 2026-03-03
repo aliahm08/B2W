@@ -1,22 +1,25 @@
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { ctaHref, ctaLabel, missionStatement, missionPillars } from '../content/mission';
+import { ctaHref, ctaLabel, missionStatement } from '../content/mission';
 
 const navItems = [
   { to: '/', label: 'B2W Plan', end: true },
-  ...missionPillars.map((pillar) => ({ to: pillar.path, label: pillar.label, end: false }))
+  { to: '/individuals', label: 'Individuals', end: false },
+  { to: '/enterprises', label: 'Enterprises', end: false },
+  { to: '/government', label: 'Government', end: false }
 ];
 
 export default function SiteLayout() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     setMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  }, [location.pathname, prefersReducedMotion]);
 
   return (
     <div className="site-shell">
@@ -62,10 +65,14 @@ export default function SiteLayout() {
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 10 }}
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.28, ease: 'easeOut' }}
+            exit={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -8 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0 }
+                : { duration: 0.28, ease: 'easeOut' }
+            }
           >
             <Outlet />
           </motion.div>

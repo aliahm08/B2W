@@ -6,7 +6,7 @@ const fadeIn: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.36, ease: 'easeOut' } }
 };
 
-export default function HomePage() {
+export default function GovernmentPage() {
   const prefersReducedMotion = useReducedMotion();
   const heroMotion = prefersReducedMotion
     ? {}
@@ -24,18 +24,15 @@ export default function HomePage() {
     <div className="page-stack">
       <motion.section className="hero-block hero-grid" {...heroMotion}>
         <div className="hero-copy">
-          <p className="kicker">B2W Plan</p>
-          <h1>{missionStatement}</h1>
-          <p className="hero-support">
-            Product surfaces for Individuals, Enterprises, and Government teams to improve communication
-            flow and operational decision-making.
-          </p>
+          <p className="kicker">Government</p>
+          <h1>AI platforms for federal agencies</h1>
+          <p className="hero-support">{missionStatement}</p>
           <a className="btn" href={ctaHref}>
             {ctaLabel}
           </a>
         </div>
 
-        <div className="hero-surface" aria-label="B2W operating surface preview">
+        <div className="hero-surface" aria-label="Government platform preview">
           <div className="surface-topbar">
             <span className="surface-dot" />
             <span className="surface-dot" />
@@ -43,16 +40,16 @@ export default function HomePage() {
           </div>
           <div className="surface-panel">
             <div className="panel-row">
-              <span className="panel-label">Communication Intake</span>
-              <span className="panel-tag">Configured</span>
+              <span className="panel-label">Security Control Layer</span>
+              <span className="panel-tag">Scoped</span>
             </div>
             <div className="panel-row">
-              <span className="panel-label">Operational Context</span>
-              <span className="panel-tag">Mapped</span>
+              <span className="panel-label">Compliance Mapping</span>
+              <span className="panel-tag">Structured</span>
             </div>
             <div className="panel-row">
-              <span className="panel-label">Action Queue</span>
-              <span className="panel-tag">Ready</span>
+              <span className="panel-label">Workflow Governance</span>
+              <span className="panel-tag">Managed</span>
             </div>
           </div>
         </div>
@@ -60,55 +57,55 @@ export default function HomePage() {
 
       <motion.section className="content-block" {...revealMotion}>
         <div className="section-header">
-          <h2>B2W Operating Surface</h2>
+          <h2>Platform Control Surface</h2>
           <p>
-            A structured operating layer for configuration, policy control, summaries, and action
-            coordination.
+            Structured platform controls for secure operations, compliance alignment, and governed workflow
+            execution.
           </p>
         </div>
 
         <div className="product-surface">
           <div className="surface-head">
-            <div className="surface-tabs" role="list" aria-label="Operating surface sections">
-              <span className="tab-pill active">Configuration</span>
-              <span className="tab-pill">Policy</span>
-              <span className="tab-pill">Summary</span>
+            <div className="surface-tabs" role="list" aria-label="Government platform controls">
+              <span className="tab-pill active">Security</span>
+              <span className="tab-pill">Compliance</span>
+              <span className="tab-pill">Governance</span>
             </div>
-            <span className="surface-state">Structured View</span>
+            <span className="surface-state">Control View</span>
           </div>
 
           <div className="surface-layout">
-            <aside className="surface-rail" aria-label="Operating modules">
-              <div className="rail-item active">Scope</div>
-              <div className="rail-item">Workflow</div>
-              <div className="rail-item">Approvals</div>
-              <div className="rail-item">Actions</div>
+            <aside className="surface-rail" aria-label="Government modules">
+              <div className="rail-item active">Identity</div>
+              <div className="rail-item">Policy</div>
+              <div className="rail-item">Review</div>
+              <div className="rail-item">Escalation</div>
             </aside>
 
             <div className="surface-main">
               <div className="surface-grid">
                 <article className="surface-card">
-                  <h3>Inputs</h3>
+                  <h3>Security</h3>
                   <ul>
-                    <li>Communication streams</li>
-                    <li>Workflow context</li>
-                    <li>Policy constraints</li>
+                    <li>Access boundaries</li>
+                    <li>Identity controls</li>
+                    <li>Operational safeguards</li>
                   </ul>
                 </article>
                 <article className="surface-card">
-                  <h3>Processing</h3>
+                  <h3>Compliance</h3>
                   <ul>
-                    <li>Configuration and routing</li>
-                    <li>Summary and prioritization</li>
-                    <li>Action orchestration</li>
+                    <li>Policy mapping</li>
+                    <li>Review checkpoints</li>
+                    <li>Audit alignment</li>
                   </ul>
                 </article>
                 <article className="surface-card">
-                  <h3>Outputs</h3>
+                  <h3>Governance</h3>
                   <ul>
-                    <li>Structured updates</li>
-                    <li>Approvals and handoffs</li>
-                    <li>Execution-ready actions</li>
+                    <li>Decision routing</li>
+                    <li>Escalation paths</li>
+                    <li>Oversight workflow</li>
                   </ul>
                 </article>
               </div>
