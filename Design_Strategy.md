@@ -1,30 +1,43 @@
-# B2W UX & Design Strategy
+# B2W UX and Design Strategy
 
-This document defines the design system for the B2W website: premium, conversion-focused, and product-first.
+Last updated: 2026-03-03
 
-## 1. Core UX Principles
+This document defines the active design system for the B2W website.
 
-- **Themeability (Light/Dark):** Default to a clean light mode and provide a seamless manual dark-mode toggle.
-- **Product-First Hero Layout:** Every page acts as its own landing page with a hero section followed immediately by a demo preview.
-- **Centered CTA Cluster:** Hero sections use a strong primary + secondary CTA cluster with heavy negative space.
-- **Distraction-Free Header:** Keep navigation minimal and reduce choice overload.
-- **Top-Right Utility CTA:** The global conversion CTA lives in the top-right corner, outside the nav link group.
-- **Zero Fluff (Mission-Driven):** Content only includes details grounded in the B2W Mission.
+## 1. UX Principles
 
-## 2. Mission Details (Zero-Fluff Integration)
+- Themeability: default to clean light mode with manual dark-mode toggle.
+- Product-first structure: each page behaves like a landing page with hero followed by demo preview.
+- Focused conversion flow: strong CTA hierarchy with minimal navigation distraction.
+- Top-right utility CTA: global `Book Intro Call` button lives outside nav links.
+- Mission-driven copy: content must map directly to `Mission.md` and avoid non-essential narrative.
 
-1. **Individuals:** AI services that streamline execution, reduce communication overhead, and drive growth.
-2. **Enterprise Clients:** AI consulting for strategy, architecture, and advanced ecosystem integration.
-3. **Federal Agencies:** AI platforms with secure, compliant infrastructure and actionable intelligence.
+## 2. Information Architecture
 
-## 3. Typography System
+- Home introduces the full three-pathway model.
+- Individuals page demonstrates messenger-style AI workflow and task execution.
+- Enterprises page demonstrates dashboard-style analytics and operational visibility.
+- Government page demonstrates secure decisioning and audit-oriented workflow.
 
-- **Primary Typeface:** Inter (all headings and body copy).
-- **Monospace Accent:** Use monospace only for terminal/system demos.
-- **Style Goal:** Clean, precise, and readable with restrained visual noise.
+## 3. Visual System
 
-## 4. Inspiration Notes
+- Typeface: Inter for headings and body.
+- Density: generous negative space, compact utility elements.
+- Surfaces: layered panels with restrained borders and soft depth.
+- Motion: subtle fade and scale transitions that support orientation.
+- Demo language: realistic UI previews over abstract icon blocks.
 
-- **o11:** Immediate, embedded product value.
-- **Sana:** Product-first hero and low-distraction navigation.
-- **Ramp:** High-conversion CTA hierarchy.
+## 4. Header and Navigation
+
+- Brand at left.
+- Minimal nav cluster in center.
+- Theme toggle + global CTA in top-right action cluster.
+- Mobile header uses progressive disclosure via menu button.
+
+## 5. Documentation Sync Rules
+
+For every major UI/content update:
+
+1. Validate against `Mission.md` first.
+2. Update this design document for any UX/system change.
+3. Add an entry to `CHANGELOG.md`.

@@ -1,20 +1,33 @@
-# B2W Mission (Strategy & Focus)
+# B2W Mission (Strategy and Focus)
 
-**Mission Statement:** B2W builds AI solutions to improve communications and optimize operational insights.
+Last updated: 2026-03-03
 
-## Core Offerings & Target Audiences
+## Mission Statement
 
-1. **AI Services for Individuals**
-   Empowering high-agency operators with accessible AI tools to streamline execution, reduce communication overhead, and drive growth.
+B2W builds AI solutions to improve communication and optimize operational insights.
 
-2. **AI Consulting for Enterprise Clients**
-   Providing strategic guidance, custom architecture, and integration of advanced AI ecosystems to solve complex enterprise-scale challenges.
+## Core Offerings and Target Audiences
 
-3. **AI Platforms for Federal Agencies**
-   Delivering secure, compliant, and robust AI infrastructure with actionable intelligence for government organizations.
+1. AI services for Individuals.
+   This pathway supports high-agency operators with practical AI tools that reduce communication overhead, improve follow-through, and drive growth.
+
+2. AI consulting for Enterprise clients.
+   This pathway provides strategic guidance, custom architecture, and advanced ecosystem integration for enterprise-scale AI adoption.
+
+3. AI platforms for Federal agencies.
+   This pathway delivers secure, compliant, robust infrastructure and actionable intelligence for public sector programs.
 
 ## Strategic Directives
 
-- **Landing Page Ecosystem:** The primary entry point must clearly define these three distinct pathways and route visitors to the right subpage quickly.
-- **Product-First Presentation:** Each subpage should show a concrete product preview immediately after the hero.
-- **Continuous Evolution:** This document is the ground truth for B2W strategic focus and should be updated as offerings evolve.
+- The landing ecosystem must clearly route visitors to one of the three audience pathways.
+- Each pathway page must present a concrete demo preview immediately after the hero.
+- Messaging must remain concise and mission-aligned with zero fluff.
+- The mission document is the source of truth for content direction.
+
+## Tracking Note
+
+When product, audience positioning, or feature priorities change:
+
+1. Update this mission file first.
+2. Reflect UX/design implications in `Design_Strategy.md`.
+3. Record implementation changes in `CHANGELOG.md`.
