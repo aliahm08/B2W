@@ -870,6 +870,259 @@ main {
   align-items: center;
 }
 
+.individuals-demo-surface {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.86), rgba(246, 250, 255, 0.88));
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.mode-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.mode-tab {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-soft);
+  color: var(--muted);
+  padding: 0.42rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.mode-tab:hover {
+  color: var(--text);
+}
+
+.mode-tab.active {
+  border-color: var(--accent);
+  background: linear-gradient(130deg, var(--accent), var(--accent-strong));
+  color: var(--btn-text);
+}
+
+.mode-brief-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--bg-soft);
+  padding: 1rem;
+  display: grid;
+  align-content: start;
+  gap: 0.58rem;
+}
+
+.mode-step {
+  width: fit-content;
+  border-radius: 999px;
+  background: rgba(39, 78, 138, 0.1);
+  color: #274e8a;
+  padding: 0.14rem 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mode-brief-card h3 {
+  font-size: 1.08rem;
+}
+
+.mode-brief-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.38rem;
+}
+
+.mode-brief-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.mode-brief-list svg {
+  margin-top: 0.05rem;
+  flex-shrink: 0;
+}
+
+.workflow-phone {
+  width: min(390px, 100%);
+}
+
+.mode-live-badge {
+  width: fit-content;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: rgba(234, 255, 248, 0.92);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.workflow-thread {
+  min-height: 18.8rem;
+}
+
+.workflow-scene {
+  height: 100%;
+}
+
+.workflow-scene-stack {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.msg-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.26rem;
+}
+
+.sop-stack {
+  border: 1px solid rgba(102, 199, 182, 0.35);
+  border-radius: 10px;
+  background: rgba(22, 66, 59, 0.85);
+  padding: 0.45rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sop-row {
+  border-radius: 8px;
+  background: rgba(239, 252, 249, 0.08);
+  padding: 0.3rem 0.38rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.69rem;
+  color: #e6fff9;
+}
+
+.sop-row > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+}
+
+.sop-state {
+  border-radius: 999px;
+  padding: 0.12rem 0.4rem;
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.sop-state.is-done {
+  color: #03372d;
+  background: #84f2da;
+}
+
+.sop-state.is-live {
+  color: #03372d;
+  background: #f7ef9c;
+  animation: pulseState 1.2s ease-in-out infinite;
+}
+
+@keyframes pulseState {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.58;
+  }
+}
+
+.workflow-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.workflow-chip {
+  border: 1px solid rgba(150, 197, 255, 0.34);
+  border-radius: 999px;
+  background: rgba(145, 182, 230, 0.14);
+  color: #d8eaff;
+  padding: 0.18rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.assistant-parameter-card {
+  border: 1px solid rgba(149, 193, 245, 0.25);
+  border-radius: 10px;
+  background: rgba(240, 246, 252, 0.85);
+  padding: 0.5rem;
+  color: #113147;
+}
+
+.assistant-parameter-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.assistant-parameter-card ul {
+  margin: 0.32rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.assistant-parameter-card li {
+  font-size: 0.7rem;
+}
+
+.msg-external {
+  justify-self: start;
+  background: #e3edf9;
+  color: #14344a;
+  border-bottom-left-radius: 4px;
+}
+
+.msg-sender {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.08rem;
+  color: #36556d;
+}
+
+.msg-deploy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.workflow-caption {
+  margin: 0;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.workflow-caption span {
+  color: var(--text);
+  font-weight: 700;
+}
+
 .persona-kicker {
   width: fit-content;
   font-size: 0.72rem;
@@ -887,6 +1140,10 @@ main {
   border: 1px solid rgba(196, 223, 255, 0.33);
   background: linear-gradient(160deg, #111f33, #0b1527 70%);
   box-shadow: 0 16px 42px rgba(1, 7, 19, 0.52);
+}
+
+.phone-shell.workflow-phone {
+  width: min(390px, 100%);
 }
 
 .phone-notch {
@@ -1041,6 +1298,9 @@ main {
   border: 1px solid rgba(164, 201, 250, 0.24);
   color: #98b5d8;
   font-size: 0.72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 body[data-theme='dark'] .hero-insight-card {
@@ -1060,7 +1320,9 @@ body[data-theme='dark'] .mini-metric,
 body[data-theme='dark'] .checklist-card,
 body[data-theme='dark'] .usecase-card,
 body[data-theme='dark'] .persona-card,
-body[data-theme='dark'] .faq-list details {
+body[data-theme='dark'] .faq-list details,
+body[data-theme='dark'] .mode-brief-card,
+body[data-theme='dark'] .individuals-demo-surface {
   background: rgba(8, 18, 34, 0.6);
   border-color: rgba(173, 205, 248, 0.26);
 }
@@ -1071,6 +1333,27 @@ body[data-theme='dark'] .cta-banner {
 
 body[data-theme='dark'] .text-link {
   color: #b6fff3;
+}
+
+body[data-theme='dark'] .mode-step {
+  color: #043026;
+  background: #9ceede;
+}
+
+body[data-theme='dark'] .mode-tab {
+  background: rgba(14, 31, 58, 0.6);
+  border-color: rgba(135, 175, 230, 0.24);
+  color: #a5bee0;
+}
+
+body[data-theme='dark'] .mode-tab.active {
+  color: #06312a;
+  border-color: #79e7d5;
+  background: linear-gradient(130deg, #7ee6d4, #8fe7ff);
+}
+
+body[data-theme='dark'] .assistant-parameter-card {
+  background: rgba(238, 246, 255, 0.9);
 }
 
 .site-footer {
@@ -1198,6 +1481,11 @@ body[data-theme='dark'] .text-link {
   .sub-hero-metrics,
   .checklist-grid,
   .usecase-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mode-tabs {
+    display: grid;
     grid-template-columns: 1fr;
   }
 
