@@ -5,10 +5,10 @@ const team = [
     name: "Feng Xiang",
     role: "Team Lead",
     focus: "AI & Software Engineer",
-    academia: "Computer Science & User-Centered Design",
+    academia: "B.S. Computer Science",
     workplaces: ["High-Growth Tech Startups", "SaaS Enterprises"],
-    description: "Strategic leader focused on user-centered design, bringing high-tech AI products to market. Guides the vision for seamlessly integrating AI agents into everyday SMB workflows.",
-    tags: ["Product Management", "User Experience", "SaaS Growth"],
+    description: "Strategic leader focused on software architecture, AI model integration, and bringing high-tech AI products to market. Guides the vision for seamlessly integrating AI agents into everyday SMB workflows.",
+    tags: ["AI Architecture", "Full-Stack Optimization", "Machine Learning"],
     linkedin: "https://www.linkedin.com/in/fengxiang1/"
   },
   {
@@ -18,17 +18,17 @@ const team = [
     academia: "The George Washington University (B.S. Mechanical Engineering & Sustainability)",
     workplaces: ["Distributed Solar Development", "GE Solar"],
     description: "Multidisciplinary engineer with a strong background in analytical mechanics, energy systems, and sustainability. Drives commercial sales, real estate integrations, and engineering design.",
-    tags: ["Clean Energy", "Automation", "Hardware-Software Integration"],
+    tags: ["Clean Energy Systems", "AutoCAD/Revit Strategy", "Sustainable Real Estate"],
     linkedin: "https://www.linkedin.com/in/aaronpatron/"
   },
   {
     name: "Ali Ahmed",
     role: "Team Lead",
     focus: "Consulting, Software & UI/UX",
-    academia: "B.S. Mechanical Engineering & Data Science",
-    workplaces: ["NASA", "Autodesk"],
-    description: "10+ years of experience blending Data Science and Mechanical Engineering. Proven track record of building customer-facing software, B2B analytics tools, and physical products.",
-    tags: ["Deep Learning", "Data Systems", "Product Architecture"],
+    academia: "Columbia University (Architecture & Mechanical Engineering)",
+    workplaces: ["NASA", "Autodesk", "Transit Agencies"],
+    description: "Deep experience as an analyst for risk data within the transit field. Strong background integrating mechanical engineering principles with software and user-centered design.",
+    tags: ["Risk Data Analysis", "UI/UX Design", "Transit Infrastructure"],
     linkedin: "https://www.linkedin.com/in/aliahmed-co/"
   }
 ];
@@ -68,18 +68,19 @@ export default function Team() {
             </div>
 
             <div className="mb-6 space-y-4 flex-grow">
-              <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 block mb-1">Academia</span>
-                <p className="text-sm text-neutral-700">{member.academia}</p>
-              </div>
-              <div>
+              <div className="pt-2">
                 <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 block mb-1">Past Experience</span>
                 <p className="text-sm text-neutral-700">{member.workplaces.join(", ")}</p>
               </div>
               <div className="pt-2">
+                <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 block mb-1">Summary</span>
                 <p className="text-neutral-600 leading-relaxed text-sm">
                   {member.description}
                 </p>
+              </div>
+              <div className="pt-2">
+                <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 block mb-1">Academia</span>
+                <p className="text-sm text-neutral-700">{member.academia}</p>
               </div>
             </div>
 
