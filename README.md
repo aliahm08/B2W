@@ -1,47 +1,29 @@
-# B2W AI Website
+# Website Strategy: Minimal AI Solutions
 
-B2W is a React + Vite website for AI services across three audience pathways:
+## Core Philosophy
+- **Minimalism**: Remove non-essential elements. Focus on content and clarity.
+- **Monochrome**: Use only black, white, and shades of gray to convey professionalism and focus.
+- **Motion**: Use subtle, smooth scroll-based animations to guide the user's attention without overwhelming them.
+- **Clarity**: Avoid jargon. Speak plainly about problems and solutions.
 
-- Individuals
-- Enterprises
-- Government Solutions
+## Structure
+1. **Hero**: Immediate value proposition. No large distracting imagery.
+2. **Work**: Case studies presented as clean cards. Focus on results.
+3. **Industries**: Where we operate. Simple list or grid.
+4. **Team**: The humans behind the AI. Minimal portraits/avatars.
+5. **CTA**: Clear path to contact.
 
-## Current Product Experience
+## Design System
+- **Font**: Inter (Sans-serif).
+- **Colors**:
+  - Background: White (#ffffff) or very light gray (#f9fafb).
+  - Text: Black (#000000) or dark gray (#111827).
+  - Borders: Light gray (#e5e7eb).
+- **Components**:
+  - Cards: Bordered, no shadow (or very subtle), clear hierarchy.
+  - Buttons: Solid black with white text, or outlined.
 
-- Mission-first messaging based on [Mission.md](./Mission.md)
-- Product-first page structure (hero, immediate demo preview, focused CTA flow)
-- Top-right global CTA in header (`Book Intro Call`)
-- Manual light/dark mode toggle
-- Inter-based typography system with minimal visual noise
-
-## Routes
-
-- `/` Home
-- `/individuals`
-- `/enterprises`
-- `/government-solutions`
-
-## Docs
-
-- Strategy and scope: [Mission.md](./Mission.md)
-- Design system and UX principles: [Design_Strategy.md](./Design_Strategy.md)
-- Implementation history: [CHANGELOG.md](./CHANGELOG.md)
-
-## Development
-
-```bash
-npm install
-npm run dev
-```
-
-## Build
-
-```bash
-npm run build
-```
-
-## Deploy
-
-```bash
-npx vercel --prod
-```
+## Tech Stack
+- React
+- Tailwind CSS
+- Framer Motion (for animations)

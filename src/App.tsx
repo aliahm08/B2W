@@ -1,25 +1,34 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import SiteLayout from './components/SiteLayout';
-import EnterprisesPage from './pages/EnterprisesPage';
-import GovernmentPage from './pages/GovernmentPage';
-import HomePage from './pages/HomePage';
-import IndividualsPage from './pages/IndividualsPage';
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Work from './components/Work';
+import Industries from './components/Industries';
+import Team from './components/Team';
+import CTA from './components/CTA';
+import Footer from './components/Footer';
 
 export default function App() {
   return (
-    <Routes>
-      <Route element={<SiteLayout />}>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/individuals" element={<IndividualsPage />} />
-        <Route path="/enterprises" element={<EnterprisesPage />} />
-        <Route path="/government" element={<GovernmentPage />} />
-
-        <Route path="/business-owners" element={<Navigate to="/individuals" replace />} />
-        <Route path="/federal-agencies" element={<Navigate to="/government" replace />} />
-        <Route path="/government-solutions" element={<Navigate to="/government" replace />} />
-      </Route>
-
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
+      <Navbar />
+      <main>
+        <Hero />
+        <Work />
+        <section id="industries">
+          <Industries />
+        </section>
+        <section id="team">
+          <Team />
+        </section>
+        <section id="contact">
+          <CTA />
+        </section>
+      </main>
+      <Footer />
+    </div>
   );
 }
