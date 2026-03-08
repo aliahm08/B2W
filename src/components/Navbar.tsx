@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-100">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <a href="#" className="text-xl font-medium tracking-tight">Minimal AI</a>
+        <a href="#" className="text-xl font-medium tracking-tight">B2W</a>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 text-sm font-medium text-neutral-600">
@@ -19,7 +19,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Menu Toggle */}
-        <button 
+        <button
           className="md:hidden p-2"
           onClick={() => setIsOpen(!isOpen)}
         >
@@ -29,7 +29,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden absolute top-20 left-0 right-0 bg-white border-b border-neutral-100 p-6 flex flex-col gap-4 shadow-lg"

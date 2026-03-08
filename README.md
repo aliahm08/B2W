@@ -1,4 +1,4 @@
-# Website Strategy: Minimal AI Solutions
+# Website Strategy: B2W
 
 ## Core Philosophy
 - **Minimalism**: Remove non-essential elements. Focus on content and clarity.
