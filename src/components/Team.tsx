@@ -7,7 +7,7 @@ const team = [
     focus: "Consulting, Software & UI/UX",
     academia: "Columbia University (M.Arch), George Washington University (B.S. Mechanical Engineering)",
     workplaces: ["WSP", "Huupe", "NASA", "Autodesk"],
-    description: "Mechanical Engineer with experience in building Data Analytics tools by training machine learning models for transportation and urban planning, safety management, architectural design, and risk mitigation. Nearly 10 years of reporting directly to C-Suite level executives at Fortune 500 companies and federal organizations. Experienced in consulting, corporate, and start up environments, managing projects of $150M in total.",
+    description: "Mechanical Engineer and Founder with a multidisciplinary background bridging physical engineering, advanced software architecture, and UX design. Draws on extensive experience leading technical roadmaps and design systems across high-profile organizations including NASA, Autodesk, WSP, and LaunchGood. Proven expertise in developing high-throughput data ingestion pipelines, training machine learning models, and building scalable, user-centric technology solutions.",
     tags: ["Product Management", "UX/UI Engineering", "Full-stack Development"],
     linkedin: "https://www.linkedin.com/in/aliahmed-co/"
   },
