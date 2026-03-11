@@ -17,15 +17,16 @@ export default function CTA() {
         <p className="text-xl text-neutral-400 mb-12 max-w-xl mx-auto">
           Let's discuss how we can apply focused intelligence to your specific challenges.
         </p>
-        
-        <motion.button
+
+        <motion.a
+          href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-lg font-medium hover:bg-neutral-200 transition-colors"
         >
           Get in touch
           <ArrowRight className="w-5 h-5" />
-        </motion.button>
+        </motion.a>
       </motion.div>
     </section>
   );

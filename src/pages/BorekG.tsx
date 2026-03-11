@@ -1,15 +1,25 @@
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import ChatBot from '../components/ChatBot';
 
 export default function BorekG() {
     return (
-        <div className="pt-24 pb-16 px-6 max-w-7xl mx-auto min-h-screen border-x border-neutral-200">
+        <article className="pt-24 pb-16 px-6 max-w-7xl mx-auto min-h-screen">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <div className="mb-12">
+                <header className="mb-12 border-b border-neutral-100 pb-8 mt-12">
+                    <Link
+                        to="/#work"
+                        className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-black transition-colors mb-8"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        Back to Work
+                    </Link>
+
                     <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-6">
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
@@ -26,7 +36,7 @@ export default function BorekG() {
                         analyzes campaign performance, suggests budget allocations, and drafts ad copy.
                     </p>
 
-                    <div className="flex flex-wrap gap-2 mb-12">
+                    <div className="flex flex-wrap gap-2">
                         <span className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm border border-neutral-200">
                             Consulting Bot
                         </span>
@@ -37,9 +47,9 @@ export default function BorekG() {
                             Data Scrubbing
                         </span>
                     </div>
-                </div>
+                </header>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <main className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* Content Section */}
                     <div className="space-y-8">
                         <section>
@@ -84,7 +94,7 @@ export default function BorekG() {
                     </div>
 
                     {/* Interactive AI Demo Section */}
-                    <div className="bg-white border border-neutral-200 p-6 flex flex-col h-[600px]">
+                    <aside className="bg-white border border-neutral-200 p-6 flex flex-col h-[600px]">
                         <div className="mb-4 pb-4 border-b border-neutral-200">
                             <h3 className="text-lg font-medium">Borek-G AI Consultant</h3>
                             <p className="text-sm text-neutral-500">Live Demo Environment</p>
@@ -93,9 +103,9 @@ export default function BorekG() {
                         <div className="flex-1 overflow-hidden relative">
                             <ChatBot />
                         </div>
-                    </div>
-                </div>
+                    </aside>
+                </main>
             </motion.div>
-        </div>
+        </article>
     );
 }

@@ -12,6 +12,7 @@ import Team from './components/Team';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import BorekG from './pages/BorekG';
+import UyghurEats from './pages/UyghurEats';
 
 function LandingPage() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/borek-g" element={<BorekG />} />
+          <Route path="/uyghur-eats" element={<UyghurEats />} />
         </Routes>
       </main>
       <Footer />

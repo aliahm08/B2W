@@ -53,4 +53,4 @@ Not allowed:
 - Footer contains mission line only.
 - Use one CTA contract everywhere:
   - Label: `Book Intro Call`
-  - Target: `mailto:team@b2w-ai.com?subject=B2W%20Intro%20Call`
+  - Target: `mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call`
