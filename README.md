@@ -25,5 +25,8 @@
 
 ## Tech Stack
 - React
+- Vite
+- TypeScript
 - Tailwind CSS
 - Framer Motion (for animations)
+- Lucide React (for icons)

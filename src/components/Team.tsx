@@ -2,34 +2,34 @@ import { motion } from 'motion/react';
 
 const team = [
   {
-    name: "Feng Xiang",
-    role: "Team Lead",
-    focus: "AI & Software Engineer",
-    academia: "B.S. Computer Science",
-    workplaces: ["High-Growth Tech Startups", "SaaS Enterprises"],
-    description: "Strategic leader focused on software architecture, AI model integration, and bringing high-tech AI products to market. Guides the vision for seamlessly integrating AI agents into everyday SMB workflows.",
-    tags: ["AI Architecture", "Full-Stack Optimization", "Machine Learning"],
-    linkedin: "https://www.linkedin.com/in/fengxiang1/"
+    name: "Ali Ahmed",
+    role: "CEO & GTM",
+    focus: "Consulting, Software & UI/UX",
+    academia: "Columbia University (M.Arch), George Washington University (B.S. Mechanical Engineering)",
+    workplaces: ["WSP", "Huupe", "NASA", "Autodesk"],
+    description: "Mechanical Engineer and Founder with expertise in full-stack development, UX/UI engineering, and AI architecture. Built real-time IoT platforms, modern data ingestion pipelines processing 50k+ events/sec, and guided technical roadmaps for both startups and federal organizations.",
+    tags: ["Product Management", "UX/UI Engineering", "Full-stack Development"],
+    linkedin: "https://www.linkedin.com/in/aliahmed-co/"
   },
   {
     name: "Aaron Patron",
-    role: "Team Lead",
-    focus: "Solar Development Engineer & Real Estate",
+    role: "M&A",
+    focus: "Commercial Analysis & Renewable Energy",
     academia: "The George Washington University (B.S. Mechanical Engineering & Sustainability)",
-    workplaces: ["Distributed Solar Development", "GE Solar"],
-    description: "Multidisciplinary engineer with a strong background in analytical mechanics, energy systems, and sustainability. Drives commercial sales, real estate integrations, and engineering design.",
-    tags: ["Clean Energy Systems", "AutoCAD/Revit Strategy", "Sustainable Real Estate"],
+    workplaces: ["American Power Resources", "DSD Renewables", "GE Solar", "Sol Systems"],
+    description: "Manager of Commercial Analysis driven by optimizing renewable energy. Extensive background in commercial sales, development engineering, and leading solar initiatives across top clean energy and power resource firms.",
+    tags: ["Cash Flow Forecasting", "Communication", "Mergers & Acquisitions (M&A)"],
     linkedin: "https://www.linkedin.com/in/aaronpatron/"
   },
   {
-    name: "Ali Ahmed",
-    role: "Team Lead",
-    focus: "Consulting, Software & UI/UX",
-    academia: "Columbia University (Architecture & Mechanical Engineering)",
-    workplaces: ["NASA", "Autodesk", "Transit Agencies"],
-    description: "Deep experience as an analyst for risk data within the transit field. Strong background integrating mechanical engineering principles with software and user-centered design.",
-    tags: ["Risk Data Analysis", "UI/UX Design", "Transit Infrastructure"],
-    linkedin: "https://www.linkedin.com/in/aliahmed-co/"
+    name: "Feng Xiang",
+    role: "R&D",
+    focus: "AI, Autonomous Driving & Robotics",
+    academia: "Carnegie Mellon University (M.S. Robotic Systems Development), GWU (B.S. Mechanical Engineering)",
+    workplaces: ["Waymo", "ISEE", "Forterra", "US Naval Research Laboratory"],
+    description: "Software Engineer specializing in autonomous driving, vehicle navigation, and robotics. Proven expertise in building advanced AI systems for robust autonomy in safety-critical environments and global supply chains.",
+    tags: ["Multi-Object Tracking", "Trajectory Prediction", "Motion Planning"],
+    linkedin: "https://www.linkedin.com/in/fengxiang1/"
   }
 ];
 

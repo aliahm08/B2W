@@ -3,6 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Work from './components/Work';
@@ -10,23 +11,35 @@ import Industries from './components/Industries';
 import Team from './components/Team';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
+import BorekG from './pages/BorekG';
+
+function LandingPage() {
+  return (
+    <>
+      <Hero />
+      <Work />
+      <section id="industries">
+        <Industries />
+      </section>
+      <section id="team">
+        <Team />
+      </section>
+      <section id="contact">
+        <CTA />
+      </section>
+    </>
+  );
+}
 
 export default function App() {
   return (
     <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
       <Navbar />
       <main>
-        <Hero />
-        <Work />
-        <section id="industries">
-          <Industries />
-        </section>
-        <section id="team">
-          <Team />
-        </section>
-        <section id="contact">
-          <CTA />
-        </section>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/borek-g" element={<BorekG />} />
+        </Routes>
       </main>
       <Footer />
     </div>

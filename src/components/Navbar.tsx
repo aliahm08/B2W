@@ -11,7 +11,7 @@ export default function Navbar() {
         <a href="#" className="text-xl font-medium tracking-tight">B2W</a>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 text-sm font-medium text-neutral-600">
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
           <a href="#work" className="hover:text-black transition-colors">Work</a>
           <a href="#industries" className="hover:text-black transition-colors">Industries</a>
           <a href="#team" className="hover:text-black transition-colors">Team</a>

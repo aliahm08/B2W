@@ -97,5 +97,17 @@ export const caseStudies = [
         impact: "Zero bottlenecks in material procurement",
         tags: ["Signal", "Voice/Chat", "Procurement"],
         date: "July 2025"
+    },
+    {
+        id: 10,
+        category: "FOOD & BEVERAGE",
+        serviceType: "Advertising Operations",
+        clientDescription: "Borek-G Cafe",
+        title: "AI Advertising Consultant",
+        description: "A specialized AI consulting agent deployed for Borek-G to optimize and manage digital advertising operations. By integrating directly into their daily workflow, the AI analyzes campaign performance, suggests budget allocations, and drafts ad copy.",
+        impact: "42% ROAS Increase & 10h Saved Weekly",
+        tags: ["Consulting Bot", "Ad Optimization", "Data Scrubbing"],
+        date: "March 2026",
+        link: "/borek-g"
     }
 ];

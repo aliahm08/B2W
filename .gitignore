@@ -7,3 +7,9 @@ coverage/
 .env*
 !.env.example
 .vercel
+.env*.local
+
+# Case studies
+src/content/case-studies/**/*.md
+!src/content/case-studies/**/README.md
+src/content/case-studies/**/*.json
