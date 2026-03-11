@@ -3,7 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Work from './components/Work';
@@ -13,6 +14,26 @@ import CTA from './components/CTA';
 import Footer from './components/Footer';
 import BorekG from './pages/BorekG';
 import UyghurEats from './pages/UyghurEats';
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      setTimeout(() => {
+        const id = hash.replace('#', '');
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
 
 function LandingPage() {
   return (
@@ -35,6 +56,7 @@ function LandingPage() {
 export default function App() {
   return (
     <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
+      <ScrollToTop />
       <Navbar />
       <main>
         <Routes>
