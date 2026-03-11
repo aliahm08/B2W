@@ -1,38 +1,38 @@
-# Website Content
+# B2W Website Content
 
-## Team Section
+*This document is the master source of truth for the website's text and copy. It is automatically maintained by AI and updated after code changes.*
 
-The team section order on the website is:
-1. Ali Ahmed
-2. Aaron Patron
-3. Feng Xiang
+## Hero
+**Headline:** We build intelligence.
+**Subheadline:** Solving complex problems with simple, effective AI solutions. No hype. Just results.
+**CTA:** See our work
 
-### Ali Ahmed
-- **Role:** CEO & GTM
-- **Focus:** Consulting, Software & UI/UX
-- **Education:** Columbia University (M.Arch), George Washington University (B.S. Mechanical Engineering)
-- **Top Skills:** Product Management, UX/UI Engineering, Full-stack Development
-- **Experience:** WSP, Huupe, NASA, Autodesk
-- **Summary:** Mechanical Engineer and Founder with expertise in full-stack development, UX/UI engineering, and AI architecture. Built real-time IoT platforms, modern data ingestion pipelines processing 50k+ events/sec, and guided technical roadmaps for both startups and federal organizations.
-- **Source:** [LinkedIn Profile](https://www.linkedin.com/in/aliahmed-co/)
-- **Local Profile Source:** [`Ali-Ahmed-Resume-3-2.pdf`](file:///Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/appian-job-scrub/Ali-Ahmed-Resume-3-2.pdf)
+## Example Capabilities
+- **AI Front-of-House Agent** (HOSPITALITY • Operations): Multi-channel AI agent directly integrated with WhatsApp...
+- **Cafe Operations Bot** (HOSPITALITY • Management): Deployed via Telegram to assist cafe managers...
+- **Supplier Logistics Copilot** (RETAIL • Logistics): A secure Signal-based agent...
+- **Dispatch & Booking Agent** (TRANSPORTATION • Dispatch): A localized AI booking engine operating entirely on WhatsApp...
+- **Campus Transit Assistant** (EDUCATION • Transit): Integrated directly into student communities via Telegram...
+- **Bus Scheduling & Rider Comm** (GOVERNMENT • Infrastructure): A Signal-integrated AI that processes massive municipal transit datasheets...
+- **EBITDA Optimization Engine** (REAL ESTATE • Finance): A Telegram bot designed for property managers...
+- **Lease Data Scrubbing Bot** (REAL ESTATE • Data Processing): Operates on WhatsApp...
+- **Field Vendor Coordinator** (CONSTRUCTION • Coordination): A Signal-based AI that acts as a middleman...
 
-### Aaron Patron
-- **Role:** M&A
-- **Focus:** Commercial Analysis & Renewable Energy
-- **Education:** The George Washington University (B.S. Mechanical Engineering & Sustainability)
-- **Top Skills:** Cash Flow Forecasting, Communication, Mergers & Acquisitions (M&A)
-- **Experience:** American Power Resources, DSD Renewables, GE Solar, Sol Systems
-- **Summary:** Manager of Commercial Analysis driven by optimizing renewable energy. Extensive background in commercial sales, development engineering, and leading solar initiatives across top clean energy and power resource firms.
-- **Source:** [LinkedIn Profile](https://www.linkedin.com/in/aaronpatron/)
-- **Local Profile Source:** [`Profile-Aaron-Patron.pdf`](file:///Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/Profile-Aaron-Patron.pdf)
+## Projects
+- **AI Advertising Consultant** (FOOD & BEVERAGE): A specialized AI consulting agent deployed for Borek-G...
+- **Uyghur Eats Restaurant Profile** (FOOD & BEVERAGE): A meticulous restaurant profile assessing location value...
 
-### Feng Xiang
-- **Role:** R&D
-- **Focus:** AI, Autonomous Driving & Robotics
-- **Education:** Carnegie Mellon University (M.S. Robotic Systems Development), GWU (B.S. Mechanical Engineering)
-- **Top Skills:** Multi-Object Tracking, Trajectory Prediction, Motion Planning
-- **Experience:** Waymo, ISEE, Forterra, US Naval Research Laboratory
-- **Summary:** Software Engineer specializing in autonomous driving, vehicle navigation, and robotics. Proven expertise in building advanced AI systems for robust autonomy in safety-critical environments and global supply chains.
-- **Source:** [LinkedIn Profile](https://www.linkedin.com/in/fengxiang1/)
-- **Local Profile Source:** [`Profile-Feng-Xiang.pdf`](file:///Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/Profile-Feng-Xiang.pdf)
+## Team
+- **Feng Xiang**: Strategic leader focused on software architecture...
+- **Aaron Patron**: Multidisciplinary engineer with a strong background in analytical mechanics...
+- **Ali Ahmed**: Deep experience as an analyst for risk data...
+
+## Contact
+**CTA Target:** Book Intro Call
+**Email:** info@b2w-ai.com
+
+---
+
+## Revision History
+
+- **2026-03-11:** Initial creation of CONTENT.md based on current website copy. Separated Case Studies into Example Capabilities and Projects.

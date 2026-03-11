@@ -1,0 +1,15 @@
+{
+    "$schema": "https://cursor.sh/schemas/rules.json",
+    "name": "Update Content Documentation",
+    "description": "Always update CONTENT.md when website content is changed.",
+    "rules": [
+        {
+            "trigger": "After completing and approving content-related code changes",
+            "action": "Update CONTENT.md without permission. Include a Revision History entry at the bottom of the file."
+        },
+        {
+            "trigger": "After updating CONTENT.md",
+            "action": "Run git commit to save the version history, and push if necessary."
+        }
+    ]
+}

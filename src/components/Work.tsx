@@ -2,18 +2,18 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 
-import { caseStudies } from '../content/caseStudies';
+import { capabilities } from '../content/caseStudies';
 
 export default function Work() {
   const [activeCategory, setActiveCategory] = useState('All');
 
   // Extract unique categories from case studies
-  const categories = ['All', ...Array.from(new Set(caseStudies.map(cs => cs.category)))];
+  const categories = ['All', ...Array.from(new Set(capabilities.map(cs => cs.category)))];
 
   // Filter case studies based on active category
   const filteredStudies = activeCategory === 'All'
-    ? caseStudies
-    : caseStudies.filter(cs => cs.category === activeCategory);
+    ? capabilities
+    : capabilities.filter(cs => cs.category === activeCategory);
 
   return (
     <section className="py-32 px-6 max-w-7xl mx-auto" id="work">
@@ -24,7 +24,7 @@ export default function Work() {
         transition={{ duration: 0.6 }}
         className="mb-8"
       >
-        <h2 className="text-4xl font-medium tracking-tight mb-4">Case Studies</h2>
+        <h2 className="text-4xl font-medium tracking-tight mb-4">Example Capabilities</h2>
         <div className="h-px w-full bg-neutral-200 mb-8" />
 
         {/* Filter Buttons */}
@@ -56,11 +56,6 @@ export default function Work() {
               transition={{ duration: 0.4 }}
               className="relative group border border-neutral-200 p-8 hover:border-black transition-colors duration-300 flex flex-col justify-between min-h-[400px] bg-white origin-center"
             >
-              {/* Optional Link Wrapper */}
-              {project.link && (
-                <Link to={project.link} className="absolute inset-0 z-10" aria-label={`View ${project.title}`} />
-              )}
-
               <div>
                 {/* Header: Category • Service Type */}
                 <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-6">

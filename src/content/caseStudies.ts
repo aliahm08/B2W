@@ -1,4 +1,4 @@
-export const caseStudies = [
+export const capabilities = [
     {
         id: 1,
         category: "HOSPITALITY",
@@ -97,7 +97,10 @@ export const caseStudies = [
         impact: "Zero bottlenecks in material procurement",
         tags: ["Signal", "Voice/Chat", "Procurement"],
         date: "July 2025"
-    },
+    }
+];
+
+export const projects = [
     {
         id: 10,
         category: "FOOD & BEVERAGE",
