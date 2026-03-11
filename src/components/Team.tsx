@@ -7,7 +7,7 @@ const team = [
     focus: "Consulting, Software & UI/UX",
     academia: "Columbia University (M.Arch), George Washington University (B.S. Mechanical Engineering)",
     workplaces: ["WSP", "Huupe", "NASA", "Autodesk"],
-    description: "Mechanical Engineer and Founder with expertise in full-stack development, UX/UI engineering, and AI architecture. Built real-time IoT platforms, modern data ingestion pipelines processing 50k+ events/sec, and guided technical roadmaps for both startups and federal organizations.",
+    description: "Mechanical Engineer with experience in building Data Analytics tools by training machine learning models for transportation and urban planning, safety management, architectural design, and risk mitigation. Nearly 10 years of reporting directly to C-Suite level executives at Fortune 500 companies and federal organizations. Experienced in consulting, corporate, and start up environments, managing projects of $150M in total.",
     tags: ["Product Management", "UX/UI Engineering", "Full-stack Development"],
     linkedin: "https://www.linkedin.com/in/aliahmed-co/"
   },
@@ -17,7 +17,7 @@ const team = [
     focus: "Commercial Analysis & Renewable Energy",
     academia: "The George Washington University (B.S. Mechanical Engineering & Sustainability)",
     workplaces: ["American Power Resources", "DSD Renewables", "GE Solar", "Sol Systems"],
-    description: "Manager of Commercial Analysis driven by optimizing renewable energy. Extensive background in commercial sales, development engineering, and leading solar initiatives across top clean energy and power resource firms.",
+    description: "Manager of Commercial Analysis @ American Power Resources | Optimizing Renewable Energy",
     tags: ["Cash Flow Forecasting", "Communication", "Mergers & Acquisitions (M&A)"],
     linkedin: "https://www.linkedin.com/in/aaronpatron/"
   },
@@ -27,7 +27,7 @@ const team = [
     focus: "AI, Autonomous Driving & Robotics",
     academia: "Carnegie Mellon University (M.S. Robotic Systems Development), GWU (B.S. Mechanical Engineering)",
     workplaces: ["Waymo", "ISEE", "Forterra", "US Naval Research Laboratory"],
-    description: "Software Engineer specializing in autonomous driving, vehicle navigation, and robotics. Proven expertise in building advanced AI systems for robust autonomy in safety-critical environments and global supply chains.",
+    description: "Software Engineer at Waymo",
     tags: ["Multi-Object Tracking", "Trajectory Prediction", "Motion Planning"],
     linkedin: "https://www.linkedin.com/in/fengxiang1/"
   }

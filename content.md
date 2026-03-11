@@ -5,7 +5,6 @@
 ## Hero
 **Headline:** We build intelligence.
 **Subheadline:** Solving complex problems with simple, effective AI solutions. No hype. Just results.
-**CTA:** See our work
 
 ## Example Capabilities
 - **AI Front-of-House Agent** (HOSPITALITY • Operations): Multi-channel AI agent directly integrated with WhatsApp...
@@ -23,9 +22,9 @@
 - **Uyghur Eats Restaurant Profile** (FOOD & BEVERAGE): A meticulous restaurant profile assessing location value...
 
 ## Team
-- **Feng Xiang**: Strategic leader focused on software architecture...
-- **Aaron Patron**: Multidisciplinary engineer with a strong background in analytical mechanics...
-- **Ali Ahmed**: Deep experience as an analyst for risk data...
+- **Ali Ahmed**: Mechanical Engineer with experience in building Data Analytics tools by training machine learning models for transportation and urban planning...
+- **Aaron Patron**: Manager of Commercial Analysis @ American Power Resources | Optimizing Renewable Energy...
+- **Feng Xiang**: Software Engineer at Waymo...
 
 ## Contact
 **CTA Target:** Book Intro Call
@@ -35,4 +34,5 @@
 
 ## Revision History
 
+- **2026-03-11:** Merged Example Capabilities directly into the Hero section and removed the standalone Work page section. Updated Team member profile descriptions to directly map to their exported JSON resumes.
 - **2026-03-11:** Initial creation of CONTENT.md based on current website copy. Separated Case Studies into Example Capabilities and Projects.
