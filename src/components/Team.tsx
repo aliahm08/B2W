@@ -17,7 +17,7 @@ const team = [
     focus: "Commercial Analysis & Renewable Energy",
     academia: "The George Washington University (B.S. Mechanical Engineering & Sustainability)",
     workplaces: ["American Power Resources", "DSD Renewables", "GE Solar", "Sol Systems"],
-    description: "Manager of Commercial Analysis @ American Power Resources | Optimizing Renewable Energy",
+    description: "Manager of Commercial Analysis specializing in renewable energy optimization. Draws on nearly a decade of experience in commercial sales, architectural design, and development engineering across top clean energy firms including American Power Resources, DSD Renewables, and GE Solar. Proven expertise in cash flow forecasting, mechanical engineering projects, and leading multifaceted solar initiatives within the energy sector.",
     tags: ["Cash Flow Forecasting", "Communication", "Mergers & Acquisitions (M&A)"],
     linkedin: "https://www.linkedin.com/in/aaronpatron/"
   },
@@ -27,7 +27,7 @@ const team = [
     focus: "AI, Autonomous Driving & Robotics",
     academia: "Carnegie Mellon University (M.S. Robotic Systems Development), GWU (B.S. Mechanical Engineering)",
     workplaces: ["Waymo", "ISEE", "Forterra", "US Naval Research Laboratory"],
-    description: "Software Engineer at Waymo",
+    description: "Software Engineer specializing in autonomous driving, vehicle navigation, and enterprise robotics. Proven expertise in building advanced AI systems for robust autonomy in safety-critical environments, global supply chains, and advanced transit. Holds an M.S. in Robotic Systems Development from Carnegie Mellon University and brings deep research and engineering experience from Waymo, ISEE, and Forterra.",
     tags: ["Multi-Object Tracking", "Trajectory Prediction", "Motion Planning"],
     linkedin: "https://www.linkedin.com/in/fengxiang1/"
   }
