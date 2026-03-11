@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Work from './components/Work';
 import Industries from './components/Industries';
 import Team from './components/Team';
 import CTA from './components/CTA';
@@ -38,6 +39,7 @@ function LandingPage() {
   return (
     <>
       <Hero />
+      <Work />
       <section id="industries">
         <Industries />
       </section>

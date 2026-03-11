@@ -26,6 +26,7 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
+          <Link to="/#work" className="hover:text-black transition-colors">Capabilities</Link>
           <Link to="/#industries" className="hover:text-black transition-colors">Projects</Link>
           <Link to="/#team" className="hover:text-black transition-colors">Team</Link>
           <a href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call" className="bg-black text-white px-4 py-2 rounded-full hover:bg-neutral-800 transition-colors">Contact</a>
@@ -47,6 +48,7 @@ export default function Navbar() {
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden absolute top-20 left-0 right-0 bg-white border-b border-neutral-100 p-6 flex flex-col gap-4 shadow-lg"
         >
+          <Link to="/#work" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Capabilities</Link>
           <Link to="/#industries" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Projects</Link>
           <Link to="/#team" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Team</Link>
           <a href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call" className="text-lg font-medium text-black" onClick={() => setIsOpen(false)}>Contact</a>

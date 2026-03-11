@@ -5,8 +5,9 @@
 ## Hero
 **Headline:** We build intelligence.
 **Subheadline:** Solving complex problems with simple, effective AI solutions. No hype. Just results.
+**CTA:** See our work
 
-## Example Capabilities
+## Capabilities
 - **AI Front-of-House Agent** (HOSPITALITY • Operations): Multi-channel AI agent directly integrated with WhatsApp...
 - **Cafe Operations Bot** (HOSPITALITY • Management): Deployed via Telegram to assist cafe managers...
 - **Supplier Logistics Copilot** (RETAIL • Logistics): A secure Signal-based agent...
