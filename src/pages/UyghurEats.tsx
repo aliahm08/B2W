@@ -40,11 +40,11 @@ export default function UyghurEats() {
             >
                 <header className="mb-12 border-b border-neutral-100 pb-8 mt-12">
                     <Link
-                        to="/#work"
+                        to="/#industries"
                         className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-black transition-colors mb-8"
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        Back to Work
+                        Back to Projects
                     </Link>
 
                     <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-6">
