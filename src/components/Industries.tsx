@@ -31,10 +31,15 @@ export default function Industries() {
             )}
 
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-6">
-                <span className="font-semibold text-neutral-900">{project.category}</span>
-                <span className="text-neutral-300">•</span>
-                <span>{project.serviceType}</span>
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
+                  <span className="font-semibold text-neutral-900">{project.category}</span>
+                  <span className="text-neutral-300">•</span>
+                  <span>{project.serviceType}</span>
+                </div>
+                <span className="border border-neutral-200 bg-neutral-50 px-2 py-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-600">
+                  {project.status}
+                </span>
               </div>
 
               <div className="text-sm text-neutral-500 italic mb-2">

@@ -151,6 +151,9 @@ export default function UyghurEats() {
                             <p className="mt-3 text-xs text-neutral-500">
                                 Opens a short acquisition intake form for direct outreach.
                             </p>
+                            <p className="mt-4 border-t border-white/10 pt-4 text-[11px] leading-5 text-neutral-400">
+                                B2W LLC is not acting as a brokerage or agent in this matter. B2W LLC provides consulting services to the client only.
+                            </p>
                         </aside>
                     </div>
                 </header>
@@ -347,6 +350,9 @@ export default function UyghurEats() {
                             </h2>
                             <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
                                 Share your proposed purchase range, buyer profile, and intended close timeline. This form is positioned for individual acquirers.
+                            </p>
+                            <p className="mt-3 max-w-xl text-xs leading-5 text-neutral-500">
+                                B2W LLC is not a brokerage or agent and does not represent either party in a brokerage capacity. B2W LLC provides consulting services to the client.
                             </p>
                         </div>
 
