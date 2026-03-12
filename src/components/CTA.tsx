@@ -2,6 +2,10 @@ import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 
 export default function CTA() {
+  const openBooking = () => {
+    window.dispatchEvent(new CustomEvent('b2w-assistant:open', { detail: { tab: 'book' } }));
+  };
+
   return (
     <section className="py-32 px-6 max-w-7xl mx-auto">
       <motion.div
@@ -18,15 +22,16 @@ export default function CTA() {
           Let's discuss how we can apply focused intelligence to your specific challenges.
         </p>
 
-        <motion.a
-          href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
+        <motion.button
+          type="button"
+          onClick={openBooking}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="inline-flex items-center gap-3 bg-white text-black px-8 py-4 text-lg font-medium hover:bg-neutral-200 transition-colors"
         >
-          Get in touch
+          Book a consultation
           <ArrowRight className="w-5 h-5" />
-        </motion.a>
+        </motion.button>
       </motion.div>
     </section>
   );

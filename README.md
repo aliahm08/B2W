@@ -30,3 +30,9 @@
 - Tailwind CSS
 - Framer Motion (for animations)
 - Lucide React (for icons)
+
+## Website Assistant
+- The site now uses server-side `/api` routes for chat and consultation booking.
+- Ollama credentials stay in environment variables and are never exposed to the browser bundle.
+- Knowledge is pulled from local `.md` and `.json` files plus optional allowlisted Google Drive files/folders.
+- Calendar reads and event creation are restricted to `GOOGLE_ALLOWED_CALENDAR_IDS`, and Drive writes are restricted to `GOOGLE_DRIVE_BOOKING_FOLDER_ID` when that folder is also allowlisted.

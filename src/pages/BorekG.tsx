@@ -101,8 +101,8 @@ export default function BorekG() {
                     {/* Interactive AI Demo Section */}
                     <aside className="bg-white border border-neutral-200 p-6 flex flex-col h-[600px]">
                         <div className="mb-4 pb-4 border-b border-neutral-200">
-                            <h3 className="text-lg font-medium">Borek-G AI Consultant</h3>
-                            <p className="text-sm text-neutral-500">Live Demo Environment</p>
+                            <h3 className="text-lg font-medium">B2W Assistant</h3>
+                            <p className="text-sm text-neutral-500">Live site assistant</p>
                         </div>
 
                         <div className="flex-1 overflow-hidden relative">

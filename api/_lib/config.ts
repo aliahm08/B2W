@@ -1,0 +1,70 @@
+import path from 'node:path';
+
+const DEFAULT_EXCLUDED_SEGMENTS = [
+  '.git',
+  '.vercel',
+  'archive-2026-03-08',
+  'dist',
+  'node_modules',
+  'public',
+  'tmp_pdf_parser',
+];
+
+function splitCsv(value?: string): string[] {
+  return (value ?? '')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
+function unique(values: string[]): string[] {
+  return Array.from(new Set(values));
+}
+
+export const config = {
+  ollama: {
+    apiKey: process.env.OLLAMA_API_KEY ?? '',
+    baseUrl: (process.env.OLLAMA_BASE_URL ?? 'http://127.0.0.1:11434').replace(/\/$/, ''),
+    model: process.env.OLLAMA_MODEL ?? 'llama3.1:8b',
+    apiStyle: (process.env.OLLAMA_API_STYLE ?? 'ollama').toLowerCase(),
+  },
+  corpus: {
+    rootDir: process.cwd(),
+    includeExtensions: ['.json', '.md'],
+    excludedSegments: DEFAULT_EXCLUDED_SEGMENTS,
+    maxDocuments: Number(process.env.KNOWLEDGE_MAX_DOCUMENTS ?? '40'),
+    maxSnippetChars: Number(process.env.KNOWLEDGE_MAX_SNIPPET_CHARS ?? '16000'),
+  },
+  google: {
+    serviceAccountJson: process.env.GOOGLE_SERVICE_ACCOUNT_JSON ?? '',
+    allowedCalendarIds: unique(splitCsv(process.env.GOOGLE_ALLOWED_CALENDAR_IDS)),
+    bookingCalendarId: process.env.GOOGLE_BOOKING_CALENDAR_ID ?? '',
+    internalAttendeeEmails: unique(splitCsv(process.env.GOOGLE_INTERNAL_ATTENDEE_EMAILS)),
+    allowedAttendeeEmails: unique(splitCsv(process.env.GOOGLE_ALLOWED_ATTENDEE_EMAILS)),
+    allowedAttendeeDomains: unique(splitCsv(process.env.GOOGLE_ALLOWED_ATTENDEE_DOMAINS)),
+    allowedDriveFileIds: unique(splitCsv(process.env.GOOGLE_DRIVE_ALLOWED_FILE_IDS)),
+    allowedDriveFolderIds: unique(splitCsv(process.env.GOOGLE_DRIVE_ALLOWED_FOLDER_IDS)),
+    bookingFolderId: process.env.GOOGLE_DRIVE_BOOKING_FOLDER_ID ?? '',
+    availabilityDays: Number(process.env.GOOGLE_BOOKING_LOOKAHEAD_DAYS ?? '14'),
+    slotMinutes: Number(process.env.GOOGLE_BOOKING_SLOT_MINUTES ?? '60'),
+    workdayStartHour: Number(process.env.GOOGLE_BOOKING_START_HOUR ?? '10'),
+    workdayEndHour: Number(process.env.GOOGLE_BOOKING_END_HOUR ?? '17'),
+    timezone: process.env.GOOGLE_BOOKING_TIMEZONE ?? 'America/New_York',
+  },
+};
+
+export function isAllowedCalendar(calendarId: string): boolean {
+  return config.google.allowedCalendarIds.includes(calendarId);
+}
+
+export function isAllowedDriveFile(fileId: string): boolean {
+  return config.google.allowedDriveFileIds.includes(fileId);
+}
+
+export function isAllowedDriveFolder(folderId: string): boolean {
+  return config.google.allowedDriveFolderIds.includes(folderId);
+}
+
+export function resolveRelativePath(filePath: string): string {
+  return path.relative(config.corpus.rootDir, filePath) || '.';
+}

@@ -12,6 +12,7 @@ import Industries from './components/Industries';
 import Team from './components/Team';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
+import AssistantWidget from './components/AssistantWidget';
 import BorekG from './pages/BorekG';
 import UyghurEats from './pages/UyghurEats';
 import Seo from './components/Seo';
@@ -71,6 +72,7 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <AssistantWidget />
     </div>
   );
 }
