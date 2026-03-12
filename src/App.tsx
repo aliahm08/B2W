@@ -14,6 +14,7 @@ import CTA from './components/CTA';
 import Footer from './components/Footer';
 import BorekG from './pages/BorekG';
 import UyghurEats from './pages/UyghurEats';
+import Seo from './components/Seo';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -38,6 +39,10 @@ function ScrollToTop() {
 function LandingPage() {
   return (
     <>
+      <Seo
+        title="AI Consulting for Operations, Logistics, and Growth"
+        description="B2W builds practical AI systems for hospitality, retail, transportation, government, and real estate teams focused on measurable operational results."
+      />
       <Hero />
       <Work />
       <section id="industries">

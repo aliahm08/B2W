@@ -1,0 +1,5 @@
+version: 1
+agent:
+  display_name: Git Repo Reconcile
+  short_description: Verify and resolve local vs repo differences without overriding the preferred local structure.
+  default_prompt: Corroborate local and remote Git differences, explain them clearly, and walk through the lowest-risk way to reconcile them while preserving the local folder structure.

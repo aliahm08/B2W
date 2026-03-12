@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
+import Seo from '../components/Seo';
 
 export default function UyghurEats() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -73,6 +74,10 @@ export default function UyghurEats() {
 
     return (
         <article className="pt-24 pb-16 px-6 max-w-7xl mx-auto min-h-screen">
+            <Seo
+                title="Uyghur Eats Restaurant Profile"
+                description="Business profile of Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty for acquisition evaluation."
+            />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

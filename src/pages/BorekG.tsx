@@ -2,10 +2,15 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import ChatBot from '../components/ChatBot';
+import Seo from '../components/Seo';
 
 export default function BorekG() {
     return (
         <article className="pt-24 pb-16 px-6 max-w-7xl mx-auto min-h-screen">
+            <Seo
+                title="Borek-G Advertising Operations"
+                description="Case study for Borek-G showing how B2W used an AI consulting agent to optimize advertising operations, improve ROAS, and reduce weekly management overhead."
+            />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
