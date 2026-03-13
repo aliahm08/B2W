@@ -1,7 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { config, resolveRelativePath } from './config';
-import { getAllowedDriveDocuments } from './google';
 
 type KnowledgeDocument = {
   id: string;
@@ -106,7 +105,11 @@ async function loadCorpus(): Promise<KnowledgeDocument[]> {
     await Promise.all(localPaths.map((filePath) => readLocalDocument(filePath)))
   ).filter((doc): doc is KnowledgeDocument => Boolean(doc));
 
-  const driveDocs = await getAllowedDriveDocuments();
+  let driveDocs: KnowledgeDocument[] = [];
+  if (config.google.serviceAccountJson) {
+    const { getAllowedDriveDocuments } = await import('./google');
+    driveDocs = await getAllowedDriveDocuments();
+  }
 
   cachedCorpus = [...localDocs, ...driveDocs];
   cachedAt = now;

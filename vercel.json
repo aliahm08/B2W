@@ -1,3 +1,12 @@
 {
-    "name": "b2w"
+  "name": "b2w",
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/(?!api(?:/|$))(?!.*\\.[^/]+$).*$",
+      "dest": "/index.html"
+    }
+  ]
 }

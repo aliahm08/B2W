@@ -25,6 +25,25 @@ const INITIAL_MESSAGE: ChatMessage = {
     'Ask about B2W services, industries, case studies, or use the booking tab to schedule a consultation.',
 };
 
+async function readApiResponse(response: Response) {
+  const raw = await response.text();
+
+  try {
+    return {
+      ok: response.ok,
+      status: response.status,
+      data: JSON.parse(raw),
+    };
+  } catch {
+    return {
+      ok: response.ok,
+      status: response.status,
+      data: null,
+      raw,
+    };
+  }
+}
+
 function formatSlotLabel(slot: BookingSlot, timeZone: string): string {
   const start = new Date(slot.start);
   const formatter = new Intl.DateTimeFormat('en-US', {
@@ -139,10 +158,15 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
         }),
       });
 
-      const data = await response.json();
+      const result = await readApiResponse(response);
 
-      if (!response.ok) {
-        throw new Error(data.error ?? 'Unable to reach the assistant.');
+      if (!result.ok) {
+        throw new Error(
+          result.data?.error ??
+            (result.raw?.trim()
+              ? `Assistant request failed (${result.status}).`
+              : 'Unable to reach the assistant.'),
+        );
       }
 
       setMessages((current) => [
@@ -150,7 +174,7 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
         {
           id: `assistant-${Date.now()}`,
           role: 'assistant',
-          content: data.reply,
+          content: result.data.reply,
         },
       ]);
     } catch (error) {
@@ -195,10 +219,15 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
         }),
       });
 
-      const data = await response.json();
+      const result = await readApiResponse(response);
 
-      if (!response.ok) {
-        throw new Error(data.error ?? 'Unable to book consultation.');
+      if (!result.ok) {
+        throw new Error(
+          result.data?.error ??
+            (result.raw?.trim()
+              ? `Booking request failed (${result.status}).`
+              : 'Unable to book consultation.'),
+        );
       }
 
       setBookingStatus('Consultation booked. A calendar invite will be sent shortly.');

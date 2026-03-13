@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
 import BorekG from './pages/BorekG';
 import UyghurEats from './pages/UyghurEats';
+import CapabilityPage from './pages/CapabilityPage';
 import Seo from './components/Seo';
 
 function ScrollToTop() {
@@ -69,6 +70,7 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/borek-g" element={<BorekG />} />
           <Route path="/uyghur-eats" element={<UyghurEats />} />
+          <Route path="/capabilities/:slug" element={<CapabilityPage />} />
         </Routes>
       </main>
       <Footer />

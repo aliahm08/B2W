@@ -23,12 +23,12 @@ export default function Hero() {
 
         <div className="flex flex-wrap gap-5">
           <motion.a
-            href="/#work"
+            href="/#capabilities"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="group inline-flex items-center gap-2 text-lg font-medium border-b border-black pb-1 hover:text-neutral-600 transition-colors"
           >
-            See our work
+            Explore capabilities
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.a>
 

@@ -1,0 +1,292 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - link "B2W" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e7]:
+        - link "Capabilities" [ref=e8] [cursor=pointer]:
+          - /url: /#capabilities
+        - link "Projects" [ref=e9] [cursor=pointer]:
+          - /url: /#industries
+        - link "Team" [ref=e10] [cursor=pointer]:
+          - /url: /#team
+        - link "Contact" [ref=e11] [cursor=pointer]:
+          - /url: mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call
+  - main [ref=e12]:
+    - generic [ref=e14]:
+      - heading "We build intelligence." [level=1] [ref=e15]
+      - paragraph [ref=e16]: Solving complex problems with simple, effective AI solutions. No hype. Just results.
+      - generic [ref=e17]:
+        - link "Explore capabilities" [ref=e18] [cursor=pointer]:
+          - /url: /#capabilities
+          - text: Explore capabilities
+          - img [ref=e19]
+        - button "Talk to the assistant" [ref=e21]
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - heading "Capabilities" [level=2] [ref=e24]
+        - paragraph [ref=e25]: High-level operating systems we can deploy inside a business. Filter by lane, then open any capability as its own page for the full workflow, delivery shape, and human handoff.
+        - generic [ref=e27]:
+          - button "All" [ref=e28]
+          - button "Front-of-House" [ref=e29]
+          - button "Back-of-House" [ref=e30]
+          - button "Management & Admin" [ref=e31]
+          - button "Contractor Operations" [ref=e32]
+      - generic [ref=e33]:
+        - article [ref=e34]:
+          - link "View Guest Experience Concierge" [ref=e35] [cursor=pointer]:
+            - /url: /capabilities/guest-experience-concierge
+          - generic [ref=e36]:
+            - generic [ref=e37]: Front-of-House
+            - generic [ref=e38]: •
+            - generic [ref=e39]: Capability
+          - heading "Guest Experience Concierge" [level=3] [ref=e40]
+          - paragraph [ref=e41]: A 24/7 host agent that handles calls, texts, and chat inquiries so the floor team can stay focused on service.
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - generic [ref=e44]: Phone
+              - generic [ref=e45]: SMS
+            - generic [ref=e46]:
+              - text: View
+              - img [ref=e47]
+        - article [ref=e50]:
+          - link "View Post-Visit Review Recovery" [ref=e51] [cursor=pointer]:
+            - /url: /capabilities/post-visit-review-recovery
+          - generic [ref=e52]:
+            - generic [ref=e53]: Front-of-House
+            - generic [ref=e54]: •
+            - generic [ref=e55]: Capability
+          - heading "Post-Visit Review Recovery" [level=3] [ref=e56]
+          - paragraph [ref=e57]: A follow-up system that recovers unhappy guests privately and pushes satisfied guests toward public reviews.
+          - generic [ref=e58]:
+            - generic [ref=e59]:
+              - generic [ref=e60]: POS
+              - generic [ref=e61]: CRM
+            - generic [ref=e62]:
+              - text: View
+              - img [ref=e63]
+        - article [ref=e66]:
+          - link "View Delivery Demand Router" [ref=e67] [cursor=pointer]:
+            - /url: /capabilities/delivery-demand-router
+          - generic [ref=e68]:
+            - generic [ref=e69]: Front-of-House
+            - generic [ref=e70]: •
+            - generic [ref=e71]: Capability
+          - heading "Delivery Demand Router" [level=3] [ref=e72]
+          - paragraph [ref=e73]: A demand-control layer that protects kitchen throughput by adjusting messaging, timing, and channel behavior in real time.
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - generic [ref=e76]: Delivery platforms
+              - generic [ref=e77]: POS
+            - generic [ref=e78]:
+              - text: View
+              - img [ref=e79]
+        - article [ref=e82]:
+          - link "View Autonomous Inventory" [ref=e83] [cursor=pointer]:
+            - /url: /capabilities/autonomous-inventory
+          - generic [ref=e84]:
+            - generic [ref=e85]: Back-of-House
+            - generic [ref=e86]: •
+            - generic [ref=e87]: Capability
+          - heading "Autonomous Inventory" [level=3] [ref=e88]
+          - paragraph [ref=e89]: Tracks stock levels continuously and places vendor orders before crews discover shortages mid-shift.
+          - generic [ref=e90]:
+            - generic [ref=e91]:
+              - generic [ref=e92]: POS
+              - generic [ref=e93]: Inventory data
+            - generic [ref=e94]:
+              - text: View
+              - img [ref=e95]
+        - article [ref=e98]:
+          - link "View The Prep Oracle" [ref=e99] [cursor=pointer]:
+            - /url: /capabilities/prep-oracle
+          - generic [ref=e100]:
+            - generic [ref=e101]: Back-of-House
+            - generic [ref=e102]: •
+            - generic [ref=e103]: Capability
+          - heading "The Prep Oracle" [level=3] [ref=e104]
+          - paragraph [ref=e105]: Builds prep plans from weather, local events, and historical sales patterns instead of gut feel.
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - generic [ref=e108]: Historical sales
+              - generic [ref=e109]: Weather
+            - generic [ref=e110]:
+              - text: View
+              - img [ref=e111]
+        - article [ref=e114]:
+          - link "View Equipment Watchdog" [ref=e115] [cursor=pointer]:
+            - /url: /capabilities/equipment-watchdog
+          - generic [ref=e116]:
+            - generic [ref=e117]: Back-of-House
+            - generic [ref=e118]: •
+            - generic [ref=e119]: Capability
+          - heading "Equipment Watchdog" [level=3] [ref=e120]
+          - paragraph [ref=e121]: Monitors kitchen equipment and flags failure risk before a freezer or fridge goes down.
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - generic [ref=e124]: Sensors
+              - generic [ref=e125]: Maintenance vendors
+            - generic [ref=e126]:
+              - text: View
+              - img [ref=e127]
+      - button "Show all 17 capabilities" [ref=e131]
+    - generic [ref=e133]:
+      - heading "Projects" [level=2] [ref=e135]
+      - generic [ref=e137]:
+        - generic [ref=e138]:
+          - link "View AI Advertising Consultant" [ref=e139] [cursor=pointer]:
+            - /url: /borek-g
+          - generic [ref=e140]:
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]: FOOD & BEVERAGE
+                - generic [ref=e144]: •
+                - generic [ref=e145]: Advertising Operations
+              - generic [ref=e146]: Completed
+            - generic [ref=e147]: Borek-G Cafe
+            - heading "AI Advertising Consultant" [level=3] [ref=e148]
+            - paragraph [ref=e149]: A specialized AI consulting agent deployed for Borek-G to optimize and manage digital advertising operations. By integrating directly into their daily workflow, the AI analyzes campaign performance, suggests budget allocations, and drafts ad copy.
+          - generic [ref=e150]:
+            - generic [ref=e151]:
+              - generic [ref=e152]: Impact
+              - text: 42% ROAS Increase & 10h Saved Weekly
+            - generic [ref=e153]:
+              - generic [ref=e154]:
+                - generic [ref=e155]: Consulting Bot
+                - generic [ref=e156]: Ad Optimization
+                - generic [ref=e157]: Data Scrubbing
+              - generic [ref=e158]: March 2026
+        - generic [ref=e159]:
+          - link "View Uyghur Eats Restaurant Profile" [ref=e160] [cursor=pointer]:
+            - /url: /uyghur-eats
+          - generic [ref=e161]:
+            - generic [ref=e162]:
+              - generic [ref=e163]:
+                - generic [ref=e164]: FOOD & BEVERAGE
+                - generic [ref=e165]: •
+                - generic [ref=e166]: Real Estate Acquisition
+              - generic [ref=e167]: In Progress
+            - generic [ref=e168]: Authentic Uyghur Cuisine in DC
+            - heading "Uyghur Eats Restaurant Profile" [level=3] [ref=e169]
+            - paragraph [ref=e170]: A meticulous restaurant profile assessing location value, operational footprint, and community integration for Uyghur Eats. The analysis highlights key drivers such as their signature hand-pulled noodles and deep neighborhood loyalty, tailored for real estate acquisition evaluation.
+          - generic [ref=e171]:
+            - generic [ref=e172]:
+              - generic [ref=e173]: Impact
+              - text: High-Traffic Neighborhood Anchor
+            - generic [ref=e174]:
+              - generic [ref=e175]:
+                - generic [ref=e176]: Real Estate Profile
+                - generic [ref=e177]: Location Value
+                - generic [ref=e178]: Market Positioning
+              - generic [ref=e179]: March 2026
+    - generic [ref=e181]:
+      - heading "Team" [level=2] [ref=e183]
+      - generic [ref=e185]:
+        - generic [ref=e186]:
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - heading "Ali Ahmed" [level=3] [ref=e189]:
+                - link "Ali Ahmed" [ref=e190] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/aliahmed-co/
+              - paragraph [ref=e191]: CEO & GTM
+            - paragraph [ref=e192]: Consulting, Software & UI/UX
+          - generic [ref=e193]:
+            - generic [ref=e194]:
+              - generic [ref=e195]: Past Experience
+              - paragraph [ref=e196]: WSP, Huupe, NASA, Autodesk
+            - generic [ref=e197]:
+              - generic [ref=e198]: Summary
+              - paragraph [ref=e199]: Mechanical Engineer and Founder with a multidisciplinary background bridging physical engineering, advanced software architecture, and UX design. Draws on extensive experience leading technical roadmaps and design systems across high-profile organizations including NASA, Autodesk, WSP, and LaunchGood. Proven expertise in developing high-throughput data ingestion pipelines, training machine learning models, and building scalable, user-centric technology solutions.
+            - generic [ref=e200]:
+              - generic [ref=e201]: Academia
+              - paragraph [ref=e202]: Columbia University (M.Arch), George Washington University (B.S. Mechanical Engineering)
+          - generic [ref=e203]:
+            - generic [ref=e204]: Product Management
+            - generic [ref=e205]: UX/UI Engineering
+            - generic [ref=e206]: Full-stack Development
+        - generic [ref=e207]:
+          - generic [ref=e208]:
+            - generic [ref=e209]:
+              - heading "Aaron Patron" [level=3] [ref=e210]:
+                - link "Aaron Patron" [ref=e211] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/aaronpatron/
+              - paragraph [ref=e212]: M&A
+            - paragraph [ref=e213]: Commercial Analysis & Renewable Energy
+          - generic [ref=e214]:
+            - generic [ref=e215]:
+              - generic [ref=e216]: Past Experience
+              - paragraph [ref=e217]: American Power Resources, DSD Renewables, GE Solar, Sol Systems
+            - generic [ref=e218]:
+              - generic [ref=e219]: Summary
+              - paragraph [ref=e220]: Manager of Commercial Analysis specializing in renewable energy optimization. Draws on nearly a decade of experience in commercial sales, architectural design, and development engineering across top clean energy firms including American Power Resources, DSD Renewables, and GE Solar. Proven expertise in cash flow forecasting, mechanical engineering projects, and leading multifaceted solar initiatives within the energy sector.
+            - generic [ref=e221]:
+              - generic [ref=e222]: Academia
+              - paragraph [ref=e223]: The George Washington University (B.S. Mechanical Engineering & Sustainability)
+          - generic [ref=e224]:
+            - generic [ref=e225]: Cash Flow Forecasting
+            - generic [ref=e226]: Communication
+            - generic [ref=e227]: Mergers & Acquisitions (M&A)
+        - generic [ref=e228]:
+          - generic [ref=e229]:
+            - generic [ref=e230]:
+              - heading "Feng Xiang" [level=3] [ref=e231]:
+                - link "Feng Xiang" [ref=e232] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/fengxiang1/
+              - paragraph [ref=e233]: R&D
+            - paragraph [ref=e234]: AI, Autonomous Driving & Robotics
+          - generic [ref=e235]:
+            - generic [ref=e236]:
+              - generic [ref=e237]: Past Experience
+              - paragraph [ref=e238]: Waymo, ISEE, Forterra, US Naval Research Laboratory
+            - generic [ref=e239]:
+              - generic [ref=e240]: Summary
+              - paragraph [ref=e241]: Software Engineer specializing in autonomous driving, vehicle navigation, and enterprise robotics. Proven expertise in building advanced AI systems for robust autonomy in safety-critical environments, global supply chains, and advanced transit. Holds an M.S. in Robotic Systems Development from Carnegie Mellon University and brings deep research and engineering experience from Waymo, ISEE, and Forterra.
+            - generic [ref=e242]:
+              - generic [ref=e243]: Academia
+              - paragraph [ref=e244]: Carnegie Mellon University (M.S. Robotic Systems Development), GWU (B.S. Mechanical Engineering)
+          - generic [ref=e245]:
+            - generic [ref=e246]: Multi-Object Tracking
+            - generic [ref=e247]: Trajectory Prediction
+            - generic [ref=e248]: Motion Planning
+    - generic [ref=e251]:
+      - heading "Ready to simplify?" [level=2] [ref=e252]
+      - paragraph [ref=e253]: Let's discuss how we can apply focused intelligence to your specific challenges.
+      - button "Book a consultation" [ref=e254]:
+        - text: Book a consultation
+        - img [ref=e255]
+  - contentinfo [ref=e257]:
+    - generic [ref=e258]:
+      - generic [ref=e259]:
+        - heading "B2W" [level=3] [ref=e260]
+        - paragraph [ref=e261]: © 2024 All rights reserved.
+      - generic [ref=e262]:
+        - link "Privacy" [ref=e263] [cursor=pointer]:
+          - /url: "#"
+        - link "Terms" [ref=e264] [cursor=pointer]:
+          - /url: "#"
+        - link "Contact" [ref=e265] [cursor=pointer]:
+          - /url: "#"
+  - generic [ref=e269]:
+    - generic [ref=e270]:
+      - generic [ref=e271]:
+        - paragraph [ref=e272]: B2W Assistant
+        - paragraph [ref=e273]: Ask questions or book time
+      - button [ref=e274]:
+        - img [ref=e275]
+    - generic [ref=e279]:
+      - generic [ref=e280]:
+        - generic [ref=e281]:
+          - img [ref=e283]
+          - generic [ref=e286]:
+            - heading "B2W Assistant" [level=3] [ref=e287]
+            - paragraph [ref=e288]: Services, case studies, and consultation booking
+        - generic [ref=e289]:
+          - button "Chat" [ref=e290]
+          - button "Book time" [ref=e291]
+      - generic [ref=e293]:
+        - img [ref=e295]
+        - generic [ref=e298]: Ask about B2W services, industries, case studies, or use the booking tab to schedule a consultation.
+      - generic [ref=e300]:
+        - textbox "Ask what B2W can build for your team..." [active] [ref=e301]: What services does B2W provide?
+        - button [ref=e302]:
+          - img [ref=e303]

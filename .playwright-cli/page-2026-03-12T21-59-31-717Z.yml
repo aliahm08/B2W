@@ -1,0 +1,368 @@
+- generic [ref=e3]:
+  - navigation [ref=e4]:
+    - generic [ref=e5]:
+      - link "B2W" [ref=e6] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e7]:
+        - link "Capabilities" [ref=e8] [cursor=pointer]:
+          - /url: /#work
+        - link "Projects" [ref=e9] [cursor=pointer]:
+          - /url: /#industries
+        - link "Team" [ref=e10] [cursor=pointer]:
+          - /url: /#team
+        - link "Contact" [ref=e11] [cursor=pointer]:
+          - /url: mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call
+  - main [ref=e12]:
+    - generic [ref=e14]:
+      - heading "We build intelligence." [level=1] [ref=e15]
+      - paragraph [ref=e16]: Solving complex problems with simple, effective AI solutions. No hype. Just results.
+      - generic [ref=e17]:
+        - link "See our work" [ref=e18] [cursor=pointer]:
+          - /url: /#work
+          - text: See our work
+          - img [ref=e19]
+        - button "Talk to the assistant" [ref=e21]
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - heading "Capabilities" [level=2] [ref=e24]
+        - generic [ref=e26]:
+          - button "All" [ref=e27]
+          - button "HOSPITALITY" [ref=e28]
+          - button "RETAIL" [ref=e29]
+          - button "TRANSPORTATION" [ref=e30]
+          - button "EDUCATION" [ref=e31]
+          - button "GOVERNMENT" [ref=e32]
+          - button "REAL ESTATE" [ref=e33]
+          - button "CONSTRUCTION" [ref=e34]
+      - generic [ref=e35]:
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - generic [ref=e39]: HOSPITALITY
+              - generic [ref=e40]: •
+              - generic [ref=e41]: Operations
+            - generic [ref=e42]: A regional restaurant group
+            - heading "AI Front-of-House Agent" [level=3] [ref=e43]
+            - paragraph [ref=e44]: Multi-channel AI agent directly integrated with WhatsApp. Handles guest reservations, answers menu questions, and processes inventory requests by reading incoming vendor datasheets. Transitioned operations from reactive (Level 1) to proactive management (Level 2).
+          - generic [ref=e45]:
+            - generic [ref=e46]:
+              - generic [ref=e47]: Impact
+              - text: 30% faster table turnover & automated ordering
+            - generic [ref=e48]:
+              - generic [ref=e49]:
+                - generic [ref=e50]: WhatsApp
+                - generic [ref=e51]: Voice/Chat
+                - generic [ref=e52]: Vendor Data
+              - generic [ref=e53]: March 2026
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57]: HOSPITALITY
+              - generic [ref=e58]: •
+              - generic [ref=e59]: Management
+            - generic [ref=e60]: Local independent cafes
+            - heading "Cafe Operations Bot" [level=3] [ref=e61]
+            - paragraph [ref=e62]: Deployed via Telegram to assist cafe managers. The bot uses simple text and voice commands to track daily inventory, alert staff of low stock, and manage shift scheduling by cross-referencing CSV datasheets from suppliers.
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: Impact
+              - text: Saved 15 hours/week on admin tasks
+            - generic [ref=e66]:
+              - generic [ref=e67]:
+                - generic [ref=e68]: Telegram
+                - generic [ref=e69]: Text/Voice
+                - generic [ref=e70]: Inventory
+              - generic [ref=e71]: February 2026
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - generic [ref=e75]: RETAIL
+              - generic [ref=e76]: •
+              - generic [ref=e77]: Logistics
+            - generic [ref=e78]: A regional supermarket chain
+            - heading "Supplier Logistics Copilot" [level=3] [ref=e79]
+            - paragraph [ref=e80]: A secure Signal-based agent that automatically extracts pricing and delivery schedules from incoming PDFs and vendor datasheets. Allows store managers to query stock status via text or voice natively.
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - generic [ref=e83]: Impact
+              - text: Zero manual data entry for shipments
+            - generic [ref=e84]:
+              - generic [ref=e85]:
+                - generic [ref=e86]: Signal
+                - generic [ref=e87]: Voice/Chat
+                - generic [ref=e88]: Data Scrubbing
+              - generic [ref=e89]: January 2026
+        - generic [ref=e90]:
+          - generic [ref=e91]:
+            - generic [ref=e92]:
+              - generic [ref=e93]: TRANSPORTATION
+              - generic [ref=e94]: •
+              - generic [ref=e95]: Dispatch
+            - generic [ref=e96]: Local shuttle service companies
+            - heading "Dispatch & Booking Agent" [level=3] [ref=e97]
+            - paragraph [ref=e98]: A localized AI booking engine operating entirely on WhatsApp. Customers can drop voice notes or texts to book rides. The agent cross-references driver availability and traffic datasheets to optimize routes.
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - generic [ref=e101]: Impact
+              - text: 45% increase in daily ride capacity
+            - generic [ref=e102]:
+              - generic [ref=e103]:
+                - generic [ref=e104]: WhatsApp
+                - generic [ref=e105]: Voice/Text
+                - generic [ref=e106]: Routing
+              - generic [ref=e107]: December 2025
+        - generic [ref=e108]:
+          - generic [ref=e109]:
+            - generic [ref=e110]:
+              - generic [ref=e111]: EDUCATION
+              - generic [ref=e112]: •
+              - generic [ref=e113]: Transit
+            - generic [ref=e114]: University shuttle providers
+            - heading "Campus Transit Assistant" [level=3] [ref=e115]
+            - paragraph [ref=e116]: Integrated directly into student communities via Telegram. Students receive real-time bus locations and ETA updates via natural language queries. The agent parses GPS datasheets from the buses.
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - generic [ref=e119]: Impact
+              - text: 80% drop in 'Where is the bus?' calls
+            - generic [ref=e120]:
+              - generic [ref=e121]:
+                - generic [ref=e122]: Telegram
+                - generic [ref=e123]: Text/Chat
+                - generic [ref=e124]: Live Data
+              - generic [ref=e125]: November 2025
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - generic [ref=e128]:
+              - generic [ref=e129]: GOVERNMENT
+              - generic [ref=e130]: •
+              - generic [ref=e131]: Infrastructure
+            - generic [ref=e132]: Metropolitan transit & rail agencies
+            - heading "Bus Scheduling & Rider Comm" [level=3] [ref=e133]
+            - paragraph [ref=e134]: A Signal-integrated AI that processes massive municipal transit datasheets to automatically report delays and reroutes to subscribed riders. Elevates the agency from manual bulletin updates.
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - generic [ref=e137]: Impact
+              - text: Sub-minute delay notifications
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - generic [ref=e140]: Signal
+                - generic [ref=e141]: Voice/Text
+                - generic [ref=e142]: Municipal Data
+              - generic [ref=e143]: October 2025
+        - generic [ref=e144]:
+          - generic [ref=e145]:
+            - generic [ref=e146]:
+              - generic [ref=e147]: REAL ESTATE
+              - generic [ref=e148]: •
+              - generic [ref=e149]: Finance
+            - generic [ref=e150]: Commercial property holding firm
+            - heading "EBITDA Optimization Engine" [level=3] [ref=e151]
+            - paragraph [ref=e152]: A Telegram bot designed for property managers. By feeding the AI raw income and expense datasheets, it instantly scrubs the data, identifies revenue leakage, and proposes actionable EBITDA improvements via voice or text.
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - generic [ref=e155]: Impact
+              - text: 12% average increase in projected EBITDA
+            - generic [ref=e156]:
+              - generic [ref=e157]:
+                - generic [ref=e158]: Telegram
+                - generic [ref=e159]: Voice/Chat
+                - generic [ref=e160]: Financial Data
+              - generic [ref=e161]: September 2025
+        - generic [ref=e162]:
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]: REAL ESTATE
+              - generic [ref=e166]: •
+              - generic [ref=e167]: Data Processing
+            - generic [ref=e168]: Leasing and brokerage firms
+            - heading "Lease Data Scrubbing Bot" [level=3] [ref=e169]
+            - paragraph [ref=e170]: Operates on WhatsApp. Agents forward messy lease agreements and contracts. The AI scrubs the unstructured text, verifies compliance rules, and returns perfectly formatted tenant datasheets in seconds.
+          - generic [ref=e171]:
+            - generic [ref=e172]:
+              - generic [ref=e173]: Impact
+              - text: Reduced processing time from hours to seconds
+            - generic [ref=e174]:
+              - generic [ref=e175]:
+                - generic [ref=e176]: WhatsApp
+                - generic [ref=e177]: Text/Scrubbing
+                - generic [ref=e178]: Contracts
+              - generic [ref=e179]: August 2025
+        - generic [ref=e180]:
+          - generic [ref=e181]:
+            - generic [ref=e182]:
+              - generic [ref=e183]: CONSTRUCTION
+              - generic [ref=e184]: •
+              - generic [ref=e185]: Coordination
+            - generic [ref=e186]: General construction contractors
+            - heading "Field Vendor Coordinator" [level=3] [ref=e187]
+            - paragraph [ref=e188]: A Signal-based AI that acts as a middleman between the job site and suppliers. Foremen dictate voice memos for material needs; the AI drafts purchase orders by scrubbing pricing datasheets and sends them to vendors.
+          - generic [ref=e189]:
+            - generic [ref=e190]:
+              - generic [ref=e191]: Impact
+              - text: Zero bottlenecks in material procurement
+            - generic [ref=e192]:
+              - generic [ref=e193]:
+                - generic [ref=e194]: Signal
+                - generic [ref=e195]: Voice/Chat
+                - generic [ref=e196]: Procurement
+              - generic [ref=e197]: July 2025
+    - generic [ref=e199]:
+      - heading "Projects" [level=2] [ref=e201]
+      - generic [ref=e203]:
+        - generic [ref=e204]:
+          - link "View AI Advertising Consultant" [ref=e205] [cursor=pointer]:
+            - /url: /borek-g
+          - generic [ref=e206]:
+            - generic [ref=e207]:
+              - generic [ref=e208]:
+                - generic [ref=e209]: FOOD & BEVERAGE
+                - generic [ref=e210]: •
+                - generic [ref=e211]: Advertising Operations
+              - generic [ref=e212]: Completed
+            - generic [ref=e213]: Borek-G Cafe
+            - heading "AI Advertising Consultant" [level=3] [ref=e214]
+            - paragraph [ref=e215]: A specialized AI consulting agent deployed for Borek-G to optimize and manage digital advertising operations. By integrating directly into their daily workflow, the AI analyzes campaign performance, suggests budget allocations, and drafts ad copy.
+          - generic [ref=e216]:
+            - generic [ref=e217]:
+              - generic [ref=e218]: Impact
+              - text: 42% ROAS Increase & 10h Saved Weekly
+            - generic [ref=e219]:
+              - generic [ref=e220]:
+                - generic [ref=e221]: Consulting Bot
+                - generic [ref=e222]: Ad Optimization
+                - generic [ref=e223]: Data Scrubbing
+              - generic [ref=e224]: March 2026
+        - generic [ref=e225]:
+          - link "View Uyghur Eats Restaurant Profile" [ref=e226] [cursor=pointer]:
+            - /url: /uyghur-eats
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - generic [ref=e229]:
+                - generic [ref=e230]: FOOD & BEVERAGE
+                - generic [ref=e231]: •
+                - generic [ref=e232]: Real Estate Acquisition
+              - generic [ref=e233]: In Progress
+            - generic [ref=e234]: Authentic Uyghur Cuisine in DC
+            - heading "Uyghur Eats Restaurant Profile" [level=3] [ref=e235]
+            - paragraph [ref=e236]: A meticulous restaurant profile assessing location value, operational footprint, and community integration for Uyghur Eats. The analysis highlights key drivers such as their signature hand-pulled noodles and deep neighborhood loyalty, tailored for real estate acquisition evaluation.
+          - generic [ref=e237]:
+            - generic [ref=e238]:
+              - generic [ref=e239]: Impact
+              - text: High-Traffic Neighborhood Anchor
+            - generic [ref=e240]:
+              - generic [ref=e241]:
+                - generic [ref=e242]: Real Estate Profile
+                - generic [ref=e243]: Location Value
+                - generic [ref=e244]: Market Positioning
+              - generic [ref=e245]: March 2026
+    - generic [ref=e247]:
+      - heading "Team" [level=2] [ref=e249]
+      - generic [ref=e251]:
+        - generic [ref=e252]:
+          - generic [ref=e253]:
+            - generic [ref=e254]:
+              - heading "Ali Ahmed" [level=3] [ref=e255]:
+                - link "Ali Ahmed" [ref=e256] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/aliahmed-co/
+              - paragraph [ref=e257]: CEO & GTM
+            - paragraph [ref=e258]: Consulting, Software & UI/UX
+          - generic [ref=e259]:
+            - generic [ref=e260]:
+              - generic [ref=e261]: Past Experience
+              - paragraph [ref=e262]: WSP, Huupe, NASA, Autodesk
+            - generic [ref=e263]:
+              - generic [ref=e264]: Summary
+              - paragraph [ref=e265]: Mechanical Engineer and Founder with a multidisciplinary background bridging physical engineering, advanced software architecture, and UX design. Draws on extensive experience leading technical roadmaps and design systems across high-profile organizations including NASA, Autodesk, WSP, and LaunchGood. Proven expertise in developing high-throughput data ingestion pipelines, training machine learning models, and building scalable, user-centric technology solutions.
+            - generic [ref=e266]:
+              - generic [ref=e267]: Academia
+              - paragraph [ref=e268]: Columbia University (M.Arch), George Washington University (B.S. Mechanical Engineering)
+          - generic [ref=e269]:
+            - generic [ref=e270]: Product Management
+            - generic [ref=e271]: UX/UI Engineering
+            - generic [ref=e272]: Full-stack Development
+        - generic [ref=e273]:
+          - generic [ref=e274]:
+            - generic [ref=e275]:
+              - heading "Aaron Patron" [level=3] [ref=e276]:
+                - link "Aaron Patron" [ref=e277] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/aaronpatron/
+              - paragraph [ref=e278]: M&A
+            - paragraph [ref=e279]: Commercial Analysis & Renewable Energy
+          - generic [ref=e280]:
+            - generic [ref=e281]:
+              - generic [ref=e282]: Past Experience
+              - paragraph [ref=e283]: American Power Resources, DSD Renewables, GE Solar, Sol Systems
+            - generic [ref=e284]:
+              - generic [ref=e285]: Summary
+              - paragraph [ref=e286]: Manager of Commercial Analysis specializing in renewable energy optimization. Draws on nearly a decade of experience in commercial sales, architectural design, and development engineering across top clean energy firms including American Power Resources, DSD Renewables, and GE Solar. Proven expertise in cash flow forecasting, mechanical engineering projects, and leading multifaceted solar initiatives within the energy sector.
+            - generic [ref=e287]:
+              - generic [ref=e288]: Academia
+              - paragraph [ref=e289]: The George Washington University (B.S. Mechanical Engineering & Sustainability)
+          - generic [ref=e290]:
+            - generic [ref=e291]: Cash Flow Forecasting
+            - generic [ref=e292]: Communication
+            - generic [ref=e293]: Mergers & Acquisitions (M&A)
+        - generic [ref=e294]:
+          - generic [ref=e295]:
+            - generic [ref=e296]:
+              - heading "Feng Xiang" [level=3] [ref=e297]:
+                - link "Feng Xiang" [ref=e298] [cursor=pointer]:
+                  - /url: https://www.linkedin.com/in/fengxiang1/
+              - paragraph [ref=e299]: R&D
+            - paragraph [ref=e300]: AI, Autonomous Driving & Robotics
+          - generic [ref=e301]:
+            - generic [ref=e302]:
+              - generic [ref=e303]: Past Experience
+              - paragraph [ref=e304]: Waymo, ISEE, Forterra, US Naval Research Laboratory
+            - generic [ref=e305]:
+              - generic [ref=e306]: Summary
+              - paragraph [ref=e307]: Software Engineer specializing in autonomous driving, vehicle navigation, and enterprise robotics. Proven expertise in building advanced AI systems for robust autonomy in safety-critical environments, global supply chains, and advanced transit. Holds an M.S. in Robotic Systems Development from Carnegie Mellon University and brings deep research and engineering experience from Waymo, ISEE, and Forterra.
+            - generic [ref=e308]:
+              - generic [ref=e309]: Academia
+              - paragraph [ref=e310]: Carnegie Mellon University (M.S. Robotic Systems Development), GWU (B.S. Mechanical Engineering)
+          - generic [ref=e311]:
+            - generic [ref=e312]: Multi-Object Tracking
+            - generic [ref=e313]: Trajectory Prediction
+            - generic [ref=e314]: Motion Planning
+    - generic [ref=e317]:
+      - heading "Ready to simplify?" [level=2] [ref=e318]
+      - paragraph [ref=e319]: Let's discuss how we can apply focused intelligence to your specific challenges.
+      - button "Book a consultation" [ref=e320]:
+        - text: Book a consultation
+        - img [ref=e321]
+  - contentinfo [ref=e323]:
+    - generic [ref=e324]:
+      - generic [ref=e325]:
+        - heading "B2W" [level=3] [ref=e326]
+        - paragraph [ref=e327]: © 2024 All rights reserved.
+      - generic [ref=e328]:
+        - link "Privacy" [ref=e329] [cursor=pointer]:
+          - /url: "#"
+        - link "Terms" [ref=e330] [cursor=pointer]:
+          - /url: "#"
+        - link "Contact" [ref=e331] [cursor=pointer]:
+          - /url: "#"
+  - generic [ref=e335]:
+    - generic [ref=e336]:
+      - generic [ref=e337]:
+        - paragraph [ref=e338]: B2W Assistant
+        - paragraph [ref=e339]: Ask questions or book time
+      - button [ref=e340]:
+        - img [ref=e341]
+    - generic [ref=e345]:
+      - generic [ref=e346]:
+        - generic [ref=e347]:
+          - img [ref=e349]
+          - generic [ref=e352]:
+            - heading "B2W Assistant" [level=3] [ref=e353]
+            - paragraph [ref=e354]: Services, case studies, and consultation booking
+        - generic [ref=e355]:
+          - button "Chat" [ref=e356]
+          - button "Book time" [ref=e357]
+      - generic [ref=e359]:
+        - img [ref=e361]
+        - generic [ref=e364]: Ask about B2W services, industries, case studies, or use the booking tab to schedule a consultation.
+      - generic [ref=e366]:
+        - textbox "Ask what B2W can build for your team..." [active] [ref=e367]: What services does B2W provide?
+        - button [ref=e368]:
+          - img [ref=e369]
