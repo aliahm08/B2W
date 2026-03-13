@@ -14,6 +14,7 @@ import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
 import BorekG from './pages/BorekG';
+import BorekGOperations from './pages/BorekGOperations';
 import UyghurEats from './pages/UyghurEats';
 import CapabilityPage from './pages/CapabilityPage';
 import Seo from './components/Seo';
@@ -69,6 +70,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/borek-g" element={<BorekG />} />
+          <Route path="/borek-g-operations" element={<BorekGOperations />} />
           <Route path="/uyghur-eats" element={<UyghurEats />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
         </Routes>
