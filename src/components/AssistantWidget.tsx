@@ -5,6 +5,10 @@ import { useLocation } from 'react-router-dom';
 
 type ProposalOption = 'option-one' | 'option-two' | 'option-three';
 
+const proposalWidgetEnabledPaths = new Set<string>([
+  '/borek-g',
+]);
+
 const proposalOptions: Array<{
   id: ProposalOption;
   title: string;
@@ -143,7 +147,7 @@ export default function AssistantWidget() {
   const signature = useSignaturePad();
 
   const isProposalPage = useMemo(
-    () => pathname === '/borek-g' || pathname === '/borek-g-operations' || pathname === '/uyghur-eats',
+    () => proposalWidgetEnabledPaths.has(pathname),
     [pathname],
   );
 
