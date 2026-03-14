@@ -7,6 +7,7 @@ import { allCapabilities, capabilityLanes } from '../content/capabilities';
 export default function Work() {
     const [activeLaneId, setActiveLaneId] = useState('all');
     const [isExpanded, setIsExpanded] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
 
     const filters = [
         { id: 'all', label: 'All' },
@@ -22,7 +23,20 @@ export default function Work() {
         setIsExpanded(false);
     }, [activeLaneId]);
 
-    const visibleCapabilities = isExpanded ? filteredCapabilities : filteredCapabilities.slice(0, 6);
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(max-width: 767px)');
+        const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+
+        updateIsMobile();
+        mediaQuery.addEventListener('change', updateIsMobile);
+
+        return () => {
+            mediaQuery.removeEventListener('change', updateIsMobile);
+        };
+    }, []);
+
+    const collapsedCount = isMobile ? 3 : 6;
+    const visibleCapabilities = isExpanded ? filteredCapabilities : filteredCapabilities.slice(0, collapsedCount);
 
     return (
         <section className="py-32 px-6 max-w-7xl mx-auto" id="capabilities">
@@ -107,7 +121,7 @@ export default function Work() {
                 ))}
             </div>
 
-            {filteredCapabilities.length > 6 && (
+            {filteredCapabilities.length > collapsedCount && (
                 <div className="mt-10 flex justify-center">
                     <button
                         type="button"
