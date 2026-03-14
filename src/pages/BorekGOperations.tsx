@@ -2,6 +2,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Bot, Clock3, MessageSquare, Settings2, Store, Wrench } from 'lucide-react';
 import Seo from '../components/Seo';
+import MobileSectionNav from '../components/MobileSectionNav';
+import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -11,10 +13,10 @@ import {
 } from '../components/projectPageLayout';
 
 const workstreams = [
-    'Front-of-house question handling for menu, hours, pickup, catering, and market inventory.',
-    'Internal operating support for recurring staff questions, shift notes, opening tasks, and customer-policy consistency.',
-    'Structured escalation when the bot cannot answer confidently or when a manager decision is required.',
-    'Conversation logging to identify repetitive operational friction and future automation opportunities.'
+    'Handle menu, hours, pickup, catering, and market inventory questions.',
+    'Answer recurring staff questions around shift notes, opening tasks, and store policy.',
+    'Escalate edge cases when confidence is low or manager approval is required.',
+    'Log recurring questions so the team can spot the next automation targets.'
 ];
 
 const launchPlan = [
@@ -62,14 +64,12 @@ export default function BorekGOperations() {
 
                     <div className={projectHeroGridClassNames.operations}>
                         <div>
-                            <h1 className="mb-6 text-5xl font-medium tracking-tight md:text-6xl">
+                            <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
                                 Borek-G Operations Chatbot
                             </h1>
 
-                            <p className="mb-8 max-w-3xl text-xl leading-relaxed text-neutral-600">
-                                Proposal for a Borek-G chatbot that supports day-to-day store operations, handles
-                                repetitive customer and staff questions, and standardizes how the business responds
-                                across pickup, catering, dine-in, and market workflows.
+                            <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
+                                Proposal for a Borek-G chatbot that handles repeat questions, keeps answers consistent, and routes exceptions to staff.
                             </p>
 
                             <div className="flex flex-wrap gap-2">
@@ -89,12 +89,11 @@ export default function BorekGOperations() {
                             <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
                                 Proposal Scope
                             </p>
-                            <h2 className="mb-4 text-3xl font-medium tracking-tight md:text-4xl">
-                                Reduce repetitive operational load without replacing human judgment.
+                            <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
+                                Cut repetitive store questions without removing human judgment.
                             </h2>
                             <p className="mb-6 text-sm leading-6 text-neutral-300">
-                                The system is framed as an assistant for consistency and speed, with manager escalation
-                                built in for edge cases, sensitive requests, and policy exceptions.
+                                The system acts as an assistant for speed and consistency, with escalation for edge cases, sensitive requests, and policy exceptions.
                             </p>
 
                             <div className="grid grid-cols-2 gap-3 text-sm">
@@ -119,31 +118,44 @@ export default function BorekGOperations() {
                     </div>
                 </header>
 
-                <main data-project-body className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+                    <div className="lg:col-span-12">
+                        <MobileSectionNav
+                            items={[
+                                { id: 'role', label: 'Role' },
+                                { id: 'use-cases', label: 'Use cases' },
+                                { id: 'rollout', label: 'Rollout' },
+                                { id: 'handles', label: 'Handles' },
+                                { id: 'benefits', label: 'Benefits' },
+                                { id: 'next-step', label: 'Next step' },
+                            ]}
+                        />
+                    </div>
                     <div className="space-y-12 lg:col-span-7">
-                        <section>
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="rounded-sm bg-neutral-100 p-2">
-                                    <Bot className="h-5 w-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">System Role</h2>
-                            </div>
+                        <ResponsiveAccordionSection
+                            id="role"
+                            title="System Role"
+                            icon={Bot}
+                            defaultOpen
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
                             <div data-project-detail-body>
-                                <p className="leading-relaxed text-neutral-600">
-                                    This proposal is separate from Borek-G marketing work. It is an operations system:
-                                    a chatbot trained to answer recurring business questions, reduce interruptions, and
-                                    keep responses consistent across channels.
+                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    This is a store operations system, not a marketing chatbot. It answers recurring business questions, reduces interruptions, and keeps responses consistent across channels.
                                 </p>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section>
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="rounded-sm bg-neutral-100 p-2">
-                                    <Store className="h-5 w-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">Core Use Cases</h2>
-                            </div>
+                        <ResponsiveAccordionSection
+                            id="use-cases"
+                            title="Core Use Cases"
+                            icon={Store}
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
                             <div data-project-detail-body>
                                 <ul className="list-disc space-y-2 pl-5 text-neutral-600">
                                     {workstreams.map((item) => (
@@ -151,14 +163,18 @@ export default function BorekGOperations() {
                                     ))}
                                 </ul>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Settings2 className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Proposed Rollout</h3>
-                            </div>
-                            <div data-project-detail-body className="space-y-6 p-6">
+                        <ResponsiveAccordionSection
+                            id="rollout"
+                            title="Proposed Rollout"
+                            icon={Settings2}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
                                 {launchPlan.map((phase) => (
                                     <div key={phase.title}>
                                         <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-black">
@@ -168,42 +184,51 @@ export default function BorekGOperations() {
                                     </div>
                                 ))}
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
                     </div>
 
                     <aside className="space-y-8 lg:col-span-5">
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <MessageSquare className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">What It Would Handle</h3>
+                        <ResponsiveAccordionSection
+                            id="handles"
+                            title="What It Would Handle"
+                            icon={MessageSquare}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body>
+                                Menu questions, order timing, pickup instructions, catering intake, store policies, common staff procedures, and routing logic for issues that need a person.
                             </div>
-                            <div data-project-detail-body className="p-6 text-sm leading-6 text-neutral-600">
-                                Menu questions, order timing, pickup instructions, catering intake, store policies,
-                                common staff procedures, and routing logic for issues that need a person.
-                            </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Clock3 className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Expected Benefits</h3>
+                        <ResponsiveAccordionSection
+                            id="benefits"
+                            title="Expected Benefits"
+                            icon={Clock3}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body>
+                                Faster response times, fewer repetitive interruptions for staff, cleaner handoffs, and a structured record of recurring questions that can inform later automation.
                             </div>
-                            <div data-project-detail-body className="p-6 text-sm leading-6 text-neutral-600">
-                                Faster response times, fewer repetitive interruptions for staff, cleaner handoffs,
-                                and a structured record of recurring questions that can inform later automation.
-                            </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Wrench className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Next Step</h3>
+                        <ResponsiveAccordionSection
+                            id="next-step"
+                            title="Next Step"
+                            icon={Wrench}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body>
+                                Confirm the training sources: menus, hours, catering policies, staff SOPs, pickup rules, and escalation contacts. That operating corpus defines the first useful version.
                             </div>
-                            <div data-project-detail-body className="p-6 text-sm leading-6 text-neutral-600">
-                                Confirm the source materials for training: menus, hours, catering policies, staff SOPs,
-                                pickup rules, and escalation contacts. That operating corpus defines the first useful version.
-                            </div>
-                        </section>
+                        </ResponsiveAccordionSection>
                     </aside>
                 </main>
             </motion.div>

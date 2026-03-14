@@ -1,6 +1,6 @@
-export const projectPageShellClassName = 'min-h-screen max-w-7xl mx-auto px-6 pb-16 pt-24';
+export const projectPageShellClassName = 'min-h-screen max-w-7xl mx-auto px-4 pb-12 pt-20 sm:px-6 md:pb-16 md:pt-24';
 
-export const projectPageHeaderClassName = 'mt-12 mb-12 border-b border-neutral-100 pb-8';
+export const projectPageHeaderClassName = 'mt-8 mb-10 border-b border-neutral-100 pb-8 md:mt-12 md:mb-12';
 
 export const projectPageBackLinkClassName =
   'mb-8 inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black';

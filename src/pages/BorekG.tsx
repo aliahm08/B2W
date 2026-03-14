@@ -12,6 +12,8 @@ import {
     Users
 } from 'lucide-react';
 import Seo from '../components/Seo';
+import MobileSectionNav from '../components/MobileSectionNav';
+import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -96,10 +98,10 @@ const marketingReadout = [
 ];
 
 const recommendations = [
-    'Turn review volume into paid and owned creative. Borek-G already has enough five-star proof to rotate review-led landing sections, paid social ads, and menu highlights without inventing new messaging.',
-    'Increase Instagram capture at point of sale. Review density is much stronger than follower depth, so the business is converting guests better than it is retaining them digitally.',
-    'Promote the market-to-cafe story more aggressively. Farmers market roots, halal catering, Turkish grocery inventory, and dine-in service together create a differentiated narrative that most local bakery accounts do not have.',
-    'Track content cadence and post-level engagement weekly. Public social traction can be monitored without Meta admin access if the website stores snapshots of followers, posts, likes, and comments from public pages.'
+    'Turn five-star reviews into landing-page proof, paid creative, and menu-focused social posts.',
+    'Capture more Instagram followers in-store because review volume already exceeds audience retention.',
+    'Push the market-plus-cafe story harder across catering, retail, and dine-in messaging.',
+    'Track posting cadence and engagement weekly so weak creative gets cut quickly.'
 ];
 
 const strategyPlaybook = [
@@ -140,9 +142,9 @@ const growthForecast = [
 ];
 
 const valuationNotes = [
-    'The public market data suggests the marketing problem is not weak product-market fit. It is under-distributed proof. That makes this a higher-confidence growth project than a repositioning project.',
-    'Because Borek-G already has strong reviews, press, and multi-channel ordering, incremental marketing effort should have better payback than for a restaurant starting from zero trust.',
-    'Soft valuation: this proposal should be justified if it helps create even one durable additional revenue engine, especially catering and repeat local audience capture, not just vanity follower growth.'
+    'The issue is distribution, not product-market fit. Borek-G already has public proof that should convert better with sharper packaging.',
+    'Because trust is already visible across reviews, press, and ordering channels, this is a stronger bet than a cold-start restaurant marketing project.',
+    'The project pays off if it grows repeat demand or catering, not if it only grows vanity metrics.'
 ];
 
 // Archived for later reintroduction:
@@ -220,19 +222,16 @@ export default function BorekG() {
 
                         <div className={projectHeroGridClassNames.proposal}>
                             <div>
-                                <h1 className="mb-6 text-5xl font-medium tracking-tight md:text-6xl">
+                                <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
                                     Borek-G
                                 </h1>
 
-                                <p className="mb-6 max-w-3xl text-xl leading-relaxed text-neutral-200">
-                                    Bring more people into BorekG consistently by showcasing your food, story, and authenticity
-                                    through short videos, photos, and proven engagement strategies.
+                                <p className="mb-5 max-w-3xl text-lg leading-relaxed text-neutral-200 md:text-xl">
+                                    Bring more people into Borek-G by turning existing trust into stronger local content, offers, and repeat audience capture.
                                 </p>
 
-                                <p className="mb-8 max-w-3xl text-sm leading-7 text-neutral-300">
-                                    This proposal is built from public operating, review, press, and social data. The current
-                                    signal suggests a strong neighborhood food business with real trust already in place, but with
-                                    digital storytelling and repeat audience capture still underdeveloped.
+                                <p className="mb-8 max-w-3xl text-sm leading-6 text-neutral-300">
+                                    Built from public review, press, and channel data. The business already has demand; the gap is packaging that proof into repeatable growth.
                                 </p>
 
                                 <div className="flex flex-wrap gap-2">
@@ -249,13 +248,11 @@ export default function BorekG() {
                             </div>
 
                             <div className="space-y-4">
-                                <h2 className="text-3xl font-medium tracking-tight md:text-4xl">
-                                    Build the public-facing profile into a repeatable growth engine.
+                                <h2 className="text-2xl font-medium tracking-tight md:text-4xl">
+                                    Convert public proof into a repeatable growth system.
                                 </h2>
                                 <p className="text-sm leading-6 text-neutral-300">
-                                    Public data already indicates strong local reputation, strong channel diversity, and credible but
-                                    under-leveraged Instagram scale. Snapshot date: {snapshotDate}. Full execution would begin with
-                                    baseline setup, data sharing, and channel alignment once the project formally starts.
+                                    Snapshot date: {snapshotDate}. Public data shows strong reputation, solid channel breadth, and underused social leverage. Execution starts with baseline setup, access, and channel alignment.
                                 </p>
 
                                 <div className="grid grid-cols-2 gap-3 text-sm">
@@ -274,61 +271,75 @@ export default function BorekG() {
                     </section>
                 </header>
 
-                <main data-project-body className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+                    <div className="lg:col-span-12">
+                        <MobileSectionNav
+                            items={[
+                                { id: 'footprint', label: 'Footprint' },
+                                { id: 'positioning', label: 'Positioning' },
+                                { id: 'evaluation', label: 'Evaluation' },
+                                { id: 'thesis', label: 'Thesis' },
+                                { id: 'focus', label: 'Focus' },
+                                { id: 'value', label: 'Value' },
+                                { id: 'sources', label: 'Sources' },
+                                { id: 'forecast', label: 'Forecast' },
+                            ]}
+                        />
+                    </div>
                     <div className="space-y-12 lg:col-span-7">
-                        <section>
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="rounded-sm bg-neutral-100 p-2">
-                                    <MapPin className="h-5 w-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">Location & Operating Footprint</h2>
-                            </div>
-                            <div data-project-detail-body>
-                                <p className="mb-4 leading-relaxed text-neutral-600">
+                        <ResponsiveAccordionSection
+                            id="footprint"
+                            title="Location & Operating Footprint"
+                            icon={MapPin}
+                            defaultOpen
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
+                            <div data-project-detail-body className="space-y-4 text-sm leading-relaxed text-neutral-600 md:text-base">
+                                <p>
                                     Borek-G operates from <strong className="font-semibold text-black">315 S Maple Ave, Falls Church, Virginia</strong>.
-                                    For proposal purposes, the operating thesis is that Borek-G is more than a single-format restaurant.
-                                    Public materials show a combined cafe, market, catering, online-ordering, and gift-card setup,
-                                    which materially improves resilience versus a dine-in-only concept.
+                                    Public materials show five active revenue paths: cafe, market, catering, online ordering, and gift cards.
                                 </p>
-                                <p className="leading-relaxed text-neutral-600">
-                                    Press coverage also ties the brand to the Falls Church Farmers Market and to its Turkish prepared-food
-                                    and grocery identity. That combination gives Borek-G a stronger neighborhood moat than a standard pastry
-                                    shop or breakfast cafe.
+                                <p>
+                                    Farmers market roots and the Turkish prepared-food plus grocery mix give the business a stronger moat than a standard bakery or breakfast shop.
                                 </p>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section>
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="rounded-sm bg-neutral-100 p-2">
-                                    <Store className="h-5 w-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">Brand Positioning</h2>
-                            </div>
-                            <div data-project-detail-body>
-                                <p className="mb-4 leading-relaxed text-neutral-600">
-                                    The proposed brand narrative positions Borek-G as a culturally specific Turkish food business with a
-                                    broader commercial footprint than typical independent cafes. The brand promise spans savory pastries,
-                                    halal food, catering, and imported pantry goods rather than relying on one hero menu item alone.
+                        <ResponsiveAccordionSection
+                            id="positioning"
+                            title="Brand Positioning"
+                            icon={Store}
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
+                            <div data-project-detail-body className="space-y-4">
+                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    Borek-G should be positioned as a Turkish cafe and market with multiple purchase paths, not as a single-product bakery.
                                 </p>
-                                <ul className="list-disc space-y-2 pl-5 text-neutral-600">
+                                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
                                     <li>Turkish cafe and market identity anchored in Falls Church.</li>
                                     <li>Halal positioning broadens addressable demand beyond casual bakery traffic.</li>
-                                    <li>Farmers market roots create a strong authenticity story and recurring local discovery.</li>
-                                    <li>Square ecommerce stack supports direct transactions instead of pushing all demand to third-party marketplaces.</li>
+                                    <li>Farmers market roots support a concrete authenticity story.</li>
+                                    <li>Square ecommerce keeps more transactions direct instead of pushing demand to third-party platforms.</li>
                                 </ul>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Megaphone className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Initial Marketing Evaluation</h3>
-                            </div>
-                            <div data-project-detail-body className="space-y-6 p-6">
+                        <ResponsiveAccordionSection
+                            id="evaluation"
+                            title="Initial Marketing Evaluation"
+                            icon={Megaphone}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
                                 <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
-                                    These are proposal-stage signals from public sources, not full campaign analytics. They are
-                                    enough to justify the project and define where deeper measurement should start.
+                                    Proposal-stage signals only. Enough to justify the project and set the first measurement priorities.
                                 </p>
                                 {marketingReadout.map((item) => (
                                     <div key={item.title}>
@@ -342,31 +353,37 @@ export default function BorekG() {
                                     </div>
                                 ))}
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="bg-black p-6 text-white">
-                            <div className="mb-4 flex items-center gap-2">
-                                <LineChart className="h-5 w-5 text-white" />
-                                <h3 className="text-lg font-medium">Project Thesis</h3>
-                            </div>
+                        <ResponsiveAccordionSection
+                            id="thesis"
+                            title="Project Thesis"
+                            icon={LineChart}
+                            className="border border-neutral-900 bg-black text-white"
+                            headerClassName="p-4 md:p-6 md:pb-4"
+                            bodyClassName="px-4 pb-4 md:px-6 md:pb-6"
+                            tone="dark"
+                            titleClassName="text-white md:text-lg"
+                        >
                             <div data-project-detail-body>
                                 <p className="text-sm leading-relaxed text-neutral-300">
-                                    Borek-G looks operationally stronger than its digital brand scale suggests. Review quality, channel diversity,
-                                    and earned media indicate a business with real local trust. The proposal is to package that proof into a
-                                    cleaner public profile first, then layer in deeper social tracking once the engagement begins.
+                                    Borek-G is stronger operationally than it looks online. The work is to package visible trust into better local conversion, then add deeper tracking after launch.
                                 </p>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Megaphone className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Bottom Line</h3>
-                            </div>
-                            <div data-project-detail-body className="space-y-6 p-6">
+                        <ResponsiveAccordionSection
+                            id="focus"
+                            title="Bottom Line"
+                            icon={Megaphone}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
                                 <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
-                                    Soft bottom line: Borek-G should win on social by looking more like the business it already is in real life.
-                                    The winning strategy is proof-heavy, local, food-forward, and offer-specific rather than brand-abstract.
+                                    Borek-G should win by looking online like it already looks in person: credible, food-forward, and local.
                                 </p>
                                 {strategyPlaybook.map((item) => (
                                     <div key={item.title}>
@@ -377,17 +394,21 @@ export default function BorekG() {
                                     </div>
                                 ))}
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
                     </div>
 
                     <aside className="space-y-8 lg:col-span-5">
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Star className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Signal Summary</h3>
-                            </div>
-                            <div data-project-detail-body className="grid gap-4 p-6 md:grid-cols-2 lg:grid-cols-1">
+                        <ResponsiveAccordionSection
+                            id="value"
+                            title="Signal Summary"
+                            icon={Star}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="grid gap-4 p-4 md:grid-cols-2 md:p-6 lg:grid-cols-1"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="contents">
                                 {scorecards.map((card) => (
                                     <div key={card.label} className="border border-neutral-200 p-4">
                                         <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">
@@ -398,42 +419,52 @@ export default function BorekG() {
                                     </div>
                                 ))}
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <Users className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Proposed Focus Areas</h3>
-                            </div>
-                            <div data-project-detail-body className="p-6">
+                        <ResponsiveAccordionSection
+                            title="Proposed Focus Areas"
+                            icon={Users}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body>
                                 <ul className="list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-600">
                                     {recommendations.map((item) => (
                                         <li key={item}>{item}</li>
                                     ))}
                                 </ul>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <LineChart className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Valuation Logic</h3>
-                            </div>
-                            <div data-project-detail-body className="p-6">
+                        <ResponsiveAccordionSection
+                            title="Valuation Logic"
+                            icon={LineChart}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body>
                                 <ul className="list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-600">
                                     {valuationNotes.map((item) => (
                                         <li key={item}>{item}</li>
                                     ))}
                                 </ul>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                                <ShoppingBag className="h-5 w-5 text-black" />
-                                <h3 className="text-xl font-medium">Source Stack</h3>
-                            </div>
-                            <div data-project-detail-body className="space-y-3 p-6">
+                        <ResponsiveAccordionSection
+                            id="sources"
+                            title="Source Stack"
+                            icon={ShoppingBag}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-3 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-3">
                                 {sources.map((source) => (
                                     <a
                                         key={source.href}
@@ -447,19 +478,21 @@ export default function BorekG() {
                                     </a>
                                 ))}
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
                     </aside>
 
-                    <section className="border border-neutral-200 lg:col-span-12">
-                        <div className="flex items-center gap-3 border-b border-neutral-200 bg-neutral-50 p-4">
-                            <LineChart className="h-5 w-5 text-black" />
-                            <h3 className="text-xl font-medium">Predicted Growth & Project Value</h3>
-                        </div>
-                        <div data-project-detail-body className="space-y-6 p-6 md:p-8">
+                    <ResponsiveAccordionSection
+                        id="forecast"
+                        title="Predicted Growth & Project Value"
+                        icon={LineChart}
+                        className="border border-neutral-200 lg:col-span-12"
+                        headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                        bodyClassName="space-y-6 p-4 md:p-8"
+                        titleClassName="md:text-xl"
+                    >
+                        <div data-project-detail-body className="space-y-6">
                             <p className="max-w-4xl text-sm leading-relaxed text-neutral-600">
-                                Based on Borek-G&apos;s existing public trust signals, this proposal is modeled as a demand-amplification
-                                project. The forecast below is a soft prediction, not a guarantee, and assumes competent execution over
-                                one to three quarters.
+                                This is a demand-amplification model, not a turnaround forecast. The ranges below assume competent execution over one to three quarters.
                             </p>
                             <div className="grid gap-4 md:grid-cols-3">
                                 {growthForecast.map((item) => (
@@ -476,15 +509,12 @@ export default function BorekG() {
                                 <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">
                                     Soft Valuation
                                 </p>
-                                <p className="max-w-5xl text-sm leading-6 text-neutral-700">
-                                    Market data supports the view that this is a high-leverage project because Borek-G already has
-                                    validated demand, strong local sentiment, and multiple purchase channels. The commercial value is
-                                    in converting that existing trust into more frequent visits, larger catering volume, and stronger
-                                    repeat digital demand.
+                                    <p className="max-w-5xl text-sm leading-6 text-neutral-700">
+                                    Market data supports this as a high-leverage project because demand and trust are already visible. The commercial upside is more repeat visits, larger catering volume, and stronger owned demand.
                                 </p>
                             </div>
                         </div>
-                    </section>
+                    </ResponsiveAccordionSection>
 
                 </main>
             </motion.div>

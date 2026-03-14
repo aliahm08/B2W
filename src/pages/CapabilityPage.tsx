@@ -2,6 +2,8 @@ import { motion } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, BriefcaseBusiness, Cpu, Handshake, MessageSquareText } from 'lucide-react';
 import Seo from '../components/Seo';
+import MobileSectionNav from '../components/MobileSectionNav';
+import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import { getCapabilityBySlug } from '../content/capabilities';
 
 export default function CapabilityPage() {
@@ -58,7 +60,7 @@ export default function CapabilityPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <header className="mt-12 border-b border-white/10 pb-10">
+                    <header className="mt-8 border-b border-white/10 pb-10 md:mt-12">
                         <Link
                             to="/#capabilities"
                             className="inline-flex items-center gap-2 text-sm font-medium text-stone-400 transition-colors hover:text-white mb-8"
@@ -75,11 +77,11 @@ export default function CapabilityPage() {
 
                         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_320px]">
                             <div>
-                                <h1 className="text-5xl md:text-6xl font-medium tracking-tight mb-6 text-white">
+                                <h1 className="mb-5 text-4xl font-medium tracking-tight text-white md:text-6xl">
                                     {capability.title}
                                 </h1>
 
-                                <p className="text-xl text-stone-300 max-w-3xl leading-relaxed mb-8">
+                                <p className="mb-6 max-w-3xl text-lg leading-relaxed text-stone-300 md:text-xl">
                                     {capability.summary}
                                 </p>
 
@@ -118,45 +120,79 @@ export default function CapabilityPage() {
                         </div>
                     </header>
 
-                    <main className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-12 pt-12">
+                    <main className="grid grid-cols-1 gap-8 pt-10 md:gap-12 md:pt-12 lg:grid-cols-[minmax(0,1fr)_320px]">
+                        <MobileSectionNav
+                            items={[
+                                { id: 'when-to-use', label: 'When to use' },
+                                { id: 'what-we-deploy', label: 'What we deploy' },
+                                { id: 'what-you-get', label: 'What you get' },
+                                { id: 'systems', label: 'Systems' },
+                                { id: 'lane-fit', label: 'Lane fit' },
+                            ]}
+                        />
                         <div className="space-y-10">
-                            <section>
-                                <h2 className="text-2xl font-medium mb-4 text-white">The Problem</h2>
-                                <p className="text-stone-300 leading-relaxed">
+                            <ResponsiveAccordionSection
+                                id="when-to-use"
+                                title="When to use it"
+                                defaultOpen
+                                tone="dark"
+                                className="border border-white/10 md:border-0"
+                                headerClassName="p-4 md:p-0"
+                                bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                                titleClassName="text-white"
+                            >
+                                <p className="text-sm leading-relaxed text-stone-300 md:text-base">
                                     {capability.problem}
                                 </p>
-                            </section>
+                            </ResponsiveAccordionSection>
 
-                            <section>
-                                <h2 className="text-2xl font-medium mb-4 text-white">The AI Solution</h2>
-                                <p className="text-stone-300 leading-relaxed">
+                            <ResponsiveAccordionSection
+                                id="what-we-deploy"
+                                title="What we deploy"
+                                tone="dark"
+                                className="border border-white/10 md:border-0"
+                                headerClassName="p-4 md:p-0"
+                                bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                                titleClassName="text-white"
+                            >
+                                <p className="text-sm leading-relaxed text-stone-300 md:text-base">
                                     {capability.solution}
                                 </p>
-                            </section>
+                            </ResponsiveAccordionSection>
 
-                            <section className="border border-white/10">
-                                <div className="border-b border-white/10 px-6 py-4 bg-white/[0.03]">
-                                    <h2 className="text-xl font-medium text-white">What Teams Receive</h2>
-                                </div>
-                                <div className="p-6">
+                            <ResponsiveAccordionSection
+                                id="what-you-get"
+                                title="What you get"
+                                tone="dark"
+                                className="border border-white/10"
+                                headerClassName="border-b border-white/10 bg-white/[0.03] px-4 py-4 md:px-6"
+                                bodyClassName="p-4 md:p-6"
+                                titleClassName="text-white md:text-xl"
+                            >
+                                <div>
                                     <ul className="space-y-4">
                                         {capability.outputs.map((output) => (
                                             <li key={output} className="flex items-start gap-3">
                                                 <span className="mt-2 h-2 w-2 shrink-0 bg-white" />
-                                                <span className="text-stone-300 leading-relaxed">{output}</span>
+                                                <span className="text-sm leading-relaxed text-stone-300 md:text-base">{output}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
-                            </section>
+                            </ResponsiveAccordionSection>
                         </div>
 
                         <aside className="space-y-6">
-                            <section className="border border-white/10 p-6">
-                                <div className="flex items-center gap-2 text-stone-400 mb-4">
-                                    <Cpu className="w-4 h-4" />
-                                    <p className="text-[11px] font-mono uppercase tracking-[0.24em]">Connected systems</p>
-                                </div>
+                            <ResponsiveAccordionSection
+                                id="systems"
+                                title="Connected systems"
+                                icon={Cpu}
+                                tone="dark"
+                                className="border border-white/10"
+                                headerClassName="p-4 md:p-6 md:pb-4"
+                                bodyClassName="px-4 pb-4 md:px-6 md:pb-6"
+                                titleClassName="text-white md:text-xl"
+                            >
                                 <div className="space-y-2">
                                     {capability.systems.map((system) => (
                                         <div key={system} className="border border-white/10 px-3 py-2 text-sm text-stone-200">
@@ -164,16 +200,21 @@ export default function CapabilityPage() {
                                         </div>
                                     ))}
                                 </div>
-                            </section>
+                            </ResponsiveAccordionSection>
 
-                            <section className="border border-white/10 p-6">
-                                <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-stone-500 mb-4">
-                                    Lane context
-                                </p>
+                            <ResponsiveAccordionSection
+                                id="lane-fit"
+                                title="Lane fit"
+                                tone="dark"
+                                className="border border-white/10"
+                                headerClassName="p-4 md:p-6 md:pb-4"
+                                bodyClassName="px-4 pb-4 md:px-6 md:pb-6"
+                                titleClassName="text-white md:text-xl"
+                            >
                                 <p className="text-sm leading-relaxed text-stone-300">
                                     {capability.laneDescription}
                                 </p>
-                            </section>
+                            </ResponsiveAccordionSection>
                         </aside>
                     </main>
                 </motion.div>

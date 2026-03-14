@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
 import Seo from '../components/Seo';
+import MobileSectionNav from '../components/MobileSectionNav';
+import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -116,15 +118,12 @@ export default function UyghurEats() {
 
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
-                            <h1 className="text-5xl md:text-6xl font-medium tracking-tight mb-6">
+                            <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
                                 Uyghur Eats
                             </h1>
 
-                            <p className="text-xl text-neutral-600 max-w-3xl leading-relaxed mb-8">
-                                A definitive location and business profile of an authentic Central Asian dining institution.
-                                This study details the operational strengths, hyper-local community loyalty, and unique
-                                artisanal food production (specifically hand-pulled noodles) that make this business an ideal
-                                anchor tenant for high-value real estate acquisition.
+                            <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
+                                A business profile built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering that can support acquisition or continued operation.
                             </p>
 
                             <div className="flex flex-wrap gap-2">
@@ -144,12 +143,11 @@ export default function UyghurEats() {
                             <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400 mb-4">
                                 For Sale
                             </p>
-                            <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-4">
-                                Acquire the business and its neighborhood loyalty.
+                            <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
+                                Acquire the business and the demand already around it.
                             </h2>
                             <p className="text-sm leading-6 text-neutral-300 mb-6">
-                                Qualified individual buyers can submit an acquisition offer for owner review, including
-                                proposed structure, close timeline, and operating intent.
+                                Qualified buyers can submit an acquisition offer with proposed structure, timeline, and operating plan.
                             </p>
                             <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
                                 <div className="border border-white/15 bg-white/5 p-3">
@@ -179,82 +177,95 @@ export default function UyghurEats() {
                     </div>
                 </header>
 
-                <main data-project-body className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
+                    <div className="lg:col-span-12">
+                        <MobileSectionNav
+                            items={[
+                                { id: 'location', label: 'Location' },
+                                { id: 'culinary', label: 'Food draw' },
+                                { id: 'community', label: 'Community' },
+                                { id: 'market', label: 'Market' },
+                                { id: 'thesis', label: 'Thesis' },
+                                { id: 'growth', label: 'Growth' },
+                                { id: 'gallery', label: 'Gallery' },
+                            ]}
+                        />
+                    </div>
                     {/* Content Section */}
                     <div className="lg:col-span-5 space-y-12">
-                        <section>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-neutral-100 rounded-sm">
-                                    <MapPin className="w-5 h-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">Location & Footprint</h2>
-                            </div>
-                            <div data-project-detail-body>
-                                <p className="text-neutral-600 leading-relaxed mb-4">
+                        <ResponsiveAccordionSection
+                            id="location"
+                            title="Location & Footprint"
+                            icon={MapPin}
+                            defaultOpen
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
+                            <div data-project-detail-body className="space-y-4">
+                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
                                     Situated at <strong className="text-black font-semibold">2412 Wisconsin Ave NW, Washington, DC</strong>,
-                                    the restaurant occupies a premium neighborhood position in a high-income, high-traffic commercial corridor.
-                                    Operating previously under a different namesake, the recent 2024 rebranding to <em>Uyghur Eats</em> points to
-                                    a modern, focused operational overhaul by founders Thi and Lan.
+                                    the restaurant sits in a high-income, high-traffic corridor. The 2024 rebrand to <em>Uyghur Eats</em> signals a clearer operating identity.
                                 </p>
-                                <p className="text-neutral-600 leading-relaxed">
-                                    The interior features high ceilings, contemporary industrial-chic seating mixed with warm wooden elements,
-                                    and distinctly cultural murals, creating a tranquil environment that maximizes seating density without
-                                    sacrificing comfort.
+                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    The room combines high ceilings, cultural murals, and efficient seating density without reading as cramped.
                                 </p>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-neutral-100 rounded-sm">
-                                    <ChefHat className="w-5 h-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">Culinary Draw</h2>
-                            </div>
+                        <ResponsiveAccordionSection
+                            id="culinary"
+                            title="Culinary Draw"
+                            icon={ChefHat}
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
                             <div data-project-detail-body>
-                                <p className="text-neutral-600 leading-relaxed mb-4">
-                                    The principal value driver is their artisanal specialty: <strong className="text-black font-semibold">Daily Fresh Made Hand-Pulled Noodles (Laghman)</strong>.
-                                    By focusing on authentic, labor-intensive Uyghur and Central Asian preparations, they command a niche market
-                                    that ensures consistent, recurring revenue.
+                                <p className="mb-4 text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    The key value driver is <strong className="text-black font-semibold">daily hand-pulled laghman noodles</strong>. The menu wins because it is specific, labor-intensive, and hard to substitute nearby.
                                 </p>
-                                <ul className="list-disc pl-5 text-neutral-600 space-y-2">
+                                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
                                     <li><strong>Signature:</strong> Royal Laghman & Fried Laghman</li>
                                     <li><strong>Savory:</strong> Handmade Manta (dumplings) & Samsa (pastries)</li>
                                     <li><strong>Proteins:</strong> Premium Halal meats including Fried Lamb Shank</li>
                                     <li><strong>Communal:</strong> High-margin shareables like "Big Plate Chicken"</li>
                                 </ul>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="p-2 bg-neutral-100 rounded-sm">
-                                    <Users className="w-5 h-5 text-black" />
-                                </div>
-                                <h2 className="text-2xl font-medium">Community Integration</h2>
-                            </div>
+                        <ResponsiveAccordionSection
+                            id="community"
+                            title="Community Integration"
+                            icon={Users}
+                            className="border border-neutral-200 md:border-0"
+                            headerClassName="p-4 md:mb-4 md:p-0"
+                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                        >
                             <div data-project-detail-body>
-                                <p className="text-neutral-600 leading-relaxed">
-                                    Beyond the food, Uyghur Eats acts as a cultural anchor. The family-run service model yields extremely
-                                    high customer retention and organic word-of-mouth marketing across Yelp and Google. The "addictive" spice profiles
-                                    and localized appeal draw distinct crowds from surrounding universities, embassies, and residential blocks.
+                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    Uyghur Eats functions as a neighborhood anchor. Family-run service, strong word of mouth, and traffic from nearby universities, embassies, and residences support repeat demand.
                                 </p>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200">
-                            <div className="bg-neutral-50 p-4 border-b border-neutral-200 flex items-center gap-3">
-                                <LineChart className="w-5 h-5 text-black" />
-                                <h3 className="text-xl font-medium">Market Analysis</h3>
-                            </div>
-                            <div data-project-detail-body className="p-6 space-y-6">
+                        <ResponsiveAccordionSection
+                            id="market"
+                            title="Market Analysis"
+                            icon={LineChart}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Property Profile</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed mb-1">
                                         <strong className="text-black font-medium">Size:</strong> 2,880 sqft retail space on a 0.05-acre lot. High-ceiling dining room.
                                     </p>
                                     <p className="text-sm text-neutral-600 leading-relaxed">
-                                        <strong className="text-black font-medium">History:</strong> The location has hosted a continuous lineage of successful Central Asian restaurants since its 2001 sale ($391,100), proving sustained local demand for this specific footprint.
+                                        <strong className="text-black font-medium">History:</strong> The location has supported Central Asian restaurant demand for years, which lowers concept risk for the footprint.
                                     </p>
                                 </div>
 
@@ -269,58 +280,71 @@ export default function UyghurEats() {
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Competitive Landscape</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed max-w-xl">
-                                        Surrounded by Italian (Divino), Middle Eastern (Bonjon Rumi), and Fast Casual (Chipotle), Uyghur Eats maintains a monopoly on authentic hand-pulled noodles in this corridor. Highly defensible asset.
+                                        Nearby competition covers Italian, Middle Eastern, and fast casual formats, but not authentic hand-pulled noodles. That makes the concept unusually defensible for the corridor.
                                     </p>
                                 </div>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="bg-black text-white p-6">
-                            <div className="flex items-center gap-2 mb-4">
-                                <Target className="w-5 h-5 text-white" />
-                                <h3 className="text-lg font-medium">Acquisition Thesis</h3>
-                            </div>
+                        <ResponsiveAccordionSection
+                            id="thesis"
+                            title="Acquisition Thesis"
+                            icon={Target}
+                            className="border border-neutral-900 bg-black text-white"
+                            headerClassName="p-4 md:p-6 md:pb-4"
+                            bodyClassName="px-4 pb-4 md:px-6 md:pb-6"
+                            tone="dark"
+                            titleClassName="text-white md:text-lg"
+                        >
                             <div data-project-detail-body>
                                 <p className="text-sm text-neutral-300 leading-relaxed">
-                                    Uyghur Eats represents an optimal tenant or acquisition target due to its un-replicable artisanal product,
-                                    loyal community integration, and prime DC real estate positioning. The business shows resilience to fast-casual
-                                    market fluctuations by offering a distinct, high-quality dine-in experience.
+                                    Uyghur Eats is attractive because the product is difficult to replicate, the location is strong, and demand is already embedded in the neighborhood.
                                 </p>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
 
-                        <section className="border border-neutral-200 mt-12">
-                            <div className="bg-neutral-50 p-4 border-b border-neutral-200 flex items-center gap-3">
-                                <TrendingUp className="w-5 h-5 text-black" />
-                                <h3 className="text-xl font-medium">Potential Use Cases & Growth</h3>
-                            </div>
-                            <div data-project-detail-body className="p-6 space-y-6 bg-white">
+                        <ResponsiveAccordionSection
+                            id="growth"
+                            title="Potential Use Cases & Growth"
+                            icon={TrendingUp}
+                            className="mt-12 border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 bg-white p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Cafe & Restaurant Buyers</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed max-w-xl">
-                                        Immediate turnkey acquisition for operators looking to capitalize on the established handmade noodle market. Growth predictions indicate a potential 15-20% YOY revenue increase by expanding delivery radiuses and extending operational hours.
+                                        Immediate acquisition for operators who want a live handmade-noodle concept. Growth upside comes from wider delivery coverage and longer hours.
                                     </p>
                                 </div>
 
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Continued Operations & Management</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed max-w-xl">
-                                        For absentee owners or holding companies, B2W can provide comprehensive, automated management solutions. Integrating AI-driven supply chain tracking and shift scheduling can aggressively maximize net operating margins without altering the beloved local brand.
+                                        For holdco or absentee ownership, B2W can layer in operating systems such as inventory tracking and shift scheduling without changing the local-facing brand.
                                     </p>
                                 </div>
 
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Mixed-Use Space Redevelopment</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed max-w-xl">
-                                        The 0.05-acre premium Wisconsin Ave footprint offers compelling long-term redevelopment potential. Maintaining the current high-yield restaurant lease while scoping upper-level residential additions provides a highly secure, cash-flowing land banking strategy.
+                                        The Wisconsin Ave footprint also supports a longer-term land-bank strategy: preserve restaurant cash flow while evaluating upper-level residential additions.
                                     </p>
                                 </div>
                             </div>
-                        </section>
+                        </ResponsiveAccordionSection>
                     </div>
 
                     {/* Image Gallery Section */}
-                    <aside className="lg:col-span-7">
+                    <ResponsiveAccordionSection
+                        id="gallery"
+                        title="Image Gallery"
+                        className="border border-neutral-200 lg:col-span-7 md:border-0"
+                        headerClassName="p-4 md:mb-4 md:p-0"
+                        bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                    >
                         <div
                             data-project-detail-body
                             className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 h-full"
@@ -347,7 +371,7 @@ export default function UyghurEats() {
                                 </motion.figure>
                             ))}
                         </div>
-                    </aside>
+                    </ResponsiveAccordionSection>
                 </main>
             </motion.div>
 
