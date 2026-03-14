@@ -2,6 +2,13 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Bot, Clock3, MessageSquare, Settings2, Store, Wrench } from 'lucide-react';
 import Seo from '../components/Seo';
+import {
+    projectPageBackLinkClassName,
+    projectPageEyebrowClassName,
+    projectPageHeaderClassName,
+    projectPageShellClassName,
+    projectHeroGridClassNames,
+} from '../components/projectPageLayout';
 
 const workstreams = [
     'Front-of-house question handling for menu, hours, pickup, catering, and market inventory.',
@@ -27,7 +34,7 @@ const launchPlan = [
 
 export default function BorekGOperations() {
     return (
-        <article className="min-h-screen max-w-7xl mx-auto px-6 pb-16 pt-24">
+        <article className={projectPageShellClassName}>
             <Seo
                 title="Borek-G Operations Chatbot Proposal"
                 description="Proposal page for a Borek-G operations chatbot covering the workflow scope, operating use cases, and phased rollout plan."
@@ -38,22 +45,22 @@ export default function BorekGOperations() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <header className="mt-12 mb-12 border-b border-neutral-100 pb-8">
+                <header className={projectPageHeaderClassName}>
                     <Link
                         to="/#industries"
-                        className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black"
+                        className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to Projects
                     </Link>
 
-                    <div className="mb-6 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
+                    <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
                         <span>Proposal</span>
                     </div>
 
-                    <div className="grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.85fr)] lg:items-start">
+                    <div className={projectHeroGridClassNames.operations}>
                         <div>
                             <h1 className="mb-6 text-5xl font-medium tracking-tight md:text-6xl">
                                 Borek-G Operations Chatbot
@@ -112,7 +119,7 @@ export default function BorekGOperations() {
                     </div>
                 </header>
 
-                <main className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <main data-project-body className="grid grid-cols-1 gap-12 lg:grid-cols-12">
                     <div className="space-y-12 lg:col-span-7">
                         <section>
                             <div className="mb-4 flex items-center gap-3">
@@ -121,11 +128,13 @@ export default function BorekGOperations() {
                                 </div>
                                 <h2 className="text-2xl font-medium">System Role</h2>
                             </div>
-                            <p className="leading-relaxed text-neutral-600">
-                                This proposal is separate from Borek-G marketing work. It is an operations system:
-                                a chatbot trained to answer recurring business questions, reduce interruptions, and
-                                keep responses consistent across channels.
-                            </p>
+                            <div data-project-detail-body>
+                                <p className="leading-relaxed text-neutral-600">
+                                    This proposal is separate from Borek-G marketing work. It is an operations system:
+                                    a chatbot trained to answer recurring business questions, reduce interruptions, and
+                                    keep responses consistent across channels.
+                                </p>
+                            </div>
                         </section>
 
                         <section>
@@ -135,11 +144,13 @@ export default function BorekGOperations() {
                                 </div>
                                 <h2 className="text-2xl font-medium">Core Use Cases</h2>
                             </div>
-                            <ul className="list-disc space-y-2 pl-5 text-neutral-600">
-                                {workstreams.map((item) => (
-                                    <li key={item}>{item}</li>
-                                ))}
-                            </ul>
+                            <div data-project-detail-body>
+                                <ul className="list-disc space-y-2 pl-5 text-neutral-600">
+                                    {workstreams.map((item) => (
+                                        <li key={item}>{item}</li>
+                                    ))}
+                                </ul>
+                            </div>
                         </section>
 
                         <section className="border border-neutral-200">
@@ -147,7 +158,7 @@ export default function BorekGOperations() {
                                 <Settings2 className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Proposed Rollout</h3>
                             </div>
-                            <div className="space-y-6 p-6">
+                            <div data-project-detail-body className="space-y-6 p-6">
                                 {launchPlan.map((phase) => (
                                     <div key={phase.title}>
                                         <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-black">
@@ -166,7 +177,7 @@ export default function BorekGOperations() {
                                 <MessageSquare className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">What It Would Handle</h3>
                             </div>
-                            <div className="p-6 text-sm leading-6 text-neutral-600">
+                            <div data-project-detail-body className="p-6 text-sm leading-6 text-neutral-600">
                                 Menu questions, order timing, pickup instructions, catering intake, store policies,
                                 common staff procedures, and routing logic for issues that need a person.
                             </div>
@@ -177,7 +188,7 @@ export default function BorekGOperations() {
                                 <Clock3 className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Expected Benefits</h3>
                             </div>
-                            <div className="p-6 text-sm leading-6 text-neutral-600">
+                            <div data-project-detail-body className="p-6 text-sm leading-6 text-neutral-600">
                                 Faster response times, fewer repetitive interruptions for staff, cleaner handoffs,
                                 and a structured record of recurring questions that can inform later automation.
                             </div>
@@ -188,7 +199,7 @@ export default function BorekGOperations() {
                                 <Wrench className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Next Step</h3>
                             </div>
-                            <div className="p-6 text-sm leading-6 text-neutral-600">
+                            <div data-project-detail-body className="p-6 text-sm leading-6 text-neutral-600">
                                 Confirm the source materials for training: menus, hours, catering policies, staff SOPs,
                                 pickup rules, and escalation contacts. That operating corpus defines the first useful version.
                             </div>

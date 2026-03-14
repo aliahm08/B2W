@@ -10,14 +10,17 @@ import Hero from './components/Hero';
 import Work from './components/Work';
 import Industries from './components/Industries';
 import Team from './components/Team';
+import OurProcess from './components/OurProcess';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
+import ProjectPasswordGate from './components/ProjectPasswordGate';
 import BorekG from './pages/BorekG';
 import BorekGOperations from './pages/BorekGOperations';
 import UyghurEats from './pages/UyghurEats';
 import CapabilityPage from './pages/CapabilityPage';
 import Seo from './components/Seo';
+import { protectedProjects } from './content/projectAccess';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -54,12 +57,19 @@ function LandingPage() {
       <section id="team">
         <Team />
       </section>
+      <section id="process">
+        <OurProcess />
+      </section>
       <section id="contact">
         <CTA />
       </section>
     </>
   );
 }
+
+const borekGProject = protectedProjects.find((project) => project.path === '/borek-g')!;
+const borekGOperationsProject = protectedProjects.find((project) => project.path === '/borek-g-operations')!;
+const uyghurEatsProject = protectedProjects.find((project) => project.path === '/uyghur-eats')!;
 
 export default function App() {
   return (
@@ -69,9 +79,45 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/borek-g" element={<BorekG />} />
-          <Route path="/borek-g-operations" element={<BorekGOperations />} />
-          <Route path="/uyghur-eats" element={<UyghurEats />} />
+          <Route
+            path="/borek-g"
+            element={(
+              <ProjectPasswordGate
+                path={borekGProject.path}
+                title={borekGProject.title}
+                subtitle={borekGProject.subtitle}
+                overlayTop={borekGProject.overlayTop}
+              >
+                <BorekG />
+              </ProjectPasswordGate>
+            )}
+          />
+          <Route
+            path="/borek-g-operations"
+            element={(
+              <ProjectPasswordGate
+                path={borekGOperationsProject.path}
+                title={borekGOperationsProject.title}
+                subtitle={borekGOperationsProject.subtitle}
+                overlayTop={borekGOperationsProject.overlayTop}
+              >
+                <BorekGOperations />
+              </ProjectPasswordGate>
+            )}
+          />
+          <Route
+            path="/uyghur-eats"
+            element={(
+              <ProjectPasswordGate
+                path={uyghurEatsProject.path}
+                title={uyghurEatsProject.title}
+                subtitle={uyghurEatsProject.subtitle}
+                overlayTop={uyghurEatsProject.overlayTop}
+              >
+                <UyghurEats />
+              </ProjectPasswordGate>
+            )}
+          />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
         </Routes>
       </main>

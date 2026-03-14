@@ -12,3 +12,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+[data-project-locked='true'] [data-project-detail-body] {
+  filter: blur(10px);
+  opacity: 0.52;
+  pointer-events: none;
+  user-select: none;
+  transform: translateZ(0) scale(1.01);
+  transform-origin: center;
+  transition: filter 180ms ease, opacity 180ms ease;
+}
+
+[data-project-locked='true'] [data-project-detail-body] img,
+[data-project-locked='true'] [data-project-detail-body] button,
+[data-project-locked='true'] [data-project-detail-body] a,
+[data-project-locked='true'] [data-project-detail-body] input,
+[data-project-locked='true'] [data-project-detail-body] textarea,
+[data-project-locked='true'] [data-project-detail-body] select {
+  pointer-events: none;
+}

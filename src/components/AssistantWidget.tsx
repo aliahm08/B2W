@@ -1,13 +1,19 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { PenSquare, ReceiptText, Send, X } from 'lucide-react';
+import { PenSquare, ReceiptText, Send, X, ArrowRight } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { fetchProjectAccessStatus, getProtectedProject } from '../content/projectAccess';
 
 type ProposalOption = 'option-one' | 'option-two' | 'option-three';
 
-const proposalWidgetEnabledPaths = new Set<string>([
-  '/borek-g',
-]);
+type FloatingPageCta =
+  | { type: 'proposal'; label: string }
+  | { type: 'event'; label: string; eventName: string };
+
+const floatingPageCtas: Record<string, FloatingPageCta> = {
+  '/borek-g': { type: 'proposal', label: 'Respond to Proposal' },
+  '/uyghur-eats': { type: 'event', label: 'Make an Offer', eventName: 'b2w-uyghur-offer:open' },
+};
 
 const proposalOptions: Array<{
   id: ProposalOption;
@@ -144,24 +150,64 @@ export default function AssistantWidget() {
   const [notes, setNotes] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isProjectUnlocked, setIsProjectUnlocked] = useState(true);
   const signature = useSignaturePad();
+  const protectedProject = useMemo(() => getProtectedProject(pathname), [pathname]);
 
-  const isProposalPage = useMemo(
-    () => proposalWidgetEnabledPaths.has(pathname),
-    [pathname],
-  );
+  const activeFloatingCta = useMemo(() => floatingPageCtas[pathname], [pathname]);
+  const isProposalPage = activeFloatingCta?.type === 'proposal';
 
   useEffect(() => {
-    if (!isProposalPage) {
+    let isActive = true;
+
+    const checkAccess = async () => {
+      if (!protectedProject) {
+        if (isActive) {
+          setIsProjectUnlocked(true);
+        }
+        return;
+      }
+
+      const unlocked = await fetchProjectAccessStatus(pathname);
+      if (isActive) {
+        setIsProjectUnlocked(unlocked);
+      }
+    };
+
+    void checkAccess();
+
+    function handleAccessChange(event: Event) {
+      const detail = (event as CustomEvent<{ path?: string; unlocked?: boolean }>).detail;
+
+      if (detail?.path === pathname) {
+        setIsProjectUnlocked(Boolean(detail.unlocked));
+        return;
+      }
+
+      void checkAccess();
+    }
+
+    window.addEventListener('b2w-project-access-change', handleAccessChange as EventListener);
+    window.addEventListener('storage', handleAccessChange);
+
+    return () => {
+      isActive = false;
+      window.removeEventListener('b2w-project-access-change', handleAccessChange as EventListener);
+      window.removeEventListener('storage', handleAccessChange);
+    };
+  }, [pathname, protectedProject]);
+
+  useEffect(() => {
+    if (!activeFloatingCta || !isProjectUnlocked) {
       setIsOpen(false);
       setSubmitted(false);
       setIsBottomPrompted(false);
       setHasAutoOpened(false);
     }
-  }, [isProposalPage]);
+  }, [activeFloatingCta, isProjectUnlocked]);
 
   useEffect(() => {
-    if (!isProposalPage || hasAutoOpened) {
+    if (!activeFloatingCta || !isProjectUnlocked || hasAutoOpened) {
       return;
     }
 
@@ -179,8 +225,13 @@ export default function AssistantWidget() {
       setIsBottomPrompted(true);
 
       openTimer = window.setTimeout(() => {
-        setSubmitted(false);
-        setIsOpen(true);
+        if (activeFloatingCta.type === 'proposal') {
+          setSubmitted(false);
+          setIsOpen(true);
+          return;
+        }
+
+        window.dispatchEvent(new CustomEvent(activeFloatingCta.eventName));
       }, 260);
     }
 
@@ -193,16 +244,22 @@ export default function AssistantWidget() {
         window.clearTimeout(openTimer);
       }
     };
-  }, [hasAutoOpened, isProposalPage]);
+  }, [activeFloatingCta, hasAutoOpened, isProjectUnlocked]);
 
   useEffect(() => {
     function handleOpen() {
+      if (!isProjectUnlocked) {
+        return;
+      }
+      if (activeFloatingCta?.type !== 'proposal') {
+        return;
+      }
       setSubmitted(false);
       setIsOpen(true);
     }
     window.addEventListener('b2w-assistant:open', handleOpen as EventListener);
     return () => window.removeEventListener('b2w-assistant:open', handleOpen as EventListener);
-  }, []);
+  }, [activeFloatingCta, isProjectUnlocked, pathname]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -211,12 +268,26 @@ export default function AssistantWidget() {
     setSubmitted(true);
   }
 
-  if (!isProposalPage) return null;
+  if (!activeFloatingCta || !isProjectUnlocked) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-4">
+    <>
+      <AnimatePresence>
+        {isProposalPage && isOpen ? (
+          <motion.div
+            key="proposal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/30"
+            onClick={() => setIsOpen(false)}
+          />
+        ) : null}
+      </AnimatePresence>
+
+      <div className="pointer-events-none fixed inset-x-0 bottom-5 z-50 flex justify-center px-4">
       <AnimatePresence mode="wait">
-        {isOpen ? (
+        {isProposalPage && isOpen ? (
           <motion.div
             key="proposal-panel"
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -444,11 +515,20 @@ export default function AssistantWidget() {
           </motion.div>
         ) : (
           <motion.button
-            key="proposal-trigger"
+            key={`${pathname}-floating-cta`}
             type="button"
             onClick={() => {
-              setSubmitted(false);
-              setIsOpen(true);
+              if (!isProjectUnlocked) {
+                return;
+              }
+
+              if (activeFloatingCta.type === 'proposal') {
+                setSubmitted(false);
+                setIsOpen(true);
+                return;
+              }
+
+              window.dispatchEvent(new CustomEvent(activeFloatingCta.eventName));
             }}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -457,11 +537,12 @@ export default function AssistantWidget() {
               isBottomPrompted ? 'scale-105 px-8 py-5' : 'px-6 py-4'
             }`}
           >
-            <ReceiptText size={16} />
-            Respond to Proposal
+            {activeFloatingCta.type === 'proposal' ? <ReceiptText size={16} /> : <ArrowRight size={16} />}
+            {activeFloatingCta.label}
           </motion.button>
         )}
       </AnimatePresence>
-    </div>
+      </div>
+    </>
   );
 }

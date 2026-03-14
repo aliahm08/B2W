@@ -56,6 +56,14 @@ export const config = {
     workdayEndHour: Number(getEnv('GOOGLE_BOOKING_END_HOUR', '17')),
     timezone: getEnv('GOOGLE_BOOKING_TIMEZONE', 'America/New_York'),
   },
+  projectAccess: {
+    secret: getEnv('PROJECT_ACCESS_SECRET'),
+    passwords: {
+      '/borek-g': getEnv('PROJECT_PASSWORD_BOREK_G'),
+      '/borek-g-operations': getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS'),
+      '/uyghur-eats': getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
+    } satisfies Record<string, string>,
+  },
 };
 
 export function isAllowedCalendar(calendarId: string): boolean {

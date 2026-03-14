@@ -12,6 +12,13 @@ import {
     Users
 } from 'lucide-react';
 import Seo from '../components/Seo';
+import {
+    projectPageBackLinkClassName,
+    projectPageEyebrowClassName,
+    projectPageHeaderClassName,
+    projectPageShellClassName,
+    projectHeroGridClassNames,
+} from '../components/projectPageLayout';
 
 const snapshotDate = 'March 13, 2026';
 
@@ -180,7 +187,7 @@ const valuationNotes = [
 
 export default function BorekG() {
     return (
-        <article className="min-h-screen max-w-7xl mx-auto px-6 pb-16 pt-24">
+        <article className={projectPageShellClassName}>
             <Seo
                 title="Borek-G Project Proposal"
                 description="Proposal page for a Borek-G restaurant profile and marketing audit in Falls Church, outlining the public-data workflow, growth thesis, and client-success roadmap for execution."
@@ -191,16 +198,16 @@ export default function BorekG() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <header className="mt-12 mb-12 border-b border-neutral-100 pb-8">
+                <header className={projectPageHeaderClassName}>
                     <Link
                         to="/#industries"
-                        className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black"
+                        className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to Projects
                     </Link>
 
-                    <div className="mb-6 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
+                    <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
                         <span>Proposal</span>
@@ -211,7 +218,7 @@ export default function BorekG() {
                             Proposal for Marketing Systems and Growth
                         </p>
 
-                        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.9fr)] lg:items-start">
+                        <div className={projectHeroGridClassNames.proposal}>
                             <div>
                                 <h1 className="mb-6 text-5xl font-medium tracking-tight md:text-6xl">
                                     Borek-G
@@ -267,7 +274,7 @@ export default function BorekG() {
                     </section>
                 </header>
 
-                <main className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+                <main data-project-body className="grid grid-cols-1 gap-12 lg:grid-cols-12">
                     <div className="space-y-12 lg:col-span-7">
                         <section>
                             <div className="mb-4 flex items-center gap-3">
@@ -276,17 +283,19 @@ export default function BorekG() {
                                 </div>
                                 <h2 className="text-2xl font-medium">Location & Operating Footprint</h2>
                             </div>
-                            <p className="mb-4 leading-relaxed text-neutral-600">
-                                Borek-G operates from <strong className="font-semibold text-black">315 S Maple Ave, Falls Church, Virginia</strong>.
-                                For proposal purposes, the operating thesis is that Borek-G is more than a single-format restaurant.
-                                Public materials show a combined cafe, market, catering, online-ordering, and gift-card setup,
-                                which materially improves resilience versus a dine-in-only concept.
-                            </p>
-                            <p className="leading-relaxed text-neutral-600">
-                                Press coverage also ties the brand to the Falls Church Farmers Market and to its Turkish prepared-food
-                                and grocery identity. That combination gives Borek-G a stronger neighborhood moat than a standard pastry
-                                shop or breakfast cafe.
-                            </p>
+                            <div data-project-detail-body>
+                                <p className="mb-4 leading-relaxed text-neutral-600">
+                                    Borek-G operates from <strong className="font-semibold text-black">315 S Maple Ave, Falls Church, Virginia</strong>.
+                                    For proposal purposes, the operating thesis is that Borek-G is more than a single-format restaurant.
+                                    Public materials show a combined cafe, market, catering, online-ordering, and gift-card setup,
+                                    which materially improves resilience versus a dine-in-only concept.
+                                </p>
+                                <p className="leading-relaxed text-neutral-600">
+                                    Press coverage also ties the brand to the Falls Church Farmers Market and to its Turkish prepared-food
+                                    and grocery identity. That combination gives Borek-G a stronger neighborhood moat than a standard pastry
+                                    shop or breakfast cafe.
+                                </p>
+                            </div>
                         </section>
 
                         <section>
@@ -296,17 +305,19 @@ export default function BorekG() {
                                 </div>
                                 <h2 className="text-2xl font-medium">Brand Positioning</h2>
                             </div>
-                            <p className="mb-4 leading-relaxed text-neutral-600">
-                                The proposed brand narrative positions Borek-G as a culturally specific Turkish food business with a
-                                broader commercial footprint than typical independent cafes. The brand promise spans savory pastries,
-                                halal food, catering, and imported pantry goods rather than relying on one hero menu item alone.
-                            </p>
-                            <ul className="list-disc space-y-2 pl-5 text-neutral-600">
-                                <li>Turkish cafe and market identity anchored in Falls Church.</li>
-                                <li>Halal positioning broadens addressable demand beyond casual bakery traffic.</li>
-                                <li>Farmers market roots create a strong authenticity story and recurring local discovery.</li>
-                                <li>Square ecommerce stack supports direct transactions instead of pushing all demand to third-party marketplaces.</li>
-                            </ul>
+                            <div data-project-detail-body>
+                                <p className="mb-4 leading-relaxed text-neutral-600">
+                                    The proposed brand narrative positions Borek-G as a culturally specific Turkish food business with a
+                                    broader commercial footprint than typical independent cafes. The brand promise spans savory pastries,
+                                    halal food, catering, and imported pantry goods rather than relying on one hero menu item alone.
+                                </p>
+                                <ul className="list-disc space-y-2 pl-5 text-neutral-600">
+                                    <li>Turkish cafe and market identity anchored in Falls Church.</li>
+                                    <li>Halal positioning broadens addressable demand beyond casual bakery traffic.</li>
+                                    <li>Farmers market roots create a strong authenticity story and recurring local discovery.</li>
+                                    <li>Square ecommerce stack supports direct transactions instead of pushing all demand to third-party marketplaces.</li>
+                                </ul>
+                            </div>
                         </section>
 
                         <section className="border border-neutral-200">
@@ -314,7 +325,7 @@ export default function BorekG() {
                                 <Megaphone className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Initial Marketing Evaluation</h3>
                             </div>
-                            <div className="space-y-6 p-6">
+                            <div data-project-detail-body className="space-y-6 p-6">
                                 <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
                                     These are proposal-stage signals from public sources, not full campaign analytics. They are
                                     enough to justify the project and define where deeper measurement should start.
@@ -338,11 +349,13 @@ export default function BorekG() {
                                 <LineChart className="h-5 w-5 text-white" />
                                 <h3 className="text-lg font-medium">Project Thesis</h3>
                             </div>
-                            <p className="text-sm leading-relaxed text-neutral-300">
-                                Borek-G looks operationally stronger than its digital brand scale suggests. Review quality, channel diversity,
-                                and earned media indicate a business with real local trust. The proposal is to package that proof into a
-                                cleaner public profile first, then layer in deeper social tracking once the engagement begins.
-                            </p>
+                            <div data-project-detail-body>
+                                <p className="text-sm leading-relaxed text-neutral-300">
+                                    Borek-G looks operationally stronger than its digital brand scale suggests. Review quality, channel diversity,
+                                    and earned media indicate a business with real local trust. The proposal is to package that proof into a
+                                    cleaner public profile first, then layer in deeper social tracking once the engagement begins.
+                                </p>
+                            </div>
                         </section>
 
                         <section className="border border-neutral-200">
@@ -350,7 +363,7 @@ export default function BorekG() {
                                 <Megaphone className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Bottom Line</h3>
                             </div>
-                            <div className="space-y-6 p-6">
+                            <div data-project-detail-body className="space-y-6 p-6">
                                 <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
                                     Soft bottom line: Borek-G should win on social by looking more like the business it already is in real life.
                                     The winning strategy is proof-heavy, local, food-forward, and offer-specific rather than brand-abstract.
@@ -374,7 +387,7 @@ export default function BorekG() {
                                 <Star className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Signal Summary</h3>
                             </div>
-                            <div className="grid gap-4 p-6 md:grid-cols-2 lg:grid-cols-1">
+                            <div data-project-detail-body className="grid gap-4 p-6 md:grid-cols-2 lg:grid-cols-1">
                                 {scorecards.map((card) => (
                                     <div key={card.label} className="border border-neutral-200 p-4">
                                         <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">
@@ -392,7 +405,7 @@ export default function BorekG() {
                                 <Users className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Proposed Focus Areas</h3>
                             </div>
-                            <div className="p-6">
+                            <div data-project-detail-body className="p-6">
                                 <ul className="list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-600">
                                     {recommendations.map((item) => (
                                         <li key={item}>{item}</li>
@@ -406,7 +419,7 @@ export default function BorekG() {
                                 <LineChart className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Valuation Logic</h3>
                             </div>
-                            <div className="p-6">
+                            <div data-project-detail-body className="p-6">
                                 <ul className="list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-600">
                                     {valuationNotes.map((item) => (
                                         <li key={item}>{item}</li>
@@ -420,7 +433,7 @@ export default function BorekG() {
                                 <ShoppingBag className="h-5 w-5 text-black" />
                                 <h3 className="text-xl font-medium">Source Stack</h3>
                             </div>
-                            <div className="space-y-3 p-6">
+                            <div data-project-detail-body className="space-y-3 p-6">
                                 {sources.map((source) => (
                                     <a
                                         key={source.href}
@@ -442,7 +455,7 @@ export default function BorekG() {
                             <LineChart className="h-5 w-5 text-black" />
                             <h3 className="text-xl font-medium">Predicted Growth & Project Value</h3>
                         </div>
-                        <div className="space-y-6 p-6 md:p-8">
+                        <div data-project-detail-body className="space-y-6 p-6 md:p-8">
                             <p className="max-w-4xl text-sm leading-relaxed text-neutral-600">
                                 Based on Borek-G&apos;s existing public trust signals, this proposal is modeled as a demand-amplification
                                 project. The forecast below is a soft prediction, not a guarantee, and assumes competent execution over

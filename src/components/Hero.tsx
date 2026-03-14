@@ -1,11 +1,7 @@
 import { motion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import ActionLink from './ActionLink';
 
 export default function Hero() {
-  const openAssistant = () => {
-    window.dispatchEvent(new CustomEvent('b2w-assistant:open', { detail: { tab: 'chat' } }));
-  };
-
   return (
     <section className="min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto pt-20">
       <motion.div
@@ -22,25 +18,8 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-wrap gap-5">
-          <motion.a
-            href="/#capabilities"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="group inline-flex items-center gap-2 text-lg font-medium border-b border-black pb-1 hover:text-neutral-600 transition-colors"
-          >
-            Explore capabilities
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </motion.a>
-
-          <motion.button
-            type="button"
-            onClick={openAssistant}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center gap-2 rounded-full border border-black px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
-          >
-            Talk to the assistant
-          </motion.button>
+          <ActionLink href="/#capabilities">Explore capabilities</ActionLink>
+          <ActionLink href="/#industries" variant="outline">See Projects</ActionLink>
         </div>
       </motion.div>
     </section>

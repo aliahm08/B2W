@@ -3,6 +3,13 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
 import Seo from '../components/Seo';
+import {
+    projectPageBackLinkClassName,
+    projectPageEyebrowClassName,
+    projectPageHeaderClassName,
+    projectPageShellClassName,
+    projectHeroGridClassNames,
+} from '../components/projectPageLayout';
 
 export default function UyghurEats() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -29,6 +36,15 @@ export default function UyghurEats() {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [isOfferModalOpen]);
+
+    useEffect(() => {
+        const handleOfferOpen = () => {
+            openOfferModal();
+        };
+
+        window.addEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
+        return () => window.removeEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
+    }, []);
 
     const openOfferModal = () => {
         setIsOfferSubmitted(false);
@@ -73,7 +89,7 @@ export default function UyghurEats() {
     ];
 
     return (
-        <article className="pt-24 pb-16 px-6 max-w-7xl mx-auto min-h-screen">
+        <article className={projectPageShellClassName}>
             <Seo
                 title="Uyghur Eats Restaurant Profile"
                 description="Business profile of Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty for acquisition evaluation."
@@ -83,22 +99,22 @@ export default function UyghurEats() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <header className="mb-12 border-b border-neutral-100 pb-8 mt-12">
+                <header className={projectPageHeaderClassName}>
                     <Link
                         to="/#industries"
-                        className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 hover:text-black transition-colors mb-8"
+                        className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="w-4 h-4" />
                         Back to Projects
                     </Link>
 
-                    <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-6">
+                    <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
                         <span>Real Estate Acquisition</span>
                     </div>
 
-                    <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)] lg:items-start">
+                    <div className={projectHeroGridClassNames.profile}>
                         <div>
                             <h1 className="text-5xl md:text-6xl font-medium tracking-tight mb-6">
                                 Uyghur Eats
@@ -163,7 +179,7 @@ export default function UyghurEats() {
                     </div>
                 </header>
 
-                <main className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <main data-project-body className="grid grid-cols-1 gap-12 lg:grid-cols-12">
                     {/* Content Section */}
                     <div className="lg:col-span-5 space-y-12">
                         <section>
@@ -173,17 +189,19 @@ export default function UyghurEats() {
                                 </div>
                                 <h2 className="text-2xl font-medium">Location & Footprint</h2>
                             </div>
-                            <p className="text-neutral-600 leading-relaxed mb-4">
-                                Situated at <strong className="text-black font-semibold">2412 Wisconsin Ave NW, Washington, DC</strong>,
-                                the restaurant occupies a premium neighborhood position in a high-income, high-traffic commercial corridor.
-                                Operating previously under a different namesake, the recent 2024 rebranding to <em>Uyghur Eats</em> points to
-                                a modern, focused operational overhaul by founders Thi and Lan.
-                            </p>
-                            <p className="text-neutral-600 leading-relaxed">
-                                The interior features high ceilings, contemporary industrial-chic seating mixed with warm wooden elements,
-                                and distinctly cultural murals, creating a tranquil environment that maximizes seating density without
-                                sacrificing comfort.
-                            </p>
+                            <div data-project-detail-body>
+                                <p className="text-neutral-600 leading-relaxed mb-4">
+                                    Situated at <strong className="text-black font-semibold">2412 Wisconsin Ave NW, Washington, DC</strong>,
+                                    the restaurant occupies a premium neighborhood position in a high-income, high-traffic commercial corridor.
+                                    Operating previously under a different namesake, the recent 2024 rebranding to <em>Uyghur Eats</em> points to
+                                    a modern, focused operational overhaul by founders Thi and Lan.
+                                </p>
+                                <p className="text-neutral-600 leading-relaxed">
+                                    The interior features high ceilings, contemporary industrial-chic seating mixed with warm wooden elements,
+                                    and distinctly cultural murals, creating a tranquil environment that maximizes seating density without
+                                    sacrificing comfort.
+                                </p>
+                            </div>
                         </section>
 
                         <section>
@@ -193,17 +211,19 @@ export default function UyghurEats() {
                                 </div>
                                 <h2 className="text-2xl font-medium">Culinary Draw</h2>
                             </div>
-                            <p className="text-neutral-600 leading-relaxed mb-4">
-                                The principal value driver is their artisanal specialty: <strong className="text-black font-semibold">Daily Fresh Made Hand-Pulled Noodles (Laghman)</strong>.
-                                By focusing on authentic, labor-intensive Uyghur and Central Asian preparations, they command a niche market
-                                that ensures consistent, recurring revenue.
-                            </p>
-                            <ul className="list-disc pl-5 text-neutral-600 space-y-2">
-                                <li><strong>Signature:</strong> Royal Laghman & Fried Laghman</li>
-                                <li><strong>Savory:</strong> Handmade Manta (dumplings) & Samsa (pastries)</li>
-                                <li><strong>Proteins:</strong> Premium Halal meats including Fried Lamb Shank</li>
-                                <li><strong>Communal:</strong> High-margin shareables like "Big Plate Chicken"</li>
-                            </ul>
+                            <div data-project-detail-body>
+                                <p className="text-neutral-600 leading-relaxed mb-4">
+                                    The principal value driver is their artisanal specialty: <strong className="text-black font-semibold">Daily Fresh Made Hand-Pulled Noodles (Laghman)</strong>.
+                                    By focusing on authentic, labor-intensive Uyghur and Central Asian preparations, they command a niche market
+                                    that ensures consistent, recurring revenue.
+                                </p>
+                                <ul className="list-disc pl-5 text-neutral-600 space-y-2">
+                                    <li><strong>Signature:</strong> Royal Laghman & Fried Laghman</li>
+                                    <li><strong>Savory:</strong> Handmade Manta (dumplings) & Samsa (pastries)</li>
+                                    <li><strong>Proteins:</strong> Premium Halal meats including Fried Lamb Shank</li>
+                                    <li><strong>Communal:</strong> High-margin shareables like "Big Plate Chicken"</li>
+                                </ul>
+                            </div>
                         </section>
 
                         <section>
@@ -213,11 +233,13 @@ export default function UyghurEats() {
                                 </div>
                                 <h2 className="text-2xl font-medium">Community Integration</h2>
                             </div>
-                            <p className="text-neutral-600 leading-relaxed">
-                                Beyond the food, Uyghur Eats acts as a cultural anchor. The family-run service model yields extremely
-                                high customer retention and organic word-of-mouth marketing across Yelp and Google. The "addictive" spice profiles
-                                and localized appeal draw distinct crowds from surrounding universities, embassies, and residential blocks.
-                            </p>
+                            <div data-project-detail-body>
+                                <p className="text-neutral-600 leading-relaxed">
+                                    Beyond the food, Uyghur Eats acts as a cultural anchor. The family-run service model yields extremely
+                                    high customer retention and organic word-of-mouth marketing across Yelp and Google. The "addictive" spice profiles
+                                    and localized appeal draw distinct crowds from surrounding universities, embassies, and residential blocks.
+                                </p>
+                            </div>
                         </section>
 
                         <section className="border border-neutral-200">
@@ -225,7 +247,7 @@ export default function UyghurEats() {
                                 <LineChart className="w-5 h-5 text-black" />
                                 <h3 className="text-xl font-medium">Market Analysis</h3>
                             </div>
-                            <div className="p-6 space-y-6">
+                            <div data-project-detail-body className="p-6 space-y-6">
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Property Profile</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed mb-1">
@@ -258,11 +280,13 @@ export default function UyghurEats() {
                                 <Target className="w-5 h-5 text-white" />
                                 <h3 className="text-lg font-medium">Acquisition Thesis</h3>
                             </div>
-                            <p className="text-sm text-neutral-300 leading-relaxed">
-                                Uyghur Eats represents an optimal tenant or acquisition target due to its un-replicable artisanal product,
-                                loyal community integration, and prime DC real estate positioning. The business shows resilience to fast-casual
-                                market fluctuations by offering a distinct, high-quality dine-in experience.
-                            </p>
+                            <div data-project-detail-body>
+                                <p className="text-sm text-neutral-300 leading-relaxed">
+                                    Uyghur Eats represents an optimal tenant or acquisition target due to its un-replicable artisanal product,
+                                    loyal community integration, and prime DC real estate positioning. The business shows resilience to fast-casual
+                                    market fluctuations by offering a distinct, high-quality dine-in experience.
+                                </p>
+                            </div>
                         </section>
 
                         <section className="border border-neutral-200 mt-12">
@@ -270,7 +294,7 @@ export default function UyghurEats() {
                                 <TrendingUp className="w-5 h-5 text-black" />
                                 <h3 className="text-xl font-medium">Potential Use Cases & Growth</h3>
                             </div>
-                            <div className="p-6 space-y-6 bg-white">
+                            <div data-project-detail-body className="p-6 space-y-6 bg-white">
                                 <div>
                                     <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-2">Cafe & Restaurant Buyers</h4>
                                     <p className="text-sm text-neutral-600 leading-relaxed max-w-xl">
@@ -297,7 +321,7 @@ export default function UyghurEats() {
 
                     {/* Image Gallery Section */}
                     <aside className="lg:col-span-7">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div data-project-detail-body className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
                             {images.map((img, idx) => (
                                 <motion.div
                                     key={idx}
