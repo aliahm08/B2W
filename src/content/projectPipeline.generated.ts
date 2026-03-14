@@ -1,56 +1,108 @@
 import type { ProjectPipelineContent } from './projectPipeline';
 
 export const projectPipelineContent: ProjectPipelineContent = {
-  hero: {
-    headline: 'We build intelligence.',
-    subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
-    primaryCtaLabel: 'Explore capabilities',
-    primaryCtaHref: '/#capabilities',
-    secondaryCtaLabel: 'See Projects',
-    secondaryCtaHref: '/#industries',
+  "hero": {
+    "headline": "We build intelligence.",
+    "subheadline": "Solving complex problems with simple, effective AI solutions. No hype. Just results.",
+    "primaryCtaLabel": "Explore capabilities",
+    "primaryCtaHref": "/#capabilities",
+    "secondaryCtaLabel": "See Projects",
+    "secondaryCtaHref": "/#industries"
   },
-  projects: [
+  "projects": [
     {
-      id: 10,
-      category: 'FOOD & BEVERAGE',
-      serviceType: 'Marketing Proposal',
-      status: 'Proposal',
-      clientDescription: 'Turkish cafe and market in Falls Church',
-      title: 'Borek-G Project Proposal',
-      description:
-        'Proposal for a source-backed Borek-G profile covering location value, operating footprint, market positioning, and an initial marketing evaluation built from public reviews, press, ecommerce, and Instagram signals.',
-      impact: '510+ Public Reviews & 1.5K IG Followers',
-      tags: ['Restaurant Profile', 'Marketing Audit', 'Data Scrubbing'],
-      date: 'March 2026',
-      link: '/borek-g',
+      "id": 1,
+      "category": "RESTAURANT",
+      "serviceType": "Social Media Management",
+      "status": "Proposed",
+      "clientDescription": "Borek-G in Falls Church, VA",
+      "title": "Borek-G Marketing Profile",
+      "description": "Borek-G profile focused on marketing, packaged as social media management. Based in Falls Church, VA. Current value is modeled from $250,000 toward $500,000.",
+      "impact": "2x growth potential to $500,000",
+      "tags": [
+        "Profile",
+        "Marketing",
+        "Social Media Management"
+      ],
+      "date": "January 2026",
+      "link": "/borek-g"
     },
     {
-      id: 11,
-      category: 'FOOD & BEVERAGE',
-      serviceType: 'Operations Chatbot',
-      status: 'Proposal',
-      clientDescription: 'Turkish cafe and market in Falls Church',
-      title: 'Borek-G Operations Chatbot',
-      description:
-        'Proposal for a Borek-G chatbot that handles repetitive customer and staff questions, standardizes operating responses, and escalates edge cases to humans when judgment is required.',
-      impact: 'Faster Responses & Lower Staff Interrupt Load',
-      tags: ['Operations Bot', 'Workflow Design', 'Human-in-the-loop'],
-      date: 'March 2026',
-      link: '/borek-g-operations',
+      "id": 2,
+      "category": "RESTAURANT",
+      "serviceType": "Chatbot",
+      "status": "Proposed",
+      "clientDescription": "Borek-G in Falls Church, VA",
+      "title": "Borek-G Operations Prototype",
+      "description": "Borek-G prototype focused on operations, packaged as Chatbot. Based in Falls Church, VA. Current value is modeled from $250,000 toward $500,000.",
+      "impact": "2x growth potential to $500,000",
+      "tags": [
+        "Prototype",
+        "Operations",
+        "Chatbot",
+        "ClawdBot",
+        "SMS Integration",
+        "AI Chatbot"
+      ],
+      "date": "March 2026",
+      "link": "/borek-g-operations"
     },
     {
-      id: 12,
-      category: 'FOOD & BEVERAGE',
-      serviceType: 'Real Estate Acquisition',
-      status: 'Proposal',
-      clientDescription: 'Authentic Uyghur Cuisine in DC',
-      title: 'Uyghur Eats Restaurant Profile',
-      description:
-        'A meticulous restaurant profile assessing location value, operational footprint, and community integration for Uyghur Eats. The analysis highlights key drivers such as their signature hand-pulled noodles and deep neighborhood loyalty, tailored for real estate acquisition evaluation.',
-      impact: 'High-Traffic Neighborhood Anchor',
-      tags: ['Real Estate Profile', 'Location Value', 'Market Positioning'],
-      date: 'March 2026',
-      link: '/uyghur-eats',
+      "id": 3,
+      "category": "RESTAURANT",
+      "serviceType": "Property Sale",
+      "status": "Proposed",
+      "clientDescription": "Uyghur Eats in Washington, DC",
+      "title": "Uyghur Eats Finance Profile",
+      "description": "Uyghur Eats profile focused on finance, packaged as property sale. Based in Washington, DC. Current value is modeled from $150,000 toward $450,000.",
+      "impact": "3x growth potential to $450,000",
+      "tags": [
+        "Profile",
+        "Finance",
+        "Property Sale",
+        "M&A",
+        "Property Valuation",
+        "Market Analysis"
+      ],
+      "date": "March 2026",
+      "link": "/uyghur-eats"
     },
-  ],
+    {
+      "id": 4,
+      "category": "RESTAURANT",
+      "serviceType": "Social Media Management",
+      "status": "Proposed",
+      "clientDescription": "Caravan Uyghur in Wall Street, NY",
+      "title": "Caravan Uyghur Marketing Profile",
+      "description": "Caravan Uyghur profile focused on marketing, packaged as social media management. Based in Wall Street, NY. Current value is modeled from $500,000 toward $1,000,000.",
+      "impact": "2x growth potential to $1,000,000",
+      "tags": [
+        "Profile",
+        "Marketing",
+        "Social Media Management"
+      ],
+      "date": "March 2026",
+      "link": ""
+    },
+    {
+      "id": 5,
+      "category": "CONSTRUCTION",
+      "serviceType": "Mobile Chatbot Assistant",
+      "status": "Proposed",
+      "clientDescription": "Sabucni in Fairfax, VA",
+      "title": "Sabucni Operations Prototype",
+      "description": "Sabucni prototype focused on operations, packaged as mobile chatbot assistant. Based in Fairfax, VA. Current value is modeled from $500,000 toward $5,000,000.",
+      "impact": "10x growth potential to $5,000,000",
+      "tags": [
+        "Prototype",
+        "Operations",
+        "Mobile Chatbot Assistant",
+        "ClawdBot",
+        "SMS Integration",
+        "Analytics Dashboard"
+      ],
+      "date": "January 2026",
+      "link": ""
+    }
+  ]
 };

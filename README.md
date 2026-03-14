@@ -40,5 +40,5 @@
 ## Project Pipeline Sync
 - The homepage hero copy and project cards are generated from `src/content/projectPipeline.generated.ts`.
 - `npm run build` automatically runs `npm run sync:projects` first.
-- When `GOOGLE_SERVICE_ACCOUNT_JSON` is set, the sync script reads `PROJECT_PIPELINE_SHEET_ID` or falls back to the `doc_id` inside `index-projects.gsheet`.
-- Share the Google Sheet with the service account email if you want Vercel builds to pull the latest hero copy and newly added project rows automatically.
+- The sync script reads the checked-in `index-projects.xlsx` workbook directly and regenerates the homepage project cards from the first worksheet.
+- To add a new project card, update `index-projects.xlsx`, then commit and deploy. The next build will regenerate the card list automatically.

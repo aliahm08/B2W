@@ -1,21 +1,7 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { GoogleAuth } from 'google-auth-library';
-import { projectPipelineContent as currentContent } from '../src/content/projectPipeline.generated';
-
-type RawSheet = {
-  properties?: {
-    title?: string;
-  };
-};
-
-type SpreadsheetResponse = {
-  sheets?: RawSheet[];
-};
-
-type ValuesResponse = {
-  values?: string[][];
-};
+import XLSX from 'xlsx';
 
 type HeroContent = {
   headline: string;
@@ -45,242 +31,253 @@ type ProjectPipelineContent = {
   projects: ProjectCard[];
 };
 
+type WorkbookRow = {
+  client?: string;
+  industry?: string;
+  date?: Date | number | string;
+  offering?: string;
+  topic?: string;
+  package?: string;
+  location?: string;
+  'initial value'?: number | string;
+  'growth potential'?: number | string;
+  'target value'?: number | string;
+  status?: string;
+  skills?: string;
+};
+
 const repoRoot = process.cwd();
-const gsheetPath = path.join(repoRoot, 'index-projects.gsheet');
+const workbookPath = path.join(repoRoot, 'index-projects.xlsx');
 const outputPath = path.join(repoRoot, 'src/content/projectPipeline.generated.ts');
-const defaultSheetId = process.env.PROJECT_PIPELINE_SHEET_ID?.trim();
-
-const PROJECT_FIELD_ALIASES: Record<keyof Omit<ProjectCard, 'id' | 'tags'>, string[]> = {
-  category: ['category', 'industry', 'lane', 'segment'],
-  serviceType: ['servicetype', 'service_type', 'service', 'projecttype', 'project_type', 'offer'],
-  status: ['status', 'stage', 'phase'],
-  clientDescription: ['clientdescription', 'client_description', 'client', 'clientsummary', 'client_summary', 'subtitle'],
-  title: ['title', 'projecttitle', 'project_title', 'name'],
-  description: ['description', 'summary', 'overview'],
-  impact: ['impact', 'result', 'outcome'],
-  date: ['date', 'month', 'updated', 'updatedat', 'timeline'],
-  link: ['link', 'path', 'url', 'href', 'slug'],
+const defaultHero: HeroContent = {
+  headline: 'We build intelligence.',
+  subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
+  primaryCtaLabel: 'Explore capabilities',
+  primaryCtaHref: '/#capabilities',
+  secondaryCtaLabel: 'See Projects',
+  secondaryCtaHref: '/#industries',
 };
 
-const HERO_FIELD_ALIASES: Record<keyof HeroContent, string[]> = {
-  headline: ['headline', 'heroheadline', 'hero_headline', 'title'],
-  subheadline: ['subheadline', 'hero_subheadline', 'herosubheadline', 'subtitle', 'description'],
-  primaryCtaLabel: ['primaryctalabel', 'primary_cta_label', 'cta', 'ctalabel', 'cta_label'],
-  primaryCtaHref: ['primaryctahref', 'primary_cta_href', 'ctahref', 'cta_href', 'ctalink', 'cta_link'],
-  secondaryCtaLabel: ['secondaryctalabel', 'secondary_cta_label', 'secondarycta', 'secondary_cta'],
-  secondaryCtaHref: ['secondaryctahref', 'secondary_cta_href', 'secondaryctalink', 'secondary_cta_link'],
+const routeMap: Record<string, string> = {
+  'borek-g|profile|marketing': '/borek-g',
+  'borek-g|prototype|operations': '/borek-g-operations',
+  'uyghur eats|profile|finance': '/uyghur-eats',
 };
 
-function normalizeHeader(value: string): string {
-  return value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
+const clientDisplayMap: Record<string, string> = {
+  'borek-g': 'Borek-G',
+  'uyghur eats': 'Uyghur Eats',
+  'caravan uyghur': 'Caravan Uyghur',
+  'sabucni': 'Sabucni',
+};
 
-function slugifySegment(value: string): string {
-  const slug = value
+const locationDisplayMap: Record<string, string> = {
+  'falls church, va': 'Falls Church, VA',
+  'washington, dc': 'Washington, DC',
+  'wall street, ny': 'Wall Street, NY',
+  'fairfax, va': 'Fairfax, VA',
+};
+
+function titleCase(value: string): string {
+  return value
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  return slug ? `/${slug}` : '';
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word) => word
+      .split('-')
+      .map((segment) => {
+        if (/^[a-z]{2}$/.test(segment)) {
+          return segment.toUpperCase();
+        }
+        return segment.charAt(0).toUpperCase() + segment.slice(1);
+      })
+      .join('-'))
+    .join(' ');
 }
 
-function splitTags(value: string): string[] {
-  return value
-    .split(/[|,]/)
-    .map((entry) => entry.trim())
-    .filter(Boolean);
+function upperLabel(value: string): string {
+  return value.trim().replace(/\s+/g, ' ').toUpperCase();
 }
 
-function getAliasValue(record: Record<string, string>, aliases: string[]): string {
-  for (const alias of aliases) {
-    const value = record[alias];
-    if (value) {
-      return value.trim();
+function compactText(value: string): string {
+  return value.trim().replace(/\s+/g, ' ');
+}
+
+function displayClient(value: string): string {
+  const normalized = compactText(value).toLowerCase();
+  return clientDisplayMap[normalized] ?? titleCase(value);
+}
+
+function displayLocation(value: string): string {
+  const normalized = compactText(value).toLowerCase();
+  return locationDisplayMap[normalized] ?? titleCase(value);
+}
+
+function parseNumber(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value.replace(/[^0-9.-]/g, '');
+    if (!normalized) {
+      return null;
+    }
+
+    const parsed = Number(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  return null;
+}
+
+function formatCurrency(value: number | null): string {
+  if (value === null) {
+    return '';
+  }
+
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function formatGrowth(value: number | null): string {
+  if (value === null) {
+    return '';
+  }
+
+  return `${value}x`;
+}
+
+function formatMonthYear(value: WorkbookRow['date']): string {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+  }
+
+  if (typeof value === 'number') {
+    const jsDate = XLSX.SSF.parse_date_code(value);
+    if (jsDate) {
+      const parsed = new Date(jsDate.y, jsDate.m - 1, jsDate.d);
+      return parsed.toLocaleString('en-US', { month: 'long', year: 'numeric' });
     }
   }
+
+  if (typeof value === 'string' && value.trim()) {
+    const parsed = new Date(value);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+    }
+    return compactText(value);
+  }
+
   return '';
 }
 
-function extractSheetIdFromShortcut(raw: string): string {
-  const parsed = JSON.parse(raw) as { doc_id?: string };
-  if (!parsed.doc_id) {
-    throw new Error('The index-projects.gsheet shortcut is missing a doc_id.');
-  }
-  return parsed.doc_id;
-}
-
-async function getAccessToken(): Promise<string> {
-  const credentials = process.env.GOOGLE_SERVICE_ACCOUNT_JSON?.trim();
-  if (!credentials) {
-    throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON is not set.');
-  }
-
-  const auth = new GoogleAuth({
-    credentials: JSON.parse(credentials),
-    scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
-  });
-
-  const client = await auth.getClient();
-  const token = await client.getAccessToken();
-  if (!token.token) {
-    throw new Error('Failed to acquire a Google access token.');
-  }
-
-  return token.token;
-}
-
-async function googleFetch<T>(url: string, token: string): Promise<T> {
-  const response = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Google Sheets API failed (${response.status}): ${body}`);
-  }
-
-  return response.json() as Promise<T>;
-}
-
-function rowsToRecords(rows: string[][]): Record<string, string>[] {
-  if (rows.length < 2) {
+function splitSkills(value: string | undefined): string[] {
+  if (!value) {
     return [];
   }
 
-  const headers = rows[0].map(normalizeHeader);
-  return rows.slice(1).map((row) => {
-    const record: Record<string, string> = {};
-    headers.forEach((header, index) => {
-      if (header) {
-        record[header] = (row[index] ?? '').trim();
-      }
-    });
-    return record;
-  }).filter((record) => Object.values(record).some(Boolean));
+  return value
+    .split(',')
+    .map((entry) => compactText(entry))
+    .filter(Boolean);
 }
 
-function findHeroInRecord(record: Record<string, string>): Partial<HeroContent> | null {
-  const headline = getAliasValue(record, HERO_FIELD_ALIASES.headline);
-  const subheadline = getAliasValue(record, HERO_FIELD_ALIASES.subheadline);
-  const primaryCtaLabel = getAliasValue(record, HERO_FIELD_ALIASES.primaryCtaLabel);
-  const primaryCtaHref = getAliasValue(record, HERO_FIELD_ALIASES.primaryCtaHref);
-  const secondaryCtaLabel = getAliasValue(record, HERO_FIELD_ALIASES.secondaryCtaLabel);
-  const secondaryCtaHref = getAliasValue(record, HERO_FIELD_ALIASES.secondaryCtaHref);
+function summarizeProject(row: WorkbookRow): string {
+  const client = displayClient(String(row.client ?? ''));
+  const packageName = compactText(String(row.package ?? ''));
+  const offering = compactText(String(row.offering ?? ''));
+  const topic = compactText(String(row.topic ?? ''));
+  const location = displayLocation(String(row.location ?? ''));
+  const initialValue = formatCurrency(parseNumber(row['initial value']));
+  const targetValue = formatCurrency(parseNumber(row['target value']));
 
-  if (!headline && !subheadline && !primaryCtaLabel && !secondaryCtaLabel) {
-    return null;
+  return [
+    `${client} ${offering} focused on ${topic}, packaged as ${packageName}.`,
+    location ? `Based in ${location}.` : '',
+    initialValue && targetValue ? `Current value is modeled from ${initialValue} toward ${targetValue}.` : '',
+  ].filter(Boolean).join(' ');
+}
+
+function buildImpact(row: WorkbookRow): string {
+  const targetValue = formatCurrency(parseNumber(row['target value']));
+  const growthPotential = formatGrowth(parseNumber(row['growth potential']));
+
+  if (targetValue && growthPotential) {
+    return `${growthPotential} growth potential to ${targetValue}`;
   }
 
-  return {
-    headline,
-    subheadline,
-    primaryCtaLabel,
-    primaryCtaHref,
-    secondaryCtaLabel,
-    secondaryCtaHref,
-  };
+  return targetValue || growthPotential || 'Pipeline opportunity';
 }
 
-function findHeroInKeyValueRecords(records: Record<string, string>[]): Partial<HeroContent> | null {
-  const hero: Partial<HeroContent> = {};
+function buildTitle(row: WorkbookRow): string {
+  const client = displayClient(String(row.client ?? ''));
+  const topic = titleCase(String(row.topic ?? ''));
+  const offering = titleCase(String(row.offering ?? ''));
 
-  for (const record of records) {
-    const section = (record.section ?? record.group ?? '').trim().toLowerCase();
-    const key = normalizeHeader(record.key ?? record.field ?? record.name ?? '');
-    const value = (record.value ?? record.content ?? record.copy ?? '').trim();
-
-    if (!value) {
-      continue;
-    }
-
-    if (section && section !== 'hero') {
-      continue;
-    }
-
-    for (const [field, aliases] of Object.entries(HERO_FIELD_ALIASES) as Array<[keyof HeroContent, string[]]>) {
-      if (aliases.includes(key)) {
-        hero[field] = value;
-      }
-    }
+  if (client && topic && offering) {
+    return `${client} ${topic} ${offering}`;
   }
 
-  return Object.keys(hero).length > 0 ? hero : null;
+  return [client, topic, offering].filter(Boolean).join(' ');
 }
 
-function isProjectRecord(record: Record<string, string>): boolean {
-  const title = getAliasValue(record, PROJECT_FIELD_ALIASES.title);
-  const description = getAliasValue(record, PROJECT_FIELD_ALIASES.description);
-  const category = getAliasValue(record, PROJECT_FIELD_ALIASES.category);
-  return Boolean(title && (description || category));
+function buildServiceType(row: WorkbookRow): string {
+  const packageName = titleCase(String(row.package ?? ''));
+  const topic = titleCase(String(row.topic ?? ''));
+
+  return packageName || topic || 'Project';
 }
 
-function recordToProject(record: Record<string, string>, index: number): ProjectCard {
-  const rawTags = record.tags ?? record.tag ?? record.keywords ?? '';
-  const rawLink = getAliasValue(record, PROJECT_FIELD_ALIASES.link);
-  const rawTitle = getAliasValue(record, PROJECT_FIELD_ALIASES.title);
-  const idValue = record.id?.trim();
-  const numericId = idValue && /^\d+$/.test(idValue) ? Number(idValue) : 1000 + index;
-  const normalizedLink = rawLink.startsWith('/') || rawLink.startsWith('http')
-    ? rawLink
-    : slugifySegment(rawLink || rawTitle);
-
-  return {
-    id: numericId,
-    category: getAliasValue(record, PROJECT_FIELD_ALIASES.category),
-    serviceType: getAliasValue(record, PROJECT_FIELD_ALIASES.serviceType),
-    status: getAliasValue(record, PROJECT_FIELD_ALIASES.status),
-    clientDescription: getAliasValue(record, PROJECT_FIELD_ALIASES.clientDescription),
-    title: rawTitle,
-    description: getAliasValue(record, PROJECT_FIELD_ALIASES.description),
-    impact: getAliasValue(record, PROJECT_FIELD_ALIASES.impact),
-    tags: splitTags(rawTags),
-    date: getAliasValue(record, PROJECT_FIELD_ALIASES.date),
-    link: normalizedLink,
-  };
+function buildClientDescription(row: WorkbookRow): string {
+  const client = displayClient(String(row.client ?? ''));
+  const location = displayLocation(String(row.location ?? ''));
+  return [client, location].filter(Boolean).join(' in ');
 }
 
-function mergeHero(base: HeroContent, incoming: Partial<HeroContent> | null): HeroContent {
-  if (!incoming) {
-    return base;
-  }
+function buildTags(row: WorkbookRow): string[] {
+  const tags = [
+    titleCase(String(row.offering ?? '')),
+    titleCase(String(row.topic ?? '')),
+    titleCase(String(row.package ?? '')),
+    ...splitSkills(row.skills),
+  ].filter(Boolean);
 
-  return {
-    headline: incoming.headline || base.headline,
-    subheadline: incoming.subheadline || base.subheadline,
-    primaryCtaLabel: incoming.primaryCtaLabel || base.primaryCtaLabel,
-    primaryCtaHref: incoming.primaryCtaHref || base.primaryCtaHref,
-    secondaryCtaLabel: incoming.secondaryCtaLabel || base.secondaryCtaLabel,
-    secondaryCtaHref: incoming.secondaryCtaHref || base.secondaryCtaHref,
-  };
+  return Array.from(new Set(tags));
 }
 
-function sanitizeProjects(projects: ProjectCard[], fallback: ProjectCard[]): ProjectCard[] {
-  const deduped = new Map<string, ProjectCard>();
+function buildLink(row: WorkbookRow): string {
+  const key = [
+    String(row.client ?? '').trim().toLowerCase(),
+    String(row.offering ?? '').trim().toLowerCase(),
+    String(row.topic ?? '').trim().toLowerCase(),
+  ].join('|');
 
-  projects.forEach((project) => {
-    const key = `${project.title.toLowerCase()}::${project.link.toLowerCase()}`;
-    if (!deduped.has(key)) {
-      deduped.set(key, project);
-    }
-  });
+  return routeMap[key] ?? '';
+}
 
-  const cleaned = Array.from(deduped.values())
-    .filter((project) => project.title && project.description)
-    .map((project) => ({
-      ...project,
-      category: project.category || 'PROJECT',
-      serviceType: project.serviceType || 'Project',
-      status: project.status || 'Active',
-      clientDescription: project.clientDescription || '',
-      impact: project.impact || '',
-      date: project.date || '',
-      link: project.link || '',
-      tags: project.tags.filter(Boolean),
-    }));
+function sanitizeRows(rows: WorkbookRow[]): WorkbookRow[] {
+  return rows.filter((row) => row.client && row.industry && row.offering && row.topic);
+}
 
-  return cleaned.length > 0 ? cleaned : fallback;
+function workbookToProjects(rows: WorkbookRow[]): ProjectCard[] {
+  return sanitizeRows(rows).map((row, index) => ({
+    id: index + 1,
+    category: upperLabel(String(row.industry ?? 'Project')),
+    serviceType: buildServiceType(row),
+    status: compactText(String(row.status ?? 'Active')),
+    clientDescription: buildClientDescription(row),
+    title: buildTitle(row),
+    description: summarizeProject(row),
+    impact: buildImpact(row),
+    tags: buildTags(row),
+    date: formatMonthYear(row.date),
+    link: buildLink(row),
+  }));
 }
 
 function serializeContent(content: ProjectPipelineContent): string {
@@ -288,56 +285,34 @@ function serializeContent(content: ProjectPipelineContent): string {
 }
 
 async function main() {
-  if (!process.env.GOOGLE_SERVICE_ACCOUNT_JSON?.trim()) {
-    console.log('Skipping project content sync because GOOGLE_SERVICE_ACCOUNT_JSON is not set.');
+  if (!existsSync(workbookPath)) {
+    console.log('Skipping project content sync because index-projects.xlsx is not present.');
     return;
   }
 
-  const sheetId = defaultSheetId || extractSheetIdFromShortcut(await readFile(gsheetPath, 'utf8'));
-  const token = await getAccessToken();
-  const spreadsheet = await googleFetch<SpreadsheetResponse>(
-    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=sheets.properties.title`,
-    token,
-  );
+  const workbook = XLSX.readFile(workbookPath, {
+    cellDates: true,
+    raw: false,
+  });
 
-  const sheetNames = (spreadsheet.sheets ?? [])
-    .map((sheet) => sheet.properties?.title?.trim())
-    .filter((sheetName): sheetName is string => Boolean(sheetName));
-
-  let hero = currentContent.hero;
-  const projects: ProjectCard[] = [];
-
-  for (const sheetName of sheetNames) {
-    const values = await googleFetch<ValuesResponse>(
-      `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(sheetName)}`,
-      token,
-    );
-    const records = rowsToRecords(values.values ?? []);
-    if (records.length === 0) {
-      continue;
-    }
-
-    hero = mergeHero(hero, findHeroInKeyValueRecords(records));
-
-    const inlineHeroRecord = records.find((record) => findHeroInRecord(record));
-    if (inlineHeroRecord) {
-      hero = mergeHero(hero, findHeroInRecord(inlineHeroRecord));
-    }
-
-    records
-      .filter(isProjectRecord)
-      .forEach((record) => {
-        projects.push(recordToProject(record, projects.length));
-      });
+  const sheetName = workbook.SheetNames[0];
+  if (!sheetName) {
+    throw new Error('The workbook does not contain any sheets.');
   }
 
+  const sheet = workbook.Sheets[sheetName];
+  const rows = XLSX.utils.sheet_to_json<WorkbookRow>(sheet, {
+    range: 4,
+    defval: '',
+  });
+
   const nextContent: ProjectPipelineContent = {
-    hero,
-    projects: sanitizeProjects(projects, currentContent.projects),
+    hero: defaultHero,
+    projects: workbookToProjects(rows),
   };
 
   await writeFile(outputPath, serializeContent(nextContent), 'utf8');
-  console.log(`Synced project pipeline content from Google Sheets into ${path.relative(repoRoot, outputPath)}.`);
+  console.log(`Synced project pipeline content from ${path.basename(workbookPath)} into ${path.relative(repoRoot, outputPath)}.`);
 }
 
 main().catch((error) => {
