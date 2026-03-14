@@ -321,25 +321,30 @@ export default function UyghurEats() {
 
                     {/* Image Gallery Section */}
                     <aside className="lg:col-span-7">
-                        <div data-project-detail-body className="grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
+                        <div
+                            data-project-detail-body
+                            className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-4 md:mx-0 md:grid md:grid-cols-2 md:overflow-visible md:px-0 md:pb-0 h-full"
+                        >
                             {images.map((img, idx) => (
-                                <motion.div
+                                <motion.figure
                                     key={idx}
-                                    className={`relative rounded-sm overflow-hidden bg-neutral-100 border border-neutral-200 group ${img.span} ${idx === 0 ? 'min-h-[300px] md:min-h-[500px]' : 'min-h-[200px]'}`}
+                                    className={`relative shrink-0 snap-center overflow-hidden rounded-sm border border-neutral-200 bg-neutral-100 group w-[85vw] ${idx === 0 ? 'min-h-[360px]' : 'min-h-[280px]'} md:w-auto ${img.span} ${idx === 0 ? 'md:min-h-[500px]' : 'md:min-h-[200px]'}`}
                                     whileHover={{ scale: 0.99 }}
                                     transition={{ duration: 0.2 }}
                                 >
                                     <img
                                         src={img.url}
                                         alt={img.alt}
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                                         loading="lazy"
                                     />
-                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <p className="text-white text-sm font-medium">{img.alt}</p>
-                                    </div>
-                                </motion.div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/5 to-transparent md:bg-black/0 md:group-hover:bg-black/10 transition-colors duration-300" />
+                                    <figcaption className="absolute bottom-0 left-0 right-0 p-4">
+                                        <p className="text-sm font-medium text-white md:opacity-0 md:transition-opacity md:duration-300 md:group-hover:opacity-100">
+                                            {img.alt}
+                                        </p>
+                                    </figcaption>
+                                </motion.figure>
                             ))}
                         </div>
                     </aside>
