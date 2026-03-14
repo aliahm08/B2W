@@ -165,6 +165,16 @@ function formatGrowth(value: number | null): string {
   return `${value}x`;
 }
 
+function formatPercent(value: number | null): string {
+  if (value === null || !Number.isFinite(value)) {
+    return '';
+  }
+
+  return new Intl.NumberFormat('en-US', {
+    maximumFractionDigits: Number.isInteger(value) ? 0 : 1,
+  }).format(value);
+}
+
 function formatMonthYear(value: WorkbookRow['date']): string {
   if (value instanceof Date && !Number.isNaN(value.getTime())) {
     return value.toLocaleString('en-US', { month: 'long', year: 'numeric' });
@@ -216,12 +226,67 @@ function summarizeProject(row: WorkbookRow): string {
   ].filter(Boolean).join(' ');
 }
 
+function buildScopeImpactLabel(row: WorkbookRow): string {
+  const industry = compactText(String(row.industry ?? '')).toLowerCase();
+  const topic = compactText(String(row.topic ?? '')).toLowerCase();
+  const packageName = compactText(String(row.package ?? '')).toLowerCase();
+
+  if (topic === 'marketing') {
+    return 'sales';
+  }
+
+  if (topic === 'finance' || packageName.includes('property sale')) {
+    return 'sale value';
+  }
+
+  if (topic === 'operations' && packageName.includes('mobile')) {
+    return industry === 'construction' ? 'field coordination capacity' : 'coordination capacity';
+  }
+
+  if (topic === 'operations' && /(chatbot|assistant)/.test(packageName)) {
+    return 'response capacity';
+  }
+
+  if (topic === 'operations') {
+    return 'operating capacity';
+  }
+
+  return 'project value';
+}
+
+function buildGrowthImpactPercent(row: WorkbookRow): number | null {
+  const initialValue = parseNumber(row['initial value']);
+  const targetValue = parseNumber(row['target value']);
+
+  if (
+    initialValue !== null
+    && targetValue !== null
+    && initialValue > 0
+    && targetValue > initialValue
+  ) {
+    return ((targetValue - initialValue) / initialValue) * 100;
+  }
+
+  const growthPotential = parseNumber(row['growth potential']);
+  if (growthPotential !== null && growthPotential > 1) {
+    return (growthPotential - 1) * 100;
+  }
+
+  return null;
+}
+
 function buildImpact(row: WorkbookRow): string {
+  const growthImpactPercent = buildGrowthImpactPercent(row);
+  const scopeImpactLabel = buildScopeImpactLabel(row);
   const targetValue = formatCurrency(parseNumber(row['target value']));
   const growthPotential = formatGrowth(parseNumber(row['growth potential']));
 
-  if (targetValue && growthPotential) {
-    return `${growthPotential} growth potential to ${targetValue}`;
+  if (growthImpactPercent !== null) {
+    return `Modeled ${formatPercent(growthImpactPercent)}% increase in ${scopeImpactLabel}`;
+  }
+
+  if (targetValue && scopeImpactLabel) {
+    return `${titleCase(scopeImpactLabel)} modeled to ${targetValue}`;
   }
 
   return targetValue || growthPotential || 'Pipeline opportunity';
