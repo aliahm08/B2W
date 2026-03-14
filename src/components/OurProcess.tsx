@@ -76,6 +76,12 @@ const processLinks = [
   ['initial-delivery', 'publishing'],
 ] as const;
 
+const processTracks = [
+  ['business-audit', 'due-diligence', 'initial-delivery', 'publishing'],
+  ['due-diligence', 'improvement-scoping', 'initial-delivery'],
+  ['due-diligence', 'contracting', 'initial-delivery'],
+] as const;
+
 const positionForNode = (node: ProcessNode) => {
   const x = 120 + node.column * 220;
   const y = 180 + node.row * 108;
@@ -88,6 +94,30 @@ const createPath = (from: ProcessNode, to: ProcessNode) => {
   const controlOffset = (end.x - start.x) * 0.42;
 
   return `M ${start.x} ${start.y} C ${start.x + controlOffset} ${start.y}, ${end.x - controlOffset} ${end.y}, ${end.x} ${end.y}`;
+};
+
+const createTrackPath = (nodeIds: readonly string[]) => {
+  const nodes = nodeIds
+    .map((id) => processNodes.find((node) => node.id === id))
+    .filter((node): node is ProcessNode => Boolean(node));
+
+  if (nodes.length === 0) {
+    return '';
+  }
+
+  const first = positionForNode(nodes[0]);
+  let path = `M ${first.x} ${first.y}`;
+
+  for (let index = 1; index < nodes.length; index += 1) {
+    const previous = positionForNode(nodes[index - 1]);
+    const current = positionForNode(nodes[index]);
+    const horizontalDelta = current.x - previous.x;
+    const curvature = Math.max(horizontalDelta * 0.44, 72);
+
+    path += ` C ${previous.x + curvature} ${previous.y}, ${current.x - curvature} ${current.y}, ${current.x} ${current.y}`;
+  }
+
+  return path;
 };
 
 export default function OurProcess() {
@@ -115,6 +145,27 @@ export default function OurProcess() {
             <div className="min-w-[1080px]">
               <div className="relative h-[360px]">
                 <svg viewBox="0 0 1120 360" className="absolute inset-0 h-full w-full" aria-hidden="true">
+                  {processTracks.map((nodeIds, index) => {
+                    const path = createTrackPath(nodeIds);
+                    const isActive = nodeIds.includes(activeNodeId);
+
+                    return (
+                      <motion.path
+                        key={`track-base-${index}`}
+                        d={path}
+                        fill="none"
+                        stroke={isActive ? '#d4d4d4' : '#e5e5e5'}
+                        strokeWidth={isActive ? 22 : 18}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={{ pathLength: 0, opacity: 0.2 }}
+                        whileInView={{ pathLength: 1, opacity: isActive ? 0.42 : 0.28 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.1, delay: index * 0.08, ease: 'easeInOut' }}
+                      />
+                    );
+                  })}
+
                   {processLinks.map(([fromId, toId]) => {
                     const from = processNodes.find((node) => node.id === fromId)!;
                     const to = processNodes.find((node) => node.id === toId)!;
@@ -133,6 +184,27 @@ export default function OurProcess() {
                         whileInView={{ pathLength: 1, opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.85, ease: 'easeInOut' }}
+                      />
+                    );
+                  })}
+
+                  {processTracks.map((nodeIds, index) => {
+                    const path = createTrackPath(nodeIds);
+                    const isActive = nodeIds.includes(activeNodeId);
+
+                    return (
+                      <motion.path
+                        key={`track-top-${index}`}
+                        d={path}
+                        fill="none"
+                        stroke={isActive ? '#111111' : '#cfcfcf'}
+                        strokeWidth={isActive ? 2.5 : 1.3}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        initial={{ pathLength: 0, opacity: 0.5 }}
+                        whileInView={{ pathLength: 1, opacity: isActive ? 1 : 0.85 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 1.05, delay: 0.06 + index * 0.08, ease: 'easeInOut' }}
                       />
                     );
                   })}
@@ -156,6 +228,11 @@ export default function OurProcess() {
                       className="absolute -translate-x-1/2 -translate-y-1/2 text-left"
                       style={{ left: `${(x / 1120) * 100}%`, top: `${(y / 360) * 100}%` }}
                     >
+                      <span
+                        className={`mb-4 block h-3 w-3 rounded-full border transition-colors ${
+                          isActive ? 'border-black bg-black' : 'border-neutral-300 bg-white'
+                        }`}
+                      />
                       <div className="w-[174px] border-t border-neutral-300 pt-4">
                         <p className={`text-[10px] font-mono uppercase tracking-[0.24em] ${isActive ? 'text-black' : 'text-neutral-400'}`}>
                           {node.step}
