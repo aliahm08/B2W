@@ -9,6 +9,7 @@ coverage/
 .vercel
 .env*.local
 .playwright-cli/
+index-projects.xlsx
 
 # Case studies
 src/content/case-studies/**/*.md

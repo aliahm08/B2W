@@ -53,7 +53,7 @@ type RawSheetRow = Array<string | number | Date | null>;
 const repoRoot = process.cwd();
 const workbookPath = path.join(repoRoot, 'index-projects.xlsx');
 const outputPath = path.join(repoRoot, 'src/content/projectPipeline.generated.ts');
-const passwordOutputPath = path.join(repoRoot, 'api/_lib/projectPasswords.generated.ts');
+const passwordEnvOutputPath = path.join(repoRoot, '.env.project-passwords.local');
 const defaultHero: HeroContent = {
   headline: 'We build intelligence.',
   subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
@@ -394,8 +394,25 @@ function serializeContent(content: ProjectPipelineContent): string {
   return `import type { ProjectPipelineContent } from './projectPipeline';\n\nexport const projectPipelineContent: ProjectPipelineContent = ${JSON.stringify(content, null, 2)};\n`;
 }
 
-function serializePasswords(passwords: Record<string, string>): string {
-  return `export const generatedProjectPasswords = ${JSON.stringify(passwords, null, 2)} as const;\n`;
+function serializePasswordEnv(passwords: Record<string, string>): string {
+  const envVarByRoute: Record<string, string> = {
+    '/borek-g': 'PROJECT_PASSWORD_BOREK_G',
+    '/borek-g-operations': 'PROJECT_PASSWORD_BOREK_G_OPERATIONS',
+    '/uyghur-eats': 'PROJECT_PASSWORD_UYGHUR_EATS',
+  };
+
+  const lines = [
+    '# Generated from index-projects.xlsx. Do not commit.',
+  ];
+
+  for (const [route, envName] of Object.entries(envVarByRoute)) {
+    const password = passwords[route];
+    if (password) {
+      lines.push(`${envName}=${JSON.stringify(password)}`);
+    }
+  }
+
+  return `${lines.join('\n')}\n`;
 }
 
 async function main() {
@@ -424,7 +441,7 @@ async function main() {
   const nextPasswords = buildPasswordMap(rows);
 
   await writeFile(outputPath, serializeContent(nextContent), 'utf8');
-  await writeFile(passwordOutputPath, serializePasswords(nextPasswords), 'utf8');
+  await writeFile(passwordEnvOutputPath, serializePasswordEnv(nextPasswords), 'utf8');
   console.log(`Synced project pipeline content from ${path.basename(workbookPath)} into ${path.relative(repoRoot, outputPath)}.`);
 }
 
