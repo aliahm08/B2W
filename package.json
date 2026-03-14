@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
     "dev:full": "npx vercel dev --listen 0.0.0.0:3000",
+    "sync:projects": "node --import tsx ./scripts/sync-project-content.ts",
+    "prebuild": "npm run sync:projects",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",

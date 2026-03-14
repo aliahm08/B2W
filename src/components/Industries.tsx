@@ -1,8 +1,14 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { projects } from '../content/caseStudies';
+import { projectPipelineContent } from '../content/projectPipeline';
+
+function isExternalLink(value: string): boolean {
+  return /^https?:\/\//.test(value);
+}
 
 export default function Industries() {
+  const { projects } = projectPipelineContent;
+
   return (
     <section className="py-32 px-6 max-w-7xl mx-auto bg-neutral-50" id="industries">
       <motion.div
@@ -27,7 +33,17 @@ export default function Industries() {
             className="relative group border border-neutral-200 p-8 hover:border-black transition-colors duration-300 flex flex-col justify-between min-h-[400px] bg-white origin-center"
           >
             {project.link && (
-              <Link to={project.link} className="absolute inset-0 z-10" aria-label={`View ${project.title}`} />
+              isExternalLink(project.link) ? (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="absolute inset-0 z-10"
+                  aria-label={`View ${project.title}`}
+                />
+              ) : (
+                <Link to={project.link} className="absolute inset-0 z-10" aria-label={`View ${project.title}`} />
+              )
             )}
 
             <div>
@@ -61,17 +77,17 @@ export default function Industries() {
                 <span className="text-lg font-medium text-neutral-900">{project.impact}</span>
               </div>
 
-              <div className="flex justify-between items-end">
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map(tag => (
-                    <span key={tag} className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm">
-                      {tag}
-                    </span>
-                  ))}
+                <div className="flex justify-between items-end">
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag) => (
+                      <span key={tag} className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="text-xs text-neutral-400 font-mono">{project.date}</span>
                 </div>
-                <span className="text-xs text-neutral-400 font-mono">{project.date}</span>
               </div>
-            </div>
           </motion.div>
         ))}
       </div>

@@ -36,3 +36,9 @@
 - Ollama credentials stay in environment variables and are never exposed to the browser bundle.
 - Knowledge is pulled from local `.md` and `.json` files plus optional allowlisted Google Drive files/folders.
 - Calendar reads and event creation are restricted to `GOOGLE_ALLOWED_CALENDAR_IDS`, and Drive writes are restricted to `GOOGLE_DRIVE_BOOKING_FOLDER_ID` when that folder is also allowlisted.
+
+## Project Pipeline Sync
+- The homepage hero copy and project cards are generated from `src/content/projectPipeline.generated.ts`.
+- `npm run build` automatically runs `npm run sync:projects` first.
+- When `GOOGLE_SERVICE_ACCOUNT_JSON` is set, the sync script reads `PROJECT_PIPELINE_SHEET_ID` or falls back to the `doc_id` inside `index-projects.gsheet`.
+- Share the Google Sheet with the service account email if you want Vercel builds to pull the latest hero copy and newly added project rows automatically.

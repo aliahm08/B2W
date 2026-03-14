@@ -1,7 +1,10 @@
 import { motion } from 'motion/react';
 import ActionLink from './ActionLink';
+import { projectPipelineContent } from '../content/projectPipeline';
 
 export default function Hero() {
+  const { hero } = projectPipelineContent;
+
   return (
     <section className="min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto pt-20">
       <motion.div
@@ -11,15 +14,15 @@ export default function Hero() {
         className="max-w-4xl"
       >
         <h1 className="text-6xl md:text-8xl font-medium tracking-tight mb-8 leading-[0.9]">
-          We build intelligence.
+          {hero.headline}
         </h1>
         <p className="text-xl md:text-2xl text-neutral-500 max-w-2xl leading-relaxed mb-12">
-          Solving complex problems with simple, effective AI solutions. No hype. Just results.
+          {hero.subheadline}
         </p>
 
         <div className="flex flex-wrap gap-5">
-          <ActionLink href="/#capabilities">Explore capabilities</ActionLink>
-          <ActionLink href="/#industries" variant="outline">See Projects</ActionLink>
+          <ActionLink href={hero.primaryCtaHref}>{hero.primaryCtaLabel}</ActionLink>
+          <ActionLink href={hero.secondaryCtaHref} variant="outline">{hero.secondaryCtaLabel}</ActionLink>
         </div>
       </motion.div>
     </section>

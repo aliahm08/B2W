@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { PenSquare, ReceiptText, Send, X, ArrowRight } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -94,14 +94,14 @@ function useSignaturePad() {
     context.clearRect(0, 0, rect.width, rect.height);
   }, []);
 
-  function getPoint(event: React.PointerEvent<HTMLCanvasElement>) {
+  function getPoint(event: ReactPointerEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     const rect = canvas.getBoundingClientRect();
     return { x: event.clientX - rect.left, y: event.clientY - rect.top };
   }
 
-  function startDrawing(event: React.PointerEvent<HTMLCanvasElement>) {
+  function startDrawing(event: ReactPointerEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current;
     const context = canvas?.getContext('2d');
     const point = getPoint(event);
@@ -112,7 +112,7 @@ function useSignaturePad() {
     setHasSignature(true);
   }
 
-  function draw(event: React.PointerEvent<HTMLCanvasElement>) {
+  function draw(event: ReactPointerEvent<HTMLCanvasElement>) {
     if (!isDrawingRef.current) return;
     const canvas = canvasRef.current;
     const context = canvas?.getContext('2d');
