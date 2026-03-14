@@ -1,6 +1,7 @@
 import path from 'node:path';
 import dotenv from 'dotenv';
 
+dotenv.config({ path: path.join(process.cwd(), '.env.local') });
 dotenv.config({ path: path.join(process.cwd(), '.env.project-passwords.local'), override: true });
 
 const DEFAULT_EXCLUDED_SEGMENTS = [
