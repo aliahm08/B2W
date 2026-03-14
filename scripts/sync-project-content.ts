@@ -15,6 +15,7 @@ type HeroContent = {
 type ProjectCard = {
   id: number;
   category: string;
+  projectType: string;
   serviceType: string;
   status: string;
   clientDescription: string;
@@ -44,11 +45,15 @@ type WorkbookRow = {
   'target value'?: number | string;
   status?: string;
   skills?: string;
+  password?: string;
 };
+
+type RawSheetRow = Array<string | number | Date | null>;
 
 const repoRoot = process.cwd();
 const workbookPath = path.join(repoRoot, 'index-projects.xlsx');
 const outputPath = path.join(repoRoot, 'src/content/projectPipeline.generated.ts');
+const passwordOutputPath = path.join(repoRoot, 'api/_lib/projectPasswords.generated.ts');
 const defaultHero: HeroContent = {
   headline: 'We build intelligence.',
   subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
@@ -76,6 +81,14 @@ const locationDisplayMap: Record<string, string> = {
   'washington, dc': 'Washington, DC',
   'wall street, ny': 'Wall Street, NY',
   'fairfax, va': 'Fairfax, VA',
+};
+
+const projectTypeOverrideMap: Record<string, string> = {
+  'borek-g|profile|marketing': 'Consulting',
+  'borek-g|prototype|operations': 'Custom Solution',
+  'uyghur eats|profile|finance': 'Consulting',
+  'caravan uyghur|profile|marketing': 'Consulting',
+  'sabucni|prototype|operations': 'Custom Solution',
 };
 
 function titleCase(value: string): string {
@@ -260,6 +273,102 @@ function buildLink(row: WorkbookRow): string {
   return routeMap[key] ?? '';
 }
 
+function buildPasswordMap(rows: WorkbookRow[]): Record<string, string> {
+  return sanitizeRows(rows).reduce<Record<string, string>>((passwords, row) => {
+    const link = buildLink(row);
+    const password = compactText(String(row.password ?? ''));
+
+    if (link && password) {
+      passwords[link] = password;
+    }
+
+    return passwords;
+  }, {});
+}
+
+function normalizeHeader(value: unknown): string {
+  return compactText(String(value ?? '')).toLowerCase();
+}
+
+function findHeaderRowIndex(sheet: XLSX.WorkSheet): number {
+  const rows = XLSX.utils.sheet_to_json<RawSheetRow>(sheet, {
+    header: 1,
+    raw: false,
+    defval: '',
+  });
+
+  const index = rows.findIndex((row) => {
+    const normalized = row.map((cell) => normalizeHeader(cell));
+    return normalized.includes('client') && normalized.includes('industry') && normalized.includes('password');
+  });
+
+  if (index === -1) {
+    throw new Error('Could not find the project pipeline header row in index-projects.xlsx.');
+  }
+
+  return index;
+}
+
+function sheetToWorkbookRows(sheet: XLSX.WorkSheet): WorkbookRow[] {
+  const rawRows = XLSX.utils.sheet_to_json<RawSheetRow>(sheet, {
+    header: 1,
+    raw: false,
+    defval: '',
+  });
+  const headerRowIndex = findHeaderRowIndex(sheet);
+  const headers = rawRows[headerRowIndex]?.map((cell) => normalizeHeader(cell)) ?? [];
+
+  return rawRows
+    .slice(headerRowIndex + 1)
+    .map((row) => {
+      const record: Record<string, string | number | Date> = {};
+
+      headers.forEach((header, index) => {
+        if (header) {
+          const value = row[index];
+          if (value !== '' && value !== null && value !== undefined) {
+            record[header] = value;
+          }
+        }
+      });
+
+      return record as WorkbookRow;
+    })
+    .filter((row) => Object.keys(row).length > 0);
+}
+
+function buildProjectType(row: WorkbookRow): string {
+  const client = compactText(String(row.client ?? '')).toLowerCase();
+  const offering = compactText(String(row.offering ?? '')).toLowerCase();
+  const topic = compactText(String(row.topic ?? '')).toLowerCase();
+  const packageName = compactText(String(row.package ?? '')).toLowerCase();
+  const overrideKey = [client, offering, topic].join('|');
+
+  if (projectTypeOverrideMap[overrideKey]) {
+    return projectTypeOverrideMap[overrideKey];
+  }
+
+  if (['profile', 'audit', 'assessment', 'strategy'].includes(offering)) {
+    return 'Consulting';
+  }
+
+  if (
+    ['implementation', 'integration', 'deployment', 'rollout'].includes(offering)
+    || /(implementation|integration|deployment|rollout)/.test(packageName)
+  ) {
+    return 'Implementation';
+  }
+
+  if (
+    ['prototype', 'build', 'automation'].includes(offering)
+    || /(assistant|chatbot|dashboard|automation|custom)/.test(packageName)
+  ) {
+    return 'Custom Solution';
+  }
+
+  return 'Consulting';
+}
+
 function sanitizeRows(rows: WorkbookRow[]): WorkbookRow[] {
   return rows.filter((row) => row.client && row.industry && row.offering && row.topic);
 }
@@ -268,6 +377,7 @@ function workbookToProjects(rows: WorkbookRow[]): ProjectCard[] {
   return sanitizeRows(rows).map((row, index) => ({
     id: index + 1,
     category: upperLabel(String(row.industry ?? 'Project')),
+    projectType: buildProjectType(row),
     serviceType: buildServiceType(row),
     status: compactText(String(row.status ?? 'Active')),
     clientDescription: buildClientDescription(row),
@@ -282,6 +392,10 @@ function workbookToProjects(rows: WorkbookRow[]): ProjectCard[] {
 
 function serializeContent(content: ProjectPipelineContent): string {
   return `import type { ProjectPipelineContent } from './projectPipeline';\n\nexport const projectPipelineContent: ProjectPipelineContent = ${JSON.stringify(content, null, 2)};\n`;
+}
+
+function serializePasswords(passwords: Record<string, string>): string {
+  return `export const generatedProjectPasswords = ${JSON.stringify(passwords, null, 2)} as const;\n`;
 }
 
 async function main() {
@@ -301,17 +415,16 @@ async function main() {
   }
 
   const sheet = workbook.Sheets[sheetName];
-  const rows = XLSX.utils.sheet_to_json<WorkbookRow>(sheet, {
-    range: 4,
-    defval: '',
-  });
+  const rows = sheetToWorkbookRows(sheet);
 
   const nextContent: ProjectPipelineContent = {
     hero: defaultHero,
     projects: workbookToProjects(rows),
   };
+  const nextPasswords = buildPasswordMap(rows);
 
   await writeFile(outputPath, serializeContent(nextContent), 'utf8');
+  await writeFile(passwordOutputPath, serializePasswords(nextPasswords), 'utf8');
   console.log(`Synced project pipeline content from ${path.basename(workbookPath)} into ${path.relative(repoRoot, outputPath)}.`);
 }
 

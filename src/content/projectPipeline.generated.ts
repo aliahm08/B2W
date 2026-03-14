@@ -13,6 +13,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     {
       "id": 1,
       "category": "RESTAURANT",
+      "projectType": "Consulting",
       "serviceType": "Social Media Management",
       "status": "Proposed",
       "clientDescription": "Borek-G in Falls Church, VA",
@@ -30,6 +31,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     {
       "id": 2,
       "category": "RESTAURANT",
+      "projectType": "Custom Solution",
       "serviceType": "Chatbot",
       "status": "Proposed",
       "clientDescription": "Borek-G in Falls Church, VA",
@@ -50,6 +52,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     {
       "id": 3,
       "category": "RESTAURANT",
+      "projectType": "Consulting",
       "serviceType": "Property Sale",
       "status": "Proposed",
       "clientDescription": "Uyghur Eats in Washington, DC",
@@ -70,6 +73,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     {
       "id": 4,
       "category": "RESTAURANT",
+      "projectType": "Consulting",
       "serviceType": "Social Media Management",
       "status": "Proposed",
       "clientDescription": "Caravan Uyghur in Wall Street, NY",
@@ -87,6 +91,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     {
       "id": 5,
       "category": "CONSTRUCTION",
+      "projectType": "Custom Solution",
       "serviceType": "Mobile Chatbot Assistant",
       "status": "Proposed",
       "clientDescription": "Sabucni in Fairfax, VA",

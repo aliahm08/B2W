@@ -10,6 +10,7 @@ export type HeroContent = {
 export type ProjectCard = {
   id: number;
   category: string;
+  projectType: string;
   serviceType: string;
   status: string;
   clientDescription: string;

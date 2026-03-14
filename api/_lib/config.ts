@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { generatedProjectPasswords } from './projectPasswords.generated';
 
 const DEFAULT_EXCLUDED_SEGMENTS = [
   '.git',
@@ -59,9 +60,9 @@ export const config = {
   projectAccess: {
     secret: getEnv('PROJECT_ACCESS_SECRET'),
     passwords: {
-      '/borek-g': getEnv('PROJECT_PASSWORD_BOREK_G'),
-      '/borek-g-operations': getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS'),
-      '/uyghur-eats': getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
+      '/borek-g': getEnv('PROJECT_PASSWORD_BOREK_G', generatedProjectPasswords['/borek-g'] ?? ''),
+      '/borek-g-operations': getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS', generatedProjectPasswords['/borek-g-operations'] ?? ''),
+      '/uyghur-eats': getEnv('PROJECT_PASSWORD_UYGHUR_EATS', generatedProjectPasswords['/uyghur-eats'] ?? ''),
     } satisfies Record<string, string>,
   },
 };
