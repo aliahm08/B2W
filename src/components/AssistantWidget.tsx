@@ -2,7 +2,7 @@ import { FormEvent, PointerEvent as ReactPointerEvent, useEffect, useMemo, useRe
 import { AnimatePresence, motion } from 'motion/react';
 import { PenSquare, ReceiptText, Send, X, ArrowRight } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { fetchProjectAccessStatus, getProtectedProject, isProjectAccessGranted, type ProjectAccessLevel } from '../content/projectAccess';
+import { fetchProjectAccessStatus, getProtectedProject, isProjectAccessGranted, type ProjectAccessStatus } from '../content/projectAccess';
 
 type ProposalOption = 'option-one' | 'option-two' | 'option-three';
 
@@ -11,8 +11,23 @@ type FloatingPageCta =
   | { type: 'event'; label: string; eventName: string };
 
 const floatingPageCtas: Record<string, FloatingPageCta> = {
+  '/borek-g-operations': { type: 'proposal', label: 'Respond to Proposal' },
   '/uyghur-eats': { type: 'event', label: 'Make an Offer', eventName: 'b2w-uyghur-offer:open' },
 };
+
+type CachedProposalResponse = {
+  fullName: string;
+  email: string;
+  company: string;
+  selectedOption: ProposalOption;
+  notes: string;
+  acceptedTerms: boolean;
+  submitted: boolean;
+};
+
+function getProposalCacheKey(pathname: string): string {
+  return `b2w-proposal-response:${pathname}`;
+}
 
 const proposalOptions: Array<{
   id: ProposalOption;
@@ -157,6 +172,51 @@ export default function AssistantWidget() {
   const isProposalPage = activeFloatingCta?.type === 'proposal';
 
   useEffect(() => {
+    if (!isProposalPage) {
+      return;
+    }
+
+    try {
+      const raw = window.localStorage.getItem(getProposalCacheKey(pathname));
+      if (!raw) {
+        return;
+      }
+
+      const cached = JSON.parse(raw) as Partial<CachedProposalResponse>;
+      setFullName(String(cached.fullName ?? ''));
+      setEmail(String(cached.email ?? ''));
+      setCompany(String(cached.company ?? ''));
+      setSelectedOption(
+        cached.selectedOption === 'option-one' || cached.selectedOption === 'option-two' || cached.selectedOption === 'option-three'
+          ? cached.selectedOption
+          : 'option-two',
+      );
+      setNotes(String(cached.notes ?? ''));
+      setAcceptedTerms(Boolean(cached.acceptedTerms));
+      setSubmitted(Boolean(cached.submitted));
+    } catch {
+      window.localStorage.removeItem(getProposalCacheKey(pathname));
+    }
+  }, [isProposalPage, pathname]);
+
+  useEffect(() => {
+    if (!isProposalPage) {
+      return;
+    }
+
+    const cached: CachedProposalResponse = {
+      fullName,
+      email,
+      company,
+      selectedOption,
+      notes,
+      acceptedTerms,
+      submitted,
+    };
+    window.localStorage.setItem(getProposalCacheKey(pathname), JSON.stringify(cached));
+  }, [acceptedTerms, company, email, fullName, isProposalPage, notes, pathname, selectedOption, submitted]);
+
+  useEffect(() => {
     let isActive = true;
 
     const checkAccess = async () => {
@@ -167,19 +227,19 @@ export default function AssistantWidget() {
         return;
       }
 
-      const accessLevel = await fetchProjectAccessStatus(pathname);
+      const accessStatus = await fetchProjectAccessStatus(pathname);
       if (isActive) {
-        setIsProjectUnlocked(isProjectAccessGranted(accessLevel));
+        setIsProjectUnlocked(isProjectAccessGranted(accessStatus.accessLevel));
       }
     };
 
     void checkAccess();
 
     function handleAccessChange(event: Event) {
-      const detail = (event as CustomEvent<{ path?: string; accessLevel?: ProjectAccessLevel }>).detail;
+      const detail = (event as CustomEvent<{ path?: string; status?: ProjectAccessStatus }>).detail;
 
       if (detail?.path === pathname) {
-        setIsProjectUnlocked(isProjectAccessGranted(detail.accessLevel ?? 'locked'));
+        setIsProjectUnlocked(isProjectAccessGranted(detail.status?.accessLevel ?? 'locked'));
         return;
       }
 
@@ -225,7 +285,6 @@ export default function AssistantWidget() {
 
       openTimer = window.setTimeout(() => {
         if (activeFloatingCta.type === 'proposal') {
-          setSubmitted(false);
           setIsOpen(true);
           return;
         }
@@ -253,7 +312,6 @@ export default function AssistantWidget() {
       if (activeFloatingCta?.type !== 'proposal') {
         return;
       }
-      setSubmitted(false);
       setIsOpen(true);
     }
     window.addEventListener('b2w-assistant:open', handleOpen as EventListener);
@@ -492,6 +550,9 @@ export default function AssistantWidget() {
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-600">
                     The package selection, notes, contact details, and digital signature are ready to route into your preferred approval workflow.
                   </p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.22em] text-neutral-500">
+                    Cached on this device for quick revisit
+                  </p>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <button
                       type="button"
@@ -522,7 +583,6 @@ export default function AssistantWidget() {
               }
 
               if (activeFloatingCta.type === 'proposal') {
-                setSubmitted(false);
                 setIsOpen(true);
                 return;
               }

@@ -1,10 +1,10 @@
 import { motion } from 'motion/react';
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ProjectAccessPrompt from './ProjectAccessPrompt';
 import ProjectTagPill from './ProjectTagPill';
 import { projectPipelineContent } from '../content/projectPipeline';
-import { fetchProjectAccessStatus, isProjectAccessGranted, protectedProjects, type ProjectAccessLevel } from '../content/projectAccess';
+import { protectedProjects } from '../content/projectAccess';
 
 function isExternalLink(value: string): boolean {
   return /^https?:\/\//.test(value);
@@ -12,10 +12,8 @@ function isExternalLink(value: string): boolean {
 
 export default function Industries() {
   const { projects } = projectPipelineContent;
-  const navigate = useNavigate();
   const [selectedBusinessType, setSelectedBusinessType] = useState('All');
   const [selectedProjectType, setSelectedProjectType] = useState('All');
-  const [projectAccess, setProjectAccess] = useState<Record<string, ProjectAccessLevel>>({});
   const [activeProtectedPath, setActiveProtectedPath] = useState<string | null>(null);
 
   const businessTypes = useMemo(
@@ -36,37 +34,6 @@ export default function Industries() {
     }),
     [projects, selectedBusinessType, selectedProjectType],
   );
-
-  useEffect(() => {
-    let isActive = true;
-
-    const checkAccess = async () => {
-      const accessEntries = await Promise.all(
-        protectedProjects.map(async (project) => [project.path, await fetchProjectAccessStatus(project.path)] as const),
-      );
-
-      if (!isActive) {
-        return;
-      }
-
-      setProjectAccess(Object.fromEntries(accessEntries));
-    };
-
-    void checkAccess();
-
-    const handleAccessChange = () => {
-      void checkAccess();
-    };
-
-    window.addEventListener('b2w-project-access-change', handleAccessChange as EventListener);
-    window.addEventListener('storage', handleAccessChange);
-
-    return () => {
-      isActive = false;
-      window.removeEventListener('b2w-project-access-change', handleAccessChange as EventListener);
-      window.removeEventListener('storage', handleAccessChange);
-    };
-  }, []);
 
   const protectedProjectMap = useMemo(
     () => Object.fromEntries(protectedProjects.map((project) => [project.path, project])),
@@ -145,13 +112,11 @@ export default function Industries() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {filteredProjects.map((project, index) => {
             const protectedProject = protectedProjectMap[project.link];
-            const accessLevel = protectedProject ? projectAccess[project.link] ?? 'locked' : 'profile';
-            const isRevealed = !protectedProject || isProjectAccessGranted(accessLevel);
             const displayTitle = project.title;
             const displayClientDescription = project.clientDescription;
             const displayDescription = project.description;
             const displayImpact = project.impact;
-            const cardAriaLabel = isRevealed ? `View ${project.title}` : 'Open project access options';
+            const cardAriaLabel = protectedProject ? 'Open project access options' : `View ${project.title}`;
 
             return (
               <motion.div
@@ -171,7 +136,7 @@ export default function Industries() {
                       className="absolute inset-0 z-10"
                       aria-label={cardAriaLabel}
                     />
-                  ) : protectedProject && !isRevealed ? (
+                  ) : protectedProject ? (
                     <button
                       type="button"
                       className="absolute inset-0 z-10"
@@ -238,12 +203,8 @@ export default function Industries() {
           title={activeProtectedProject.maskedTitle}
           subtitle={activeProtectedProject.subtitle}
           onClose={() => setActiveProtectedPath(null)}
-          onSuccess={(accessLevel) => {
-            const nextPath = activeProtectedProject.path;
-            setProjectAccess((current) => ({ ...current, [nextPath]: accessLevel }));
-            setActiveProtectedPath(null);
-            navigate(nextPath);
-          }}
+          initialMethod={activeProtectedProject.view}
+          onStatusChange={() => undefined}
         />
       ) : null}
     </section>

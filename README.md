@@ -41,6 +41,7 @@
 - The homepage hero copy and project cards are generated from `src/content/projectPipeline.generated.ts`.
 - `npm run build` automatically runs `npm run sync:projects` first.
 - The sync script reads the checked-in `index-projects.xlsx` workbook directly and regenerates the homepage project cards from the first worksheet.
+- Protected project auth is backed by the checked-in [project-access.registry.json](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/project-access.registry.json) file, which can be regenerated from the local workbook with `npm run sync:project-access`.
 - Proposal-state homepage cards must not expose client names, exact locations, or other PII. Public card copy should stay generalized until access is granted.
 - Proposal-state card tags and impact must be derived from the underlying proposal/profile materials, with tag tiers expressed in monochrome shades.
 - Route-specific public card overrides and proposal/page tag tiers live in `src/content/projectShowcase.ts`.

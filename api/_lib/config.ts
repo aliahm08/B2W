@@ -15,6 +15,22 @@ const DEFAULT_EXCLUDED_SEGMENTS = [
   'tmp_pdf_parser',
 ];
 
+export type ProjectAccessLevel = 'proposal' | 'profile';
+
+export type ProjectAccessPageRecord = {
+  path: string;
+  view: ProjectAccessLevel;
+};
+
+export type ProjectAccessScopeRecord = {
+  scopeId: string;
+  title: string;
+  password: string;
+  proposalEmails: string[];
+  pages: ProjectAccessPageRecord[];
+  notes: string;
+};
+
 function splitCsv(value?: string): string[] {
   return (value ?? '')
     .split(',')
@@ -22,8 +38,26 @@ function splitCsv(value?: string): string[] {
     .filter(Boolean);
 }
 
-function unique(values: string[]): string[] {
+function unique<T>(values: T[]): T[] {
   return Array.from(new Set(values));
+}
+
+function normalizePath(value?: string): string {
+  const trimmed = String(value ?? '').trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+}
+
+function normalizeView(value?: string, fallback: ProjectAccessLevel = 'proposal'): ProjectAccessLevel {
+  const normalized = String(value ?? '').trim().toLowerCase();
+  if (normalized === 'profile' || normalized === 'proposal') {
+    return normalized;
+  }
+
+  return fallback;
 }
 
 function getEnv(name: string, fallback = ''): string {
@@ -31,7 +65,12 @@ function getEnv(name: string, fallback = ''): string {
   return value || fallback;
 }
 
-type ProjectAccessRegistryRecord = {
+type RegistryProjectPageRecord = {
+  path?: string;
+  view?: string;
+};
+
+type LegacyProjectAccessRegistryRecord = {
   path?: string;
   title?: string;
   passwordEnvVar?: string;
@@ -40,16 +79,25 @@ type ProjectAccessRegistryRecord = {
   notes?: string;
 };
 
+type ProjectAccessRegistryRecord = {
+  scopeId?: string;
+  title?: string;
+  passwordEnvVar?: string;
+  proposalEmails?: string[];
+  pages?: RegistryProjectPageRecord[];
+  notes?: string;
+} | LegacyProjectAccessRegistryRecord;
+
 type ProjectAccessRegistryFile = {
   projects?: ProjectAccessRegistryRecord[];
 };
 
 function resolveRegistryPath(): string {
-  const configuredPath = getEnv('PROJECT_ACCESS_REGISTRY_PATH', './project-access.registry.local.json');
+  const configuredPath = getEnv('PROJECT_ACCESS_REGISTRY_PATH', './project-access.registry.json');
   return path.isAbsolute(configuredPath) ? configuredPath : path.join(process.cwd(), configuredPath);
 }
 
-function loadProjectAccessRegistry(): Record<string, { password: string; proposalEmails: string[] }> | null {
+function loadProjectAccessRegistry(): ProjectAccessScopeRecord[] | null {
   const registryPath = resolveRegistryPath();
   if (!fs.existsSync(registryPath)) {
     return null;
@@ -57,46 +105,113 @@ function loadProjectAccessRegistry(): Record<string, { password: string; proposa
 
   const parsed = JSON.parse(fs.readFileSync(registryPath, 'utf8')) as ProjectAccessRegistryFile;
   const projects = Array.isArray(parsed.projects) ? parsed.projects : [];
-  const entries = new Map<string, { password: string; proposalEmails: string[] }>();
 
-  for (const project of projects) {
-    const proposalEmails = unique(
-      (Array.isArray(project.proposalEmails) ? project.proposalEmails : [])
-        .map((entry) => String(entry ?? '').trim())
-        .filter(Boolean),
-    );
-    const password = project.passwordEnvVar ? getEnv(project.passwordEnvVar) : '';
-    const paths = unique(
-      [
-        String(project.path ?? '').trim(),
-        ...(Array.isArray(project.authenticatedPages) ? project.authenticatedPages.map((entry) => String(entry ?? '').trim()) : []),
-      ].filter(Boolean),
-    );
+  return projects
+    .map((project) => {
+      const title = String(project.title ?? '').trim();
+      const scopeId = String(('scopeId' in project ? project.scopeId : '') ?? '').trim()
+        || String(title || ('path' in project ? project.path : '') || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_');
+      const passwordEnvVar = String(project.passwordEnvVar ?? '').trim();
+      const password = passwordEnvVar ? getEnv(passwordEnvVar) : '';
+      const proposalEmails = unique(
+        (Array.isArray(project.proposalEmails) ? project.proposalEmails : [])
+          .map((entry) => String(entry ?? '').trim().toLowerCase())
+          .filter(Boolean),
+      );
 
-    for (const pathname of paths) {
-      entries.set(pathname, { password, proposalEmails });
-    }
-  }
+      const pages = (() => {
+        if ('pages' in project && Array.isArray(project.pages) && project.pages.length > 0) {
+          return unique(
+            project.pages
+              .map((page) => {
+                const pathname = normalizePath(page.path);
+                if (!pathname) {
+                  return null;
+                }
 
-  return Object.fromEntries(entries);
+                return `${pathname}::${normalizeView(page.view)}`;
+              })
+              .filter(Boolean) as string[],
+          ).map<ProjectAccessPageRecord>((entry) => {
+            const [pathname, view] = entry.split('::');
+            return { path: pathname, view: normalizeView(view, 'profile') };
+          });
+        }
+
+        const primaryPath = normalizePath('path' in project ? project.path : '');
+        const authenticatedPages = Array.isArray((project as LegacyProjectAccessRegistryRecord).authenticatedPages)
+          ? (project as LegacyProjectAccessRegistryRecord).authenticatedPages ?? []
+          : [];
+        const allPaths = unique([primaryPath, ...authenticatedPages.map((entry) => normalizePath(entry))].filter(Boolean));
+
+        return allPaths.map<ProjectAccessPageRecord>((pathname) => ({
+          path: pathname,
+          view: pathname === primaryPath ? 'profile' : 'proposal',
+        }));
+      })();
+
+      if (!scopeId || pages.length === 0) {
+        return null;
+      }
+
+      return {
+        scopeId,
+        title,
+        password,
+        proposalEmails,
+        pages,
+        notes: String(project.notes ?? '').trim(),
+      } satisfies ProjectAccessScopeRecord;
+    })
+    .filter((record): record is ProjectAccessScopeRecord => record !== null);
 }
 
-const fallbackProjectAccess = {
-  '/borek-g': {
+const fallbackProjectAccessScopes: ProjectAccessScopeRecord[] = [
+  {
+    scopeId: 'borek_g',
+    title: 'Borek-G',
     password: getEnv('PROJECT_PASSWORD_BOREK_G'),
-    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G'))),
+    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G')).map((email) => email.toLowerCase())),
+    pages: [
+      { path: '/borek-g', view: 'profile' },
+      { path: '/borek-g-operations', view: 'proposal' },
+    ],
+    notes: '',
   },
-  '/borek-g-operations': {
-    password: getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS'),
-    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G_OPERATIONS'))),
-  },
-  '/uyghur-eats': {
+  {
+    scopeId: 'uyghur_eats',
+    title: 'Uyghur Eats',
     password: getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
-    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_UYGHUR_EATS'))),
+    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_UYGHUR_EATS')).map((email) => email.toLowerCase())),
+    pages: [
+      { path: '/uyghur-eats', view: 'profile' },
+    ],
+    notes: '',
   },
-} satisfies Record<string, { password: string; proposalEmails: string[] }>;
+];
 
-const projectAccessRegistry = loadProjectAccessRegistry() ?? fallbackProjectAccess;
+const projectAccessScopes = loadProjectAccessRegistry() ?? fallbackProjectAccessScopes;
+
+const projectAccessPathLookup = Object.fromEntries(
+  projectAccessScopes.flatMap((scope) => scope.pages.map((page) => [
+    page.path,
+    {
+      scopeId: scope.scopeId,
+      title: scope.title,
+      password: scope.password,
+      proposalEmails: scope.proposalEmails,
+      view: page.view,
+      availableViews: Object.fromEntries(scope.pages.map((item) => [item.view, item.path])) as Partial<Record<ProjectAccessLevel, string>>,
+    },
+  ])),
+) satisfies Record<string, {
+  scopeId: string;
+  title: string;
+  password: string;
+  proposalEmails: string[];
+  view: ProjectAccessLevel;
+  availableViews: Partial<Record<ProjectAccessLevel, string>>;
+}>;
 
 export const config = {
   ollama: {
@@ -131,12 +246,8 @@ export const config = {
   projectAccess: {
     secret: getEnv('PROJECT_ACCESS_SECRET'),
     registryPath: resolveRegistryPath(),
-    passwords: Object.fromEntries(
-      Object.entries(projectAccessRegistry).map(([pathname, value]) => [pathname, value.password]),
-    ) satisfies Record<string, string>,
-    proposalEmails: Object.fromEntries(
-      Object.entries(projectAccessRegistry).map(([pathname, value]) => [pathname, value.proposalEmails]),
-    ) satisfies Record<string, string[]>,
+    scopes: projectAccessScopes,
+    paths: projectAccessPathLookup,
   },
 };
 

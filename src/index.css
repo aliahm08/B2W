@@ -13,6 +13,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+[data-section-anchor='true'] {
+  scroll-margin-top: 7rem;
+}
+
 [data-project-locked='true'] [data-project-detail-body] {
   filter: blur(10px);
   opacity: 0.52;

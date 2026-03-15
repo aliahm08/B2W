@@ -1,6 +1,14 @@
 import { allowMethods, readJsonBody, sendJson } from '../_lib/http.js';
 import { config } from '../_lib/config.js';
-import { getProjectPassword, getProjectProposalEmails, isAllowedProposalEmail, setProjectAccessCookie } from '../_lib/projectAccess.js';
+import {
+  getProjectAccessSession,
+  getProjectAccessStatusForSession,
+  getProjectAvailableViews,
+  getProjectPassword,
+  getProjectProposalEmails,
+  isAllowedProposalEmail,
+  setProjectAccessCookie,
+} from '../_lib/projectAccess.js';
 
 type LoginRequestBody = {
   path?: string;
@@ -36,8 +44,9 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
+    const proposalPath = getProjectAvailableViews(pathname).proposal;
     const allowedEmails = getProjectProposalEmails(pathname);
-    if (allowedEmails.length === 0) {
+    if (!proposalPath || allowedEmails.length === 0) {
       sendJson(res, 404, { error: 'Proposal access is not configured for this project.' });
       return;
     }
@@ -47,8 +56,12 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
-    setProjectAccessCookie(res, pathname, 'proposal', email);
-    sendJson(res, 200, { accessLevel: 'proposal' });
+    const session = getProjectAccessSession(req, pathname);
+    const nextSession = setProjectAccessCookie(res, pathname, 'proposal', email, session);
+    sendJson(res, 200, {
+      ...getProjectAccessStatusForSession(proposalPath, nextSession),
+      redirectPath: proposalPath,
+    });
     return;
   }
 
@@ -73,6 +86,11 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  setProjectAccessCookie(res, pathname, 'profile', expectedPassword);
-  sendJson(res, 200, { accessLevel: 'profile' });
+  const profilePath = getProjectAvailableViews(pathname).profile ?? pathname;
+  const session = getProjectAccessSession(req, pathname);
+  const nextSession = setProjectAccessCookie(res, pathname, 'profile', expectedPassword, session);
+  sendJson(res, 200, {
+    ...getProjectAccessStatusForSession(profilePath, nextSession),
+    redirectPath: profilePath,
+  });
 }

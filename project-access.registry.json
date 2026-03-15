@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "scopeId": "borek_g",
+      "title": "Borek-G",
+      "passwordEnvVar": "PROJECT_PASSWORD_BOREK_G",
+      "proposalEmails": [
+        "info@b2w-ai.com"
+      ],
+      "pages": [
+        {
+          "path": "/borek-g",
+          "view": "profile"
+        },
+        {
+          "path": "/borek-g-operations",
+          "view": "proposal"
+        }
+      ],
+      "notes": "Keep the real password only in env vars."
+    },
+    {
+      "scopeId": "uyghur_eats",
+      "title": "Uyghur Eats",
+      "passwordEnvVar": "PROJECT_PASSWORD_UYGHUR_EATS",
+      "proposalEmails": [],
+      "pages": [
+        {
+          "path": "/uyghur-eats",
+          "view": "profile"
+        }
+      ],
+      "notes": "Add all related authenticated pages in the pages sheet."
+    }
+  ]
+}

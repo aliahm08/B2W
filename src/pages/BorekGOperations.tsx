@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, Bot, Clock3, MessageSquare, Settings2, Store, Wrench } from 'lucide-react';
 import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
-import MobileSectionNav from '../components/MobileSectionNav';
+import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import {
@@ -36,6 +36,14 @@ const launchPlan = [
     }
 ];
 const showcase = projectShowcaseOverridesByPath['/borek-g-operations'];
+const sectionItems = [
+    { id: 'role', label: 'System Role' },
+    { id: 'use-cases', label: 'Core Use Cases' },
+    { id: 'rollout', label: 'Proposed Rollout' },
+    { id: 'handles', label: 'What It Handles' },
+    { id: 'benefits', label: 'Expected Benefits' },
+    { id: 'next-step', label: 'Next Step' },
+];
 
 export default function BorekGOperations() {
     return (
@@ -117,15 +125,10 @@ export default function BorekGOperations() {
 
                 <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
                     <div className="lg:col-span-12">
-                        <MobileSectionNav
-                            items={[
-                                { id: 'role', label: 'Role' },
-                                { id: 'use-cases', label: 'Use cases' },
-                                { id: 'rollout', label: 'Rollout' },
-                                { id: 'handles', label: 'Handles' },
-                                { id: 'benefits', label: 'Benefits' },
-                                { id: 'next-step', label: 'Next step' },
-                            ]}
+                        <ProfileSectionNav
+                            items={sectionItems}
+                            eyebrow="Proposal navigation"
+                            description="Move through the operating scope, rollout plan, and expected business effect without breaking the proposal flow."
                         />
                     </div>
                     <div className="space-y-12 lg:col-span-7">

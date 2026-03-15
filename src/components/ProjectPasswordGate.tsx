@@ -1,6 +1,15 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { LockKeyhole, ShieldCheck } from 'lucide-react';
-import { fetchProjectAccessStatus, getProtectedProject, isProjectAccessGranted, type ProjectAccessLevel } from '../content/projectAccess';
+import { useNavigate } from 'react-router-dom';
+import {
+  fetchProjectAccessStatus,
+  getProtectedProject,
+  hasGrantedView,
+  isProjectAccessGranted,
+  logoutProjectAccess,
+  type ProjectAccessStatus,
+  type ProjectAccessView,
+} from '../content/projectAccess';
 import ProjectAccessPrompt from './ProjectAccessPrompt';
 import Seo from './Seo';
 
@@ -12,9 +21,18 @@ type ProjectPasswordGateProps = {
   children: ReactNode;
 };
 
-const accessLabels: Record<Exclude<ProjectAccessLevel, 'locked'>, string> = {
+const accessLabels: Record<ProjectAccessView, string> = {
   proposal: 'Proposal View',
   profile: 'Business Profile View',
+};
+
+const emptyStatus: ProjectAccessStatus = {
+  scopeId: null,
+  accessLevel: 'locked',
+  grantedLevels: [],
+  currentView: null,
+  availableViews: {},
+  title: '',
 };
 
 export default function ProjectPasswordGate({
@@ -23,9 +41,11 @@ export default function ProjectPasswordGate({
   subtitle,
   children,
 }: ProjectPasswordGateProps) {
-  const [accessLevel, setAccessLevel] = useState<ProjectAccessLevel>('locked');
+  const navigate = useNavigate();
+  const [status, setStatus] = useState<ProjectAccessStatus>(emptyStatus);
   const [isCheckingAccess, setIsCheckingAccess] = useState(true);
   const [isPromptOpen, setIsPromptOpen] = useState(false);
+  const [preferredMethod, setPreferredMethod] = useState<ProjectAccessView | undefined>(undefined);
   const protectedProject = useMemo(() => getProtectedProject(path), [path]);
 
   useEffect(() => {
@@ -35,13 +55,13 @@ export default function ProjectPasswordGate({
       setIsCheckingAccess(true);
 
       try {
-        const nextAccessLevel = await fetchProjectAccessStatus(path);
+        const nextStatus = await fetchProjectAccessStatus(path);
         if (!isActive) {
           return;
         }
 
-        setAccessLevel(nextAccessLevel);
-        window.dispatchEvent(new CustomEvent('b2w-project-access-change', { detail: { path, accessLevel: nextAccessLevel } }));
+        setStatus(nextStatus);
+        window.dispatchEvent(new CustomEvent('b2w-project-access-change', { detail: { path, status: nextStatus } }));
       } finally {
         if (isActive) {
           setIsCheckingAccess(false);
@@ -56,16 +76,70 @@ export default function ProjectPasswordGate({
     };
   }, [path]);
 
-  if (isProjectAccessGranted(accessLevel)) {
+  const currentView = protectedProject?.view ?? null;
+
+  if (currentView && isProjectAccessGranted(status.accessLevel)) {
+    const otherViewEntries = (Object.entries(protectedProject?.routes ?? {}) as Array<[ProjectAccessView, string]>)
+      .filter(([view, routePath]) => Boolean(routePath) && view !== currentView);
+
     return (
       <>
         <div className="pointer-events-none fixed right-4 top-24 z-40 flex justify-end px-4">
-          <div className="pointer-events-auto inline-flex items-center gap-2 rounded-full border border-black bg-white/92 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-black shadow-[0_12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
-            <ShieldCheck className="h-4 w-4" />
-            {accessLabels[accessLevel]}
+          <div className="pointer-events-auto flex flex-wrap items-center justify-end gap-2 rounded-3xl border border-black bg-white/92 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-black shadow-[0_12px_40px_rgba(0,0,0,0.12)] backdrop-blur-md">
+            <div className="inline-flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4" />
+              {currentView ? accessLabels[currentView] : 'Access Granted'}
+            </div>
+
+            {otherViewEntries.map(([view, routePath]) => (
+              hasGrantedView(status, view) ? (
+                <button
+                  key={view}
+                  type="button"
+                  onClick={() => navigate(routePath)}
+                  className="border border-neutral-300 px-3 py-2 text-[10px] tracking-[0.22em] text-neutral-700 transition-colors hover:border-black hover:text-black"
+                >
+                  Open {accessLabels[view]}
+                </button>
+              ) : (
+                <button
+                  key={view}
+                  type="button"
+                  onClick={() => {
+                    setPreferredMethod(view);
+                    setIsPromptOpen(true);
+                  }}
+                  className="border border-neutral-300 px-3 py-2 text-[10px] tracking-[0.22em] text-neutral-700 transition-colors hover:border-black hover:text-black"
+                >
+                  Unlock {accessLabels[view]}
+                </button>
+              )
+            ))}
+
+            <button
+              type="button"
+              onClick={() => {
+                void logoutProjectAccess(path).then((nextStatus) => {
+                  setStatus(nextStatus);
+                  window.dispatchEvent(new CustomEvent('b2w-project-access-change', { detail: { path, status: nextStatus } }));
+                });
+              }}
+              className="border border-neutral-300 px-3 py-2 text-[10px] tracking-[0.22em] text-neutral-700 transition-colors hover:border-black hover:text-black"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
         {children}
+        <ProjectAccessPrompt
+          isOpen={isPromptOpen}
+          path={path}
+          title={protectedProject?.maskedTitle ?? title}
+          subtitle={subtitle}
+          initialMethod={preferredMethod}
+          onClose={() => setIsPromptOpen(false)}
+          onStatusChange={(nextStatus) => setStatus(nextStatus)}
+        />
       </>
     );
   }
@@ -117,12 +191,12 @@ export default function ProjectPasswordGate({
             <div className="mt-8 space-y-5">
               <div className="border border-white/10 bg-white/[0.03] p-4">
                 <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Business name</p>
-                <p className="mt-3 text-lg font-medium">{protectedProject?.maskedTitle ?? 'Confidential Client'}</p>
+                <p className="mt-3 text-lg font-medium">{protectedProject?.maskedTitle ?? title}</p>
               </div>
               <div className="border border-white/10 bg-white/[0.03] p-4">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Profile details</p>
-                <p className="mt-3 text-sm leading-6 text-neutral-300 blur-sm">
-                  Full business profile, location details, and project-specific documentation are revealed only after access succeeds.
+                <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">View options</p>
+                <p className="mt-3 text-sm leading-6 text-neutral-300">
+                  Proposal and profile routes are authenticated separately, and the session stays available across linked pages until you sign out.
                 </p>
               </div>
             </div>
@@ -134,7 +208,10 @@ export default function ProjectPasswordGate({
         {!isCheckingAccess ? (
           <button
             type="button"
-            onClick={() => setIsPromptOpen(true)}
+            onClick={() => {
+              setPreferredMethod(protectedProject?.view);
+              setIsPromptOpen(true);
+            }}
             className="pointer-events-auto inline-flex items-center gap-3 rounded-full border border-black bg-black px-6 py-4 text-sm font-semibold text-white shadow-[0_24px_50px_rgba(0,0,0,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-neutral-800"
           >
             <LockKeyhole className="h-4 w-4" />
@@ -147,11 +224,9 @@ export default function ProjectPasswordGate({
         path={path}
         title={protectedProject?.maskedTitle ?? title}
         subtitle={subtitle}
+        initialMethod={preferredMethod}
         onClose={() => setIsPromptOpen(false)}
-        onSuccess={(nextAccessLevel) => {
-          setAccessLevel(nextAccessLevel);
-          setIsPromptOpen(false);
-        }}
+        onStatusChange={(nextStatus) => setStatus(nextStatus)}
       />
     </section>
   );

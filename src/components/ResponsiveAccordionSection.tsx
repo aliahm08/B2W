@@ -40,7 +40,7 @@ export default function ResponsiveAccordionSection({
   const chevronClassName = tone === 'dark' ? 'text-stone-400' : 'text-neutral-400';
 
   return (
-    <section id={id} className={className}>
+    <section id={id} data-section-anchor={id ? 'true' : undefined} className={className}>
       <button
         type="button"
         aria-expanded={isOpen}

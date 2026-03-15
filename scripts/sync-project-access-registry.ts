@@ -8,19 +8,26 @@ type ClientRow = {
   password_env_var?: string;
   proposal_emails_csv?: string;
   primary_path?: string;
+  primary_view?: string;
   notes?: string;
 };
 
 type PageRow = {
   client_key?: string;
   path?: string;
+  view?: string;
+};
+
+type RegistryPage = {
+  path: string;
+  view: 'proposal' | 'profile';
 };
 
 const rootDir = process.cwd();
 const workbookPath = path.join(rootDir, 'project-access-registry.local.xlsx');
-const outputPath = path.join(rootDir, 'project-access.registry.local.json');
+const outputPath = path.join(rootDir, 'project-access.registry.json');
 
-function unique(values: string[]): string[] {
+function unique<T>(values: T[]): T[] {
   return Array.from(new Set(values));
 }
 
@@ -40,7 +47,7 @@ function splitCsv(value: string): string[] {
   return unique(
     String(value ?? '')
       .split(',')
-      .map((entry) => entry.trim())
+      .map((entry) => entry.trim().toLowerCase())
       .filter(Boolean),
   );
 }
@@ -54,6 +61,19 @@ function normalizePath(value: string): string {
   return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
 }
 
+function normalizeView(value: string, fallback: RegistryPage['view'] = 'proposal'): RegistryPage['view'] {
+  const normalized = String(value ?? '').trim().toLowerCase();
+  if (normalized === 'profile' || normalized === 'proposal') {
+    return normalized;
+  }
+
+  return fallback;
+}
+
+function scopeIdFromClientKey(value: string): string {
+  return String(value ?? '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_');
+}
+
 function buildTemplateWorkbook() {
   const workbook = XLSX.utils.book_new();
 
@@ -62,31 +82,31 @@ function buildTemplateWorkbook() {
       client_key: 'borek_g',
       title: 'Borek-G',
       password_env_var: 'PROJECT_PASSWORD_BOREK_G',
-      proposal_emails_csv: 'owner@example.com,ops@example.com',
+      proposal_emails_csv: 'info@b2w-ai.com',
       primary_path: '/borek-g',
+      primary_view: 'profile',
       notes: 'Keep the real password only in env vars.',
     },
     {
       client_key: 'uyghur_eats',
       title: 'Uyghur Eats',
       password_env_var: 'PROJECT_PASSWORD_UYGHUR_EATS',
-      proposal_emails_csv: 'buyer@example.com',
+      proposal_emails_csv: '',
       primary_path: '/uyghur-eats',
-      notes: 'Add all related authenticated pages in the pages sheet.',
+      primary_view: 'profile',
+      notes: 'Add a proposal page once that route exists.',
     },
   ]);
 
   const pagesSheet = XLSX.utils.json_to_sheet([
-    { client_key: 'borek_g', path: '/borek-g' },
-    { client_key: 'borek_g', path: '/borek-g-operations' },
-    { client_key: 'uyghur_eats', path: '/uyghur-eats' },
+    { client_key: 'borek_g', path: '/borek-g-operations', view: 'proposal' },
   ]);
 
   const readmeSheet = XLSX.utils.aoa_to_sheet([
     ['Project Access Registry'],
-    ['Store approved emails, protected paths, and password env var names here.'],
+    ['Store approved proposal emails, protected paths, and password env var names here.'],
     ['Do not store plaintext passwords in this workbook.'],
-    ['Run `npm run sync:project-access` after changes to refresh project-access.registry.local.json for the backend.'],
+    ['Run `npm run sync:project-access` after changes to refresh project-access.registry.json for deployment.'],
   ]);
 
   clientsSheet['!cols'] = [
@@ -95,9 +115,10 @@ function buildTemplateWorkbook() {
     { wch: 32 },
     { wch: 40 },
     { wch: 24 },
+    { wch: 18 },
     { wch: 48 },
   ];
-  pagesSheet['!cols'] = [{ wch: 18 }, { wch: 28 }];
+  pagesSheet['!cols'] = [{ wch: 18 }, { wch: 28 }, { wch: 18 }];
   readmeSheet['!cols'] = [{ wch: 110 }];
 
   XLSX.utils.book_append_sheet(workbook, clientsSheet, 'clients');
@@ -108,45 +129,81 @@ function buildTemplateWorkbook() {
 }
 
 if (!fs.existsSync(workbookPath)) {
-  buildTemplateWorkbook();
+  console.log('Skipping project access sync because project-access-registry.local.xlsx is not present.');
+  if (!fs.existsSync(outputPath)) {
+    buildTemplateWorkbook();
+    console.log('Created a template project-access-registry.local.xlsx because no workbook or deployable registry was found.');
+  }
+  process.exit(0);
 }
 
 const workbook = XLSX.readFile(workbookPath);
 const clientRows = readSheet<ClientRow>(workbook, 'clients');
 const pageRows = readSheet<PageRow>(workbook, 'pages');
+const existingRegistry = fs.existsSync(outputPath)
+  ? JSON.parse(fs.readFileSync(outputPath, 'utf8')) as {
+      projects?: Array<{ scopeId?: string; proposalEmails?: string[] }>;
+    }
+  : { projects: [] };
+const existingProposalEmailsByScope = new Map(
+  (existingRegistry.projects ?? []).map((project) => [
+    scopeIdFromClientKey(String(project.scopeId ?? '')),
+    Array.isArray(project.proposalEmails) ? project.proposalEmails : [],
+  ]),
+);
 
-const pagesByClient = new Map<string, string[]>();
+const pagesByClient = new Map<string, RegistryPage[]>();
 for (const row of pageRows) {
-  const clientKey = String(row.client_key ?? '').trim();
+  const clientKey = scopeIdFromClientKey(String(row.client_key ?? ''));
   const pathname = normalizePath(String(row.path ?? ''));
   if (!clientKey || !pathname) {
     continue;
   }
 
   const current = pagesByClient.get(clientKey) ?? [];
-  current.push(pathname);
+  current.push({
+    path: pathname,
+    view: normalizeView(String(row.view ?? ''), 'proposal'),
+  });
   pagesByClient.set(clientKey, current);
 }
 
 const projects = clientRows
   .map((row) => {
-    const clientKey = String(row.client_key ?? '').trim();
+    const scopeId = scopeIdFromClientKey(String(row.client_key ?? ''));
     const primaryPath = normalizePath(String(row.primary_path ?? ''));
-    const authenticatedPages = unique([
-      primaryPath,
-      ...(pagesByClient.get(clientKey) ?? []),
-    ].filter(Boolean));
+    const primaryView = normalizeView(String(row.primary_view ?? ''), 'profile');
+    const extraPages = (pagesByClient.get(scopeId) ?? []).filter((page) => page.path !== primaryPath);
+    const pages = unique(
+      [
+        primaryPath ? `${primaryPath}::${primaryView}` : '',
+        ...extraPages.map((page) => `${page.path}::${page.view}`),
+      ].filter(Boolean),
+    ).map((entry) => {
+      const [pathname, view] = entry.split('::');
+      return { path: pathname, view: normalizeView(view, 'profile') };
+    });
 
-    if (!clientKey || !primaryPath) {
+    if (!scopeId || pages.length === 0) {
       return null;
     }
 
+    const workbookProposalEmails = splitCsv(String(row.proposal_emails_csv ?? ''));
+    const looksPlaceholderOnly = workbookProposalEmails.length > 0
+      && workbookProposalEmails.every((email) => email.endsWith('@example.com'));
+    const hasProposalPage = pages.some((page) => page.view === 'proposal');
+    const proposalEmails = hasProposalPage
+      ? (looksPlaceholderOnly
+        ? (existingProposalEmailsByScope.get(scopeId) ?? [])
+        : workbookProposalEmails)
+      : [];
+
     return {
-      path: primaryPath,
+      scopeId,
       title: String(row.title ?? '').trim(),
       passwordEnvVar: String(row.password_env_var ?? '').trim(),
-      proposalEmails: splitCsv(String(row.proposal_emails_csv ?? '')),
-      authenticatedPages,
+      proposalEmails: proposalEmails.length > 0 ? proposalEmails : (hasProposalPage ? ['info@b2w-ai.com'] : []),
+      pages,
       notes: String(row.notes ?? '').trim(),
     };
   })

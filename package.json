@@ -8,7 +8,7 @@
     "dev:full": "npx vercel dev --listen 0.0.0.0:3000",
     "sync:projects": "node --import tsx ./scripts/sync-project-content.ts",
     "sync:project-access": "node --import tsx ./scripts/sync-project-access-registry.ts",
-    "prebuild": "npm run sync:projects",
+    "prebuild": "npm run sync:projects && npm run sync:project-access",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",

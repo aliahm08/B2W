@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
 import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
-import MobileSectionNav from '../components/MobileSectionNav';
+import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import {
@@ -93,6 +93,16 @@ export default function UyghurEats() {
         }
     ];
 
+    const sectionItems = [
+        { id: 'location', label: 'Location & Footprint' },
+        { id: 'culinary', label: 'Culinary Draw' },
+        { id: 'community', label: 'Community Integration' },
+        { id: 'market', label: 'Market Analysis' },
+        { id: 'thesis', label: 'Acquisition Thesis' },
+        { id: 'growth', label: 'Use Cases & Growth' },
+        { id: 'gallery', label: 'Image Gallery' },
+    ];
+
     return (
         <article className={projectPageShellClassName}>
             <Seo
@@ -176,16 +186,10 @@ export default function UyghurEats() {
 
                 <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
                     <div className="lg:col-span-12">
-                        <MobileSectionNav
-                            items={[
-                                { id: 'location', label: 'Location' },
-                                { id: 'culinary', label: 'Food draw' },
-                                { id: 'community', label: 'Community' },
-                                { id: 'market', label: 'Market' },
-                                { id: 'thesis', label: 'Thesis' },
-                                { id: 'growth', label: 'Growth' },
-                                { id: 'gallery', label: 'Gallery' },
-                            ]}
+                        <ProfileSectionNav
+                            items={sectionItems}
+                            eyebrow="Profile navigation"
+                            description="Jump between the acquisition case, neighborhood context, operating upside, and gallery while keeping the page’s sales narrative intact."
                         />
                     </div>
                     {/* Content Section */}

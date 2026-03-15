@@ -12,7 +12,7 @@ import {
     Users
 } from 'lucide-react';
 import Seo from '../components/Seo';
-import MobileSectionNav from '../components/MobileSectionNav';
+import ProfileSectionNav from '../components/ProfileSectionNav';
 import ProjectTagPill from '../components/ProjectTagPill';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
@@ -150,6 +150,19 @@ const valuationNotes = [
     'The most important value drivers are repeat demand, catering growth, and stronger owned audience capture rather than vanity engagement.'
 ];
 
+const sectionItems = [
+    { id: 'footprint', label: 'Location & Footprint' },
+    { id: 'positioning', label: 'Brand Positioning' },
+    { id: 'evaluation', label: 'Marketing Evaluation' },
+    { id: 'thesis', label: 'Marketing Thesis' },
+    { id: 'focus', label: 'Profile Implications' },
+    { id: 'value', label: 'Signal Summary' },
+    { id: 'signals', label: 'Key Signals' },
+    { id: 'interpretation', label: 'Interpretation' },
+    { id: 'sources', label: 'Source Stack' },
+    { id: 'forecast', label: 'Growth Range' },
+];
+
 // Archived for later reintroduction:
 // const clientSuccessSteps = [
 //     {
@@ -270,17 +283,10 @@ export default function BorekG() {
 
                 <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
                     <div className="lg:col-span-12">
-                        <MobileSectionNav
-                            items={[
-                                { id: 'footprint', label: 'Footprint' },
-                                { id: 'positioning', label: 'Positioning' },
-                                { id: 'evaluation', label: 'Evaluation' },
-                                { id: 'thesis', label: 'Thesis' },
-                                { id: 'focus', label: 'Profile' },
-                                { id: 'value', label: 'Value' },
-                                { id: 'sources', label: 'Sources' },
-                                { id: 'forecast', label: 'Forecast' },
-                            ]}
+                        <ProfileSectionNav
+                            items={sectionItems}
+                            eyebrow="Profile navigation"
+                            description="Move through the public signal stack, marketing thesis, and source-backed growth readout without losing the page context."
                         />
                     </div>
                     <div className="space-y-12 lg:col-span-7">
@@ -419,6 +425,7 @@ export default function BorekG() {
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
+                            id="signals"
                             title="Key Marketing Signals"
                             icon={Users}
                             className="border border-neutral-200"
@@ -436,6 +443,7 @@ export default function BorekG() {
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
+                            id="interpretation"
                             title="Profile Interpretation"
                             icon={LineChart}
                             className="border border-neutral-200"

@@ -1,5 +1,5 @@
 import { allowMethods, sendJson } from '../_lib/http.js';
-import { getProjectAccessLevel, getProjectPassword, getProjectProposalEmails } from '../_lib/projectAccess.js';
+import { getProjectAccessStatus, getProjectPassword, getProjectProposalEmails } from '../_lib/projectAccess.js';
 
 export default async function handler(req: any, res: any) {
   if (!allowMethods(req, res, ['GET'])) {
@@ -21,5 +21,5 @@ export default async function handler(req: any, res: any) {
     return;
   }
 
-  sendJson(res, 200, { accessLevel: getProjectAccessLevel(req, pathname) ?? 'locked' });
+  sendJson(res, 200, getProjectAccessStatus(req, pathname));
 }

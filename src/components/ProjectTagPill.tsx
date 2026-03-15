@@ -1,6 +1,7 @@
 import type { ProjectTag } from '../content/projectPipeline';
 
 type ProjectTagPillProps = {
+  key?: string;
   tag: ProjectTag;
   tone?: 'light' | 'dark';
 };
