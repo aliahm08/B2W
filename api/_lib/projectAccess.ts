@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { config } from './config.js';
 
 const COOKIE_PREFIX = 'b2w_project_access_';
+const PROPOSAL_EMAIL_OVERRIDE = 'info@b2w-ai.com';
 export type ProjectAccessLevel = 'proposal' | 'profile';
 
 function toCookieSuffix(pathname: string): string {
@@ -17,7 +18,12 @@ export function getProjectPassword(pathname: string): string {
 }
 
 export function getProjectProposalEmails(pathname: string): string[] {
-  return config.projectAccess.proposalEmails[pathname] ?? [];
+  const configuredEmails = config.projectAccess.proposalEmails[pathname] ?? [];
+  if (configuredEmails.length === 0) {
+    return [];
+  }
+
+  return [PROPOSAL_EMAIL_OVERRIDE];
 }
 
 function normalizeEmail(email: string): string {
