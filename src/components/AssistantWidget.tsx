@@ -11,7 +11,6 @@ type FloatingPageCta =
   | { type: 'event'; label: string; eventName: string };
 
 const floatingPageCtas: Record<string, FloatingPageCta> = {
-  '/borek-g': { type: 'proposal', label: 'Respond to Proposal' },
   '/uyghur-eats': { type: 'event', label: 'Make an Offer', eventName: 'b2w-uyghur-offer:open' },
 };
 

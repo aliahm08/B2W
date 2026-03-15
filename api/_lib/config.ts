@@ -1,4 +1,5 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import dotenv from 'dotenv';
 
 dotenv.config({ path: path.join(process.cwd(), '.env.local') });
@@ -29,6 +30,73 @@ function getEnv(name: string, fallback = ''): string {
   const value = (process.env[name] ?? '').trim();
   return value || fallback;
 }
+
+type ProjectAccessRegistryRecord = {
+  path?: string;
+  title?: string;
+  passwordEnvVar?: string;
+  proposalEmails?: string[];
+  authenticatedPages?: string[];
+  notes?: string;
+};
+
+type ProjectAccessRegistryFile = {
+  projects?: ProjectAccessRegistryRecord[];
+};
+
+function resolveRegistryPath(): string {
+  const configuredPath = getEnv('PROJECT_ACCESS_REGISTRY_PATH', './project-access.registry.local.json');
+  return path.isAbsolute(configuredPath) ? configuredPath : path.join(process.cwd(), configuredPath);
+}
+
+function loadProjectAccessRegistry(): Record<string, { password: string; proposalEmails: string[] }> | null {
+  const registryPath = resolveRegistryPath();
+  if (!fs.existsSync(registryPath)) {
+    return null;
+  }
+
+  const parsed = JSON.parse(fs.readFileSync(registryPath, 'utf8')) as ProjectAccessRegistryFile;
+  const projects = Array.isArray(parsed.projects) ? parsed.projects : [];
+  const entries = new Map<string, { password: string; proposalEmails: string[] }>();
+
+  for (const project of projects) {
+    const proposalEmails = unique(
+      (Array.isArray(project.proposalEmails) ? project.proposalEmails : [])
+        .map((entry) => String(entry ?? '').trim())
+        .filter(Boolean),
+    );
+    const password = project.passwordEnvVar ? getEnv(project.passwordEnvVar) : '';
+    const paths = unique(
+      [
+        String(project.path ?? '').trim(),
+        ...(Array.isArray(project.authenticatedPages) ? project.authenticatedPages.map((entry) => String(entry ?? '').trim()) : []),
+      ].filter(Boolean),
+    );
+
+    for (const pathname of paths) {
+      entries.set(pathname, { password, proposalEmails });
+    }
+  }
+
+  return Object.fromEntries(entries);
+}
+
+const fallbackProjectAccess = {
+  '/borek-g': {
+    password: getEnv('PROJECT_PASSWORD_BOREK_G'),
+    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G'))),
+  },
+  '/borek-g-operations': {
+    password: getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS'),
+    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G_OPERATIONS'))),
+  },
+  '/uyghur-eats': {
+    password: getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
+    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_UYGHUR_EATS'))),
+  },
+} satisfies Record<string, { password: string; proposalEmails: string[] }>;
+
+const projectAccessRegistry = loadProjectAccessRegistry() ?? fallbackProjectAccess;
 
 export const config = {
   ollama: {
@@ -62,16 +130,13 @@ export const config = {
   },
   projectAccess: {
     secret: getEnv('PROJECT_ACCESS_SECRET'),
-    passwords: {
-      '/borek-g': getEnv('PROJECT_PASSWORD_BOREK_G'),
-      '/borek-g-operations': getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS'),
-      '/uyghur-eats': getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
-    } satisfies Record<string, string>,
-    proposalEmails: {
-      '/borek-g': unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G'))),
-      '/borek-g-operations': unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G_OPERATIONS'))),
-      '/uyghur-eats': unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_UYGHUR_EATS'))),
-    } satisfies Record<string, string[]>,
+    registryPath: resolveRegistryPath(),
+    passwords: Object.fromEntries(
+      Object.entries(projectAccessRegistry).map(([pathname, value]) => [pathname, value.password]),
+    ) satisfies Record<string, string>,
+    proposalEmails: Object.fromEntries(
+      Object.entries(projectAccessRegistry).map(([pathname, value]) => [pathname, value.proposalEmails]),
+    ) satisfies Record<string, string[]>,
   },
 };
 

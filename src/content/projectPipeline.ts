@@ -7,6 +7,11 @@ export type HeroContent = {
   secondaryCtaHref: string;
 };
 
+export type ProjectTag = {
+  label: string;
+  tier: 1 | 2 | 3;
+};
+
 export type ProjectCard = {
   id: number;
   category: string;
@@ -17,7 +22,7 @@ export type ProjectCard = {
   title: string;
   description: string;
   impact: string;
-  tags: string[];
+  tags: ProjectTag[];
   date: string;
   link: string;
 };

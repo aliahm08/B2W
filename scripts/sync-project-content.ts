@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import XLSX from 'xlsx';
+import { projectShowcaseOverridesByPath } from '../src/content/projectShowcase';
 
 type HeroContent = {
   headline: string;
@@ -10,6 +11,11 @@ type HeroContent = {
   primaryCtaHref: string;
   secondaryCtaLabel: string;
   secondaryCtaHref: string;
+};
+
+type ProjectTag = {
+  label: string;
+  tier: 1 | 2 | 3;
 };
 
 type ProjectCard = {
@@ -22,7 +28,7 @@ type ProjectCard = {
   title: string;
   description: string;
   impact: string;
-  tags: string[];
+  tags: ProjectTag[];
   date: string;
   link: string;
 };
@@ -226,6 +232,136 @@ function summarizeProject(row: WorkbookRow): string {
   ].filter(Boolean).join(' ');
 }
 
+function isProposalState(status: string): boolean {
+  return /(proposal|proposed)/i.test(status);
+}
+
+function generalizeIndustryLabel(industry: string): string {
+  const normalized = compactText(industry).toLowerCase();
+
+  if (normalized === 'food & beverage' || normalized === 'restaurant') {
+    return 'restaurant';
+  }
+
+  if (normalized === 'construction') {
+    return 'trade-services operator';
+  }
+
+  if (normalized) {
+    return compactText(industry).toLowerCase();
+  }
+
+  return 'business';
+}
+
+function buildPublicTitle(row: WorkbookRow): string {
+  const offering = compactText(String(row.offering ?? '')).toLowerCase();
+  const topic = compactText(String(row.topic ?? '')).toLowerCase();
+  const packageName = compactText(String(row.package ?? '')).toLowerCase();
+
+  if (offering === 'profile' && topic === 'marketing') {
+    return 'Neighborhood Restaurant Marketing Profile';
+  }
+
+  if (offering === 'prototype' && topic === 'operations') {
+    return packageName.includes('mobile') ? 'Field Coordination Assistant Prototype' : 'Frontline Operations Copilot Prototype';
+  }
+
+  if (offering === 'profile' && topic === 'finance') {
+    return 'Acquisition Readiness and Valuation Profile';
+  }
+
+  if (offering === 'profile') {
+    return `${titleCase(topic || 'Business')} Profile`;
+  }
+
+  if (offering === 'prototype') {
+    return `${titleCase(topic || 'Operations')} Prototype`;
+  }
+
+  return [titleCase(topic), titleCase(offering), titleCase(String(row.package ?? ''))].filter(Boolean).join(' ');
+}
+
+function buildPublicClientDescription(row: WorkbookRow): string {
+  const industry = generalizeIndustryLabel(String(row.industry ?? ''));
+  const topic = compactText(String(row.topic ?? '')).toLowerCase();
+  const packageName = compactText(String(row.package ?? '')).toLowerCase();
+
+  if (industry === 'restaurant' && topic === 'marketing') {
+    return 'Independent restaurant in a high-traffic suburban market';
+  }
+
+  if (industry === 'restaurant' && topic === 'operations') {
+    return 'Restaurant team managing repeat customer and staff questions';
+  }
+
+  if (industry === 'restaurant' && topic === 'finance') {
+    return 'Specialty restaurant positioned in a strong urban corridor';
+  }
+
+  if (industry === 'trade-services operator' && topic === 'operations') {
+    return 'Trade-services operator coordinating field crews across jobsites';
+  }
+
+  if (packageName.includes('mobile')) {
+    return 'Operator coordinating mobile teams across active work';
+  }
+
+  return `${titleCase(industry)} with a defined ${topic || 'project'} brief`;
+}
+
+function buildPublicDescription(row: WorkbookRow): string {
+  const offering = compactText(String(row.offering ?? '')).toLowerCase();
+  const topic = compactText(String(row.topic ?? '')).toLowerCase();
+  const packageName = compactText(String(row.package ?? '')).toLowerCase();
+
+  if (offering === 'profile' && topic === 'marketing') {
+    return 'Restaurant marketing profile covering public reputation, social opportunity, search visibility, and website conversion opportunities.';
+  }
+
+  if (offering === 'prototype' && topic === 'operations') {
+    return 'Operations proposal focused on repetitive question handling, workflow consistency, escalation rules, and support coverage.';
+  }
+
+  if (offering === 'profile' && topic === 'finance') {
+    return 'Business profile focused on acquisition readiness, location quality, market position, and differentiated demand drivers.';
+  }
+
+  if (packageName.includes('mobile')) {
+    return 'Operations prototype focused on mobile coordination, field communication, and faster issue routing.';
+  }
+
+  return `${titleCase(topic || 'Project')} ${titleCase(offering || 'overview')} summarizing scope, opportunity, and implementation direction without public client details.`;
+}
+
+function buildPublicImpact(row: WorkbookRow): string {
+  const offering = compactText(String(row.offering ?? '')).toLowerCase();
+  const topic = compactText(String(row.topic ?? '')).toLowerCase();
+  const packageName = compactText(String(row.package ?? '')).toLowerCase();
+
+  if (offering === 'profile' && topic === 'marketing') {
+    return 'Clearer digital demand capture plan';
+  }
+
+  if (offering === 'prototype' && topic === 'operations') {
+    return packageName.includes('mobile') ? 'Better field coordination potential' : 'Faster frontline response flow';
+  }
+
+  if (offering === 'profile' && topic === 'finance') {
+    return 'Stronger acquisition positioning';
+  }
+
+  if (topic === 'marketing') {
+    return 'Improved demand generation strategy';
+  }
+
+  if (topic === 'operations') {
+    return 'Operational leverage opportunity identified';
+  }
+
+  return 'General opportunity identified';
+}
+
 function buildScopeImpactLabel(row: WorkbookRow): string {
   const industry = compactText(String(row.industry ?? '')).toLowerCase();
   const topic = compactText(String(row.topic ?? '')).toLowerCase();
@@ -317,15 +453,17 @@ function buildClientDescription(row: WorkbookRow): string {
   return [client, location].filter(Boolean).join(' in ');
 }
 
-function buildTags(row: WorkbookRow): string[] {
-  const tags = [
-    titleCase(String(row.offering ?? '')),
-    titleCase(String(row.topic ?? '')),
-    titleCase(String(row.package ?? '')),
-    ...splitSkills(row.skills),
-  ].filter(Boolean);
+function buildTags(row: WorkbookRow): ProjectTag[] {
+  const orderedTags: ProjectTag[] = [
+    { label: titleCase(String(row.offering ?? '')), tier: 1 },
+    { label: titleCase(String(row.topic ?? '')), tier: 2 },
+    { label: titleCase(String(row.package ?? '')), tier: 3 },
+    ...splitSkills(row.skills).map((label) => ({ label, tier: 3 as const })),
+  ].filter((tag) => tag.label);
 
-  return Array.from(new Set(tags));
+  return orderedTags.filter((tag, index) => (
+    orderedTags.findIndex((candidate) => candidate.label.toLowerCase() === tag.label.toLowerCase()) === index
+  ));
 }
 
 function buildLink(row: WorkbookRow): string {
@@ -439,20 +577,35 @@ function sanitizeRows(rows: WorkbookRow[]): WorkbookRow[] {
 }
 
 function workbookToProjects(rows: WorkbookRow[]): ProjectCard[] {
-  return sanitizeRows(rows).map((row, index) => ({
-    id: index + 1,
-    category: upperLabel(String(row.industry ?? 'Project')),
-    projectType: buildProjectType(row),
-    serviceType: buildServiceType(row),
-    status: compactText(String(row.status ?? 'Active')),
-    clientDescription: buildClientDescription(row),
-    title: buildTitle(row),
-    description: summarizeProject(row),
-    impact: buildImpact(row),
-    tags: buildTags(row),
-    date: formatMonthYear(row.date),
-    link: buildLink(row),
-  }));
+  return sanitizeRows(rows).map((row, index) => {
+    const status = compactText(String(row.status ?? 'Active'));
+    const link = buildLink(row);
+    const routeOverride = link ? projectShowcaseOverridesByPath[link] : undefined;
+    const usePublicProposalCard = isProposalState(status);
+
+    return {
+      id: index + 1,
+      category: upperLabel(String(row.industry ?? 'Project')),
+      projectType: buildProjectType(row),
+      serviceType: buildServiceType(row),
+      status,
+      clientDescription: usePublicProposalCard
+        ? routeOverride?.publicClientDescription ?? buildPublicClientDescription(row)
+        : buildClientDescription(row),
+      title: usePublicProposalCard
+        ? routeOverride?.publicTitle ?? buildPublicTitle(row)
+        : buildTitle(row),
+      description: usePublicProposalCard
+        ? routeOverride?.publicDescription ?? buildPublicDescription(row)
+        : summarizeProject(row),
+      impact: usePublicProposalCard
+        ? routeOverride?.publicImpact ?? buildPublicImpact(row)
+        : buildImpact(row),
+      tags: routeOverride?.tags ?? buildTags(row),
+      date: formatMonthYear(row.date),
+      link,
+    };
+  });
 }
 
 function serializeContent(content: ProjectPipelineContent): string {

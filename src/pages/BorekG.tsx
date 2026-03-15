@@ -98,10 +98,10 @@ const marketingReadout = [
 ];
 
 const recommendations = [
-    'Turn five-star reviews into landing-page proof, paid creative, and menu-focused social posts.',
-    'Capture more Instagram followers in-store because review volume already exceeds audience retention.',
-    'Push the market-plus-cafe story harder across catering, retail, and dine-in messaging.',
-    'Track posting cadence and engagement weekly so weak creative gets cut quickly.'
+    'Review density is already strong enough to support testimonial-led creative and stronger menu proof across owned channels.',
+    'Instagram audience retention lags behind in-store and review traction, which suggests weak capture of existing foot traffic.',
+    'The cafe-plus-market positioning creates more sellable angles than a single-product bakery identity.',
+    'Channel breadth is solid, but the public brand package still undersells catering, retail grocery, and repeat-visit value.'
 ];
 
 const strategyPlaybook = [
@@ -142,9 +142,9 @@ const growthForecast = [
 ];
 
 const valuationNotes = [
-    'The issue is distribution, not product-market fit. Borek-G already has public proof that should convert better with sharper packaging.',
-    'Because trust is already visible across reviews, press, and ordering channels, this is a stronger bet than a cold-start restaurant marketing project.',
-    'The project pays off if it grows repeat demand or catering, not if it only grows vanity metrics.'
+    'The core issue appears to be packaging and distribution, not product-market fit. Public demand signals are already visible.',
+    'Trust is documented across reviews, local press, ecommerce, and farmers-market visibility, which lowers perception risk.',
+    'The most important value drivers are repeat demand, catering growth, and stronger owned audience capture rather than vanity engagement.'
 ];
 
 // Archived for later reintroduction:
@@ -191,8 +191,8 @@ export default function BorekG() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Borek-G Project Proposal"
-                description="Proposal page for a Borek-G restaurant profile and marketing audit in Falls Church, outlining the public-data workflow, growth thesis, and client-success roadmap for execution."
+                title="Borek-G Restaurant Marketing Profile"
+                description="Restaurant marketing profile of Borek-G covering reputation strength, discovery coverage, social traction, channel depth, and restaurant growth potential in Falls Church."
             />
 
             <motion.div
@@ -212,26 +212,26 @@ export default function BorekG() {
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
-                        <span>Proposal</span>
+                        <span>Restaurant Marketing Profile</span>
                     </div>
 
                     <section className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-8">
                         <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
-                            Proposal for Marketing Systems and Growth
+                            Restaurant Marketing Profile
                         </p>
 
-                        <div className={projectHeroGridClassNames.proposal}>
+                        <div className={projectHeroGridClassNames.profile}>
                             <div>
                                 <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
                                     Borek-G
                                 </h1>
 
                                 <p className="mb-5 max-w-3xl text-lg leading-relaxed text-neutral-200 md:text-xl">
-                                    Bring more people into Borek-G by turning existing trust into stronger local content, offers, and repeat audience capture.
+                                    A restaurant marketing profile built around Borek-G's unusually strong local reputation, multi-channel revenue mix, and underused social conversion potential.
                                 </p>
 
                                 <p className="mb-8 max-w-3xl text-sm leading-6 text-neutral-300">
-                                    Built from public review, press, and channel data. The business already has demand; the gap is packaging that proof into repeatable growth.
+                                    Built from public review, press, ecommerce, and social data. The restaurant already shows strong demand signals; this profile maps how those signals translate into marketing strength.
                                 </p>
 
                                 <div className="flex flex-wrap gap-2">
@@ -247,12 +247,12 @@ export default function BorekG() {
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
+                            <aside className="space-y-4 border border-white/15 bg-white/5 p-5 md:p-6">
                                 <h2 className="text-2xl font-medium tracking-tight md:text-4xl">
-                                    Convert public proof into a repeatable growth system.
+                                    A neighborhood restaurant with proof already visible in public.
                                 </h2>
                                 <p className="text-sm leading-6 text-neutral-300">
-                                    Snapshot date: {snapshotDate}. Public data shows strong reputation, solid channel breadth, and underused social leverage. Execution starts with baseline setup, access, and channel alignment.
+                                    Snapshot date: {snapshotDate}. Public data shows strong reputation, solid discovery coverage, and a broader commercial footprint than the brand currently communicates online.
                                 </p>
 
                                 <div className="grid grid-cols-2 gap-3 text-sm">
@@ -266,7 +266,7 @@ export default function BorekG() {
                                         </div>
                                     ))}
                                 </div>
-                            </div>
+                            </aside>
                         </div>
                     </section>
                 </header>
@@ -279,7 +279,7 @@ export default function BorekG() {
                                 { id: 'positioning', label: 'Positioning' },
                                 { id: 'evaluation', label: 'Evaluation' },
                                 { id: 'thesis', label: 'Thesis' },
-                                { id: 'focus', label: 'Focus' },
+                                { id: 'focus', label: 'Profile' },
                                 { id: 'value', label: 'Value' },
                                 { id: 'sources', label: 'Sources' },
                                 { id: 'forecast', label: 'Forecast' },
@@ -330,7 +330,7 @@ export default function BorekG() {
 
                         <ResponsiveAccordionSection
                             id="evaluation"
-                            title="Initial Marketing Evaluation"
+                            title="Marketing Evaluation"
                             icon={Megaphone}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -339,7 +339,7 @@ export default function BorekG() {
                         >
                             <div data-project-detail-body className="space-y-6">
                                 <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
-                                    Proposal-stage signals only. Enough to justify the project and set the first measurement priorities.
+                                    Public signals only. The readout below reflects current outward-facing marketing strength rather than a proposed engagement scope.
                                 </p>
                                 {marketingReadout.map((item) => (
                                     <div key={item.title}>
@@ -357,7 +357,7 @@ export default function BorekG() {
 
                         <ResponsiveAccordionSection
                             id="thesis"
-                            title="Project Thesis"
+                            title="Marketing Thesis"
                             icon={LineChart}
                             className="border border-neutral-900 bg-black text-white"
                             headerClassName="p-4 md:p-6 md:pb-4"
@@ -367,14 +367,14 @@ export default function BorekG() {
                         >
                             <div data-project-detail-body>
                                 <p className="text-sm leading-relaxed text-neutral-300">
-                                    Borek-G is stronger operationally than it looks online. The work is to package visible trust into better local conversion, then add deeper tracking after launch.
+                                    Borek-G appears stronger in market than in presentation. The restaurant already has trust, range, and product credibility; the main gap is how clearly that value is packaged across public channels.
                                 </p>
                             </div>
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
                             id="focus"
-                            title="Bottom Line"
+                            title="Profile Implications"
                             icon={Megaphone}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -383,7 +383,7 @@ export default function BorekG() {
                         >
                             <div data-project-detail-body className="space-y-6">
                                 <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
-                                    Borek-G should win by looking online like it already looks in person: credible, food-forward, and local.
+                                    The restaurant should be understood as a high-trust local food business with more monetizable demand than its current online packaging suggests.
                                 </p>
                                 {strategyPlaybook.map((item) => (
                                     <div key={item.title}>
@@ -422,7 +422,7 @@ export default function BorekG() {
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
-                            title="Proposed Focus Areas"
+                            title="Key Marketing Signals"
                             icon={Users}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -439,7 +439,7 @@ export default function BorekG() {
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
-                            title="Valuation Logic"
+                            title="Profile Interpretation"
                             icon={LineChart}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -483,7 +483,7 @@ export default function BorekG() {
 
                     <ResponsiveAccordionSection
                         id="forecast"
-                        title="Predicted Growth & Project Value"
+                        title="Predicted Growth Range"
                         icon={LineChart}
                         className="border border-neutral-200 lg:col-span-12"
                         headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -492,7 +492,7 @@ export default function BorekG() {
                     >
                         <div data-project-detail-body className="space-y-6">
                             <p className="max-w-4xl text-sm leading-relaxed text-neutral-600">
-                                This is a demand-amplification model, not a turnaround forecast. The ranges below assume competent execution over one to three quarters.
+                                This is a demand-amplification range, not a turnaround case. The estimates below assume competent restaurant marketing execution over one to three quarters.
                             </p>
                             <div className="grid gap-4 md:grid-cols-3">
                                 {growthForecast.map((item) => (
@@ -507,10 +507,10 @@ export default function BorekG() {
                             </div>
                             <div className="border border-neutral-200 bg-neutral-50 p-4 md:p-5">
                                 <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">
-                                    Soft Valuation
+                                    Profile Summary
                                 </p>
-                                    <p className="max-w-5xl text-sm leading-6 text-neutral-700">
-                                    Market data supports this as a high-leverage project because demand and trust are already visible. The commercial upside is more repeat visits, larger catering volume, and stronger owned demand.
+                                <p className="max-w-5xl text-sm leading-6 text-neutral-700">
+                                    Market data supports Borek-G as a high-trust restaurant brand with expansion room in repeat visits, catering volume, and owned-audience growth. The profile is strongest when read as a packaging opportunity, not a rescue case.
                                 </p>
                             </div>
                         </div>

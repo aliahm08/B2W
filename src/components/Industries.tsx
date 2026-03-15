@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ProjectAccessPrompt from './ProjectAccessPrompt';
 import { projectPipelineContent } from '../content/projectPipeline';
 import { fetchProjectAccessStatus, isProjectAccessGranted, protectedProjects, type ProjectAccessLevel } from '../content/projectAccess';
 
@@ -10,9 +11,11 @@ function isExternalLink(value: string): boolean {
 
 export default function Industries() {
   const { projects } = projectPipelineContent;
+  const navigate = useNavigate();
   const [selectedBusinessType, setSelectedBusinessType] = useState('All');
   const [selectedProjectType, setSelectedProjectType] = useState('All');
   const [projectAccess, setProjectAccess] = useState<Record<string, ProjectAccessLevel>>({});
+  const [activeProtectedPath, setActiveProtectedPath] = useState<string | null>(null);
 
   const businessTypes = useMemo(
     () => ['All', ...Array.from(new Set(projects.map((project) => project.category)))],
@@ -68,6 +71,50 @@ export default function Industries() {
     () => Object.fromEntries(protectedProjects.map((project) => [project.path, project])),
     [],
   );
+
+  const publicTitleOverrides = useMemo<Record<number, string>>(
+    () => ({
+      1: 'Neighborhood Restaurant Growth Blueprint',
+      2: 'Frontline Operations Copilot Prototype',
+      3: 'Acquisition Readiness and Valuation Profile',
+      4: 'Restaurant Demand Generation Strategy',
+      5: 'Field Coordination Assistant Prototype',
+      10: 'Restaurant Growth Proposal and Audit',
+      11: 'Operations Chatbot Rollout Proposal',
+      12: 'Acquisition Strategy and Business Profile',
+    }),
+    [],
+  );
+
+  const publicImpactOverrides = useMemo<Record<number, string>>(
+    () => ({
+      1: 'Clearer local growth path',
+      2: 'Faster frontline response flow',
+      3: 'Stronger acquisition positioning',
+      4: 'Improved demand generation strategy',
+      5: 'Better field coordination potential',
+      10: 'Clearer growth path identified',
+      11: 'Operational leverage opportunity identified',
+      12: 'Acquisition upside identified',
+    }),
+    [],
+  );
+
+  const publicClientDescriptionOverrides = useMemo<Record<number, string>>(
+    () => ({
+      1: 'Independent restaurant in a high-traffic suburban market',
+      2: 'Restaurant team managing repeat customer and staff questions',
+      3: 'Specialty restaurant positioned in a strong urban corridor',
+      4: 'Established restaurant brand in a dense commercial district',
+      5: 'Trade-services operator coordinating field crews across jobsites',
+      10: 'Independent restaurant in a high-traffic suburban market',
+      11: 'Restaurant team managing repeat customer and staff questions',
+      12: 'Specialty restaurant positioned in a strong urban corridor',
+    }),
+    [],
+  );
+
+  const activeProtectedProject = activeProtectedPath ? protectedProjectMap[activeProtectedPath] : undefined;
 
   const renderFilterGroup = (
     label: string,
@@ -137,90 +184,118 @@ export default function Industries() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-        {filteredProjects.map((project, index) => (
-          (() => {
+          {filteredProjects.map((project, index) => {
             const protectedProject = protectedProjectMap[project.link];
             const accessLevel = protectedProject ? projectAccess[project.link] ?? 'locked' : 'profile';
             const isRevealed = !protectedProject || isProjectAccessGranted(accessLevel);
-            const displayTitle = isRevealed ? project.title : protectedProject.maskedTitle;
-            const displayClientDescription = isRevealed ? project.clientDescription : protectedProject.maskedClientDescription;
-            const displayDescription = isRevealed ? project.description : protectedProject.maskedDescription;
-            const displayImpact = isRevealed ? project.impact : protectedProject.maskedImpact;
-            const cardAriaLabel = isRevealed ? `View ${project.title}` : 'View confidential project';
+            const publicTitle = publicTitleOverrides[project.id] ?? project.title;
+            const displayTitle = isRevealed ? project.title : protectedProject?.maskedTitle ?? publicTitle;
+            const displayClientDescription = isRevealed
+              ? publicClientDescriptionOverrides[project.id] ?? project.clientDescription
+              : protectedProject?.maskedClientDescription ?? publicClientDescriptionOverrides[project.id] ?? 'General location context available on request';
+            const displayDescription = isRevealed
+              ? project.description
+              : protectedProject?.maskedDescription ?? 'Confidential project details remain hidden until access is verified.';
+            const displayImpact = isRevealed
+              ? publicImpactOverrides[project.id] ?? project.impact
+              : protectedProject?.maskedImpact ?? publicImpactOverrides[project.id] ?? 'General impact identified';
+            const cardAriaLabel = isRevealed ? `View ${project.title}` : 'Open project access options';
 
             return (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="relative group border border-neutral-200 p-8 hover:border-black transition-colors duration-300 flex flex-col justify-between min-h-[400px] bg-white origin-center"
-          >
-            {project.link && (
-              isExternalLink(project.link) ? (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="absolute inset-0 z-10"
-                  aria-label={cardAriaLabel}
-                />
-              ) : (
-                <Link to={project.link} className="absolute inset-0 z-10" aria-label={cardAriaLabel} />
-              )
-            )}
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative group flex min-h-[400px] origin-center flex-col justify-between border border-neutral-200 bg-white p-8 transition-colors duration-300 hover:border-black"
+              >
+                {project.link ? (
+                  isExternalLink(project.link) ? (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="absolute inset-0 z-10"
+                      aria-label={cardAriaLabel}
+                    />
+                  ) : protectedProject && !isRevealed ? (
+                    <button
+                      type="button"
+                      className="absolute inset-0 z-10"
+                      aria-label={cardAriaLabel}
+                      onClick={() => setActiveProtectedPath(project.link)}
+                    />
+                  ) : (
+                    <Link to={project.link} className="absolute inset-0 z-10" aria-label={cardAriaLabel} />
+                  )
+                ) : null}
 
-            <div>
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
-                  <span className="font-semibold text-neutral-900">{project.category}</span>
-                  <span className="text-neutral-300">•</span>
-                  <span>{project.projectType}</span>
-                  <span className="text-neutral-300">•</span>
-                  <span>{project.serviceType}</span>
-                </div>
-                <span className="border border-neutral-200 bg-neutral-50 px-2 py-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-600">
-                  {project.status}
-                </span>
-              </div>
-
-              <div className="mb-2 text-sm italic text-neutral-500">
-                {displayClientDescription}
-              </div>
-
-              <h3 className="text-2xl font-medium mb-4 text-neutral-900 group-hover:underline decoration-1 underline-offset-4 decoration-neutral-300">
-                {displayTitle}
-              </h3>
-
-              <p className="text-neutral-600 leading-relaxed mb-8 text-sm md:text-base">
-                {displayDescription}
-              </p>
-            </div>
-
-            <div className="pt-6 border-t border-neutral-100">
-              <div className="mb-4">
-                <span className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Impact</span>
-                <span className="text-lg font-medium text-neutral-900">{displayImpact}</span>
-              </div>
-
-                <div className="flex justify-between items-end">
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span key={tag} className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm">
-                        {tag}
-                      </span>
-                    ))}
+                <div>
+                  <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500">
+                      <span className="font-semibold text-neutral-900">{project.category}</span>
+                      <span className="text-neutral-300">•</span>
+                      <span>{project.projectType}</span>
+                      <span className="text-neutral-300">•</span>
+                      <span>{project.serviceType}</span>
+                    </div>
+                    <span className="border border-neutral-200 bg-neutral-50 px-2 py-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-600">
+                      {project.status}
+                    </span>
                   </div>
-                  <span className="text-xs text-neutral-400 font-mono">{project.date}</span>
+
+                  <div className="mb-2 text-sm italic text-neutral-500">
+                    {displayClientDescription}
+                  </div>
+
+                  <h3 className="mb-4 text-2xl font-medium text-neutral-900 group-hover:underline decoration-1 underline-offset-4 decoration-neutral-300">
+                    {displayTitle}
+                  </h3>
+
+                  <p className="mb-8 text-sm leading-relaxed text-neutral-600 md:text-base">
+                    {displayDescription}
+                  </p>
                 </div>
-              </div>
-          </motion.div>
+
+                <div className="border-t border-neutral-100 pt-6">
+                  <div className="mb-4">
+                    <span className="mb-1 block text-xs font-mono uppercase tracking-wider text-neutral-400">Impact</span>
+                    <span className="text-lg font-medium text-neutral-900">{displayImpact}</span>
+                  </div>
+
+                  <div className="flex items-end justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span key={tag} className="rounded-sm bg-neutral-50 px-2 py-1 text-xs text-neutral-500">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-xs font-mono text-neutral-400">{project.date}</span>
+                  </div>
+                </div>
+              </motion.div>
             );
-          })()
-        ))}
+          })}
         </div>
       )}
+
+      {activeProtectedProject ? (
+        <ProjectAccessPrompt
+          isOpen
+          path={activeProtectedProject.path}
+          title={activeProtectedProject.maskedTitle}
+          subtitle={activeProtectedProject.subtitle}
+          onClose={() => setActiveProtectedPath(null)}
+          onSuccess={(accessLevel) => {
+            const nextPath = activeProtectedProject.path;
+            setProjectAccess((current) => ({ ...current, [nextPath]: accessLevel }));
+            setActiveProtectedPath(null);
+            navigate(nextPath);
+          }}
+        />
+      ) : null}
     </section>
   );
 }

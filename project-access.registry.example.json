@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "path": "/example-client",
+      "title": "Example Client",
+      "passwordEnvVar": "PROJECT_PASSWORD_EXAMPLE_CLIENT",
+      "proposalEmails": [
+        "owner@example.com",
+        "ops@example.com"
+      ],
+      "authenticatedPages": [
+        "/example-client",
+        "/example-client-operations"
+      ],
+      "notes": "Store the real password only in .env.local, .env.project-passwords.local, or hosted environment variables."
+    }
+  ]
+}
