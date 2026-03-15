@@ -99,12 +99,28 @@ export async function submitProjectAccess(input: SubmitProjectAccessInput): Prom
     body: JSON.stringify(input),
   });
 
-  const payload = (await response.json().catch(() => ({}))) as { accessLevel?: ProjectAccessLevel; error?: string };
+  const raw = await response.text();
+  const payload = (() => {
+    if (!raw) {
+      return {} as { accessLevel?: ProjectAccessLevel; error?: string };
+    }
+
+    try {
+      return JSON.parse(raw) as { accessLevel?: ProjectAccessLevel; error?: string };
+    } catch {
+      return {} as { accessLevel?: ProjectAccessLevel; error?: string };
+    }
+  })();
+
+  const fallbackError =
+    input.method === 'proposal'
+      ? 'Unable to verify proposal access. Confirm the API route is reachable and the email is approved.'
+      : 'Unable to verify business profile access. Confirm the API route is reachable and the password is correct.';
 
   if (!response.ok) {
     return {
       accessLevel: 'locked',
-      error: payload.error || 'Unable to verify password.',
+      error: payload.error || fallbackError,
     };
   }
 
