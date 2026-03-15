@@ -1,7 +1,8 @@
 import { createHash } from 'node:crypto';
-import { config } from './config';
+import { config } from './config.js';
 
 const COOKIE_PREFIX = 'b2w_project_access_';
+export type ProjectAccessLevel = 'proposal' | 'profile';
 
 function toCookieSuffix(pathname: string): string {
   return pathname.replace(/[^a-z0-9]+/gi, '_').replace(/^_+|_+$/g, '').toLowerCase();
@@ -15,13 +16,23 @@ export function getProjectPassword(pathname: string): string {
   return config.projectAccess.passwords[pathname] ?? '';
 }
 
-export function createProjectAccessToken(pathname: string, password: string): string {
+export function getProjectProposalEmails(pathname: string): string[] {
+  return config.projectAccess.proposalEmails[pathname] ?? [];
+}
+
+function normalizeEmail(email: string): string {
+  return email.trim().toLowerCase();
+}
+
+export function createProjectAccessToken(pathname: string, accessLevel: ProjectAccessLevel, credential: string): string {
   return createHash('sha256')
     .update(config.projectAccess.secret)
     .update('::')
     .update(pathname)
     .update('::')
-    .update(password)
+    .update(accessLevel)
+    .update('::')
+    .update(credential)
     .digest('hex');
 }
 
@@ -45,22 +56,49 @@ export function parseCookies(req: any): Record<string, string> {
     }, {});
 }
 
-export function hasProjectAccess(req: any, pathname: string): boolean {
-  const password = getProjectPassword(pathname);
-
-  if (!password || !config.projectAccess.secret) {
-    return false;
-  }
-
+export function getProjectAccessLevel(req: any, pathname: string): ProjectAccessLevel | null {
   const cookies = parseCookies(req);
   const cookieName = getProjectAccessCookieName(pathname);
-  const expectedToken = createProjectAccessToken(pathname, password);
+  const cookieValue = cookies[cookieName];
+  const password = getProjectPassword(pathname);
+  const proposalEmails = getProjectProposalEmails(pathname);
 
-  return cookies[cookieName] === expectedToken;
+  if (!cookieValue || !config.projectAccess.secret) {
+    return null;
+  }
+
+  if (password) {
+    const expectedProfileToken = createProjectAccessToken(pathname, 'profile', password);
+    if (cookieValue === expectedProfileToken) {
+      return 'profile';
+    }
+  }
+
+  if (proposalEmails.length > 0) {
+    for (const email of proposalEmails) {
+      const expectedProposalToken = createProjectAccessToken(pathname, 'proposal', normalizeEmail(email));
+      if (cookieValue === expectedProposalToken) {
+        return 'proposal';
+      }
+    }
+  }
+
+  return null;
 }
 
-export function setProjectAccessCookie(res: any, pathname: string, password: string): void {
-  const token = createProjectAccessToken(pathname, password);
+export function hasProjectAccess(req: any, pathname: string): boolean {
+  return getProjectAccessLevel(req, pathname) !== null;
+}
+
+export function isAllowedProposalEmail(pathname: string, email: string): boolean {
+  const normalizedEmail = normalizeEmail(email);
+
+  return getProjectProposalEmails(pathname).some((allowedEmail) => normalizeEmail(allowedEmail) === normalizedEmail);
+}
+
+export function setProjectAccessCookie(res: any, pathname: string, accessLevel: ProjectAccessLevel, credential: string): void {
+  const normalizedCredential = accessLevel === 'proposal' ? normalizeEmail(credential) : credential;
+  const token = createProjectAccessToken(pathname, accessLevel, normalizedCredential);
   const cookieName = getProjectAccessCookieName(pathname);
   const isSecure = process.env.NODE_ENV === 'production';
 

@@ -1,6 +1,6 @@
-import { buildKnowledgeContext } from './_lib/corpus';
-import { allowMethods, readJsonBody, sendJson } from './_lib/http';
-import { chatWithOllama } from './_lib/ollama';
+import { buildKnowledgeContext } from './_lib/corpus.js';
+import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
+import { chatWithOllama } from './_lib/ollama.js';
 
 type IncomingMessage = {
   role: 'user' | 'assistant';

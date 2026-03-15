@@ -1,5 +1,5 @@
-import { createBooking } from '../_lib/google';
-import { allowMethods, readJsonBody, sendJson } from '../_lib/http';
+import { createBooking } from '../_lib/google.js';
+import { allowMethods, readJsonBody, sendJson } from '../_lib/http.js';
 
 type BookingRequest = {
   name?: string;

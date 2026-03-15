@@ -67,6 +67,11 @@ export const config = {
       '/borek-g-operations': getEnv('PROJECT_PASSWORD_BOREK_G_OPERATIONS'),
       '/uyghur-eats': getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
     } satisfies Record<string, string>,
+    proposalEmails: {
+      '/borek-g': unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G'))),
+      '/borek-g-operations': unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_BOREK_G_OPERATIONS'))),
+      '/uyghur-eats': unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_UYGHUR_EATS'))),
+    } satisfies Record<string, string[]>,
   },
 };
 

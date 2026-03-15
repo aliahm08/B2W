@@ -54,11 +54,11 @@ function LandingPage() {
       <section id="industries">
         <Industries />
       </section>
-      <section id="team">
-        <Team />
-      </section>
       <section id="process">
         <OurProcess />
+      </section>
+      <section id="team">
+        <Team />
       </section>
       <section id="contact">
         <CTA />

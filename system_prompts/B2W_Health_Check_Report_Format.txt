@@ -1,0 +1,22 @@
+Document 2: The B2W Health Check Report (Format)
+Goal: The standard presentation delivered to the owner.
+
+I. Executive Summary
+*   The "One-Liner": The business's current status in 15 words.
+*   The Scorecard:
+    *   Marketing Score: 0-100 (Based on digital presence/conversion)
+    *   Operations Score: 0-100 (Based on efficiency/service)
+    *   Financial Health Score: 0-100 (Based on revenue estimation/overhead)
+
+II. Deep Dives
+*   Marketing Deep Dive: Summary of current assets vs. missed opportunities.
+*   Operations Deep Dive: Bottlenecks identified (e.g., slow service, inventory issues).
+*   Financial Deep Dive: Key areas of revenue leakage or cost inefficiencies.
+
+III. The "Internal Data" Layer
+*   (This section is only populated if the owner grants access to POS/Analytics).
+*   Data Correlation: Connecting public review sentiment (e.g., "Food is cold") to internal data (e.g., POS timestamps showing long prep-to-table lag).
+
+IV. B2W Roadmap
+*   Immediate Wins: Low-hanging fruit to fix in 30 days.
+*   Strategic Initiatives: 90-day plan.

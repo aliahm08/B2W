@@ -2,7 +2,7 @@ import { FormEvent, PointerEvent as ReactPointerEvent, useEffect, useMemo, useRe
 import { AnimatePresence, motion } from 'motion/react';
 import { PenSquare, ReceiptText, Send, X, ArrowRight } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { fetchProjectAccessStatus, getProtectedProject } from '../content/projectAccess';
+import { fetchProjectAccessStatus, getProtectedProject, isProjectAccessGranted, type ProjectAccessLevel } from '../content/projectAccess';
 
 type ProposalOption = 'option-one' | 'option-two' | 'option-three';
 
@@ -168,19 +168,19 @@ export default function AssistantWidget() {
         return;
       }
 
-      const unlocked = await fetchProjectAccessStatus(pathname);
+      const accessLevel = await fetchProjectAccessStatus(pathname);
       if (isActive) {
-        setIsProjectUnlocked(unlocked);
+        setIsProjectUnlocked(isProjectAccessGranted(accessLevel));
       }
     };
 
     void checkAccess();
 
     function handleAccessChange(event: Event) {
-      const detail = (event as CustomEvent<{ path?: string; unlocked?: boolean }>).detail;
+      const detail = (event as CustomEvent<{ path?: string; accessLevel?: ProjectAccessLevel }>).detail;
 
       if (detail?.path === pathname) {
-        setIsProjectUnlocked(Boolean(detail.unlocked));
+        setIsProjectUnlocked(isProjectAccessGranted(detail.accessLevel ?? 'locked'));
         return;
       }
 

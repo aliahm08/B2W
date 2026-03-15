@@ -1,6 +1,6 @@
-import { getAvailability, isGoogleBookingConfigured } from '../_lib/google';
-import { allowMethods, sendJson } from '../_lib/http';
-import { config } from '../_lib/config';
+import { getAvailability, isGoogleBookingConfigured } from '../_lib/google.js';
+import { allowMethods, sendJson } from '../_lib/http.js';
+import { config } from '../_lib/config.js';
 
 export default async function handler(req: any, res: any) {
   if (!allowMethods(req, res, ['GET'])) {

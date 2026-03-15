@@ -1,0 +1,19 @@
+Document 1: SMB Intelligence Gathering & Analysis Guideline
+Goal: Assess a business using only public data to identify "pain points" before the first meeting.
+
+1. Marketing Intelligence (The Face)
+*   Presence Audit: Do they have active social media? (Check Instagram post frequency, TikTok trends).
+*   Reputation Management: Analyze Google Maps/Yelp. Look for specific complaints about service or food consistency. Identify the ratio of positive to negative reviews.
+*   Digital Experience: Is their website functional? Is it mobile-friendly? Do they have online ordering? (If not, that's an immediate pain point).
+*   Publicity/Buzz: Search local blogs, news outlets, and "best of" lists. If they aren't being mentioned, their brand equity is low.
+
+2. Operations Intelligence (The Engine)
+*   Location Analysis: Use Google Maps traffic/foot traffic density.
+*   Menu/Offering Strategy: How complex is the menu? (High complexity = high food waste). Are prices competitive compared to the neighborhood?
+*   Customer Sentiment on Ops: Search reviews for keywords like "slow service," "long wait times," "confusing layout," or "rude staff."
+
+3. Financial Estimation (The Bottom Line)
+*   Volume Proxy: Use review frequency on Google/Yelp to estimate monthly customer traffic.
+*   AOV (Average Order Value) Estimation: Build a menu price average to estimate the ticket size.
+*   Back-of-Napkin Revenue: Daily Volume x AOV x 30 days = Estimated Monthly Revenue.
+*   Overhead Inference: Estimate rent based on location (Zip code/commercial rates) and staff size based on service intensity.

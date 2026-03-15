@@ -1,5 +1,5 @@
 import { GoogleAuth } from 'google-auth-library';
-import { config, isAllowedCalendar, isAllowedDriveFile, isAllowedDriveFolder } from './config';
+import { config, isAllowedCalendar, isAllowedDriveFile, isAllowedDriveFolder } from './config.js';
 
 type DriveDocument = {
   id: string;

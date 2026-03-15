@@ -1,0 +1,36 @@
+Document 4: B2W Strategy Alignment Protocol
+Goal: Ensure every new page, section, project, or capability maps directly to B2W's consulting model.
+
+Core Rule
+Before proposing or building anything new, map it to:
+1. The intelligence inputs defined in Document 1.
+2. The report structure defined in Document 2.
+3. The monetizable service line defined in Document 3.
+
+Required Alignment Check
+Every scoped initiative should answer the following:
+*   Which business pillar does it support: Marketing, Operations, Financials, or a combination?
+*   Which stage does it serve: intelligence gathering, health check delivery, roadmap execution, or ongoing consulting?
+*   Which proposal does it strengthen: Audit, Growth Engine, Operational Transformation, or Financial & M&A Advisory?
+*   Which owner pain point does it reduce: weak presence, poor reputation, low conversion, slow service, revenue leakage, cost inefficiency, expansion readiness, or valuation readiness?
+*   Which measurable outcome does it improve?
+
+Page and Section Rules
+*   New marketing pages should connect to public-data pain points and the Growth Engine offer.
+*   New audit or report sections should fit the Health Check structure unless there is a clear reason to evolve the report format.
+*   New operations-focused sections should tie visible business friction to roadmap actions and expected margin or satisfaction improvements.
+*   New finance or diligence sections should support valuation, diligence readiness, expansion modeling, or transaction readiness.
+
+Capability Rules
+*   New capabilities should either improve data collection, sharpen diagnosis, clarify recommendations, or increase conversion into a paid proposal.
+*   Avoid capabilities that are interesting but not attached to a deliverable, metric, or proposal tier.
+*   When a capability spans multiple offers, define the primary offer first and the secondary downstream benefits second.
+
+Proposal Design Rules
+*   Prefer productized language before custom language.
+*   Show the sequence from Audit to recurring engagement wherever appropriate.
+*   Tie recommendations to business outcomes, not generic marketing or operations activity.
+*   Keep SMB owners as the target audience: direct, diagnostic, financially grounded, and outcome-oriented.
+
+Execution Output Rule
+When presenting strategy or build work, include a short alignment note that cites the specific system prompt documents used and explains how the proposed work supports the B2W model.

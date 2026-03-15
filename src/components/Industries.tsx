@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { projectPipelineContent } from '../content/projectPipeline';
+import { fetchProjectAccessStatus, isProjectAccessGranted, protectedProjects, type ProjectAccessLevel } from '../content/projectAccess';
 
 function isExternalLink(value: string): boolean {
   return /^https?:\/\//.test(value);
@@ -11,6 +12,7 @@ export default function Industries() {
   const { projects } = projectPipelineContent;
   const [selectedBusinessType, setSelectedBusinessType] = useState('All');
   const [selectedProjectType, setSelectedProjectType] = useState('All');
+  const [projectAccess, setProjectAccess] = useState<Record<string, ProjectAccessLevel>>({});
 
   const businessTypes = useMemo(
     () => ['All', ...Array.from(new Set(projects.map((project) => project.category)))],
@@ -29,6 +31,42 @@ export default function Industries() {
       return matchesBusinessType && matchesProjectType;
     }),
     [projects, selectedBusinessType, selectedProjectType],
+  );
+
+  useEffect(() => {
+    let isActive = true;
+
+    const checkAccess = async () => {
+      const accessEntries = await Promise.all(
+        protectedProjects.map(async (project) => [project.path, await fetchProjectAccessStatus(project.path)] as const),
+      );
+
+      if (!isActive) {
+        return;
+      }
+
+      setProjectAccess(Object.fromEntries(accessEntries));
+    };
+
+    void checkAccess();
+
+    const handleAccessChange = () => {
+      void checkAccess();
+    };
+
+    window.addEventListener('b2w-project-access-change', handleAccessChange as EventListener);
+    window.addEventListener('storage', handleAccessChange);
+
+    return () => {
+      isActive = false;
+      window.removeEventListener('b2w-project-access-change', handleAccessChange as EventListener);
+      window.removeEventListener('storage', handleAccessChange);
+    };
+  }, []);
+
+  const protectedProjectMap = useMemo(
+    () => Object.fromEntries(protectedProjects.map((project) => [project.path, project])),
+    [],
   );
 
   const renderFilterGroup = (
@@ -100,6 +138,17 @@ export default function Industries() {
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {filteredProjects.map((project, index) => (
+          (() => {
+            const protectedProject = protectedProjectMap[project.link];
+            const accessLevel = protectedProject ? projectAccess[project.link] ?? 'locked' : 'profile';
+            const isRevealed = !protectedProject || isProjectAccessGranted(accessLevel);
+            const displayTitle = isRevealed ? project.title : protectedProject.maskedTitle;
+            const displayClientDescription = isRevealed ? project.clientDescription : protectedProject.maskedClientDescription;
+            const displayDescription = isRevealed ? project.description : protectedProject.maskedDescription;
+            const displayImpact = isRevealed ? project.impact : protectedProject.maskedImpact;
+            const cardAriaLabel = isRevealed ? `View ${project.title}` : 'View confidential project';
+
+            return (
           <motion.div
             key={project.id}
             initial={{ opacity: 0, y: 20 }}
@@ -115,10 +164,10 @@ export default function Industries() {
                   target="_blank"
                   rel="noreferrer"
                   className="absolute inset-0 z-10"
-                  aria-label={`View ${project.title}`}
+                  aria-label={cardAriaLabel}
                 />
               ) : (
-                <Link to={project.link} className="absolute inset-0 z-10" aria-label={`View ${project.title}`} />
+                <Link to={project.link} className="absolute inset-0 z-10" aria-label={cardAriaLabel} />
               )
             )}
 
@@ -136,23 +185,23 @@ export default function Industries() {
                 </span>
               </div>
 
-              <div className="text-sm text-neutral-500 italic mb-2">
-                {project.clientDescription}
+              <div className="mb-2 text-sm italic text-neutral-500">
+                {displayClientDescription}
               </div>
 
               <h3 className="text-2xl font-medium mb-4 text-neutral-900 group-hover:underline decoration-1 underline-offset-4 decoration-neutral-300">
-                {project.title}
+                {displayTitle}
               </h3>
 
               <p className="text-neutral-600 leading-relaxed mb-8 text-sm md:text-base">
-                {project.description}
+                {displayDescription}
               </p>
             </div>
 
             <div className="pt-6 border-t border-neutral-100">
               <div className="mb-4">
                 <span className="block text-xs font-mono uppercase tracking-wider text-neutral-400 mb-1">Impact</span>
-                <span className="text-lg font-medium text-neutral-900">{project.impact}</span>
+                <span className="text-lg font-medium text-neutral-900">{displayImpact}</span>
               </div>
 
                 <div className="flex justify-between items-end">
@@ -167,6 +216,8 @@ export default function Industries() {
                 </div>
               </div>
           </motion.div>
+            );
+          })()
         ))}
         </div>
       )}

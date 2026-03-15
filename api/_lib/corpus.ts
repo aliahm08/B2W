@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { config, resolveRelativePath } from './config';
+import { config, resolveRelativePath } from './config.js';
 
 type KnowledgeDocument = {
   id: string;
