@@ -16,14 +16,27 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Consulting",
       "serviceType": "Social Media Management",
       "status": "Proposed",
-      "clientDescription": "Borek-G in Falls Church, VA",
-      "title": "Borek-G Marketing Profile",
-      "description": "Borek-G profile focused on marketing, packaged as social media management. Based in Falls Church, VA. Current value is modeled from $250,000 toward $500,000.",
-      "impact": "Modeled 100% increase in sales",
+      "clientDescription": "Independent restaurant in a high-traffic suburban market",
+      "title": "Neighborhood Restaurant Marketing Profile",
+      "description": "Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.",
+      "impact": "Clearer digital demand capture plan",
       "tags": [
-        "Profile",
-        "Marketing",
-        "Social Media Management"
+        {
+          "label": "Profile",
+          "tier": 1
+        },
+        {
+          "label": "Instagram",
+          "tier": 2
+        },
+        {
+          "label": "SEO",
+          "tier": 3
+        },
+        {
+          "label": "Web Design",
+          "tier": 3
+        }
       ],
       "date": "January 2026",
       "link": "/borek-g"
@@ -34,17 +47,27 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Custom Solution",
       "serviceType": "Chatbot",
       "status": "Proposed",
-      "clientDescription": "Borek-G in Falls Church, VA",
-      "title": "Borek-G Operations Prototype",
-      "description": "Borek-G prototype focused on operations, packaged as Chatbot. Based in Falls Church, VA. Current value is modeled from $250,000 toward $500,000.",
-      "impact": "Modeled 100% increase in response capacity",
+      "clientDescription": "Independent restaurant team with recurring frontline questions",
+      "title": "Frontline Operations Copilot Prototype",
+      "description": "Operations proposal focused on repetitive question handling, workflow consistency, escalation rules, and staff-support coverage.",
+      "impact": "Faster frontline response flow",
       "tags": [
-        "Prototype",
-        "Operations",
-        "Chatbot",
-        "ClawdBot",
-        "SMS Integration",
-        "AI Chatbot"
+        {
+          "label": "Prototype",
+          "tier": 1
+        },
+        {
+          "label": "Operations",
+          "tier": 2
+        },
+        {
+          "label": "Chatbot",
+          "tier": 3
+        },
+        {
+          "label": "Workflow Design",
+          "tier": 3
+        }
       ],
       "date": "March 2026",
       "link": "/borek-g-operations"
@@ -55,17 +78,27 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Consulting",
       "serviceType": "Property Sale",
       "status": "Proposed",
-      "clientDescription": "Uyghur Eats in Washington, DC",
-      "title": "Uyghur Eats Finance Profile",
-      "description": "Uyghur Eats profile focused on finance, packaged as property sale. Based in Washington, DC. Current value is modeled from $150,000 toward $450,000.",
-      "impact": "Modeled 200% increase in sale value",
+      "clientDescription": "Specialty restaurant positioned in a strong urban corridor",
+      "title": "Acquisition Readiness and Valuation Profile",
+      "description": "Business profile focused on acquisition readiness, location quality, market position, and differentiated demand drivers.",
+      "impact": "Stronger acquisition positioning",
       "tags": [
-        "Profile",
-        "Finance",
-        "Property Sale",
-        "M&A",
-        "Property Valuation",
-        "Market Analysis"
+        {
+          "label": "Profile",
+          "tier": 1
+        },
+        {
+          "label": "Location",
+          "tier": 2
+        },
+        {
+          "label": "Valuation",
+          "tier": 3
+        },
+        {
+          "label": "Acquisition",
+          "tier": 3
+        }
       ],
       "date": "March 2026",
       "link": "/uyghur-eats"
@@ -76,14 +109,23 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Consulting",
       "serviceType": "Social Media Management",
       "status": "Proposed",
-      "clientDescription": "Caravan Uyghur in Wall Street, NY",
-      "title": "Caravan Uyghur Marketing Profile",
-      "description": "Caravan Uyghur profile focused on marketing, packaged as social media management. Based in Wall Street, NY. Current value is modeled from $500,000 toward $1,000,000.",
-      "impact": "Modeled 100% increase in sales",
+      "clientDescription": "Independent restaurant in a high-traffic suburban market",
+      "title": "Neighborhood Restaurant Marketing Profile",
+      "description": "Restaurant marketing profile covering public reputation, social opportunity, search visibility, and website conversion opportunities.",
+      "impact": "Clearer digital demand capture plan",
       "tags": [
-        "Profile",
-        "Marketing",
-        "Social Media Management"
+        {
+          "label": "Profile",
+          "tier": 1
+        },
+        {
+          "label": "Marketing",
+          "tier": 2
+        },
+        {
+          "label": "Social Media Management",
+          "tier": 3
+        }
       ],
       "date": "March 2026",
       "link": ""
@@ -94,17 +136,35 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Custom Solution",
       "serviceType": "Mobile Chatbot Assistant",
       "status": "Proposed",
-      "clientDescription": "Sabucni in Fairfax, VA",
-      "title": "Sabucni Operations Prototype",
-      "description": "Sabucni prototype focused on operations, packaged as mobile chatbot assistant. Based in Fairfax, VA. Current value is modeled from $500,000 toward $5,000,000.",
-      "impact": "Modeled 900% increase in field coordination capacity",
+      "clientDescription": "Trade-services operator coordinating field crews across jobsites",
+      "title": "Field Coordination Assistant Prototype",
+      "description": "Operations proposal focused on repetitive question handling, workflow consistency, escalation rules, and support coverage.",
+      "impact": "Better field coordination potential",
       "tags": [
-        "Prototype",
-        "Operations",
-        "Mobile Chatbot Assistant",
-        "ClawdBot",
-        "SMS Integration",
-        "Analytics Dashboard"
+        {
+          "label": "Prototype",
+          "tier": 1
+        },
+        {
+          "label": "Operations",
+          "tier": 2
+        },
+        {
+          "label": "Mobile Chatbot Assistant",
+          "tier": 3
+        },
+        {
+          "label": "ClawdBot",
+          "tier": 3
+        },
+        {
+          "label": "SMS Integration",
+          "tier": 3
+        },
+        {
+          "label": "Analytics Dashboard",
+          "tier": 3
+        }
       ],
       "date": "January 2026",
       "link": ""

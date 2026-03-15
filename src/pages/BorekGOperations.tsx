@@ -1,9 +1,11 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Bot, Clock3, MessageSquare, Settings2, Store, Wrench } from 'lucide-react';
+import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import MobileSectionNav from '../components/MobileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
+import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -33,6 +35,7 @@ const launchPlan = [
         body: 'Measure deflection, response speed, unresolved questions, and handoff quality to improve the system after launch.'
     }
 ];
+const showcase = projectShowcaseOverridesByPath['/borek-g-operations'];
 
 export default function BorekGOperations() {
     return (
@@ -73,15 +76,9 @@ export default function BorekGOperations() {
                             </p>
 
                             <div className="flex flex-wrap gap-2">
-                                <span className="rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-1 text-xs text-neutral-500">
-                                    Operations Chatbot
-                                </span>
-                                <span className="rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-1 text-xs text-neutral-500">
-                                    Workflow Design
-                                </span>
-                                <span className="rounded-sm border border-neutral-200 bg-neutral-50 px-2 py-1 text-xs text-neutral-500">
-                                    Proposal
-                                </span>
+                                {showcase.tags.map((tag) => (
+                                    <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
+                                ))}
                             </div>
                         </div>
 

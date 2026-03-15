@@ -40,11 +40,14 @@ Allowed:
 - Mission statement
 - Three audience pillars
 - Neutral functional labels
+- Generalized proposal-state homepage card copy that describes the work without naming the client or exposing exact location details
+- Monochrome tiered tag treatments when tags are sourced from proposal/profile materials
 
 Not allowed:
 - Fabricated metrics or outcomes
 - Fake dashboards or fake logs
 - Unsupported implementation claims
+- Proposal-state homepage cards that reveal business names, exact addresses, or other PII before access is granted
 
 ## 6. CTA and Navigation Rules
 

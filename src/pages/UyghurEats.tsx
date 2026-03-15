@@ -2,9 +2,11 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
+import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import MobileSectionNav from '../components/MobileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
+import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -14,6 +16,7 @@ import {
 } from '../components/projectPageLayout';
 
 export default function UyghurEats() {
+    const showcase = projectShowcaseOverridesByPath['/uyghur-eats'];
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
 
@@ -127,15 +130,9 @@ export default function UyghurEats() {
                             </p>
 
                             <div className="flex flex-wrap gap-2">
-                                <span className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm border border-neutral-200">
-                                    Real Estate Profile
-                                </span>
-                                <span className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm border border-neutral-200">
-                                    Location Value
-                                </span>
-                                <span className="text-xs text-neutral-500 bg-neutral-50 px-2 py-1 rounded-sm border border-neutral-200">
-                                    Market Positioning
-                                </span>
+                                {showcase.tags.map((tag) => (
+                                    <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
+                                ))}
                             </div>
                         </div>
 

@@ -11,6 +11,7 @@ coverage/
 .playwright-cli/
 index-projects.xlsx
 project-access.registry.local.json
+project-access-registry.local.xlsx
 
 # Case studies
 src/content/case-studies/**/*.md

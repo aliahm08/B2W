@@ -13,7 +13,9 @@ import {
 } from 'lucide-react';
 import Seo from '../components/Seo';
 import MobileSectionNav from '../components/MobileSectionNav';
+import ProjectTagPill from '../components/ProjectTagPill';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
+import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -23,6 +25,7 @@ import {
 } from '../components/projectPageLayout';
 
 const snapshotDate = 'March 13, 2026';
+const showcase = projectShowcaseOverridesByPath['/borek-g'];
 
 const scorecards = [
     {
@@ -235,15 +238,9 @@ export default function BorekG() {
                                 </p>
 
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="rounded-sm border border-white/15 bg-white/5 px-2 py-1 text-xs text-neutral-300">
-                                        Marketing Profile
-                                    </span>
-                                    <span className="rounded-sm border border-white/15 bg-white/5 px-2 py-1 text-xs text-neutral-300">
-                                        Social Media Audit
-                                    </span>
-                                    <span className="rounded-sm border border-white/15 bg-white/5 px-2 py-1 text-xs text-neutral-300">
-                                        Instagram Content Analytics
-                                    </span>
+                                    {showcase.tags.map((tag) => (
+                                        <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} tone="dark" />
+                                    ))}
                                 </div>
                             </div>
 

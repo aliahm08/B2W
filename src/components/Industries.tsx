@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ProjectAccessPrompt from './ProjectAccessPrompt';
+import ProjectTagPill from './ProjectTagPill';
 import { projectPipelineContent } from '../content/projectPipeline';
 import { fetchProjectAccessStatus, isProjectAccessGranted, protectedProjects, type ProjectAccessLevel } from '../content/projectAccess';
 
@@ -69,48 +70,6 @@ export default function Industries() {
 
   const protectedProjectMap = useMemo(
     () => Object.fromEntries(protectedProjects.map((project) => [project.path, project])),
-    [],
-  );
-
-  const publicTitleOverrides = useMemo<Record<number, string>>(
-    () => ({
-      1: 'Neighborhood Restaurant Growth Blueprint',
-      2: 'Frontline Operations Copilot Prototype',
-      3: 'Acquisition Readiness and Valuation Profile',
-      4: 'Restaurant Demand Generation Strategy',
-      5: 'Field Coordination Assistant Prototype',
-      10: 'Restaurant Growth Proposal and Audit',
-      11: 'Operations Chatbot Rollout Proposal',
-      12: 'Acquisition Strategy and Business Profile',
-    }),
-    [],
-  );
-
-  const publicImpactOverrides = useMemo<Record<number, string>>(
-    () => ({
-      1: 'Clearer local growth path',
-      2: 'Faster frontline response flow',
-      3: 'Stronger acquisition positioning',
-      4: 'Improved demand generation strategy',
-      5: 'Better field coordination potential',
-      10: 'Clearer growth path identified',
-      11: 'Operational leverage opportunity identified',
-      12: 'Acquisition upside identified',
-    }),
-    [],
-  );
-
-  const publicClientDescriptionOverrides = useMemo<Record<number, string>>(
-    () => ({
-      1: 'Independent restaurant in a high-traffic suburban market',
-      2: 'Restaurant team managing repeat customer and staff questions',
-      3: 'Specialty restaurant positioned in a strong urban corridor',
-      4: 'Established restaurant brand in a dense commercial district',
-      5: 'Trade-services operator coordinating field crews across jobsites',
-      10: 'Independent restaurant in a high-traffic suburban market',
-      11: 'Restaurant team managing repeat customer and staff questions',
-      12: 'Specialty restaurant positioned in a strong urban corridor',
-    }),
     [],
   );
 
@@ -188,17 +147,10 @@ export default function Industries() {
             const protectedProject = protectedProjectMap[project.link];
             const accessLevel = protectedProject ? projectAccess[project.link] ?? 'locked' : 'profile';
             const isRevealed = !protectedProject || isProjectAccessGranted(accessLevel);
-            const publicTitle = publicTitleOverrides[project.id] ?? project.title;
-            const displayTitle = isRevealed ? project.title : protectedProject?.maskedTitle ?? publicTitle;
-            const displayClientDescription = isRevealed
-              ? publicClientDescriptionOverrides[project.id] ?? project.clientDescription
-              : protectedProject?.maskedClientDescription ?? publicClientDescriptionOverrides[project.id] ?? 'General location context available on request';
-            const displayDescription = isRevealed
-              ? project.description
-              : protectedProject?.maskedDescription ?? 'Confidential project details remain hidden until access is verified.';
-            const displayImpact = isRevealed
-              ? publicImpactOverrides[project.id] ?? project.impact
-              : protectedProject?.maskedImpact ?? publicImpactOverrides[project.id] ?? 'General impact identified';
+            const displayTitle = project.title;
+            const displayClientDescription = project.clientDescription;
+            const displayDescription = project.description;
+            const displayImpact = project.impact;
             const cardAriaLabel = isRevealed ? `View ${project.title}` : 'Open project access options';
 
             return (
@@ -267,9 +219,7 @@ export default function Industries() {
                   <div className="flex items-end justify-between">
                     <div className="flex flex-wrap gap-2">
                       {project.tags.map((tag) => (
-                        <span key={tag} className="rounded-sm bg-neutral-50 px-2 py-1 text-xs text-neutral-500">
-                          {tag}
-                        </span>
+                        <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
                       ))}
                     </div>
                     <span className="text-xs font-mono text-neutral-400">{project.date}</span>
