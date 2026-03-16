@@ -249,6 +249,13 @@ export const config = {
     scopes: projectAccessScopes,
     paths: projectAccessPathLookup,
   },
+  proposalSigning: {
+    secret: getEnv('PROPOSAL_SIGNING_SECRET', getEnv('PROJECT_ACCESS_SECRET')),
+    resendApiKey: getEnv('RESEND_API_KEY'),
+    fromEmail: getEnv('PROPOSAL_SIGNING_FROM_EMAIL'),
+    internalRecipient: getEnv('PROPOSAL_SIGNING_INTERNAL_EMAIL', 'info@b2w-ai.com'),
+    driveFolderId: getEnv('GOOGLE_DRIVE_SIGNED_PROPOSALS_FOLDER_ID'),
+  },
 };
 
 export function isAllowedCalendar(calendarId: string): boolean {

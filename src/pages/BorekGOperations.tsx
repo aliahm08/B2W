@@ -5,7 +5,9 @@ import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
+import ProposalAcceptanceSection from '../components/ProposalAcceptanceSection';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
+import { getProposalContent } from '../content/proposals';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -36,13 +38,16 @@ const launchPlan = [
     }
 ];
 const showcase = projectShowcaseOverridesByPath['/borek-g-operations'];
+const proposal = getProposalContent('/borek-g-operations');
 const sectionItems = [
     { id: 'role', label: 'System Role' },
     { id: 'use-cases', label: 'Core Use Cases' },
     { id: 'rollout', label: 'Proposed Rollout' },
+    { id: 'scope-options', label: 'Scope Options' },
+    { id: 'terms', label: 'Terms' },
     { id: 'handles', label: 'What It Handles' },
     { id: 'benefits', label: 'Expected Benefits' },
-    { id: 'next-step', label: 'Next Step' },
+    { id: 'proposal-signature', label: 'Sign' },
 ];
 
 export default function BorekGOperations() {
@@ -165,6 +170,77 @@ export default function BorekGOperations() {
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
+                            id="scope-options"
+                            title={proposal?.scopeHeading ?? 'Scope Options'}
+                            icon={Wrench}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
+                                <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
+                                    {proposal?.scopeIntro}
+                                </p>
+                                <div className="grid gap-4">
+                                    {proposal?.options.map((option) => (
+                                        <article key={option.id} className="rounded-[1.5rem] border border-neutral-200 bg-white p-5">
+                                            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                                <div className="max-w-2xl">
+                                                    <p className="text-lg font-medium text-black">{option.title}</p>
+                                                    <p className="mt-2 text-sm leading-6 text-neutral-600">{option.summary}</p>
+                                                </div>
+                                                <div className="grid gap-2 text-sm md:min-w-56">
+                                                    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+                                                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Price</p>
+                                                        <p className="mt-1 font-medium text-black">{option.price}</p>
+                                                    </div>
+                                                    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+                                                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Timeline</p>
+                                                        <p className="mt-1 font-medium text-black">{option.timeline}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-neutral-600">
+                                                {option.offerings.map((offering) => <li key={offering}>{offering}</li>)}
+                                            </ul>
+                                        </article>
+                                    ))}
+                                </div>
+                            </div>
+                        </ResponsiveAccordionSection>
+
+                        <ResponsiveAccordionSection
+                            id="terms"
+                            title="Key Terms and Assumptions"
+                            icon={Clock3}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="grid gap-6 md:grid-cols-2">
+                                <div>
+                                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Key Terms</p>
+                                    <ol className="mt-4 space-y-3 text-sm leading-6 text-neutral-600">
+                                        {proposal?.terms.map((term, index) => (
+                                            <li key={term} className="flex gap-3">
+                                                <span className="font-medium text-black">{index + 1}.</span>
+                                                <span>{term}</span>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                </div>
+                                <div>
+                                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Assumptions</p>
+                                    <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-600">
+                                        {proposal?.assumptions.map((assumption) => <li key={assumption}>{assumption}</li>)}
+                                    </ul>
+                                </div>
+                            </div>
+                        </ResponsiveAccordionSection>
+
+                        <ResponsiveAccordionSection
                             id="rollout"
                             title="Proposed Rollout"
                             icon={Settings2}
@@ -215,19 +291,7 @@ export default function BorekGOperations() {
                             </div>
                         </ResponsiveAccordionSection>
 
-                        <ResponsiveAccordionSection
-                            id="next-step"
-                            title="Next Step"
-                            icon={Wrench}
-                            className="border border-neutral-200"
-                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
-                            bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
-                            titleClassName="md:text-xl"
-                        >
-                            <div data-project-detail-body>
-                                Confirm the training sources: menus, hours, catering policies, staff SOPs, pickup rules, and escalation contacts. That operating corpus defines the first useful version.
-                            </div>
-                        </ResponsiveAccordionSection>
+                        {proposal ? <ProposalAcceptanceSection pathname="/borek-g-operations" proposal={proposal} /> : null}
                     </aside>
                 </main>
             </motion.div>
