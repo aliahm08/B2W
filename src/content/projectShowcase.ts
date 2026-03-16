@@ -46,15 +46,15 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
     ],
   },
   '/uyghur-eats-acquisition': {
-    publicTitle: 'Restaurant Acquisition Proposal',
-    publicClientDescription: 'Specialty restaurant with differentiated cuisine and buyer-readiness upside',
-    publicDescription: 'Acquisition advisory proposal covering business packaging, diligence, buyer materials, and transaction-readiness support.',
-    publicImpact: 'Cleaner acquisition process',
+    publicTitle: 'Restaurant Property Sale Proposal',
+    publicClientDescription: 'Restaurant property sale opportunity with diligence-led buyer packaging',
+    publicDescription: 'Email-protected proposal covering the diligence-as-a-service model, buyer certainty package, and property sale rollout.',
+    publicImpact: 'Controlled sale process defined',
     tags: [
       { label: 'Proposal', tier: 1 },
-      { label: 'Acquisition', tier: 2 },
+      { label: 'Property Sale', tier: 2 },
       { label: 'Diligence', tier: 3 },
-      { label: 'Valuation', tier: 3 },
+      { label: 'Buyer Package', tier: 3 },
     ],
   },
 };

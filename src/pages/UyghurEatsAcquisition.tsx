@@ -18,29 +18,29 @@ import {
 } from '../components/projectPageLayout';
 
 const businessOverview = [
-  'Uyghur Eats operates in a strong Washington, DC corridor with affluent neighborhood traffic and established restaurant demand.',
-  'The concept is differentiated by authentic Uyghur cuisine, hand-pulled noodles, and a niche category with limited direct competition nearby.',
-  'The acquisition opportunity is strongest when the business is packaged around verified fundamentals, not just story or cuisine novelty.',
+  'Uyghur Eats is a property-sale opportunity built around a differentiated restaurant concept in a strong Washington, DC corridor.',
+  'The sale case is strongest when the business is translated into a buyer-ready Analysis Profile rather than an owner narrative.',
+  'B2W is proposing a diligence-as-a-service model that earns on packaging, certainty, and follow-on diligence work.',
 ];
 
 const solutionWorkstreams = [
-  'Package the business into a buyer-ready narrative with a controlled blind profile and diligence request list.',
-  'Validate the operating foundation through financial review, operational analysis, and lease-risk screening.',
-  'Convert diligence into a practical buyer-facing roadmap that clarifies risks, upside, and first-90-day priorities.',
+  'Package the business into an Analysis Profile, Blind Profile, and valuation framing memo.',
+  'Use controlled information release to qualify interest without exposing the client too early.',
+  'Monetize buyer certainty through the free brief, paid audit, roadmap, and custom review work.',
 ];
 
 const processSteps = [
   {
-    title: 'Business Packaging',
-    body: 'Build the overview, blind teaser, valuation framing, and buyer objection map so the opportunity can be presented without exposing the client too early.',
+    title: 'Phase 1: Validation',
+    body: 'Build the Blind Profile template, define the Analysis Profile structure, and test the offer with initial restaurant-owner contacts to prove demand without revealing the client.',
   },
   {
-    title: 'Diligence Review',
-    body: 'Review financials, operating patterns, lease materials, and known risks to identify what is credible, what needs explanation, and what should be corrected before wider buyer review.',
+    title: 'Phase 2: Outreach',
+    body: 'Identify private buyers, circulate the Blind Profile, and use the diligence-led pitch to convert curiosity into paid diligence access.',
   },
   {
-    title: 'Buyer-Ready Delivery',
-    body: 'Prepare the diligence report and 90-day roadmap so qualified buyers can assess the business with more certainty and a clearer ownership plan.',
+    title: 'Phase 3: Unlock Revenue',
+    body: 'Formalize the diligence report as the core product, sell the $1,000 unlock, and upsell custom review and post-acquisition roadmap work.',
   },
 ];
 
@@ -89,8 +89,8 @@ export default function UyghurEatsAcquisition() {
   return (
     <article className={projectPageShellClassName}>
       <Seo
-        title="Uyghur Eats Acquisition Proposal"
-        description="Acquisition advisory proposal for Uyghur Eats covering business packaging, diligence, scope options, and digital signing."
+        title="Uyghur Eats Property Sale Proposal"
+        description="Email-protected property sale proposal for Uyghur Eats covering the diligence-as-a-service model, scope options, and digital signing."
       />
 
       <motion.div
@@ -113,11 +113,11 @@ export default function UyghurEatsAcquisition() {
           <div className={projectHeroGridClassNames.operations}>
             <div>
               <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                Uyghur Eats Acquisition Proposal
+                {proposal?.proposalTitle ?? 'Uyghur Eats Property Sale Proposal'}
               </h1>
 
               <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                Proposal for a diligence-led acquisition process that makes Uyghur Eats easier to evaluate, safer to underwrite, and better packaged for serious buyer conversations.
+                {proposal?.proposalSummary}
               </p>
 
               <div className="mb-8 grid gap-3 md:grid-cols-3">
@@ -137,13 +137,13 @@ export default function UyghurEatsAcquisition() {
 
             <aside className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
               <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
-                Acquisition Advisory
+                Diligence-as-a-Service
               </p>
               <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
-                Reduce buyer uncertainty before the deal gets expensive.
+                Sell certainty before selling the deal.
               </h2>
               <p className="mb-6 text-sm leading-6 text-neutral-300">
-                The proposal is built around packaging, diligence, and transaction-readiness support so the project can start lean or continue through active buyer review.
+                The proposal packages the seller side, buyer side, and unlock revenue stream into one controlled property-sale process.
               </p>
 
               <div className="grid grid-cols-2 gap-3 text-sm">
@@ -157,11 +157,11 @@ export default function UyghurEatsAcquisition() {
                 </div>
                 <div className="border border-white/15 bg-white/5 p-3">
                   <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Primary Goal</p>
-                  <p className="font-medium">Deal readiness</p>
+                  <p className="font-medium">Reduce asymmetry</p>
                 </div>
                 <div className="border border-white/15 bg-white/5 p-3">
                   <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Outcome</p>
-                  <p className="font-medium">Cleaner buyer process</p>
+                  <p className="font-medium">Paid buyer certainty</p>
                 </div>
               </div>
             </aside>
@@ -232,7 +232,7 @@ export default function UyghurEatsAcquisition() {
 
             <ResponsiveAccordionSection
               id="scope-options"
-              title="Scopes"
+              title="Scope of Work"
               icon={BriefcaseBusiness}
               className="border border-neutral-200"
               headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -359,10 +359,10 @@ export default function UyghurEatsAcquisition() {
             >
               <div data-project-detail-body className="space-y-4">
                 <p>
-                  The engagement is built around a real restaurant asset with differentiated cuisine, corridor-level demand, and acquisition upside that depends on cleaner packaging.
+                  The client is Uyghur Eats. The project type is Property Sale. The actual unlocked deliverable for the client side is the Analysis Profile.
                 </p>
                 <p>
-                  The proposal framework is intentionally simple: establish the business overview, define the problem, present the solution, let the client choose a scope, and convert that choice into signed authorization.
+                  The public-facing project label remains generalized as an M&A Property Sale, while the live work product centers on diligence, controlled disclosure, and buyer confidence.
                 </p>
               </div>
             </ResponsiveAccordionSection>
