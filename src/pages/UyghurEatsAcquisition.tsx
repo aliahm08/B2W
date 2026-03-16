@@ -48,7 +48,7 @@ const sectionItems = [
   { id: 'overview', label: 'Business Overview' },
   { id: 'problem', label: 'Problem' },
   { id: 'solution', label: 'Our Solution' },
-  { id: 'scope-options', label: 'Scopes' },
+  { id: 'scope-options', label: 'Explore Your Options' },
   { id: 'process', label: 'Process' },
 ];
 
@@ -228,10 +228,12 @@ export default function UyghurEatsAcquisition() {
                 </ul>
               </div>
             </ResponsiveAccordionSection>
+          </div>
 
+          <div className="lg:col-span-12">
             <ResponsiveAccordionSection
               id="scope-options"
-              title="Scope of Work"
+              title="Explore Your Options"
               icon={BriefcaseBusiness}
               className="border-t border-neutral-200"
               headerClassName="border-b border-neutral-200 p-4"
@@ -280,7 +282,7 @@ export default function UyghurEatsAcquisition() {
                       </ul>
                       <Link
                         to="/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options"
-                        className="mt-6 inline-flex items-center gap-2 border border-neutral-200 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black hover:text-black"
+                        className="mt-6 inline-flex items-center gap-2 border border-teal-500/30 bg-teal-500/10 px-4 py-3 text-sm font-medium text-teal-700 transition-colors hover:border-teal-700 hover:bg-teal-700 hover:text-white"
                       >
                         Preview deliverable
                         <ArrowUpRight className="h-4 w-4" />
@@ -315,7 +317,9 @@ export default function UyghurEatsAcquisition() {
                 </div>
               </div>
             </ResponsiveAccordionSection>
+          </div>
 
+          <div className="space-y-12 lg:col-span-7">
             <ResponsiveAccordionSection
               id="process"
               title="Process"

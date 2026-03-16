@@ -33,11 +33,11 @@ export type ProjectAccessStatus = {
 
 export const protectedProjects: ProtectedProjectConfig[] = [
   {
-    path: '/borek-g',
+    path: '/borek-g-social-media-management',
     scopeId: 'borek_g',
     view: 'profile',
     routes: {
-      profile: '/borek-g',
+      profile: '/borek-g-social-media-management',
       proposal: '/borek-g-operations',
     },
     title: 'Borek-G',
@@ -58,7 +58,7 @@ export const protectedProjects: ProtectedProjectConfig[] = [
     scopeId: 'borek_g',
     view: 'proposal',
     routes: {
-      profile: '/borek-g',
+      profile: '/borek-g-social-media-management',
       proposal: '/borek-g-operations',
     },
     title: 'Borek-G Marketing Proposal',

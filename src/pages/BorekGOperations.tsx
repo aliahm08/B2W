@@ -43,7 +43,7 @@ const proposal = getProposalContent('/borek-g-operations');
 const sectionItems = [
     { id: 'problem', label: 'Problem' },
     { id: 'solution', label: 'Our Solution' },
-    { id: 'scope-options', label: 'Scope of Work' },
+    { id: 'scope-options', label: 'Explore Your Options' },
     { id: 'handles', label: 'Priority Workstreams' },
     { id: 'benefits', label: 'Expected Outcomes' },
     { id: 'context', label: 'Business Context' },
@@ -210,7 +210,7 @@ export default function BorekGOperations() {
 
                         <ResponsiveAccordionSection
                             id="scope-options"
-                            title="Scope of Work"
+                            title="Explore Your Options"
                             icon={Wrench}
                             className="border-t border-neutral-200"
                             headerClassName="border-b border-neutral-200 p-4"
@@ -255,8 +255,8 @@ export default function BorekGOperations() {
                                                 {selectedOption.offerings.map((offering) => <li key={offering}>{offering}</li>)}
                                             </ul>
                                             <Link
-                                                to="/borek-g"
-                                                className="mt-6 inline-flex items-center gap-2 border border-neutral-200 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black hover:text-black"
+                                                to="/borek-g-social-media-management"
+                                                className="mt-6 inline-flex items-center gap-2 border border-teal-500/30 bg-teal-500/10 px-4 py-3 text-sm font-medium text-teal-700 transition-colors hover:border-teal-700 hover:bg-teal-700 hover:text-white"
                                             >
                                                 Preview deliverable
                                                 <ArrowUpRight className="h-4 w-4" />

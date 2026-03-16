@@ -4,7 +4,7 @@
  */
 
 import { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Work from './components/Work';
@@ -74,7 +74,8 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/borek-g" element={<BorekG />} />
+          <Route path="/borek-g-social-media-management" element={<BorekG />} />
+          <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
           <Route path="/borek-g-operations" element={<BorekGOperations />} />
           <Route path="/uyghur-eats" element={<UyghurEats />} />
           <Route path="/uyghur-eats-acquisition" element={<UyghurEatsAcquisition />} />

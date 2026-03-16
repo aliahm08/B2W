@@ -70,7 +70,7 @@ const defaultHero: HeroContent = {
 };
 
 const routeMap: Record<string, string> = {
-  'borek-g|profile|marketing': '/borek-g',
+  'borek-g|profile|marketing': '/borek-g-social-media-management',
   'borek-g|prototype|operations': '/borek-g-operations',
   'uyghur eats|profile|finance': '/uyghur-eats-acquisition',
 };

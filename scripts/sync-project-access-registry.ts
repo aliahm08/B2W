@@ -83,7 +83,7 @@ function buildTemplateWorkbook() {
       title: 'Borek-G',
       password_env_var: 'PROJECT_PASSWORD_BOREK_G',
       proposal_emails_csv: 'info@b2w-ai.com',
-      primary_path: '/borek-g',
+      primary_path: '/borek-g-social-media-management',
       primary_view: 'profile',
       notes: 'Keep the real password only in env vars.',
     },

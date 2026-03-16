@@ -25,7 +25,7 @@ import {
 } from '../components/projectPageLayout';
 
 const snapshotDate = 'March 13, 2026';
-const showcase = projectShowcaseOverridesByPath['/borek-g'];
+const showcase = projectShowcaseOverridesByPath['/borek-g-social-media-management'];
 
 const scorecards = [
     {
@@ -207,8 +207,8 @@ export default function BorekG() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Borek-G Restaurant Marketing Profile"
-                description="Restaurant marketing profile of Borek-G covering reputation strength, discovery coverage, social traction, channel depth, and restaurant growth potential in Falls Church."
+                title="Turkish Bistro Social Media Management"
+                description="Social media management and marketing profile for Borek-G covering reputation strength, discovery coverage, social traction, channel depth, and restaurant growth potential in Falls Church."
             />
 
             <motion.div
@@ -228,22 +228,22 @@ export default function BorekG() {
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
-                        <span>Restaurant Marketing Profile</span>
+                        <span>Social Media Management</span>
                     </div>
 
                     <section className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-8">
                         <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
-                            Restaurant Marketing Profile
+                            Social Media Management
                         </p>
 
                         <div className={projectHeroGridClassNames.profile}>
                             <div>
                                 <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                    Borek-G
+                                    Turkish Bistro Social Media Management
                                 </h1>
 
                                 <p className="mb-5 max-w-3xl text-lg leading-relaxed text-neutral-200 md:text-xl">
-                                    A restaurant marketing profile built around Borek-G's unusually strong local reputation, multi-channel revenue mix, and underused social conversion potential.
+                                    A social media management profile built around Borek-G's unusually strong local reputation, multi-channel revenue mix, and underused social conversion potential.
                                 </p>
 
                                 <p className="mb-8 max-w-3xl text-sm leading-6 text-neutral-300">

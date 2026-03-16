@@ -10,7 +10,7 @@ export const projects = [
         impact: "510+ Public Reviews & 1.5K IG Followers",
         tags: ["Restaurant Profile", "Marketing Audit", "Data Scrubbing"],
         date: "March 2026",
-        link: "/borek-g"
+        link: "/borek-g-social-media-management"
     },
     {
         id: 11,

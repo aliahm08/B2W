@@ -39,7 +39,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
         }
       ],
       "date": "January 2026",
-      "link": "/borek-g"
+      "link": "/borek-g-social-media-management"
     },
     {
       "id": 2,

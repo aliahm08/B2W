@@ -9,7 +9,7 @@ export type ProjectShowcaseOverride = {
 };
 
 export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverride> = {
-  '/borek-g': {
+  '/borek-g-social-media-management': {
     publicTitle: 'Turkish Bistro Social Media Management',
     publicClientDescription: 'Independent restaurant in a high-traffic suburban market',
     publicDescription: 'Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.',
