@@ -41,7 +41,7 @@ export const protectedProjects: ProtectedProjectConfig[] = [
       proposal: '/borek-g-operations',
     },
     title: 'Borek-G',
-    subtitle: 'Choose proposal access with the approved email or enter the business-profile password.',
+    subtitle: 'Choose proposal access with the approved email or enter the analysis-profile password.',
     overlayTop: 780,
     maskedTitle: 'Neighborhood Restaurant Marketing Profile',
     maskedClientDescription: 'Independent restaurant in a high-traffic suburban market',
@@ -51,7 +51,7 @@ export const protectedProjects: ProtectedProjectConfig[] = [
     maskedSeoDescription: 'This restaurant marketing profile is access-controlled. Enter an approved email or password to reveal the client name and profile details.',
     teaserEyebrow: 'Access-Controlled Profile',
     teaserHeadline: 'Client identity and business details remain blurred until access is verified.',
-    teaserSummary: 'Use the proposal email or the business-profile password to choose which view you want to open.',
+    teaserSummary: 'Use the proposal email or the analysis-profile password to choose which view you want to open.',
   },
   {
     path: '/borek-g-operations',
@@ -62,7 +62,7 @@ export const protectedProjects: ProtectedProjectConfig[] = [
       proposal: '/borek-g-operations',
     },
     title: 'Borek-G Marketing Proposal',
-    subtitle: 'Choose proposal access with the approved email, or enter the business-profile password.',
+    subtitle: 'Choose proposal access with the approved email, or enter the analysis-profile password.',
     overlayTop: 720,
     maskedTitle: 'Restaurant Marketing Proposal',
     maskedClientDescription: 'Independent restaurant with strong local demand and underused digital channels',
@@ -83,17 +83,17 @@ export const protectedProjects: ProtectedProjectConfig[] = [
       proposal: '/uyghur-eats-acquisition',
     },
     title: 'Analysis Profile',
-    subtitle: 'Enter the business-profile password to open this analysis profile.',
+    subtitle: 'Enter the analysis-profile password to open this analysis profile.',
     overlayTop: 760,
     maskedTitle: 'M&A Property Sale',
     maskedClientDescription: 'Restaurant property sale opportunity',
     maskedDescription: 'Client name, location, and analysis details stay hidden until profile access is verified.',
     maskedImpact: 'Property sale opportunity identified',
     maskedSeoTitle: 'Confidential M&A Property Sale',
-    maskedSeoDescription: 'This M&A property sale project is access-controlled. Enter the business-profile password to reveal the client name and business details.',
+    maskedSeoDescription: 'This M&A property sale project is access-controlled. Enter the analysis-profile password to reveal the client name and business details.',
     teaserEyebrow: 'Access-Controlled M&A Property Sale',
     teaserHeadline: 'The client identity, location, and project details are intentionally blurred.',
-    teaserSummary: 'Use the business-profile password to reveal the full deliverable.',
+    teaserSummary: 'Use the analysis-profile password to reveal the full deliverable.',
   },
   {
     path: '/uyghur-eats-acquisition',
@@ -104,7 +104,7 @@ export const protectedProjects: ProtectedProjectConfig[] = [
       proposal: '/uyghur-eats-acquisition',
     },
     title: 'Uyghur Eats Acquisition Proposal',
-    subtitle: 'Choose proposal access with the approved email, or enter the business-profile password.',
+    subtitle: 'Choose proposal access with the approved email, or enter the analysis-profile password.',
     overlayTop: 720,
     maskedTitle: 'Restaurant Acquisition Proposal',
     maskedClientDescription: 'Specialty restaurant with differentiated cuisine and buyer-readiness upside',
@@ -189,7 +189,7 @@ export async function submitProjectAccess(input: SubmitProjectAccessInput): Prom
   const fallbackError =
     input.method === 'proposal'
       ? 'Unable to verify proposal access. Confirm the API route is reachable and the email is approved.'
-      : 'Unable to verify business profile access. Confirm the API route is reachable and the password is correct.';
+      : 'Unable to verify analysis profile access. Confirm the API route is reachable and the password is correct.';
 
   if (!response.ok) {
     return {

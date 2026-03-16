@@ -23,7 +23,7 @@ type ProjectPasswordGateProps = {
 
 const accessLabels: Record<ProjectAccessView, string> = {
   proposal: 'Proposal View',
-  profile: 'Business Profile View',
+  profile: 'Analysis Profile View',
 };
 
 const emptyStatus: ProjectAccessStatus = {

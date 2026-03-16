@@ -240,10 +240,10 @@ export default function ProjectAccessPrompt({
                 >
                   <div className="flex items-center gap-3 text-sm font-semibold text-black">
                     <ShieldCheck className="h-4 w-4" />
-                    Business Profile
+                    Analysis Profile
                   </div>
                   <p className="mt-3 text-sm leading-6 text-neutral-600">
-                    Use the business password to unlock the full profile and switch back whenever needed.
+                    Use the analysis password to unlock the full deliverable and switch back whenever needed.
                   </p>
                 </button>
               ) : null}
@@ -279,7 +279,7 @@ export default function ProjectAccessPrompt({
               ) : (
                 <div>
                   <label htmlFor={passwordLabelId} className="mb-2 block text-xs font-mono uppercase tracking-[0.2em] text-neutral-500">
-                    Business Profile Password
+                    Analysis Profile Password
                   </label>
                   <input
                     id={passwordLabelId}
@@ -320,7 +320,7 @@ export default function ProjectAccessPrompt({
                       ? 'Verifying...'
                       : activeMethod === 'proposal'
                         ? 'Open Proposal'
-                        : 'Unlock Business Profile'}
+                        : 'Unlock Analysis Profile'}
                   </button>
                 )
               ) : null}
