@@ -128,7 +128,6 @@ export default function BorekGOperations() {
                         <ProfileSectionNav
                             items={sectionItems}
                             eyebrow="Proposal navigation"
-                            description="Move through the operating scope, rollout plan, and expected business effect without breaking the proposal flow."
                         />
                     </div>
                     <div className="space-y-12 lg:col-span-7">

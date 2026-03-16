@@ -48,6 +48,7 @@ Not allowed:
 - Fake dashboards or fake logs
 - Unsupported implementation claims
 - Proposal-state homepage cards that reveal business names, exact addresses, or other PII before access is granted
+- Instructional page copy that tells the reader how to use or move through the page (for example, proposal-navigation helper text such as "move through the operating scope, rollout plan, and expected business effect")
 
 ## 6. CTA and Navigation Rules
 
