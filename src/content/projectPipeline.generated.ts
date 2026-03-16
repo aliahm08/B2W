@@ -44,28 +44,28 @@ export const projectPipelineContent: ProjectPipelineContent = {
     {
       "id": 2,
       "category": "RESTAURANT",
-      "projectType": "Custom Solution",
-      "serviceType": "Chatbot",
+      "projectType": "Consulting",
+      "serviceType": "Marketing Proposal",
       "status": "Proposed",
-      "clientDescription": "Independent restaurant team with recurring frontline questions",
-      "title": "Frontline Operations Copilot Prototype",
-      "description": "Operations proposal focused on repetitive question handling, workflow consistency, escalation rules, and staff-support coverage.",
-      "impact": "Faster frontline response flow",
+      "clientDescription": "Independent restaurant with strong local demand and underused digital channels",
+      "title": "Restaurant Marketing Proposal",
+      "description": "Marketing proposal covering channel strategy, content cadence, local discovery improvements, and digital demand capture.",
+      "impact": "Clearer marketing execution plan",
       "tags": [
         {
-          "label": "Prototype",
+          "label": "Proposal",
           "tier": 1
         },
         {
-          "label": "Operations",
+          "label": "Marketing",
           "tier": 2
         },
         {
-          "label": "Chatbot",
+          "label": "Content Strategy",
           "tier": 3
         },
         {
-          "label": "Workflow Design",
+          "label": "Local Growth",
           "tier": 3
         }
       ],

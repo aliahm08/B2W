@@ -106,8 +106,8 @@ export default function UyghurEats() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Uyghur Eats Restaurant Profile"
-                description="Business profile of Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty for acquisition evaluation."
+                title="Uyghur Eats Diligence Document"
+                description="Acquisition diligence document for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty."
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -136,7 +136,7 @@ export default function UyghurEats() {
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                                A business profile built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering that can support acquisition or continued operation.
+                                A diligence document built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering to support acquisition evaluation.
                             </p>
 
                             <div className="flex flex-wrap gap-2">
@@ -188,8 +188,8 @@ export default function UyghurEats() {
                     <div className="lg:col-span-12">
                         <ProfileSectionNav
                             items={sectionItems}
-                            eyebrow="Profile navigation"
-                            description="Jump between the acquisition case, neighborhood context, operating upside, and gallery while keeping the page’s sales narrative intact."
+                            eyebrow="Diligence navigation"
+                            description="Jump between the acquisition case, neighborhood context, operating upside, and gallery while keeping the page's diligence narrative intact."
                         />
                     </div>
                     {/* Content Section */}

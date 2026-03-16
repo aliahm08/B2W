@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Bot, CircleAlert, Clock3, MessageSquare, Settings2, Sparkles, Store, Wrench } from 'lucide-react';
+import { ArrowLeft, CircleAlert, Clock3, Megaphone, Settings2, Sparkles, Store, Wrench } from 'lucide-react';
 import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
@@ -18,24 +18,24 @@ import {
 } from '../components/projectPageLayout';
 
 const workstreams = [
-    'Handle menu, hours, pickup, catering, and market inventory questions.',
-    'Answer recurring staff questions around shift notes, opening tasks, and store policy.',
-    'Escalate edge cases when confidence is low or manager approval is required.',
-    'Log recurring questions so the team can spot the next automation targets.'
+    'Tighten Borek-G positioning across Instagram, Google Business, Yelp, and owned channels.',
+    'Build a repeatable content cadence around food visuals, testimonials, seasonal moments, and market activity.',
+    'Turn review language and in-store demand signals into higher-converting digital proof and offers.',
+    'Create a clearer operating rhythm for local promotion, retention, and channel-by-channel improvement.'
 ];
 
 const launchPlan = [
     {
         title: 'Phase 1',
-        body: 'Map the operating playbook: hours, menu logic, catering rules, pickup flow, FAQs, and staff escalation paths.'
+        body: 'Audit the current presentation across Google Business, Yelp, Instagram, ecommerce, and any active email or promotion flows.'
     },
     {
         title: 'Phase 2',
-        body: 'Deploy a Borek-G chatbot interface trained on approved business answers and common customer/staff workflows.'
+        body: 'Define the content system, channel priorities, and execution cadence needed to package the restaurant more clearly online.'
     },
     {
         title: 'Phase 3',
-        body: 'Measure deflection, response speed, unresolved questions, and handoff quality to improve the system after launch.'
+        body: 'Launch the selected scope, measure response by channel, and refine creative, offers, and publishing rhythm based on results.'
     }
 ];
 const showcase = projectShowcaseOverridesByPath['/borek-g-operations'];
@@ -44,8 +44,8 @@ const sectionItems = [
     { id: 'problem', label: 'Problem' },
     { id: 'solution', label: 'Our Solution' },
     { id: 'scope-options', label: 'Scope of Work' },
-    { id: 'handles', label: 'What It Handles' },
-    { id: 'benefits', label: 'Expected Benefits' },
+    { id: 'handles', label: 'Priority Workstreams' },
+    { id: 'benefits', label: 'Expected Outcomes' },
 ];
 
 export default function BorekGOperations() {
@@ -82,8 +82,8 @@ export default function BorekGOperations() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Borek-G Operations Chatbot Proposal"
-                description="Proposal page for a Borek-G operations chatbot covering the workflow scope, operating use cases, and phased rollout plan."
+                title="Borek-G Marketing Proposal"
+                description="Marketing proposal for Borek-G covering channel priorities, scope options, execution cadence, and phased rollout."
             />
 
             <motion.div
@@ -109,11 +109,11 @@ export default function BorekGOperations() {
                     <div className={projectHeroGridClassNames.operations}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                Borek-G Operations Chatbot
+                                Borek-G Marketing Proposal
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                                Proposal for a Borek-G chatbot that handles repeat questions, keeps answers consistent, and routes exceptions to staff.
+                                Proposal for a Borek-G marketing system built from the restaurant's existing demand signals, reputation strength, and channel gaps.
                             </p>
 
                             <div className="mb-8 grid gap-3 md:grid-cols-3">
@@ -136,10 +136,10 @@ export default function BorekGOperations() {
                                 Proposal Scope
                             </p>
                             <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
-                                Cut repetitive store questions without removing human judgment.
+                                Turn strong in-store demand into clearer digital growth.
                             </h2>
                             <p className="mb-6 text-sm leading-6 text-neutral-300">
-                                The system acts as an assistant for speed and consistency, with escalation for edge cases, sensitive requests, and policy exceptions.
+                                The work is structured so Borek-G can choose strategy only or a more execution-heavy engagement without losing continuity between analysis and rollout.
                             </p>
 
                             <div className="grid grid-cols-2 gap-3 text-sm">
@@ -149,15 +149,15 @@ export default function BorekGOperations() {
                                 </div>
                                 <div className="border border-white/15 bg-white/5 p-3">
                                     <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Mode</p>
-                                    <p className="font-medium">Human-in-the-loop</p>
+                                    <p className="font-medium">Strategy + execution</p>
                                 </div>
                                 <div className="border border-white/15 bg-white/5 p-3">
                                     <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Primary Goal</p>
-                                    <p className="font-medium">Faster responses</p>
+                                    <p className="font-medium">Stronger demand capture</p>
                                 </div>
                                 <div className="border border-white/15 bg-white/5 p-3">
-                                    <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Users</p>
-                                    <p className="font-medium">Staff + customers</p>
+                                    <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Channels</p>
+                                    <p className="font-medium">Social + local search</p>
                                 </div>
                             </div>
                         </aside>
@@ -282,21 +282,21 @@ export default function BorekGOperations() {
 
                         <ResponsiveAccordionSection
                             id="handles"
-                            title="What It Handles"
-                            icon={MessageSquare}
+                            title="Priority Workstreams"
+                            icon={Megaphone}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
                             bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
                             titleClassName="md:text-xl"
                         >
                             <div data-project-detail-body>
-                                Menu questions, order timing, pickup instructions, catering intake, store policies, common staff procedures, and routing logic for issues that need a person.
+                                Channel strategy, short-form content direction, social publishing rhythm, review-driven messaging, local discovery improvements, and higher-conversion packaging for the website and owned channels.
                             </div>
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
                             id="benefits"
-                            title="Expected Benefits"
+                            title="Expected Outcomes"
                             icon={Clock3}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -304,7 +304,7 @@ export default function BorekGOperations() {
                             titleClassName="md:text-xl"
                         >
                             <div data-project-detail-body>
-                                Faster response times, fewer repetitive interruptions for staff, cleaner handoffs, and a structured record of recurring questions that can inform later automation.
+                                Clearer positioning, more consistent content output, stronger local recall, better conversion from discovery to order intent, and a marketing rhythm the business can sustain.
                             </div>
                         </ResponsiveAccordionSection>
 
@@ -334,7 +334,7 @@ export default function BorekGOperations() {
                         <ResponsiveAccordionSection
                             id="role"
                             title="Business Information and Highlights"
-                            icon={Bot}
+                            icon={Store}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
                             bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"

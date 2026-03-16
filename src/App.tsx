@@ -18,6 +18,7 @@ import ProjectPasswordGate from './components/ProjectPasswordGate';
 import BorekG from './pages/BorekG';
 import BorekGOperations from './pages/BorekGOperations';
 import UyghurEats from './pages/UyghurEats';
+import UyghurEatsAcquisition from './pages/UyghurEatsAcquisition';
 import CapabilityPage from './pages/CapabilityPage';
 import Seo from './components/Seo';
 import { protectedProjects } from './content/projectAccess';
@@ -70,6 +71,7 @@ function LandingPage() {
 const borekGProject = protectedProjects.find((project) => project.path === '/borek-g')!;
 const borekGOperationsProject = protectedProjects.find((project) => project.path === '/borek-g-operations')!;
 const uyghurEatsProject = protectedProjects.find((project) => project.path === '/uyghur-eats')!;
+const uyghurEatsAcquisitionProject = protectedProjects.find((project) => project.path === '/uyghur-eats-acquisition')!;
 
 export default function App() {
   return (
@@ -115,6 +117,19 @@ export default function App() {
                 overlayTop={uyghurEatsProject.overlayTop}
               >
                 <UyghurEats />
+              </ProjectPasswordGate>
+            )}
+          />
+          <Route
+            path="/uyghur-eats-acquisition"
+            element={(
+              <ProjectPasswordGate
+                path={uyghurEatsAcquisitionProject.path}
+                title={uyghurEatsAcquisitionProject.title}
+                subtitle={uyghurEatsAcquisitionProject.subtitle}
+                overlayTop={uyghurEatsAcquisitionProject.overlayTop}
+              >
+                <UyghurEatsAcquisition />
               </ProjectPasswordGate>
             )}
           />

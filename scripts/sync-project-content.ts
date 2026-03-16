@@ -91,7 +91,7 @@ const locationDisplayMap: Record<string, string> = {
 
 const projectTypeOverrideMap: Record<string, string> = {
   'borek-g|profile|marketing': 'Consulting',
-  'borek-g|prototype|operations': 'Custom Solution',
+  'borek-g|prototype|operations': 'Consulting',
   'uyghur eats|profile|finance': 'Consulting',
   'caravan uyghur|profile|marketing': 'Consulting',
   'sabucni|prototype|operations': 'Custom Solution',
@@ -255,12 +255,17 @@ function generalizeIndustryLabel(industry: string): string {
 }
 
 function buildPublicTitle(row: WorkbookRow): string {
+  const client = compactText(String(row.client ?? '')).toLowerCase();
   const offering = compactText(String(row.offering ?? '')).toLowerCase();
   const topic = compactText(String(row.topic ?? '')).toLowerCase();
   const packageName = compactText(String(row.package ?? '')).toLowerCase();
 
   if (offering === 'profile' && topic === 'marketing') {
     return 'Neighborhood Restaurant Marketing Profile';
+  }
+
+  if (client === 'borek-g' && offering === 'prototype' && topic === 'operations') {
+    return 'Restaurant Marketing Proposal';
   }
 
   if (offering === 'prototype' && topic === 'operations') {
@@ -283,12 +288,17 @@ function buildPublicTitle(row: WorkbookRow): string {
 }
 
 function buildPublicClientDescription(row: WorkbookRow): string {
+  const client = compactText(String(row.client ?? '')).toLowerCase();
   const industry = generalizeIndustryLabel(String(row.industry ?? ''));
   const topic = compactText(String(row.topic ?? '')).toLowerCase();
   const packageName = compactText(String(row.package ?? '')).toLowerCase();
 
   if (industry === 'restaurant' && topic === 'marketing') {
     return 'Independent restaurant in a high-traffic suburban market';
+  }
+
+  if (client === 'borek-g' && industry === 'restaurant' && topic === 'operations') {
+    return 'Independent restaurant with strong local demand and underused digital channels';
   }
 
   if (industry === 'restaurant' && topic === 'operations') {
@@ -311,12 +321,17 @@ function buildPublicClientDescription(row: WorkbookRow): string {
 }
 
 function buildPublicDescription(row: WorkbookRow): string {
+  const client = compactText(String(row.client ?? '')).toLowerCase();
   const offering = compactText(String(row.offering ?? '')).toLowerCase();
   const topic = compactText(String(row.topic ?? '')).toLowerCase();
   const packageName = compactText(String(row.package ?? '')).toLowerCase();
 
   if (offering === 'profile' && topic === 'marketing') {
     return 'Restaurant marketing profile covering public reputation, social opportunity, search visibility, and website conversion opportunities.';
+  }
+
+  if (client === 'borek-g' && offering === 'prototype' && topic === 'operations') {
+    return 'Marketing proposal covering channel strategy, content cadence, local discovery improvements, and digital demand capture.';
   }
 
   if (offering === 'prototype' && topic === 'operations') {
@@ -335,12 +350,17 @@ function buildPublicDescription(row: WorkbookRow): string {
 }
 
 function buildPublicImpact(row: WorkbookRow): string {
+  const client = compactText(String(row.client ?? '')).toLowerCase();
   const offering = compactText(String(row.offering ?? '')).toLowerCase();
   const topic = compactText(String(row.topic ?? '')).toLowerCase();
   const packageName = compactText(String(row.package ?? '')).toLowerCase();
 
   if (offering === 'profile' && topic === 'marketing') {
     return 'Clearer digital demand capture plan';
+  }
+
+  if (client === 'borek-g' && offering === 'prototype' && topic === 'operations') {
+    return 'Clearer marketing execution plan';
   }
 
   if (offering === 'prototype' && topic === 'operations') {
@@ -441,8 +461,15 @@ function buildTitle(row: WorkbookRow): string {
 }
 
 function buildServiceType(row: WorkbookRow): string {
+  const client = compactText(String(row.client ?? '')).toLowerCase();
+  const offering = compactText(String(row.offering ?? '')).toLowerCase();
+  const topicKey = compactText(String(row.topic ?? '')).toLowerCase();
   const packageName = titleCase(String(row.package ?? ''));
   const topic = titleCase(String(row.topic ?? ''));
+
+  if (client === 'borek-g' && offering === 'prototype' && topicKey === 'operations') {
+    return 'Marketing Proposal';
+  }
 
   return packageName || topic || 'Project';
 }
@@ -549,6 +576,10 @@ function buildProjectType(row: WorkbookRow): string {
 
   if (projectTypeOverrideMap[overrideKey]) {
     return projectTypeOverrideMap[overrideKey];
+  }
+
+  if (client === 'borek-g' && offering === 'prototype' && topic === 'operations') {
+    return 'Consulting';
   }
 
   if (['profile', 'audit', 'assessment', 'strategy'].includes(offering)) {
