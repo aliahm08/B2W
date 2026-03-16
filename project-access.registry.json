@@ -23,14 +23,20 @@
       "scopeId": "uyghur_eats",
       "title": "Uyghur Eats",
       "passwordEnvVar": "PROJECT_PASSWORD_UYGHUR_EATS",
-      "proposalEmails": [],
+      "proposalEmails": [
+        "info@b2w-ai.com"
+      ],
       "pages": [
         {
           "path": "/uyghur-eats",
           "view": "profile"
+        },
+        {
+          "path": "/uyghur-eats-acquisition",
+          "view": "proposal"
         }
       ],
-      "notes": "Add all related authenticated pages in the pages sheet."
+      "notes": "Uyghur Eats proposal access is approved for info@b2w-ai.com."
     }
   ]
 }
