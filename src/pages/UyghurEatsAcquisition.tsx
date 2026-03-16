@@ -71,8 +71,8 @@ function getPreviewConfig(selectedOptionId: string) {
   }
 
   return {
-    href: `/uyghur-eats-basic-profile-preview?return=${returnParam}`,
-    label: 'Preview website profile',
+    href: `/uyghur-eats?preview=proposal&return=${returnParam}`,
+    label: 'Preview blurred analysis profile',
   };
 }
 
