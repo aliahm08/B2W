@@ -243,50 +243,49 @@ export default function UyghurEatsAcquisition() {
                   {proposal?.scopeIntro}
                 </p>
 
-                <div className="grid gap-4">
+                <div className="flex flex-wrap gap-3">
                   {proposal?.options.map((option) => (
-                    <label
+                    <button
                       key={option.id}
-                      className={`block border p-5 transition-colors ${
-                        selectedOptionId === option.id ? 'border-black bg-black text-white' : 'border-neutral-200 bg-white'
+                      type="button"
+                      onClick={() => setSelectedOptionId(option.id)}
+                      className={`border px-4 py-3 text-left text-sm font-medium transition-colors ${
+                        selectedOptionId === option.id
+                          ? 'border-black bg-black text-white'
+                          : 'border-neutral-200 bg-white text-neutral-700 hover:border-black hover:text-black'
                       }`}
                     >
-                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                        <div className="max-w-2xl">
-                          <div className="flex items-start gap-3">
-                            <input
-                              type="radio"
-                              name="scopeOption"
-                              value={option.id}
-                              checked={selectedOptionId === option.id}
-                              onChange={() => setSelectedOptionId(option.id)}
-                              className="mt-1 h-4 w-4"
-                            />
-                            <div>
-                              <p className={`text-lg font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.title}</p>
-                              <p className={`mt-2 text-sm leading-6 ${selectedOptionId === option.id ? 'text-neutral-300' : 'text-neutral-600'}`}>{option.summary}</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="grid gap-2 text-sm md:min-w-56">
-                          <div className={`border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200'}`}>
-                            <p className={`text-[10px] uppercase tracking-[0.22em] ${selectedOptionId === option.id ? 'text-neutral-400' : 'text-neutral-500'}`}>Price</p>
-                            <p className={`mt-1 font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.price}</p>
-                          </div>
-                          <div className={`border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200'}`}>
-                            <p className={`text-[10px] uppercase tracking-[0.22em] ${selectedOptionId === option.id ? 'text-neutral-400' : 'text-neutral-500'}`}>Timeline</p>
-                            <p className={`mt-1 font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.timeline}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <ul className={`mt-4 list-disc space-y-2 pl-5 text-sm leading-6 ${selectedOptionId === option.id ? 'text-neutral-200' : 'text-neutral-600'}`}>
-                        {option.offerings.map((offering) => (
+                      {option.title}
+                    </button>
+                  ))}
+                </div>
+
+                {selectedOption ? (
+                  <div className="grid gap-4 border-t border-neutral-200 pt-6 lg:grid-cols-[minmax(0,1.8fr)_minmax(180px,0.6fr)_minmax(180px,0.6fr)]">
+                    <div className="border border-neutral-200 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Details</p>
+                      <h4 className="mt-3 text-xl font-medium text-black">{selectedOption.title}</h4>
+                      <p className="mt-3 text-sm leading-6 text-neutral-600">
+                        {selectedOption.summary}
+                      </p>
+                      <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-neutral-600">
+                        {selectedOption.offerings.map((offering) => (
                           <li key={offering}>{offering}</li>
                         ))}
                       </ul>
-                    </label>
-                  ))}
-                </div>
+                    </div>
+
+                    <div className="border border-neutral-200 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Price</p>
+                      <p className="mt-3 text-xl font-medium text-black">{selectedOption.price}</p>
+                    </div>
+
+                    <div className="border border-neutral-200 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Timeline</p>
+                      <p className="mt-3 text-xl font-medium text-black">{selectedOption.timeline}</p>
+                    </div>
+                  </div>
+                ) : null}
 
                 <div className="border-t border-black pt-5">
                   <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Selected for Finalization</p>
