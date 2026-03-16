@@ -418,7 +418,6 @@ export const config = {
     maxSnippetChars: Number(process.env.KNOWLEDGE_MAX_SNIPPET_CHARS ?? '16000'),
   },
   google: {
-    clientId: getEnv('GOOGLE_CLIENT_ID', getEnv('VITE_GOOGLE_CLIENT_ID')),
     serviceAccountJson: getEnv('GOOGLE_SERVICE_ACCOUNT_JSON'),
     allowedCalendarIds: unique(splitCsv(getEnv('GOOGLE_ALLOWED_CALENDAR_IDS'))),
     bookingCalendarId: getEnv('GOOGLE_BOOKING_CALENDAR_ID'),

@@ -30,7 +30,6 @@ export default function Navbar() {
           <Link to="/#industries" className="hover:text-black transition-colors">Projects</Link>
           <Link to="/#process" className="hover:text-black transition-colors">Process</Link>
           <Link to="/#team" className="hover:text-black transition-colors">Team</Link>
-          <Link to="/portal" className="hover:text-black transition-colors">Client Portal</Link>
           <a href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call" className="bg-black text-white px-4 py-2 rounded-full hover:bg-neutral-800 transition-colors">Contact</a>
         </div>
 
@@ -54,7 +53,6 @@ export default function Navbar() {
           <Link to="/#industries" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Projects</Link>
           <Link to="/#process" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Process</Link>
           <Link to="/#team" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Team</Link>
-          <Link to="/portal" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Client Portal</Link>
           <a href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call" className="text-lg font-medium text-black" onClick={() => setIsOpen(false)}>Contact</a>
         </motion.div>
       )}

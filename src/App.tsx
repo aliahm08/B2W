@@ -20,7 +20,6 @@ import BorekGOperations from './pages/BorekGOperations';
 import UyghurEats from './pages/UyghurEats';
 import UyghurEatsAcquisition from './pages/UyghurEatsAcquisition';
 import CapabilityPage from './pages/CapabilityPage';
-import ClientPortal from './pages/ClientPortal';
 import Seo from './components/Seo';
 import { protectedProjects } from './content/projectAccess';
 
@@ -82,7 +81,6 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/portal" element={<ClientPortal />} />
           <Route
             path="/borek-g"
             element={(

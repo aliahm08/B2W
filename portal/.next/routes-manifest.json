@@ -1,0 +1,160 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/portal/admin/proposals/[id]/edit",
+      "regex": "^/portal/admin/proposals/([^/]+?)/edit(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/portal/admin/proposals/(?<nxtPid>[^/]+?)/edit(?:/)?$"
+    },
+    {
+      "page": "/portal/deliverables/[id]",
+      "regex": "^/portal/deliverables/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/portal/deliverables/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/portal/proposals/[id]",
+      "regex": "^/portal/proposals/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/portal/proposals/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/sign-in/[[...sign-in]]",
+      "regex": "^/sign\\-in(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPsignin": "nxtPsign-in"
+      },
+      "namedRegex": "^/sign\\-in(?:/(?<nxtPsignin>.+?))?(?:/)?$"
+    },
+    {
+      "page": "/sign-up/[[...sign-up]]",
+      "regex": "^/sign\\-up(?:/(.+?))?(?:/)?$",
+      "routeKeys": {
+        "nxtPsignup": "nxtPsign-up"
+      },
+      "namedRegex": "^/sign\\-up(?:/(?<nxtPsignup>.+?))?(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/portal",
+      "regex": "^/portal(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal(?:/)?$"
+    },
+    {
+      "page": "/portal/admin",
+      "regex": "^/portal/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin(?:/)?$"
+    },
+    {
+      "page": "/portal/admin/audit",
+      "regex": "^/portal/admin/audit(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin/audit(?:/)?$"
+    },
+    {
+      "page": "/portal/admin/clients",
+      "regex": "^/portal/admin/clients(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin/clients(?:/)?$"
+    },
+    {
+      "page": "/portal/admin/deliverables",
+      "regex": "^/portal/admin/deliverables(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin/deliverables(?:/)?$"
+    },
+    {
+      "page": "/portal/admin/invites",
+      "regex": "^/portal/admin/invites(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin/invites(?:/)?$"
+    },
+    {
+      "page": "/portal/admin/proposals",
+      "regex": "^/portal/admin/proposals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin/proposals(?:/)?$"
+    },
+    {
+      "page": "/portal/admin/proposals/new",
+      "regex": "^/portal/admin/proposals/new(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/admin/proposals/new(?:/)?$"
+    },
+    {
+      "page": "/portal/deliverables",
+      "regex": "^/portal/deliverables(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/deliverables(?:/)?$"
+    },
+    {
+      "page": "/portal/proposals",
+      "regex": "^/portal/proposals(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/proposals(?:/)?$"
+    },
+    {
+      "page": "/portal/settings",
+      "regex": "^/portal/settings(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/portal/settings(?:/)?$"
+    },
+    {
+      "page": "/unauthorized",
+      "regex": "^/unauthorized(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/unauthorized(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

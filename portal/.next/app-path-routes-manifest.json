@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/clerk/webhook/route": "/api/clerk/webhook",
+  "/api/files/download/route": "/api/files/download",
+  "/api/files/upload/route": "/api/files/upload",
+  "/(auth)/sign-up/[[...sign-up]]/page": "/sign-up/[[...sign-up]]",
+  "/(auth)/sign-in/[[...sign-in]]/page": "/sign-in/[[...sign-in]]",
+  "/unauthorized/page": "/unauthorized",
+  "/(portal)/portal/deliverables/[id]/page": "/portal/deliverables/[id]",
+  "/(portal)/portal/proposals/[id]/page": "/portal/proposals/[id]",
+  "/(portal)/portal/deliverables/page": "/portal/deliverables",
+  "/(portal)/portal/page": "/portal",
+  "/(portal)/portal/proposals/page": "/portal/proposals",
+  "/(portal)/portal/settings/page": "/portal/settings",
+  "/(portal)/portal/admin/audit/page": "/portal/admin/audit",
+  "/(portal)/portal/admin/invites/page": "/portal/admin/invites",
+  "/(portal)/portal/admin/deliverables/page": "/portal/admin/deliverables",
+  "/(portal)/portal/admin/page": "/portal/admin",
+  "/(portal)/portal/admin/proposals/[id]/edit/page": "/portal/admin/proposals/[id]/edit",
+  "/(portal)/portal/admin/clients/page": "/portal/admin/clients",
+  "/(portal)/portal/admin/proposals/new/page": "/portal/admin/proposals/new",
+  "/(portal)/portal/admin/proposals/page": "/portal/admin/proposals"
+}

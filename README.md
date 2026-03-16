@@ -43,7 +43,7 @@
 - `npm run build` automatically runs `npm run sync:projects` first.
 - The sync script reads the checked-in `index-projects.xlsx` workbook directly and regenerates the homepage project cards from the first worksheet.
 - Protected project auth is backed by the checked-in [project-access.registry.json](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/project-access.registry.json) file, which can be regenerated from the local workbook with `npm run sync:project-access`.
-- The Google SSO client portal is backed by the checked-in [client-portal.registry.json](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/client-portal.registry.json) file and the `/api/client-portal/*` routes. Client-side Google credentials are exchanged with the server, verified against `GOOGLE_CLIENT_ID`, and then mapped to an allowlisted account before the portal session cookie is issued.
+- The client portal is backed by the checked-in [client-portal.registry.json](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/client-portal.registry.json) file and the `/api/client-portal/*` routes. Portal access is issued server-side against the registry allowlist and stored in a signed session cookie.
 - Proposal-state homepage cards must not expose client names, exact locations, or other PII. Public card copy should stay generalized until access is granted.
 - Proposal-state card tags and impact must be derived from the underlying proposal/profile materials, with tag tiers expressed in monochrome shades.
 - Route-specific public card overrides and proposal/page tag tiers live in `src/content/projectShowcase.ts`.

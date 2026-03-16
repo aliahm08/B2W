@@ -1,0 +1,23 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/clerk/webhook/route": "app/api/clerk/webhook/route.js",
+  "/api/files/download/route": "app/api/files/download/route.js",
+  "/api/files/upload/route": "app/api/files/upload/route.js",
+  "/(auth)/sign-up/[[...sign-up]]/page": "app/(auth)/sign-up/[[...sign-up]]/page.js",
+  "/(auth)/sign-in/[[...sign-in]]/page": "app/(auth)/sign-in/[[...sign-in]]/page.js",
+  "/unauthorized/page": "app/unauthorized/page.js",
+  "/(portal)/portal/deliverables/[id]/page": "app/(portal)/portal/deliverables/[id]/page.js",
+  "/(portal)/portal/proposals/[id]/page": "app/(portal)/portal/proposals/[id]/page.js",
+  "/(portal)/portal/deliverables/page": "app/(portal)/portal/deliverables/page.js",
+  "/(portal)/portal/page": "app/(portal)/portal/page.js",
+  "/(portal)/portal/proposals/page": "app/(portal)/portal/proposals/page.js",
+  "/(portal)/portal/settings/page": "app/(portal)/portal/settings/page.js",
+  "/(portal)/portal/admin/audit/page": "app/(portal)/portal/admin/audit/page.js",
+  "/(portal)/portal/admin/invites/page": "app/(portal)/portal/admin/invites/page.js",
+  "/(portal)/portal/admin/deliverables/page": "app/(portal)/portal/admin/deliverables/page.js",
+  "/(portal)/portal/admin/page": "app/(portal)/portal/admin/page.js",
+  "/(portal)/portal/admin/proposals/[id]/edit/page": "app/(portal)/portal/admin/proposals/[id]/edit/page.js",
+  "/(portal)/portal/admin/clients/page": "app/(portal)/portal/admin/clients/page.js",
+  "/(portal)/portal/admin/proposals/new/page": "app/(portal)/portal/admin/proposals/new/page.js",
+  "/(portal)/portal/admin/proposals/page": "app/(portal)/portal/admin/proposals/page.js"
+}
