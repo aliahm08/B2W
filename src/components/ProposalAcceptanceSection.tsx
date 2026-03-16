@@ -237,9 +237,9 @@ export default function ProposalAcceptanceSection({
             initial={{ opacity: 0, x: 32 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 32 }}
-            className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl overflow-y-auto border-l border-black/10 bg-[#f4efe5] shadow-[0_24px_80px_rgba(0,0,0,0.24)]"
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl overflow-y-auto border-l border-black/10 bg-white shadow-[0_24px_80px_rgba(0,0,0,0.24)]"
           >
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-black/10 bg-[#f4efe5]/95 px-5 py-4 backdrop-blur md:px-8">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-black/10 bg-white/95 px-5 py-4 backdrop-blur md:px-8">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Proposal Finalization</p>
                 <h2 className="mt-1 text-xl font-medium text-black">{proposal.acceptanceHeading}</h2>
@@ -257,9 +257,9 @@ export default function ProposalAcceptanceSection({
             <div className="px-5 py-6 md:px-8 md:py-8">
               {!submitSuccess ? (
                 <form onSubmit={handleSubmit} className="space-y-8">
-                  <section className="rounded-[1.5rem] border border-black/10 bg-white p-5">
+                  <section className="border border-black/10 bg-white p-5">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Selected Scope</p>
-                    <div className="mt-3 rounded-[1.25rem] border border-black bg-black p-4 text-white">
+                    <div className="mt-3 border border-black bg-black p-4 text-white">
                       <p className="text-lg font-medium">{selectedOption?.title}</p>
                       <div className="mt-2 flex flex-wrap gap-2 text-xs uppercase tracking-[0.18em] text-neutral-300">
                         <span>{selectedOption?.price}</span>
@@ -270,7 +270,7 @@ export default function ProposalAcceptanceSection({
                     {proposal.options.length > 1 ? (
                       <div className="mt-4 grid gap-3">
                         {proposal.options.map((option) => (
-                          <label key={option.id} className="flex items-start gap-3 rounded-2xl border border-black/10 bg-neutral-50 px-4 py-3">
+                          <label key={option.id} className="flex items-start gap-3 border border-black/10 px-4 py-3">
                             <input
                               type="radio"
                               name="proposalOption"
@@ -292,7 +292,7 @@ export default function ProposalAcceptanceSection({
                     ) : null}
                   </section>
 
-                  <section className="rounded-[1.5rem] border border-black/10 bg-white p-5">
+                  <section className="border border-black/10 bg-white p-5">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Section 4</p>
                     <h3 className="mt-2 text-2xl font-medium text-black">Key Terms and Assumptions</h3>
                     <div className="mt-5 grid gap-6 md:grid-cols-2">
@@ -316,7 +316,7 @@ export default function ProposalAcceptanceSection({
                     </div>
                   </section>
 
-                  <section className="rounded-[1.5rem] border border-black/10 bg-white p-5">
+                  <section className="border border-black/10 bg-white p-5">
                     <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Section 5</p>
                     <h3 className="mt-2 text-2xl font-medium text-black">Signature</h3>
                     <p className="mt-2 text-sm leading-6 text-neutral-600">{proposal.acceptanceIntro}</p>
@@ -329,7 +329,7 @@ export default function ProposalAcceptanceSection({
                           value={state.fullName}
                           onChange={(event) => setState((current) => ({ ...current, fullName: event.target.value }))}
                           required
-                          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                          className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
                           placeholder="Your name"
                         />
                       </label>
@@ -340,7 +340,7 @@ export default function ProposalAcceptanceSection({
                           value={state.email}
                           onChange={(event) => setState((current) => ({ ...current, email: event.target.value }))}
                           required
-                          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                          className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
                           placeholder="name@example.com"
                         />
                       </label>
@@ -352,7 +352,7 @@ export default function ProposalAcceptanceSection({
                         type="text"
                         value={state.company}
                         onChange={(event) => setState((current) => ({ ...current, company: event.target.value }))}
-                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                        className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
                         placeholder="Company or entity"
                       />
                     </label>
@@ -363,12 +363,12 @@ export default function ProposalAcceptanceSection({
                         value={state.notes}
                         onChange={(event) => setState((current) => ({ ...current, notes: event.target.value }))}
                         rows={5}
-                        className="w-full rounded-[1.5rem] border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                        className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
                         placeholder="Share onboarding details, preferred timing, internal notes, or requested edits."
                       />
                     </label>
 
-                    <label className="mt-4 flex items-start gap-3 rounded-[1.5rem] border border-black/10 bg-neutral-50 p-4">
+                    <label className="mt-4 flex items-start gap-3 border border-black/10 p-4">
                       <input
                         type="checkbox"
                         checked={state.acceptedTerms}
@@ -381,7 +381,7 @@ export default function ProposalAcceptanceSection({
                       </span>
                     </label>
 
-                    <div className="mt-4 rounded-[1.5rem] border border-black/10 bg-neutral-50 p-4">
+                    <div className="mt-4 border border-black/10 p-4">
                       <div className="mb-3 flex items-center justify-between gap-3">
                         <div>
                           <div className="flex items-center gap-2">
@@ -398,14 +398,14 @@ export default function ProposalAcceptanceSection({
                           Clear
                         </button>
                       </div>
-                      <div className="rounded-[1.5rem] border border-dashed border-black/20 bg-white p-3">
+                      <div className="border border-dashed border-black/20 bg-white p-3">
                         <canvas
                           ref={signature.canvasRef}
                           onPointerDown={signature.startDrawing}
                           onPointerMove={signature.draw}
                           onPointerUp={signature.stopDrawing}
                           onPointerLeave={signature.stopDrawing}
-                          className="h-44 w-full touch-none rounded-[1rem] bg-white"
+                          className="h-44 w-full touch-none bg-white"
                         />
                       </div>
                       {!signature.hasSignature ? <p className="mt-3 text-xs text-neutral-500">Signature required before submitting.</p> : null}
@@ -413,7 +413,7 @@ export default function ProposalAcceptanceSection({
                   </section>
 
                   {submitError ? (
-                    <p className="rounded-2xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{submitError}</p>
+                    <p className="border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{submitError}</p>
                   ) : null}
 
                   <div className="flex flex-col gap-3 border-t border-black/10 pt-5 md:flex-row md:items-center md:justify-between">
@@ -431,7 +431,7 @@ export default function ProposalAcceptanceSection({
                   </div>
                 </form>
               ) : (
-                <div className="rounded-[1.5rem] border border-black/10 bg-white p-6">
+                <div className="border border-black/10 bg-white p-6">
                   <div className="flex items-center gap-3 text-emerald-600">
                     <CheckCircle2 size={20} />
                     <p className="text-sm font-medium uppercase tracking-[0.22em]">Signed</p>
