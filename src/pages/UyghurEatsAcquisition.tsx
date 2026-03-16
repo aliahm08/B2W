@@ -233,14 +233,13 @@ export default function UyghurEatsAcquisition() {
               id="scope-options"
               title="Scope of Work"
               icon={BriefcaseBusiness}
-              className="border-t border-neutral-900 bg-black text-white"
-              headerClassName="border-b border-white/10 p-4"
+              className="border-t border-neutral-200"
+              headerClassName="border-b border-neutral-200 p-4"
               bodyClassName="space-y-6 p-4 md:p-6"
-              titleClassName="text-white md:text-xl"
-              tone="dark"
+              titleClassName="md:text-xl"
             >
               <div data-project-detail-body className="space-y-6">
-                <p className="max-w-2xl text-sm leading-relaxed text-neutral-300">
+                <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
                   {proposal?.scopeIntro}
                 </p>
 
@@ -252,13 +251,13 @@ export default function UyghurEatsAcquisition() {
                       onClick={() => setSelectedOptionId(option.id)}
                       className={`border px-4 py-3 text-left text-sm font-medium transition-colors ${
                         selectedOptionId === option.id
-                          ? 'border-white bg-white text-black'
-                          : 'border-white/15 bg-white/5 text-white hover:border-white/40 hover:bg-white/10'
+                          ? 'border-black bg-black text-white'
+                          : 'border-neutral-200 bg-white text-neutral-700 hover:border-black hover:text-black'
                       }`}
                     >
                       <span className="block">{option.title}</span>
                       <span className={`mt-2 block text-xs leading-5 ${
-                        selectedOptionId === option.id ? 'text-neutral-600' : 'text-neutral-400'
+                        selectedOptionId === option.id ? 'text-neutral-300' : 'text-neutral-500'
                       }`}>
                         {option.summary}
                       </span>
@@ -267,49 +266,49 @@ export default function UyghurEatsAcquisition() {
                 </div>
 
                 {selectedOption ? (
-                  <div className="grid gap-4 border-t border-white/10 pt-6 lg:grid-cols-[minmax(0,1.8fr)_minmax(220px,0.7fr)_minmax(220px,0.7fr)]">
-                    <div className="border border-white/15 p-5">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-400">Deliverables</p>
-                      <h4 className="mt-3 text-2xl font-medium text-white">{selectedOption.title}</h4>
-                      <p className="mt-3 text-base leading-7 text-neutral-300">
+                  <div className="grid gap-4 border-t border-neutral-200 pt-6 lg:grid-cols-[minmax(0,1.8fr)_minmax(220px,0.7fr)_minmax(220px,0.7fr)]">
+                    <div className="border border-neutral-200 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Deliverables</p>
+                      <h4 className="mt-3 text-2xl font-medium text-black">{selectedOption.title}</h4>
+                      <p className="mt-3 text-base leading-7 text-neutral-600">
                         {selectedOption.summary}
                       </p>
-                      <ul className="mt-5 list-disc space-y-2 pl-5 text-base leading-7 text-neutral-300">
+                      <ul className="mt-5 list-disc space-y-2 pl-5 text-base leading-7 text-neutral-600">
                         {selectedOption.offerings.map((offering) => (
                           <li key={offering}>{offering}</li>
                         ))}
                       </ul>
                       <Link
                         to="/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options"
-                        className="mt-6 inline-flex items-center gap-2 border border-white/15 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white hover:bg-white hover:text-black"
+                        className="mt-6 inline-flex items-center gap-2 border border-neutral-200 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black hover:text-black"
                       >
                         Preview deliverable
                         <ArrowUpRight className="h-4 w-4" />
                       </Link>
                     </div>
 
-                    <div className="border border-white/15 p-5">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-400">Price</p>
-                      <p className="mt-3 text-3xl font-medium text-white">{selectedOption.price}</p>
+                    <div className="border border-neutral-200 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Price</p>
+                      <p className="mt-3 text-3xl font-medium text-black">{selectedOption.price}</p>
                     </div>
 
-                    <div className="border border-white/15 p-5">
-                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-400">Timeline</p>
-                      <p className="mt-3 text-3xl font-medium text-white">{selectedOption.timeline}</p>
+                    <div className="border border-neutral-200 p-5">
+                      <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Timeline</p>
+                      <p className="mt-3 text-3xl font-medium text-black">{selectedOption.timeline}</p>
                     </div>
                   </div>
                 ) : null}
 
-                <div className="border-t border-white/10 pt-5">
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-400">Selected for Finalization</p>
-                  <h4 className="mt-2 text-xl font-medium text-white">{selectedOption?.title}</h4>
-                  <p className="mt-2 text-sm leading-6 text-neutral-300">
+                <div className="border-t border-black pt-5">
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Selected for Finalization</p>
+                  <h4 className="mt-2 text-xl font-medium text-black">{selectedOption?.title}</h4>
+                  <p className="mt-2 text-sm leading-6 text-neutral-600">
                     {selectedOption?.price} · {selectedOption?.timeline}
                   </p>
                   <button
                     type="button"
                     onClick={() => setIsFinalizationOpen(true)}
-                    className="mt-5 inline-flex items-center justify-center border border-white bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
+                    className="mt-5 inline-flex items-center justify-center border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
                   >
                     Accept Terms and Sign
                   </button>
