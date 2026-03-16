@@ -255,7 +255,7 @@ export default function BorekGOperations() {
                                                 {selectedOption.offerings.map((offering) => <li key={offering}>{offering}</li>)}
                                             </ul>
                                             <Link
-                                                to="/borek-g-social-media-management"
+                                                to="/borek-g-social-media-management?preview=proposal&return=%2Fborek-g-operations%23scope-options"
                                                 className="mt-6 inline-flex items-center gap-2 border border-teal-500/30 bg-teal-500/10 px-4 py-3 text-sm font-medium text-teal-700 transition-colors hover:border-teal-700 hover:bg-teal-700 hover:text-white"
                                             >
                                                 Preview deliverable

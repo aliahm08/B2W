@@ -9,7 +9,6 @@ function isExternalLink(value: string): boolean {
 
 const projectTypeOptions = ['All', 'Marketing', 'Operations', 'Financials'] as const;
 const capacityOptions = ['All', 'Consulting', 'Implementation', 'Custom Solution'] as const;
-const statusOptions = ['All', 'Proposed', 'In-progress', 'Complete'] as const;
 const deliverableOptions = [
   'All',
   'Analysis',
@@ -192,8 +191,6 @@ export default function Industries() {
   const { projects } = projectPipelineContent;
   const [selectedProjectType, setSelectedProjectType] = useState<(typeof projectTypeOptions)[number]>('All');
   const [selectedCapacity, setSelectedCapacity] = useState<(typeof capacityOptions)[number]>('All');
-  const [selectedStatus, setSelectedStatus] = useState<(typeof statusOptions)[number]>('All');
-  const [selectedDeliverable, setSelectedDeliverable] = useState<(typeof deliverableOptions)[number]>('All');
 
   const projectCards = useMemo<ProjectCardViewModel[]>(
     () =>
@@ -211,13 +208,10 @@ export default function Industries() {
     () => projectCards.filter((project) => {
       const matchesProjectType = selectedProjectType === 'All' || project.typeLabel === selectedProjectType;
       const matchesCapacity = selectedCapacity === 'All' || project.capacityLabel === selectedCapacity;
-      const matchesStatus = selectedStatus === 'All' || project.statusLabel === selectedStatus;
-      const matchesDeliverable =
-        selectedDeliverable === 'All' || project.deliverables.includes(selectedDeliverable);
 
-      return matchesProjectType && matchesCapacity && matchesStatus && matchesDeliverable;
+      return matchesProjectType && matchesCapacity;
     }),
-    [projectCards, selectedProjectType, selectedCapacity, selectedStatus, selectedDeliverable],
+    [projectCards, selectedProjectType, selectedCapacity],
   );
 
   const renderFilterGroup = (
@@ -262,8 +256,8 @@ export default function Industries() {
         >
           <h2 className="mb-4 text-4xl font-medium tracking-tight text-neutral-950">Projects</h2>
           <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-            Filter by project type, capacity, status, and deliverables. Every card follows the same three-part format:
-            metadata on top, title and subtitle in the middle, and deliverables with date started at the bottom.
+            Filter by project type and capacity. Every card follows the same three-part format: metadata on top,
+            title and subtitle in the middle, and deliverables with date started at the bottom.
           </p>
           <div className="h-px w-full bg-neutral-200" />
         </motion.div>
@@ -276,18 +270,12 @@ export default function Industries() {
         </div>
 
         <div className="mb-12 border-t border-neutral-200 pt-6 md:pt-8">
-          <div className="grid gap-6 xl:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2">
             {renderFilterGroup('Project Type', [...projectTypeOptions], selectedProjectType, (value) =>
               setSelectedProjectType(value as (typeof projectTypeOptions)[number])
             )}
             {renderFilterGroup('Capacity', [...capacityOptions], selectedCapacity, (value) =>
               setSelectedCapacity(value as (typeof capacityOptions)[number])
-            )}
-            {renderFilterGroup('Status', [...statusOptions], selectedStatus, (value) =>
-              setSelectedStatus(value as (typeof statusOptions)[number])
-            )}
-            {renderFilterGroup('Deliverables', [...deliverableOptions], selectedDeliverable, (value) =>
-              setSelectedDeliverable(value as (typeof deliverableOptions)[number])
             )}
           </div>
         </div>
