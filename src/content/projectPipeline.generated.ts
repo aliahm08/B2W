@@ -80,7 +80,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "status": "Proposed",
       "clientDescription": "Restaurant property sale opportunity",
       "title": "M&A Property Sale",
-      "description": "Generic project explainer for a restaurant M&A property sale opportunity and the buyer-relevant signals behind it.",
+      "description": "Restaurant M&A property sale engagement focused on location quality, market position, and buyer-relevant operating signals.",
       "impact": "Property sale opportunity identified",
       "tags": [
         {
