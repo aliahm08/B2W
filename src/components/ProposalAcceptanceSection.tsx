@@ -1,10 +1,15 @@
 import { FormEvent, PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from 'react';
-import { CheckCircle2, PenSquare, Send } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { CheckCircle2, PenSquare, Send, X } from 'lucide-react';
 import type { ProposalContent } from '../content/proposals';
 
 type ProposalAcceptanceSectionProps = {
   pathname: string;
   proposal: ProposalContent;
+  isOpen: boolean;
+  onClose: () => void;
+  selectedOptionId: string;
+  onSelectedOptionChange: (optionId: string) => void;
 };
 
 type ProposalSubmissionState = {
@@ -22,18 +27,18 @@ type ProposalSubmitResponse = {
   createdAt: string;
 };
 
-const sectionId = 'proposal-signature';
-
-function getProposalCacheKey(pathname: string): string {
+export function getProposalCacheKey(pathname: string): string {
   return `b2w-proposal-response:${pathname}`;
 }
 
-function useSignaturePad() {
+function useSignaturePad(isOpen: boolean) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDrawingRef = useRef(false);
   const [hasSignature, setHasSignature] = useState(false);
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -50,7 +55,7 @@ function useSignaturePad() {
     context.lineWidth = 2;
     context.strokeStyle = '#111111';
     context.clearRect(0, 0, rect.width, rect.height);
-  }, []);
+  }, [isOpen]);
 
   function getPoint(event: ReactPointerEvent<HTMLCanvasElement>) {
     const canvas = canvasRef.current;
@@ -100,21 +105,20 @@ function useSignaturePad() {
   return { canvasRef, hasSignature, startDrawing, draw, stopDrawing, clearSignature, toDataUrl };
 }
 
-function defaultOptionId(proposal: ProposalContent): string {
-  return proposal.options[0]?.id ?? '';
-}
-
-export function scrollToProposalSignatureSection() {
-  document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-export default function ProposalAcceptanceSection({ pathname, proposal }: ProposalAcceptanceSectionProps) {
-  const signature = useSignaturePad();
+export default function ProposalAcceptanceSection({
+  pathname,
+  proposal,
+  isOpen,
+  onClose,
+  selectedOptionId,
+  onSelectedOptionChange,
+}: ProposalAcceptanceSectionProps) {
+  const signature = useSignaturePad(isOpen);
   const [state, setState] = useState<ProposalSubmissionState>({
     fullName: '',
     email: '',
     company: '',
-    selectedOptionId: defaultOptionId(proposal),
+    selectedOptionId,
     notes: '',
     acceptedTerms: false,
   });
@@ -125,9 +129,7 @@ export default function ProposalAcceptanceSection({ pathname, proposal }: Propos
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(getProposalCacheKey(pathname));
-      if (!raw) {
-        return;
-      }
+      if (!raw) return;
 
       const cached = JSON.parse(raw) as Partial<ProposalSubmissionState>;
       setState({
@@ -136,24 +138,45 @@ export default function ProposalAcceptanceSection({ pathname, proposal }: Propos
         company: String(cached.company ?? ''),
         selectedOptionId: proposal.options.some((option) => option.id === cached.selectedOptionId)
           ? String(cached.selectedOptionId)
-          : defaultOptionId(proposal),
+          : selectedOptionId,
         notes: String(cached.notes ?? ''),
         acceptedTerms: Boolean(cached.acceptedTerms),
       });
     } catch {
       window.localStorage.removeItem(getProposalCacheKey(pathname));
     }
-  }, [pathname, proposal]);
+  }, [pathname, proposal, selectedOptionId]);
+
+  useEffect(() => {
+    setState((current) => (current.selectedOptionId === selectedOptionId ? current : { ...current, selectedOptionId }));
+  }, [selectedOptionId]);
 
   useEffect(() => {
     window.localStorage.setItem(getProposalCacheKey(pathname), JSON.stringify(state));
   }, [pathname, state]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!state.acceptedTerms || !signature.hasSignature) {
-      return;
-    }
+    if (!state.acceptedTerms || !signature.hasSignature) return;
 
     setIsSubmitting(true);
     setSubmitError('');
@@ -195,191 +218,238 @@ export default function ProposalAcceptanceSection({ pathname, proposal }: Propos
     }
   }
 
-  const hasMultipleOptions = proposal.options.length > 1;
+  const selectedOption = proposal.options.find((option) => option.id === state.selectedOptionId) ?? proposal.options[0];
 
   return (
-    <section id={sectionId} className="rounded-[2rem] border border-neutral-900 bg-neutral-950 p-6 text-white md:p-8">
-      <div className="max-w-3xl">
-        <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">Proposal Acceptance</p>
-        <h2 className="mt-3 text-3xl font-medium tracking-tight md:text-4xl">{proposal.acceptanceHeading}</h2>
-        <p className="mt-4 text-sm leading-6 text-neutral-300 md:text-base">{proposal.acceptanceIntro}</p>
-      </div>
-
-      {!submitSuccess ? (
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          {hasMultipleOptions ? (
-            <section className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-              <div className="flex items-center justify-between gap-4">
-                <h3 className="text-lg font-medium">Selected Scope</h3>
-                <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Packages</p>
-              </div>
-              <div className="mt-4 grid gap-3">
-                {proposal.options.map((option) => {
-                  const isSelected = state.selectedOptionId === option.id;
-                  return (
-                    <label
-                      key={option.id}
-                      className={`rounded-[1.5rem] border p-4 transition-colors ${
-                        isSelected ? 'border-white bg-white text-black' : 'border-white/10 bg-transparent text-white'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <input
-                          type="radio"
-                          name="proposalOption"
-                          value={option.id}
-                          checked={isSelected}
-                          onChange={() => setState((current) => ({ ...current, selectedOptionId: option.id }))}
-                          className="mt-1 h-4 w-4"
-                        />
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium">{option.title}</p>
-                          <div className={`mt-2 flex flex-wrap gap-2 text-xs uppercase tracking-[0.18em] ${isSelected ? 'text-neutral-600' : 'text-neutral-400'}`}>
-                            <span>{option.price}</span>
-                            <span>•</span>
-                            <span>{option.timeline}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </label>
-                  );
-                })}
-              </div>
-            </section>
-          ) : (
-            <section className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Scope</p>
-              <h3 className="mt-2 text-lg font-medium">{proposal.options[0]?.title}</h3>
-              <p className="mt-2 text-sm text-neutral-300">{proposal.options[0]?.price} · {proposal.options[0]?.timeline}</p>
-            </section>
-          )}
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-neutral-100">Full name</span>
-              <input
-                type="text"
-                value={state.fullName}
-                onChange={(event) => setState((current) => ({ ...current, fullName: event.target.value }))}
-                required
-                className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-white"
-                placeholder="Your name"
-              />
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-medium text-neutral-100">Email</span>
-              <input
-                type="email"
-                value={state.email}
-                onChange={(event) => setState((current) => ({ ...current, email: event.target.value }))}
-                required
-                className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-white"
-                placeholder="name@example.com"
-              />
-            </label>
-          </div>
-
-          <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-100">Company</span>
-            <input
-              type="text"
-              value={state.company}
-              onChange={(event) => setState((current) => ({ ...current, company: event.target.value }))}
-              className="w-full rounded-2xl border border-white/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-white"
-              placeholder="Company or entity"
-            />
-          </label>
-
-          <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-100">Final notes or requested changes</span>
-            <textarea
-              value={state.notes}
-              onChange={(event) => setState((current) => ({ ...current, notes: event.target.value }))}
-              rows={6}
-              className="w-full rounded-[1.5rem] border border-white/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-white"
-              placeholder="Share onboarding details, preferred timing, internal notes, or requested edits."
-            />
-          </label>
-
-          <label className="flex items-start gap-3 rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-            <input
-              type="checkbox"
-              checked={state.acceptedTerms}
-              onChange={(event) => setState((current) => ({ ...current, acceptedTerms: event.target.checked }))}
-              required
-              className="mt-1 h-4 w-4"
-            />
-            <span className="text-sm leading-6 text-neutral-200">
-              I confirm I am authorized to approve this proposal, accept the terms and assumptions shown on this page, and want B2W to prepare the next execution step.
-            </span>
-          </label>
-
-          <section className="rounded-[1.5rem] border border-white/10 bg-white/5 p-5">
-            <div className="flex items-center justify-between gap-3">
+    <AnimatePresence>
+      {isOpen ? (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/40"
+            onClick={onClose}
+          />
+          <motion.aside
+            initial={{ opacity: 0, x: 32 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 32 }}
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl overflow-y-auto border-l border-black/10 bg-[#f4efe5] shadow-[0_24px_80px_rgba(0,0,0,0.24)]"
+          >
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-black/10 bg-[#f4efe5]/95 px-5 py-4 backdrop-blur md:px-8">
               <div>
-                <div className="flex items-center gap-2">
-                  <PenSquare size={18} />
-                  <h3 className="text-lg font-medium">Digital Signature</h3>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-neutral-300">Sign below using your finger, mouse, or stylus.</p>
+                <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Proposal Finalization</p>
+                <h2 className="mt-1 text-xl font-medium text-black">{proposal.acceptanceHeading}</h2>
               </div>
               <button
                 type="button"
-                onClick={signature.clearSignature}
-                className="rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:border-white"
+                onClick={onClose}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-neutral-700 transition-colors hover:border-black"
+                aria-label="Close proposal finalization"
               >
-                Clear
+                <X size={16} />
               </button>
             </div>
-            <div className="mt-4 rounded-[1.5rem] border border-dashed border-white/20 bg-white p-3">
-              <canvas
-                ref={signature.canvasRef}
-                onPointerDown={signature.startDrawing}
-                onPointerMove={signature.draw}
-                onPointerUp={signature.stopDrawing}
-                onPointerLeave={signature.stopDrawing}
-                className="h-44 w-full touch-none rounded-[1rem] bg-white"
-              />
+
+            <div className="px-5 py-6 md:px-8 md:py-8">
+              {!submitSuccess ? (
+                <form onSubmit={handleSubmit} className="space-y-8">
+                  <section className="rounded-[1.5rem] border border-black/10 bg-white p-5">
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Selected Scope</p>
+                    <div className="mt-3 rounded-[1.25rem] border border-black bg-black p-4 text-white">
+                      <p className="text-lg font-medium">{selectedOption?.title}</p>
+                      <div className="mt-2 flex flex-wrap gap-2 text-xs uppercase tracking-[0.18em] text-neutral-300">
+                        <span>{selectedOption?.price}</span>
+                        <span>•</span>
+                        <span>{selectedOption?.timeline}</span>
+                      </div>
+                    </div>
+                    {proposal.options.length > 1 ? (
+                      <div className="mt-4 grid gap-3">
+                        {proposal.options.map((option) => (
+                          <label key={option.id} className="flex items-start gap-3 rounded-2xl border border-black/10 bg-neutral-50 px-4 py-3">
+                            <input
+                              type="radio"
+                              name="proposalOption"
+                              value={option.id}
+                              checked={state.selectedOptionId === option.id}
+                              onChange={() => {
+                                setState((current) => ({ ...current, selectedOptionId: option.id }));
+                                onSelectedOptionChange(option.id);
+                              }}
+                              className="mt-1 h-4 w-4"
+                            />
+                            <div>
+                              <p className="text-sm font-medium text-black">{option.title}</p>
+                              <p className="mt-1 text-sm text-neutral-600">{option.price} · {option.timeline}</p>
+                            </div>
+                          </label>
+                        ))}
+                      </div>
+                    ) : null}
+                  </section>
+
+                  <section className="rounded-[1.5rem] border border-black/10 bg-white p-5">
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Section 4</p>
+                    <h3 className="mt-2 text-2xl font-medium text-black">Key Terms and Assumptions</h3>
+                    <div className="mt-5 grid gap-6 md:grid-cols-2">
+                      <div>
+                        <p className="text-sm font-medium text-black">Key Terms</p>
+                        <ol className="mt-3 space-y-3 text-sm leading-6 text-neutral-700">
+                          {proposal.terms.map((term, index) => (
+                            <li key={term} className="flex gap-3">
+                              <span className="font-medium text-black">{index + 1}.</span>
+                              <span>{term}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-black">Assumptions</p>
+                        <ul className="mt-3 list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-700">
+                          {proposal.assumptions.map((assumption) => <li key={assumption}>{assumption}</li>)}
+                        </ul>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section className="rounded-[1.5rem] border border-black/10 bg-white p-5">
+                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Section 5</p>
+                    <h3 className="mt-2 text-2xl font-medium text-black">Signature</h3>
+                    <p className="mt-2 text-sm leading-6 text-neutral-600">{proposal.acceptanceIntro}</p>
+
+                    <div className="mt-5 grid gap-4 md:grid-cols-2">
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-medium text-neutral-800">Full name</span>
+                        <input
+                          type="text"
+                          value={state.fullName}
+                          onChange={(event) => setState((current) => ({ ...current, fullName: event.target.value }))}
+                          required
+                          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                          placeholder="Your name"
+                        />
+                      </label>
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-medium text-neutral-800">Email</span>
+                        <input
+                          type="email"
+                          value={state.email}
+                          onChange={(event) => setState((current) => ({ ...current, email: event.target.value }))}
+                          required
+                          className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                          placeholder="name@example.com"
+                        />
+                      </label>
+                    </div>
+
+                    <label className="mt-4 block">
+                      <span className="mb-2 block text-sm font-medium text-neutral-800">Company</span>
+                      <input
+                        type="text"
+                        value={state.company}
+                        onChange={(event) => setState((current) => ({ ...current, company: event.target.value }))}
+                        className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                        placeholder="Company or entity"
+                      />
+                    </label>
+
+                    <label className="mt-4 block">
+                      <span className="mb-2 block text-sm font-medium text-neutral-800">Final notes or requested changes</span>
+                      <textarea
+                        value={state.notes}
+                        onChange={(event) => setState((current) => ({ ...current, notes: event.target.value }))}
+                        rows={5}
+                        className="w-full rounded-[1.5rem] border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+                        placeholder="Share onboarding details, preferred timing, internal notes, or requested edits."
+                      />
+                    </label>
+
+                    <label className="mt-4 flex items-start gap-3 rounded-[1.5rem] border border-black/10 bg-neutral-50 p-4">
+                      <input
+                        type="checkbox"
+                        checked={state.acceptedTerms}
+                        onChange={(event) => setState((current) => ({ ...current, acceptedTerms: event.target.checked }))}
+                        required
+                        className="mt-1 h-4 w-4"
+                      />
+                      <span className="text-sm leading-6 text-neutral-700">
+                        I confirm I am authorized to approve this proposal, accept the selected scope plus the key terms and assumptions, and want B2W to prepare the next step.
+                      </span>
+                    </label>
+
+                    <div className="mt-4 rounded-[1.5rem] border border-black/10 bg-neutral-50 p-4">
+                      <div className="mb-3 flex items-center justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <PenSquare size={18} className="text-black" />
+                            <p className="text-lg font-medium text-black">Digital Signature</p>
+                          </div>
+                          <p className="mt-1 text-sm leading-6 text-neutral-600">Sign below using your finger, mouse, or stylus.</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={signature.clearSignature}
+                          className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black"
+                        >
+                          Clear
+                        </button>
+                      </div>
+                      <div className="rounded-[1.5rem] border border-dashed border-black/20 bg-white p-3">
+                        <canvas
+                          ref={signature.canvasRef}
+                          onPointerDown={signature.startDrawing}
+                          onPointerMove={signature.draw}
+                          onPointerUp={signature.stopDrawing}
+                          onPointerLeave={signature.stopDrawing}
+                          className="h-44 w-full touch-none rounded-[1rem] bg-white"
+                        />
+                      </div>
+                      {!signature.hasSignature ? <p className="mt-3 text-xs text-neutral-500">Signature required before submitting.</p> : null}
+                    </div>
+                  </section>
+
+                  {submitError ? (
+                    <p className="rounded-2xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{submitError}</p>
+                  ) : null}
+
+                  <div className="flex flex-col gap-3 border-t border-black/10 pt-5 md:flex-row md:items-center md:justify-between">
+                    <p className="text-xs leading-5 text-neutral-500">
+                      Signed transcript delivery is sent to the signer email and to info@b2w-ai.com.
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      {isSubmitting ? 'Submitting...' : 'Submit signed proposal'}
+                      <Send size={14} />
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="rounded-[1.5rem] border border-black/10 bg-white p-6">
+                  <div className="flex items-center gap-3 text-emerald-600">
+                    <CheckCircle2 size={20} />
+                    <p className="text-sm font-medium uppercase tracking-[0.22em]">Signed</p>
+                  </div>
+                  <h3 className="mt-4 text-2xl font-medium tracking-tight text-black">{proposal.successHeading}</h3>
+                  <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-600">{proposal.successBody}</p>
+                  <a
+                    href={submitSuccess.documentUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-5 inline-flex rounded-full border border-black/10 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
+                  >
+                    Open signed transcript
+                  </a>
+                </div>
+              )}
             </div>
-            {!signature.hasSignature ? <p className="mt-3 text-xs text-neutral-400">Signature required before submitting.</p> : null}
-          </section>
-
-          {submitError ? (
-            <p className="rounded-2xl border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-100">{submitError}</p>
-          ) : null}
-
-          <div className="flex flex-col gap-3 border-t border-white/10 pt-5 md:flex-row md:items-center md:justify-between">
-            <p className="text-xs leading-5 text-neutral-400">
-              Signed transcript delivery is sent to the signer email and to info@b2w-ai.com.
-            </p>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              {isSubmitting ? 'Submitting...' : 'Submit signed proposal'}
-              <Send size={14} />
-            </button>
-          </div>
-        </form>
-      ) : (
-        <div className="mt-8 rounded-[1.5rem] border border-white/10 bg-white/5 p-6">
-          <div className="flex items-center gap-3 text-emerald-300">
-            <CheckCircle2 size={20} />
-            <p className="text-sm font-medium uppercase tracking-[0.22em]">Signed</p>
-          </div>
-          <h3 className="mt-4 text-2xl font-medium tracking-tight">{proposal.successHeading}</h3>
-          <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-300">{proposal.successBody}</p>
-          <a
-            href={submitSuccess.documentUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-5 inline-flex rounded-full border border-white/10 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white"
-          >
-            Open signed transcript
-          </a>
-        </div>
-      )}
-    </section>
+          </motion.aside>
+        </>
+      ) : null}
+    </AnimatePresence>
   );
 }

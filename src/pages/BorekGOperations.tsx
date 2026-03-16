@@ -1,11 +1,12 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Bot, Clock3, MessageSquare, Settings2, Store, Wrench } from 'lucide-react';
+import { ArrowLeft, Bot, CircleAlert, Clock3, MessageSquare, Settings2, Sparkles, Store, Wrench } from 'lucide-react';
 import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import ProposalAcceptanceSection from '../components/ProposalAcceptanceSection';
+import ProposalAcceptanceSection, { getProposalCacheKey } from '../components/ProposalAcceptanceSection';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import { getProposalContent } from '../content/proposals';
 import {
@@ -40,17 +41,44 @@ const launchPlan = [
 const showcase = projectShowcaseOverridesByPath['/borek-g-operations'];
 const proposal = getProposalContent('/borek-g-operations');
 const sectionItems = [
-    { id: 'role', label: 'System Role' },
-    { id: 'use-cases', label: 'Core Use Cases' },
-    { id: 'rollout', label: 'Proposed Rollout' },
-    { id: 'scope-options', label: 'Scope Options' },
-    { id: 'terms', label: 'Terms' },
+    { id: 'problem', label: 'Problem' },
+    { id: 'solution', label: 'Our Solution' },
+    { id: 'scope-options', label: 'Scope of Work' },
     { id: 'handles', label: 'What It Handles' },
     { id: 'benefits', label: 'Expected Benefits' },
-    { id: 'proposal-signature', label: 'Sign' },
 ];
 
 export default function BorekGOperations() {
+    const [selectedOptionId, setSelectedOptionId] = useState(proposal?.options[0]?.id ?? '');
+    const [isFinalizationOpen, setIsFinalizationOpen] = useState(false);
+
+    useEffect(() => {
+        if (!proposal) return;
+
+        try {
+            const raw = window.localStorage.getItem(getProposalCacheKey('/borek-g-operations'));
+            if (!raw) return;
+
+            const cached = JSON.parse(raw) as { selectedOptionId?: string };
+            if (proposal.options.some((option) => option.id === cached.selectedOptionId)) {
+                setSelectedOptionId(String(cached.selectedOptionId));
+            }
+        } catch {
+            window.localStorage.removeItem(getProposalCacheKey('/borek-g-operations'));
+        }
+    }, []);
+
+    useEffect(() => {
+        function handleOpen() {
+            setIsFinalizationOpen(true);
+        }
+
+        window.addEventListener('b2w-assistant:open', handleOpen as EventListener);
+        return () => window.removeEventListener('b2w-assistant:open', handleOpen as EventListener);
+    }, []);
+
+    const selectedOption = proposal?.options.find((option) => option.id === selectedOptionId) ?? proposal?.options[0];
+
     return (
         <article className={projectPageShellClassName}>
             <Seo
@@ -87,6 +115,14 @@ export default function BorekGOperations() {
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
                                 Proposal for a Borek-G chatbot that handles repeat questions, keeps answers consistent, and routes exceptions to staff.
                             </p>
+
+                            <div className="mb-8 grid gap-3 md:grid-cols-3">
+                                {proposal?.heroHighlights.map((highlight) => (
+                                    <div key={highlight} className="rounded-[1.5rem] border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6 text-neutral-700">
+                                        {highlight}
+                                    </div>
+                                ))}
+                            </div>
 
                             <div className="flex flex-wrap gap-2">
                                 {showcase.tags.map((tag) => (
@@ -137,9 +173,9 @@ export default function BorekGOperations() {
                     </div>
                     <div className="space-y-12 lg:col-span-7">
                         <ResponsiveAccordionSection
-                            id="role"
-                            title="System Role"
-                            icon={Bot}
+                            id="problem"
+                            title="Problem"
+                            icon={CircleAlert}
                             defaultOpen
                             className="border border-neutral-200 md:border-0"
                             headerClassName="p-4 md:mb-4 md:p-0"
@@ -147,20 +183,23 @@ export default function BorekGOperations() {
                         >
                             <div data-project-detail-body>
                                 <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
-                                    This is a store operations system, not a marketing chatbot. It answers recurring business questions, reduces interruptions, and keeps responses consistent across channels.
+                                    {proposal?.problemBody}
                                 </p>
                             </div>
                         </ResponsiveAccordionSection>
 
                         <ResponsiveAccordionSection
-                            id="use-cases"
-                            title="Core Use Cases"
-                            icon={Store}
+                            id="solution"
+                            title="Our Solution"
+                            icon={Sparkles}
                             className="border border-neutral-200 md:border-0"
                             headerClassName="p-4 md:mb-4 md:p-0"
                             bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
                         >
                             <div data-project-detail-body>
+                                <p className="mb-4 text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    {proposal?.solutionBody}
+                                </p>
                                 <ul className="list-disc space-y-2 pl-5 text-neutral-600">
                                     {workstreams.map((item) => (
                                         <li key={item}>{item}</li>
@@ -171,7 +210,7 @@ export default function BorekGOperations() {
 
                         <ResponsiveAccordionSection
                             id="scope-options"
-                            title={proposal?.scopeHeading ?? 'Scope Options'}
+                            title="Scope of Work"
                             icon={Wrench}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -184,88 +223,66 @@ export default function BorekGOperations() {
                                 </p>
                                 <div className="grid gap-4">
                                     {proposal?.options.map((option) => (
-                                        <article key={option.id} className="rounded-[1.5rem] border border-neutral-200 bg-white p-5">
+                                        <label
+                                            key={option.id}
+                                            className={`block rounded-[1.5rem] border p-5 transition-colors ${
+                                                selectedOptionId === option.id ? 'border-black bg-black text-white' : 'border-neutral-200 bg-white'
+                                            }`}
+                                        >
                                             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                                                 <div className="max-w-2xl">
+                                                    <div className="flex items-start gap-3">
+                                                        <input
+                                                            type="radio"
+                                                            name="scopeOption"
+                                                            value={option.id}
+                                                            checked={selectedOptionId === option.id}
+                                                            onChange={() => setSelectedOptionId(option.id)}
+                                                            className="mt-1 h-4 w-4"
+                                                        />
+                                                        <div>
                                                     <p className="text-lg font-medium text-black">{option.title}</p>
-                                                    <p className="mt-2 text-sm leading-6 text-neutral-600">{option.summary}</p>
+                                                    <p className={`mt-2 text-sm leading-6 ${selectedOptionId === option.id ? 'text-neutral-300' : 'text-neutral-600'}`}>{option.summary}</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div className="grid gap-2 text-sm md:min-w-56">
-                                                    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
-                                                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Price</p>
-                                                        <p className="mt-1 font-medium text-black">{option.price}</p>
+                                                    <div className={`rounded-2xl border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200 bg-neutral-50'}`}>
+                                                        <p className={`text-[10px] uppercase tracking-[0.22em] ${selectedOptionId === option.id ? 'text-neutral-400' : 'text-neutral-500'}`}>Price</p>
+                                                        <p className={`mt-1 font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.price}</p>
                                                     </div>
-                                                    <div className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
-                                                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Timeline</p>
-                                                        <p className="mt-1 font-medium text-black">{option.timeline}</p>
+                                                    <div className={`rounded-2xl border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200 bg-neutral-50'}`}>
+                                                        <p className={`text-[10px] uppercase tracking-[0.22em] ${selectedOptionId === option.id ? 'text-neutral-400' : 'text-neutral-500'}`}>Timeline</p>
+                                                        <p className={`mt-1 font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.timeline}</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6 text-neutral-600">
+                                            <ul className={`mt-4 list-disc space-y-2 pl-5 text-sm leading-6 ${selectedOptionId === option.id ? 'text-neutral-200' : 'text-neutral-600'}`}>
                                                 {option.offerings.map((offering) => <li key={offering}>{offering}</li>)}
                                             </ul>
-                                        </article>
+                                        </label>
                                     ))}
                                 </div>
-                            </div>
-                        </ResponsiveAccordionSection>
-
-                        <ResponsiveAccordionSection
-                            id="terms"
-                            title="Key Terms and Assumptions"
-                            icon={Clock3}
-                            className="border border-neutral-200"
-                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
-                            bodyClassName="space-y-6 p-4 md:p-6"
-                            titleClassName="md:text-xl"
-                        >
-                            <div data-project-detail-body className="grid gap-6 md:grid-cols-2">
-                                <div>
-                                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Key Terms</p>
-                                    <ol className="mt-4 space-y-3 text-sm leading-6 text-neutral-600">
-                                        {proposal?.terms.map((term, index) => (
-                                            <li key={term} className="flex gap-3">
-                                                <span className="font-medium text-black">{index + 1}.</span>
-                                                <span>{term}</span>
-                                            </li>
-                                        ))}
-                                    </ol>
-                                </div>
-                                <div>
-                                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Assumptions</p>
-                                    <ul className="mt-4 list-disc space-y-3 pl-5 text-sm leading-6 text-neutral-600">
-                                        {proposal?.assumptions.map((assumption) => <li key={assumption}>{assumption}</li>)}
-                                    </ul>
+                                <div className="rounded-[1.5rem] border border-black/10 bg-[#f4efe5] p-5">
+                                    <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Selected for Finalization</p>
+                                    <h4 className="mt-2 text-xl font-medium text-black">{selectedOption?.title}</h4>
+                                    <p className="mt-2 text-sm leading-6 text-neutral-600">
+                                        {selectedOption?.price} · {selectedOption?.timeline}
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsFinalizationOpen(true)}
+                                        className="mt-5 inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                                    >
+                                        Accept Terms and Sign
+                                    </button>
                                 </div>
                             </div>
                         </ResponsiveAccordionSection>
 
-                        <ResponsiveAccordionSection
-                            id="rollout"
-                            title="Proposed Rollout"
-                            icon={Settings2}
-                            className="border border-neutral-200"
-                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
-                            bodyClassName="space-y-6 p-4 md:p-6"
-                            titleClassName="md:text-xl"
-                        >
-                            <div data-project-detail-body className="space-y-6">
-                                {launchPlan.map((phase) => (
-                                    <div key={phase.title}>
-                                        <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-black">
-                                            {phase.title}
-                                        </h4>
-                                        <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">{phase.body}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        </ResponsiveAccordionSection>
-                    </div>
-
-                    <aside className="space-y-8 lg:col-span-5">
                         <ResponsiveAccordionSection
                             id="handles"
-                            title="What It Would Handle"
+                            title="What It Handles"
                             icon={MessageSquare}
                             className="border border-neutral-200"
                             headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
@@ -291,10 +308,57 @@ export default function BorekGOperations() {
                             </div>
                         </ResponsiveAccordionSection>
 
-                        {proposal ? <ProposalAcceptanceSection pathname="/borek-g-operations" proposal={proposal} /> : null}
+                        <ResponsiveAccordionSection
+                            id="rollout"
+                            title="Implementation Notes"
+                            icon={Settings2}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="space-y-6 p-4 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-6">
+                                {launchPlan.map((phase) => (
+                                    <div key={phase.title}>
+                                        <h4 className="mb-2 text-sm font-semibold uppercase tracking-wider text-black">
+                                            {phase.title}
+                                        </h4>
+                                        <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">{phase.body}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </ResponsiveAccordionSection>
+                    </div>
+
+                    <aside className="space-y-8 lg:col-span-5">
+                        <ResponsiveAccordionSection
+                            id="role"
+                            title="Business Information and Highlights"
+                            icon={Bot}
+                            className="border border-neutral-200"
+                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
+                            titleClassName="md:text-xl"
+                        >
+                            <div data-project-detail-body className="space-y-4">
+                                <p>Borek-G is a neighborhood food business with clear product-market appeal, strong visual food assets, and room to sharpen how that value is presented online.</p>
+                                <p>The proposal is structured so the business can choose a lighter advisory scope or a more execution-heavy engagement without losing continuity between review and signing.</p>
+                            </div>
+                        </ResponsiveAccordionSection>
                     </aside>
                 </main>
             </motion.div>
+
+            {proposal ? (
+                <ProposalAcceptanceSection
+                    pathname="/borek-g-operations"
+                    proposal={proposal}
+                    isOpen={isFinalizationOpen}
+                    onClose={() => setIsFinalizationOpen(false)}
+                    selectedOptionId={selectedOptionId}
+                    onSelectedOptionChange={setSelectedOptionId}
+                />
+            ) : null}
         </article>
     );
 }

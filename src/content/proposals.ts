@@ -10,6 +10,11 @@ export type ProposalScopeOption = {
 export type ProposalContent = {
   proposalTitle: string;
   proposalSummary: string;
+  heroHighlights: string[];
+  problemTitle: string;
+  problemBody: string;
+  solutionTitle: string;
+  solutionBody: string;
   scopeHeading: string;
   scopeIntro: string;
   options: ProposalScopeOption[];
@@ -26,9 +31,20 @@ export const proposalsByPath: Record<string, ProposalContent> = {
     proposalTitle: 'Proposal for Marketing Systems and Growth',
     proposalSummary:
       'Bring more people into Borek-G consistently by packaging the food, story, and brand more clearly across social, local discovery, and digital channels.',
+    heroHighlights: [
+      'Strong neighborhood reputation with loyal repeat traffic',
+      'Distinct product story and visual food appeal that can translate well to short-form content',
+      'Clear opportunity to turn in-store demand into stronger digital discovery and retention',
+    ],
+    problemTitle: 'Problem',
+    problemBody:
+      'Borek-G already appears to have product credibility and local demand, but the business is under-packaged digitally. The current gap is not whether people like the food. The gap is consistent discovery, stronger storytelling, and a repeatable system that turns interest into recurring attention and sales.',
+    solutionTitle: 'Our Solution',
+    solutionBody:
+      'B2W proposes a marketing system that tightens brand presentation, builds a repeatable content cadence, and gives Borek-G a clearer operating rhythm for local awareness, customer recall, and growth. The proposal below is structured in selectable scopes so the business can choose advisory-only support or a more hands-on execution model.',
     scopeHeading: 'Scope Options',
     scopeIntro:
-      'Each scope below carries its own commercial structure. Multi-option proposals can be selected at signing; single-option proposals can use the same layout without the package chooser.',
+      'Select a scope below to see the exact deliverables, pricing, and timeline. The selected option is retained locally and carries through into the signing drawer automatically.',
     options: [
       {
         id: 'option-one',

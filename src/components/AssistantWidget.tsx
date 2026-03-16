@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, ReceiptText } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
-import { scrollToProposalSignatureSection } from './ProposalAcceptanceSection';
 import { getProposalContent } from '../content/proposals';
 import { fetchProjectAccessStatus, getProtectedProject, isProjectAccessGranted, type ProjectAccessStatus } from '../content/projectAccess';
 
@@ -107,7 +106,7 @@ export default function AssistantWidget() {
           onClick={() => {
             if (activeFloatingCta.type === 'proposal') {
               if (proposal) {
-                scrollToProposalSignatureSection();
+                window.dispatchEvent(new CustomEvent('b2w-assistant:open'));
               }
               return;
             }
