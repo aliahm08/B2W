@@ -1,5 +1,12 @@
 import { allowMethods } from '../_lib/http.js';
-import { parseProposalAccessToken, readStoredProposalRecord, renderProposalTranscriptHtml } from '../_lib/proposals.js';
+import {
+  getProposalDownloadFilename,
+  getProposalPdfUrl,
+  parseProposalAccessToken,
+  readStoredProposalRecord,
+  renderProposalPdfBuffer,
+  renderProposalTranscriptHtml,
+} from '../_lib/proposals.js';
 
 export default async function handler(req: any, res: any) {
   if (!allowMethods(req, res, ['GET'])) {
@@ -9,6 +16,7 @@ export default async function handler(req: any, res: any) {
   const url = new URL(req.url, `http://${req.headers.host ?? 'localhost'}`);
   const documentId = url.searchParams.get('id') ?? '';
   const token = url.searchParams.get('token') ?? '';
+  const format = String(url.searchParams.get('format') ?? 'html').trim().toLowerCase();
 
   const parsed = parseProposalAccessToken(token);
   if (!documentId || !parsed || parsed.documentId !== documentId) {
@@ -27,9 +35,18 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
+    if (format === 'pdf') {
+      const pdfBuffer = await renderProposalPdfBuffer(record);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${getProposalDownloadFilename(record)}"`);
+      res.end(pdfBuffer);
+      return;
+    }
+
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.end(renderProposalTranscriptHtml(record));
+    res.end(renderProposalTranscriptHtml(record, getProposalPdfUrl(req, record.documentId, parsed.storage)));
   } catch (error) {
     res.statusCode = 500;
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');

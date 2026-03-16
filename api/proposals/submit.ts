@@ -2,6 +2,7 @@ import { allowMethods, readJsonBody, sendJson } from '../_lib/http.js';
 import {
   buildProposalSubmissionRecord,
   getProposalDocumentUrl,
+  getProposalPdfUrl,
   isValidEmail,
   sendProposalTranscriptEmails,
   storeProposalRecord,
@@ -67,14 +68,17 @@ export default async function handler(req: any, res: any) {
 
     const storage = await storeProposalRecord(record);
     const documentUrl = getProposalDocumentUrl(req, record.documentId, storage);
+    const pdfUrl = getProposalPdfUrl(req, record.documentId, storage);
     await sendProposalTranscriptEmails({
       record,
       documentUrl,
+      pdfUrl,
     });
 
     sendJson(res, 200, {
       documentId: record.documentId,
       documentUrl,
+      pdfUrl,
       createdAt: record.submittedAt,
     });
   } catch (error) {

@@ -24,6 +24,7 @@ type ProposalSubmissionState = {
 type ProposalSubmitResponse = {
   documentId: string;
   documentUrl: string;
+  pdfUrl: string;
   createdAt: string;
 };
 
@@ -201,13 +202,14 @@ export default function ProposalAcceptanceSection({
 
       const payload = await response.json() as Partial<ProposalSubmitResponse> & { error?: string };
 
-      if (!response.ok || !payload.documentId || !payload.documentUrl || !payload.createdAt) {
+      if (!response.ok || !payload.documentId || !payload.documentUrl || !payload.pdfUrl || !payload.createdAt) {
         throw new Error(payload.error || 'Unable to submit the signed proposal.');
       }
 
       setSubmitSuccess({
         documentId: payload.documentId,
         documentUrl: payload.documentUrl,
+        pdfUrl: payload.pdfUrl,
         createdAt: payload.createdAt,
       });
       window.dispatchEvent(new CustomEvent('b2w-proposal:submitted'));
@@ -443,6 +445,12 @@ export default function ProposalAcceptanceSection({
                     className="mt-5 inline-flex rounded-full border border-black/10 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
                   >
                     Open signed transcript
+                  </a>
+                  <a
+                    href={submitSuccess.pdfUrl}
+                    className="mt-3 inline-flex rounded-full bg-black px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                  >
+                    Download PDF
                   </a>
                 </div>
               )}

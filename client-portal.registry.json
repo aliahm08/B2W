@@ -1,0 +1,130 @@
+{
+  "accounts": [
+    {
+      "accountId": "borek-g",
+      "companyName": "Borek-G",
+      "workspaceTitle": "Borek-G Client Portal",
+      "allowedEmails": [
+        "info@b2w-ai.com"
+      ],
+      "supportEmail": "info@b2w-ai.com",
+      "contacts": [
+        {
+          "name": "Ali Ahmed",
+          "role": "B2W Engagement Lead",
+          "email": "info@b2w-ai.com"
+        }
+      ],
+      "projects": [
+        {
+          "id": "growth-systems",
+          "name": "Growth Systems Rollout",
+          "status": "In progress",
+          "summary": "Marketing operations, funnel cleanup, and reporting workflows for the Borek-G team.",
+          "lastUpdated": "2026-03-14",
+          "nextMilestone": "Approve homepage revision package",
+          "links": [
+            {
+              "label": "Operations Proposal",
+              "href": "/borek-g-operations",
+              "kind": "proposal"
+            },
+            {
+              "label": "Analysis Profile",
+              "href": "/borek-g",
+              "kind": "profile"
+            }
+          ],
+          "milestones": [
+            {
+              "title": "Finalize channel priorities",
+              "dueDate": "2026-03-18",
+              "status": "Ready for review"
+            },
+            {
+              "title": "Launch KPI dashboard",
+              "dueDate": "2026-03-25",
+              "status": "Scheduled"
+            }
+          ],
+          "updates": [
+            {
+              "date": "2026-03-14",
+              "title": "Reporting stack defined",
+              "summary": "B2W mapped the weekly reporting cadence, owner handoffs, and the first dashboard views."
+            },
+            {
+              "date": "2026-03-10",
+              "title": "Landing page revisions queued",
+              "summary": "Content and CTA revisions were packaged for approval before production changes begin."
+            }
+          ]
+        }
+      ],
+      "notes": "Primary portal account for Borek-G stakeholders."
+    },
+    {
+      "accountId": "uyghur-eats",
+      "companyName": "Uyghur Eats",
+      "workspaceTitle": "Uyghur Eats Client Portal",
+      "allowedEmails": [
+        "info@b2w-ai.com"
+      ],
+      "supportEmail": "info@b2w-ai.com",
+      "contacts": [
+        {
+          "name": "Ali Ahmed",
+          "role": "B2W Deal Lead",
+          "email": "info@b2w-ai.com"
+        }
+      ],
+      "projects": [
+        {
+          "id": "sale-process",
+          "name": "Property Sale Process",
+          "status": "Active diligence",
+          "summary": "Buyer packaging, diligence preparation, and transaction support for the restaurant property sale.",
+          "lastUpdated": "2026-03-12",
+          "nextMilestone": "Release diligence checklist to buyer group",
+          "links": [
+            {
+              "label": "Acquisition Proposal",
+              "href": "/uyghur-eats-acquisition",
+              "kind": "proposal"
+            },
+            {
+              "label": "Analysis Profile",
+              "href": "/uyghur-eats",
+              "kind": "profile"
+            }
+          ],
+          "milestones": [
+            {
+              "title": "Finalize buyer brief",
+              "dueDate": "2026-03-20",
+              "status": "In progress"
+            },
+            {
+              "title": "Launch diligence room",
+              "dueDate": "2026-03-27",
+              "status": "Planned"
+            }
+          ],
+          "updates": [
+            {
+              "date": "2026-03-12",
+              "title": "Buyer FAQ drafted",
+              "summary": "The buyer FAQ and property-positioning notes were organized for outbound conversations."
+            },
+            {
+              "date": "2026-03-08",
+              "title": "Deal timeline aligned",
+              "summary": "The transaction steps, diligence dependencies, and owner approvals were consolidated."
+            }
+          ]
+        }
+      ],
+      "notes": "Portal access for Uyghur Eats transaction stakeholders."
+    }
+  ]
+}
