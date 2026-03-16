@@ -18,6 +18,8 @@ import BorekG from './pages/BorekG';
 import BorekGOperations from './pages/BorekGOperations';
 import UyghurEats from './pages/UyghurEats';
 import UyghurEatsAcquisition from './pages/UyghurEatsAcquisition';
+import UyghurEatsAiAgentPreview from './pages/UyghurEatsAiAgentPreview';
+import UyghurEatsBasicProfilePreview from './pages/UyghurEatsBasicProfilePreview';
 import CapabilityPage from './pages/CapabilityPage';
 import Seo from './components/Seo';
 
@@ -79,6 +81,8 @@ export default function App() {
           <Route path="/borek-g-operations" element={<BorekGOperations />} />
           <Route path="/uyghur-eats" element={<UyghurEats />} />
           <Route path="/uyghur-eats-acquisition" element={<UyghurEatsAcquisition />} />
+          <Route path="/uyghur-eats-basic-profile-preview" element={<UyghurEatsBasicProfilePreview />} />
+          <Route path="/uyghur-eats-ai-agent-preview" element={<UyghurEatsAiAgentPreview />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
         </Routes>
       </main>

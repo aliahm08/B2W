@@ -20,28 +20,28 @@ import {
 
 const businessOverview = [
   'Uyghur Eats is a property-sale opportunity built around a differentiated restaurant concept in a strong Washington, DC corridor.',
-  'The sale case is strongest when the business is translated into a buyer-ready Analysis Profile rather than an owner narrative.',
-  'B2W is proposing a diligence-as-a-service model that earns on packaging, certainty, and follow-on diligence work.',
+  'The commercial structure now starts with a low-friction website listing, then upgrades into deeper buyer-facing analysis only when the owner wants it.',
+  'B2W earns through a simple listing fee, per-lead pricing, and optional higher-value diligence and AI add-ons rather than trying to front-load every service.',
 ];
 
 const solutionWorkstreams = [
-  'Package the business into an Analysis Profile, Blind Profile, and valuation framing memo.',
-  'Use controlled information release to qualify interest without exposing the client too early.',
-  'Monetize buyer certainty through the free brief, paid audit, roadmap, and custom review work.',
+  'Publish a clear property-sale profile on the B2W website and route generated leads through a defined intake path.',
+  'Upgrade serious buyers into an interactive analysis profile with scenario-based financial visuals and stronger diligence framing.',
+  'Layer in custom add-ons such as inspector-data modules and an AI sales agent that can answer questions and manage negotiation flow using approved guardrails.',
 ];
 
 const processSteps = [
   {
-    title: 'Phase 1: Validation',
-    body: 'Build the Blind Profile template, define the Analysis Profile structure, and test the offer with initial restaurant-owner contacts to prove demand without revealing the client.',
+    title: 'Phase 1: Publish',
+    body: 'Launch the basic property-sale profile quickly so the owner can test demand without first paying for a full diligence dashboard.',
   },
   {
-    title: 'Phase 2: Outreach',
-    body: 'Identify private buyers, circulate the Blind Profile, and use the diligence-led pitch to convert curiosity into paid diligence access.',
+    title: 'Phase 2: Deepen',
+    body: 'If stronger buyer quality is needed, convert the listing into an interactive analysis page that shows how the business performs under multiple buyer scenarios.',
   },
   {
-    title: 'Phase 3: Unlock Revenue',
-    body: 'Formalize the diligence report as the core product, sell the $1,000 unlock, and upsell custom review and post-acquisition roadmap work.',
+    title: 'Phase 3: Automate',
+    body: 'Add custom diligence layers and an AI negotiation assistant only after the owner confirms what data can be used and how much of the sales flow should be delegated.',
   },
 ];
 
@@ -52,6 +52,29 @@ const sectionItems = [
   { id: 'scope-options', label: 'Explore Your Options' },
   { id: 'process', label: 'Process' },
 ];
+
+function getPreviewConfig(selectedOptionId: string) {
+  const returnParam = encodeURIComponent('/uyghur-eats-acquisition#scope-options');
+
+  if (selectedOptionId === 'option-three') {
+    return {
+      href: `/uyghur-eats-ai-agent-preview?return=${returnParam}`,
+      label: 'Preview AI diligence dashboard',
+    };
+  }
+
+  if (selectedOptionId === 'option-two') {
+    return {
+      href: `/uyghur-eats-basic-profile-preview?return=${returnParam}`,
+      label: 'Preview analysis dashboard',
+    };
+  }
+
+  return {
+    href: `/uyghur-eats-basic-profile-preview?return=${returnParam}`,
+    label: 'Preview website profile',
+  };
+}
 
 export default function UyghurEatsAcquisition() {
   const proposalPath = '/uyghur-eats-acquisition';
@@ -86,12 +109,13 @@ export default function UyghurEatsAcquisition() {
   }, []);
 
   const selectedOption = proposal?.options.find((option) => option.id === selectedOptionId) ?? proposal?.options[0];
+  const selectedPreview = getPreviewConfig(selectedOption?.id ?? 'option-one');
 
   return (
     <article className={projectPageShellClassName}>
       <Seo
         title="Fine Dining in Washington, DC"
-        description="Buyer diligence engagement for Uyghur Eats covering the diligence-as-a-service model, scope options, and digital signing."
+        description="Property sale proposal for Uyghur Eats covering the listing launch, interactive analysis upgrade, AI add-ons, and digital signing."
       />
 
       <motion.div
@@ -137,14 +161,12 @@ export default function UyghurEatsAcquisition() {
             </div>
 
             <aside className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
-              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
-                Diligence-as-a-Service
-              </p>
+              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">Sale Support Stack</p>
               <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
-                Sell certainty before selling the deal.
+                Start with visibility, then add depth only when it pays.
               </h2>
               <p className="mb-6 text-sm leading-6 text-neutral-300">
-                The proposal packages the seller side, buyer side, and unlock revenue stream into one controlled property-sale process.
+                The proposal is structured so the owner can begin with a lightweight website profile, then step into deeper analysis and AI-assisted negotiation support only if the buyer process justifies it.
               </p>
 
               <div className="grid grid-cols-2 gap-3 text-sm">
@@ -154,15 +176,15 @@ export default function UyghurEatsAcquisition() {
                 </div>
                 <div className="border border-white/15 bg-white/5 p-3">
                   <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Mode</p>
-                  <p className="font-medium">Advisory + diligence</p>
+                  <p className="font-medium">Listing + diligence + AI</p>
                 </div>
                 <div className="border border-white/15 bg-white/5 p-3">
                   <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Primary Goal</p>
-                  <p className="font-medium">Reduce asymmetry</p>
+                  <p className="font-medium">Generate qualified buyers</p>
                 </div>
                 <div className="border border-white/15 bg-white/5 p-3">
                   <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Outcome</p>
-                  <p className="font-medium">Paid buyer certainty</p>
+                  <p className="font-medium">Progressively stronger buyer conversations</p>
                 </div>
               </div>
             </aside>
@@ -282,10 +304,10 @@ export default function UyghurEatsAcquisition() {
                         ))}
                       </ul>
                       <Link
-                        to="/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options"
+                        to={selectedPreview.href}
                         className="mt-6 inline-flex items-center gap-2 border border-teal-500/30 bg-teal-500/10 px-4 py-3 text-sm font-medium text-teal-700 transition-colors hover:border-teal-700 hover:bg-teal-700 hover:text-white"
                       >
-                        Preview deliverable
+                        {selectedPreview.label}
                         <ArrowUpRight className="h-4 w-4" />
                       </Link>
                     </div>
@@ -374,16 +396,16 @@ export default function UyghurEatsAcquisition() {
             >
               <div data-project-detail-body className="space-y-4">
                 <p>
-                  The client is Uyghur Eats. The project type is Property Sale. The actual unlocked deliverable for the client side is the Analysis Profile.
+                  The client is Uyghur Eats. The project type is Property Sale. The deliverables now ladder from a $100 website profile plus per-lead pricing into a deeper $1,000 interactive analysis page and then custom AI-enabled add-ons.
                 </p>
                 <p>
-                  The public-facing project label remains generalized as an M&A Property Sale, while the live work product centers on diligence, controlled disclosure, and buyer confidence.
+                  Option Two is positioned to attract more serious buyers by showing financial logic and scenario framing on-page. Option Three extends that same dashboard with custom diligence modules and a negotiation-aware AI layer.
                 </p>
                 <Link
-                  to="/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options"
+                  to={selectedPreview.href}
                   className="inline-flex items-center gap-2 border border-black px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
                 >
-                  Preview Analysis Profile
+                  {selectedPreview.label}
                 </Link>
               </div>
             </ResponsiveAccordionSection>
