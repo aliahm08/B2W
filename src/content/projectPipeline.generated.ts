@@ -79,12 +79,12 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "serviceType": "Property Sale",
       "status": "Proposed",
       "clientDescription": "Specialty restaurant positioned in a strong urban corridor",
-      "title": "Acquisition Readiness and Valuation Profile",
-      "description": "Business profile focused on acquisition readiness, location quality, market position, and differentiated demand drivers.",
-      "impact": "Stronger acquisition positioning",
+      "title": "Acquisition Diligence Document",
+      "description": "Diligence document focused on acquisition readiness, location quality, market position, and differentiated demand drivers.",
+      "impact": "Stronger acquisition underwriting",
       "tags": [
         {
-          "label": "Profile",
+          "label": "Diligence",
           "tier": 1
         },
         {

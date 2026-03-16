@@ -46,6 +46,8 @@ const sectionItems = [
     { id: 'scope-options', label: 'Scope of Work' },
     { id: 'handles', label: 'Priority Workstreams' },
     { id: 'benefits', label: 'Expected Outcomes' },
+    { id: 'context', label: 'Business Context' },
+    { id: 'rollout', label: 'Implementation Notes' },
 ];
 
 export default function BorekGOperations() {
@@ -164,14 +166,13 @@ export default function BorekGOperations() {
                     </div>
                 </header>
 
-                <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-                    <div className="lg:col-span-12">
-                        <ProfileSectionNav
-                            items={sectionItems}
-                            eyebrow="Proposal navigation"
-                        />
-                    </div>
-                    <div className="space-y-12 lg:col-span-7">
+                <main data-project-body className="space-y-12">
+                    <ProfileSectionNav
+                        items={sectionItems}
+                        eyebrow="Proposal navigation"
+                    />
+
+                    <div className="space-y-12">
                         <ResponsiveAccordionSection
                             id="problem"
                             title="Problem"
@@ -328,11 +329,9 @@ export default function BorekGOperations() {
                                 ))}
                             </div>
                         </ResponsiveAccordionSection>
-                    </div>
 
-                    <aside className="space-y-8 lg:col-span-5">
                         <ResponsiveAccordionSection
-                            id="role"
+                            id="context"
                             title="Business Information and Highlights"
                             icon={Store}
                             className="border border-neutral-200"
@@ -345,7 +344,7 @@ export default function BorekGOperations() {
                                 <p>The proposal is structured so the business can choose a lighter advisory scope or a more execution-heavy engagement without losing continuity between review and signing.</p>
                             </div>
                         </ResponsiveAccordionSection>
-                    </aside>
+                    </div>
                 </main>
             </motion.div>
 

@@ -40,7 +40,11 @@ export default function ResponsiveAccordionSection({
   const chevronClassName = tone === 'dark' ? 'text-stone-400' : 'text-neutral-400';
 
   return (
-    <section id={id} data-section-anchor={id ? 'true' : undefined} className={className}>
+    <section
+      id={id}
+      data-section-anchor={id ? 'true' : undefined}
+      className={cx(id && 'scroll-mt-32 md:scroll-mt-36', className)}
+    >
       <button
         type="button"
         aria-expanded={isOpen}

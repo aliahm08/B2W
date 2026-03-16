@@ -77,44 +77,21 @@ export default function ProfileSectionNav({
   }, [items]);
 
   return (
-    <nav aria-label="Profile section navigation" className="lg:sticky lg:top-24 lg:z-20">
-      <div className="border border-neutral-200 bg-white lg:bg-white/96 lg:backdrop-blur-sm">
-        <div className="border-b border-neutral-200 px-4 py-4 md:px-5">
-          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">{eyebrow}</p>
-          {description ? (
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-neutral-600">{description}</p>
-          ) : null}
-        </div>
-
-        <div className="md:hidden">
-          <div className="-mx-4 flex snap-x gap-2 overflow-x-auto px-4 py-4">
-            {items.map((item, index) => {
-              const isActive = item.id === activeId;
-
-              return (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  aria-current={isActive ? 'location' : undefined}
-                  onClick={() => setActiveId(item.id)}
-                  className={cx(
-                    'snap-start whitespace-nowrap border px-3 py-2 text-xs font-medium transition-colors',
-                    isActive
-                      ? 'border-black bg-black text-white'
-                      : 'border-neutral-200 bg-white text-neutral-700 hover:border-black hover:text-black',
-                  )}
-                >
-                  <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.18em] opacity-70">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
-                  {item.label}
-                </a>
-              );
-            })}
+    <nav aria-label="Profile section navigation" className="sticky top-20 z-30 -mx-4 border-y border-neutral-200 bg-white/92 backdrop-blur-sm sm:-mx-6">
+      <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
+        <div className="mb-3 flex items-end justify-between gap-4">
+          <div>
+            <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-neutral-500">{eyebrow}</p>
+            {description ? (
+              <p className="mt-1 max-w-3xl text-xs leading-5 text-neutral-500 md:text-sm">{description}</p>
+            ) : null}
           </div>
+          <p className="hidden text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 md:block">
+            {String(items.findIndex((item) => item.id === activeId) + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
+          </p>
         </div>
 
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4">
+        <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => {
             const isActive = item.id === activeId;
 
@@ -125,27 +102,16 @@ export default function ProfileSectionNav({
                 aria-current={isActive ? 'location' : undefined}
                 onClick={() => setActiveId(item.id)}
                 className={cx(
-                  'group flex min-h-24 items-start gap-4 border-l border-t border-neutral-200 px-5 py-4 transition-colors first:border-l-0 lg:min-h-28',
-                  isActive ? 'bg-neutral-950 text-white' : 'bg-white text-neutral-900 hover:bg-neutral-50',
+                  'snap-start whitespace-nowrap rounded-full border px-4 py-2 text-xs font-medium transition-colors md:text-sm',
+                  isActive
+                    ? 'border-black bg-black text-white'
+                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-black hover:text-black',
                 )}
               >
-                <span
-                  className={cx(
-                    'mt-0.5 font-mono text-[10px] uppercase tracking-[0.22em]',
-                    isActive ? 'text-neutral-400' : 'text-neutral-500',
-                  )}
-                >
+                <span className={cx('mr-2 font-mono text-[10px] uppercase tracking-[0.18em]', isActive ? 'text-neutral-400' : 'text-neutral-400')}>
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <span className="space-y-2">
-                  <span className="block text-sm font-medium leading-5">{item.label}</span>
-                  <span
-                    className={cx(
-                      'block h-px w-8 transition-all',
-                      isActive ? 'bg-white' : 'bg-neutral-300 group-hover:w-12 group-hover:bg-black',
-                    )}
-                  />
-                </span>
+                {item.label}
               </a>
             );
           })}
