@@ -39,3 +39,19 @@ html {
 [data-project-locked='true'] [data-project-detail-body] select {
   pointer-events: none;
 }
+
+[data-project-preview='blurred'] [data-project-detail-body] {
+  filter: blur(10px);
+  opacity: 0.52;
+  user-select: none;
+  pointer-events: none;
+  transform: translateZ(0) scale(1.01);
+  transform-origin: center;
+  transition: filter 180ms ease, opacity 180ms ease;
+}
+
+[data-project-preview='blurred'] [data-preview-cta='true'] {
+  opacity: 0.45;
+  filter: grayscale(0.2);
+  pointer-events: none;
+}

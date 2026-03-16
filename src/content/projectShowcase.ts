@@ -10,7 +10,7 @@ export type ProjectShowcaseOverride = {
 
 export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverride> = {
   '/borek-g-social-media-management': {
-    publicTitle: 'Turkish Bistro Social Media Management',
+    publicTitle: 'Turkish Bistro in Falls Church, VA',
     publicClientDescription: 'Independent restaurant in a high-traffic suburban market',
     publicDescription: 'Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.',
     publicImpact: 'Clearer digital demand capture plan',
@@ -22,7 +22,7 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
     ],
   },
   '/borek-g-operations': {
-    publicTitle: 'Turkish Bistro Content and Promotion System',
+    publicTitle: 'Turkish Bistro in Falls Church, VA',
     publicClientDescription: 'Independent restaurant with strong local demand and underused digital channels',
     publicDescription: 'Marketing proposal covering channel strategy, content cadence, local discovery improvements, and digital demand capture.',
     publicImpact: 'Clearer marketing execution plan',
@@ -34,7 +34,7 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
     ],
   },
   '/uyghur-eats': {
-    publicTitle: 'Urban Restaurant Sale Readiness',
+    publicTitle: 'Fine Dining in Washington, DC',
     publicClientDescription: 'Restaurant property sale opportunity',
     publicDescription: 'Restaurant M&A property sale engagement focused on location quality, market position, and buyer-relevant operating signals.',
     publicImpact: 'Property sale opportunity identified',
@@ -46,7 +46,7 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
     ],
   },
   '/uyghur-eats-acquisition': {
-    publicTitle: 'Urban Restaurant Buyer Diligence',
+    publicTitle: 'Fine Dining in Washington, DC',
     publicClientDescription: 'Restaurant property sale opportunity with diligence-led buyer packaging',
     publicDescription: 'Email-protected proposal covering the diligence-as-a-service model, buyer certainty package, and property sale rollout.',
     publicImpact: 'Controlled sale process defined',

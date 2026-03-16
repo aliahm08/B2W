@@ -7,6 +7,7 @@ import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import ProposalAcceptanceSection, { getProposalCacheKey } from '../components/ProposalAcceptanceSection';
+import FloatingProposalCTA from '../components/FloatingProposalCTA';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import { getProposalContent } from '../content/proposals';
 import {
@@ -84,7 +85,7 @@ export default function BorekGOperations() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Turkish Bistro Content and Promotion System"
+                title="Turkish Bistro in Falls Church, VA"
                 description="Growth system for Borek-G covering channel priorities, scope options, execution cadence, and phased rollout."
             />
 
@@ -111,7 +112,7 @@ export default function BorekGOperations() {
                     <div className={projectHeroGridClassNames.operations}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                Turkish Bistro Content and Promotion System
+                                Turkish Bistro in Falls Church, VA
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
@@ -367,6 +368,14 @@ export default function BorekGOperations() {
                     onClose={() => setIsFinalizationOpen(false)}
                     selectedOptionId={selectedOptionId}
                     onSelectedOptionChange={setSelectedOptionId}
+                />
+            ) : null}
+
+            {selectedOption ? (
+                <FloatingProposalCTA
+                    label={selectedOption.title}
+                    detail={`${selectedOption.price} · ${selectedOption.timeline}`}
+                    onClick={() => setIsFinalizationOpen(true)}
                 />
             ) : null}
         </article>

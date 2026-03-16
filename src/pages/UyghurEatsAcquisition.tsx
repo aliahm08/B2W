@@ -7,6 +7,7 @@ import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import ProposalAcceptanceSection, { getProposalCacheKey } from '../components/ProposalAcceptanceSection';
+import FloatingProposalCTA from '../components/FloatingProposalCTA';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import { getProposalContent } from '../content/proposals';
 import {
@@ -89,7 +90,7 @@ export default function UyghurEatsAcquisition() {
   return (
     <article className={projectPageShellClassName}>
       <Seo
-        title="Urban Restaurant Buyer Diligence"
+        title="Fine Dining in Washington, DC"
         description="Buyer diligence engagement for Uyghur Eats covering the diligence-as-a-service model, scope options, and digital signing."
       />
 
@@ -113,7 +114,7 @@ export default function UyghurEatsAcquisition() {
           <div className={projectHeroGridClassNames.operations}>
             <div>
               <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                {proposal?.proposalTitle ?? 'Urban Restaurant Buyer Diligence'}
+                {proposal?.proposalTitle ?? 'Fine Dining in Washington, DC'}
               </h1>
 
               <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
@@ -398,6 +399,14 @@ export default function UyghurEatsAcquisition() {
           onClose={() => setIsFinalizationOpen(false)}
           selectedOptionId={selectedOptionId}
           onSelectedOptionChange={setSelectedOptionId}
+        />
+      ) : null}
+
+      {selectedOption ? (
+        <FloatingProposalCTA
+          label={selectedOption.title}
+          detail={`${selectedOption.price} · ${selectedOption.timeline}`}
+          onClick={() => setIsFinalizationOpen(true)}
         />
       ) : null}
     </article>

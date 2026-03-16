@@ -260,20 +260,20 @@ function buildPublicTitle(row: WorkbookRow): string {
   const topic = compactText(String(row.topic ?? '')).toLowerCase();
   const packageName = compactText(String(row.package ?? '')).toLowerCase();
 
-  if (offering === 'profile' && topic === 'marketing') {
-    return 'Turkish Bistro Social Media Management';
+  if (client === 'borek-g') {
+    return 'Turkish Bistro in Falls Church, VA';
   }
 
-  if (client === 'borek-g' && offering === 'prototype' && topic === 'operations') {
-    return 'Turkish Bistro Content and Promotion System';
+  if (client === 'uyghur eats') {
+    return 'Fine Dining in Washington, DC';
+  }
+
+  if (client === 'caravan uyghur') {
+    return 'Fine Dining in NYC';
   }
 
   if (offering === 'prototype' && topic === 'operations') {
     return packageName.includes('mobile') ? 'Field Crew Coordination Assistant' : 'Frontline Service Copilot';
-  }
-
-  if (offering === 'profile' && topic === 'finance') {
-    return 'Urban Restaurant Sale Readiness';
   }
 
   if (offering === 'profile') {

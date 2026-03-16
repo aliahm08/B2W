@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, Ar
 import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
+import PreviewAccessChrome from '../components/PreviewAccessChrome';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
 import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../content/projectAccess';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
@@ -86,9 +87,13 @@ export default function UyghurEats() {
 
         window.addEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
         return () => window.removeEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
-    }, []);
+    }, [isBlurredPreview]);
 
     const openOfferModal = () => {
+        if (isBlurredPreview) {
+            return;
+        }
+
         setIsOfferSubmitted(false);
         setIsOfferModalOpen(true);
     };
@@ -166,35 +171,29 @@ export default function UyghurEats() {
     ];
 
     return (
-        <article className={projectPageShellClassName}>
+        <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
             <Seo
-                title="Analysis Profile"
+                title="Fine Dining in Washington, DC"
                 description="Analysis profile for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty in support of a property sale."
             />
             {isBlurredPreview ? (
-                <div className="fixed inset-x-0 top-20 z-40 px-6">
-                    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 border border-neutral-900 bg-white/95 px-5 py-4 shadow-[0_20px_60px_rgba(0,0,0,0.12)] backdrop-blur">
-                        <div>
-                            <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">Preview Mode</p>
-                            <p className="mt-1 text-sm text-neutral-700">
-                                This analysis profile preview is intentionally blurred until the profile password is entered.
-                            </p>
-                        </div>
-                        <Link
-                            to={proposalReturnPath}
-                            className="inline-flex items-center gap-2 border border-neutral-300 px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black"
-                        >
-                            <ArrowLeft className="h-4 w-4" />
-                            Back to Scope
-                        </Link>
-                    </div>
-                </div>
+                <PreviewAccessChrome
+                    returnPath={proposalReturnPath}
+                    previewLabel="This analysis profile preview"
+                    previewMessage="Hero content, scoping context, and section headings remain visible, while analysis details stay blurred until the profile password is entered."
+                    unlockLabel="Unlock Full Profile"
+                    passwordPlaceholder="Analysis profile password"
+                    passwordValue={profilePassword}
+                    onPasswordChange={setProfilePassword}
+                    onSubmit={handlePreviewUnlock}
+                    isSubmitting={isUnlockingPreview}
+                    error={previewError}
+                />
             ) : null}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className={isBlurredPreview ? 'pointer-events-none select-none blur-md' : undefined}
             >
                 <header className={projectPageHeaderClassName}>
                     <Link
@@ -214,7 +213,7 @@ export default function UyghurEats() {
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                Analysis Profile
+                                Fine Dining in Washington, DC
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
@@ -262,6 +261,8 @@ export default function UyghurEats() {
                             <button
                                 type="button"
                                 onClick={openOfferModal}
+                                disabled={isBlurredPreview}
+                                data-preview-cta="true"
                                 className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
                             >
                                 Make an Offer
@@ -467,49 +468,6 @@ export default function UyghurEats() {
                     </ResponsiveAccordionSection>
                 </main>
             </motion.div>
-
-            {isBlurredPreview ? (
-                <div className="fixed inset-x-0 bottom-6 z-50 px-6">
-                    <div className="mx-auto max-w-5xl border border-neutral-900 bg-neutral-950 p-5 text-white shadow-[0_24px_80px_rgba(0,0,0,0.24)] md:p-6">
-                        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-                            <div className="max-w-2xl">
-                                <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-400">Unlock Full Access</p>
-                                <p className="mt-3 text-sm leading-6 text-neutral-300">
-                                    Enter the analysis profile password to unlock the live deliverable. Proposal review stays available separately, and you can return to the scope section at any time.
-                                </p>
-                            </div>
-
-                            <form onSubmit={handlePreviewUnlock} className="flex w-full flex-col gap-3 lg:max-w-xl lg:flex-row lg:items-center">
-                                <input
-                                    type="password"
-                                    value={profilePassword}
-                                    onChange={(event) => setProfilePassword(event.target.value)}
-                                    placeholder="Analysis profile password"
-                                    autoComplete="current-password"
-                                    className="min-w-0 flex-1 border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-neutral-500 focus:border-white/40"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={isUnlockingPreview}
-                                    className="inline-flex items-center justify-center rounded-full border border-white bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
-                                >
-                                    {isUnlockingPreview ? 'Unlocking...' : 'Unlock Full Profile'}
-                                </button>
-                                <Link
-                                    to={proposalReturnPath}
-                                    className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-white/40"
-                                >
-                                    Back to Scope
-                                </Link>
-                            </form>
-                        </div>
-
-                        {previewError ? (
-                            <p className="mt-4 text-sm text-rose-300">{previewError}</p>
-                        ) : null}
-                    </div>
-                </div>
-            ) : null}
 
             {isOfferModalOpen && (
                 <div
