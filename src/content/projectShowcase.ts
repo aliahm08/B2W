@@ -34,9 +34,9 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
     ],
   },
   '/uyghur-eats': {
-    publicTitle: 'Analysis Profile',
+    publicTitle: 'M&A Property Sale',
     publicClientDescription: 'Restaurant property sale opportunity',
-    publicDescription: 'Analysis profile focused on location quality, market position, and buyer-relevant operating signals.',
+    publicDescription: 'Restaurant M&A property sale engagement focused on location quality, market position, and buyer-relevant operating signals.',
     publicImpact: 'Property sale opportunity identified',
     tags: [
       { label: 'Analysis', tier: 1 },

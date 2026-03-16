@@ -106,8 +106,8 @@ export default function UyghurEats() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Acquisition Diligence Brief"
-                description="Acquisition diligence brief for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty."
+                title="Analysis Profile"
+                description="Analysis profile for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty in support of a property sale."
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -132,11 +132,11 @@ export default function UyghurEats() {
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                Acquisition Diligence Brief
+                                Analysis Profile
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                                A plain-language diligence brief for the potential sale of Uyghur Eats, built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering.
+                                A plain-language analysis profile for the potential sale of Uyghur Eats, built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering.
                             </p>
 
                             <div className="mb-8 grid gap-3 md:grid-cols-2">
