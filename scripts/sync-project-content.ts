@@ -66,7 +66,7 @@ const defaultHero: HeroContent = {
   primaryCtaLabel: 'Explore capabilities',
   primaryCtaHref: '/#capabilities',
   secondaryCtaLabel: 'See Projects',
-  secondaryCtaHref: '/#industries',
+  secondaryCtaHref: '/#projects',
 };
 
 const routeMap: Record<string, string> = {

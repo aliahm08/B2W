@@ -7,7 +7,6 @@ type ProfileSectionNavItem = {
 
 type ProfileSectionNavProps = {
   items: ProfileSectionNavItem[];
-  eyebrow?: string;
   description?: string;
 };
 
@@ -17,7 +16,6 @@ function cx(...values: Array<string | false | null | undefined>) {
 
 export default function ProfileSectionNav({
   items,
-  eyebrow = 'Section navigation',
   description,
 }: ProfileSectionNavProps) {
   const [activeId, setActiveId] = useState(items[0]?.id ?? '');
@@ -79,17 +77,14 @@ export default function ProfileSectionNav({
   return (
     <nav aria-label="Profile section navigation" className="sticky top-20 z-30 -mx-4 border-y border-neutral-200 bg-white/92 backdrop-blur-sm sm:-mx-6">
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
-        <div className="mb-3 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-neutral-500">{eyebrow}</p>
-            {description ? (
-              <p className="mt-1 max-w-3xl text-xs leading-5 text-neutral-500 md:text-sm">{description}</p>
-            ) : null}
+        {description ? (
+          <div className="mb-3 flex items-end justify-between gap-4">
+            <p className="max-w-3xl text-xs leading-5 text-neutral-500 md:text-sm">{description}</p>
+            <p className="hidden text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 md:block">
+              {String(items.findIndex((item) => item.id === activeId) + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
+            </p>
           </div>
-          <p className="hidden text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 md:block">
-            {String(items.findIndex((item) => item.id === activeId) + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
-          </p>
-        </div>
+        ) : null}
 
         <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => {
@@ -102,7 +97,7 @@ export default function ProfileSectionNav({
                 aria-current={isActive ? 'location' : undefined}
                 onClick={() => setActiveId(item.id)}
                 className={cx(
-                  'snap-start whitespace-nowrap rounded-full border px-4 py-2 text-xs font-medium transition-colors md:text-sm',
+                  'snap-start whitespace-nowrap border px-4 py-2 text-xs font-medium transition-colors md:text-sm',
                   isActive
                     ? 'border-black bg-black text-white'
                     : 'border-neutral-200 bg-white text-neutral-600 hover:border-black hover:text-black',

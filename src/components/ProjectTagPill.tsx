@@ -29,7 +29,7 @@ function getClasses(tier: ProjectTag['tier'], tone: 'light' | 'dark'): string {
 export default function ProjectTagPill({ tag, tone = 'light' }: ProjectTagPillProps) {
   return (
     <span
-      className={`rounded-sm border px-2 py-1 text-xs transition-colors ${getClasses(tag.tier, tone)}`}
+      className={`border px-2 py-1 text-xs transition-colors ${getClasses(tag.tier, tone)}`}
       data-tag-tier={tag.tier}
     >
       {tag.label}

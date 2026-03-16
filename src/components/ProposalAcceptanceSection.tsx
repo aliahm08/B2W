@@ -393,7 +393,7 @@ export default function ProposalAcceptanceSection({
                         <button
                           type="button"
                           onClick={signature.clearSignature}
-                          className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black"
+                          className="border border-black/10 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black"
                         >
                           Clear
                         </button>
@@ -423,7 +423,7 @@ export default function ProposalAcceptanceSection({
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
+                      className="inline-flex items-center justify-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {isSubmitting ? 'Submitting...' : 'Submit signed proposal'}
                       <Send size={14} />
@@ -442,13 +442,13 @@ export default function ProposalAcceptanceSection({
                     href={submitSuccess.documentUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-5 inline-flex rounded-full border border-black/10 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
+                    className="mt-5 inline-flex border border-black/10 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
                   >
                     Open signed transcript
                   </a>
                   <a
                     href={submitSuccess.pdfUrl}
-                    className="mt-3 inline-flex rounded-full bg-black px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                    className="mt-3 inline-flex border border-black bg-black px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
                   >
                     Download PDF
                   </a>

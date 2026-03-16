@@ -99,7 +99,7 @@ export default function UyghurEatsAcquisition() {
         transition={{ duration: 0.6 }}
       >
         <header className={projectPageHeaderClassName}>
-          <Link to="/#industries" className={projectPageBackLinkClassName}>
+          <Link to="/#projects" className={projectPageBackLinkClassName}>
             <ArrowLeft className="h-4 w-4" />
             Back to Projects
           </Link>
@@ -122,7 +122,7 @@ export default function UyghurEatsAcquisition() {
 
               <div className="mb-8 grid gap-3 md:grid-cols-3">
                 {proposal?.heroHighlights.map((highlight) => (
-                  <div key={highlight} className="rounded-[1.5rem] border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6 text-neutral-700">
+                  <div key={highlight} className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
                     {highlight}
                   </div>
                 ))}
@@ -172,7 +172,6 @@ export default function UyghurEatsAcquisition() {
           <div className="lg:col-span-12">
             <ProfileSectionNav
               items={sectionItems}
-              eyebrow="Proposal navigation"
             />
           </div>
 
@@ -234,8 +233,8 @@ export default function UyghurEatsAcquisition() {
               id="scope-options"
               title="Scope of Work"
               icon={BriefcaseBusiness}
-              className="border border-neutral-200"
-              headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+              className="border-t border-neutral-200"
+              headerClassName="border-b border-neutral-200 p-4"
               bodyClassName="space-y-6 p-4 md:p-6"
               titleClassName="md:text-xl"
             >
@@ -248,7 +247,7 @@ export default function UyghurEatsAcquisition() {
                   {proposal?.options.map((option) => (
                     <label
                       key={option.id}
-                      className={`block rounded-[1.5rem] border p-5 transition-colors ${
+                      className={`block border p-5 transition-colors ${
                         selectedOptionId === option.id ? 'border-black bg-black text-white' : 'border-neutral-200 bg-white'
                       }`}
                     >
@@ -270,11 +269,11 @@ export default function UyghurEatsAcquisition() {
                           </div>
                         </div>
                         <div className="grid gap-2 text-sm md:min-w-56">
-                          <div className={`rounded-2xl border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200 bg-neutral-50'}`}>
+                          <div className={`border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200'}`}>
                             <p className={`text-[10px] uppercase tracking-[0.22em] ${selectedOptionId === option.id ? 'text-neutral-400' : 'text-neutral-500'}`}>Price</p>
                             <p className={`mt-1 font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.price}</p>
                           </div>
-                          <div className={`rounded-2xl border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200 bg-neutral-50'}`}>
+                          <div className={`border px-4 py-3 ${selectedOptionId === option.id ? 'border-white/15 bg-white/5' : 'border-neutral-200'}`}>
                             <p className={`text-[10px] uppercase tracking-[0.22em] ${selectedOptionId === option.id ? 'text-neutral-400' : 'text-neutral-500'}`}>Timeline</p>
                             <p className={`mt-1 font-medium ${selectedOptionId === option.id ? 'text-white' : 'text-black'}`}>{option.timeline}</p>
                           </div>
@@ -289,7 +288,7 @@ export default function UyghurEatsAcquisition() {
                   ))}
                 </div>
 
-                <div className="rounded-[1.5rem] border border-black/10 bg-[#f4efe5] p-5">
+                <div className="border-t border-black pt-5">
                   <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Selected for Finalization</p>
                   <h4 className="mt-2 text-xl font-medium text-black">{selectedOption?.title}</h4>
                   <p className="mt-2 text-sm leading-6 text-neutral-600">
@@ -298,7 +297,7 @@ export default function UyghurEatsAcquisition() {
                   <button
                     type="button"
                     onClick={() => setIsFinalizationOpen(true)}
-                    className="mt-5 inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                    className="mt-5 inline-flex items-center justify-center border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
                   >
                     Accept Terms and Sign
                   </button>
@@ -310,8 +309,8 @@ export default function UyghurEatsAcquisition() {
               id="process"
               title="Process"
               icon={ClipboardCheck}
-              className="border border-neutral-200"
-              headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+              className="border-t border-neutral-200"
+              headerClassName="border-b border-neutral-200 p-4"
               bodyClassName="space-y-6 p-4 md:p-6"
               titleClassName="md:text-xl"
             >
@@ -333,8 +332,8 @@ export default function UyghurEatsAcquisition() {
               id="terms"
               title="Accept Terms and Sign"
               icon={FileSignature}
-              className="border border-neutral-200"
-              headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+              className="border-t border-neutral-200"
+              headerClassName="border-b border-neutral-200 p-4"
               bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
               titleClassName="md:text-xl"
             >
@@ -352,8 +351,8 @@ export default function UyghurEatsAcquisition() {
               id="business-info"
               title="Business Context"
               icon={Landmark}
-              className="border border-neutral-200"
-              headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+              className="border-t border-neutral-200"
+              headerClassName="border-b border-neutral-200 p-4"
               bodyClassName="p-4 text-sm leading-6 text-neutral-600 md:p-6"
               titleClassName="md:text-xl"
             >

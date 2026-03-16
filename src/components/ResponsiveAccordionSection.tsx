@@ -34,8 +34,8 @@ export default function ResponsiveAccordionSection({
 
   const iconShellClassName =
     tone === 'dark'
-      ? 'rounded-sm bg-white/10 p-2 text-white'
-      : 'rounded-sm bg-neutral-100 p-2 text-black';
+      ? 'border border-white/15 px-2 py-2 text-white'
+      : 'border border-neutral-200 px-2 py-2 text-black';
 
   const chevronClassName = tone === 'dark' ? 'text-stone-400' : 'text-neutral-400';
 

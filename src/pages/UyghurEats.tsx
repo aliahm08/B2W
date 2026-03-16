@@ -198,7 +198,7 @@ export default function UyghurEats() {
             >
                 <header className={projectPageHeaderClassName}>
                     <Link
-                        to="/#industries"
+                        to="/#projects"
                         className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="w-4 h-4" />
@@ -222,11 +222,11 @@ export default function UyghurEats() {
                             </p>
 
                             <div className="mb-8 grid gap-3 md:grid-cols-2">
-                                <div className="rounded-[1.5rem] border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6 text-neutral-700">
+                                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
                                     <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
                                     <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
                                 </div>
-                                <div className="rounded-[1.5rem] border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6 text-neutral-700">
+                                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
                                     <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
                                     <span className="mt-2 block font-medium text-black">Property Sale</span>
                                 </div>
@@ -281,7 +281,6 @@ export default function UyghurEats() {
                     <div className="lg:col-span-12">
                         <ProfileSectionNav
                             items={sectionItems}
-                            eyebrow="Diligence navigation"
                             description="Jump between the acquisition case, neighborhood context, operating upside, and gallery while keeping the page's diligence narrative intact."
                         />
                     </div>
@@ -347,8 +346,8 @@ export default function UyghurEats() {
                             id="market"
                             title="Market Analysis"
                             icon={LineChart}
-                            className="border border-neutral-200"
-                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            className="border-t border-neutral-200"
+                            headerClassName="border-b border-neutral-200 p-4"
                             bodyClassName="space-y-6 p-4 md:p-6"
                             titleClassName="md:text-xl"
                         >
@@ -401,8 +400,8 @@ export default function UyghurEats() {
                             id="growth"
                             title="Potential Use Cases & Growth"
                             icon={TrendingUp}
-                            className="mt-12 border border-neutral-200"
-                            headerClassName="border-b border-neutral-200 bg-neutral-50 p-4"
+                            className="mt-12 border-t border-neutral-200"
+                            headerClassName="border-b border-neutral-200 p-4"
                             bodyClassName="space-y-6 bg-white p-4 md:p-6"
                             titleClassName="md:text-xl"
                         >
@@ -446,7 +445,7 @@ export default function UyghurEats() {
                             {images.map((img, idx) => (
                                 <motion.figure
                                     key={idx}
-                                    className={`relative shrink-0 snap-center overflow-hidden rounded-sm border border-neutral-200 bg-neutral-100 group w-[85vw] ${idx === 0 ? 'min-h-[360px]' : 'min-h-[280px]'} md:w-auto ${img.span} ${idx === 0 ? 'md:min-h-[500px]' : 'md:min-h-[200px]'}`}
+                                    className={`relative shrink-0 snap-center overflow-hidden border border-neutral-200 bg-neutral-100 group w-[85vw] ${idx === 0 ? 'min-h-[360px]' : 'min-h-[280px]'} md:w-auto ${img.span} ${idx === 0 ? 'md:min-h-[500px]' : 'md:min-h-[200px]'}`}
                                     whileHover={{ scale: 0.99 }}
                                     transition={{ duration: 0.2 }}
                                 >
@@ -492,13 +491,13 @@ export default function UyghurEats() {
                                 <button
                                     type="submit"
                                     disabled={isUnlockingPreview}
-                                    className="inline-flex items-center justify-center border border-white bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
+                                    className="inline-flex items-center justify-center rounded-full border border-white bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
                                 >
                                     {isUnlockingPreview ? 'Unlocking...' : 'Unlock Full Profile'}
                                 </button>
                                 <Link
                                     to={proposalReturnPath}
-                                    className="inline-flex items-center justify-center border border-white/15 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-white/40"
+                                    className="inline-flex items-center justify-center rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-white/40"
                                 >
                                     Back to Scope
                                 </Link>
@@ -530,7 +529,7 @@ export default function UyghurEats() {
                         <button
                             type="button"
                             onClick={closeOfferModal}
-                            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition-colors hover:text-black"
+                            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center border border-neutral-200 text-neutral-500 transition-colors hover:text-black"
                             aria-label="Close offer form"
                         >
                             <X className="h-4 w-4" />

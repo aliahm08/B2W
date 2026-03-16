@@ -218,7 +218,7 @@ export default function BorekG() {
             >
                 <header className={projectPageHeaderClassName}>
                     <Link
-                        to="/#industries"
+                        to="/#projects"
                         className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="h-4 w-4" />
@@ -285,7 +285,6 @@ export default function BorekG() {
                     <div className="lg:col-span-12">
                         <ProfileSectionNav
                             items={sectionItems}
-                            eyebrow="Profile navigation"
                             description="Move through the public signal stack, marketing thesis, and source-backed growth readout without losing the page context."
                         />
                     </div>

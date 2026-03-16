@@ -50,7 +50,7 @@ function LandingPage() {
       />
       <Hero />
       <Work />
-      <section id="industries">
+      <section id="projects">
         <Industries />
       </section>
       <section id="process">

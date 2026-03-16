@@ -275,7 +275,7 @@ export default function Industries() {
           </span>
         </div>
 
-        <div className="mb-12 border border-black/10 bg-neutral-50 p-6 md:p-8">
+        <div className="mb-12 border-t border-neutral-200 pt-6 md:pt-8">
           <div className="grid gap-6 xl:grid-cols-2">
             {renderFilterGroup('Project Type', [...projectTypeOptions], selectedProjectType, (value) =>
               setSelectedProjectType(value as (typeof projectTypeOptions)[number])

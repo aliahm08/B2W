@@ -96,8 +96,8 @@ export default function OurProcess() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.35, delay: index * 0.05 }}
-        className={`border transition-colors ${
-          isOpen ? 'border-neutral-900 bg-white' : 'border-neutral-200 bg-neutral-50'
+        className={`border-t transition-colors ${
+          isOpen ? 'border-neutral-900' : 'border-neutral-200'
         }`}
       >
         <button
@@ -112,7 +112,7 @@ export default function OurProcess() {
           <div className="flex-1">
             <div className="mb-3 flex flex-wrap items-center gap-3">
               <span
-                className={`rounded-full border px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] ${
+                className={`border px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] ${
                   isOpen
                     ? 'border-neutral-900 bg-neutral-900 text-white'
                     : 'border-neutral-300 bg-white text-neutral-500'

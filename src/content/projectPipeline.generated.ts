@@ -7,7 +7,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     "primaryCtaLabel": "Explore capabilities",
     "primaryCtaHref": "/#capabilities",
     "secondaryCtaLabel": "See Projects",
-    "secondaryCtaHref": "/#industries"
+    "secondaryCtaHref": "/#projects"
   },
   "projects": [
     {

@@ -177,7 +177,7 @@ export default function ProjectAccessPrompt({
           >
             <div className="flex flex-wrap items-center justify-between gap-4">
               <Link
-                to="/#industries"
+                to="/#projects"
                 className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black"
                 onClick={onClose}
               >
