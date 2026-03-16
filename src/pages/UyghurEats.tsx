@@ -106,8 +106,8 @@ export default function UyghurEats() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Uyghur Eats Diligence Document"
-                description="Acquisition diligence document for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty."
+                title="Acquisition Diligence Brief"
+                description="Acquisition diligence brief for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty."
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -132,12 +132,23 @@ export default function UyghurEats() {
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                Uyghur Eats
+                                Acquisition Diligence Brief
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                                A diligence document built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering to support acquisition evaluation.
+                                A plain-language diligence brief for the potential sale of Uyghur Eats, built around location quality, neighborhood loyalty, and a differentiated handmade noodle offering.
                             </p>
+
+                            <div className="mb-8 grid gap-3 md:grid-cols-2">
+                                <div className="rounded-[1.5rem] border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6 text-neutral-700">
+                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
+                                    <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
+                                </div>
+                                <div className="rounded-[1.5rem] border border-neutral-200 bg-neutral-50 p-4 text-sm leading-6 text-neutral-700">
+                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
+                                    <span className="mt-2 block font-medium text-black">Property Sale</span>
+                                </div>
+                            </div>
 
                             <div className="flex flex-wrap gap-2">
                                 {showcase.tags.map((tag) => (

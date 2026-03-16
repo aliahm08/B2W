@@ -5,6 +5,7 @@
 - **Monochrome**: Use only black, white, and shades of gray to convey professionalism and focus.
 - **Motion**: Use subtle, smooth scroll-based animations to guide the user's attention without overwhelming them.
 - **Clarity**: Avoid jargon. Speak plainly about problems and solutions.
+- **Deliverables**: Name deliverables in plain, credible language. Public-facing cards should stay generic until access is granted; unlocked deliverables should use direct, specific titles without hype.
 
 ## Structure
 1. **Hero**: Immediate value proposition. No large distracting imagery.

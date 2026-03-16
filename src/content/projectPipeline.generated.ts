@@ -78,13 +78,13 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Consulting",
       "serviceType": "Property Sale",
       "status": "Proposed",
-      "clientDescription": "Specialty restaurant positioned in a strong urban corridor",
-      "title": "Acquisition Diligence Document",
-      "description": "Diligence document focused on acquisition readiness, location quality, market position, and differentiated demand drivers.",
-      "impact": "Stronger acquisition underwriting",
+      "clientDescription": "Restaurant property sale opportunity",
+      "title": "Analysis Profile",
+      "description": "Analysis profile focused on location quality, market position, and buyer-relevant operating signals.",
+      "impact": "Property sale opportunity identified",
       "tags": [
         {
-          "label": "Diligence",
+          "label": "Analysis",
           "tier": 1
         },
         {
@@ -96,7 +96,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
           "tier": 3
         },
         {
-          "label": "Acquisition",
+          "label": "Property Sale",
           "tier": 3
         }
       ],

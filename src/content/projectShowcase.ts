@@ -34,15 +34,15 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
     ],
   },
   '/uyghur-eats': {
-    publicTitle: 'Acquisition Diligence Document',
-    publicClientDescription: 'Specialty restaurant positioned in a strong urban corridor',
-    publicDescription: 'Diligence document focused on acquisition readiness, location quality, market position, and differentiated demand drivers.',
-    publicImpact: 'Stronger acquisition underwriting',
+    publicTitle: 'Analysis Profile',
+    publicClientDescription: 'Restaurant property sale opportunity',
+    publicDescription: 'Analysis profile focused on location quality, market position, and buyer-relevant operating signals.',
+    publicImpact: 'Property sale opportunity identified',
     tags: [
-      { label: 'Diligence', tier: 1 },
+      { label: 'Analysis', tier: 1 },
       { label: 'Location', tier: 2 },
       { label: 'Valuation', tier: 3 },
-      { label: 'Acquisition', tier: 3 },
+      { label: 'Property Sale', tier: 3 },
     ],
   },
   '/uyghur-eats-acquisition': {

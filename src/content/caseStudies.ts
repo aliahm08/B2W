@@ -28,13 +28,13 @@ export const projects = [
     {
         id: 12,
         category: "FOOD & BEVERAGE",
-        serviceType: "Acquisition Diligence",
+        serviceType: "Property Sale",
         status: "Proposal",
-        clientDescription: "Authentic Uyghur Cuisine in DC",
-        title: "Uyghur Eats Diligence Document",
-        description: "A diligence document assessing location value, operational footprint, and community integration for Uyghur Eats. The analysis highlights key drivers such as signature hand-pulled noodles and deep neighborhood loyalty for acquisition evaluation.",
-        impact: "High-Traffic Neighborhood Anchor",
-        tags: ["Diligence", "Location Value", "Market Positioning"],
+        clientDescription: "Restaurant property sale opportunity",
+        title: "Analysis Profile",
+        description: "A generic analysis profile covering location value, operational footprint, and market positioning for a restaurant property sale opportunity.",
+        impact: "Property sale opportunity identified",
+        tags: ["Analysis", "Location Value", "Market Positioning"],
         date: "March 2026",
         link: "/uyghur-eats"
     }
