@@ -36,6 +36,6 @@ export const projects = [
         impact: "Property sale opportunity identified",
         tags: ["Analysis", "Location Value", "Market Positioning"],
         date: "March 2026",
-        link: "/uyghur-eats"
+        link: "/uyghur-eats-acquisition"
     }
 ];

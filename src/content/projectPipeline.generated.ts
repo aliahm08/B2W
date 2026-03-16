@@ -2,7 +2,7 @@ import type { ProjectPipelineContent } from './projectPipeline';
 
 export const projectPipelineContent: ProjectPipelineContent = {
   "hero": {
-    "headline": "We build intelligence.",
+    "headline": "Optimizing growth for small and midsize businesses.",
     "subheadline": "Solving complex problems with simple, effective AI solutions. No hype. Just results.",
     "primaryCtaLabel": "Explore capabilities",
     "primaryCtaHref": "/#capabilities",
@@ -78,30 +78,30 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Consulting",
       "serviceType": "Property Sale",
       "status": "Proposed",
-      "clientDescription": "Restaurant property sale opportunity",
-      "title": "M&A Property Sale",
-      "description": "Restaurant M&A property sale engagement focused on location quality, market position, and buyer-relevant operating signals.",
-      "impact": "Property sale opportunity identified",
+      "clientDescription": "Restaurant property sale opportunity with diligence-led buyer packaging",
+      "title": "Restaurant Property Sale Proposal",
+      "description": "Email-protected proposal covering the diligence-as-a-service model, buyer certainty package, and property sale rollout.",
+      "impact": "Controlled sale process defined",
       "tags": [
         {
-          "label": "Analysis",
+          "label": "Proposal",
           "tier": 1
         },
         {
-          "label": "Location",
+          "label": "Property Sale",
           "tier": 2
         },
         {
-          "label": "Valuation",
+          "label": "Diligence",
           "tier": 3
         },
         {
-          "label": "Property Sale",
+          "label": "Buyer Package",
           "tier": 3
         }
       ],
       "date": "March 2026",
-      "link": "/uyghur-eats"
+      "link": "/uyghur-eats-acquisition"
     },
     {
       "id": 4,

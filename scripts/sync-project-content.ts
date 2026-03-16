@@ -61,7 +61,7 @@ const workbookPath = path.join(repoRoot, 'index-projects.xlsx');
 const outputPath = path.join(repoRoot, 'src/content/projectPipeline.generated.ts');
 const passwordEnvOutputPath = path.join(repoRoot, '.env.project-passwords.local');
 const defaultHero: HeroContent = {
-  headline: 'We build intelligence.',
+  headline: 'Optimizing growth for small and midsize businesses.',
   subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
   primaryCtaLabel: 'Explore capabilities',
   primaryCtaHref: '/#capabilities',
@@ -72,7 +72,7 @@ const defaultHero: HeroContent = {
 const routeMap: Record<string, string> = {
   'borek-g|profile|marketing': '/borek-g',
   'borek-g|prototype|operations': '/borek-g-operations',
-  'uyghur eats|profile|finance': '/uyghur-eats',
+  'uyghur eats|profile|finance': '/uyghur-eats-acquisition',
 };
 
 const clientDisplayMap: Record<string, string> = {
