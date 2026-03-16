@@ -1,9 +1,7 @@
 import { motion } from 'motion/react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProjectAccessPrompt from './ProjectAccessPrompt';
 import { projectPipelineContent, type ProjectCard } from '../content/projectPipeline';
-import { protectedProjects } from '../content/projectAccess';
 
 function isExternalLink(value: string): boolean {
   return /^https?:\/\//.test(value);
@@ -196,7 +194,6 @@ export default function Industries() {
   const [selectedCapacity, setSelectedCapacity] = useState<(typeof capacityOptions)[number]>('All');
   const [selectedStatus, setSelectedStatus] = useState<(typeof statusOptions)[number]>('All');
   const [selectedDeliverable, setSelectedDeliverable] = useState<(typeof deliverableOptions)[number]>('All');
-  const [activeProtectedPath, setActiveProtectedPath] = useState<string | null>(null);
 
   const projectCards = useMemo<ProjectCardViewModel[]>(
     () =>
@@ -222,13 +219,6 @@ export default function Industries() {
     }),
     [projectCards, selectedProjectType, selectedCapacity, selectedStatus, selectedDeliverable],
   );
-
-  const protectedProjectMap = useMemo(
-    () => Object.fromEntries(protectedProjects.map((project) => [project.path, project])),
-    [],
-  );
-
-  const activeProtectedProject = activeProtectedPath ? protectedProjectMap[activeProtectedPath] : undefined;
 
   const renderFilterGroup = (
     label: string,
@@ -285,19 +275,21 @@ export default function Industries() {
           </span>
         </div>
 
-        <div className="mb-12 grid gap-6 md:grid-cols-2">
-          {renderFilterGroup('Project Type', [...projectTypeOptions], selectedProjectType, (value) =>
-            setSelectedProjectType(value as (typeof projectTypeOptions)[number])
-          )}
-          {renderFilterGroup('Capacity', [...capacityOptions], selectedCapacity, (value) =>
-            setSelectedCapacity(value as (typeof capacityOptions)[number])
-          )}
-          {renderFilterGroup('Status', [...statusOptions], selectedStatus, (value) =>
-            setSelectedStatus(value as (typeof statusOptions)[number])
-          )}
-          {renderFilterGroup('Deliverables', [...deliverableOptions], selectedDeliverable, (value) =>
-            setSelectedDeliverable(value as (typeof deliverableOptions)[number])
-          )}
+        <div className="mb-12 border border-black/10 bg-neutral-50 p-6 md:p-8">
+          <div className="grid gap-6 xl:grid-cols-2">
+            {renderFilterGroup('Project Type', [...projectTypeOptions], selectedProjectType, (value) =>
+              setSelectedProjectType(value as (typeof projectTypeOptions)[number])
+            )}
+            {renderFilterGroup('Capacity', [...capacityOptions], selectedCapacity, (value) =>
+              setSelectedCapacity(value as (typeof capacityOptions)[number])
+            )}
+            {renderFilterGroup('Status', [...statusOptions], selectedStatus, (value) =>
+              setSelectedStatus(value as (typeof statusOptions)[number])
+            )}
+            {renderFilterGroup('Deliverables', [...deliverableOptions], selectedDeliverable, (value) =>
+              setSelectedDeliverable(value as (typeof deliverableOptions)[number])
+            )}
+          </div>
         </div>
 
         {filteredProjects.length === 0 ? (
@@ -307,9 +299,8 @@ export default function Industries() {
         ) : (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
             {filteredProjects.map((project, index) => {
-              const protectedProject = protectedProjectMap[project.link];
               const hasLink = Boolean(project.link);
-              const cardAriaLabel = protectedProject ? 'Open project access options' : `View ${project.title}`;
+              const cardAriaLabel = `View ${project.title}`;
 
               return (
                 <motion.article
@@ -329,13 +320,6 @@ export default function Industries() {
                         className="absolute inset-0 z-10"
                         aria-label={cardAriaLabel}
                       />
-                    ) : protectedProject ? (
-                      <button
-                        type="button"
-                        className="absolute inset-0 z-10"
-                        aria-label={cardAriaLabel}
-                        onClick={() => setActiveProtectedPath(project.link)}
-                      />
                     ) : (
                       <Link to={project.link} className="absolute inset-0 z-10" aria-label={cardAriaLabel} />
                     )
@@ -343,7 +327,7 @@ export default function Industries() {
 
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_35%)]" />
 
-                  <div className="relative flex h-full flex-col justify-between">
+                  <div className="relative grid h-full grid-rows-[auto,1fr,auto] gap-8">
                     <div>
                       <div className="mb-6 flex flex-wrap items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-400">
                         <span className="font-semibold text-stone-100">{project.typeLabel}</span>
@@ -359,19 +343,19 @@ export default function Industries() {
                         <h3 className="mb-4 text-2xl font-medium text-stone-50 group-hover:underline decoration-1 underline-offset-4 decoration-neutral-700">
                           {project.title}
                         </h3>
-                        <p className="text-sm leading-relaxed text-neutral-300 md:text-base">
-                          {project.description}
+                        <p className="text-sm leading-relaxed text-neutral-200 md:text-base">
+                          {project.clientDescription}
                         </p>
                       </div>
                     </div>
 
-                    <div className="mt-8 border-t border-neutral-800 pt-6">
-                      <div className="flex flex-wrap items-start justify-between gap-5">
+                    <div className="border-t border-neutral-800 pt-6">
+                      <div className="grid gap-5">
                         <div>
-                          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">
+                          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-400">
                             Deliverables
                           </p>
-                          <div className="mt-4 flex flex-wrap gap-2">
+                          <div className="mt-3 flex flex-wrap gap-2">
                             {project.deliverables.map((deliverable) => (
                               <span
                                 key={`${project.id}-${deliverable}`}
@@ -383,13 +367,13 @@ export default function Industries() {
                           </div>
                         </div>
 
-                        <div className="min-w-[126px]">
-                          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">
+                        <div>
+                          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-400">
                             Date Started
                           </p>
-                          <p className="mt-3 text-sm font-medium text-stone-100">
+                          <span className="mt-3 inline-flex border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm font-medium text-stone-100">
                             {project.date}
-                          </p>
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -400,18 +384,6 @@ export default function Industries() {
           </div>
         )}
       </div>
-
-      {activeProtectedProject ? (
-        <ProjectAccessPrompt
-          isOpen
-          path={activeProtectedProject.path}
-          title={activeProtectedProject.maskedTitle}
-          subtitle={activeProtectedProject.subtitle}
-          onClose={() => setActiveProtectedPath(null)}
-          initialMethod={activeProtectedProject.view}
-          onStatusChange={() => undefined}
-        />
-      ) : null}
     </section>
   );
 }

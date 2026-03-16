@@ -89,8 +89,8 @@ export default function UyghurEatsAcquisition() {
   return (
     <article className={projectPageShellClassName}>
       <Seo
-        title="Uyghur Eats Property Sale Proposal"
-        description="Email-protected property sale proposal for Uyghur Eats covering the diligence-as-a-service model, scope options, and digital signing."
+        title="Urban Restaurant Buyer Diligence"
+        description="Buyer diligence engagement for Uyghur Eats covering the diligence-as-a-service model, scope options, and digital signing."
       />
 
       <motion.div
@@ -107,13 +107,13 @@ export default function UyghurEatsAcquisition() {
           <div className={projectPageEyebrowClassName}>
             <span className="font-semibold text-neutral-900">Food & Beverage</span>
             <span className="text-neutral-300">•</span>
-            <span>Proposal</span>
+            <span>Engagement</span>
           </div>
 
           <div className={projectHeroGridClassNames.operations}>
             <div>
               <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                {proposal?.proposalTitle ?? 'Uyghur Eats Property Sale Proposal'}
+                {proposal?.proposalTitle ?? 'Urban Restaurant Buyer Diligence'}
               </h1>
 
               <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
@@ -364,6 +364,12 @@ export default function UyghurEatsAcquisition() {
                 <p>
                   The public-facing project label remains generalized as an M&A Property Sale, while the live work product centers on diligence, controlled disclosure, and buyer confidence.
                 </p>
+                <Link
+                  to="/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options"
+                  className="inline-flex items-center gap-2 border border-black px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+                >
+                  Preview Analysis Profile
+                </Link>
               </div>
             </ResponsiveAccordionSection>
           </aside>

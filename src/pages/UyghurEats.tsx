@@ -1,11 +1,12 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
 import ProjectTagPill from '../components/ProjectTagPill';
 import Seo from '../components/Seo';
 import ProfileSectionNav from '../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
+import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../content/projectAccess';
 import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
@@ -16,9 +17,45 @@ import {
 } from '../components/projectPageLayout';
 
 export default function UyghurEats() {
+    const projectPath = '/uyghur-eats';
     const showcase = projectShowcaseOverridesByPath['/uyghur-eats'];
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
+    const [profilePassword, setProfilePassword] = useState('');
+    const [previewError, setPreviewError] = useState('');
+    const [isUnlockingPreview, setIsUnlockingPreview] = useState(false);
+    const [hasPreviewAccess, setHasPreviewAccess] = useState(false);
+    const isProposalPreview = searchParams.get('preview') === 'proposal';
+    const proposalReturnPath = useMemo(
+        () => searchParams.get('return') || '/uyghur-eats-acquisition#scope-options',
+        [searchParams],
+    );
+    const isBlurredPreview = isProposalPreview && !hasPreviewAccess;
+
+    useEffect(() => {
+        if (!isProposalPreview) {
+            setHasPreviewAccess(false);
+            setPreviewError('');
+            setProfilePassword('');
+            return;
+        }
+
+        let isActive = true;
+
+        void fetchProjectAccessStatus(projectPath).then((status) => {
+            if (!isActive) {
+                return;
+            }
+
+            setHasPreviewAccess(hasGrantedView(status, 'profile'));
+        });
+
+        return () => {
+            isActive = false;
+        };
+    }, [isProposalPreview]);
 
     useEffect(() => {
         if (!isOfferModalOpen) {
@@ -65,6 +102,31 @@ export default function UyghurEats() {
         setIsOfferSubmitted(true);
     };
 
+    const handlePreviewUnlock = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsUnlockingPreview(true);
+
+        try {
+            const result = await submitProjectAccess({
+                path: projectPath,
+                method: 'profile',
+                password: profilePassword,
+            });
+
+            if (!hasGrantedView(result, 'profile')) {
+                setPreviewError(result.error || 'Incorrect password.');
+                return;
+            }
+
+            setHasPreviewAccess(true);
+            setPreviewError('');
+            setProfilePassword('');
+            navigate(projectPath, { replace: true });
+        } finally {
+            setIsUnlockingPreview(false);
+        }
+    };
+
     const images = [
         {
             url: '/images/uyghur-eats/interior.jpg',
@@ -109,10 +171,30 @@ export default function UyghurEats() {
                 title="Analysis Profile"
                 description="Analysis profile for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty in support of a property sale."
             />
+            {isBlurredPreview ? (
+                <div className="fixed inset-x-0 top-20 z-40 px-6">
+                    <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 border border-neutral-900 bg-white/95 px-5 py-4 shadow-[0_20px_60px_rgba(0,0,0,0.12)] backdrop-blur">
+                        <div>
+                            <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">Preview Mode</p>
+                            <p className="mt-1 text-sm text-neutral-700">
+                                This analysis profile preview is intentionally blurred until the profile password is entered.
+                            </p>
+                        </div>
+                        <Link
+                            to={proposalReturnPath}
+                            className="inline-flex items-center gap-2 border border-neutral-300 px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black"
+                        >
+                            <ArrowLeft className="h-4 w-4" />
+                            Back to Scope
+                        </Link>
+                    </div>
+                </div>
+            ) : null}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
+                className={isBlurredPreview ? 'pointer-events-none select-none blur-md' : undefined}
             >
                 <header className={projectPageHeaderClassName}>
                     <Link
@@ -386,6 +468,49 @@ export default function UyghurEats() {
                     </ResponsiveAccordionSection>
                 </main>
             </motion.div>
+
+            {isBlurredPreview ? (
+                <div className="fixed inset-x-0 bottom-6 z-50 px-6">
+                    <div className="mx-auto max-w-5xl border border-neutral-900 bg-neutral-950 p-5 text-white shadow-[0_24px_80px_rgba(0,0,0,0.24)] md:p-6">
+                        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                            <div className="max-w-2xl">
+                                <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-400">Unlock Full Access</p>
+                                <p className="mt-3 text-sm leading-6 text-neutral-300">
+                                    Enter the analysis profile password to unlock the live deliverable. Proposal review stays available separately, and you can return to the scope section at any time.
+                                </p>
+                            </div>
+
+                            <form onSubmit={handlePreviewUnlock} className="flex w-full flex-col gap-3 lg:max-w-xl lg:flex-row lg:items-center">
+                                <input
+                                    type="password"
+                                    value={profilePassword}
+                                    onChange={(event) => setProfilePassword(event.target.value)}
+                                    placeholder="Analysis profile password"
+                                    autoComplete="current-password"
+                                    className="min-w-0 flex-1 border border-white/15 bg-white/5 px-4 py-3 text-sm text-white outline-none transition-colors placeholder:text-neutral-500 focus:border-white/40"
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={isUnlockingPreview}
+                                    className="inline-flex items-center justify-center border border-white bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 disabled:cursor-not-allowed disabled:opacity-60"
+                                >
+                                    {isUnlockingPreview ? 'Unlocking...' : 'Unlock Full Profile'}
+                                </button>
+                                <Link
+                                    to={proposalReturnPath}
+                                    className="inline-flex items-center justify-center border border-white/15 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-white/40"
+                                >
+                                    Back to Scope
+                                </Link>
+                            </form>
+                        </div>
+
+                        {previewError ? (
+                            <p className="mt-4 text-sm text-rose-300">{previewError}</p>
+                        ) : null}
+                    </div>
+                </div>
+            ) : null}
 
             {isOfferModalOpen && (
                 <div

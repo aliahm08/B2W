@@ -84,8 +84,8 @@ export default function BorekGOperations() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Borek-G Marketing Proposal"
-                description="Marketing proposal for Borek-G covering channel priorities, scope options, execution cadence, and phased rollout."
+                title="Turkish Bistro Content and Promotion System"
+                description="Growth system for Borek-G covering channel priorities, scope options, execution cadence, and phased rollout."
             />
 
             <motion.div
@@ -105,17 +105,17 @@ export default function BorekGOperations() {
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
-                        <span>Proposal</span>
+                        <span>Engagement</span>
                     </div>
 
                     <div className={projectHeroGridClassNames.operations}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                                Borek-G Marketing Proposal
+                                Turkish Bistro Content and Promotion System
                             </h1>
 
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                                Proposal for a Borek-G marketing system built from the restaurant's existing demand signals, reputation strength, and channel gaps.
+                                Growth system for a Turkish bistro built from the restaurant's existing demand signals, reputation strength, and channel gaps.
                             </p>
 
                             <div className="mb-8 grid gap-3 md:grid-cols-3">

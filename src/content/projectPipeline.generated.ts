@@ -17,7 +17,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "serviceType": "Social Media Management",
       "status": "Proposed",
       "clientDescription": "Independent restaurant in a high-traffic suburban market",
-      "title": "Neighborhood Restaurant Marketing Profile",
+      "title": "Turkish Bistro Social Media Management",
       "description": "Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.",
       "impact": "Clearer digital demand capture plan",
       "tags": [
@@ -48,7 +48,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "serviceType": "Marketing Proposal",
       "status": "Proposed",
       "clientDescription": "Independent restaurant with strong local demand and underused digital channels",
-      "title": "Restaurant Marketing Proposal",
+      "title": "Turkish Bistro Content and Promotion System",
       "description": "Marketing proposal covering channel strategy, content cadence, local discovery improvements, and digital demand capture.",
       "impact": "Clearer marketing execution plan",
       "tags": [
@@ -79,7 +79,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "serviceType": "Property Sale",
       "status": "Proposed",
       "clientDescription": "Restaurant property sale opportunity with diligence-led buyer packaging",
-      "title": "Restaurant Property Sale Proposal",
+      "title": "Urban Restaurant Buyer Diligence",
       "description": "Email-protected proposal covering the diligence-as-a-service model, buyer certainty package, and property sale rollout.",
       "impact": "Controlled sale process defined",
       "tags": [
@@ -110,7 +110,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "serviceType": "Social Media Management",
       "status": "Proposed",
       "clientDescription": "Independent restaurant in a high-traffic suburban market",
-      "title": "Neighborhood Restaurant Marketing Profile",
+      "title": "Turkish Bistro Social Media Management",
       "description": "Restaurant marketing profile covering public reputation, social opportunity, search visibility, and website conversion opportunities.",
       "impact": "Clearer digital demand capture plan",
       "tags": [
@@ -137,7 +137,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "serviceType": "Mobile Chatbot Assistant",
       "status": "Proposed",
       "clientDescription": "Trade-services operator coordinating field crews across jobsites",
-      "title": "Field Coordination Assistant Prototype",
+      "title": "Field Crew Coordination Assistant",
       "description": "Operations proposal focused on repetitive question handling, workflow consistency, escalation rules, and support coverage.",
       "impact": "Better field coordination potential",
       "tags": [

@@ -261,30 +261,30 @@ function buildPublicTitle(row: WorkbookRow): string {
   const packageName = compactText(String(row.package ?? '')).toLowerCase();
 
   if (offering === 'profile' && topic === 'marketing') {
-    return 'Neighborhood Restaurant Marketing Profile';
+    return 'Turkish Bistro Social Media Management';
   }
 
   if (client === 'borek-g' && offering === 'prototype' && topic === 'operations') {
-    return 'Restaurant Marketing Proposal';
+    return 'Turkish Bistro Content and Promotion System';
   }
 
   if (offering === 'prototype' && topic === 'operations') {
-    return packageName.includes('mobile') ? 'Field Coordination Assistant Prototype' : 'Frontline Operations Copilot Prototype';
+    return packageName.includes('mobile') ? 'Field Crew Coordination Assistant' : 'Frontline Service Copilot';
   }
 
   if (offering === 'profile' && topic === 'finance') {
-    return 'Acquisition Readiness and Valuation Profile';
+    return 'Urban Restaurant Sale Readiness';
   }
 
   if (offering === 'profile') {
-    return `${titleCase(topic || 'Business')} Profile`;
+    return `${titleCase(topic || 'Business')} System`;
   }
 
   if (offering === 'prototype') {
-    return `${titleCase(topic || 'Operations')} Prototype`;
+    return `${titleCase(topic || 'Business')} Solution`;
   }
 
-  return [titleCase(topic), titleCase(offering), titleCase(String(row.package ?? ''))].filter(Boolean).join(' ');
+  return titleCase(String(row.package ?? '')) || [titleCase(topic), titleCase(offering)].filter(Boolean).join(' ');
 }
 
 function buildPublicClientDescription(row: WorkbookRow): string {

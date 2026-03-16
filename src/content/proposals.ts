@@ -28,7 +28,7 @@ export type ProposalContent = {
 
 export const proposalsByPath: Record<string, ProposalContent> = {
   '/borek-g-operations': {
-    proposalTitle: 'Proposal for Marketing Systems and Growth',
+    proposalTitle: 'Turkish Bistro Content and Promotion System',
     proposalSummary:
       'Bring more people into Borek-G consistently by packaging the food, story, and brand more clearly across social, local discovery, and digital channels.',
     heroHighlights: [
@@ -110,7 +110,7 @@ export const proposalsByPath: Record<string, ProposalContent> = {
       'A transcript and secure document link have been prepared for the signer and for B2W internal follow-up.',
   },
   '/uyghur-eats-acquisition': {
-    proposalTitle: 'Proposal for Uyghur Eats Property Sale Advisory',
+    proposalTitle: 'Urban Restaurant Buyer Diligence',
     proposalSummary:
       'Launch a diligence-as-a-service process around the potential sale of Uyghur Eats by packaging the business properly, controlling information flow, and turning buyer uncertainty into paid diligence access.',
     heroHighlights: [
