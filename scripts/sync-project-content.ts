@@ -9,8 +9,8 @@ type HeroContent = {
   subheadline: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
-  secondaryCtaLabel: string;
-  secondaryCtaHref: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
 };
 
 type ProjectTag = {
@@ -61,12 +61,10 @@ const workbookPath = path.join(repoRoot, 'index-projects.xlsx');
 const outputPath = path.join(repoRoot, 'src/content/projectPipeline.generated.ts');
 const passwordEnvOutputPath = path.join(repoRoot, '.env.project-passwords.local');
 const defaultHero: HeroContent = {
-  headline: 'Optimizing growth for small and midsize businesses.',
+  headline: 'The AI Consultancy for small and midsize businesses.',
   subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
   primaryCtaLabel: 'Explore capabilities',
   primaryCtaHref: '/#capabilities',
-  secondaryCtaLabel: 'See Projects',
-  secondaryCtaHref: '/#projects',
 };
 
 const routeMap: Record<string, string> = {
