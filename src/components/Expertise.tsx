@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
 import {
   categories,
   tiers,
@@ -147,6 +148,27 @@ export default function Expertise() {
           );
         })}
       </div>
+
+      {/* Custom solution CTA */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="mt-12 border-t border-neutral-200 pt-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p className="text-base text-neutral-600">
+          Need something outside the box?
+        </p>
+        <a
+          href="mailto:info@b2w-ai.com?subject=Custom%20Solution%20Inquiry"
+          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 transition-colors hover:text-black underline decoration-neutral-300 underline-offset-4 hover:decoration-black"
+        >
+          Reach out for custom solution development
+          <ArrowRight className="h-4 w-4" />
+        </a>
+      </motion.div>
     </section>
   );
 }
+

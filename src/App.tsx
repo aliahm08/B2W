@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Work from './components/Work';
 import Expertise from './components/Expertise';
+import ProjectShowcase from './components/ProjectShowcase';
 import Team from './components/Team';
 import OurProcess from './components/OurProcess';
 import CTA from './components/CTA';
@@ -23,6 +24,7 @@ import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/Ba
 import CapabilityPage from './pages/capabilities/CapabilityPage';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
+import SabucnuProfilePage from './pages/projects/sabucnu/ProfilePage';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -56,6 +58,9 @@ function LandingPage() {
       <section id="expertise">
         <Expertise />
       </section>
+      <section id="projects">
+        <ProjectShowcase />
+      </section>
       <section id="process">
         <OurProcess />
       </section>
@@ -85,6 +90,7 @@ export default function App() {
           <Route path="/uyghur-eats-basic-profile-preview" element={<UyghurEatsBasicPreviewPage />} />
           <Route path="/uyghur-eats-ai-agent-preview" element={<UyghurEatsAiAgentPreviewPage />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
+          <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
