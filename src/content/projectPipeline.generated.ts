@@ -3,7 +3,7 @@ import type { ProjectPipelineContent } from './projectPipeline';
 export const projectPipelineContent: ProjectPipelineContent = {
   "hero": {
     "headline": "The AI Consultancy for small and midsize businesses.",
-    "subheadline": "Solving complex problems with simple, effective AI solutions. No hype. Just results.",
+    "subheadline": "We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day",
     "primaryCtaLabel": "Explore capabilities",
     "primaryCtaHref": "/#capabilities"
   },

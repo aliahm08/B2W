@@ -62,7 +62,7 @@ const outputPath = path.join(repoRoot, 'src/content/projectPipeline.generated.ts
 const passwordEnvOutputPath = path.join(repoRoot, '.env.project-passwords.local');
 const defaultHero: HeroContent = {
   headline: 'The AI Consultancy for small and midsize businesses.',
-  subheadline: 'Solving complex problems with simple, effective AI solutions. No hype. Just results.',
+  subheadline: 'We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day',
   primaryCtaLabel: 'Explore capabilities',
   primaryCtaHref: '/#capabilities',
 };
