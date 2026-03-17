@@ -419,60 +419,64 @@ export default function UyghurEats() {
                     onSelect={setActiveSection}
                 />
 
-                {/* ─── Content Frame ──────────────────────────────── */}
                 <main className="mt-8 md:mt-12" data-project-body>
-                    <AnimatePresence mode="wait">
-                        <motion.section
-                            key={currentSection.id}
-                            initial={{ opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -12 }}
-                            transition={{ duration: 0.25 }}
-                            className="max-w-3xl"
-                        >
-                            {/* Section header */}
-                            <div className="mb-6 flex items-center gap-3">
-                                {Icon && (
-                                    <div className="border border-neutral-200 p-2">
-                                        <Icon className="h-5 w-5 text-black" />
-                                    </div>
-                                )}
-                                <h2 className="text-xl font-medium md:text-2xl">{currentSection.label}</h2>
-                            </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8 lg:gap-12 items-start">
+                        <AnimatePresence mode="wait">
+                            <motion.section
+                                key={currentSection.id}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -12 }}
+                                transition={{ duration: 0.25 }}
+                            >
+                                <div className="mb-6 flex items-center gap-3">
+                                    {Icon && (
+                                        <div className="border border-neutral-200 p-2">
+                                            <Icon className="h-5 w-5 text-black" />
+                                        </div>
+                                    )}
+                                    <h2 className="text-xl font-medium md:text-2xl">{currentSection.label}</h2>
+                                </div>
+                                <div data-project-detail-body className="pb-6">
+                                    {currentSection.content}
+                                </div>
+                                {/* Mobile: next section link */}
+                                <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4 lg:hidden">
+                                    <p className="text-xs font-mono uppercase tracking-[0.18em] text-neutral-400">
+                                        {String(currentIndex + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')}
+                                    </p>
+                                    {nextSection && (
+                                        <button type="button" onClick={() => setActiveSection(nextSection.id)} className="inline-flex items-center gap-2 text-sm font-medium text-black">
+                                            {nextSection.label}
+                                            <ArrowRight className="h-4 w-4" />
+                                        </button>
+                                    )}
+                                </div>
+                            </motion.section>
+                        </AnimatePresence>
 
-                            {/* Section body */}
-                            <div data-project-detail-body className="pb-8 border-b border-neutral-100">
-                                {currentSection.content}
-                            </div>
-
-                            {/* Next section prompt */}
-                            <div className="mt-6 flex items-center justify-between">
-                                <p className="text-xs font-mono uppercase tracking-[0.18em] text-neutral-400">
-                                    {String(currentIndex + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')}
-                                </p>
-                                {nextSection ? (
+                        {/* Right sidebar: section index (desktop) */}
+                        <aside className="hidden lg:block sticky top-40">
+                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Sections</p>
+                            <nav className="space-y-1">
+                                {sections.map((s, i) => (
                                     <button
+                                        key={s.id}
                                         type="button"
-                                        onClick={() => setActiveSection(nextSection.id)}
-                                        className="inline-flex items-center gap-2 text-sm font-medium text-black transition-colors hover:text-neutral-600"
+                                        onClick={() => setActiveSection(s.id)}
+                                        className={`w-full text-left px-3 py-2.5 text-sm transition-colors border-l-2 ${
+                                            s.id === activeSection
+                                                ? 'border-black text-black font-medium bg-neutral-50'
+                                                : 'border-transparent text-neutral-400 hover:text-black hover:border-neutral-300'
+                                        }`}
                                     >
-                                        {nextSection.label}
-                                        <ArrowRight className="h-4 w-4" />
+                                        <span className="font-mono text-[10px] tracking-[0.18em] mr-2">{String(i + 1).padStart(2, '0')}</span>
+                                        {s.label}
                                     </button>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        onClick={openOfferModal}
-                                        disabled={isBlurredPreview}
-                                        className="inline-flex items-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                                    >
-                                        Make an Offer
-                                        <ArrowRight className="h-4 w-4" />
-                                    </button>
-                                )}
-                            </div>
-                        </motion.section>
-                    </AnimatePresence>
+                                ))}
+                            </nav>
+                        </aside>
+                    </div>
                 </main>
             </motion.div>
 
