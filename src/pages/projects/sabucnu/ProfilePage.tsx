@@ -10,6 +10,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import Seo from '../../../components/Seo';
+import ClientNavbar from '../../../components/ClientNavbar';
 import {
   projectPageShellClassName,
   projectPageHeaderClassName,
@@ -83,6 +84,7 @@ export default function SabucnuProfilePage() {
 
   return (
     <article className={projectPageShellClassName}>
+      <ClientNavbar clientName="Sabucnu Contractors" />
       <Seo
         title="Sabucnu Contractors | Operations Profile"
         description="Operations analysis for Sabucnu Contractors. Detailed evaluation of workforce coordination, standard operating procedures, and scheduling systems."

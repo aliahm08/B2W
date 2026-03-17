@@ -13,6 +13,7 @@ import {
     Users
 } from 'lucide-react';
 import Seo from '../../../components/Seo';
+import ClientNavbar from '../../../components/ClientNavbar';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
@@ -271,6 +272,7 @@ export default function BorekG() {
 
     return (
         <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
+            <ClientNavbar clientName="Borek-G" />
             <Seo
                 title="Turkish Bistro in Falls Church, VA"
                 description="Social media management and marketing profile for Borek-G covering reputation strength, discovery coverage, social traction, channel depth, and restaurant growth potential in Falls Church."
@@ -365,7 +367,6 @@ export default function BorekG() {
                     <div className="lg:col-span-12">
                         <ProfileSectionNav
                             items={sectionItems}
-                            description="Move through the public signal stack, marketing thesis, and source-backed growth readout without losing the page context."
                         />
                     </div>
                     <div className="space-y-12 lg:col-span-7">

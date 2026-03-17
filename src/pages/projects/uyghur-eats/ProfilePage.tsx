@@ -5,6 +5,7 @@ import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, Ar
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import Seo from '../../../components/Seo';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
+import ClientNavbar from '../../../components/ClientNavbar';
 import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
 import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
 import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
@@ -312,6 +313,7 @@ export default function UyghurEats() {
 
     return (
         <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
+            <ClientNavbar clientName="Uyghur Eats" />
             <Seo
                 title="Uyghur Eats | Business Opportunity Profile"
                 description="Comprehensive business profile for Uyghur Eats. Explore the location footprint, culinary draw, community integration, and acquisition thesis for this Washington, DC restaurant."

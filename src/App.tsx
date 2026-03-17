@@ -84,9 +84,12 @@ export default function App() {
   const [searchParams] = useSearchParams();
 
   const isClientPortal = location.pathname.startsWith('/client/');
-  const isDataRoom = location.pathname === '/uyghur-eats-data-room';
+  const isDataRoom = location.pathname.includes('-data-room');
+  const isProjectPage = location.pathname.includes('-operations') || 
+                        location.pathname.includes('-social-media-management') ||
+                        location.pathname.includes('-valuation-model');
   const hasReturnParam = searchParams.has('return');
-  const isIsolatedView = isClientPortal || isDataRoom || hasReturnParam;
+  const isIsolatedView = isClientPortal || isDataRoom || isProjectPage || hasReturnParam;
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -96,7 +99,7 @@ export default function App() {
   return (
     <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
       <ScrollToTop />
-      {isIsolatedView ? <ClientNavbar clientName={clientName} /> : <Navbar />}
+      {!isIsolatedView && <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />

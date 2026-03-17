@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
 import PreviewReturnBar from '../../../../components/PreviewReturnBar';
+import ClientNavbar from '../../../../components/ClientNavbar';
 import Seo from '../../../../components/Seo';
 import {
   projectPageEyebrowClassName,
@@ -58,6 +59,7 @@ export default function PreviewPageFrame({
 
   return (
     <article className={articleClassName}>
+      <ClientNavbar clientName="Uyghur Eats" />
       <Seo title={title} description={description} />
 
       <PreviewReturnBar returnPath={returnPath} label={returnLabel} detail={returnDetail} />

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, CircleAlert, Clock3, Megaphone, Settings2, Sparkles, Store, Wrench } from 'lucide-react';
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import Seo from '../../../components/Seo';
+import ClientNavbar from '../../../components/ClientNavbar';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
 import ResponsiveAccordionSection from '../../../components/ResponsiveAccordionSection';
 import ProposalAcceptanceSection, { getProposalCacheKey } from '../../../components/ProposalAcceptanceSection';
@@ -84,6 +85,7 @@ export default function BorekGOperations() {
 
     return (
         <article className={projectPageShellClassName}>
+            <ClientNavbar clientName="Borek-G" />
             <Seo
                 title="Borek-G | Growth Proposal"
                 description="Growth systems proposal for Borek-G. Review our consulting engagement scope, strategies for local discovery, and phased implementation recommendations."

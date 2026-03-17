@@ -4,6 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, DollarSign, BarChart3, TrendingUp, Scale } from 'lucide-react';
 import Seo from '../../../components/Seo';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
+import ClientNavbar from '../../../components/ClientNavbar';
 import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
 import {
     projectPageBackLinkClassName,
@@ -186,6 +187,7 @@ export default function ValuationModelPage() {
 
     return (
         <article className={projectPageShellClassName}>
+            <ClientNavbar clientName="Uyghur Eats" />
             <Seo
                 title="Uyghur Eats | Valuation Model"
                 description="Estimated valuation model for Uyghur Eats. Revenue analysis, normalized earnings, comparable sales benchmarking, and estimated sale price range."

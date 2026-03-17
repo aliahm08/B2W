@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef, useCallback, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, X, FileSignature } from 'lucide-react';
+import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, X, FileSignature, Scale } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
 import ProfileSectionNav, { type ProfileSectionNavItem } from '../../components/ProfileSectionNav';
+import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import {
     projectPageHeaderClassName,
     projectPageShellClassName,
@@ -87,6 +88,29 @@ function OperationsContent() {
     );
 }
 
+function TermsContent() {
+    return (
+        <div className="space-y-6">
+            <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+                Review the primary terms and conditions for the engagement.
+            </p>
+            <div className="border border-neutral-200 divide-y divide-neutral-100">
+                {[
+                    { label: 'Exclusivity', detail: 'Engagement is exclusive for a period of 4 months from signing.' },
+                    { label: 'Success Fee', detail: 'Payable only upon successful transaction or capital raise.' },
+                    { label: 'Confidentiality', detail: 'Mutual NDA covers all financial and operational disclosures.' },
+                    { label: 'Termination', detail: 'Either party may terminate with 30 days written notice.' },
+                ].map((item) => (
+                    <div key={item.label} className="p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1">{item.label}</p>
+                        <p className="text-sm text-neutral-700">{item.detail}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
+
 function DueDiligenceContent() {
     return (
         <div className="space-y-6">
@@ -113,6 +137,7 @@ const sectionIconMap: Record<string, typeof LayoutTemplate> = {
     valuation: LineChart,
     operations: FileText,
     'due-diligence': BriefcaseBusiness,
+    terms: Scale,
     'accept-proposal': FileSignature,
 };
 
@@ -130,11 +155,12 @@ export default function UyghurEatsClientPortal() {
         { id: 'valuation', label: '2. Valuation Modeling', content: <ValuationContent /> },
         { id: 'operations', label: '3. Operations Documentation', content: <OperationsContent /> },
         { id: 'due-diligence', label: '4. Buyer Due Diligence Package', content: <DueDiligenceContent /> },
+        { id: 'terms', label: '5. Terms & Conditions', content: <TermsContent /> },
     ];
 
     const sectionItems: ProfileSectionNavItem[] = [
         ...sections.map((s) => ({ id: s.id, label: s.label })),
-        { id: 'accept-proposal', label: '5. Accept Proposal' },
+        { id: 'accept-proposal', label: '6. Accept Proposal' },
     ];
 
     const allSectionIds = sectionItems.map((s) => s.id);
@@ -221,8 +247,23 @@ export default function UyghurEatsClientPortal() {
     const nextSection = sections[currentIndex + 1];
     const Icon = sectionIconMap[currentSection.id];
 
+    const navItems: ClientNavAction[] = [
+        { label: 'Proposal', onClick: () => setActiveSection('overview') },
+        { 
+            label: 'Package', 
+            items: [
+                { label: 'Valuation Modeling', onClick: () => setActiveSection('valuation') },
+                { label: 'Operations Documentation', onClick: () => setActiveSection('operations') },
+                { label: 'Buyer Due Diligence', onClick: () => setActiveSection('due-diligence') },
+            ]
+        },
+        { label: 'Terms', onClick: () => setActiveSection('terms') },
+        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+    ];
+
     return (
         <article className={projectPageShellClassName}>
+            <ClientNavbar clientName="Uyghur Eats" navItems={navItems} />
             <Seo
                 title="Uyghur Eats | Client Portal"
                 description="Secure client portal for Uyghur Eats. Review business sale preparation deliverables, valuation models, operations documentation, and buyer packages from B2W."
@@ -333,7 +374,7 @@ export default function UyghurEatsClientPortal() {
 
                         {/* Right sidebar: section index (desktop) */}
                         <aside className="hidden lg:block sticky top-40">
-                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Sections</p>
+                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Package Items</p>
                             <nav className="space-y-1">
                                 {sections.map((s, i) => (
                                     <button
