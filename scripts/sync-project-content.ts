@@ -9,8 +9,8 @@ type HeroContent = {
   subheadline: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
-  secondaryCtaLabel?: string;
-  secondaryCtaHref?: string;
+  secondaryCtaLabel: string;
+  secondaryCtaHref: string;
 };
 
 type ProjectTag = {
@@ -65,6 +65,8 @@ const defaultHero: HeroContent = {
   subheadline: 'We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day',
   primaryCtaLabel: 'Explore capabilities',
   primaryCtaHref: '/#capabilities',
+  secondaryCtaLabel: 'See Projects',
+  secondaryCtaHref: '/#projects',
 };
 
 const routeMap: Record<string, string> = {

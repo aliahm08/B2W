@@ -11,7 +11,7 @@ type ActionLinkProps = {
 } & Omit<ComponentPropsWithoutRef<'a'>, 'href' | 'children'>;
 
 const baseClassName =
-  'group inline-flex items-center gap-2 text-lg font-medium leading-none text-black transition-colors';
+  'group inline-flex items-center gap-2 text-lg font-medium text-black transition-colors';
 
 const variantClassNames: Record<ActionLinkVariant, string> = {
   underline: 'border-b border-black pb-1 hover:text-neutral-600',

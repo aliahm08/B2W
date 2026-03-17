@@ -22,11 +22,6 @@ export default function Hero() {
 
         <div className="flex flex-wrap gap-5">
           <ActionLink href={hero.primaryCtaHref}>{hero.primaryCtaLabel}</ActionLink>
-          {hero.secondaryCtaHref && hero.secondaryCtaLabel && (
-            <ActionLink href={hero.secondaryCtaHref} variant="outline">
-              {hero.secondaryCtaLabel}
-            </ActionLink>
-          )}
         </div>
       </motion.div>
     </section>
