@@ -171,7 +171,7 @@ export default function OurProcess() {
       >
         <h2 className="mb-4 text-4xl font-medium tracking-tight">Process</h2>
         <p className="mb-8 max-w-4xl text-xl font-medium leading-relaxed text-neutral-600 md:text-2xl">
-          A narrow process, with deliberate branching only where specialist work needs to diverge.
+          Key checkpoints with our clients to ensure engagements are on-track.
         </p>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
