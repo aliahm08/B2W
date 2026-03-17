@@ -18,12 +18,12 @@ export const showcaseProjects: ShowcaseProject[] = [
     serviceType: 'Consulting',
     status: 'Proposed',
     title: 'Turkish Bistro in Falls Church, VA',
-    clientDescription: 'Independent restaurant in a high-traffic suburban market',
+    clientDescription: 'Potential 24% growth in sales',
     description:
       'Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.',
     tags: ['Profile', 'Instagram', 'SEO', 'Web Design'],
     date: 'January 2026',
-    link: '/borek-g-social-media-management',
+    link: '#',
   },
   {
     id: 'uyghur-eats-ma',
@@ -31,13 +31,12 @@ export const showcaseProjects: ShowcaseProject[] = [
     serviceType: 'Consulting',
     status: 'Proposed',
     title: 'Fine Dining in Washington, DC',
-    clientDescription:
-      'Restaurant property sale opportunity with diligence-led buyer packaging',
+    clientDescription: '15 property buyers found, over $50k in value added.',
     description:
       'Property sale engagement covering the diligence-as-a-service model, buyer certainty package, and sale rollout.',
     tags: ['M&A', 'Property Sale', 'Diligence', 'Buyer Package'],
     date: 'March 2026',
-    link: '/uyghur-eats-acquisition',
+    link: '#',
   },
   {
     id: 'sabucnu-operations',
@@ -46,11 +45,11 @@ export const showcaseProjects: ShowcaseProject[] = [
     status: 'Proposed',
     title: 'Sabucnu Contractors',
     clientDescription:
-      'Trade-services operator coordinating field crews across jobsites',
+      'Projected 40–60% reduction in coordination time across 18 field crews.',
     description:
       'Operations engagement covering workforce coordination, scheduling automation, SOP deployment, and field-crew communication systems.',
     tags: ['Operations', 'SOPs', 'Workforce', 'Scheduling'],
     date: 'March 2026',
-    link: '/sabucnu-operations',
+    link: '#',
   },
 ];

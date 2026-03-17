@@ -1,5 +1,4 @@
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
 import { showcaseProjects } from '../content/projectShowcaseCards';
 
 function getStatusClasses(status: string) {
@@ -40,14 +39,8 @@ export default function ProjectShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.06 }}
-              className="group relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300 hover:border-neutral-600"
+              className="group relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300"
             >
-              <Link
-                to={project.link}
-                className="absolute inset-0 z-10"
-                aria-label={`View ${project.title}`}
-              />
-
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_35%)]" />
 
               <div className="relative grid h-full grid-rows-[auto,1fr,auto] gap-8">
@@ -67,7 +60,7 @@ export default function ProjectShowcase() {
                   </div>
 
                   <div className="max-w-2xl">
-                    <h3 className="mb-4 text-2xl font-medium text-stone-50 decoration-1 underline-offset-4 decoration-neutral-700 group-hover:underline">
+                    <h3 className="mb-4 text-2xl font-medium text-stone-50">
                       {project.title}
                     </h3>
                     <p className="text-sm leading-relaxed text-neutral-200 md:text-base">
