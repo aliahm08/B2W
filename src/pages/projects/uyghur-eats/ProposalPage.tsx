@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, BriefcaseBusiness, CircleAlert, ClipboardCheck, FileSignature, Landmark, Sparkles, Store } from 'lucide-react';
-import ProjectTagPill from '../components/ProjectTagPill';
-import Seo from '../components/Seo';
-import ProfileSectionNav from '../components/ProfileSectionNav';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import ProposalAcceptanceSection, { getProposalCacheKey } from '../components/ProposalAcceptanceSection';
-import FloatingProposalCTA from '../components/FloatingProposalCTA';
-import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
-import { getProposalContent } from '../content/proposals';
+import ProjectTagPill from '../../../components/ProjectTagPill';
+import Seo from '../../../components/Seo';
+import ProfileSectionNav from '../../../components/ProfileSectionNav';
+import ResponsiveAccordionSection from '../../../components/ResponsiveAccordionSection';
+import ProposalAcceptanceSection, { getProposalCacheKey } from '../../../components/ProposalAcceptanceSection';
+import FloatingProposalCTA from '../../../components/FloatingProposalCTA';
+import { projectShowcaseOverridesByPath } from '../../../content/projectShowcase';
+import { getProposalContent } from '../../../content/proposals';
 import {
   projectPageBackLinkClassName,
   projectPageEyebrowClassName,
   projectPageHeaderClassName,
   projectPageShellClassName,
   projectHeroGridClassNames,
-} from '../components/projectPageLayout';
+} from '../../../components/projectPageLayout';
 
 const businessOverview = [
   'Uyghur Eats is a property-sale opportunity built around a differentiated restaurant concept in a strong Washington, DC corridor.',

@@ -12,20 +12,20 @@ import {
     Store,
     Users
 } from 'lucide-react';
-import Seo from '../components/Seo';
-import ProfileSectionNav from '../components/ProfileSectionNav';
-import ProjectTagPill from '../components/ProjectTagPill';
-import PreviewAccessChrome from '../components/PreviewAccessChrome';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../content/projectAccess';
-import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
+import Seo from '../../../components/Seo';
+import ProfileSectionNav from '../../../components/ProfileSectionNav';
+import ProjectTagPill from '../../../components/ProjectTagPill';
+import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
+import ResponsiveAccordionSection from '../../../components/ResponsiveAccordionSection';
+import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
+import { projectShowcaseOverridesByPath } from '../../../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
-} from '../components/projectPageLayout';
+} from '../../../components/projectPageLayout';
 
 const snapshotDate = 'March 13, 2026';
 const showcase = projectShowcaseOverridesByPath['/borek-g-social-media-management'];

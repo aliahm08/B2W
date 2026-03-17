@@ -2,18 +2,10 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Bot, Building2, DollarSign, Factory, LineChart, TrendingUp } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import PreviewReturnBar from '../components/PreviewReturnBar';
-import ProfileSectionNav from '../components/ProfileSectionNav';
-import ProjectTagPill from '../components/ProjectTagPill';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import Seo from '../components/Seo';
-import {
-  projectPageEyebrowClassName,
-  projectPageHeaderClassName,
-  projectPageShellClassName,
-  projectHeroGridClassNames,
-} from '../components/projectPageLayout';
-import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
+import ProfileSectionNav from '../../../../components/ProfileSectionNav';
+import ProjectTagPill from '../../../../components/ProjectTagPill';
+import ResponsiveAccordionSection from '../../../../components/ResponsiveAccordionSection';
+import { projectShowcaseOverridesByPath } from '../../../../content/projectShowcase';
 import {
   uyghurChatScript,
   uyghurLeadModel,
@@ -21,7 +13,8 @@ import {
   uyghurPreviewSectionItems,
   uyghurRevenueMix,
   uyghurScenarioCards,
-} from '../content/uyghurEatsPreview';
+} from '../../../../content/uyghurEatsPreview';
+import PreviewPageFrame from './PreviewPageFrame';
 
 function StatBar({ label, value, amount }: { label: string; value: number; amount: string }) {
   return (
@@ -42,7 +35,7 @@ function StatBar({ label, value, amount }: { label: string; value: number; amoun
   );
 }
 
-export default function UyghurEatsAiAgentPreview() {
+export default function AiAgentPreviewPage() {
   const showcase = projectShowcaseOverridesByPath['/uyghur-eats-acquisition'];
   const [searchParams] = useSearchParams();
   const proposalReturnPath = useMemo(
@@ -62,127 +55,100 @@ export default function UyghurEatsAiAgentPreview() {
   const visibleMessages = Array.from({ length: 3 }, (_, offset) => uyghurChatScript[(activeIndex + offset) % uyghurChatScript.length]);
 
   return (
-    <article className={`${projectPageShellClassName} pb-28`}>
-      <Seo
-        title="Uyghur Eats AI Buyer Agent Preview"
-        description="Mock diligence dashboard preview with a floating AI buyer agent for the Uyghur Eats property sale."
-      />
-
-      <PreviewReturnBar
-        returnPath={proposalReturnPath}
-        label="Option 3 Preview"
-        detail="Mock diligence dashboard plus a floating AI negotiation agent handling buyer questions."
-      />
-
-      <div className="pointer-events-none fixed inset-x-4 bottom-4 z-40 lg:left-1/2 lg:top-1/2 lg:bottom-auto lg:w-[min(92vw,480px)] lg:-translate-x-1/2 lg:-translate-y-1/2">
-        <div className="border border-neutral-900 bg-white/92 shadow-[0_30px_80px_rgba(0,0,0,0.18)] backdrop-blur">
-          <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-neutral-50">
-                <Bot className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-black">Uyghur Eats AI Buyer Agent</p>
-                <p className="text-xs text-neutral-500">Animated negotiation preview</p>
-              </div>
-            </div>
-            <div className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-emerald-700">
-              live demo
-            </div>
+    <PreviewPageFrame
+      title="Uyghur Eats AI Buyer Agent Preview"
+      description="Mock diligence dashboard preview with a floating AI buyer agent for the Uyghur Eats property sale."
+      returnPath={proposalReturnPath}
+      returnLabel="Option 3 Preview"
+      returnDetail="Mock diligence dashboard plus a floating AI negotiation agent handling buyer questions."
+      eyebrow="AI Negotiation Preview"
+      kicker="Diligence Dashboard + Agent Layer"
+      heading="Buyer Questions, Handled On-Page"
+      summary="This mockup extends the analysis dashboard with an AI sales layer that can answer recurring questions, reinforce owner-approved facts, and keep negotiation momentum moving."
+      heroNotes={
+        <>
+          <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
+            The chat is intentionally presented as a floating agent, not a generic support bot. It is framed around diligence, negotiation guardrails, and buyer qualification.
           </div>
+          <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
+            This preview is non-interactive on purpose. It demonstrates the narrative and UI positioning without requiring live data or a production model hookup.
+          </div>
+        </>
+      }
+      tagContent={
+        <>
+          {showcase.tags.map((tag) => (
+            <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
+          ))}
+          <ProjectTagPill tag={{ label: 'AI Agent', tier: 2 }} />
+          <ProjectTagPill tag={{ label: 'Negotiation', tier: 3 }} />
+        </>
+      }
+      asideLabel="Option 3 Layer"
+      asideHeading="A custom sales assistant for the owner."
+      asideSummary="The AI layer is designed to reduce owner involvement in repetitive buyer Q&A while still keeping all responses aligned to approved positioning and deal constraints."
+      metricsContent={
+        <>
+          {uyghurPreviewMetrics.map((metric) => (
+            <div key={metric.label} className="border border-white/15 bg-white/5 p-3">
+              <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">{metric.label}</p>
+              <p className="font-medium">{metric.value}</p>
+              <p className="mt-1 text-xs text-neutral-400">{metric.detail}</p>
+            </div>
+          ))}
+        </>
+      }
+      floatingContent={
+        <div className="pointer-events-none fixed inset-x-4 bottom-4 z-40 lg:left-1/2 lg:top-1/2 lg:bottom-auto lg:w-[min(92vw,480px)] lg:-translate-x-1/2 lg:-translate-y-1/2">
+          <div className="border border-neutral-900 bg-white/92 shadow-[0_30px_80px_rgba(0,0,0,0.18)] backdrop-blur">
+            <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-300 bg-neutral-50">
+                  <Bot className="h-5 w-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-black">Uyghur Eats AI Buyer Agent</p>
+                  <p className="text-xs text-neutral-500">Animated negotiation preview</p>
+                </div>
+              </div>
+              <div className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-emerald-700">
+                live demo
+              </div>
+            </div>
 
-          <div className="space-y-4 px-5 py-5">
-            <AnimatePresence mode="popLayout">
-              {visibleMessages.map((message, index) => (
-                <motion.div
-                  key={`${activeIndex}-${index}`}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -12 }}
-                  transition={{ duration: 0.24 }}
-                  className="space-y-3"
-                >
-                  <div className="ml-auto max-w-[85%] border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm leading-6 text-neutral-700">
-                    {message.ask}
-                  </div>
-                  <div className="max-w-[92%] border border-neutral-900 bg-neutral-950 px-4 py-3 text-sm leading-6 text-neutral-200">
-                    {message.answer}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+            <div className="space-y-4 px-5 py-5">
+              <AnimatePresence mode="popLayout">
+                {visibleMessages.map((message, index) => (
+                  <motion.div
+                    key={`${activeIndex}-${index}`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.24 }}
+                    className="space-y-3"
+                  >
+                    <div className="ml-auto max-w-[85%] border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm leading-6 text-neutral-700">
+                      {message.ask}
+                    </div>
+                    <div className="max-w-[92%] border border-neutral-900 bg-neutral-950 px-4 py-3 text-sm leading-6 text-neutral-200">
+                      {message.answer}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
-      </div>
-
-      <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-        <header className={projectPageHeaderClassName}>
-          <div className={projectPageEyebrowClassName}>
-            <span className="font-semibold text-neutral-900">Food & Beverage</span>
-            <span className="text-neutral-300">•</span>
-            <span>AI Negotiation Preview</span>
-          </div>
-
-          <div className={projectHeroGridClassNames.profile}>
-            <div>
-              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">
-                Diligence Dashboard + Agent Layer
-              </p>
-              <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                Buyer Questions, Handled On-Page
-              </h1>
-              <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                This mockup extends the analysis dashboard with an AI sales layer that can answer recurring questions, reinforce owner-approved facts, and keep negotiation momentum moving.
-              </p>
-
-              <div className="mb-8 grid gap-3 md:grid-cols-2">
-                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-                  The chat is intentionally presented as a floating agent, not a generic support bot. It is framed around diligence, negotiation guardrails, and buyer qualification.
-                </div>
-                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-                  This preview is non-interactive on purpose. It demonstrates the narrative and UI positioning without requiring live data or a production model hookup.
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {showcase.tags.map((tag) => (
-                  <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
-                ))}
-                <ProjectTagPill tag={{ label: 'AI Agent', tier: 2 }} />
-                <ProjectTagPill tag={{ label: 'Negotiation', tier: 3 }} />
-              </div>
-            </div>
-
-            <aside className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
-              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
-                Option 3 Layer
-              </p>
-              <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
-                A custom sales assistant for the owner.
-              </h2>
-              <p className="mb-6 text-sm leading-6 text-neutral-300">
-                The AI layer is designed to reduce owner involvement in repetitive buyer Q&A while still keeping all responses aligned to approved positioning and deal constraints.
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                {uyghurPreviewMetrics.map((metric) => (
-                  <div key={metric.label} className="border border-white/15 bg-white/5 p-3">
-                    <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">{metric.label}</p>
-                    <p className="font-medium">{metric.value}</p>
-                    <p className="mt-1 text-xs text-neutral-400">{metric.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-        </header>
-
-        <main className="space-y-12">
-          <ProfileSectionNav
-            items={[...uyghurPreviewSectionItems, { id: 'agent-layer', label: 'AI Layer' }]}
-            description="This preview shows the Option Two diligence dashboard as the base layer, then adds a floating AI buyer agent and negotiation-support positioning."
-          />
-
+      }
+      shellClassName="pb-28"
+      navContent={
+        <ProfileSectionNav
+          items={[...uyghurPreviewSectionItems, { id: 'agent-layer', label: 'AI Layer' }]}
+          description="This preview shows the Option Two diligence dashboard as the base layer, then adds a floating AI buyer agent and negotiation-support positioning."
+        />
+      }
+      mainContent={
+        <>
           <ResponsiveAccordionSection
             id="profile"
             title="Diligence Dashboard Foundation"
@@ -334,8 +300,8 @@ export default function UyghurEatsAiAgentPreview() {
               </div>
             </div>
           </ResponsiveAccordionSection>
-        </main>
-      </motion.div>
-    </article>
+        </>
+      }
+    />
   );
 }

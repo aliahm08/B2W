@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, CircleAlert, Clock3, Megaphone, Settings2, Sparkles, Store, Wrench } from 'lucide-react';
-import ProjectTagPill from '../components/ProjectTagPill';
-import Seo from '../components/Seo';
-import ProfileSectionNav from '../components/ProfileSectionNav';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import ProposalAcceptanceSection, { getProposalCacheKey } from '../components/ProposalAcceptanceSection';
-import FloatingProposalCTA from '../components/FloatingProposalCTA';
-import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
-import { getProposalContent } from '../content/proposals';
+import ProjectTagPill from '../../../components/ProjectTagPill';
+import Seo from '../../../components/Seo';
+import ProfileSectionNav from '../../../components/ProfileSectionNav';
+import ResponsiveAccordionSection from '../../../components/ResponsiveAccordionSection';
+import ProposalAcceptanceSection, { getProposalCacheKey } from '../../../components/ProposalAcceptanceSection';
+import FloatingProposalCTA from '../../../components/FloatingProposalCTA';
+import { projectShowcaseOverridesByPath } from '../../../content/projectShowcase';
+import { getProposalContent } from '../../../content/proposals';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
-} from '../components/projectPageLayout';
+} from '../../../components/projectPageLayout';
 
 const workstreams = [
     'Tighten Borek-G positioning across Instagram, Google Business, Yelp, and owned channels.',

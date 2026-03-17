@@ -14,13 +14,13 @@ import OurProcess from './components/OurProcess';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
-import BorekG from './pages/BorekG';
-import BorekGOperations from './pages/BorekGOperations';
-import UyghurEats from './pages/UyghurEats';
-import UyghurEatsAcquisition from './pages/UyghurEatsAcquisition';
-import UyghurEatsAiAgentPreview from './pages/UyghurEatsAiAgentPreview';
-import UyghurEatsBasicProfilePreview from './pages/UyghurEatsBasicProfilePreview';
-import CapabilityPage from './pages/CapabilityPage';
+import BorekGProfilePage from './pages/projects/borek-g/ProfilePage';
+import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
+import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
+import UyghurEatsProposalPage from './pages/projects/uyghur-eats/ProposalPage';
+import UyghurEatsAiAgentPreviewPage from './pages/projects/uyghur-eats/previews/AiAgentPreviewPage';
+import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/BasicPreviewPage';
+import CapabilityPage from './pages/capabilities/CapabilityPage';
 import Seo from './components/Seo';
 
 function ScrollToTop() {
@@ -76,13 +76,13 @@ export default function App() {
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/borek-g-social-media-management" element={<BorekG />} />
+          <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
           <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-          <Route path="/borek-g-operations" element={<BorekGOperations />} />
-          <Route path="/uyghur-eats" element={<UyghurEats />} />
-          <Route path="/uyghur-eats-acquisition" element={<UyghurEatsAcquisition />} />
-          <Route path="/uyghur-eats-basic-profile-preview" element={<UyghurEatsBasicProfilePreview />} />
-          <Route path="/uyghur-eats-ai-agent-preview" element={<UyghurEatsAiAgentPreview />} />
+          <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
+          <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
+          <Route path="/uyghur-eats-acquisition" element={<UyghurEatsProposalPage />} />
+          <Route path="/uyghur-eats-basic-profile-preview" element={<UyghurEatsBasicPreviewPage />} />
+          <Route path="/uyghur-eats-ai-agent-preview" element={<UyghurEatsAiAgentPreviewPage />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
         </Routes>
       </main>

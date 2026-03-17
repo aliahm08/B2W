@@ -1,10 +1,10 @@
 import { motion } from 'motion/react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, BriefcaseBusiness, Cpu, Handshake, MessageSquareText } from 'lucide-react';
-import Seo from '../components/Seo';
-import MobileSectionNav from '../components/MobileSectionNav';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import { getCapabilityBySlug } from '../content/capabilities';
+import Seo from '../../components/Seo';
+import MobileSectionNav from '../../components/MobileSectionNav';
+import ResponsiveAccordionSection from '../../components/ResponsiveAccordionSection';
+import { getCapabilityBySlug } from '../../content/capabilities';
 
 export default function CapabilityPage() {
     const { slug } = useParams();

@@ -2,20 +2,20 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
-import ProjectTagPill from '../components/ProjectTagPill';
-import Seo from '../components/Seo';
-import ProfileSectionNav from '../components/ProfileSectionNav';
-import PreviewAccessChrome from '../components/PreviewAccessChrome';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../content/projectAccess';
-import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
+import ProjectTagPill from '../../../components/ProjectTagPill';
+import Seo from '../../../components/Seo';
+import ProfileSectionNav from '../../../components/ProfileSectionNav';
+import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
+import ResponsiveAccordionSection from '../../../components/ResponsiveAccordionSection';
+import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
+import { projectShowcaseOverridesByPath } from '../../../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
-} from '../components/projectPageLayout';
+} from '../../../components/projectPageLayout';
 
 export default function UyghurEats() {
     const projectPath = '/uyghur-eats';

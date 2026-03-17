@@ -1,19 +1,10 @@
-import { motion } from 'motion/react';
 import { Building2, DollarSign, Factory, LineChart, TrendingUp } from 'lucide-react';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import PreviewReturnBar from '../components/PreviewReturnBar';
-import ProfileSectionNav from '../components/ProfileSectionNav';
-import ProjectTagPill from '../components/ProjectTagPill';
-import ResponsiveAccordionSection from '../components/ResponsiveAccordionSection';
-import Seo from '../components/Seo';
-import {
-  projectPageEyebrowClassName,
-  projectPageHeaderClassName,
-  projectPageShellClassName,
-  projectHeroGridClassNames,
-} from '../components/projectPageLayout';
-import { projectShowcaseOverridesByPath } from '../content/projectShowcase';
+import ProfileSectionNav from '../../../../components/ProfileSectionNav';
+import ProjectTagPill from '../../../../components/ProjectTagPill';
+import ResponsiveAccordionSection from '../../../../components/ResponsiveAccordionSection';
+import { projectShowcaseOverridesByPath } from '../../../../content/projectShowcase';
 import {
   uyghurCostStructure,
   uyghurLeadModel,
@@ -21,7 +12,8 @@ import {
   uyghurPreviewSectionItems,
   uyghurRevenueMix,
   uyghurScenarioCards,
-} from '../content/uyghurEatsPreview';
+} from '../../../../content/uyghurEatsPreview';
+import PreviewPageFrame from './PreviewPageFrame';
 
 function Meter({
   label,
@@ -55,7 +47,7 @@ function Meter({
   );
 }
 
-export default function UyghurEatsBasicProfilePreview() {
+export default function BasicPreviewPage() {
   const showcase = projectShowcaseOverridesByPath['/uyghur-eats-acquisition'];
   const [searchParams] = useSearchParams();
   const proposalReturnPath = useMemo(
@@ -64,86 +56,57 @@ export default function UyghurEatsBasicProfilePreview() {
   );
 
   return (
-    <article className={projectPageShellClassName}>
-      <Seo
-        title="Uyghur Eats Sale Profile Preview"
-        description="Mock buyer-facing preview for the Uyghur Eats property sale, including the website profile, financial snapshot, and scenario-based earnings visuals."
-      />
-
-      <PreviewReturnBar
-        returnPath={proposalReturnPath}
-        label="Option 2 Preview"
-        detail="Mockup of the basic profile plus analytics visuals for serious buyer conversations."
-      />
-
-      <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
-        <header className={projectPageHeaderClassName}>
-          <div className={projectPageEyebrowClassName}>
-            <span className="font-semibold text-neutral-900">Food & Beverage</span>
-            <span className="text-neutral-300">•</span>
-            <span>Property Sale Preview</span>
+    <PreviewPageFrame
+      title="Uyghur Eats Sale Profile Preview"
+      description="Mock buyer-facing preview for the Uyghur Eats property sale, including the website profile, financial snapshot, and scenario-based earnings visuals."
+      returnPath={proposalReturnPath}
+      returnLabel="Option 2 Preview"
+      returnDetail="Mockup of the basic profile plus analytics visuals for serious buyer conversations."
+      eyebrow="Property Sale Preview"
+      kicker="Basic Profile + Analytics"
+      heading="Uyghur Eats Buyer Preview"
+      summary="A mock public-facing sale profile that introduces the business cleanly, then supports the narrative with buyer-friendly earnings visuals and scenario modeling."
+      heroNotes={
+        <>
+          <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
+            This preview is positioned for the owner who wants more than a static listing but less friction than a full custom diligence platform.
           </div>
-
-          <div className={projectHeroGridClassNames.profile}>
-            <div>
-              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">
-                Basic Profile + Analytics
-              </p>
-              <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
-                Uyghur Eats Buyer Preview
-              </h1>
-              <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                A mock public-facing sale profile that introduces the business cleanly, then supports the narrative with buyer-friendly earnings visuals and scenario modeling.
-              </p>
-
-              <div className="mb-8 grid gap-3 md:grid-cols-2">
-                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-                  This preview is positioned for the owner who wants more than a static listing but less friction than a full custom diligence platform.
-                </div>
-                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-                  All numbers shown here are mock data for visualization only, designed to show how buyer economics can be explained on-brand.
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {showcase.tags.map((tag) => (
-                  <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
-                ))}
-                <ProjectTagPill tag={{ label: 'Preview', tier: 2 }} />
-                <ProjectTagPill tag={{ label: 'Financial Modeling', tier: 3 }} />
-              </div>
+          <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
+            All numbers shown here are mock data for visualization only, designed to show how buyer economics can be explained on-brand.
+          </div>
+        </>
+      }
+      tagContent={
+        <>
+          {showcase.tags.map((tag) => (
+            <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
+          ))}
+          <ProjectTagPill tag={{ label: 'Preview', tier: 2 }} />
+          <ProjectTagPill tag={{ label: 'Financial Modeling', tier: 3 }} />
+        </>
+      }
+      asideLabel="Preview Snapshot"
+      asideHeading="A listing that helps buyers understand why this asset matters."
+      asideSummary="The page starts as a clean website profile, then moves quickly into what buyers care about most: earnings capacity, scenario fit, and downside clarity."
+      metricsContent={
+        <>
+          {uyghurPreviewMetrics.map((metric) => (
+            <div key={metric.label} className="border border-white/15 bg-white/5 p-3">
+              <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">{metric.label}</p>
+              <p className="font-medium">{metric.value}</p>
+              <p className="mt-1 text-xs text-neutral-400">{metric.detail}</p>
             </div>
-
-            <aside className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
-              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
-                Preview Snapshot
-              </p>
-              <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
-                A listing that helps buyers understand why this asset matters.
-              </h2>
-              <p className="mb-6 text-sm leading-6 text-neutral-300">
-                The page starts as a clean website profile, then moves quickly into what buyers care about most: earnings capacity, scenario fit, and downside clarity.
-              </p>
-
-              <div className="grid grid-cols-2 gap-3 text-sm">
-                {uyghurPreviewMetrics.map((metric) => (
-                  <div key={metric.label} className="border border-white/15 bg-white/5 p-3">
-                    <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">{metric.label}</p>
-                    <p className="font-medium">{metric.value}</p>
-                    <p className="mt-1 text-xs text-neutral-400">{metric.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          </div>
-        </header>
-
-        <main className="space-y-12">
-          <ProfileSectionNav
-            items={uyghurPreviewSectionItems}
-            description="This preview shows how the website listing, financials, and buyer scenarios can be packaged into a more credible property-sale experience."
-          />
-
+          ))}
+        </>
+      }
+      navContent={
+        <ProfileSectionNav
+          items={uyghurPreviewSectionItems}
+          description="This preview shows how the website listing, financials, and buyer scenarios can be packaged into a more credible property-sale experience."
+        />
+      }
+      mainContent={
+        <>
           <ResponsiveAccordionSection
             id="profile"
             title="Basic Website Profile"
@@ -297,8 +260,8 @@ export default function UyghurEatsBasicProfilePreview() {
               </div>
             </div>
           </ResponsiveAccordionSection>
-        </main>
-      </motion.div>
-    </article>
+        </>
+      }
+    />
   );
 }
