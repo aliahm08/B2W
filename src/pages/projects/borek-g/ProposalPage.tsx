@@ -85,8 +85,8 @@ export default function BorekGOperations() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Turkish Bistro in Falls Church, VA"
-                description="Growth system for Borek-G covering channel priorities, scope options, execution cadence, and phased rollout."
+                title="Borek-G | Growth Proposal"
+                description="Growth systems proposal for Borek-G. Review our consulting engagement scope, strategies for local discovery, and phased implementation recommendations."
             />
 
             <motion.div

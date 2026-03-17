@@ -9,7 +9,8 @@
     "sync:projects": "node --import tsx ./scripts/sync-project-content.ts",
     "sync:project-access": "node --import tsx ./scripts/sync-project-access-registry.ts",
     "prebuild": "npm run sync:projects && npm run sync:project-access",
-    "build": "vite build",
+    "build": "vite build && npm run generate-seo",
+    "generate-seo": "node --import tsx ./scripts/generate-static-seo.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"

@@ -51,7 +51,7 @@ export default function CapabilityPage() {
         <article className="min-h-screen bg-[#0b1115] pt-24 pb-16 text-stone-100">
             <Seo
                 title={`${capability.title} | Capability`}
-                description={capability.summary}
+                description={`Explore how our ${capability.title} capability helps address operational gaps, streamline workflows, and support expansion.`}
             />
 
             <div className="mx-auto max-w-7xl px-6">

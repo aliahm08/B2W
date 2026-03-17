@@ -27,7 +27,7 @@ export default function CapabilitiesIndex() {
         <article className="min-h-screen bg-[#0b1115] pt-24 pb-32 text-stone-100">
             <Seo
                 title="Our Capabilities & Use Cases | B2W"
-                description="Explore our full range of AI capabilities, integrations, and operational solutions for your business."
+                description="Explore our full range of consulting capabilities, from business performance analysis to evaluating operational gaps and deploying modern expansion tools."
             />
             
             <section className="px-6 max-w-7xl mx-auto" id="capabilities-index">

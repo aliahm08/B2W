@@ -84,8 +84,8 @@ export default function SabucnuProfilePage() {
   return (
     <article className={projectPageShellClassName}>
       <Seo
-        title="Sabucnu Contractors — Operations"
-        description="Operations engagement covering workforce coordination, scheduling automation, SOP deployment, and field-crew communication systems for a trade-services contractor."
+        title="Sabucnu Contractors | Operations Profile"
+        description="Operations analysis for Sabucnu Contractors. Detailed evaluation of workforce coordination, standard operating procedures, and scheduling systems."
       />
 
       <motion.div

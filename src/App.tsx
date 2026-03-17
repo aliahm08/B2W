@@ -52,8 +52,8 @@ function LandingPage() {
   return (
     <>
       <Seo
-        title="AI Consulting for Operations, Logistics, and Growth"
-        description="B2W builds practical AI systems for hospitality, retail, transportation, government, and real estate teams focused on measurable operational results."
+        title="B2W | Consulting for Small to Midsize Businesses"
+        description="B2W helps small and midsize businesses analyze performance, identify operational gaps, and deploy modern tools to support sustainable expansion."
       />
       <Hero />
       <section id="capabilities">
@@ -100,10 +100,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
+          <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
           <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
           <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
           <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
-          <Route path="/uyghur-eats-data-room" element={<UyghurEatsDataRoomPage />} />
           <Route path="/uyghur-eats-data-room" element={<UyghurEatsDataRoomPage />} />
           <Route path="/capabilities" element={<CapabilitiesIndex />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />

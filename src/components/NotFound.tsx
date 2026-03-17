@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <>
       <Seo
-        title="Page Not Found"
+        title="Page Not Found | B2W"
         description="The page you're looking for doesn't exist or has been moved."
       />
       <section className="flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
