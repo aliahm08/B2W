@@ -1,7 +1,7 @@
 Website Architecture
 Homepage (company, capabilities, projects, process, team, contact)
     Company
-        Headline = The AI Consultancy for small and midsize businesses.
+        Headline = The Consultancy for small and midsize businesses.
         Tagline = We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day.
     Capabilities (Filters, Cards)
         Category = M&A, AI, Growth

@@ -3,7 +3,7 @@
 *This document is the master source of truth for the website's text and copy. It is automatically maintained by AI and updated after code changes.*
 
 ## Hero
-**Headline:** The AI Consultancy for small and midsize businesses.
+**Headline:** The Consultancy for small and midsize businesses.
 **Subheadline:** We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day.
 **CTA:** Explore capabilities
 

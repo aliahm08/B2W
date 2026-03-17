@@ -20,3 +20,4 @@ Proposal 4: Financial & M&A Advisory (Custom Pricing)
 *   Deliverable: Business valuation, diligence documentation, and strategic partnership modeling.
 *   Focus: Helping owners prepare for selling, M&A activity, or expanding to new locations.
 *   Metric: Transaction readiness and increased business valuation.
+
