@@ -105,12 +105,6 @@ export default function UyghurEatsClientPortal() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    <div className={projectPageEyebrowClassName}>
-                        <span className="font-semibold text-neutral-900">Client Portal</span>
-                        <span className="text-neutral-300">•</span>
-                        <span>Uyghur Eats</span>
-                    </div>
-
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
                             <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
