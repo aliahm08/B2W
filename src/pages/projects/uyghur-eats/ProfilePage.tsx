@@ -173,8 +173,8 @@ export default function UyghurEats() {
     return (
         <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
             <Seo
-                title="Fine Dining in Washington, DC"
-                description="Analysis profile for Uyghur Eats covering location value, operational footprint, market positioning, and neighborhood loyalty in support of a property sale."
+                title="Uyghur Eats | Business Opportunity Profile"
+                description="Comprehensive business profile for Uyghur Eats. Explore the location footprint, culinary draw, community integration, and acquisition thesis for this Washington, DC restaurant."
             />
             {isBlurredPreview ? (
                 <PreviewAccessChrome

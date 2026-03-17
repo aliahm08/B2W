@@ -96,8 +96,8 @@ export default function UyghurEatsClientPortal() {
     return (
         <article className={projectPageShellClassName}>
             <Seo
-                title="Client Portal | Uyghur Eats"
-                description="Business Sale Preparation and Opportunity Packaging proposal for Uyghur Eats."
+                title="Uyghur Eats | Client Portal"
+                description="Secure client portal for Uyghur Eats. Review business sale preparation deliverables, valuation models, operations documentation, and buyer packages from B2W."
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

@@ -49,8 +49,8 @@ export default function DataRoomPage() {
 
   return (
     <PreviewPageFrame
-      title="Uyghur Eats | Buyer Data Room"
-      description="Structured data room preview showing the framework for due diligence materials."
+      title="Uyghur Eats | Buyer Due Diligence Data Room"
+      description="Secure buyer information package and data room for Uyghur Eats, organizing financial records, operations, leases, and digital assets for due diligence."
       returnPath={returnPath}
       returnLabel={searchParams.get('return') ? "Client Portal" : "Projects"}
       returnDetail={searchParams.get('return') ? "Back to the main presentation" : "Back to B2W Portfolio"}
