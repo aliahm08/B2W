@@ -18,7 +18,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     serviceType: 'Consulting',
     status: 'Proposed',
     title: 'Turkish Bistro in Falls Church, VA',
-    clientDescription: 'Potential 24% growth in sales',
+    clientDescription: 'Potential 24% growth in sales.',
     description:
       'Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.',
     tags: ['Profile', 'Instagram', 'SEO', 'Web Design'],
