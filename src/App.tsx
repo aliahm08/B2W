@@ -21,6 +21,7 @@ import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
 import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
 import UyghurEatsClientPortal from './pages/client/UyghurEatsClientPortal';
 import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/ValuationModelPage';
+import UyghurEatsValuationModelPage from './pages/projects/uyghur-eats/ValuationModelPage';
 import UyghurEatsDataRoomPage from './pages/projects/uyghur-eats/previews/DataRoomPage';
 import CapabilityPage from './pages/capabilities/CapabilityPage';
 import CapabilitiesIndex from './pages/capabilities/CapabilitiesIndex';
@@ -104,6 +105,7 @@ export default function App() {
           <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
           <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
           <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
+          <Route path="/uyghur-eats-valuation-model" element={<UyghurEatsValuationModelPage />} />
           <Route path="/uyghur-eats-data-room" element={<UyghurEatsDataRoomPage />} />
           <Route path="/capabilities" element={<CapabilitiesIndex />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />

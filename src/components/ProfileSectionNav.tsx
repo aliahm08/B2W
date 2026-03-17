@@ -8,7 +8,10 @@ export type ProfileSectionNavItem = {
 
 type ProfileSectionNavProps = {
   items: ProfileSectionNavItem[];
-  description?: string;
+  /** Controlled active tab id — when set, the nav acts as a tab bar instead of scroll-spy. */
+  activeId?: string;
+  /** Called when a tab is clicked (controlled mode). */
+  onSelect?: (id: string) => void;
 };
 
 function cx(...values: Array<string | false | null | undefined>) {
@@ -17,12 +20,16 @@ function cx(...values: Array<string | false | null | undefined>) {
 
 export default function ProfileSectionNav({
   items,
-  description,
+  activeId: controlledActiveId,
+  onSelect,
 }: ProfileSectionNavProps) {
-  const [activeId, setActiveId] = useState(items[0]?.id ?? '');
+  const isControlled = controlledActiveId !== undefined;
+  const [internalActiveId, setInternalActiveId] = useState(items[0]?.id ?? '');
+  const activeId = isControlled ? controlledActiveId : internalActiveId;
 
+  /* Scroll-spy mode (uncontrolled) */
   useEffect(() => {
-    if (items.length === 0) {
+    if (isControlled || items.length === 0) {
       return;
     }
 
@@ -44,7 +51,7 @@ export default function ProfileSectionNav({
         }
       });
 
-      setActiveId(currentSection.id);
+      setInternalActiveId(currentSection.id);
     };
 
     updateActiveSection();
@@ -56,7 +63,7 @@ export default function ProfileSectionNav({
           .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top);
 
         if (visibleEntries[0]?.target instanceof HTMLElement) {
-          setActiveId(visibleEntries[0].target.id);
+          setInternalActiveId(visibleEntries[0].target.id);
         } else {
           updateActiveSection();
         }
@@ -74,27 +81,33 @@ export default function ProfileSectionNav({
       observer.disconnect();
       window.removeEventListener('scroll', updateActiveSection);
     };
-  }, [items]);
+  }, [items, isControlled]);
+
+  const handleClick = (item: ProfileSectionNavItem) => {
+    if (item.action) {
+      item.action();
+      return;
+    }
+
+    if (isControlled && onSelect) {
+      onSelect(item.id);
+    } else {
+      setInternalActiveId(item.id);
+    }
+  };
 
   return (
     <nav aria-label="Profile section navigation" className="sticky top-20 z-30 -mx-4 border-y border-neutral-200 bg-white/92 backdrop-blur-sm sm:-mx-6">
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
-        {description ? (
-          <div className="mb-3 flex items-end justify-between gap-4">
-            <p className="max-w-3xl text-xs leading-5 text-neutral-500 md:text-sm">{description}</p>
-            <p className="hidden text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 md:block">
-              {String(items.findIndex((item) => item.id === activeId) + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
-            </p>
-          </div>
-        ) : null}
-
         <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => {
+            const isActive = item.id === activeId;
+
             if (item.action) {
               return (
                 <button
                   key={item.id}
-                  onClick={item.action}
+                  onClick={() => handleClick(item)}
                   className="snap-start whitespace-nowrap border border-black bg-black px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-neutral-800 md:text-sm"
                 >
                   <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400">
@@ -105,14 +118,12 @@ export default function ProfileSectionNav({
               );
             }
 
-            const isActive = item.id === activeId;
-
             return (
-              <a
+              <button
                 key={item.id}
-                href={`#${item.id}`}
+                type="button"
                 aria-current={isActive ? 'location' : undefined}
-                onClick={() => setActiveId(item.id)}
+                onClick={() => handleClick(item)}
                 className={cx(
                   'snap-start whitespace-nowrap border px-4 py-2 text-xs font-medium transition-colors md:text-sm',
                   isActive
@@ -124,7 +135,7 @@ export default function ProfileSectionNav({
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 {item.label}
-              </a>
+              </button>
             );
           })}
         </div>

@@ -1,24 +1,153 @@
-import { useEffect, useState, useRef, type FormEvent } from 'react';
+import { useEffect, useState, useRef, useCallback, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, X, FileSignature } from 'lucide-react';
+import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, X, FileSignature } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
+import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
 import ProfileSectionNav, { type ProfileSectionNavItem } from '../../components/ProfileSectionNav';
-import ResponsiveAccordionSection from '../../components/ResponsiveAccordionSection';
 import {
-    projectPageBackLinkClassName,
-    projectPageEyebrowClassName,
     projectPageHeaderClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
 } from '../../components/projectPageLayout';
 
+/* ─── Section content data ──────────────────────────────────── */
+type SectionDef = {
+    id: string;
+    label: string;
+    content: ReactNode;
+};
+
+function OverviewContent() {
+    return (
+        <div className="space-y-4">
+            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
+                <li>Business overview and history</li>
+                <li>Description of products or services</li>
+                <li>Customer profile and demand drivers</li>
+                <li>Financial highlights and revenue model</li>
+                <li>Competitive positioning and market overview</li>
+                <li>Key assets included in the sale</li>
+                <li>Growth opportunities for a new owner</li>
+            </ul>
+            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
+                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
+                <p className="text-sm text-neutral-700">A structured Business Opportunity Page designed to clearly communicate the value of the business.</p>
+                <Link
+                    to="/uyghur-eats?return=%2Fclient%2Fuyghur-eats"
+                    className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+                >
+                    View Sample Webpage
+                    <ArrowRight className="h-4 w-4" />
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+function ValuationContent() {
+    return (
+        <div>
+            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
+                <li>Review of historical revenue and profitability</li>
+                <li>Normalized owner earnings analysis</li>
+                <li>Benchmarking against comparable business sales</li>
+                <li>Estimated valuation range based on market multiples</li>
+            </ul>
+            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
+                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
+                <p className="text-sm text-neutral-700">A valuation model and summary explaining potential sale price ranges.</p>
+                <Link
+                    to="/uyghur-eats-valuation-model?return=%2Fclient%2Fuyghur-eats"
+                    className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+                >
+                    View Sample Model
+                    <ArrowRight className="h-4 w-4" />
+                </Link>
+            </div>
+        </div>
+    );
+}
+
+function OperationsContent() {
+    return (
+        <div>
+            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
+                <li>Documentation of key processes and workflows</li>
+                <li>Creation or formalization of Standard Operating Procedures (SOPs)</li>
+                <li>Vendor and supplier documentation</li>
+                <li>Marketing and customer acquisition processes</li>
+                <li>Staff roles and operational responsibilities</li>
+            </ul>
+            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
+                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
+                <p className="text-sm text-neutral-700">A structured Business Operations Manual to help a new owner quickly understand and operate the business.</p>
+            </div>
+        </div>
+    );
+}
+
+function DueDiligenceContent() {
+    return (
+        <div className="space-y-6">
+            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
+                <li>Business summary and key investment highlights</li>
+                <li>Organized financial summaries</li>
+                <li>Vendor and supplier overview</li>
+                <li>Lease or location information</li>
+                <li>Equipment and asset inventory</li>
+                <li>Marketing channels and digital assets</li>
+                <li>Growth opportunities and common buyer questions</li>
+            </ul>
+            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
+                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
+                <p className="text-sm text-neutral-700">A structured Buyer Information Package / Data Room that the owner can share with qualified buyers.</p>
+            </div>
+        </div>
+    );
+}
+
+/* ─── Section icon map ──────────────────────────────────── */
+const sectionIconMap: Record<string, typeof LayoutTemplate> = {
+    overview: LayoutTemplate,
+    valuation: LineChart,
+    operations: FileText,
+    'due-diligence': BriefcaseBusiness,
+    'accept-proposal': FileSignature,
+};
+
+/* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
+    const [activeSection, setActiveSection] = useState('overview');
     const [visibleCtas, setVisibleCtas] = useState<Set<Element>>(new Set());
     const heroCtaRef = useRef<HTMLAnchorElement>(null);
     const endCtaRef = useRef<HTMLButtonElement>(null);
+
+    const sections: SectionDef[] = [
+        { id: 'overview', label: '1. Opportunity Webpage', content: <OverviewContent /> },
+        { id: 'valuation', label: '2. Valuation Modeling', content: <ValuationContent /> },
+        { id: 'operations', label: '3. Operations Documentation', content: <OperationsContent /> },
+        { id: 'due-diligence', label: '4. Buyer Due Diligence Package', content: <DueDiligenceContent /> },
+    ];
+
+    const sectionItems: ProfileSectionNavItem[] = [
+        ...sections.map((s) => ({ id: s.id, label: s.label })),
+        { id: 'accept-proposal', label: '5. Accept Proposal' },
+    ];
+
+    const allSectionIds = sectionItems.map((s) => s.id);
+
+    const handleSectionSelect = useCallback((id: string) => {
+        if (id === 'accept-proposal') {
+            openOfferModal();
+            return;
+        }
+        setActiveSection(id);
+    }, []);
+
+    useScrollSectionNav(allSectionIds, activeSection, handleSectionSelect);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -86,12 +215,11 @@ export default function UyghurEatsClientPortal() {
         setIsOfferSubmitted(true);
     };
 
-    const sectionItems: ProfileSectionNavItem[] = [
-        { id: 'overview', label: '1. Opportunity Webpage' },
-        { id: 'valuation', label: '2. Valuation Modeling' },
-        { id: 'operations', label: '3. Operations Documentation' },
-        { id: 'due-diligence', label: '4. Buyer Due Diligence Package' },
-    ];
+    /* Current section metadata */
+    const currentSection = sections.find((s) => s.id === activeSection) ?? sections[0];
+    const currentIndex = sections.findIndex((s) => s.id === activeSection);
+    const nextSection = sections[currentIndex + 1];
+    const Icon = sectionIconMap[currentSection.id];
 
     return (
         <article className={projectPageShellClassName}>
@@ -107,13 +235,9 @@ export default function UyghurEatsClientPortal() {
                 <header className={projectPageHeaderClassName}>
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
-                            <h1 className="mb-6 text-4xl font-medium tracking-tight md:text-6xl">
+                            <h1 className="mb-8 text-4xl font-medium tracking-tight md:text-6xl">
                                 Business Sale Preparation & Opportunity Packaging
                             </h1>
-
-                            <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-                                Prepare the business for sale by organizing financial, operational, and market information into a clear, professional package that communicates the opportunity to potential buyers. This process helps increase buyer confidence, improve perceived value, and streamline the sale process.
-                            </p>
 
                             <div className="mb-8 grid gap-3 md:grid-cols-2">
                                 <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
@@ -131,12 +255,9 @@ export default function UyghurEatsClientPortal() {
                             <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400 mb-4">
                                 Proposal details
                             </p>
-                            <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-3xl">
+                            <h2 className="mb-6 text-2xl font-medium tracking-tight md:text-3xl">
                                 Execute the preparation phase and package the operations.
                             </h2>
-                            <p className="text-sm leading-6 text-neutral-300 mb-6">
-                                B2W provides business preparation, research, and documentation services. All communications with prospective buyers and sale negotiations will be conducted directly by the business owner or their licensed broker.
-                            </p>
                             
                             <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
                                 <div className="border border-white/15 bg-white/5 p-3">
@@ -154,193 +275,84 @@ export default function UyghurEatsClientPortal() {
                                 href="#overview"
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    const element = document.getElementById('overview');
-                                    if (element) {
-                                        const y = element.getBoundingClientRect().top + window.scrollY - 100;
-                                        window.scrollTo({ top: y, behavior: 'smooth' });
-                                    }
+                                    setActiveSection('overview');
                                 }}
                                 className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
                             >
                                 Explore Scope
                                 <ArrowRight className="w-4 h-4" />
                             </a>
-                            <p className="mt-3 text-xs text-neutral-500">
-                                Review the phase-by-phase timeline below.
-                            </p>
                         </aside>
                     </div>
                 </header>
 
-                <main data-project-body className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-                    <div className="lg:col-span-12 sticky top-24 z-30 bg-white md:bg-transparent">
-                        <ProfileSectionNav
-                            items={sectionItems}
-                        />
-                    </div>
-                    {/* Content Section */}
-                    <div className="lg:col-span-8 space-y-12">
-                        <ResponsiveAccordionSection
-                            id="overview"
-                            title="1. Business Opportunity Overview Webpage"
-                            icon={LayoutTemplate}
-                            defaultOpen
-                            className="border border-neutral-200 md:border-0"
-                            headerClassName="p-4 md:mb-4 md:p-0"
-                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
+                {/* ─── Tab Navigation ──────────────────────────────── */}
+                <ProfileSectionNav
+                    items={sectionItems}
+                    activeId={activeSection}
+                    onSelect={handleSectionSelect}
+                />
+
+                {/* ─── Content Frame ──────────────────────────────── */}
+                <main className="mt-8 md:mt-12">
+                    <AnimatePresence mode="wait">
+                        <motion.section
+                            key={currentSection.id}
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -12 }}
+                            transition={{ duration: 0.25 }}
+                            className="max-w-3xl"
                         >
-                            <div data-project-detail-body className="space-y-4">
-                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
-                                    Develop a professional digital overview that presents the business in a clear and compelling format for prospective buyers.
+                            {/* Section header */}
+                            <div className="mb-6 flex items-center gap-3">
+                                {Icon && (
+                                    <div className="border border-neutral-200 p-2">
+                                        <Icon className="h-5 w-5 text-black" />
+                                    </div>
+                                )}
+                                <h2 className="text-xl font-medium md:text-2xl">{currentSection.label}</h2>
+                            </div>
+
+                            {/* Section body */}
+                            <div className="pb-8 border-b border-neutral-100">
+                                {currentSection.content}
+                            </div>
+
+                            {/* Next section prompt */}
+                            <div className="mt-6 flex items-center justify-between">
+                                <p className="text-xs font-mono uppercase tracking-[0.18em] text-neutral-400">
+                                    {String(currentIndex + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')}
                                 </p>
-                                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                                    <li>Business overview and history</li>
-                                    <li>Description of products or services</li>
-                                    <li>Customer profile and demand drivers</li>
-                                    <li>Financial highlights and revenue model</li>
-                                    <li>Competitive positioning and market overview</li>
-                                    <li>Key assets included in the sale</li>
-                                    <li>Growth opportunities for a new owner</li>
-                                </ul>
-                                <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                                    <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                                    <p className="text-sm text-neutral-700">A structured Business Opportunity Page designed to clearly communicate the value of the business.</p>
-                                    <Link
-                                        to="/uyghur-eats?return=%2Fclient%2Fuyghur-eats"
-                                        className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+                                {nextSection ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveSection(nextSection.id)}
+                                        className="inline-flex items-center gap-2 text-sm font-medium text-black transition-colors hover:text-neutral-600"
                                     >
-                                        View Sample Webpage
+                                        {nextSection.label}
                                         <ArrowRight className="h-4 w-4" />
-                                    </Link>
-                                </div>
+                                    </button>
+                                ) : (
+                                    <button
+                                        ref={endCtaRef}
+                                        type="button"
+                                        onClick={openOfferModal}
+                                        className="inline-flex items-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                                    >
+                                        Accept Proposal
+                                        <ArrowRight className="h-4 w-4" />
+                                    </button>
+                                )}
                             </div>
-                        </ResponsiveAccordionSection>
-
-                        <ResponsiveAccordionSection
-                            id="valuation"
-                            title="2. Valuation Modeling & Estimated Sale Range"
-                            icon={LineChart}
-                            className="border border-neutral-200 md:border-0"
-                            headerClassName="p-4 md:mb-4 md:p-0"
-                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
-                        >
-                            <div data-project-detail-body>
-                                <p className="mb-4 text-sm leading-relaxed text-neutral-600 md:text-base">
-                                    Develop an estimated valuation range based on available financial and operational data.
-                                </p>
-                                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                                    <li>Review of historical revenue and profitability</li>
-                                    <li>Normalized owner earnings analysis</li>
-                                    <li>Benchmarking against comparable business sales</li>
-                                    <li>Estimated valuation range based on market multiples</li>
-                                </ul>
-                                <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                                    <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                                    <p className="text-sm text-neutral-700">A valuation model and summary explaining potential sale price ranges.</p>
-                                </div>
-                            </div>
-                        </ResponsiveAccordionSection>
-
-                        <ResponsiveAccordionSection
-                            id="operations"
-                            title="3. Operations Documentation & SOP Packaging"
-                            icon={FileText}
-                            className="border border-neutral-200 md:border-0"
-                            headerClassName="p-4 md:mb-4 md:p-0"
-                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
-                        >
-                            <div data-project-detail-body>
-                                <p className="mb-4 text-sm leading-relaxed text-neutral-600 md:text-base">
-                                    Organize and formalize the operational knowledge of the business so it can transfer smoothly to a buyer.
-                                </p>
-                                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                                    <li>Documentation of key processes and workflows</li>
-                                    <li>Creation or formalization of Standard Operating Procedures (SOPs)</li>
-                                    <li>Vendor and supplier documentation</li>
-                                    <li>Marketing and customer acquisition processes</li>
-                                    <li>Staff roles and operational responsibilities</li>
-                                </ul>
-                                <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                                    <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                                    <p className="text-sm text-neutral-700">A structured Business Operations Manual to help a new owner quickly understand and operate the business.</p>
-                                </div>
-                            </div>
-                        </ResponsiveAccordionSection>
-
-                        <ResponsiveAccordionSection
-                            id="due-diligence"
-                            title="4. Buyer Due Diligence Package"
-                            icon={BriefcaseBusiness}
-                            className="border border-neutral-200 md:border-0"
-                            headerClassName="p-4 md:mb-4 md:p-0"
-                            bodyClassName="px-4 pb-4 md:px-0 md:pb-0"
-                        >
-                            <div data-project-detail-body className="space-y-6">
-                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
-                                    Prepare and organize the materials commonly requested by prospective buyers so the business can be clearly evaluated.
-                                </p>
-                                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                                    <li>Business summary and key investment highlights</li>
-                                    <li>Organized financial summaries</li>
-                                    <li>Vendor and supplier overview</li>
-                                    <li>Lease or location information</li>
-                                    <li>Equipment and asset inventory</li>
-                                    <li>Marketing channels and digital assets</li>
-                                    <li>Growth opportunities and common buyer questions</li>
-                                </ul>
-                                <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                                    <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                                    <p className="text-sm text-neutral-700">A structured Buyer Information Package / Data Room that the owner can share with qualified buyers.</p>
-                                </div>
-                            </div>
-                        </ResponsiveAccordionSection>
-
-                        <ResponsiveAccordionSection
-                            id="accept-proposal"
-                            title="5. Accept Proposal"
-                            icon={FileSignature}
-                            className="border-t border-neutral-200"
-                            headerClassName="border-b border-neutral-200 p-4 bg-black text-white"
-                            bodyClassName="px-4 py-6 md:px-6 md:py-8 bg-neutral-50 border border-neutral-200"
-                            titleClassName="md:text-xl font-medium"
-                            tone="dark"
-                        >
-                            <div className="space-y-6 max-w-2xl">
-                                <h3 className="text-xl font-medium">Ready to start the sale preparation process?</h3>
-                                <p className="text-sm text-neutral-600 leading-relaxed">
-                                    Execute the preparation phase and package the operations. B2W provides business preparation, research, and documentation services. All communications with prospective buyers and sale negotiations will be conducted directly by the business owner or their licensed broker.
-                                </p>
-                                <div className="grid grid-cols-2 gap-3 mb-6 text-sm max-w-sm">
-                                    <div className="border border-neutral-200 bg-white p-4">
-                                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-2">Investment Range</p>
-                                        <p className="font-medium text-xl">$4K - $7.5K</p>
-                                    </div>
-                                    <div className="border border-neutral-200 bg-white p-4">
-                                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-2">Timeline</p>
-                                        <p className="font-medium text-xl">3 Weeks</p>
-                                    </div>
-                                </div>
-                                <button
-                                    ref={endCtaRef}
-                                    type="button"
-                                    onClick={openOfferModal}
-                                    className="inline-flex items-center justify-center gap-2 bg-black px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                                >
-                                    Accept Proposal
-                                    <ArrowRight className="w-4 h-4" />
-                                </button>
-                                <p className="text-xs text-neutral-500 mt-2">
-                                    Opens a letter of intent for direct engagement.
-                                </p>
-                            </div>
-                        </ResponsiveAccordionSection>
-                    </div>
+                        </motion.section>
+                    </AnimatePresence>
                 </main>
             </motion.div>
 
             {isOfferModalOpen && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-4 py-8"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-0 py-0 md:px-4 md:py-8"
                     role="dialog"
                     aria-modal="true"
                     aria-labelledby="offer-modal-title"
@@ -350,7 +362,7 @@ export default function UyghurEatsClientPortal() {
                         initial={{ opacity: 0, y: 20, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         transition={{ duration: 0.2 }}
-                        className="relative w-full max-w-2xl border border-neutral-200 bg-white shadow-2xl max-h-[90vh] overflow-y-auto"
+                        className="relative w-full h-full md:h-auto md:max-h-[90vh] max-w-2xl border-0 md:border md:border-neutral-200 bg-white md:shadow-2xl overflow-y-auto"
                         onClick={(event) => event.stopPropagation()}
                     >
                         <button
@@ -369,9 +381,6 @@ export default function UyghurEatsClientPortal() {
                             <h2 id="offer-modal-title" className="text-2xl font-medium tracking-tight">
                                 Proposal Acceptance
                             </h2>
-                            <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-                                By signing below, Client acknowledges and accepts the scope of services, pricing, and assumptions described in this proposal. This section only serves as a non-binding letter of intent.
-                            </p>
                         </div>
 
                         {!isOfferSubmitted ? (
@@ -460,13 +469,14 @@ export default function UyghurEatsClientPortal() {
                         exit={{ opacity: 0, y: 50 }}
                         className="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none"
                     >
-                        <a
-                            href="#accept-proposal"
+                        <button
+                            type="button"
+                            onClick={openOfferModal}
                             className="pointer-events-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)] inline-flex items-center gap-2 rounded-full bg-black px-6 py-3.5 text-sm font-medium text-white transition-all hover:scale-105 hover:bg-neutral-800"
                         >
                             Accept Proposal
                             <ArrowRight className="h-4 w-4" />
-                        </a>
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>
