@@ -176,7 +176,6 @@ export default function UyghurEatsClientPortal() {
                     <div className="lg:col-span-12 sticky top-24 z-30 bg-white md:bg-transparent">
                         <ProfileSectionNav
                             items={sectionItems}
-                            description="Review the four phases of the delivery timeline to ensure alignment with the sale packaging objectives."
                         />
                     </div>
                     {/* Content Section */}
