@@ -105,14 +105,6 @@ export default function UyghurEatsClientPortal() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    <Link
-                        to="/"
-                        className={projectPageBackLinkClassName}
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        Back to Homepage
-                    </Link>
-
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Client Portal</span>
                         <span className="text-neutral-300">•</span>

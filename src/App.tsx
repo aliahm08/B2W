@@ -87,10 +87,15 @@ export default function App() {
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView = isClientPortal || isDataRoom || hasReturnParam;
 
+  let clientName: string | undefined = undefined;
+  if (location.pathname.includes('uyghur-eats')) {
+    clientName = "Uyghur Eats";
+  }
+
   return (
     <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
       <ScrollToTop />
-      {isIsolatedView ? <ClientNavbar /> : <Navbar />}
+      {isIsolatedView ? <ClientNavbar clientName={clientName} /> : <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
