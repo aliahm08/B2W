@@ -49,8 +49,7 @@ export default function Work() {
             >
                 <h2 className="text-4xl font-medium tracking-tight mb-4">Capabilities</h2>
                 <p className="max-w-3xl text-base text-neutral-600 leading-relaxed mb-8">
-                    High-level operating systems we can deploy inside a business. Filter by lane, then open any
-                    capability as its own page for the full workflow, delivery shape, and human handoff.
+                    What we build and operate.
                 </p>
                 <div className="h-px w-full bg-neutral-200 mb-8" />
 
@@ -89,8 +88,6 @@ export default function Work() {
 
                         <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500 mb-6">
                             <span className="font-semibold text-neutral-900">{capability.laneMenuLabel}</span>
-                            <span className="text-neutral-300">•</span>
-                            <span>Capability</span>
                         </div>
 
                         <h3 className="text-2xl font-medium mb-4 text-neutral-900 group-hover:underline decoration-1 underline-offset-4 decoration-neutral-300">

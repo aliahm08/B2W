@@ -8,7 +8,7 @@ import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Work from './components/Work';
-import Industries from './components/Industries';
+import Expertise from './components/Expertise';
 import Team from './components/Team';
 import OurProcess from './components/OurProcess';
 import CTA from './components/CTA';
@@ -53,8 +53,8 @@ function LandingPage() {
       />
       <Hero />
       <Work />
-      <section id="projects">
-        <Industries />
+      <section id="expertise">
+        <Expertise />
       </section>
       <section id="process">
         <OurProcess />

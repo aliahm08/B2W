@@ -19,7 +19,7 @@ export default function CTA() {
           Ready to simplify?
         </h2>
         <p className="text-xl text-neutral-600 mb-12 max-w-xl">
-          Let's discuss how we can apply focused intelligence to your specific challenges.
+          Tell us where you're stuck. We'll tell you what we can do.
         </p>
 
         <motion.button

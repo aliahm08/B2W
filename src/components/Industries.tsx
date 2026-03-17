@@ -256,18 +256,10 @@ export default function Industries() {
         >
           <h2 className="mb-4 text-4xl font-medium tracking-tight text-neutral-950">Projects</h2>
           <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-            Filter by project type and capacity. Every card follows the same three-part format: metadata on top,
-            title and subtitle in the middle, and deliverables with date started at the bottom.
+            Active and proposed client engagements.
           </p>
           <div className="h-px w-full bg-neutral-200" />
         </motion.div>
-
-        <div className="mb-8 mt-8 flex items-center justify-between gap-4 text-sm text-neutral-600">
-          <span>
-            Showing <span className="font-medium text-neutral-950">{filteredProjects.length}</span> of {projects.length}{' '}
-            projects
-          </span>
-        </div>
 
         <div className="mb-12 border-t border-neutral-200 pt-6 md:pt-8">
           <div className="grid gap-6 md:grid-cols-2">
@@ -337,33 +329,20 @@ export default function Industries() {
                       </div>
                     </div>
 
-                    <div className="border-t border-neutral-800 pt-6">
-                      <div className="grid gap-5">
-                        <div>
-                          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-400">
-                            Deliverables
-                          </p>
-                          <div className="mt-3 flex flex-wrap gap-2">
-                            {project.deliverables.map((deliverable) => (
-                              <span
-                                key={`${project.id}-${deliverable}`}
-                                className={`border px-2 py-1 text-xs ${getDeliverableClasses(deliverable)}`}
-                              >
-                                {deliverable}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-400">
-                            Date Started
-                          </p>
-                          <span className="mt-3 inline-flex border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm font-medium text-stone-100">
-                            {project.date}
+                    <div className="border-t border-neutral-800 pt-6 flex items-end justify-between gap-4">
+                      <div className="flex flex-wrap gap-2">
+                        {project.deliverables.map((deliverable) => (
+                          <span
+                            key={`${project.id}-${deliverable}`}
+                            className={`border px-2 py-1 text-xs ${getDeliverableClasses(deliverable)}`}
+                          >
+                            {deliverable}
                           </span>
-                        </div>
+                        ))}
                       </div>
+                      <span className="shrink-0 text-xs font-mono uppercase tracking-wider text-neutral-500">
+                        {project.date}
+                      </span>
                     </div>
                   </div>
                 </motion.article>
