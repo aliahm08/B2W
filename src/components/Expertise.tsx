@@ -19,7 +19,7 @@ const categoryAccentClasses: Record<Category, { active: string; card: string }> 
     active: 'border-sky-600 bg-sky-600 text-white',
     card: 'border-sky-200',
   },
-  Exit: {
+  'M&A': {
     active: 'border-amber-600 bg-amber-600 text-white',
     card: 'border-amber-200',
   },

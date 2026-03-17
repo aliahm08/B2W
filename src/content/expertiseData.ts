@@ -1,5 +1,5 @@
 export type Tier = 'Advisory' | 'Consulting' | 'Implementation';
-export type Category = 'Growth' | 'Optimization' | 'Exit';
+export type Category = 'Growth' | 'Optimization' | 'M&A';
 
 export interface ExpertiseCell {
   pricing: string;
@@ -10,12 +10,12 @@ export interface ExpertiseCell {
 export type ExpertiseMatrix = Record<Tier, Record<Category, ExpertiseCell>>;
 
 export const tiers: Tier[] = ['Advisory', 'Consulting', 'Implementation'];
-export const categories: Category[] = ['Growth', 'Optimization', 'Exit'];
+export const categories: Category[] = ['Growth', 'Optimization', 'M&A'];
 
 export const categoryDescriptions: Record<Category, string> = {
   Growth: 'Expand reach, build brand, and acquire customers.',
   Optimization: 'Streamline operations and train your workforce.',
-  Exit: 'Prepare, position, and close a sale.',
+  'M&A': 'Prepare, position, and close a sale.',
 };
 
 export const tierDescriptions: Record<Tier, string> = {
@@ -36,7 +36,7 @@ export const expertiseMatrix: ExpertiseMatrix = {
       deliverable: 'SOPs',
       terms: '3 revisions allowed',
     },
-    Exit: {
+    'M&A': {
       pricing: '$100 + $100/lead',
       deliverable: 'Sale Profile',
       terms: 'Exclusively publish on our site',
@@ -53,7 +53,7 @@ export const expertiseMatrix: ExpertiseMatrix = {
       deliverable: 'Workforce Training',
       terms: 'Management or managing owners must take course',
     },
-    Exit: {
+    'M&A': {
       pricing: '$500 + 15% profits',
       deliverable: 'Due Diligence',
       terms: 'Requires full disclosure of financial documents',
@@ -70,7 +70,7 @@ export const expertiseMatrix: ExpertiseMatrix = {
       deliverable: 'Courses',
       terms: 'Limited to 10 total minutes over 3–5 videos',
     },
-    Exit: {
+    'M&A': {
       pricing: '$300/month',
       deliverable: 'Negotiations',
       terms: 'Our negotiations technology requires an NDA',

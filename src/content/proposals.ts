@@ -110,7 +110,7 @@ export const proposalsByPath: Record<string, ProposalContent> = {
       'A transcript and secure document link have been prepared for the signer and for B2W internal follow-up.',
   },
   '/uyghur-eats-acquisition': {
-    proposalTitle: 'Fine Dining in Washington, DC',
+    proposalTitle: 'Exit Strategy for High-End Restaurant in Washington, DC',
     proposalSummary:
       'Launch a low-friction property-sale profile for Uyghur Eats, then layer in deeper buyer diligence and AI-assisted negotiation support only if the owner wants more serious, better-qualified buyer conversations.',
     heroHighlights: [

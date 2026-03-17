@@ -30,7 +30,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     category: 'Financials',
     serviceType: 'Consulting',
     status: 'Proposed',
-    title: 'Fine Dining in Washington, DC',
+    title: 'Exit Strategy for High-End Restaurant in Washington, DC',
     clientDescription: 'Planned 15 property buyers found and over $50k in value added.',
     description:
       'Property sale engagement covering the diligence-as-a-service model, buyer certainty package, and sale rollout.',
@@ -43,7 +43,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     category: 'Operations',
     serviceType: 'Implementation',
     status: 'Proposed',
-    title: 'Sabucnu Contractors',
+    title: 'Estimation Tool for Luxury Interior Contractor in Virginia.',
     clientDescription:
       'Projected 40–60% reduction in coordination time across 18 field crews.',
     description:

@@ -35,6 +35,7 @@
 
 ## Revision History
 
+- **2026-03-17:** Updated Expertise category from "Exit" to "M&A". Updated Sabucnu project card title to "Estimation Tool for Luxury Interior Contractor in Virginia." and Uyghur Eats project card and proposal headline to "Exit Strategy for High-End Restaurant in Washington, DC".
 - **2026-03-17:** Content audit — removed AI slop and instructional language from Capabilities, Projects, and CTA subtitles. Rewrote team bios for B2W context. Removed Summary and Academia labels from Team. Simplified project card layout.
 - **2026-03-12:** Reworked Capabilities into a minimal filterable section with dedicated subpages for each capability, aligned to the existing project case-study page structure and dark subpage treatment.
 - **2026-03-11:** Merged Example Capabilities directly into the Hero section and removed the standalone Work page section. Updated Team member profile descriptions to directly map to their exported JSON resumes.
