@@ -14,6 +14,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-600">
           <Link to="/#capabilities" className="hover:text-black transition-colors">Capabilities</Link>
           <Link to="/#expertise" className="hover:text-black transition-colors">Expertise</Link>
+          <Link to="/#projects" className="hover:text-black transition-colors">Projects</Link>
           <Link to="/#process" className="hover:text-black transition-colors">Process</Link>
           <Link to="/#team" className="hover:text-black transition-colors">Team</Link>
           <a href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call" className="rounded-full border border-black bg-black px-4 py-2 text-white hover:bg-neutral-800 transition-colors">Contact</a>
@@ -37,6 +38,7 @@ export default function Navbar() {
         >
           <Link to="/#capabilities" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Capabilities</Link>
           <Link to="/#expertise" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Expertise</Link>
+          <Link to="/#projects" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Projects</Link>
           <Link to="/#process" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Process</Link>
           <Link to="/#team" className="text-lg font-medium" onClick={() => setIsOpen(false)}>Team</Link>
           <a href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call" className="text-lg font-medium text-black" onClick={() => setIsOpen(false)}>Contact</a>
