@@ -31,7 +31,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     serviceType: 'Consulting',
     status: 'Proposed',
     title: 'Fine Dining in Washington, DC',
-    clientDescription: '15 property buyers found, over $50k in value added.',
+    clientDescription: 'Projected 15 property buyers found, over $50k in value added.',
     description:
       'Property sale engagement covering the diligence-as-a-service model, buyer certainty package, and sale rollout.',
     tags: ['M&A', 'Property Sale', 'Diligence', 'Buyer Package'],
