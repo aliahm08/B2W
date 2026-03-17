@@ -17,7 +17,7 @@ export default function UyghurEatsClientPortal() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
     const [visibleCtas, setVisibleCtas] = useState<Set<Element>>(new Set());
-    const heroCtaRef = useRef<HTMLButtonElement>(null);
+    const heroCtaRef = useRef<HTMLAnchorElement>(null);
     const endCtaRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -149,17 +149,24 @@ export default function UyghurEatsClientPortal() {
                                 </div>
                             </div>
 
-                            <button
+                            <a
                                 ref={heroCtaRef}
-                                type="button"
-                                onClick={openOfferModal}
+                                href="#overview"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    const element = document.getElementById('overview');
+                                    if (element) {
+                                        const y = element.getBoundingClientRect().top + window.scrollY - 100;
+                                        window.scrollTo({ top: y, behavior: 'smooth' });
+                                    }
+                                }}
                                 className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
                             >
-                                Accept Proposal
+                                Explore Scope
                                 <ArrowRight className="w-4 h-4" />
-                            </button>
+                            </a>
                             <p className="mt-3 text-xs text-neutral-500">
-                                Opens a letter of intent for direct engagement.
+                                Review the phase-by-phase timeline below.
                             </p>
                         </aside>
                     </div>
