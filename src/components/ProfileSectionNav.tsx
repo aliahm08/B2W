@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 
-type ProfileSectionNavItem = {
+export type ProfileSectionNavItem = {
   id: string;
   label: string;
+  action?: () => void;
 };
 
 type ProfileSectionNavProps = {
@@ -26,6 +27,7 @@ export default function ProfileSectionNav({
     }
 
     const sectionElements = items
+      .filter((item) => !item.action)
       .map((item) => document.getElementById(item.id))
       .filter((element): element is HTMLElement => element instanceof HTMLElement);
 
@@ -88,6 +90,21 @@ export default function ProfileSectionNav({
 
         <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => {
+            if (item.action) {
+              return (
+                <button
+                  key={item.id}
+                  onClick={item.action}
+                  className="snap-start whitespace-nowrap border border-black bg-black px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-neutral-800 md:text-sm"
+                >
+                  <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  {item.label}
+                </button>
+              );
+            }
+
             const isActive = item.id === activeId;
 
             return (

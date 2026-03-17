@@ -4,10 +4,11 @@
  */
 
 import { useEffect } from 'react';
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, useSearchParams } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import ClientNavbar from './components/ClientNavbar';
 import Hero from './components/Hero';
-import Work from './components/Work';
+import CapabilitiesVisualization from './components/CapabilitiesVisualization';
 import Expertise from './components/Expertise';
 import ProjectShowcase from './components/ProjectShowcase';
 import Team from './components/Team';
@@ -18,10 +19,11 @@ import AssistantWidget from './components/AssistantWidget';
 import BorekGProfilePage from './pages/projects/borek-g/ProfilePage';
 import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
 import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
-import UyghurEatsProposalPage from './pages/projects/uyghur-eats/ProposalPage';
-import UyghurEatsAiAgentPreviewPage from './pages/projects/uyghur-eats/previews/AiAgentPreviewPage';
-import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/BasicPreviewPage';
+import UyghurEatsClientPortal from './pages/client/UyghurEatsClientPortal';
+import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/ValuationModelPage';
+import UyghurEatsDataRoomPage from './pages/projects/uyghur-eats/previews/DataRoomPage';
 import CapabilityPage from './pages/capabilities/CapabilityPage';
+import CapabilitiesIndex from './pages/capabilities/CapabilitiesIndex';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
 import SabucnuProfilePage from './pages/projects/sabucnu/ProfilePage';
@@ -54,7 +56,9 @@ function LandingPage() {
         description="B2W builds practical AI systems for hospitality, retail, transportation, government, and real estate teams focused on measurable operational results."
       />
       <Hero />
-      <Work />
+      <section id="capabilities">
+        <CapabilitiesVisualization />
+      </section>
       <section id="expertise">
         <Expertise />
       </section>
@@ -75,26 +79,35 @@ function LandingPage() {
 }
 
 export default function App() {
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  const isClientPortal = location.pathname.startsWith('/client/');
+  const isDataRoom = location.pathname === '/uyghur-eats-data-room';
+  const hasReturnParam = searchParams.has('return');
+  const isIsolatedView = isClientPortal || isDataRoom || hasReturnParam;
+
   return (
     <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
       <ScrollToTop />
-      <Navbar />
+      {isIsolatedView ? <ClientNavbar /> : <Navbar />}
       <main>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
           <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-          <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
           <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
-          <Route path="/uyghur-eats-acquisition" element={<UyghurEatsProposalPage />} />
-          <Route path="/uyghur-eats-basic-profile-preview" element={<UyghurEatsBasicPreviewPage />} />
-          <Route path="/uyghur-eats-ai-agent-preview" element={<UyghurEatsAiAgentPreviewPage />} />
+          <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
+          <Route path="/uyghur-eats-data-room" element={<UyghurEatsDataRoomPage />} />
+          <Route path="/uyghur-eats-data-room" element={<UyghurEatsDataRoomPage />} />
+          <Route path="/capabilities" element={<CapabilitiesIndex />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
           <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
+          <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      <Footer />
+      {!isIsolatedView && <Footer />}
       <AssistantWidget />
     </div>
   );

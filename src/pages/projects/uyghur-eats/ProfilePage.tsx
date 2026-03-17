@@ -197,11 +197,11 @@ export default function UyghurEats() {
             >
                 <header className={projectPageHeaderClassName}>
                     <Link
-                        to="/#projects"
+                        to={searchParams.get('return') || "/#projects"}
                         className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="w-4 h-4" />
-                        Back to Projects
+                        {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Projects'}
                     </Link>
 
                     <div className={projectPageEyebrowClassName}>

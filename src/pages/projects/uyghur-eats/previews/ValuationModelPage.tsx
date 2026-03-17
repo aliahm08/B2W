@@ -1,11 +1,9 @@
 import { motion } from 'motion/react';
 import { Building2, DollarSign, Factory, LineChart, TrendingUp } from 'lucide-react';
-import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ProfileSectionNav from '../../../../components/ProfileSectionNav';
 import ProjectTagPill from '../../../../components/ProjectTagPill';
 import ResponsiveAccordionSection from '../../../../components/ResponsiveAccordionSection';
-import { projectShowcaseOverridesByPath } from '../../../../content/projectShowcase';
 import {
   uyghurCostStructure,
   uyghurLeadModel,
@@ -49,46 +47,40 @@ function Meter({
 }
 
 export default function BasicPreviewPage() {
-  const showcase = projectShowcaseOverridesByPath['/uyghur-eats-acquisition'];
   const [searchParams] = useSearchParams();
-  const proposalReturnPath = useMemo(
-    () => searchParams.get('return') || '/uyghur-eats-acquisition#scope-options',
-    [searchParams],
-  );
+  const returnPath = searchParams.get('return') || '/#projects';
 
   return (
     <PreviewPageFrame
-      title="Uyghur Eats Sale Profile Preview"
-      description="Mock buyer-facing preview for the Uyghur Eats property sale, including the website profile, financial snapshot, and scenario-based earnings visuals."
-      returnPath={proposalReturnPath}
-      returnLabel="Option 2 Preview"
-      returnDetail="Mockup of the basic profile plus analytics visuals for serious buyer conversations."
-      eyebrow="Property Sale Preview"
-      kicker="Basic Profile + Analytics"
-      heading="Uyghur Eats Buyer Preview"
-      summary="A mock public-facing sale profile that introduces the business cleanly, then supports the narrative with buyer-friendly earnings visuals and scenario modeling."
+      title="Uyghur Eats Valuation Model"
+      description="Valuation and financial snapshot for the Uyghur Eats property sale, including scenario-based earnings visuals."
+      returnPath={returnPath}
+      returnLabel={searchParams.get('return') ? "Client Portal" : "Projects"}
+      returnDetail={searchParams.get('return') ? "Back to the main presentation" : "Back to B2W Portfolio"}
+      eyebrow="Property Sale Deliverable"
+      kicker="Valuation & Scenarios"
+      heading="Uyghur Eats Valuation Model"
+      summary="A standalone financial snapshot that supports the business sale narrative with buyer-friendly earnings visuals and scenario modeling."
       heroNotes={
         <>
           <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-            This preview is positioned for the owner who wants more than a static listing but less friction than a full custom diligence platform.
+            This module is designed to give buyers a clear understanding of earnings capacity and downside clarity.
           </div>
           <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-            All numbers shown here are mock data for visualization only, designed to show how buyer economics can be explained on-brand.
+            All numbers shown here are illustrative, designed to show how buyer economics can be explained on-brand.
           </div>
         </>
       }
       tagContent={
         <>
-          {showcase.tags.map((tag) => (
-            <ProjectTagPill key={`${tag.label}-${tag.tier}`} tag={tag} />
-          ))}
-          <ProjectTagPill tag={{ label: 'Preview', tier: 2 }} />
-          <ProjectTagPill tag={{ label: 'Financial Modeling', tier: 3 }} />
+          <ProjectTagPill tag={{ label: 'Valuation', tier: 1 }} />
+          <ProjectTagPill tag={{ label: 'Financial Modeling', tier: 2 }} />
+          <ProjectTagPill tag={{ label: 'Scenarios', tier: 3 }} />
         </>
       }
-      asideLabel="Preview Snapshot"
-      asideHeading="A listing that helps buyers understand why this asset matters."
-      asideSummary="The page starts as a clean website profile, then moves quickly into what buyers care about most: earnings capacity, scenario fit, and downside clarity."
+      asideLabel="Valuation Snapshot"
+      asideHeading="Earnings visuals that help buyers construct an offer."
+      asideSummary="The page starts with a clean executive profile, then moves quickly into earnings capacity, scenario fit, and baseline margins."
       metricsContent={
         <>
           {uyghurPreviewMetrics.map((metric) => (
@@ -254,7 +246,7 @@ export default function BasicPreviewPage() {
               <div className="flex items-start gap-3">
                 <LineChart className="mt-1 h-5 w-5 shrink-0 text-neutral-300" />
                 <p className="text-sm leading-6 text-neutral-300">
-                  This page is designed to justify the Option Two upgrade: buyers who can inspect the financial story visually are more likely to qualify themselves before the owner spends time with them.
+                  This page provides buyers with visual clarity on how different debt, equity, and operational scenarios affect their returns.
                 </p>
               </div>
             </div>

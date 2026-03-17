@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowUpRight, BriefcaseBusiness, CircleAlert, ClipboardCheck, FileSignature, Landmark, Sparkles, Store } from 'lucide-react';
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import Seo from '../../../components/Seo';
@@ -80,6 +80,7 @@ export default function UyghurEatsAcquisition() {
   const proposalPath = '/uyghur-eats-acquisition';
   const showcase = projectShowcaseOverridesByPath[proposalPath];
   const proposal = getProposalContent(proposalPath);
+  const [searchParams] = useSearchParams();
   const [selectedOptionId, setSelectedOptionId] = useState(proposal?.options[0]?.id ?? '');
   const [isFinalizationOpen, setIsFinalizationOpen] = useState(false);
 
@@ -124,9 +125,9 @@ export default function UyghurEatsAcquisition() {
         transition={{ duration: 0.6 }}
       >
         <header className={projectPageHeaderClassName}>
-          <Link to="/#projects" className={projectPageBackLinkClassName}>
+          <Link to={searchParams.get('return') || "/#projects"} className={projectPageBackLinkClassName}>
             <ArrowLeft className="h-4 w-4" />
-            Back to Projects
+            {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Projects'}
           </Link>
 
           <div className={projectPageEyebrowClassName}>

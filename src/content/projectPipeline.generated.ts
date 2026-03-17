@@ -76,25 +76,33 @@ export const projectPipelineContent: ProjectPipelineContent = {
       "projectType": "Consulting",
       "serviceType": "Property Sale",
       "status": "Proposed",
-      "clientDescription": "Restaurant property sale opportunity with diligence-led buyer packaging",
+      "clientDescription": "Specialty restaurant positioned in a strong urban corridor",
       "title": "Fine Dining in Washington, DC",
-      "description": "Email-protected proposal covering the diligence-as-a-service model, buyer certainty package, and property sale rollout.",
-      "impact": "Controlled sale process defined",
+      "description": "Business profile focused on acquisition readiness, location quality, market position, and differentiated demand drivers.",
+      "impact": "Stronger acquisition positioning",
       "tags": [
         {
-          "label": "Proposal",
+          "label": "Profile",
           "tier": 1
         },
         {
-          "label": "Property Sale",
+          "label": "Finance",
           "tier": 2
         },
         {
-          "label": "Diligence",
+          "label": "Property Sale",
           "tier": 3
         },
         {
-          "label": "Buyer Package",
+          "label": "M&A",
+          "tier": 3
+        },
+        {
+          "label": "Property Valuation",
+          "tier": 3
+        },
+        {
+          "label": "Market Analysis",
           "tier": 3
         }
       ],

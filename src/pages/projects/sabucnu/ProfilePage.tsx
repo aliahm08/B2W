@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft,
   Cog,
@@ -79,6 +79,8 @@ const sectionItems = [
 ];
 
 export default function SabucnuProfilePage() {
+  const [searchParams] = useSearchParams();
+
   return (
     <article className={projectPageShellClassName}>
       <Seo
@@ -92,9 +94,9 @@ export default function SabucnuProfilePage() {
         transition={{ duration: 0.6 }}
       >
         <header className={projectPageHeaderClassName}>
-          <Link to="/#projects" className={projectPageBackLinkClassName}>
+          <Link to={searchParams.get('return') || "/#projects"} className={projectPageBackLinkClassName}>
             <ArrowLeft className="h-4 w-4" />
-            Back to Projects
+            {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Projects'}
           </Link>
 
           <div className={projectPageEyebrowClassName}>
