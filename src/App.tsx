@@ -22,6 +22,7 @@ import UyghurEatsAiAgentPreviewPage from './pages/projects/uyghur-eats/previews/
 import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/BasicPreviewPage';
 import CapabilityPage from './pages/capabilities/CapabilityPage';
 import Seo from './components/Seo';
+import NotFound from './components/NotFound';
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -84,6 +85,7 @@ export default function App() {
           <Route path="/uyghur-eats-basic-profile-preview" element={<UyghurEatsBasicPreviewPage />} />
           <Route path="/uyghur-eats-ai-agent-preview" element={<UyghurEatsAiAgentPreviewPage />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

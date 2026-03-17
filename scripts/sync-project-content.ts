@@ -3,40 +3,7 @@ import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import XLSX from 'xlsx';
 import { projectShowcaseOverridesByPath } from '../src/content/projectShowcase';
-
-type HeroContent = {
-  headline: string;
-  subheadline: string;
-  primaryCtaLabel: string;
-  primaryCtaHref: string;
-  secondaryCtaLabel: string;
-  secondaryCtaHref: string;
-};
-
-type ProjectTag = {
-  label: string;
-  tier: 1 | 2 | 3;
-};
-
-type ProjectCard = {
-  id: number;
-  category: string;
-  projectType: string;
-  serviceType: string;
-  status: string;
-  clientDescription: string;
-  title: string;
-  description: string;
-  impact: string;
-  tags: ProjectTag[];
-  date: string;
-  link: string;
-};
-
-type ProjectPipelineContent = {
-  hero: HeroContent;
-  projects: ProjectCard[];
-};
+import type { HeroContent, ProjectTag, ProjectCard, ProjectPipelineContent } from '../src/content/projectPipeline';
 
 type WorkbookRow = {
   client?: string;
@@ -65,8 +32,6 @@ const defaultHero: HeroContent = {
   subheadline: 'We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day.',
   primaryCtaLabel: 'Explore capabilities',
   primaryCtaHref: '/#capabilities',
-  secondaryCtaLabel: 'See Projects',
-  secondaryCtaHref: '/#projects',
 };
 
 const routeMap: Record<string, string> = {
@@ -482,9 +447,9 @@ function buildClientDescription(row: WorkbookRow): string {
 
 function buildTags(row: WorkbookRow): ProjectTag[] {
   const orderedTags: ProjectTag[] = [
-    { label: titleCase(String(row.offering ?? '')), tier: 1 },
-    { label: titleCase(String(row.topic ?? '')), tier: 2 },
-    { label: titleCase(String(row.package ?? '')), tier: 3 },
+    { label: titleCase(String(row.offering ?? '')), tier: 1 as const },
+    { label: titleCase(String(row.topic ?? '')), tier: 2 as const },
+    { label: titleCase(String(row.package ?? '')), tier: 3 as const },
     ...splitSkills(row.skills).map((label) => ({ label, tier: 3 as const })),
   ].filter((tag) => tag.label);
 

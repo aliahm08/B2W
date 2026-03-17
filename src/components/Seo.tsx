@@ -36,7 +36,7 @@ function upsertLink(selector: string, attributes: Record<string, string>) {
 export default function Seo({ title, description }: SeoProps) {
   useEffect(() => {
     const absoluteTitle = `${title} | ${SITE_NAME}`;
-    const canonicalUrl = window.location.href;
+    const canonicalUrl = window.location.origin + window.location.pathname;
 
     document.title = absoluteTitle;
 

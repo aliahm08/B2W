@@ -297,7 +297,7 @@ export default function Industries() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.04 }}
-                  className="group relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300 hover:border-neutral-600"
+                  className={`relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300 ${hasLink ? 'group hover:border-neutral-600' : ''}`}
                 >
                   {hasLink ? (
                     isExternalLink(project.link) ? (
@@ -328,7 +328,7 @@ export default function Industries() {
                       </div>
 
                       <div className="max-w-2xl">
-                        <h3 className="mb-4 text-2xl font-medium text-stone-50 group-hover:underline decoration-1 underline-offset-4 decoration-neutral-700">
+                        <h3 className={`mb-4 text-2xl font-medium text-stone-50 decoration-1 underline-offset-4 decoration-neutral-700 ${hasLink ? 'group-hover:underline' : ''}`}>
                           {project.title}
                         </h3>
                         <p className="text-sm leading-relaxed text-neutral-200 md:text-base">

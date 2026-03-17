@@ -5,9 +5,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
     "headline": "The AI Consultancy for small and midsize businesses.",
     "subheadline": "We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day.",
     "primaryCtaLabel": "Explore capabilities",
-    "primaryCtaHref": "/#capabilities",
-    "secondaryCtaLabel": "See Projects",
-    "secondaryCtaHref": "/#projects"
+    "primaryCtaHref": "/#capabilities"
   },
   "projects": [
     {

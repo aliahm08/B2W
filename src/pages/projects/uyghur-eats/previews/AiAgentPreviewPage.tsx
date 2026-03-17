@@ -192,7 +192,7 @@ export default function AiAgentPreviewPage() {
               <div className="space-y-4 border border-neutral-200 p-5">
                 <p className="text-[11px] font-mono uppercase tracking-[0.24em] text-neutral-500">Revenue Readout</p>
                 {uyghurRevenueMix.map((item) => (
-                  <StatBar key={item.label} label={item.label} value={item.value} amount={item.amount} />
+                  <StatBar label={item.label} value={item.value} amount={item.amount} />
                 ))}
               </div>
               <div className="border border-neutral-200 p-5">

@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import { Building2, DollarSign, Factory, LineChart, TrendingUp } from 'lucide-react';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -168,7 +169,6 @@ export default function BasicPreviewPage() {
                 <div className="space-y-4">
                   {uyghurRevenueMix.map((item, index) => (
                     <Meter
-                      key={item.label}
                       label={item.label}
                       value={item.value}
                       detail={item.amount}
@@ -183,7 +183,6 @@ export default function BasicPreviewPage() {
                 <div className="space-y-4">
                   {uyghurCostStructure.map((item, index) => (
                     <Meter
-                      key={item.label}
                       label={item.label}
                       value={item.value}
                       detail={index === uyghurCostStructure.length - 1 ? 'Illustrative normalized margin' : 'Mock ratio'}

@@ -3,8 +3,6 @@ export type HeroContent = {
   subheadline: string;
   primaryCtaLabel: string;
   primaryCtaHref: string;
-  secondaryCtaLabel: string;
-  secondaryCtaHref: string;
 };
 
 export type ProjectTag = {
