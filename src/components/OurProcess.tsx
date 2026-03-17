@@ -170,7 +170,7 @@ export default function OurProcess() {
         className="mb-12"
       >
         <h2 className="mb-4 text-4xl font-medium tracking-tight">Process</h2>
-        <p className="mb-8 max-w-4xl text-xl font-medium leading-relaxed text-neutral-600 md:text-2xl">
+        <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
           Key checkpoints with our clients to ensure engagements are on-track.
         </p>
         <div className="h-px w-full bg-neutral-200" />

@@ -47,6 +47,9 @@ export default function Team() {
         className="mb-16"
       >
         <h2 className="text-4xl font-medium tracking-tight mb-4">Team</h2>
+        <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
+          30 years of combined experience in engineering, strategy, and development.
+        </p>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
 
