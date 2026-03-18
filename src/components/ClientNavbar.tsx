@@ -116,7 +116,6 @@ export default function ClientNavbar({
             return <span key={item.label}>{item.label}</span>;
           })}
           
-          {!navItems && <span>Client Portal</span>}
         </div>
       </div>
     </nav>

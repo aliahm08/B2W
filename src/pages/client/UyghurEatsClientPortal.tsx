@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
 import ProfileSectionNav, { type ProfileSectionNavItem } from '../../components/ProfileSectionNav';
-import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
+import ClientNavbar from '../../components/ClientNavbar';
 import {
     projectPageHeaderClassName,
     projectPageShellClassName,
@@ -247,23 +247,9 @@ export default function UyghurEatsClientPortal() {
     const nextSection = sections[currentIndex + 1];
     const Icon = sectionIconMap[currentSection.id];
 
-    const navItems: ClientNavAction[] = [
-        { label: 'Proposal', onClick: () => setActiveSection('overview') },
-        { 
-            label: 'Package', 
-            items: [
-                { label: 'Valuation Modeling', onClick: () => setActiveSection('valuation') },
-                { label: 'Operations Documentation', onClick: () => setActiveSection('operations') },
-                { label: 'Buyer Due Diligence', onClick: () => setActiveSection('due-diligence') },
-            ]
-        },
-        { label: 'Terms', onClick: () => setActiveSection('terms') },
-        { label: 'Accept', type: 'cta', onClick: openOfferModal },
-    ];
-
     return (
         <article className={projectPageShellClassName}>
-            <ClientNavbar clientName="Uyghur Eats" navItems={navItems} />
+            <ClientNavbar clientName="Uyghur Eats" />
             <Seo
                 title="Uyghur Eats | Client Portal"
                 description="Secure client portal for Uyghur Eats. Review business sale preparation deliverables, valuation models, operations documentation, and buyer packages from B2W."
