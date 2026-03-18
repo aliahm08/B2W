@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
 import ProfileSectionNav, { type ProfileSectionNavItem } from '../../components/ProfileSectionNav';
-import ClientNavbar from '../../components/ClientNavbar';
+import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import {
     projectPageHeaderClassName,
     projectPageShellClassName,
@@ -247,9 +247,17 @@ export default function UyghurEatsClientPortal() {
     const nextSection = sections[currentIndex + 1];
     const Icon = sectionIconMap[currentSection.id];
 
+    const navItems: ClientNavAction[] = [
+        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+    ];
+
     return (
         <article className={projectPageShellClassName}>
-            <ClientNavbar clientName="Uyghur Eats" />
+            <ClientNavbar 
+                clientName="Uyghur Eats" 
+                clientLink="/client/uyghur-eats"
+                navItems={navItems} 
+            />
             <Seo
                 title="Uyghur Eats | Client Portal"
                 description="Secure client portal for Uyghur Eats. Review business sale preparation deliverables, valuation models, operations documentation, and buyer packages from B2W."
@@ -297,18 +305,14 @@ export default function UyghurEatsClientPortal() {
                                 </div>
                             </div>
 
-                            <a
+                            <Link
                                 ref={heroCtaRef}
-                                href="#overview"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    setActiveSection('overview');
-                                }}
+                                to="/uyghur-eats?return=%2Fclient%2Fuyghur-eats"
                                 className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
                             >
-                                Explore Scope
+                                Explore Opportunity
                                 <ArrowRight className="w-4 h-4" />
-                            </a>
+                            </Link>
                         </aside>
                     </div>
                 </header>

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export type ClientNavAction = {
   label: string;
@@ -12,9 +13,11 @@ export type ClientNavAction = {
 
 export default function ClientNavbar({ 
   clientName, 
+  clientLink,
   navItems 
 }: { 
   clientName?: string;
+  clientLink?: string;
   navItems?: ClientNavAction[];
 }) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -38,7 +41,24 @@ export default function ClientNavbar({
           {clientName && (
             <>
               <span className="text-neutral-300">/</span>
-              <span className="text-sm font-medium tracking-tight text-neutral-600">{clientName}</span>
+              {clientLink ? (
+                <Link 
+                  to={clientLink} 
+                  className="group relative flex items-center gap-1.5 text-sm font-medium tracking-tight text-neutral-600 hover:text-black transition-colors"
+                >
+                  <span>{clientName}</span>
+                  <motion.span
+                    initial={{ opacity: 0, x: -4 }}
+                    whileHover={{ opacity: 1, x: 0 }}
+                    className="inline-flex"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </motion.span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-black transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ) : (
+                <span className="text-sm font-medium tracking-tight text-neutral-600">{clientName}</span>
+              )}
             </>
           )}
         </div>
