@@ -1,11 +1,12 @@
 import { useEffect, useState, useRef, useCallback, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, X, FileSignature, Scale } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
 import ProfileSectionNav, { type ProfileSectionNavItem } from '../../components/ProfileSectionNav';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
+import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
     projectPageHeaderClassName,
     projectPageShellClassName,
@@ -35,7 +36,7 @@ function OverviewContent() {
                 <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
                 <p className="text-sm text-neutral-700">A structured Business Opportunity Page designed to clearly communicate the value of the business.</p>
                 <Link
-                    to="/uyghur-eats?return=%2Fclient%2Fuyghur-eats"
+                    to="/client/uyghur-eats/opportunity"
                     className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
                 >
                     View Sample Webpage
@@ -59,7 +60,7 @@ function ValuationContent() {
                 <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
                 <p className="text-sm text-neutral-700">A valuation model and summary explaining potential sale price ranges.</p>
                 <Link
-                    to="/uyghur-eats-valuation-model?return=%2Fclient%2Fuyghur-eats"
+                    to="/client/uyghur-eats/valuation"
                     className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
                 >
                     View Sample Model
@@ -143,9 +144,11 @@ const sectionIconMap: Record<string, typeof LayoutTemplate> = {
 
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
+    const { section } = useParams();
+    const navigate = useNavigate();
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
-    const [activeSection, setActiveSection] = useState('overview');
+    const [activeSection, setActiveSection] = useState(section || 'overview');
     const [visibleCtas, setVisibleCtas] = useState<Set<Element>>(new Set());
     const heroCtaRef = useRef<HTMLAnchorElement>(null);
     const endCtaRef = useRef<HTMLButtonElement>(null);
@@ -171,7 +174,8 @@ export default function UyghurEatsClientPortal() {
             return;
         }
         setActiveSection(id);
-    }, []);
+        navigate(`/client/uyghur-eats/${id}`, { replace: true });
+    }, [navigate]);
 
     useScrollSectionNav(allSectionIds, activeSection, handleSectionSelect);
 
@@ -200,6 +204,12 @@ export default function UyghurEatsClientPortal() {
     }, []);
 
     const showFloatingCta = visibleCtas.size === 0 && !isOfferModalOpen;
+
+    useEffect(() => {
+        if (section && section !== activeSection) {
+            setActiveSection(section);
+        }
+    }, [section]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -248,7 +258,9 @@ export default function UyghurEatsClientPortal() {
     const Icon = sectionIconMap[currentSection.id];
 
     const navItems: ClientNavAction[] = [
-        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+        { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
+        { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
+        { label: 'Accept', type: 'cta', onClick: openOfferModal }
     ];
 
     return (
@@ -306,13 +318,12 @@ export default function UyghurEatsClientPortal() {
                             </div>
 
                             <Link
-                                ref={heroCtaRef}
-                                to="/uyghur-eats?return=%2Fclient%2Fuyghur-eats"
-                                className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
-                            >
-                                Explore Opportunity
-                                <ArrowRight className="w-4 h-4" />
-                            </Link>
+                                    to="/client/uyghur-eats/opportunity"
+                                    className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-neutral-800 transition-colors group"
+                                >
+                                    Explore Opportunity
+                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </Link>
                         </aside>
                     </div>
                 </header>
@@ -387,116 +398,25 @@ export default function UyghurEatsClientPortal() {
                 </main>
             </motion.div>
 
-            {isOfferModalOpen && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-0 py-0 md:px-4 md:py-8"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="offer-modal-title"
-                    onClick={closeOfferModal}
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="relative w-full h-full md:h-auto md:max-h-[90vh] max-w-2xl border-0 md:border md:border-neutral-200 bg-white md:shadow-2xl overflow-y-auto"
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        <button
-                            type="button"
-                            onClick={closeOfferModal}
-                            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center border border-neutral-200 text-neutral-500 transition-colors hover:text-black"
-                            aria-label="Close form"
-                        >
-                            <X className="h-4 w-4" />
-                        </button>
+            <UyghurEatsOfferModal 
+                isOpen={isOfferModalOpen}
+                onClose={closeOfferModal}
+                isSubmitted={isOfferSubmitted}
+                onSubmit={handleOfferSubmit}
+            />
 
-                        <div className="border-b border-neutral-200 px-6 py-5 md:px-8">
-                            <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500 mb-3">
-                                Letter of Intent
-                            </p>
-                            <h2 id="offer-modal-title" className="text-2xl font-medium tracking-tight">
-                                Proposal Acceptance
-                            </h2>
-                        </div>
-
-                        {!isOfferSubmitted ? (
-                            <form onSubmit={handleOfferSubmit} className="px-6 py-6 md:px-8 md:py-8">
-                                <div className="grid gap-5 md:grid-cols-2">
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Client Name</span>
-                                        <input
-                                            type="text"
-                                            name="clientName"
-                                            required
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="Legal entity or name"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Authorized Representative</span>
-                                        <input
-                                            type="text"
-                                            name="representative"
-                                            required
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="Name of signee"
-                                        />
-                                    </label>
-                                </div>
-
-                                <label className="mt-5 block border-b border-neutral-300 pb-2">
-                                    <span className="mb-2 block text-sm font-medium text-neutral-800">Signature</span>
-                                    <input
-                                        type="text"
-                                        name="signature"
-                                        required
-                                        className="w-full font-serif italic text-lg outline-none transition-colors focus:border-black text-black"
-                                        placeholder="Type signature here..."
-                                    />
-                                </label>
-
-                                <div className="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-5 md:flex-row md:items-center md:justify-between">
-                                    <p className="text-xs leading-5 text-neutral-500">
-                                        All information is strictly confidential and private.
-                                    </p>
-                                    <button
-                                        type="submit"
-                                        className="inline-flex items-center justify-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                                    >
-                                        Execute LOI
-                                        <ArrowRight className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </form>
-                        ) : (
-                            <div className="px-6 py-8 md:px-8">
-                                <div className="border border-neutral-200 bg-neutral-50 p-6">
-                                    <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500 mb-3">
-                                        Success
-                                    </p>
-                                    <h3 className="text-2xl font-medium tracking-tight mb-3">
-                                        Letter of Intent Received
-                                    </h3>
-                                    <p className="max-w-xl text-sm leading-6 text-neutral-600">
-                                        Your acceptance has been captured. B2W will forward the finalized service contract to govern the legal relationship shortly.
-                                    </p>
-                                    <div className="mt-6 flex gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={closeOfferModal}
-                                            className="inline-flex items-center justify-center border border-neutral-300 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
-                                        >
-                                            Close
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </motion.div>
+            <footer className="mt-20 border-t border-neutral-100 py-12 px-6 md:px-8">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-8 opacity-50">
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">B2W LLC</p>
+                        <p className="text-xs text-neutral-500">M&A Advisory & Strategy Consulting</p>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">Contact</p>
+                        <p className="text-xs text-neutral-500 underline underline-offset-4">ali@b2w-ai.com</p>
+                    </div>
                 </div>
-            )}
+            </footer>
 
             <AnimatePresence>
                 {showFloatingCta && (

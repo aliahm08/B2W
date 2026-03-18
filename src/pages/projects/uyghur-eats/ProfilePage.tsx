@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
+import React, { useState, useEffect, useMemo, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, MapPin, ChefHat, Users, Target, LineChart, TrendingUp, X, ArrowRight } from 'lucide-react';
+import { MapPin, ChefHat, Users, LineChart, Target, TrendingUp, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import Seo from '../../../components/Seo';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
-import ClientNavbar from '../../../components/ClientNavbar';
+import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNavbar';
+import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
 import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
 import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
 import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
@@ -180,9 +181,29 @@ export default function UyghurEats() {
     const [isUnlockingPreview, setIsUnlockingPreview] = useState(false);
     const [hasPreviewAccess, setHasPreviewAccess] = useState(false);
     const [activeSection, setActiveSection] = useState('location');
+
+    const openOfferModal = () => {
+        setIsOfferSubmitted(false);
+        setIsOfferModalOpen(true);
+    };
+
+    const closeOfferModal = () => {
+        setIsOfferModalOpen(false);
+    };
+
+    const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsOfferSubmitted(true);
+    };
+
+    const navItems: ClientNavAction[] = [
+        { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
+        { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
+        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+    ];
     const isProposalPreview = searchParams.get('preview') === 'proposal';
     const proposalReturnPath = useMemo(
-        () => searchParams.get('return') || '/uyghur-eats-acquisition#scope-options',
+        () => searchParams.get('return') || '/client/uyghur-eats',
         [searchParams],
     );
     const isBlurredPreview = isProposalPreview && !hasPreviewAccess;
@@ -241,24 +262,6 @@ export default function UyghurEats() {
         return () => window.removeEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
     }, [isBlurredPreview]);
 
-    const openOfferModal = () => {
-        if (isBlurredPreview) {
-            return;
-        }
-
-        setIsOfferSubmitted(false);
-        setIsOfferModalOpen(true);
-    };
-
-    const closeOfferModal = () => {
-        setIsOfferModalOpen(false);
-    };
-
-    const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsOfferSubmitted(true);
-    };
-
     const handlePreviewUnlock = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsUnlockingPreview(true);
@@ -313,7 +316,11 @@ export default function UyghurEats() {
 
     return (
         <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
-            <ClientNavbar clientName="Uyghur Eats" />
+            <ClientNavbar 
+                clientName="Uyghur Eats" 
+                clientLink="/client/uyghur-eats"
+                navItems={navItems} 
+            />
             <Seo
                 title="Uyghur Eats | Business Opportunity Profile"
                 description="Comprehensive business profile for Uyghur Eats. Explore the location footprint, culinary draw, community integration, and acquisition thesis for this Washington, DC restaurant."
@@ -338,13 +345,14 @@ export default function UyghurEats() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    <Link
+                    {/* Back link hidden per user request */}
+                    {/* <Link
                         to={searchParams.get('return') || "/#projects"}
                         className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="w-4 h-4" />
                         {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Projects'}
-                    </Link>
+                    </Link> */}
 
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
@@ -415,11 +423,12 @@ export default function UyghurEats() {
                 </header>
 
                 {/* ─── Tab Navigation ──────────────────────────────── */}
-                <ProfileSectionNav
+                {/* Horizontal navigation hidden per user request */}
+                {/* <ProfileSectionNav
                     items={sectionNavItems}
                     activeId={activeSection}
                     onSelect={setActiveSection}
-                />
+                /> */}
 
                 <main className="mt-8 md:mt-12" data-project-body>
                     <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8 lg:gap-12 items-start">
@@ -482,178 +491,25 @@ export default function UyghurEats() {
                 </main>
             </motion.div>
 
-            {isOfferModalOpen && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 px-0 py-0 md:px-4 md:py-8"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="offer-modal-title"
-                    onClick={closeOfferModal}
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="relative w-full h-full md:h-auto md:max-h-[90vh] max-w-2xl border-0 md:border md:border-neutral-200 bg-white md:shadow-2xl overflow-y-auto"
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        <button
-                            type="button"
-                            onClick={closeOfferModal}
-                            className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center border border-neutral-200 text-neutral-500 transition-colors hover:text-black"
-                            aria-label="Close offer form"
-                        >
-                            <X className="h-4 w-4" />
-                        </button>
+            <UyghurEatsOfferModal 
+                isOpen={isOfferModalOpen}
+                onClose={closeOfferModal}
+                isSubmitted={isOfferSubmitted}
+                onSubmit={handleOfferSubmit}
+            />
 
-                        <div className="border-b border-neutral-200 px-6 py-5 md:px-8">
-                            <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500 mb-3">
-                                Acquisition Offer
-                            </p>
-                            <h2 id="offer-modal-title" className="text-2xl font-medium tracking-tight">
-                                Make an offer for Uyghur Eats
-                            </h2>
-                        </div>
-
-                        {!isOfferSubmitted ? (
-                            <form onSubmit={handleOfferSubmit} className="px-6 py-6 md:px-8 md:py-8">
-                                <div className="grid gap-5 md:grid-cols-2">
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Full name</span>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            required
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="Your name"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Email</span>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            required
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="name@example.com"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Phone</span>
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="(555) 555-5555"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Offer range</span>
-                                        <input
-                                            type="text"
-                                            name="offerRange"
-                                            required
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="$850,000 - $1,050,000"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Closing timeline</span>
-                                        <input
-                                            type="text"
-                                            name="timeline"
-                                            required
-                                            className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                            placeholder="30-45 days"
-                                        />
-                                    </label>
-
-                                    <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-neutral-800">Buyer type</span>
-                                        <select
-                                            name="buyerType"
-                                            required
-                                            defaultValue=""
-                                            className="w-full border border-neutral-300 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                        >
-                                            <option value="" disabled>Select buyer profile</option>
-                                            <option value="owner-operator">Owner-operator</option>
-                                            <option value="family-office">Family office</option>
-                                            <option value="strategic-buyer">Strategic buyer</option>
-                                            <option value="other">Other individual buyer</option>
-                                        </select>
-                                    </label>
-                                </div>
-
-                                <label className="mt-5 block">
-                                    <span className="mb-2 block text-sm font-medium text-neutral-800">Operating plan</span>
-                                    <textarea
-                                        name="operatingPlan"
-                                        required
-                                        rows={4}
-                                        className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                        placeholder="Describe your intent for the business, brand, and team."
-                                    />
-                                </label>
-
-                                <label className="mt-5 block">
-                                    <span className="mb-2 block text-sm font-medium text-neutral-800">Notes for the seller</span>
-                                    <textarea
-                                        name="notes"
-                                        rows={4}
-                                        className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                                        placeholder="Outline financing certainty, diligence needs, or transition preferences."
-                                    />
-                                </label>
-
-                                <div className="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-5 md:flex-row md:items-center md:justify-end">
-                                    <button
-                                        type="submit"
-                                        className="inline-flex items-center justify-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                                    >
-                                        Submit Offer
-                                        <ArrowRight className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </form>
-                        ) : (
-                            <div className="px-6 py-8 md:px-8">
-                                <div className="border border-neutral-200 bg-neutral-50 p-6">
-                                    <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500 mb-3">
-                                        Offer Received
-                                    </p>
-                                    <h3 className="text-2xl font-medium tracking-tight mb-3">
-                                        Your acquisition inquiry is ready for review.
-                                    </h3>
-                                    <p className="max-w-xl text-sm leading-6 text-neutral-600">
-                                        The buyer intake has been captured and will be routed to the owner for follow-up.
-                                    </p>
-                                    <div className="mt-6 flex gap-3">
-                                        <button
-                                            type="button"
-                                            onClick={closeOfferModal}
-                                            className="inline-flex items-center justify-center border border-neutral-300 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
-                                        >
-                                            Close
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsOfferSubmitted(false)}
-                                            className="inline-flex items-center justify-center bg-black px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                                        >
-                                            Edit Offer
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </motion.div>
+            <footer className="mt-20 border-t border-neutral-100 py-12 px-6 md:px-8">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-8 opacity-50">
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">B2W LLC</p>
+                        <p className="text-xs text-neutral-500">M&A Advisory & Strategy Consulting</p>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">Contact</p>
+                        <p className="text-xs text-neutral-500 underline underline-offset-4">ali@b2w-ai.com</p>
+                    </div>
                 </div>
-            )}
+            </footer>
         </article>
     );
 }

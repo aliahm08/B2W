@@ -1,10 +1,11 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, DollarSign, BarChart3, TrendingUp, Scale } from 'lucide-react';
 import Seo from '../../../components/Seo';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
-import ClientNavbar from '../../../components/ClientNavbar';
+import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNavbar';
+import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
 import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
 import {
     projectPageBackLinkClassName,
@@ -165,6 +166,28 @@ const sectionIconMap: Record<string, typeof BarChart3> = {
 export default function ValuationModelPage() {
     const [searchParams] = useSearchParams();
     const [activeSection, setActiveSection] = useState('revenue');
+    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
+    const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
+
+    const openOfferModal = () => {
+        setIsOfferSubmitted(false);
+        setIsOfferModalOpen(true);
+    };
+
+    const closeOfferModal = () => {
+        setIsOfferModalOpen(false);
+    };
+
+    const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setIsOfferSubmitted(true);
+    };
+
+    const navItems: ClientNavAction[] = [
+        { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
+        { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
+        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+    ];
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -187,7 +210,11 @@ export default function ValuationModelPage() {
 
     return (
         <article className={projectPageShellClassName}>
-            <ClientNavbar clientName="Uyghur Eats" />
+            <ClientNavbar 
+                clientName="Uyghur Eats" 
+                clientLink="/client/uyghur-eats"
+                navItems={navItems} 
+            />
             <Seo
                 title="Uyghur Eats | Valuation Model"
                 description="Estimated valuation model for Uyghur Eats. Revenue analysis, normalized earnings, comparable sales benchmarking, and estimated sale price range."
@@ -198,13 +225,14 @@ export default function ValuationModelPage() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    <Link
+                    {/* Back link hidden per user request */}
+                    {/* <Link
                         to={searchParams.get('return') || '/client/uyghur-eats'}
                         className={projectPageBackLinkClassName}
                     >
                         <ArrowLeft className="w-4 h-4" />
                         {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Client Portal'}
-                    </Link>
+                    </Link> */}
 
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Uyghur Eats</span>
@@ -308,7 +336,7 @@ export default function ValuationModelPage() {
 
                         {/* Right sidebar: section index (desktop) */}
                         <aside className="hidden lg:block sticky top-40">
-                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Sections</p>
+                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Package Items</p>
                             <nav className="space-y-1">
                                 {sections.map((s, i) => (
                                     <button
@@ -330,6 +358,26 @@ export default function ValuationModelPage() {
                     </div>
                 </main>
             </motion.div>
+
+            <UyghurEatsOfferModal 
+                isOpen={isOfferModalOpen}
+                onClose={closeOfferModal}
+                isSubmitted={isOfferSubmitted}
+                onSubmit={handleOfferSubmit}
+            />
+
+            <footer className="mt-20 border-t border-neutral-100 py-12 px-6 md:px-8">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-8 opacity-50">
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">B2W LLC</p>
+                        <p className="text-xs text-neutral-500">M&A Advisory & Strategy Consulting</p>
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">Contact</p>
+                        <p className="text-xs text-neutral-500 underline underline-offset-4">ali@b2w-ai.com</p>
+                    </div>
+                </div>
+            </footer>
         </article>
     );
 }

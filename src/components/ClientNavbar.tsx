@@ -54,7 +54,6 @@ export default function ClientNavbar({
                   >
                     <ArrowRight className="w-3.5 h-3.5" />
                   </motion.span>
-                  <span className="absolute -bottom-1 left-0 w-0 h-px bg-black transition-all duration-300 group-hover:w-full" />
                 </Link>
               ) : (
                 <span className="text-sm font-medium tracking-tight text-neutral-600">{clientName}</span>

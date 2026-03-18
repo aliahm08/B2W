@@ -20,6 +20,7 @@ import BorekGProfilePage from './pages/projects/borek-g/ProfilePage';
 import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
 import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
 import UyghurEatsClientPortal from './pages/client/UyghurEatsClientPortal';
+import UyghurEatsClientPortalV2 from './pages/client/UyghurEatsClientPortalV2';
 import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/ValuationModelPage';
 import UyghurEatsValuationModelPage from './pages/projects/uyghur-eats/ValuationModelPage';
 import UyghurEatsDataRoomPage from './pages/projects/uyghur-eats/previews/DataRoomPage';
@@ -106,14 +107,19 @@ export default function App() {
           <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
           <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
           <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-          <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
-          <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
-          <Route path="/uyghur-eats-valuation-model" element={<UyghurEatsValuationModelPage />} />
-          <Route path="/uyghur-eats-data-room" element={<UyghurEatsDataRoomPage />} />
-          <Route path="/capabilities" element={<CapabilitiesIndex />} />
-          <Route path="/capabilities/:slug" element={<CapabilityPage />} />
-          <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
           <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
+          <Route path="/client/uyghur-eats-v2" element={<UyghurEatsClientPortalV2 />} />
+          <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
+          <Route path="/client/uyghur-eats/opportunity" element={<UyghurEatsProfilePage />} />
+          <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
+          <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
+          
+          {/* Redirects for legacy routes */}
+          <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/opportunity" replace />} />
+          <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
+          <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
+          
+          <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
