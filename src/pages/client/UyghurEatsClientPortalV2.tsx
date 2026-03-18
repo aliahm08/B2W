@@ -695,7 +695,7 @@ export default function UyghurEatsClientPortalV2() {
             </footer>
 
             <AnimatePresence>
-                {nextPkg && (
+                {activePackage === 'opportunity' && nextPkg && (
                     <motion.div
                         key={nextPkg.id}
                         initial={{ opacity: 0, y: 50 }}
