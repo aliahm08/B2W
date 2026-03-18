@@ -75,6 +75,15 @@ export default function UyghurEatsOfferModal({
                                 />
                             </label>
                         </div>
+                        
+                        <div className="mt-6 p-5 border border-neutral-100 bg-neutral-50/50">
+                            <p className="text-sm leading-relaxed text-neutral-600">
+                                By signing below, Client acknowledges and accepts the scope of services, pricing, and assumptions described in this proposal for the following option listed above: <span className="inline-block border-b border-neutral-400 min-w-[200px] font-medium text-black px-1">___________________________</span>.
+                            </p>
+                            <p className="mt-3 text-xs leading-relaxed text-neutral-500 italic">
+                                This proposal is not intended to replace the service contract, which will govern the Parties’ legal relationship. This section only serves as a non-binding letter of intent.
+                            </p>
+                        </div>
 
                         <label className="mt-5 block border-b border-neutral-300 pb-2">
                             <span className="mb-2 block text-sm font-medium text-neutral-800">Signature</span>
