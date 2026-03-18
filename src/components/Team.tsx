@@ -22,7 +22,7 @@ const team: TeamMember[] = [
     name: "Aaron Patron",
     role: "COO (M&A)",
     focus: "Commercial Analysis & Renewable Energy",
-    description: "Nine years structuring commercial deals across the energy sector — American Power Resources, DSD Renewables, GE Solar, Sol Systems. Built cash flow models, sized multi-million dollar projects, and closed complex transactions. GWU mechanical engineering with a sustainability focus.",
+    description: "Aaron has built his career at the intersection of engineering, finance, and development. Across roles at American Power Resources, DSD Renewables, GE Solar, and Sol Systems, he has worked on renewable energy projects from technical design and analysis through commercial strategy and execution. His experience includes financial modeling, project evaluation, cross-functional coordination, and helping turn complex opportunities into clear decisions and actionable plans.",
     tags: ["Cash Flow Forecasting", "Communication", "Mergers & Acquisitions (M&A)"],
     linkedin: "https://www.linkedin.com/in/aaronpatron/"
   },

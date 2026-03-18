@@ -22,7 +22,7 @@
 
 ## Team
 - **Ali Ahmed** (CEO & GTM): Leads B2W's client engagements and builds the tools behind them. Background in mechanical engineering, software architecture, and interface design — shaped at NASA, Autodesk, WSP, and LaunchGood. Owns the technical roadmap, designs the data systems, and writes the code that ships.
-- **Aaron Patron** (M&A): Runs B2W's financial modeling and deal structuring. Nine years across commercial solar — American Power Resources, DSD Renewables, GE Solar — building cash flow models, sizing projects, and closing deals. Brings that same rigor to restaurant acquisitions and property sales.
+- **Aaron Patron** (M&A): Aaron has built his career at the intersection of engineering, finance, and development. Across roles at American Power Resources, DSD Renewables, GE Solar, and Sol Systems, he has worked on renewable energy projects from technical design and analysis through commercial strategy and execution. His experience includes financial modeling, project evaluation, cross-functional coordination, and helping turn complex opportunities into clear decisions and actionable plans.
 - **Feng Xiang** (R&D): Builds B2W's AI infrastructure. Carnegie Mellon robotics graduate who spent years at Waymo, ISEE, and Forterra making machines navigate the real world. Applies that same systems thinking to the operational AI agents B2W deploys for clients.
 
 ## Contact
