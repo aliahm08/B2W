@@ -149,8 +149,8 @@ const proposalValueAdds = [
         description:
             'We normalize your financial reality to ensure buyers see the full scope of your earning power, justification for premium multiples.',
         icon: TrendingUp,
-        accent: 'from-emerald-50 to-white',
-        iconClassName: 'text-emerald-700 bg-emerald-100 border-emerald-200',
+        cardClassName: 'border-emerald-300',
+        iconClassName: 'text-emerald-700 bg-emerald-50 border-emerald-200',
     },
     {
         id: 'ease-transfer',
@@ -158,8 +158,8 @@ const proposalValueAdds = [
         description:
             'We document your operations so thoroughly that a buyer can confidently step into a turnkey environment, reducing their risk and increasing your sale price.',
         icon: ShieldCheck,
-        accent: 'from-sky-50 to-white',
-        iconClassName: 'text-sky-700 bg-sky-100 border-sky-200',
+        cardClassName: 'border-sky-300',
+        iconClassName: 'text-sky-700 bg-sky-50 border-sky-200',
     },
 ] as const;
 
@@ -308,36 +308,20 @@ export default function UyghurEatsClientPortal() {
                                 Business Sale Preparation & Opportunity Packaging
                             </h1>
 
-                            <div className="mb-8 grid gap-3 md:grid-cols-2">
-                                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
-                                    <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
-                                </div>
-                                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
-                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
-                                    <span className="mt-2 block font-medium text-black">Sale Preparation</span>
-                                </div>
-                            </div>
-
-                            <div className="grid gap-4 md:grid-cols-2">
+                            <div className="mb-8 grid gap-4 md:grid-cols-2">
                                 {proposalValueAdds.map((item) => {
                                     const Icon = item.icon;
                                     return (
                                         <div
                                             key={item.id}
-                                            className={`group overflow-hidden border border-neutral-200 bg-gradient-to-br ${item.accent} p-5 transition-all duration-300 md:min-h-[220px] md:hover:border-black md:hover:shadow-xl`}
+                                            className={`overflow-hidden border bg-white p-5 ${item.cardClassName}`}
                                         >
                                             <div className={`mb-5 inline-flex rounded-full border p-3 ${item.iconClassName}`}>
                                                 <Icon className="h-5 w-5" />
                                             </div>
                                             <div className="space-y-3">
                                                 <h2 className="text-xl font-medium tracking-tight text-black">{item.title}</h2>
-                                                <p className="text-sm leading-6 text-neutral-700 md:max-h-0 md:overflow-hidden md:opacity-0 md:transition-all md:duration-300 md:group-hover:max-h-40 md:group-hover:opacity-100">
-                                                    {item.description}
-                                                </p>
-                                                <p className="text-sm leading-6 text-neutral-700 md:hidden">
-                                                    {item.description}
-                                                </p>
+                                                <p className="text-sm leading-6 text-neutral-700">{item.description}</p>
                                             </div>
                                         </div>
                                     );
