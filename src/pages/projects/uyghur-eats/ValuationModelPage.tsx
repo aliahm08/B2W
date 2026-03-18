@@ -20,67 +20,67 @@ type SectionDef = { id: string; label: string; content: ReactNode };
 
 function RevenueContent() {
     return (
-        <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <section className="space-y-12">
+            <h2 className="text-3xl font-medium tracking-tight border-b pb-6">Revenue & Composition</h2>
+            <div className="grid md:grid-cols-4 gap-6">
                 {[
-                    { label: 'Avg Monthly Revenue', value: '—', note: 'Pending financial review' },
-                    { label: 'Annual Gross Revenue', value: '—', note: 'Year-over-year' },
-                    { label: 'Gross Margin', value: '—', note: 'Pre-owner compensation' },
-                    { label: 'Growth Rate', value: '—', note: 'Trailing 12 months' },
-                ].map((stat) => (
-                    <div key={stat.label} className="border border-neutral-200 p-4">
-                        <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-2">{stat.label}</p>
-                        <p className="text-2xl font-medium text-black">{stat.value}</p>
-                        <p className="mt-1 text-xs text-neutral-400">{stat.note}</p>
+                    { label: 'Avg Monthly REV', value: '—', note: 'Pending Final Review' },
+                    { label: 'Y-O-Y REV', value: '—', note: 'Trailing 12 Months' },
+                    { label: 'Gross Margin', value: '—', note: 'Pre-normalization' },
+                    { label: 'Growth Rate', value: '—', note: 'Trend Analysis' }
+                ].map(stat => (
+                    <div key={stat.label} className="p-6 border border-neutral-100 bg-white shadow-sm">
+                        <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-2 font-bold">{stat.label}</p>
+                        <p className="text-2xl font-medium">{stat.value}</p>
+                        <p className="text-[9px] text-neutral-400 mt-2 font-mono">{stat.note}</p>
                     </div>
                 ))}
             </div>
-
-            <div>
-                <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">Revenue Composition</h4>
-                <div className="space-y-3">
-                    {[
-                        { stream: 'Dine-in', pct: '—' },
-                        { stream: 'Takeout & Delivery', pct: '—' },
-                        { stream: 'Catering & Events', pct: '—' },
-                    ].map((row) => (
-                        <div key={row.stream} className="flex items-center justify-between border-b border-neutral-100 pb-2">
-                            <span className="text-sm text-neutral-700">{row.stream}</span>
-                            <span className="text-sm font-medium text-black">{row.pct}</span>
-                        </div>
-                    ))}
+            <div className="p-10 border border-neutral-200 bg-neutral-900 text-white flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg rounded-sm gap-8">
+                <div>
+                    <h3 className="text-xl font-medium mb-2">Revenue Streams</h3>
+                    <p className="text-neutral-400 text-sm">Balanced mix between Dine-in and Carry-out.</p>
+                </div>
+                <div className="flex gap-8">
+                    <div className="text-center font-mono">
+                        <span className="block text-2xl mb-1">55%</span>
+                        <span className="text-[10px] uppercase text-neutral-400 tracking-widest">Dine-in</span>
+                    </div>
+                    <div className="text-center font-mono border-l border-white/20 pl-8">
+                        <span className="block text-2xl mb-1">45%</span>
+                        <span className="text-[10px] uppercase text-neutral-400 tracking-widest">Takeout</span>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
 
 function EarningsContent() {
     return (
-        <div className="space-y-6">
-            <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
-                Seller's Discretionary Earnings (SDE) normalizes owner compensation, one-time expenses, and non-operational costs to reflect true earning power.
-            </p>
-
-            <div className="border border-neutral-200">
-                <div className="border-b border-neutral-200 bg-neutral-50 px-4 py-3">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Normalization Adjustments</p>
-                </div>
-                {[
-                    'Net Income (reported)',
-                    '+ Owner salary & benefits',
-                    '+ One-time legal / consulting',
-                    '+ Depreciation & amortization',
-                    '+ Personal expenses through business',
-                    '= Adjusted SDE',
-                ].map((line, idx) => (
-                    <div key={idx} className={`flex items-center justify-between px-4 py-3 text-sm ${idx === 5 ? 'bg-black text-white font-medium' : 'border-b border-neutral-100 text-neutral-700'}`}>
-                        <span>{line}</span>
-                        <span className="font-mono">—</span>
+        <section className="space-y-12">
+            <h2 className="text-3xl font-medium tracking-tight border-b pb-6">Model Methodology</h2>
+            <div className="grid md:grid-cols-2 gap-12">
+                <div className="space-y-8">
+                    <div className="p-8 border border-neutral-100 bg-neutral-50/50 shadow-sm">
+                        <h3 className="text-sm font-mono uppercase tracking-[0.25em] text-neutral-400 mb-6 font-bold">Primary: SDE-Based Multiple</h3>
+                        <p className="text-neutral-600 leading-relaxed text-lg">
+                            Determining true earning power (Seller Discretionary Earnings) via detailed normalization of owner compensation, one-time expenses, and discretionary spending.
+                        </p>
                     </div>
-                ))}
+                </div>
+                <div className="space-y-6">
+                    <h3 className="text-xl font-medium tracking-tight">Normalization Logic</h3>
+                    <ul className="space-y-4 text-sm text-neutral-500">
+                        <li className="flex justify-between border-b pb-2"><span>Net Income (reported)</span><span className="font-mono">$XX,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>+ Owner salary & benefits</span><span className="font-mono">$XX,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>+ Non-recurring legal / consulting</span><span className="font-mono">$X,000</span></li>
+                        <li className="flex justify-between border-b pb-2"><span>+ Personal expenses</span><span className="font-mono">$X,000</span></li>
+                        <li className="flex justify-between font-bold text-black border-t-2 pt-2 border-black"><span>Adjusted SDE</span><span>$XX,000</span></li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </section>
     );
 }
 
@@ -119,38 +119,29 @@ function ComparablesContent() {
 
 function ValuationRangeContent() {
     return (
-        <div className="space-y-6">
-            <div className="bg-black text-white p-6 md:p-8 -mx-4 md:mx-0">
-                <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400 mb-4">Estimated Valuation Range</p>
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                    <div className="text-center">
-                        <p className="text-xs uppercase tracking-wider text-neutral-400 mb-2">Low</p>
-                        <p className="text-2xl font-medium md:text-3xl">—</p>
-                    </div>
-                    <div className="text-center border-x border-white/15">
-                        <p className="text-xs uppercase tracking-wider text-neutral-400 mb-2">Mid</p>
-                        <p className="text-2xl font-medium md:text-3xl">—</p>
-                    </div>
-                    <div className="text-center">
-                        <p className="text-xs uppercase tracking-wider text-neutral-400 mb-2">High</p>
-                        <p className="text-2xl font-medium md:text-3xl">—</p>
-                    </div>
+        <section className="space-y-8">
+            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold mb-4">Executive Summary</p>
+            <h1 className="text-4xl md:text-7xl font-medium tracking-tight mb-8">
+                Strategic Valuation.
+            </h1>
+            <div className="grid md:grid-cols-3 gap-1 grid-cols-1 border border-neutral-200 bg-neutral-200">
+                <div className="p-12 bg-white text-center">
+                     <p className="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-4 font-bold">Conservative Multiple</p>
+                     <p className="text-4xl font-medium">$XX,000</p>
                 </div>
-                <p className="text-xs text-neutral-400 leading-relaxed">
-                    Ranges are based on SDE multiples benchmarked against comparable restaurant sales in the DC metro area.
-                </p>
+                <div className="p-12 bg-white text-center">
+                     <p className="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-4 font-bold">Standard Target</p>
+                     <p className="text-4xl font-black">$XX,000</p>
+                </div>
+                <div className="p-12 bg-white text-center">
+                     <p className="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-4 font-bold">Market High Premium</p>
+                     <p className="text-4xl font-medium">$XX,000</p>
+                </div>
             </div>
-
-            <div>
-                <h4 className="text-sm font-semibold text-black uppercase tracking-wider mb-3">Methodology</h4>
-                <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                    <li>SDE-based multiple analysis (primary)</li>
-                    <li>Revenue-based multiple cross-reference</li>
-                    <li>Asset-adjusted floor valuation</li>
-                    <li>Location premium adjustment for Glover Park corridor</li>
-                </ul>
-            </div>
-        </div>
+            <p className="max-w-2xl text-lg text-neutral-500 leading-relaxed italic">
+                "Ranges are based on SDE multiples benchmarked against comparable restaurant sales in the DC metro area, including location premiums for the Glover Park corridor."
+            </p>
+        </section>
     );
 }
 
@@ -184,6 +175,7 @@ export default function ValuationModelPage() {
     };
 
     const navItems: ClientNavAction[] = [
+        { label: 'Proposal', to: '/portal/uyghur-eats' },
         { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal },
@@ -194,10 +186,10 @@ export default function ValuationModelPage() {
     }, []);
 
     const sections: SectionDef[] = [
-        { id: 'revenue', label: 'Revenue & Profitability', content: <RevenueContent /> },
-        { id: 'earnings', label: 'Normalized Earnings (SDE)', content: <EarningsContent /> },
-        { id: 'comparables', label: 'Comparable Sales', content: <ComparablesContent /> },
-        { id: 'range', label: 'Estimated Valuation Range', content: <ValuationRangeContent /> },
+        { id: 'revenue', label: '1 - Existing Restaurant', content: <RevenueContent /> },
+        { id: 'earnings', label: '2 - Add Management Services', content: <EarningsContent /> },
+        { id: 'comparables', label: '3 - Add Marketing Services', content: <ComparablesContent /> },
+        { id: 'range', label: '4 - Add Merchandising', content: <ValuationRangeContent /> },
     ];
 
     const sectionNavItems = sections.map((s) => ({ id: s.id, label: s.label }));
@@ -225,14 +217,17 @@ export default function ValuationModelPage() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    {/* Back link hidden per user request */}
-                    {/* <Link
-                        to={searchParams.get('return') || '/client/uyghur-eats'}
-                        className={projectPageBackLinkClassName}
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Client Portal'}
-                    </Link> */}
+                    <div className="mb-8 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <Link to="/portal/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
+                                <ArrowLeft className="w-4 h-4" />
+                                Return to Proposal
+                            </Link>
+                            <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
+                                Preview Mode
+                            </span>
+                        </div>
+                    </div>
 
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Uyghur Eats</span>
@@ -270,17 +265,15 @@ export default function ValuationModelPage() {
                                 Deliverable Preview
                             </p>
                             <h2 className="mb-6 text-2xl font-medium tracking-tight md:text-3xl">
-                                What will be included in the valuation model.
+                                How this model adds value to your exit.
                             </h2>
-                            <div className="space-y-3 text-sm text-neutral-300">
-                                {sections.map((s, i) => (
-                                    <div key={s.id} className="flex items-start gap-3">
-                                        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-500 mt-0.5">
-                                            {String(i + 1).padStart(2, '0')}
-                                        </span>
-                                        <span>{s.label}</span>
-                                    </div>
-                                ))}
+                            <div className="space-y-4 text-sm text-neutral-300">
+                                <ul className="list-disc pl-4 space-y-2">
+                                    <li>Establishes an objective, defensible baseline for your asking price.</li>
+                                    <li>Highlights scenarios for immediate cash flow improvements to buyers.</li>
+                                    <li>Demonstrates untapped earning power through precise financial modeling.</li>
+                                    <li>Equips you with quantitative data during buyer negotiations.</li>
+                                </ul>
                             </div>
                         </aside>
                     </div>

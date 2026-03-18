@@ -14,9 +14,15 @@ export default function OpsDashboard() {
             {/* Minimal Dashboard Sidebar */}
             <aside className="w-64 border-r border-neutral-200 bg-white hidden md:flex flex-col sticky top-0 h-screen overflow-y-auto">
                 <div className="p-8 border-b border-neutral-100 flex flex-col gap-4">
-                    <Link to="/portal/uyghur-eats" className="p-2 hover:bg-neutral-50 rounded-full transition-colors self-start group">
-                        <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                    </Link>
+                    <div className="flex flex-col gap-4">
+                        <Link to="/portal/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full self-start">
+                            <ArrowLeft className="w-4 h-4" />
+                            Return to Proposal
+                        </Link>
+                        <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200 self-start">
+                            Preview Mode
+                        </span>
+                    </div>
                     <div>
                         <h2 className="text-xl font-medium tracking-tight">Project Status</h2>
                         <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 mt-1 font-bold">Uyghur Eats Dashboard</p>
@@ -47,10 +53,16 @@ export default function OpsDashboard() {
             <main className="flex-1 px-6 md:px-16 py-24 max-w-5xl mx-auto space-y-24">
                 
                 {/* Header Mobile Only */}
-                <div className="md:hidden flex items-center justify-between mb-12">
-                   <Link to="/portal/uyghur-eats" className="p-2 hover:bg-white rounded-full transition-colors border">
-                        <ArrowLeft className="w-5 h-5" />
-                    </Link>
+                <div className="md:hidden flex flex-col gap-4 mb-12">
+                    <div className="flex items-center justify-between w-full">
+                        <Link to="/portal/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-white hover:bg-neutral-50 px-4 py-2 rounded-full border border-neutral-200">
+                            <ArrowLeft className="w-4 h-4" />
+                            Return
+                        </Link>
+                        <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
+                            Preview Mode
+                        </span>
+                    </div>
                     <div className="text-right">
                         <div className="text-2xl font-black">{progressPercentage}%</div>
                         <p className="text-[9px] uppercase tracking-widest text-neutral-400">Project Status</p>
@@ -120,6 +132,36 @@ export default function OpsDashboard() {
                          </div>
                     </div>
                 </div>
+
+                <section className="mt-24 space-y-8">
+                    <div className="border border-neutral-200 bg-white p-8 md:p-12 shadow-sm rounded-sm">
+                        <h3 className="text-2xl font-medium tracking-tight mb-4">Due Diligence Checklist</h3>
+                        <p className="text-neutral-600 mb-10 max-w-2xl text-lg">
+                            The following documents and research materials are required to complete the preparation phase and build the final buyer data room.
+                        </p>
+                        <div className="space-y-4">
+                            {[
+                                '3 Years of Business Tax Returns',
+                                'Year-to-Date Profit & Loss Statement (Detailed)',
+                                'Current Lease Agreement & Any Applicable Amendments',
+                                'Equipment & Fixture Inventory List (FFE)',
+                                'Copy of Health Department Permits and Licenses',
+                                'Summary of Key Employee Roles, Wages, & Tenures',
+                                'Primary Vendor & Supplier List with Contact Info',
+                                'Point of Sale (POS) Revenue Reports (last 12 months)'
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex items-start gap-5 p-5 border border-neutral-100 rounded-lg bg-neutral-50/50 hover:border-black transition-colors group cursor-default">
+                                    <div className="mt-0.5">
+                                        <Circle className="w-5 h-5 text-neutral-300 group-hover:text-black transition-colors" />
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-black text-sm md:text-base">{item}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
     );

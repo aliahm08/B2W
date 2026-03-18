@@ -110,9 +110,9 @@ export default function UyghurEatsProposalHub() {
           <div className="flex flex-col md:flex-row items-start md:items-center gap-8 mb-16">
              <button 
                 onClick={handleOpenModal}
-                className="flex items-center gap-3 px-8 py-5 bg-black text-white font-semibold text-sm rounded-full transition-transform hover:scale-105 active:scale-95 shadow-2xl"
+                className="flex items-center gap-3 px-8 py-5 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm rounded-full transition-transform hover:scale-105 active:scale-95 shadow-2xl"
              >
-                <span>Accept Proposal</span>
+                <span>Accepting Proposal</span>
                 <ArrowRight className="w-4 h-4" />
              </button>
              <div className="flex gap-8 text-sm">
@@ -128,6 +128,7 @@ export default function UyghurEatsProposalHub() {
           </div>
         </motion.div>
       </section>
+
 
       {/* Quick Access Nav - Moved Explore Links Here */}
       <section className="mx-auto max-w-7xl px-6 mb-32">
@@ -280,6 +281,11 @@ export default function UyghurEatsProposalHub() {
                 <p className="text-sm text-neutral-600 leading-relaxed">
                     All financial disclosures, operational SOPs, and marketing strategies are covered under our mutual Non-Disclosure Agreement.
                 </p>
+                <div className="mt-4">
+                    <button className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-400 hover:text-black transition-colors flex items-center gap-1">
+                        [see full terms <ArrowRight className="w-3 h-3 inline" />]
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -292,7 +298,7 @@ export default function UyghurEatsProposalHub() {
             </div>
             <button 
                 onClick={handleOpenModal}
-                className="whitespace-nowrap px-8 py-4 bg-white text-black font-semibold text-sm rounded-full transition-transform hover:scale-105 active:scale-95"
+                className="whitespace-nowrap px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm rounded-full transition-transform hover:scale-105 active:scale-95"
             >
                 Execute Acceptance
             </button>

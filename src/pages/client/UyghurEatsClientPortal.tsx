@@ -317,13 +317,22 @@ export default function UyghurEatsClientPortal() {
                                 </div>
                             </div>
 
-                            <Link
+                            <div className="flex flex-col sm:flex-row gap-3">
+                                <Link
                                     to="/client/uyghur-eats/opportunity"
-                                    className="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-full text-sm font-medium hover:bg-neutral-800 transition-colors group"
+                                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors group"
                                 >
                                     Explore Opportunity
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </Link>
+                                <Link
+                                    to="/portal/uyghur-eats/dashboard"
+                                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-800 text-white border border-neutral-700 rounded-full text-sm font-medium hover:bg-neutral-700 transition-colors group"
+                                >
+                                    View Diligence
+                                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </Link>
+                            </div>
                         </aside>
                     </div>
                 </header>

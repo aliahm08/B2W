@@ -197,6 +197,7 @@ export default function UyghurEats() {
     };
 
     const navItems: ClientNavAction[] = [
+        { label: 'Proposal', to: '/portal/uyghur-eats' },
         { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal },
@@ -345,14 +346,17 @@ export default function UyghurEats() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    {/* Back link hidden per user request */}
-                    {/* <Link
-                        to={searchParams.get('return') || "/#projects"}
-                        className={projectPageBackLinkClassName}
-                    >
-                        <ArrowLeft className="w-4 h-4" />
-                        {searchParams.get('return') ? 'Back to Client Portal' : 'Back to Projects'}
-                    </Link> */}
+                    <div className="mb-8 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <Link to="/portal/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
+                                <ArrowLeft className="w-4 h-4" />
+                                Return to Proposal
+                            </Link>
+                            <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
+                                Preview Mode
+                            </span>
+                        </div>
+                    </div>
 
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
