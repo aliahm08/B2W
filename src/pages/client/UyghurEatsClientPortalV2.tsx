@@ -723,6 +723,24 @@ export default function UyghurEatsClientPortalV2() {
                         </button>
                     </motion.div>
                 )}
+                {activePackage === 'terms' && (
+                    <motion.div
+                        key="accept-proposal"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                        className="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none"
+                    >
+                        <button
+                            type="button"
+                            onClick={openOfferModal}
+                            className="pointer-events-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)] inline-flex items-center gap-2 rounded-full bg-black px-8 py-4 text-base font-medium text-white transition-all hover:scale-105 hover:bg-neutral-800"
+                        >
+                            Accept Proposal
+                            <ArrowRight className="h-5 w-5" />
+                        </button>
+                    </motion.div>
+                )}
             </AnimatePresence>
         </article>
     );
