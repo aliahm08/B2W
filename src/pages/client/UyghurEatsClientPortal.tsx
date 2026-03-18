@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, X, FileSignature, Scale } from 'lucide-react';
+import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, FileSignature, Scale, TrendingUp, ShieldCheck } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
@@ -142,6 +142,27 @@ const sectionIconMap: Record<string, typeof LayoutTemplate> = {
     'accept-proposal': FileSignature,
 };
 
+const proposalValueAdds = [
+    {
+        id: 'maximize-returns',
+        title: 'Maximize Returns',
+        description:
+            'We normalize your financial reality to ensure buyers see the full scope of your earning power, justification for premium multiples.',
+        icon: TrendingUp,
+        accent: 'from-emerald-50 to-white',
+        iconClassName: 'text-emerald-700 bg-emerald-100 border-emerald-200',
+    },
+    {
+        id: 'ease-transfer',
+        title: 'Ease Transfer',
+        description:
+            'We document your operations so thoroughly that a buyer can confidently step into a turnkey environment, reducing their risk and increasing your sale price.',
+        icon: ShieldCheck,
+        accent: 'from-sky-50 to-white',
+        iconClassName: 'text-sky-700 bg-sky-100 border-sky-200',
+    },
+] as const;
+
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
     const { section } = useParams();
@@ -258,7 +279,7 @@ export default function UyghurEatsClientPortal() {
     const Icon = sectionIconMap[currentSection.id];
 
     const navItems: ClientNavAction[] = [
-        { label: 'Proposal', to: '/portal/uyghur-eats' },
+        { label: 'Proposal', to: '/client/uyghur-eats' },
         { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal }
@@ -297,6 +318,31 @@ export default function UyghurEatsClientPortal() {
                                     <span className="mt-2 block font-medium text-black">Sale Preparation</span>
                                 </div>
                             </div>
+
+                            <div className="grid gap-4 md:grid-cols-2">
+                                {proposalValueAdds.map((item) => {
+                                    const Icon = item.icon;
+                                    return (
+                                        <div
+                                            key={item.id}
+                                            className={`group overflow-hidden border border-neutral-200 bg-gradient-to-br ${item.accent} p-5 transition-all duration-300 md:min-h-[220px] md:hover:border-black md:hover:shadow-xl`}
+                                        >
+                                            <div className={`mb-5 inline-flex rounded-full border p-3 ${item.iconClassName}`}>
+                                                <Icon className="h-5 w-5" />
+                                            </div>
+                                            <div className="space-y-3">
+                                                <h2 className="text-xl font-medium tracking-tight text-black">{item.title}</h2>
+                                                <p className="text-sm leading-6 text-neutral-700 md:max-h-0 md:overflow-hidden md:opacity-0 md:transition-all md:duration-300 md:group-hover:max-h-40 md:group-hover:opacity-100">
+                                                    {item.description}
+                                                </p>
+                                                <p className="text-sm leading-6 text-neutral-700 md:hidden">
+                                                    {item.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
                         </div>
 
                         <aside className="border border-neutral-900 bg-neutral-950 text-white p-6 md:p-7">
@@ -327,10 +373,10 @@ export default function UyghurEatsClientPortal() {
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                                 <Link
-                                    to="/portal/uyghur-eats/dashboard"
+                                    to="/client/uyghur-eats"
                                     className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-800 text-white border border-neutral-700 rounded-full text-sm font-medium hover:bg-neutral-700 transition-colors group"
                                 >
-                                    View Diligence
+                                    Return to Proposal
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </Link>
                             </div>
