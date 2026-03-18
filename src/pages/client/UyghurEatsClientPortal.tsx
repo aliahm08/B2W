@@ -309,6 +309,14 @@ export default function UyghurEatsClientPortal() {
                             </h1>
 
                             <div className="mb-8 grid gap-4 md:grid-cols-2">
+                                <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700">
+                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
+                                    <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
+                                </div>
+                                <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700">
+                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
+                                    <span className="mt-2 block font-medium text-black">Sale Preparation</span>
+                                </div>
                                 {proposalValueAdds.map((item) => {
                                     const Icon = item.icon;
                                     return (
