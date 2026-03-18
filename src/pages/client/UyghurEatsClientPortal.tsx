@@ -318,9 +318,9 @@ export default function UyghurEatsClientPortal() {
 
                             <div className="mb-6 space-y-3 border-y border-white/10 py-5">
                                 {[
-                                    'Opportunity webpage',
-                                    'Valuation modeling',
-                                    'Operations documentation',
+                                    'Advertise your business',
+                                    'Get the best value',
+                                    'Timely transfer of ownership',
                                 ].map((item, index) => (
                                     <div key={item} className="flex items-start gap-3">
                                         <span className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-white/15 bg-white/5 px-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-300">
