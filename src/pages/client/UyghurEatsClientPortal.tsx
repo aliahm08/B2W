@@ -1,10 +1,8 @@
-import { useEffect, useState, useRef, useCallback, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, FileSignature, Scale, TrendingUp, ShieldCheck } from 'lucide-react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
-import { useScrollSectionNav } from '../../hooks/useScrollSectionNav';
-import ProfileSectionNav, { type ProfileSectionNavItem } from '../../components/ProfileSectionNav';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
@@ -165,11 +163,8 @@ const proposalValueAdds = [
 
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
-    const { section } = useParams();
-    const navigate = useNavigate();
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
-    const [activeSection, setActiveSection] = useState(section || 'overview');
     const [visibleCtas, setVisibleCtas] = useState<Set<Element>>(new Set());
     const heroCtaRef = useRef<HTMLAnchorElement>(null);
     const endCtaRef = useRef<HTMLButtonElement>(null);
@@ -181,24 +176,6 @@ export default function UyghurEatsClientPortal() {
         { id: 'due-diligence', label: '4. Buyer Due Diligence Package', content: <DueDiligenceContent /> },
         { id: 'terms', label: '5. Terms & Conditions', content: <TermsContent /> },
     ];
-
-    const sectionItems: ProfileSectionNavItem[] = [
-        ...sections.map((s) => ({ id: s.id, label: s.label })),
-        { id: 'accept-proposal', label: '6. Accept Proposal' },
-    ];
-
-    const allSectionIds = sectionItems.map((s) => s.id);
-
-    const handleSectionSelect = useCallback((id: string) => {
-        if (id === 'accept-proposal') {
-            openOfferModal();
-            return;
-        }
-        setActiveSection(id);
-        navigate(`/client/uyghur-eats/${id}`, { replace: true });
-    }, [navigate]);
-
-    useScrollSectionNav(allSectionIds, activeSection, handleSectionSelect);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -271,12 +248,6 @@ export default function UyghurEatsClientPortal() {
         event.preventDefault();
         setIsOfferSubmitted(true);
     };
-
-    /* Current section metadata */
-    const currentSection = sections.find((s) => s.id === activeSection) ?? sections[0];
-    const currentIndex = sections.findIndex((s) => s.id === activeSection);
-    const nextSection = sections[currentIndex + 1];
-    const Icon = sectionIconMap[currentSection.id];
 
     const navItems: ClientNavAction[] = [
         { label: 'Proposal', to: '/client/uyghur-eats' },
@@ -392,74 +363,6 @@ export default function UyghurEatsClientPortal() {
                     </div>
                 </header>
 
-                {/* ─── Tab Navigation ──────────────────────────────── */}
-                <ProfileSectionNav
-                    items={sectionItems}
-                    activeId={activeSection}
-                    onSelect={handleSectionSelect}
-                />
-
-                {/* ─── Content Frame ──────────────────────────────── */}
-                <main className="mt-8 md:mt-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8 lg:gap-12 items-start">
-                        {/* Left: active section content */}
-                        <AnimatePresence mode="wait">
-                            <motion.section
-                                key={currentSection.id}
-                                initial={{ opacity: 0, y: 12 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -12 }}
-                                transition={{ duration: 0.25 }}
-                            >
-                                <div className="mb-6 flex items-center gap-3">
-                                    {Icon && (
-                                        <div className="border border-neutral-200 p-2">
-                                            <Icon className="h-5 w-5 text-black" />
-                                        </div>
-                                    )}
-                                    <h2 className="text-xl font-medium md:text-2xl">{currentSection.label}</h2>
-                                </div>
-                                <div className="pb-6">
-                                    {currentSection.content}
-                                </div>
-                                {/* Mobile: next section link */}
-                                <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-4 lg:hidden">
-                                    <p className="text-xs font-mono uppercase tracking-[0.18em] text-neutral-400">
-                                        {String(currentIndex + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')}
-                                    </p>
-                                    {nextSection && (
-                                        <button type="button" onClick={() => setActiveSection(nextSection.id)} className="inline-flex items-center gap-2 text-sm font-medium text-black">
-                                            {nextSection.label}
-                                            <ArrowRight className="h-4 w-4" />
-                                        </button>
-                                    )}
-                                </div>
-                            </motion.section>
-                        </AnimatePresence>
-
-                        {/* Right sidebar: section index (desktop) */}
-                        <aside className="hidden lg:block sticky top-40">
-                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Package Items</p>
-                            <nav className="space-y-1">
-                                {sections.map((s, i) => (
-                                    <button
-                                        key={s.id}
-                                        type="button"
-                                        onClick={() => setActiveSection(s.id)}
-                                        className={`w-full text-left px-3 py-2.5 text-sm transition-colors border-l-2 ${
-                                            s.id === activeSection
-                                                ? 'border-black text-black font-medium bg-neutral-50'
-                                                : 'border-transparent text-neutral-400 hover:text-black hover:border-neutral-300'
-                                        }`}
-                                    >
-                                        <span className="font-mono text-[10px] tracking-[0.18em] mr-2">{String(i + 1).padStart(2, '0')}</span>
-                                        {s.label.replace(/^\d+\.\s*/, '')}
-                                    </button>
-                                ))}
-                            </nav>
-                        </aside>
-                    </div>
-                </main>
             </motion.div>
 
             <UyghurEatsOfferModal 
