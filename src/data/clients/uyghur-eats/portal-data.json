@@ -1,0 +1,94 @@
+{
+  "clientName": "Uyghur Eats",
+  "portalTitle": "Business Sale Preparation & Opportunity Packaging",
+  "investmentRange": "$4K – $7.5K",
+  "proposalHighlights": ["Maximize Returns", "Ease Transfer"],
+  
+  "projectStatus": [
+    {
+      "stage": "Discovery & Business Audit",
+      "status": "completed",
+      "date": "March 2025"
+    },
+    {
+      "stage": "Public Profile & Solution Proposal",
+      "status": "completed",
+      "date": "March 2025"
+    },
+    {
+      "stage": "Improvement Scoping & Financial Modeling",
+      "status": "in-progress",
+      "date": "March/April 2025"
+    },
+    {
+      "stage": "Official Proposal Signing",
+      "status": "pending",
+      "date": "April 2025"
+    },
+    {
+      "stage": "Delivery of Ops & Due Diligence",
+      "status": "pending",
+      "date": "April 2025"
+    }
+  ],
+  
+  "deliverables": [
+    {
+      "id": "opportunity",
+      "title": "Opportunity Webpage (Public Profile)",
+      "description": "An Unrivaled Location with a Story to Tell. Already developed and live.",
+      "status": "completed",
+      "iconName": "LayoutTemplate",
+      "hoverText": "View Profile"
+    },
+    {
+      "id": "valuation",
+      "title": "Valuation & Financial Modeling",
+      "description": "Pressure-testing financial reality for peak exit value. In progress.",
+      "status": "in-progress",
+      "iconName": "LineChart",
+      "hoverText": "How Much Is it Worth?"
+    },
+    {
+      "id": "operations-due-diligence",
+      "title": "Operations & Due Diligence Package",
+      "description": "Consolidated SOPs and Turnkey Handoff Materials.",
+      "status": "pending",
+      "iconName": "BriefcaseBusiness",
+      "hoverText": "View Package"
+    }
+  ],
+
+  "timeline": [
+    {
+      "milestone": "Initial Meeting & Business Audit",
+      "date": "2025-03-05",
+      "completed": true,
+      "description": "Established operating baseline and identified value leakage points."
+    },
+    {
+      "milestone": "Public Profile Hand-off & Solution Proposal",
+      "date": "2025-03-12",
+      "completed": true,
+      "description": "Developed the Uyghur Eats public opportunity profile."
+    },
+    {
+      "milestone": "V3 Project Dashboard Launch",
+      "date": "2025-03-18",
+      "completed": true,
+      "description": "Centralized all strategic deliverables and tracking."
+    },
+    {
+      "milestone": "Financial Modeling & SDE Analysis",
+      "date": "2025-03-25",
+      "completed": false,
+      "description": "Normalizing earnings to reflect true business earning power."
+    },
+    {
+      "milestone": "Final Deliverables & Exit Handoff",
+      "date": "2025-04-10",
+      "completed": false,
+      "description": "Complete ops documentation and due diligence ready for buyers."
+    }
+  ]
+}

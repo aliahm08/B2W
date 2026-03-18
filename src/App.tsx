@@ -21,6 +21,11 @@ import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
 import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
 import UyghurEatsClientPortal from './pages/client/UyghurEatsClientPortal';
 import UyghurEatsClientPortalV2 from './pages/client/UyghurEatsClientPortalV2';
+import UyghurEatsPortalV3 from './app/client/uyghur-eats-v3/page';
+import UyghurEatsProposalHub from './app/portal/uyghur-eats/page';
+import PropertyProfile from './app/portal/uyghur-eats/property-profile';
+import ValuationModel from './app/portal/uyghur-eats/valuation-model';
+import OpsDashboard from './app/portal/uyghur-eats/ops-dashboard';
 import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/ValuationModelPage';
 import UyghurEatsValuationModelPage from './pages/projects/uyghur-eats/ValuationModelPage';
 import UyghurEatsDataRoomPage from './pages/projects/uyghur-eats/previews/DataRoomPage';
@@ -90,7 +95,7 @@ export default function App() {
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model');
   const hasReturnParam = searchParams.has('return');
-  const isIsolatedView = isClientPortal || isDataRoom || isProjectPage || hasReturnParam;
+  const isIsolatedView = isClientPortal || isDataRoom || isProjectPage || hasReturnParam || location.pathname.startsWith('/portal/');
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -109,6 +114,11 @@ export default function App() {
           <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
           <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
           <Route path="/client/uyghur-eats-v2" element={<UyghurEatsClientPortalV2 />} />
+          <Route path="/client/uyghur-eats-v3/*" element={<UyghurEatsPortalV3 />} />
+          <Route path="/portal/uyghur-eats" element={<UyghurEatsProposalHub />} />
+          <Route path="/portal/uyghur-eats/ad" element={<PropertyProfile />} />
+          <Route path="/portal/uyghur-eats/analysis" element={<ValuationModel />} />
+          <Route path="/portal/uyghur-eats/dashboard" element={<OpsDashboard />} />
           <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
           <Route path="/client/uyghur-eats/opportunity" element={<UyghurEatsProfilePage />} />
           <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
