@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, LineChart, FileText, LayoutTemplate, BriefcaseBusiness, FileSignature, Scale, TrendingUp, ShieldCheck } from 'lucide-react';
+import { ArrowRight, TrendingUp, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
@@ -10,135 +10,6 @@ import {
     projectPageShellClassName,
     projectHeroGridClassNames,
 } from '../../components/projectPageLayout';
-
-/* ─── Section content data ──────────────────────────────────── */
-type SectionDef = {
-    id: string;
-    label: string;
-    content: ReactNode;
-};
-
-function OverviewContent() {
-    return (
-        <div className="space-y-4">
-            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                <li>Business overview and history</li>
-                <li>Description of products or services</li>
-                <li>Customer profile and demand drivers</li>
-                <li>Financial highlights and revenue model</li>
-                <li>Competitive positioning and market overview</li>
-                <li>Key assets included in the sale</li>
-                <li>Growth opportunities for a new owner</li>
-            </ul>
-            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                <p className="text-sm text-neutral-700">A structured Business Opportunity Page designed to clearly communicate the value of the business.</p>
-                <Link
-                    to="/client/uyghur-eats/opportunity"
-                    className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
-                >
-                    View Sample Webpage
-                    <ArrowRight className="h-4 w-4" />
-                </Link>
-            </div>
-        </div>
-    );
-}
-
-function ValuationContent() {
-    return (
-        <div>
-            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                <li>Review of historical revenue and profitability</li>
-                <li>Normalized owner earnings analysis</li>
-                <li>Benchmarking against comparable business sales</li>
-                <li>Estimated valuation range based on market multiples</li>
-            </ul>
-            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                <p className="text-sm text-neutral-700">A valuation model and summary explaining potential sale price ranges.</p>
-                <Link
-                    to="/client/uyghur-eats/valuation"
-                    className="mt-4 inline-flex items-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
-                >
-                    View Sample Model
-                    <ArrowRight className="h-4 w-4" />
-                </Link>
-            </div>
-        </div>
-    );
-}
-
-function OperationsContent() {
-    return (
-        <div>
-            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                <li>Documentation of key processes and workflows</li>
-                <li>Creation or formalization of Standard Operating Procedures (SOPs)</li>
-                <li>Vendor and supplier documentation</li>
-                <li>Marketing and customer acquisition processes</li>
-                <li>Staff roles and operational responsibilities</li>
-            </ul>
-            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                <p className="text-sm text-neutral-700">A structured Business Operations Manual to help a new owner quickly understand and operate the business.</p>
-            </div>
-        </div>
-    );
-}
-
-function TermsContent() {
-    return (
-        <div className="space-y-6">
-            <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
-                Review the primary terms and conditions for the engagement.
-            </p>
-            <div className="border border-neutral-200 divide-y divide-neutral-100">
-                {[
-                    { label: 'Exclusivity', detail: 'Engagement is exclusive for a period of 4 months from signing.' },
-                    { label: 'Success Fee', detail: 'Payable only upon successful transaction or capital raise.' },
-                    { label: 'Confidentiality', detail: 'Mutual NDA covers all financial and operational disclosures.' },
-                    { label: 'Termination', detail: 'Either party may terminate with 30 days written notice.' },
-                ].map((item) => (
-                    <div key={item.label} className="p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-1">{item.label}</p>
-                        <p className="text-sm text-neutral-700">{item.detail}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function DueDiligenceContent() {
-    return (
-        <div className="space-y-6">
-            <ul className="list-disc space-y-2 pl-5 text-sm text-neutral-600 md:text-base">
-                <li>Business summary and key investment highlights</li>
-                <li>Organized financial summaries</li>
-                <li>Vendor and supplier overview</li>
-                <li>Lease or location information</li>
-                <li>Equipment and asset inventory</li>
-                <li>Marketing channels and digital assets</li>
-                <li>Growth opportunities and common buyer questions</li>
-            </ul>
-            <div className="mt-4 p-4 border-l-2 border-black bg-neutral-50">
-                <strong className="block text-sm font-medium text-black mb-1">Deliverable</strong>
-                <p className="text-sm text-neutral-700">A structured Buyer Information Package / Data Room that the owner can share with qualified buyers.</p>
-            </div>
-        </div>
-    );
-}
-
-/* ─── Section icon map ──────────────────────────────────── */
-const sectionIconMap: Record<string, typeof LayoutTemplate> = {
-    overview: LayoutTemplate,
-    valuation: LineChart,
-    operations: FileText,
-    'due-diligence': BriefcaseBusiness,
-    terms: Scale,
-    'accept-proposal': FileSignature,
-};
 
 const proposalValueAdds = [
     {
@@ -161,6 +32,27 @@ const proposalValueAdds = [
     },
 ] as const;
 
+const deliveryPackageItems = [
+    {
+        id: 'advertise',
+        title: 'Advertise Your Business',
+        description: 'A public-facing business profile that packages the concept, location, and buyer story into a clear acquisition narrative.',
+        to: '/client/uyghur-eats/opportunity',
+    },
+    {
+        id: 'value',
+        title: 'Get the Best Value',
+        description: 'A valuation model that reframes reported performance into normalized earnings and a sharper market pricing range.',
+        to: '/client/uyghur-eats/valuation',
+    },
+    {
+        id: 'transfer',
+        title: 'Timely Transfer of Ownership',
+        description: 'An operations package that organizes workflows and key handoff material so ownership can transition with less friction.',
+        to: '/client/uyghur-eats/terms',
+    },
+] as const;
+
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -168,14 +60,6 @@ export default function UyghurEatsClientPortal() {
     const [visibleCtas, setVisibleCtas] = useState<Set<Element>>(new Set());
     const heroCtaRef = useRef<HTMLAnchorElement>(null);
     const endCtaRef = useRef<HTMLButtonElement>(null);
-
-    const sections: SectionDef[] = [
-        { id: 'overview', label: '1. Opportunity Webpage', content: <OverviewContent /> },
-        { id: 'valuation', label: '2. Valuation Modeling', content: <ValuationContent /> },
-        { id: 'operations', label: '3. Operations Documentation', content: <OperationsContent /> },
-        { id: 'due-diligence', label: '4. Buyer Due Diligence Package', content: <DueDiligenceContent /> },
-        { id: 'terms', label: '5. Terms & Conditions', content: <TermsContent /> },
-    ];
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -202,12 +86,6 @@ export default function UyghurEatsClientPortal() {
     }, []);
 
     const showFloatingCta = visibleCtas.size === 0 && !isOfferModalOpen;
-
-    useEffect(() => {
-        if (section && section !== activeSection) {
-            setActiveSection(section);
-        }
-    }, [section]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -273,48 +151,51 @@ export default function UyghurEatsClientPortal() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    <div className={projectHeroGridClassNames.profile}>
-                        <div>
-                            <h1 className="mb-8 text-4xl font-medium tracking-tight md:text-6xl">
-                                Business Sale Preparation & Opportunity Packaging
-                            </h1>
-
-                            <div className="mb-8 grid gap-4 md:grid-cols-2">
-                                <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700">
-                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
-                                    <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
-                                </div>
-                                <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700">
-                                    <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
-                                    <span className="mt-2 block font-medium text-black">Sale Preparation</span>
-                                </div>
-                                {proposalValueAdds.map((item) => {
-                                    const Icon = item.icon;
-                                    return (
-                                        <div
-                                            key={item.id}
-                                            className={`overflow-hidden border bg-white p-5 ${item.cardClassName}`}
-                                        >
-                                            <div className={`mb-5 inline-flex rounded-full border p-3 ${item.iconClassName}`}>
-                                                <Icon className="h-5 w-5" />
-                                            </div>
-                                            <div className="space-y-3">
-                                                <h2 className="text-xl font-medium tracking-tight text-black">{item.title}</h2>
-                                                <p className="text-sm leading-6 text-neutral-700">{item.description}</p>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
+                    <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-stretch">
+                        <div className="grid gap-4 content-start md:grid-cols-2">
+                            <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700 md:col-span-2">
+                                <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Engagement Focus</p>
+                                <p className="mt-3 max-w-2xl text-base leading-7 text-neutral-700">
+                                    Build a buyer-ready package that markets the opportunity clearly, supports a stronger valuation position, and makes operational handoff more efficient.
+                                </p>
                             </div>
+                            <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700">
+                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
+                                <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
+                            </div>
+                            <div className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700">
+                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
+                                <span className="mt-2 block font-medium text-black">Strategic Exit</span>
+                            </div>
+                            {proposalValueAdds.map((item) => {
+                                const Icon = item.icon;
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className={`overflow-hidden border bg-white p-5 ${item.cardClassName}`}
+                                    >
+                                        <div className={`mb-5 inline-flex rounded-full border p-3 ${item.iconClassName}`}>
+                                            <Icon className="h-5 w-5" />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <h2 className="text-xl font-medium tracking-tight text-black">{item.title}</h2>
+                                            <p className="text-sm leading-6 text-neutral-700">{item.description}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
 
-                        <aside className="border border-neutral-900 bg-neutral-950 text-white p-6 md:p-7">
-                            <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400 mb-4">
+                        <aside className="flex h-full flex-col border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
+                            <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
                                 Proposal details
                             </p>
-                            <h2 className="mb-6 text-2xl font-medium tracking-tight md:text-3xl">
-                                Three deliverables to position the business for a stronger transaction.
-                            </h2>
+                            <h1 className="mb-6 text-3xl font-medium tracking-tight md:text-5xl">
+                                Business Sale Preparation & Opportunity Packaging
+                            </h1>
+                            <p className="mb-6 max-w-md text-sm leading-6 text-neutral-300">
+                                Three deliverables designed to market the business, improve pricing support, and make transfer easier for the next owner.
+                            </p>
 
                             <div className="mb-6 space-y-3 border-y border-white/10 py-5">
                                 {[
@@ -330,19 +211,19 @@ export default function UyghurEatsClientPortal() {
                                     </div>
                                 ))}
                             </div>
-                            
-                            <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
+
+                            <div className="mb-6 grid grid-cols-2 gap-3 text-sm">
                                 <div className="border border-white/15 bg-white/5 p-3">
-                                    <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-2">Investment</p>
+                                    <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Investment</p>
                                     <p className="font-medium">$4K - $7.5K</p>
                                 </div>
                                 <div className="border border-white/15 bg-white/5 p-3">
-                                    <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500 mb-2">Timeline</p>
+                                    <p className="mb-2 text-[10px] uppercase tracking-[0.22em] text-neutral-500">Timeline</p>
                                     <p className="font-medium">3 Weeks</p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col gap-3">
+                            <div className="mt-auto flex flex-col gap-3">
                                 <Link
                                     to="/client/uyghur-eats/terms"
                                     className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 group"
@@ -362,6 +243,32 @@ export default function UyghurEatsClientPortal() {
                         </aside>
                     </div>
                 </header>
+
+                <section className="mb-12">
+                    <div className="mb-6 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">
+                        <span>Delivery Package</span>
+                        <span className="text-neutral-300">/</span>
+                        <span>Scope</span>
+                    </div>
+                    <div className="grid gap-4 lg:grid-cols-3">
+                        {deliveryPackageItems.map((item, index) => (
+                            <Link
+                                key={item.id}
+                                to={item.to}
+                                className="group border border-neutral-200 bg-white p-6 transition-colors hover:border-black"
+                            >
+                                <div className="mb-5 flex items-center justify-between">
+                                    <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+                                        {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    <ArrowRight className="h-4 w-4 text-neutral-300 transition-transform group-hover:translate-x-1 group-hover:text-black" />
+                                </div>
+                                <h2 className="mb-3 text-2xl font-medium tracking-tight text-black">{item.title}</h2>
+                                <p className="text-sm leading-6 text-neutral-600">{item.description}</p>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
 
             </motion.div>
 
