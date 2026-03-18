@@ -258,6 +258,7 @@ export default function UyghurEatsClientPortal() {
     const Icon = sectionIconMap[currentSection.id];
 
     const navItems: ClientNavAction[] = [
+        { label: 'Proposal', to: '/portal/uyghur-eats' },
         { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal }
