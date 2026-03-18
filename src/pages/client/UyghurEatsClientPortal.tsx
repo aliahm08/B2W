@@ -342,8 +342,23 @@ export default function UyghurEatsClientPortal() {
                                 Proposal details
                             </p>
                             <h2 className="mb-6 text-2xl font-medium tracking-tight md:text-3xl">
-                                Execute the preparation phase and package the operations.
+                                Three deliverables to position the business for a stronger transaction.
                             </h2>
+
+                            <div className="mb-6 space-y-3 border-y border-white/10 py-5">
+                                {[
+                                    'Opportunity webpage',
+                                    'Valuation modeling',
+                                    'Operations documentation',
+                                ].map((item, index) => (
+                                    <div key={item} className="flex items-start gap-3">
+                                        <span className="mt-0.5 inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-white/15 bg-white/5 px-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-300">
+                                            {String(index + 1).padStart(2, '0')}
+                                        </span>
+                                        <p className="text-sm text-neutral-200">{item}</p>
+                                    </div>
+                                ))}
+                            </div>
                             
                             <div className="grid grid-cols-2 gap-3 mb-6 text-sm">
                                 <div className="border border-white/15 bg-white/5 p-3">
@@ -356,21 +371,22 @@ export default function UyghurEatsClientPortal() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-3">
+                            <div className="flex flex-col gap-3">
                                 <Link
-                                    to="/client/uyghur-eats/opportunity"
-                                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-black rounded-full text-sm font-medium hover:bg-neutral-200 transition-colors group"
+                                    to="/client/uyghur-eats/terms"
+                                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10 group"
                                 >
-                                    Explore Opportunity
+                                    View Key Terms
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </Link>
-                                <Link
-                                    to="/client/uyghur-eats"
-                                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-neutral-800 text-white border border-neutral-700 rounded-full text-sm font-medium hover:bg-neutral-700 transition-colors group"
+                                <button
+                                    type="button"
+                                    onClick={openOfferModal}
+                                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 group"
                                 >
-                                    Return to Proposal
+                                    Accept Proposal
                                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </Link>
+                                </button>
                             </div>
                         </aside>
                     </div>
