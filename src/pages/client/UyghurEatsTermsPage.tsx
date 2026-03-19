@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Seo from '../../components/Seo';
+import Footer from '../../components/Footer';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
@@ -283,6 +284,8 @@ export default function UyghurEatsTermsPage() {
           </motion.div>
         ) : null}
       </AnimatePresence>
+
+      <Footer />
     </article>
   );
 }
