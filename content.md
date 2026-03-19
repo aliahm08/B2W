@@ -4,8 +4,8 @@
 
 ## Hero
 **Headline:** Optimizing growth for small and midsize businesses.
-**Subheadline:** B2W builds AI-enabled systems that help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.
-**CTA:** Explore capabilities
+**Subheadline:** We help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.
+**CTA:** Explore AI-enabled Systems
 
 ## Capabilities
 - **Section subtitle:** What we build and operate.

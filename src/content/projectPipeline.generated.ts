@@ -3,8 +3,8 @@ import type { ProjectPipelineContent } from './projectPipeline';
 export const projectPipelineContent: ProjectPipelineContent = {
   "hero": {
     "headline": "Optimizing growth for small and midsize businesses.",
-    "subheadline": "B2W builds AI-enabled systems that help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.",
-    "primaryCtaLabel": "Explore capabilities",
+    "subheadline": "We help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.",
+    "primaryCtaLabel": "Explore AI-enabled Systems",
     "primaryCtaHref": "/#capabilities"
   },
   "projects": [

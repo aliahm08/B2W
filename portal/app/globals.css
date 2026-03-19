@@ -40,6 +40,16 @@ body {
   min-height: 100vh;
 }
 
+.b2w-wordmark {
+  display: inline-block;
+  transform: scaleY(0.96);
+  transform-origin: center;
+}
+
+:where(.uppercase, .eyebrow) {
+  font-size-adjust: 0.97;
+}
+
 .app-shell {
   min-height: 100vh;
   background: linear-gradient(180deg, #fafbfc 0%, #ffffff 28%);

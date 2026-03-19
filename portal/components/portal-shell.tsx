@@ -33,7 +33,7 @@ export async function PortalShell({
     <div className="app-shell">
       <div className="portal-layout">
         <aside className="sidebar">
-          <p className="eyebrow">B2W Portal</p>
+          <p className="eyebrow"><span className="b2w-wordmark">B2W</span> Portal</p>
           <h2 style={{ marginTop: 10, marginBottom: 0, fontSize: 28, letterSpacing: '-0.04em' }}>Client Workspace</h2>
           <p className="muted-copy" style={{ marginTop: 12 }}>
             {context.isInternal ? 'Internal operations and client management' : 'Your proposals, deliverables, and collaboration history'}

@@ -6,7 +6,7 @@ export default function SignInPage() {
   return (
     <div className="auth-shell">
       <div className="auth-card">
-        <p className="eyebrow">B2W Client Portal</p>
+        <p className="eyebrow"><span className="b2w-wordmark">B2W</span> Client Portal</p>
         <h1 className="hero-title">Sign in to review active work.</h1>
         <p className="hero-copy">
           Use Google, magic link, or any additional sign-in method enabled in Clerk.

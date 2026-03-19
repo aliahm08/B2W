@@ -6,7 +6,7 @@ export default function SignUpPage() {
   return (
     <div className="auth-shell">
       <div className="auth-card">
-        <p className="eyebrow">B2W Client Portal</p>
+        <p className="eyebrow"><span className="b2w-wordmark">B2W</span> Client Portal</p>
         <h1 className="hero-title">Create your portal access.</h1>
         <p className="hero-copy">Invited client users can finish setup here after receiving an organization invite.</p>
         <div style={{ marginTop: 24 }}>

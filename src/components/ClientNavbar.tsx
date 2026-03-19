@@ -65,6 +65,8 @@ export default function ClientNavbar({
     'group inline-flex items-center text-sm font-medium tracking-tight text-neutral-600 transition-colors hover:text-black';
   const breadcrumbArrowClassName =
     'ml-0 inline-flex w-0 overflow-hidden opacity-0 transition-all duration-200 ease-out group-hover:ml-1.5 group-hover:w-3.5 group-hover:opacity-100';
+  const mobileMenuLinkClassName =
+    'flex min-h-14 items-center justify-between py-4 text-left text-[15px] font-medium text-neutral-800 transition-colors hover:text-black';
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -107,64 +109,69 @@ export default function ClientNavbar({
             to="/"
             className="inline-flex items-center text-xl font-medium tracking-tight text-black transition-all duration-200 ease-out hover:font-semibold"
           >
-            <span>B2W</span>
+            <span className="b2w-wordmark">B2W</span>
           </Link>
           {clientName && (
             <>
               <span className="text-neutral-300">/</span>
               {clientLink ? (
-                <div
-                  className="relative"
-                  ref={dropdownRef}
-                  onMouseEnter={openClientDropdown}
-                  onMouseLeave={closeClientDropdownWithDelay}
-                >
-                  <Link 
-                    to={clientLink} 
-                    className={breadcrumbLinkClassName}
+                <>
+                  <div
+                    className="relative hidden md:block"
+                    ref={dropdownRef}
+                    onMouseEnter={openClientDropdown}
+                    onMouseLeave={closeClientDropdownWithDelay}
                   >
-                    <span>{clientName}</span>
-                    <ChevronDown
-                      className={`ml-1 h-3.5 w-3.5 transition-transform duration-200 ${openDropdown === 'client-pages' ? 'rotate-180' : ''}`}
-                    />
-                  </Link>
-                  {clientSubpages.length > 0 ? (
-                    <div
-                      className={`absolute top-full left-0 mt-2 min-w-56 border border-neutral-200 bg-white py-2 shadow-xl transition-all duration-200 ${
-                        openDropdown === 'client-pages'
-                          ? 'pointer-events-auto translate-y-0 opacity-100'
-                          : 'pointer-events-none -translate-y-1 opacity-0'
-                      }`}
+                    <Link 
+                      to={clientLink} 
+                      className={breadcrumbLinkClassName}
                     >
-                      {clientSubpages.map((subItem) =>
-                        subItem.to ? (
-                          <Link
-                            key={subItem.label}
-                            to={subItem.to}
-                            className={`group flex items-center justify-between px-4 py-2 text-sm text-neutral-600 transition-all duration-200 hover:bg-neutral-50 hover:font-semibold hover:text-black ${
-                              nestedDeliverableLabels.has(subItem.label) ? 'pl-7' : ''
-                            }`}
-                          >
-                            <span>{subItem.label}</span>
-                            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                          </Link>
-                        ) : (
-                          <button
-                            key={subItem.label}
-                            type="button"
-                            onClick={subItem.onClick}
-                            className={`group flex w-full items-center justify-between px-4 py-2 text-left text-sm text-neutral-600 transition-all duration-200 hover:bg-neutral-50 hover:font-semibold hover:text-black ${
-                              nestedDeliverableLabels.has(subItem.label) ? 'pl-7' : ''
-                            }`}
-                          >
-                            <span>{subItem.label}</span>
-                            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                          </button>
-                        )
-                      )}
-                    </div>
-                  ) : null}
-                </div>
+                      <span>{clientName}</span>
+                      <ChevronDown
+                        className={`ml-1 h-3.5 w-3.5 transition-transform duration-200 ${openDropdown === 'client-pages' ? 'rotate-180' : ''}`}
+                      />
+                    </Link>
+                    {clientSubpages.length > 0 ? (
+                      <div
+                        className={`absolute top-full left-0 mt-2 min-w-56 border border-neutral-200 bg-white py-2 shadow-xl transition-all duration-200 ${
+                          openDropdown === 'client-pages'
+                            ? 'pointer-events-auto translate-y-0 opacity-100'
+                            : 'pointer-events-none -translate-y-1 opacity-0'
+                        }`}
+                      >
+                        {clientSubpages.map((subItem) =>
+                          subItem.to ? (
+                            <Link
+                              key={subItem.label}
+                              to={subItem.to}
+                              className={`group flex items-center justify-between px-4 py-2 text-sm text-neutral-600 transition-all duration-200 hover:bg-neutral-50 hover:font-semibold hover:text-black ${
+                                nestedDeliverableLabels.has(subItem.label) ? 'pl-7' : ''
+                              }`}
+                            >
+                              <span>{subItem.label}</span>
+                              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                            </Link>
+                          ) : (
+                            <button
+                              key={subItem.label}
+                              type="button"
+                              onClick={subItem.onClick}
+                              className={`group flex w-full items-center justify-between px-4 py-2 text-left text-sm text-neutral-600 transition-all duration-200 hover:bg-neutral-50 hover:font-semibold hover:text-black ${
+                                nestedDeliverableLabels.has(subItem.label) ? 'pl-7' : ''
+                              }`}
+                            >
+                              <span>{subItem.label}</span>
+                              <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                            </button>
+                          )
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                  <Link to={clientLink} className={`${breadcrumbLinkClassName} md:hidden`}>
+                    <span>{clientName}</span>
+                  </Link>
+                </>
               ) : (
                 <span className="text-sm font-medium tracking-tight text-neutral-600">{clientName}</span>
               )}
@@ -277,10 +284,10 @@ export default function ClientNavbar({
         {isMobileMenuOpen ? (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: 'calc(100vh - 5rem)' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="overflow-hidden border-t border-neutral-100 bg-white/95 px-4 pb-4 pt-3 shadow-sm backdrop-blur-md md:hidden"
+            className="overflow-hidden border-t border-neutral-100 bg-[#fbfbf8]/95 px-4 pb-5 pt-4 shadow-sm backdrop-blur-md md:hidden"
           >
             <motion.div
               initial="closed"
@@ -290,64 +297,68 @@ export default function ClientNavbar({
                 open: { transition: { staggerChildren: 0.05, delayChildren: 0.03 } },
                 closed: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
               }}
-              className="mx-auto flex max-w-7xl flex-col gap-1"
+              className="mx-auto flex h-full max-w-7xl flex-col gap-3 overflow-y-auto"
             >
+              {clientSubpages.length > 0 ? (
+                <motion.div variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: -8 } }} className="border-b border-neutral-200 pb-2">
+                  <div className="flex flex-col divide-y divide-neutral-200">
+                    {clientSubpages.map((item) =>
+                      item.to ? (
+                        <Link
+                          key={item.label}
+                          to={item.to}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`${mobileMenuLinkClassName} ${nestedDeliverableLabels.has(item.label) ? 'pl-5' : ''}`}
+                        >
+                          <span>{item.label}</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      ) : (
+                        <button
+                          key={item.label}
+                          type="button"
+                          onClick={() => {
+                            item.onClick?.();
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`${mobileMenuLinkClassName} ${nestedDeliverableLabels.has(item.label) ? 'pl-5' : ''}`}
+                        >
+                          <span>{item.label}</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </button>
+                      )
+                    )}
+                  </div>
+                </motion.div>
+              ) : null}
+
               {navItems?.map((item) => {
                 const itemVariants = {
                   open: { opacity: 1, y: 0 },
                   closed: { opacity: 0, y: -8 },
                 };
 
-                if (item.type === 'cta') {
-                  return (
-                    <motion.button
-                      key={item.label}
-                      variants={itemVariants}
-                      type="button"
-                      onClick={() => {
-                        item.onClick?.();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="inline-flex min-h-11 items-center justify-between py-3 text-left text-sm font-semibold uppercase tracking-widest text-black"
-                    >
-                      <span>{item.label}</span>
-                      <ArrowRight className="h-4 w-4" />
-                    </motion.button>
-                  );
+                if (item.type !== 'cta') {
+                  return null;
                 }
 
-                if (item.to) {
+                if (item.type === 'cta') {
                   return (
-                    <motion.div key={item.label} variants={itemVariants}>
-                      <Link
-                        to={item.to}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`inline-flex min-h-11 items-center justify-between py-3 text-sm font-medium text-neutral-700 transition-colors hover:text-black ${
-                          nestedDeliverableLabels.has(item.label) ? 'pl-4' : ''
-                        }`}
+                    <motion.div key={item.label} variants={itemVariants} className="pt-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          item.onClick?.();
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="flex min-h-12 w-full items-center justify-between rounded-full bg-black px-5 py-3 text-left text-sm font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-neutral-800"
                       >
                         <span>{item.label}</span>
                         <ArrowRight className="h-4 w-4" />
-                      </Link>
+                      </button>
                     </motion.div>
                   );
                 }
-
-                return (
-                  <motion.button
-                    key={item.label}
-                    variants={itemVariants}
-                    type="button"
-                    onClick={() => {
-                      item.onClick?.();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="inline-flex min-h-11 items-center justify-between py-3 text-left text-sm font-medium text-neutral-700 transition-colors hover:text-black"
-                  >
-                    <span>{item.label}</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </motion.button>
-                );
               })}
             </motion.div>
           </motion.div>

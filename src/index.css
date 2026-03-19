@@ -33,6 +33,12 @@ html {
   scroll-behavior: smooth;
 }
 
+.b2w-wordmark {
+  display: inline-block;
+  transform: scaleY(0.96);
+  transform-origin: center;
+}
+
 [data-section-anchor='true'] {
   scroll-margin-top: 7rem;
 }
