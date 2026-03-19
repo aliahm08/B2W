@@ -1,8 +1,8 @@
 Website Architecture
 Homepage (company, capabilities, projects, process, team, contact)
     Company
-        Headline = The Consultancy for small and midsize businesses.
-        Tagline = We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day.
+        Headline = Optimizing growth for small and midsize businesses.
+        Tagline = B2W builds AI-enabled systems that help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.
     Capabilities (Filters, Cards)
         Category = M&A, AI, Growth
         Delivery Type = Documentation, Content, Analytics

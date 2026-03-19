@@ -3,8 +3,8 @@
 *This document is the master source of truth for the website's text and copy. It is automatically maintained by AI and updated after code changes.*
 
 ## Hero
-**Headline:** The Consultancy for small and midsize businesses.
-**Subheadline:** We analyze business performance, identify operational gaps, and deploy tools that support expansion in the modern day.
+**Headline:** Optimizing growth for small and midsize businesses.
+**Subheadline:** B2W builds AI-enabled systems that help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.
 **CTA:** Explore capabilities
 
 ## Capabilities
