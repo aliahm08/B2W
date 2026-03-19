@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, LineChart, BarChart3, TrendingUp, DollarSign, Scale } from 'lucide-react';
+import { ArrowLeft, BarChart3, TrendingUp, DollarSign, Scale } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const sections = [
-  { id: 'analysis', label: 'Analysis', icon: Scale },
-  { id: 'revenue', label: 'Revenue Visualization', icon: BarChart3 },
-  { id: 'summary', label: 'Executive Summary', icon: TrendingUp }
+  { id: 'revenue', label: 'Revenue & Composition', icon: BarChart3 },
+  { id: 'analysis', label: 'Model Methodology', icon: DollarSign },
+  { id: 'comparables', label: 'Comparables', icon: TrendingUp },
+  { id: 'summary', label: 'Executive Summary', icon: Scale }
 ];
 
 type ValuationModelProps = {
@@ -16,7 +17,7 @@ type ValuationModelProps = {
 export default function ValuationModel({
     basePath = '/client/uyghur-eats-v5',
 }: ValuationModelProps) {
-    const [activeSection, setActiveSection] = useState('analysis');
+    const [activeSection, setActiveSection] = useState('revenue');
 
     return (
         <div className="min-h-screen bg-white text-black font-sans pb-24">
@@ -68,32 +69,6 @@ export default function ValuationModel({
                         exit={{ opacity: 0, scale: 0.98 }}
                         transition={{ duration: 0.3, ease: 'easeOut' }}
                     >
-                        {activeSection === 'analysis' && (
-                            <section className="space-y-16">
-                                <h1 className="text-4xl md:text-6xl font-medium tracking-tight max-w-3xl">Our Model Methodology.</h1>
-                                <div className="grid md:grid-cols-2 gap-12">
-                                    <div className="space-y-8">
-                                        <div className="p-8 border border-neutral-100 bg-neutral-50/50">
-                                            <h3 className="text-sm font-mono uppercase tracking-[0.25em] text-neutral-400 mb-6 font-bold">Primary: SDE-Based Multiple</h3>
-                                            <p className="text-neutral-600 leading-relaxed text-lg">
-                                                Determining true earning power (Seller Discretionary Earnings) via detailed normalization of owner compensation, one-time expenses, and discretionary spending.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-6">
-                                        <h3 className="text-xl font-medium tracking-tight">Normalization Logic</h3>
-                                        <ul className="space-y-4 text-sm text-neutral-500">
-                                            <li className="flex justify-between border-b pb-2"><span>Net Income (reported)</span><span className="font-mono">$XX,000</span></li>
-                                            <li className="flex justify-between border-b pb-2"><span>+ Owner salary & benefits</span><span className="font-mono">$XX,000</span></li>
-                                            <li className="flex justify-between border-b pb-2"><span>+ Non-recurring legal / consulting</span><span className="font-mono">$X,000</span></li>
-                                            <li className="flex justify-between border-b pb-2"><span>+ Personal expenses</span><span className="font-mono">$X,000</span></li>
-                                            <li className="flex justify-between font-bold text-black border-t-2 pt-2 border-black"><span>Adjusted SDE</span><span>$XX,000</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </section>
-                        )}
-
                         {activeSection === 'revenue' && (
                             <section className="space-y-12">
                                 <h2 className="text-3xl font-medium tracking-tight border-b pb-6">Revenue & Composition</h2>
@@ -120,6 +95,64 @@ export default function ValuationModel({
                                         <div className="text-center font-mono">Dine-in <br/> 55%</div>
                                         <div className="text-center font-mono">Takeout <br/> 45%</div>
                                     </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {activeSection === 'analysis' && (
+                            <section className="space-y-16">
+                                <h1 className="text-4xl md:text-6xl font-medium tracking-tight max-w-3xl">Our Model Methodology.</h1>
+                                <div className="grid md:grid-cols-2 gap-12">
+                                    <div className="space-y-8">
+                                        <div className="p-8 border border-neutral-100 bg-neutral-50/50">
+                                            <h3 className="text-sm font-mono uppercase tracking-[0.25em] text-neutral-400 mb-6 font-bold">Primary: SDE-Based Multiple</h3>
+                                            <p className="text-neutral-600 leading-relaxed text-lg">
+                                                Determining true earning power (Seller Discretionary Earnings) via detailed normalization of owner compensation, one-time expenses, and discretionary spending.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <h3 className="text-xl font-medium tracking-tight">Normalization Logic</h3>
+                                        <ul className="space-y-4 text-sm text-neutral-500">
+                                            <li className="flex justify-between border-b pb-2"><span>Net Income (reported)</span><span className="font-mono">$XX,000</span></li>
+                                            <li className="flex justify-between border-b pb-2"><span>+ Owner salary & benefits</span><span className="font-mono">$XX,000</span></li>
+                                            <li className="flex justify-between border-b pb-2"><span>+ Non-recurring legal / consulting</span><span className="font-mono">$X,000</span></li>
+                                            <li className="flex justify-between border-b pb-2"><span>+ Personal expenses</span><span className="font-mono">$X,000</span></li>
+                                            <li className="flex justify-between font-bold text-black border-t-2 pt-2 border-black"><span>Adjusted SDE</span><span>$XX,000</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </section>
+                        )}
+
+                        {activeSection === 'comparables' && (
+                            <section className="space-y-6">
+                                <h2 className="text-3xl font-medium tracking-tight border-b pb-6">Comparable Sales</h2>
+                                <p className="text-sm leading-relaxed text-neutral-600 md:text-base">
+                                    Comparable business sales provide market context for establishing a reasonable valuation range.
+                                </p>
+
+                                <div className="border border-neutral-200">
+                                    <div className="grid grid-cols-4 gap-0 border-b border-neutral-200 bg-neutral-50 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                                        <span>Business Type</span>
+                                        <span>Revenue</span>
+                                        <span>Sale Price</span>
+                                        <span>Multiple</span>
+                                    </div>
+                                    {[1, 2, 3, 4].map((i) => (
+                                        <div key={i} className="grid grid-cols-4 gap-0 border-b border-neutral-100 px-4 py-3 text-sm text-neutral-700">
+                                            <span className="text-neutral-400">Comp {i}</span>
+                                            <span className="font-mono">—</span>
+                                            <span className="font-mono">—</span>
+                                            <span className="font-mono">—</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="p-4 border-l-2 border-black bg-neutral-50">
+                                    <p className="text-sm text-neutral-700">
+                                        Valuation multiples will be sourced from BizBuySell, DealStats, and regional restaurant sale data.
+                                    </p>
                                 </div>
                             </section>
                         )}
