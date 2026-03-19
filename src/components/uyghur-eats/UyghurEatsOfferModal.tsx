@@ -74,11 +74,22 @@ export default function UyghurEatsOfferModal({
                                     placeholder="Name of signee"
                                 />
                             </label>
+
+                            <label className="block md:col-span-2">
+                                <span className="mb-2 block text-sm font-medium text-neutral-800">Email</span>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    required
+                                    className="w-full border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
+                                    placeholder="name@company.com"
+                                />
+                            </label>
                         </div>
                         
                         <div className="mt-6 p-5 border border-neutral-100 bg-neutral-50/50">
                             <p className="text-sm leading-relaxed text-neutral-600">
-                                By signing below, Client acknowledges and accepts the scope of services, pricing, and assumptions described in this proposal for the following option listed above: <span className="inline-block border-b border-neutral-400 min-w-[200px] font-medium text-black px-1">___________________________</span>.
+                                By signing below, Client acknowledges and accepts the scope of services, pricing, and assumptions described in this proposal for the following option listed above.
                             </p>
                             <p className="mt-3 text-xs leading-relaxed text-neutral-500 italic">
                                 This proposal is not intended to replace the service contract, which will govern the Parties’ legal relationship. This section only serves as a non-binding letter of intent.
@@ -96,17 +107,36 @@ export default function UyghurEatsOfferModal({
                             />
                         </label>
 
+                        <label className="mt-5 block">
+                            <span className="mb-2 block text-sm font-medium text-neutral-800">Comments (Optional)</span>
+                            <textarea
+                                name="comments"
+                                rows={4}
+                                className="w-full resize-y border border-neutral-300 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
+                                placeholder="Add any notes, requested edits, or context for the B2W team."
+                            />
+                        </label>
+
                         <div className="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-5 md:flex-row md:items-center md:justify-between">
                             <p className="text-xs leading-5 text-neutral-500">
                                 All information is strictly confidential and private.
                             </p>
-                            <button
-                                type="submit"
-                                className="inline-flex items-center justify-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                            >
-                                Execute LOI
-                                <ArrowRight className="w-4 h-4" />
-                            </button>
+                            <div className="flex flex-col gap-3 md:flex-row">
+                                <button
+                                    type="submit"
+                                    className="inline-flex items-center justify-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                                >
+                                    Accept Non-Binding Proposal
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                                <button
+                                    type="button"
+                                    className="inline-flex items-center justify-center gap-2 border border-neutral-300 px-5 py-3 text-sm font-medium text-black transition-colors hover:border-black hover:bg-neutral-50"
+                                >
+                                    Request Changes
+                                    <ArrowRight className="w-4 h-4" />
+                                </button>
+                            </div>
                         </div>
                     </form>
                 ) : (

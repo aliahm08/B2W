@@ -20,6 +20,7 @@ import BorekGProfilePage from './pages/projects/borek-g/ProfilePage';
 import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
 import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
 import UyghurEatsClientPortal from './pages/client/UyghurEatsClientPortal';
+import UyghurEatsTermsPage from './pages/client/UyghurEatsTermsPage';
 import UyghurEatsPortalV1 from './app/client/uyghur-eats-v1/page';
 import UyghurEatsPortalV2 from './app/client/uyghur-eats-v2/page';
 import UyghurEatsPortalV3 from './app/client/uyghur-eats-v3/page';
@@ -137,6 +138,7 @@ export default function App() {
           <Route path="/portal/uyghur-eats/ad" element={<PropertyProfile />} />
           <Route path="/portal/uyghur-eats/analysis" element={<ValuationModel />} />
           <Route path="/portal/uyghur-eats/dashboard" element={<OpsDashboard />} />
+          <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
           <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
           <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
           <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
