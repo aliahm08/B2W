@@ -1,7 +1,8 @@
-import { FormEvent, PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from 'react';
+import { type FormEvent, PointerEvent as ReactPointerEvent, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { CheckCircle2, PenSquare, Send, X } from 'lucide-react';
 import type { ProposalContent } from '../content/proposals';
+import { getHostedFormEndpoint, getSourceMetadata, submitHostedForm } from '../lib/engagement';
 
 type ProposalAcceptanceSectionProps = {
   pathname: string;
@@ -19,13 +20,6 @@ type ProposalSubmissionState = {
   selectedOptionId: string;
   notes: string;
   acceptedTerms: boolean;
-};
-
-type ProposalSubmitResponse = {
-  documentId: string;
-  documentUrl: string;
-  pdfUrl: string;
-  createdAt: string;
 };
 
 export function getProposalCacheKey(pathname: string): string {
@@ -125,7 +119,7 @@ export default function ProposalAcceptanceSection({
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState<ProposalSubmitResponse | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     try {
@@ -183,35 +177,34 @@ export default function ProposalAcceptanceSection({
     setSubmitError('');
 
     try {
-      const response = await fetch('/api/proposals/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          path: pathname,
-          fullName: state.fullName,
-          email: state.email,
-          company: state.company,
-          notes: state.notes,
-          selectedOptionId: state.selectedOptionId,
-          acceptedTerms: state.acceptedTerms,
-          signatureDataUrl: signature.toDataUrl(),
+      const result = await submitHostedForm(getHostedFormEndpoint('client'), {
+        client_name: state.fullName.trim(),
+        email: state.email.trim(),
+        client_email: state.email.trim(),
+        company: state.company.trim(),
+        message: state.notes.trim(),
+        proposal_name: proposal.proposalTitle,
+        project_name: proposal.proposalTitle,
+        selected_option_id: state.selectedOptionId,
+        selected_option_title: selectedOption?.title ?? '',
+        selected_option_price: selectedOption?.price ?? '',
+        action_type: 'proposal_acceptance',
+        form_type: 'proposal_acceptance',
+        accepted_terms: state.acceptedTerms,
+        signature_present: signature.hasSignature,
+        signature_name: state.fullName.trim(),
+        signature_data_url: signature.toDataUrl(),
+        _subject: `${proposal.proposalTitle}: proposal accepted`,
+        ...getSourceMetadata({
+          source_path: pathname,
         }),
       });
 
-      const payload = await response.json() as Partial<ProposalSubmitResponse> & { error?: string };
-
-      if (!response.ok || !payload.documentId || !payload.documentUrl || !payload.pdfUrl || !payload.createdAt) {
-        throw new Error(payload.error || 'Unable to submit the signed proposal.');
+      if (!result.ok) {
+        throw new Error(result.error || 'Unable to submit the signed proposal.');
       }
 
-      setSubmitSuccess({
-        documentId: payload.documentId,
-        documentUrl: payload.documentUrl,
-        pdfUrl: payload.pdfUrl,
-        createdAt: payload.createdAt,
-      });
+      setSubmitSuccess(true);
       window.dispatchEvent(new CustomEvent('b2w-proposal:submitted'));
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Unable to submit the signed proposal.');
@@ -418,7 +411,7 @@ export default function ProposalAcceptanceSection({
 
                   <div className="flex flex-col gap-3 border-t border-black/10 pt-5 md:flex-row md:items-center md:justify-between">
                     <p className="text-xs leading-5 text-neutral-500">
-                      Signed transcript delivery is sent to the signer email and to info@b2w-ai.com.
+                      This acceptance routes through the client submission endpoint and should notify info@b2w-ai.com plus the signer email.
                     </p>
                     <button
                       type="submit"
@@ -438,20 +431,9 @@ export default function ProposalAcceptanceSection({
                   </div>
                   <h3 className="mt-4 text-2xl font-medium tracking-tight text-black">{proposal.successHeading}</h3>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-600">{proposal.successBody}</p>
-                  <a
-                    href={submitSuccess.documentUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-5 inline-flex border border-black/10 px-4 py-3 text-sm font-medium text-black transition-colors hover:border-black"
-                  >
-                    Open signed transcript
-                  </a>
-                  <a
-                    href={submitSuccess.pdfUrl}
-                    className="mt-3 inline-flex border border-black bg-black px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                  >
-                    Download PDF
-                  </a>
+                  <p className="mt-5 border border-black/10 bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
+                    B2W should receive the notification at <span className="font-medium">info@b2w-ai.com</span>, and the signer should receive a confirmation email when the hosted form provider autoresponse is enabled.
+                  </p>
                 </div>
               )}
             </div>

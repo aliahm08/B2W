@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, type FormEvent } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, TrendingUp, ShieldCheck, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
+import ClientCommunicationForm from '../../components/forms/ClientCommunicationForm';
 import {
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
@@ -156,7 +157,6 @@ function StrategicObjectivesCards() {
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-    const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
     const [showPricingWhy, setShowPricingWhy] = useState(false);
     const [isFinalSectionVisible, setIsFinalSectionVisible] = useState(false);
     const [openQuestion, setOpenQuestion] = useState<'investment' | 'timeline' | 'scope' | 'approval'>('investment');
@@ -213,17 +213,11 @@ export default function UyghurEatsClientPortal() {
     }, [isOfferModalOpen]);
 
     const openOfferModal = () => {
-        setIsOfferSubmitted(false);
         setIsOfferModalOpen(true);
     };
 
     const closeOfferModal = () => {
         setIsOfferModalOpen(false);
-    };
-
-    const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsOfferSubmitted(true);
     };
 
     const navItems: ClientNavAction[] = [
@@ -609,13 +603,30 @@ export default function UyghurEatsClientPortal() {
                     </div>
                 </section>
 
+                <section className="mb-12 border-t border-neutral-100 pt-10 md:pt-12">
+                    <motion.div
+                        {...copyReveal}
+                        className="mb-5 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500 md:mb-6"
+                    >
+                        <span>Client Routing</span>
+                        <span className="text-neutral-300">/</span>
+                        <span>Communication</span>
+                    </motion.div>
+                    <motion.div {...copyReveal}>
+                        <ClientCommunicationForm
+                            clientName="Uyghur Eats"
+                            projectName="Uyghur Eats Strategic Exit"
+                            title="Send a message to B2W"
+                            intro="Use this client-side channel for proposal questions, requested edits, or approval follow-up. This is separate from public consultation booking."
+                        />
+                    </motion.div>
+                </section>
+
             </motion.div>
 
             <UyghurEatsOfferModal 
                 isOpen={isOfferModalOpen}
                 onClose={closeOfferModal}
-                isSubmitted={isOfferSubmitted}
-                onSubmit={handleOfferSubmit}
             />
 
             <Footer />

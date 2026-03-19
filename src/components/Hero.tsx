@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import ActionLink from './ActionLink';
+import { ArrowRight } from 'lucide-react';
 import { projectPipelineContent } from '../content/projectPipeline';
 
 export default function Hero() {
@@ -20,8 +20,21 @@ export default function Hero() {
           {hero.subheadline}
         </p>
 
-        <div className="flex flex-wrap gap-5">
-          <ActionLink href={hero.primaryCtaHref}>{hero.primaryCtaLabel}</ActionLink>
+        <div className="flex flex-wrap gap-4">
+          <a
+            href={hero.primaryCtaHref}
+            className="group inline-flex min-h-12 items-center gap-2 border border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:bg-black hover:text-white"
+          >
+            <span>{hero.primaryCtaLabel}</span>
+            <ArrowRight className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-1" />
+          </a>
+          <a
+            href="/#contact"
+            className="group inline-flex items-center gap-2 border-b border-black pb-1 text-lg font-medium text-black transition-colors hover:text-neutral-600"
+          >
+            <span>Tell us about your business</span>
+            <ArrowRight className="h-5 w-5 shrink-0 transition-transform group-hover:translate-x-1" />
+          </a>
         </div>
       </motion.div>
     </section>

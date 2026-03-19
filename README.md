@@ -38,6 +38,24 @@
 - Knowledge is pulled from local `.md` and `.json` files plus optional allowlisted Google Drive files/folders.
 - Calendar reads and event creation are restricted to `GOOGLE_ALLOWED_CALENDAR_IDS`, and Drive writes are restricted to `GOOGLE_DRIVE_BOOKING_FOLDER_ID` when that folder is also allowlisted.
 
+## Booking and Forms Setup
+- Public landing pages now use a hosted lead form as the primary intake flow, with Calendly shown as a follow-on booking option.
+- Client proposal and portal pages use a separate hosted form endpoint for proposal acceptance and client communications.
+- Add these browser-safe environment variables locally and in Vercel:
+
+```bash
+VITE_CALENDLY_URL="https://calendly.com/your-team/consultation"
+VITE_FORM_ENDPOINT_LEADS="https://formspree.io/f/your-leads-id"
+VITE_FORM_ENDPOINT_CLIENT="https://formspree.io/f/your-client-id"
+```
+
+- `VITE_CALENDLY_URL` is used in the Expertise section and in the success state after public lead submissions.
+- `VITE_FORM_ENDPOINT_LEADS` is used by the public lead inquiry form.
+- `VITE_FORM_ENDPOINT_CLIENT` is used by client-side proposal acceptance and communication forms.
+- Configure the client hosted form so notifications go to `info@b2w-ai.com` and replies can use the submitted client email.
+- If the provider supports autoresponders, enable a confirmation email on the client form.
+- Full operator setup is documented in [docs/forms-and-booking-setup.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/forms-and-booking-setup.md).
+
 ## Project Pipeline Sync
 - The homepage hero copy and project cards are generated from `src/content/projectPipeline.generated.ts`.
 - `npm run build` automatically runs `npm run sync:projects` first.

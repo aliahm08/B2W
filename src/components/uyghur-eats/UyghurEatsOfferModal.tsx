@@ -1,21 +1,62 @@
-import { type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ArrowRight } from 'lucide-react';
+import { getHostedFormEndpoint, getSourceMetadata, submitHostedForm } from '../../lib/engagement';
 
 interface UyghurEatsOfferModalProps {
     isOpen: boolean;
     onClose: () => void;
-    isSubmitted: boolean;
-    onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+    isSubmitted?: boolean;
+    onSubmit?: (event: FormEvent<HTMLFormElement>) => void;
 }
 
 export default function UyghurEatsOfferModal({
     isOpen,
-    onClose,
-    isSubmitted,
-    onSubmit
+    onClose
 }: UyghurEatsOfferModalProps) {
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState('');
+
     if (!isOpen) return null;
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        setIsSubmitting(true);
+        setSubmitError('');
+
+        const clientName = String(formData.get('clientName') ?? '').trim();
+        const representative = String(formData.get('representative') ?? '').trim();
+        const email = String(formData.get('email') ?? '').trim();
+        const signature = String(formData.get('signature') ?? '').trim();
+        const comments = String(formData.get('comments') ?? '').trim();
+
+        const result = await submitHostedForm(getHostedFormEndpoint('client'), {
+            client_name: clientName,
+            authorized_representative: representative,
+            email,
+            client_email: email,
+            signature_name: signature,
+            message: comments,
+            project_name: 'Uyghur Eats Strategic Exit',
+            proposal_name: 'Business Sale Preparation & Opportunity Packaging',
+            action_type: 'proposal_acceptance',
+            form_type: 'proposal_acceptance',
+            accepted_terms: true,
+            _subject: 'Uyghur Eats: proposal acceptance',
+            ...getSourceMetadata(),
+        });
+
+        setIsSubmitting(false);
+
+        if (!result.ok) {
+            setSubmitError(result.error ?? 'Unable to submit the proposal acceptance.');
+            return;
+        }
+
+        setIsSubmitted(true);
+    }
 
     return (
         <div
@@ -51,7 +92,7 @@ export default function UyghurEatsOfferModal({
                 </div>
 
                 {!isSubmitted ? (
-                    <form onSubmit={onSubmit} className="px-6 py-6 md:px-8 md:py-8">
+                    <form onSubmit={handleSubmit} className="px-6 py-6 md:px-8 md:py-8">
                         <div className="grid gap-5 md:grid-cols-2">
                             <label className="block">
                                 <span className="mb-2 block text-sm font-medium text-neutral-800">Client Name</span>
@@ -117,23 +158,29 @@ export default function UyghurEatsOfferModal({
                             />
                         </label>
 
+                        {submitError ? (
+                            <p className="mt-5 border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{submitError}</p>
+                        ) : null}
+
                         <div className="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-5 md:flex-row md:items-center md:justify-between">
                             <p className="text-xs leading-5 text-neutral-500">
-                                All information is strictly confidential and private.
+                                This routes through the client submission form and should notify info@b2w-ai.com while sending a confirmation to the submitted client email when enabled in the form provider.
                             </p>
                             <div className="flex flex-col gap-3 md:flex-row">
                                 <button
                                     type="submit"
+                                    disabled={isSubmitting}
                                     className="inline-flex items-center justify-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
                                 >
-                                    Accept Non-Binding Proposal
+                                    {isSubmitting ? 'Submitting...' : 'Accept Non-Binding Proposal'}
                                     <ArrowRight className="w-4 h-4" />
                                 </button>
                                 <button
                                     type="button"
+                                    onClick={onClose}
                                     className="inline-flex items-center justify-center gap-2 border border-neutral-300 px-5 py-3 text-sm font-medium text-black transition-colors hover:border-black hover:bg-neutral-50"
                                 >
-                                    Request Changes
+                                    Close
                                     <ArrowRight className="w-4 h-4" />
                                 </button>
                             </div>
@@ -149,7 +196,7 @@ export default function UyghurEatsOfferModal({
                                 Letter of Intent Received
                             </h3>
                             <p className="max-w-xl text-sm leading-6 text-neutral-600">
-                                Your acceptance has been captured. B2W will forward the finalized service contract to govern the legal relationship shortly.
+                                Your acceptance has been captured through the client workflow. B2W can reply directly to the submitted email, and a receipt can be sent from the hosted form provider when autoresponse is configured.
                             </p>
                             <div className="mt-6 flex gap-3">
                                 <button

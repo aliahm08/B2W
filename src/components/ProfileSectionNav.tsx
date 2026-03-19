@@ -8,6 +8,7 @@ export type ProfileSectionNavItem = {
 
 type ProfileSectionNavProps = {
   items: ProfileSectionNavItem[];
+  description?: string;
   /** Controlled active tab id — when set, the nav acts as a tab bar instead of scroll-spy. */
   activeId?: string;
   /** Called when a tab is clicked (controlled mode). */
@@ -20,6 +21,7 @@ function cx(...values: Array<string | false | null | undefined>) {
 
 export default function ProfileSectionNav({
   items,
+  description,
   activeId: controlledActiveId,
   onSelect,
 }: ProfileSectionNavProps) {
@@ -99,6 +101,9 @@ export default function ProfileSectionNav({
   return (
     <nav aria-label="Profile section navigation" className="sticky top-20 z-30 -mx-4 border-y border-neutral-200 bg-white/92 backdrop-blur-sm sm:-mx-6">
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
+        {description ? (
+          <p className="mb-3 max-w-3xl text-sm leading-6 text-neutral-600">{description}</p>
+        ) : null}
         <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {items.map((item, index) => {
             const isActive = item.id === activeId;

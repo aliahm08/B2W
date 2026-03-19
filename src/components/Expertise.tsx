@@ -9,6 +9,7 @@ import {
   tierDescriptions,
   type Category,
 } from '../content/expertiseData';
+import { getCalendlyUrl, openCalendly } from '../lib/engagement';
 
 const categoryAccentClasses: Record<Category, { active: string; card: string }> = {
   Growth: {
@@ -34,6 +35,7 @@ const infoTypeLabels = [
 export default function Expertise() {
   const [activeCategory, setActiveCategory] = useState<Category>('Growth');
   const accent = categoryAccentClasses[activeCategory];
+  const calendlyUrl = getCalendlyUrl();
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-32">
@@ -48,6 +50,23 @@ export default function Expertise() {
         <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
           What we deliver, how engagements are structured, and the value they create.
         </p>
+        <div className="mb-8 flex flex-wrap items-center gap-3">
+          <a
+            href="/#contact"
+            className="inline-flex items-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+          >
+            Tell us about your business
+            <ArrowRight className="h-4 w-4" />
+          </a>
+          <button
+            type="button"
+            onClick={openCalendly}
+            className="inline-flex items-center gap-2 border border-black px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+          >
+            {calendlyUrl ? 'Book a call' : 'Add Calendly URL'}
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        </div>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
 
