@@ -1,13 +1,15 @@
 import { useEffect, useState, useRef, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, TrendingUp, ShieldCheck } from 'lucide-react';
+import { ArrowRight, TrendingUp, ShieldCheck, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
+    projectPageEyebrowClassName,
     projectPageHeaderClassName,
+    projectPageSectionTitleClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
 } from '../../components/projectPageLayout';
@@ -85,6 +87,12 @@ const copyReveal = {
     transition: { duration: 0.45, ease: 'easeOut' as const },
 };
 
+const heroReveal = {
+    initial: { opacity: 0, y: 14 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.45, ease: 'easeOut' as const },
+};
+
 const proposalObjectives = [
     {
         id: 'advertise',
@@ -103,40 +111,80 @@ const proposalObjectives = [
     },
 ] as const;
 
+function StrategicObjectivesCards() {
+    return (
+        <div className="grid gap-4 md:grid-cols-2">
+            {proposalValueAdds.map((item) => {
+                const Icon = item.icon;
+                return (
+                    <motion.div
+                        key={item.id}
+                        initial={{ opacity: 0, y: 18 }}
+                        whileInView={{ opacity: 1, y: [0, -4, 0] }}
+                        viewport={{ once: false, amount: 0.45 }}
+                        transition={{
+                            opacity: { duration: 0.45, ease: 'easeOut' },
+                            y: { duration: 3.6, ease: 'easeInOut', repeat: Infinity },
+                        }}
+                        className={`overflow-hidden border bg-white p-5 sm:p-6 ${item.cardClassName}`}
+                    >
+                        <motion.div
+                            whileInView={{ scale: [1, 1.015, 1] }}
+                            viewport={{ once: false, amount: 0.45 }}
+                            transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity }}
+                            className={`mb-4 inline-flex rounded-full border p-3 ${item.iconClassName}`}
+                        >
+                            <Icon className="h-5 w-5" />
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.35 }}
+                            transition={{ duration: 0.4, delay: 0.12 }}
+                            className="space-y-3"
+                        >
+                            <h2 className="text-lg font-medium tracking-tight text-black sm:text-xl">{item.title}</h2>
+                            <p className="text-sm leading-6 text-neutral-700">{item.description}</p>
+                        </motion.div>
+                    </motion.div>
+                );
+            })}
+        </div>
+    );
+}
+
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
     const [showPricingWhy, setShowPricingWhy] = useState(false);
-    const [visibleCtas, setVisibleCtas] = useState<Set<Element>>(new Set());
-    const heroCtaRef = useRef<HTMLAnchorElement>(null);
-    const endCtaRef = useRef<HTMLButtonElement>(null);
+    const [isFinalSectionVisible, setIsFinalSectionVisible] = useState(false);
+    const [openQuestion, setOpenQuestion] = useState<'investment' | 'timeline' | 'scope' | 'approval'>('investment');
+    const qnaCardRef = useRef<HTMLDivElement>(null);
+    const workingTermsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        const observedNodes = [qnaCardRef.current, workingTermsRef.current].filter(Boolean) as HTMLDivElement[];
+        if (observedNodes.length === 0) {
+            return;
+        }
+
         const observer = new IntersectionObserver(
             (entries) => {
-                setVisibleCtas((prev) => {
-                    const next = new Set(prev);
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            next.add(entry.target);
-                        } else {
-                            next.delete(entry.target);
-                        }
-                    });
-                    return next;
-                });
+                const anyVisible = entries.some(
+                    (entry) => entry.isIntersecting && entry.intersectionRatio >= 0.35
+                );
+                setIsFinalSectionVisible(anyVisible);
             },
-            { threshold: 0, rootMargin: '0px 0px 50px 0px' }
+            { threshold: [0.35, 0.5, 0.7], rootMargin: '0px 0px -15% 0px' }
         );
 
-        if (heroCtaRef.current) observer.observe(heroCtaRef.current);
-        if (endCtaRef.current) observer.observe(endCtaRef.current);
+        observedNodes.forEach((node) => observer.observe(node));
 
         return () => observer.disconnect();
     }, []);
 
-    const showFloatingCta = visibleCtas.size === 0 && !isOfferModalOpen;
+    const showFloatingCta = isFinalSectionVisible && !isOfferModalOpen;
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -182,6 +230,8 @@ export default function UyghurEatsClientPortal() {
         { label: 'Proposal', to: '/client/uyghur-eats' },
         { label: 'Profile', to: '/client/uyghur-eats/profile' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
+        { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
+        { label: 'Terms', to: '/client/uyghur-eats/terms' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal }
     ];
 
@@ -206,14 +256,14 @@ export default function UyghurEatsClientPortal() {
                         <div className="grid content-start gap-3 md:grid-cols-2 md:gap-4">
                             <div className="md:col-span-2">
                                 <motion.p
-                                    {...copyReveal}
+                                    {...heroReveal}
                                     className="mb-3 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500"
                                 >
                                     Client Proposal
                                 </motion.p>
                                 <motion.h1
-                                    {...copyReveal}
-                                    transition={{ ...copyReveal.transition, delay: 0.04 }}
+                                    {...heroReveal}
+                                    transition={{ ...heroReveal.transition, delay: 0.04 }}
                                     className="max-w-[12ch] text-[2.2rem] font-medium leading-[0.98] tracking-tight text-black sm:text-5xl md:max-w-none md:text-6xl"
                                 >
                                     Business Sale Preparation & Opportunity Packaging
@@ -221,42 +271,58 @@ export default function UyghurEatsClientPortal() {
                             </div>
                             <div className="grid grid-cols-2 gap-3 md:col-span-2 md:contents">
                             <motion.div
-                                {...copyReveal}
-                                transition={{ ...copyReveal.transition, delay: 0.06 }}
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.06 }}
                                 className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
                             >
                                 <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
                                 <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
                             </motion.div>
                             <motion.div
-                                {...copyReveal}
-                                transition={{ ...copyReveal.transition, delay: 0.1 }}
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.1 }}
                                 className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
                             >
                                 <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project</span>
                                 <span className="mt-2 block font-medium text-black">Strategic Exit</span>
+                            </motion.div>
+                            <motion.div
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.14 }}
+                                className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                            >
+                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Revenue Missed</span>
+                                <span className="mt-2 block font-medium text-black blur-[4px] select-none">$XXX,XXX+</span>
+                            </motion.div>
+                            <motion.div
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.18 }}
+                                className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                            >
+                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Potential Time Saved</span>
+                                <span className="mt-2 block font-medium text-black blur-[4px] select-none">XX+ hours</span>
                             </motion.div>
                             </div>
                         </div>
 
                         <aside className="flex h-full flex-col border border-neutral-900 bg-neutral-950 p-5 text-white sm:p-6 md:p-7">
                             <motion.p
-                                {...copyReveal}
+                                {...heroReveal}
                                 className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400"
                             >
                                 Proposal details
                             </motion.p>
                             <motion.h2
-                                {...copyReveal}
-                                transition={{ ...copyReveal.transition, delay: 0.05 }}
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.05 }}
                                 className="mb-5 max-w-md text-xl font-medium leading-tight tracking-tight text-white sm:text-2xl md:mb-6 md:text-3xl"
                             >
                                 Build a buyer-ready package that markets, supports, and makes operational handoff more efficient.
                             </motion.h2>
 
                             <motion.div
-                                {...copyReveal}
-                                transition={{ ...copyReveal.transition, delay: 0.1 }}
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.1 }}
                                 className="mb-5 space-y-3 border-y border-white/10 py-4 md:mb-6 md:py-5"
                             >
                                 {proposalObjectives.map((item, index) => (
@@ -279,8 +345,8 @@ export default function UyghurEatsClientPortal() {
                             </motion.div>
 
                             <motion.div
-                                {...copyReveal}
-                                transition={{ ...copyReveal.transition, delay: 0.14 }}
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.14 }}
                                 className="mb-5 grid grid-cols-2 gap-3 text-sm md:mb-6"
                             >
                                 <div className="relative border border-white/15 bg-white/5 p-3">
@@ -315,8 +381,8 @@ export default function UyghurEatsClientPortal() {
                             </motion.div>
 
                             <motion.div
-                                {...copyReveal}
-                                transition={{ ...copyReveal.transition, delay: 0.18 }}
+                                {...heroReveal}
+                                transition={{ ...heroReveal.transition, delay: 0.18 }}
                                 className="mt-auto flex flex-col gap-2.5 sm:gap-3"
                             >
                                 <button
@@ -329,6 +395,7 @@ export default function UyghurEatsClientPortal() {
                                 </button>
                             </motion.div>
                         </aside>
+
                     </div>
                 </header>
 
@@ -341,43 +408,7 @@ export default function UyghurEatsClientPortal() {
                         <span className="text-neutral-300">/</span>
                         <span>Outcome Design</span>
                     </motion.div>
-                    <div className="grid gap-4 md:grid-cols-2">
-                        {proposalValueAdds.map((item) => {
-                            const Icon = item.icon;
-                            return (
-                                <motion.div
-                                    key={item.id}
-                                    initial={{ opacity: 0, y: 18 }}
-                                    whileInView={{ opacity: 1, y: [0, -4, 0] }}
-                                    viewport={{ once: false, amount: 0.45 }}
-                                    transition={{
-                                        opacity: { duration: 0.45, ease: 'easeOut' },
-                                        y: { duration: 3.6, ease: 'easeInOut', repeat: Infinity },
-                                    }}
-                                    className={`overflow-hidden border bg-white p-5 sm:p-6 ${item.cardClassName}`}
-                                >
-                                    <motion.div
-                                        whileInView={{ scale: [1, 1.015, 1] }}
-                                        viewport={{ once: false, amount: 0.45 }}
-                                        transition={{ duration: 3.2, ease: 'easeInOut', repeat: Infinity }}
-                                        className={`mb-4 inline-flex rounded-full border p-3 ${item.iconClassName}`}
-                                    >
-                                        <Icon className="h-5 w-5" />
-                                    </motion.div>
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true, amount: 0.35 }}
-                                        transition={{ duration: 0.4, delay: 0.12 }}
-                                        className="space-y-3"
-                                    >
-                                        <h2 className="text-lg font-medium tracking-tight text-black sm:text-xl">{item.title}</h2>
-                                        <p className="text-sm leading-6 text-neutral-700">{item.description}</p>
-                                    </motion.div>
-                                </motion.div>
-                            );
-                        })}
-                    </div>
+                    <StrategicObjectivesCards />
                 </section>
 
                 <section className="mb-12">
@@ -419,7 +450,7 @@ export default function UyghurEatsClientPortal() {
                                             ))}
                                         </ul>
                                     </div>
-                                    <div className="mt-auto border border-neutral-900 bg-neutral-950 p-4 text-white sm:p-5">
+                                    <div className="border border-neutral-900 bg-neutral-950 p-4 text-white sm:p-5">
                                         <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">Client Value</p>
                                         <p className="text-sm leading-6 text-neutral-200">{item.value}</p>
                                         <div className={`mt-4 inline-flex items-center gap-2 text-sm transition-colors ${item.ctaClassName}`}>
@@ -427,6 +458,7 @@ export default function UyghurEatsClientPortal() {
                                             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
                                         </div>
                                     </div>
+                                    <div className="flex-1" />
                                 </div>
                             </Link>
                         ))}
@@ -436,7 +468,7 @@ export default function UyghurEatsClientPortal() {
                 <section className="mb-12 border-t border-neutral-100 pt-10 md:pt-12">
                     <motion.div
                         {...copyReveal}
-                        className="mb-6 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500"
+                        className={projectPageEyebrowClassName}
                     >
                         <span>Terms</span>
                         <span className="text-neutral-300">/</span>
@@ -445,75 +477,115 @@ export default function UyghurEatsClientPortal() {
                     <div className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
                         <motion.div
                             {...copyReveal}
+                            ref={qnaCardRef}
                             className="border border-neutral-200 bg-white p-6"
                         >
                             <motion.h2
                                 {...copyReveal}
                                 transition={{ ...copyReveal.transition, delay: 0.04 }}
-                                className="mb-4 text-2xl font-medium tracking-tight text-black md:text-3xl"
+                                className={`mb-4 ${projectPageSectionTitleClassName}`}
                             >
-                                Key Terms of the Proposal
+                                Questions & Answers
                             </motion.h2>
                             <div className="divide-y divide-neutral-100 border-y border-neutral-100">
                                 {[
                                     {
-                                        label: 'Investment',
-                                        detail: 'depending on final scope and deliverable depth.',
-                                    },
-                                    {
-                                        label: 'Timeline',
-                                        detail: 'Target delivery window of approximately 3 weeks from kickoff and receipt of source materials.',
-                                    },
-                                    {
-                                        label: 'Scope',
-                                        detail: 'Business Profile, Valuation Model, and Diligence Package prepared for sale-readiness and buyer communication.',
-                                    },
-                                    {
-                                        label: 'Approval Flow',
-                                        detail: 'Major deliverables are reviewed with the client before finalization and buyer-facing release.',
-                                    },
-                                ].map((item) => (
-                                    <div key={item.label} className="py-4">
-                                        <p className="mb-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">
-                                            {item.label}
-                                        </p>
-                                        {item.label === 'Investment' ? (
-                                            <div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowPricingWhy((current) => !current)}
-                                                    className="text-left text-sm leading-6 text-neutral-700 transition-colors hover:text-orange-600"
-                                                    aria-expanded={showPricingWhy}
-                                                    aria-controls="pricing-why-terms"
-                                                >
-                                                    <span className="font-semibold text-black">$4K - $7.5K</span> {item.detail}
-                                                </button>
-                                                {showPricingWhy ? (
-                                                    <div
-                                                        id="pricing-why-terms"
-                                                        className="mt-3 rounded-xl border border-neutral-200 bg-neutral-50 p-4"
-                                                    >
-                                                        <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">
-                                                            Why We Charge This
-                                                        </p>
-                                                        <p className="text-sm leading-6 text-neutral-700">
-                                                            This pricing covers strategic framing, financial scenario work, and a sale-ready documentation package rather than a single design deliverable.
-                                                        </p>
-                                                    </div>
-                                                ) : null}
+                                        id: 'investment' as const,
+                                        title: 'Investment',
+                                        question: 'How much is it?',
+                                        answer: (
+                                            <div className="border border-neutral-300 p-4">
+                                                <p className="text-sm leading-6 text-neutral-700">
+                                                    <span className="font-semibold text-orange-600">$4K - $7.5K</span> depending on final scope and deliverable depth. This pricing covers strategic framing, financial scenario work, and a sale-ready documentation package rather than a single design deliverable.
+                                                </p>
                                             </div>
-                                        ) : (
-                                            <p className="text-sm leading-6 text-neutral-700">{item.detail}</p>
-                                        )}
-                                    </div>
-                                ))}
+                                        ),
+                                    },
+                                    {
+                                        id: 'timeline' as const,
+                                        title: 'Timeline',
+                                        question: 'How long will it take?',
+                                        answer: (
+                                            <div className="border border-neutral-300 p-4">
+                                                <p className="text-sm leading-6 text-neutral-700">
+                                                    Target delivery window is <span className="font-semibold text-orange-600">approximately 3 weeks</span> from kickoff and receipt of source materials.
+                                                </p>
+                                            </div>
+                                        ),
+                                    },
+                                    {
+                                        id: 'scope' as const,
+                                        title: 'Scope',
+                                        question: 'What is included?',
+                                        answer: (
+                                            <div className="border border-neutral-300 p-4">
+                                                <p className="text-sm leading-6 text-neutral-700">
+                                                    <span className="font-semibold text-orange-600">Business Profile, Valuation Model, and Diligence Package</span> prepared for sale-readiness and buyer communication.
+                                                </p>
+                                            </div>
+                                        ),
+                                    },
+                                    {
+                                        id: 'approval' as const,
+                                        title: 'Approval Flow',
+                                        question: 'How does approval work?',
+                                        answer: (
+                                            <div className="border border-neutral-300 p-4">
+                                                <p className="text-sm leading-6 text-neutral-700">
+                                                    Major deliverables are <span className="font-semibold text-orange-600">reviewed with the client</span> before finalization and buyer-facing release.
+                                                </p>
+                                            </div>
+                                        ),
+                                    },
+                                ].map((item) => {
+                                    const isOpen = openQuestion === item.id;
+                                    return (
+                                        <div key={item.id} className="py-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => setOpenQuestion(item.id)}
+                                                className="flex w-full items-start justify-between gap-3 px-0 py-4 text-left"
+                                                aria-expanded={isOpen}
+                                            >
+                                                <span className="min-w-0">
+                                                    <h4 className="mb-1 text-xs font-mono uppercase tracking-wider text-neutral-500">
+                                                        {item.title}
+                                                    </h4>
+                                                    <h3 className="text-lg font-medium tracking-tight text-black md:text-xl">
+                                                        {item.question}
+                                                    </h3>
+                                                </span>
+                                                <ChevronDown
+                                                    className={`mt-1 h-4 w-4 shrink-0 text-neutral-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                                                />
+                                            </button>
+                                            <AnimatePresence initial={false}>
+                                                {isOpen ? (
+                                                    <motion.div
+                                                        key={`${item.id}-answer`}
+                                                        initial={{ height: 0, opacity: 0 }}
+                                                        animate={{ height: 'auto', opacity: 1 }}
+                                                        exit={{ height: 0, opacity: 0 }}
+                                                        transition={{ duration: 0.24, ease: 'easeOut' }}
+                                                        className="overflow-hidden"
+                                                    >
+                                                        <div className="pb-4">
+                                                            {item.answer}
+                                                        </div>
+                                                    </motion.div>
+                                                ) : null}
+                                            </AnimatePresence>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </motion.div>
 
                         <motion.div
                             {...copyReveal}
                             transition={{ ...copyReveal.transition, delay: 0.08 }}
-                            className="border border-neutral-900 bg-neutral-950 p-6 text-white"
+                            ref={workingTermsRef}
+                            className="border border-neutral-900 bg-neutral-950 p-6 text-white lg:self-start"
                         >
                             <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
                                 Working Terms

@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import type { ReactNode } from 'react';
 import PreviewReturnBar from '../../../../components/PreviewReturnBar';
-import ClientNavbar from '../../../../components/ClientNavbar';
+import ClientNavbar, { type ClientNavAction } from '../../../../components/ClientNavbar';
 import Seo from '../../../../components/Seo';
 import {
   projectPageEyebrowClassName,
@@ -53,13 +53,21 @@ export default function PreviewPageFrame({
   mainContent,
   shellClassName,
 }: PreviewPageFrameProps) {
+  const navItems: ClientNavAction[] = [
+    { label: 'Proposal', to: '/client/uyghur-eats' },
+    { label: 'Profile', to: '/client/uyghur-eats/profile' },
+    { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
+    { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
+    { label: 'Terms', to: '/client/uyghur-eats/terms' },
+  ];
+
   const articleClassName = shellClassName
     ? `${projectPageShellClassName} ${shellClassName}`
     : projectPageShellClassName;
 
   return (
     <article className={articleClassName}>
-      <ClientNavbar clientName="Uyghur Eats" />
+      <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} />
       <Seo title={title} description={description} />
 
       <PreviewReturnBar returnPath={returnPath} label={returnLabel} detail={returnDetail} />

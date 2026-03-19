@@ -265,6 +265,8 @@ export default function ValuationModelPage() {
         { label: 'Proposal', to: '/client/uyghur-eats' },
         { label: 'Profile', to: '/client/uyghur-eats/profile' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
+        { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
+        { label: 'Terms', to: '/client/uyghur-eats/terms' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal },
     ];
 
