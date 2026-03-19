@@ -8,8 +8,10 @@ import {
   categoryDescriptions,
   tierDescriptions,
   type Category,
+  type Tier,
 } from '../content/expertiseData';
-import { getCalendlyUrl, openCalendly } from '../lib/engagement';
+import ExpertiseBookingModal from './ExpertiseBookingModal';
+import { getExpertiseBookingLabel, getExpertiseMetricLabel } from '../lib/expertise';
 
 const categoryAccentClasses: Record<Category, { active: string; card: string }> = {
   Growth: {
@@ -28,14 +30,13 @@ const categoryAccentClasses: Record<Category, { active: string; card: string }> 
 
 const infoTypeLabels = [
   { key: 'deliverable' as const, label: 'Deliverable', mono: false },
-  { key: 'value' as const, label: 'Value', mono: false },
   { key: 'terms' as const, label: 'Terms', mono: false },
 ];
 
 export default function Expertise() {
   const [activeCategory, setActiveCategory] = useState<Category>('Growth');
   const accent = categoryAccentClasses[activeCategory];
-  const calendlyUrl = getCalendlyUrl();
+  const [selectedBooking, setSelectedBooking] = useState<{ tier: Tier; serviceLabel: string } | null>(null);
 
   return (
     <section className="mx-auto max-w-7xl px-6 py-32">
@@ -50,23 +51,6 @@ export default function Expertise() {
         <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
           What we deliver, how engagements are structured, and the value they create.
         </p>
-        <div className="mb-8 flex flex-wrap items-center gap-3">
-          <a
-            href="/#contact"
-            className="inline-flex items-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-          >
-            Tell us about your business
-            <ArrowRight className="h-4 w-4" />
-          </a>
-          <button
-            type="button"
-            onClick={openCalendly}
-            className="inline-flex items-center gap-2 border border-black px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
-          >
-            {calendlyUrl ? 'Book a call' : 'Add Calendly URL'}
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
 
@@ -109,6 +93,7 @@ export default function Expertise() {
       <div className="grid gap-6">
         {tiers.map((tier, tierIndex) => {
           const cell = expertiseMatrix[tier][activeCategory];
+          const serviceLabel = getExpertiseBookingLabel(activeCategory, tier, cell);
 
           return (
             <motion.div
@@ -117,10 +102,20 @@ export default function Expertise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: tierIndex * 0.06 }}
-              className={`border bg-white transition-colors duration-300 ${accent.card}`}
+              className={`group relative border bg-white transition-colors duration-300 ${accent.card}`}
             >
+              <button
+                type="button"
+                onClick={() => setSelectedBooking({ tier, serviceLabel })}
+                className="absolute inset-0 z-10"
+                aria-label={`Book a call for ${serviceLabel}`}
+              />
+              <div className="pointer-events-none absolute inset-3 border border-black/0 opacity-0 transition-all duration-200 group-hover:border-black/15 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute right-6 top-6 z-20 translate-y-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+                Book a call
+              </div>
               {/* Tier header */}
-              <div className="border-b border-neutral-100 px-6 py-5 md:px-8">
+              <div className="relative border-b border-neutral-100 px-6 py-5 md:px-8">
                 <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-4">
                   <span className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
                     {tier}
@@ -139,18 +134,22 @@ export default function Expertise() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -12 }}
                   transition={{ duration: 0.22, ease: 'easeOut' }}
-                  className="grid gap-6 px-6 py-6 md:grid-cols-3 md:px-8"
+                  className="relative grid gap-6 px-6 py-6 md:grid-cols-3 md:px-8"
                 >
+                  <div>
+                    <span className="mb-2 block text-[10px] font-mono uppercase tracking-[0.26em] text-neutral-400">
+                      {getExpertiseMetricLabel(activeCategory)}
+                    </span>
+                    <span className="text-2xl font-medium tracking-tight text-neutral-950">
+                      {cell.value}
+                    </span>
+                  </div>
                   {infoTypeLabels.map(({ key, label }) => (
                     <div key={key}>
                       <span className="mb-2 block text-[10px] font-mono uppercase tracking-[0.26em] text-neutral-400">
                         {label}
                       </span>
-                      {key === 'value' ? (
-                        <span className="text-2xl font-medium tracking-tight text-neutral-950">
-                          {cell[key]}
-                        </span>
-                      ) : key === 'deliverable' ? (
+                      {key === 'deliverable' ? (
                         <ul className="space-y-2">
                           {cell[key].split(',').map((item) => (
                             <li key={item.trim()} className="flex items-start gap-2 text-base font-medium text-neutral-800">
@@ -192,6 +191,12 @@ export default function Expertise() {
           <ArrowRight className="h-4 w-4" />
         </a>
       </motion.div>
+
+      <ExpertiseBookingModal
+        isOpen={selectedBooking !== null}
+        serviceLabel={selectedBooking?.serviceLabel ?? ''}
+        onClose={() => setSelectedBooking(null)}
+      />
     </section>
   );
 }

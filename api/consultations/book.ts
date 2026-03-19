@@ -6,6 +6,7 @@ type BookingRequest = {
   email?: string;
   company?: string;
   notes?: string;
+  service?: string;
   start?: string;
   end?: string;
 };
@@ -40,7 +41,9 @@ export default async function handler(req: any, res: any) {
       name,
       email,
       company: body.company?.trim(),
-      notes: body.notes?.trim(),
+      notes: [body.service?.trim() ? `Requested service: ${body.service.trim()}` : '', body.notes?.trim() ?? '']
+        .filter(Boolean)
+        .join('\n\n'),
       start,
       end,
     });

@@ -80,7 +80,7 @@ export default function ProjectShowcase() {
                   </div>
                 </div>
 
-                <div className="border-t border-neutral-800 pt-6 flex items-end justify-between gap-4">
+                <div className="flex flex-col gap-4 border-t border-neutral-800 pt-6">
                   <div className="flex flex-wrap gap-2">
                     {project.tags.slice(0, 3).map((tag) => (
                       <span
@@ -93,7 +93,7 @@ export default function ProjectShowcase() {
                   </div>
                   <Link
                     to={project.link}
-                    className="group/link inline-flex shrink-0 items-center gap-2 border border-neutral-700 px-4 py-2 text-sm font-medium text-stone-50 transition-colors hover:border-stone-50 hover:bg-stone-50 hover:text-neutral-950"
+                    className="group/link inline-flex w-full items-center justify-between gap-2 border border-neutral-700 px-4 py-3 text-sm font-medium text-stone-50 transition-colors hover:border-stone-50 hover:bg-stone-50 hover:text-neutral-950 sm:w-auto sm:self-start"
                   >
                     <span>{project.ctaLabel}</span>
                     <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
