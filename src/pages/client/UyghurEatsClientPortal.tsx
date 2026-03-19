@@ -527,7 +527,7 @@ export default function UyghurEatsClientPortal() {
                             </div>
                             <Link
                                 to="/client/uyghur-eats/terms"
-                                className="mt-6 inline-flex items-center gap-2 text-sm text-orange-500 transition-colors hover:text-orange-600"
+                                className="mt-6 inline-flex items-center gap-2 text-sm text-orange-600 transition-colors hover:text-orange-700"
                             >
                                 View Key Terms
                                 <ArrowRight className="h-4 w-4" />
