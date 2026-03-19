@@ -41,6 +41,7 @@ import UyghurEatsValuationModelPage from './pages/projects/uyghur-eats/Valuation
 import UyghurEatsDataRoomPage from './pages/projects/uyghur-eats/previews/DataRoomPage';
 import CapabilityPage from './pages/capabilities/CapabilityPage';
 import CapabilitiesIndex from './pages/capabilities/CapabilitiesIndex';
+import ServiceProjectPage from './pages/ServiceProjectPage';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
 import SabucnuProfilePage from './pages/projects/sabucnu/ProfilePage';
@@ -155,6 +156,10 @@ export default function App() {
           <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
           
           <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
+          <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
+          <Route path="/services/financial-review" element={<ServiceProjectPage />} />
+          <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
+          <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

@@ -1,7 +1,12 @@
 import { motion } from 'motion/react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
 import { showcaseProjects } from '../content/projectShowcaseCards';
 
-function getStatusClasses(status: string) {
+function getStatusClasses(status: string, tone?: 'default' | 'active') {
+  if (tone === 'active') {
+    return 'border-emerald-400/30 bg-emerald-400/15 text-emerald-100';
+  }
   if (status === 'Complete') {
     return 'border-emerald-400/30 bg-emerald-400/15 text-emerald-100';
   }
@@ -23,7 +28,7 @@ export default function ProjectShowcase() {
           className="mb-10"
         >
           <h2 className="mb-4 text-4xl font-medium tracking-tight text-neutral-950">
-            Project Types
+            Projects
           </h2>
           <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
             B2W supports marketing, financial, and operations work across small and midsize businesses.
@@ -53,9 +58,9 @@ export default function ProjectShowcase() {
                     <span>{project.serviceType}</span>
                     <span className="text-neutral-700">•</span>
                     <span
-                      className={`inline-flex border px-2 py-1 text-[10px] tracking-[0.2em] ${getStatusClasses(project.status)}`}
+                      className={`inline-flex border px-2 py-1 text-[10px] tracking-[0.2em] ${getStatusClasses(project.status, project.statusTone)}`}
                     >
-                      {project.status}
+                      {project.statusLabel ?? project.status}
                     </span>
                   </div>
 
@@ -80,9 +85,13 @@ export default function ProjectShowcase() {
                       </span>
                     ))}
                   </div>
-                  <span className="shrink-0 text-xs font-mono uppercase tracking-wider text-neutral-500">
-                    {project.date}
-                  </span>
+                  <Link
+                    to={project.link}
+                    className="group/link inline-flex shrink-0 items-center gap-2 border border-neutral-700 px-4 py-2 text-sm font-medium text-stone-50 transition-colors hover:border-stone-50 hover:bg-stone-50 hover:text-neutral-950"
+                  >
+                    <span>{project.ctaLabel}</span>
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5" />
+                  </Link>
                 </div>
               </div>
             </motion.article>
