@@ -45,15 +45,15 @@ function DocumentSkeleton({ title, type, locked = false }: { title: string, type
 
 export default function DataRoomPage() {
   const [searchParams] = useSearchParams();
-  const returnPath = searchParams.get('return') || '/#projects';
+  const returnPath = '/client/uyghur-eats';
 
   return (
     <PreviewPageFrame
       title="Uyghur Eats | Buyer Due Diligence Data Room"
       description="Secure buyer information package and data room for Uyghur Eats, organizing financial records, operations, leases, and digital assets for due diligence."
       returnPath={returnPath}
-      returnLabel={searchParams.get('return') ? "Client Portal" : "Projects"}
-      returnDetail={searchParams.get('return') ? "Back to the main presentation" : "Back to B2W Portfolio"}
+      returnLabel="Proposal"
+      returnDetail="Back to the main client presentation"
       eyebrow="Property Sale Deliverable"
       kicker="Due Diligence Package"
       heading="Buyer Information Package"

@@ -197,16 +197,13 @@ export default function UyghurEats() {
     };
 
     const navItems: ClientNavAction[] = [
-        { label: 'Proposal', to: '/portal/uyghur-eats' },
-        { label: 'Opportunity', to: '/client/uyghur-eats/opportunity' },
+        { label: 'Proposal', to: '/client/uyghur-eats' },
+        { label: 'Profile', to: '/client/uyghur-eats/profile' },
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal },
     ];
     const isProposalPreview = searchParams.get('preview') === 'proposal';
-    const proposalReturnPath = useMemo(
-        () => searchParams.get('return') || '/client/uyghur-eats',
-        [searchParams],
-    );
+    const proposalReturnPath = '/client/uyghur-eats';
     const isBlurredPreview = isProposalPreview && !hasPreviewAccess;
 
     useEffect(() => {
@@ -348,13 +345,10 @@ export default function UyghurEats() {
                 <header className={projectPageHeaderClassName}>
                     <div className="mb-8 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <Link to="/portal/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
+                            <Link to="/client/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
                                 <ArrowLeft className="w-4 h-4" />
                                 Return to Proposal
                             </Link>
-                            <span className="inline-flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.2em] text-orange-600 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-200">
-                                Preview Mode
-                            </span>
                         </div>
                     </div>
 

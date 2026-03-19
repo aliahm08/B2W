@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, TrendingUp, LayoutTemplate, Target, ShieldCheck, LineChart } from 'lucide-react';
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  Clock,
+  DollarSign,
+  LayoutTemplate,
+  LineChart,
+  Scale,
+  ShieldCheck,
+  Target,
+  TrendingUp,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
 

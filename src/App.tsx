@@ -138,12 +138,13 @@ export default function App() {
           <Route path="/portal/uyghur-eats/analysis" element={<ValuationModel />} />
           <Route path="/portal/uyghur-eats/dashboard" element={<OpsDashboard />} />
           <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
-          <Route path="/client/uyghur-eats/opportunity" element={<UyghurEatsProfilePage />} />
+          <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
+          <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
           <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
           <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
           
           {/* Redirects for legacy routes */}
-          <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/opportunity" replace />} />
+          <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
           <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
           <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
           
