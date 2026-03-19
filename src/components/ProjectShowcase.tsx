@@ -23,10 +23,10 @@ export default function ProjectShowcase() {
           className="mb-10"
         >
           <h2 className="mb-4 text-4xl font-medium tracking-tight text-neutral-950">
-            Selected Projects
+            Project Types
           </h2>
           <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-            Recent and proposed client engagements.
+            B2W supports marketing, financial, and operations work across small and midsize businesses.
           </p>
           <div className="h-px w-full bg-neutral-200" />
         </motion.div>

@@ -13,43 +13,45 @@ export type ShowcaseProject = {
 
 export const showcaseProjects: ShowcaseProject[] = [
   {
-    id: 'borek-g-marketing',
+    id: 'marketing-projects',
     category: 'Marketing',
     serviceType: 'Consulting',
-    status: 'Proposed',
-    title: 'Turkish Bistro in Falls Church, VA',
-    clientDescription: 'Potential 24% growth in sales.',
+    status: 'Complete',
+    title: 'Marketing Projects',
+    clientDescription:
+      'Brand positioning, campaign planning, channel strategy, and customer acquisition work tailored to small and midsize businesses.',
     description:
-      'Restaurant marketing profile covering public reputation, Instagram opportunity, search visibility, and conversion opportunities across the website and owned channels.',
-    tags: ['Profile', 'Instagram', 'SEO', 'Web Design'],
-    date: 'January 2026',
+      'Marketing engagements can include messaging strategy, digital campaign planning, social media direction, website conversion improvements, and performance reporting.',
+    tags: ['Brand Strategy', 'Campaigns', 'Content', 'Growth'],
+    date: 'Project Type',
     link: '#',
   },
   {
-    id: 'uyghur-eats-ma',
+    id: 'financial-projects',
     category: 'Financials',
     serviceType: 'Consulting',
-    status: 'Proposed',
-    title: 'Exit Strategy for High-End Restaurant in Washington, DC',
-    clientDescription: 'Planned 15 property buyers found and over $50k in value added.',
+    status: 'Complete',
+    title: 'Financial Projects',
+    clientDescription:
+      'Financial analysis, forecasting, valuation support, and decision-ready reporting built around the realities of owner-operated businesses.',
     description:
-      'Property sale engagement covering the diligence-as-a-service model, buyer certainty package, and sale rollout.',
-    tags: ['M&A', 'Property Sale', 'Diligence', 'Buyer Package'],
-    date: 'March 2026',
+      'Financial work can cover budgeting, cash flow analysis, scenario modeling, pricing reviews, due diligence support, and executive summaries for growth or transition decisions.',
+    tags: ['Forecasting', 'Valuation', 'Reporting', 'Analysis'],
+    date: 'Project Type',
     link: '#',
   },
   {
-    id: 'sabucnu-operations',
+    id: 'operations-projects',
     category: 'Operations',
     serviceType: 'Implementation',
-    status: 'Proposed',
-    title: 'Estimation Tool for Luxury Interior Contractor in Virginia.',
+    status: 'Complete',
+    title: 'Operations Projects',
     clientDescription:
-      'Projected 40–60% reduction in coordination time across 18 field crews.',
+      'Process improvement, workflow design, automation, and execution systems that make day-to-day operations more reliable and scalable.',
     description:
-      'Operations engagement covering workforce coordination, scheduling automation, SOP deployment, and field-crew communication systems.',
-    tags: ['Operations', 'SOPs', 'Workforce', 'Scheduling'],
-    date: 'March 2026',
+      'Operations projects can include SOP development, scheduling systems, team coordination workflows, dashboard rollouts, and practical automations that reduce manual overhead.',
+    tags: ['Workflows', 'Automation', 'SOPs', 'Execution'],
+    date: 'Project Type',
     link: '#',
   },
 ];
