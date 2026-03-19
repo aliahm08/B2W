@@ -4,7 +4,8 @@ export type ShowcaseProject = {
   serviceType: string;
   status: 'Proposed' | 'In-progress' | 'Complete';
   statusLabel?: string;
-  statusTone?: 'default' | 'active';
+  statusTone?: 'default' | 'active' | 'warning' | 'info';
+  inquiryType: 'Marketing' | 'Financials' | 'Operations' | 'End-to-End Rebuild';
   title: string;
   clientDescription: string;
   description: string;
@@ -21,6 +22,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     status: 'Proposed',
     statusLabel: 'Accepting Requests',
     statusTone: 'active',
+    inquiryType: 'Marketing',
     title: 'Grow your Business by 24%',
     clientDescription:
       'Brand positioning, campaign planning, channel strategy, and customer acquisition work tailored to small and midsize businesses.',
@@ -37,6 +39,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     status: 'Proposed',
     statusLabel: 'Accepting Requests',
     statusTone: 'active',
+    inquiryType: 'Financials',
     title: 'Discover up to $100k in Lost Revenue',
     clientDescription:
       'Financial analysis, forecasting, valuation support, and decision-ready reporting built around the realities of owner-operated businesses.',
@@ -51,8 +54,9 @@ export const showcaseProjects: ShowcaseProject[] = [
     category: 'Operations',
     serviceType: 'Implementation',
     status: 'Proposed',
-    statusLabel: 'Accepting Requests',
-    statusTone: 'active',
+    statusLabel: 'Limited Availability',
+    statusTone: 'warning',
+    inquiryType: 'Operations',
     title: 'Reduce Training Time by 3 Days',
     clientDescription:
       'Process improvement, workflow design, automation, and execution systems that make day-to-day operations more reliable and scalable.',
@@ -67,8 +71,9 @@ export const showcaseProjects: ShowcaseProject[] = [
     category: 'Business Revamp',
     serviceType: 'Scoping + Execution',
     status: 'Proposed',
-    statusLabel: 'Accepting Requests',
-    statusTone: 'active',
+    statusLabel: 'Per Case Basis',
+    statusTone: 'info',
+    inquiryType: 'End-to-End Rebuild',
     title: 'End-to-End Business Rebuild',
     clientDescription:
       'A full business scoping engagement for owners who need a clear diagnosis, a practical roadmap, and hands-on support to reset performance.',

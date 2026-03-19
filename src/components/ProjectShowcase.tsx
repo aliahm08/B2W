@@ -1,11 +1,17 @@
-import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
 import { showcaseProjects } from '../content/projectShowcaseCards';
 
-function getStatusClasses(status: string, tone?: 'default' | 'active') {
+function getStatusClasses(status: string, tone?: 'default' | 'active' | 'warning' | 'info') {
   if (tone === 'active') {
     return 'border-emerald-400/30 bg-emerald-400/15 text-emerald-100';
+  }
+  if (tone === 'warning') {
+    return 'border-amber-400/30 bg-amber-400/15 text-amber-100';
+  }
+  if (tone === 'info') {
+    return 'border-sky-400/30 bg-sky-400/15 text-sky-100';
   }
   if (status === 'Complete') {
     return 'border-emerald-400/30 bg-emerald-400/15 text-emerald-100';
@@ -36,7 +42,7 @@ export default function ProjectShowcase() {
           <div className="h-px w-full bg-neutral-200" />
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
           {showcaseProjects.map((project, index) => (
             <motion.article
               key={project.id}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import {
   categories,
   tiers,
@@ -27,7 +27,7 @@ const categoryAccentClasses: Record<Category, { active: string; card: string }> 
 
 const infoTypeLabels = [
   { key: 'deliverable' as const, label: 'Deliverable', mono: false },
-  { key: 'pricing' as const, label: 'Pricing', mono: false },
+  { key: 'value' as const, label: 'Value', mono: false },
   { key: 'terms' as const, label: 'Terms', mono: false },
 ];
 
@@ -46,7 +46,7 @@ export default function Expertise() {
       >
         <h2 className="mb-4 text-4xl font-medium tracking-tight">Expertise</h2>
         <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-          What we deliver, what it costs, and what to expect.
+          What we deliver, how engagements are structured, and the value they create.
         </p>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
@@ -127,14 +127,19 @@ export default function Expertise() {
                       <span className="mb-2 block text-[10px] font-mono uppercase tracking-[0.26em] text-neutral-400">
                         {label}
                       </span>
-                      {key === 'pricing' ? (
+                      {key === 'value' ? (
                         <span className="text-2xl font-medium tracking-tight text-neutral-950">
                           {cell[key]}
                         </span>
                       ) : key === 'deliverable' ? (
-                        <span className="text-base font-medium text-neutral-800">
-                          {cell[key]}
-                        </span>
+                        <ul className="space-y-2">
+                          {cell[key].split(',').map((item) => (
+                            <li key={item.trim()} className="flex items-start gap-2 text-base font-medium text-neutral-800">
+                              <Check className="mt-0.5 h-4 w-4 shrink-0 text-neutral-500" />
+                              <span>{item.trim()}</span>
+                            </li>
+                          ))}
+                        </ul>
                       ) : (
                         <span className="text-sm leading-relaxed text-neutral-500">
                           {cell[key]}
@@ -171,4 +176,3 @@ export default function Expertise() {
     </section>
   );
 }
-

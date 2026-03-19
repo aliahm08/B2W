@@ -2,7 +2,7 @@ export type Tier = 'Advisory' | 'Consulting' | 'Implementation';
 export type Category = 'Growth' | 'Optimization' | 'M&A';
 
 export interface ExpertiseCell {
-  pricing: string;
+  value: string;
   deliverable: string;
   terms: string;
 }
@@ -14,7 +14,7 @@ export const categories: Category[] = ['Growth', 'Optimization', 'M&A'];
 
 export const categoryDescriptions: Record<Category, string> = {
   Growth: 'Expand reach, build brand, and acquire customers.',
-  Optimization: 'Streamline operations and train your workforce.',
+  Optimization: 'Streamline operations and improve execution across your business.',
   'M&A': 'Prepare, position, and close a sale.',
 };
 
@@ -27,51 +27,57 @@ export const tierDescriptions: Record<Tier, string> = {
 export const expertiseMatrix: ExpertiseMatrix = {
   Advisory: {
     Growth: {
-      pricing: '$1,200',
+      value: '$1,200',
       deliverable: 'Marketing Strategy',
       terms: '1 payment on 3 month contingency',
     },
     Optimization: {
-      pricing: '$150/document',
-      deliverable: 'SOPs',
-      terms: '3 revisions allowed',
+      value:
+        'Identifies inefficiencies and creates a clearer path to improvement',
+      deliverable:
+        'Process audits, workflow mapping, SOP recommendations, KPI design, reporting structure',
+      terms: 'Includes findings summary and prioritized recommendations',
     },
     'M&A': {
-      pricing: '$100 + $100/lead',
+      value: '$100 + $100/lead',
       deliverable: 'Sale Profile',
       terms: 'Exclusively publish on our site',
     },
   },
   Consulting: {
     Growth: {
-      pricing: '$3,000 – $5,000',
+      value: '$3,000 – $5,000',
       deliverable: 'Social Media Campaign',
       terms: 'Per month for 3 months minimum',
     },
     Optimization: {
-      pricing: '$15/month per employee',
-      deliverable: 'Workforce Training',
-      terms: 'Management or managing owners must take course',
+      value:
+        'Builds stronger execution through better workflows and accountability',
+      deliverable:
+        'Workflow optimization, team accountability systems, sales process refinement, admin process improvement, operational planning',
+      terms: 'Structured over a defined engagement period',
     },
     'M&A': {
-      pricing: '$500 + 15% profits',
+      value: '$500 + 15% profits',
       deliverable: 'Due Diligence',
       terms: 'Requires full disclosure of financial documents',
     },
   },
   Implementation: {
     Growth: {
-      pricing: '$7,000+',
+      value: '$7,000+',
       deliverable: 'Digital Branding',
       terms: 'Per month',
     },
     Optimization: {
-      pricing: '$1,800+',
-      deliverable: 'Courses',
-      terms: 'Limited to 10 total minutes over 3–5 videos',
+      value:
+        'Installs the systems needed for more scalable and consistent operations',
+      deliverable:
+        'SOP buildout, CRM setup, dashboard implementation, automation workflows, onboarding systems',
+      terms: 'Scoped based on business needs and implementation complexity',
     },
     'M&A': {
-      pricing: '$300/month',
+      value: '$300/month',
       deliverable: 'Negotiations',
       terms: 'Our negotiations technology requires an NDA',
     },
