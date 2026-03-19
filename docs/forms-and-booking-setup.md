@@ -37,6 +37,10 @@ Recommended fields:
 - `name`
 - `email`
 - `business_name`
+- `website`
+- `arr_range`
+- `project_areas`
+- `normalized_project_area`
 - `message`
 - `form_type`
 - `action_type`
@@ -49,6 +53,12 @@ Recommended fields:
 Configure email notifications to route new submissions to [info@b2w-ai.com](mailto:info@b2w-ai.com).
 
 After a successful public lead submission, the site should reveal a secondary `Book a call` CTA that opens the Calendly URL from `VITE_CALENDLY_URL`.
+
+Public intake normalization:
+
+- The public `project_areas` field is multi-select.
+- Selecting all three core project areas (`Marketing`, `Financials`, and `Operations`) should set `normalized_project_area` to `End-to-End Rebuild`.
+- Service landing pages should use the same public form and preselect the matching area while keeping the field editable.
 
 ### 2. Create the client endpoint
 

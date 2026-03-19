@@ -52,6 +52,8 @@ VITE_FORM_ENDPOINT_CLIENT="https://formspree.io/f/your-client-id"
 - `VITE_CALENDLY_URL` is used in the Expertise section and in the success state after public lead submissions.
 - `VITE_FORM_ENDPOINT_LEADS` is used by the public lead inquiry form.
 - `VITE_FORM_ENDPOINT_CLIENT` is used by client-side proposal acceptance and communication forms.
+- All non-client landing pages now use the same `Tell us about your business` intake form, including ARR and multi-select project areas.
+- Selecting all three public project areas normalizes the lead to `End-to-End Rebuild`.
 - Configure the client hosted form so notifications go to `info@b2w-ai.com` and replies can use the submitted client email.
 - If the provider supports autoresponders, enable a confirmation email on the client form.
 - Full operator setup is documented in [docs/forms-and-booking-setup.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/forms-and-booking-setup.md).

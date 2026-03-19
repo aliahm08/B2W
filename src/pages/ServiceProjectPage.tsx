@@ -1,20 +1,8 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowUpRight, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import Seo from '../components/Seo';
-
-type InquiryType = 'Marketing' | 'Financials' | 'Operations' | 'End-to-End Rebuild';
-
-const arrRangeOptions = [
-  'Under $250k',
-  '$250k - $1M',
-  '$1M - $5M',
-  '$5M - $10M',
-  '$10M - $25M',
-  '$25M+',
-] as const;
-
-type ArrRange = (typeof arrRangeOptions)[number] | '';
+import LeadForm, { type PublicProjectArea } from '../components/forms/LeadForm';
 
 type ServicePageContent = {
   title: string;
@@ -23,7 +11,7 @@ type ServicePageContent = {
   summary: string;
   outcomes: string[];
   scope: string[];
-  inquiryType: InquiryType;
+  preselectedProjectAreas: PublicProjectArea[];
 };
 
 const servicePageContent: Record<string, ServicePageContent> = {
@@ -45,7 +33,7 @@ const servicePageContent: Record<string, ServicePageContent> = {
       'Website and funnel conversion recommendations',
       'Performance measurement and reporting priorities',
     ],
-    inquiryType: 'Marketing',
+    preselectedProjectAreas: ['Marketing'],
   },
   '/services/financial-review': {
     eyebrow: 'Financials',
@@ -65,7 +53,7 @@ const servicePageContent: Record<string, ServicePageContent> = {
       'Pricing and margin diagnostics',
       'Decision memo with recommended next actions',
     ],
-    inquiryType: 'Financials',
+    preselectedProjectAreas: ['Financials'],
   },
   '/services/operations-implementation': {
     eyebrow: 'Operations',
@@ -85,7 +73,7 @@ const servicePageContent: Record<string, ServicePageContent> = {
       'Scheduling, dashboard, or automation recommendations',
       'Implementation roadmap tied to day-to-day operations',
     ],
-    inquiryType: 'Operations',
+    preselectedProjectAreas: ['Operations'],
   },
   '/services/business-revamp': {
     eyebrow: 'Business Revamp',
@@ -105,7 +93,7 @@ const servicePageContent: Record<string, ServicePageContent> = {
       'Revamp roadmap with sequenced priorities',
       'Advisory support for implementation decisions',
     ],
-    inquiryType: 'End-to-End Rebuild',
+    preselectedProjectAreas: ['Marketing', 'Financials', 'Operations'],
   },
 };
 
@@ -116,61 +104,42 @@ export default function ServiceProjectPage() {
     [location.pathname],
   );
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [company, setCompany] = useState('');
-  const [website, setWebsite] = useState('');
-  const [arrRange, setArrRange] = useState<ArrRange>('');
-  const [businessInfo, setBusinessInfo] = useState('');
-  const [inquiryType, setInquiryType] = useState<InquiryType>(content.inquiryType);
-
-  useEffect(() => {
-    setInquiryType(content.inquiryType);
-  }, [content.inquiryType]);
-
-  function handleInquirySubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const subject = encodeURIComponent(`B2W Inquiry: ${inquiryType}`);
-    const body = encodeURIComponent(
-      [
-        `Name: ${name}`,
-        `Email: ${email}`,
-        `Company: ${company}`,
-        `Website: ${website}`,
-        `ARR range: ${arrRange || 'Not provided'}`,
-        `Area of interest: ${inquiryType}`,
-        '',
-        'Business information:',
-        businessInfo,
-      ].join('\n'),
-    );
-
-    window.location.href = `mailto:info@b2w-ai.com?subject=${subject}&body=${body}`;
-  }
-
   return (
     <>
       <Seo title={`${content.title} | B2W`} description={content.description} />
-      <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
-        <div className="mb-10">
-          <Link to="/#projects" className="text-sm font-medium text-neutral-500 transition-colors hover:text-black">
+      <section className="mx-auto max-w-7xl px-6 py-32">
+        <div className="mb-12 border-b border-neutral-200 pb-10 md:pb-12">
+          <Link to="/#projects" className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black">
             Back to homepage projects
           </Link>
-          <p className="mb-5 mt-8 text-xs font-mono uppercase tracking-[0.28em] text-neutral-400">{content.eyebrow}</p>
-          <h1 className="max-w-4xl text-4xl font-medium tracking-tight text-neutral-950 sm:text-5xl md:text-7xl">
-            {content.title}
-          </h1>
-          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
-            {content.summary}
-          </p>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)] lg:items-start">
+            <div>
+              <p className="mb-6 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">{content.eyebrow}</p>
+              <h1 className="max-w-4xl text-5xl font-medium tracking-tight text-neutral-950 md:text-7xl leading-[0.95]">
+                {content.title}
+              </h1>
+              <p className="mt-6 max-w-3xl text-xl leading-relaxed text-neutral-500 md:text-2xl">
+                {content.summary}
+              </p>
+            </div>
+
+            <aside className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
+              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">Service Snapshot</p>
+              <h2 className="mb-4 text-2xl font-medium tracking-tight md:text-4xl">
+                Practical support shaped around the business constraints you already have.
+              </h2>
+              <p className="text-sm leading-6 text-neutral-300">
+                Share your situation, urgency, and current business context. B2W uses that intake to assess fit, define the right scope, and recommend the next step.
+              </p>
+            </aside>
+          </div>
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-start">
           <div className="space-y-10">
             <div className="grid gap-8 md:grid-cols-2">
-              <div className="border border-neutral-200 bg-white p-6">
-                <h2 className="mb-4 text-sm font-mono uppercase tracking-[0.22em] text-neutral-400">Outcomes</h2>
+              <div className="border border-neutral-200 bg-white p-6 md:p-7">
+                <h2 className="mb-4 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-400">Outcomes</h2>
                 <ul className="space-y-4">
                   {content.outcomes.map((item) => (
                     <li key={item} className="flex items-start gap-3 text-base leading-relaxed text-neutral-700">
@@ -181,8 +150,8 @@ export default function ServiceProjectPage() {
                 </ul>
               </div>
 
-              <div className="border border-neutral-200 bg-white p-6">
-                <h2 className="mb-4 text-sm font-mono uppercase tracking-[0.22em] text-neutral-400">Scope</h2>
+              <div className="border border-neutral-200 bg-white p-6 md:p-7">
+                <h2 className="mb-4 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-400">Scope</h2>
                 <ul className="space-y-4">
                   {content.scope.map((item) => (
                     <li key={item} className="flex items-start gap-3 text-base leading-relaxed text-neutral-700">
@@ -194,8 +163,8 @@ export default function ServiceProjectPage() {
               </div>
             </div>
 
-            <div className="border border-neutral-200 bg-neutral-50 p-6 md:p-8">
-              <p className="mb-3 text-sm font-mono uppercase tracking-[0.22em] text-neutral-400">How It Starts</p>
+            <div className="border-t border-neutral-200 pt-8 md:pt-10">
+              <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">How It Starts</p>
               <p className="max-w-3xl text-base leading-relaxed text-neutral-700">
                 Share your business context, current constraints, and what you want to improve. B2W uses that information
                 to understand whether the project is a fit and what the right scope should look like.
@@ -203,94 +172,15 @@ export default function ServiceProjectPage() {
             </div>
           </div>
 
-          <aside className="border border-neutral-200 bg-white p-5 sm:p-6 md:p-8 lg:sticky lg:top-28">
-            <p className="mb-3 text-sm font-mono uppercase tracking-[0.22em] text-neutral-400">Inquiry Form</p>
-            <h2 className="text-2xl font-medium tracking-tight text-neutral-950 sm:text-3xl">
-              Tell us about your business
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-              The service area is already selected for this page. Add enough business context for B2W to evaluate fit,
-              scope, and urgency.
-            </p>
-
-            <form onSubmit={handleInquirySubmit} className="mt-6 space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder="Your name"
-                  className="w-full border border-neutral-200 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                  required
-                />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  placeholder="Work email"
-                  className="w-full border border-neutral-200 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                  required
-                />
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <input
-                  type="text"
-                  value={company}
-                  onChange={(event) => setCompany(event.target.value)}
-                  placeholder="Business name"
-                  className="w-full border border-neutral-200 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                />
-                <input
-                  type="url"
-                  value={website}
-                  onChange={(event) => setWebsite(event.target.value)}
-                  placeholder="Website"
-                  className="w-full border border-neutral-200 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                />
-              </div>
-
-              <select
-                value={arrRange}
-                onChange={(event) => setArrRange(event.target.value as ArrRange)}
-                className="w-full border border-neutral-200 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-              >
-                <option value="">Select ARR range</option>
-                {arrRangeOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-
-              <select
-                value={inquiryType}
-                onChange={(event) => setInquiryType(event.target.value as InquiryType)}
-                className="w-full border border-neutral-200 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-              >
-                <option value="Marketing">Marketing</option>
-                <option value="Financials">Financials</option>
-                <option value="Operations">Operations</option>
-                <option value="End-to-End Rebuild">End-to-End Rebuild</option>
-              </select>
-
-              <textarea
-                value={businessInfo}
-                onChange={(event) => setBusinessInfo(event.target.value)}
-                placeholder="Describe the business, the current problem, any constraints, and what kind of outcome you want."
-                rows={7}
-                className="w-full border border-neutral-200 px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-                required
+          <aside className="border border-black/10 bg-white p-5 sm:p-6 md:p-7 lg:sticky lg:top-28">
+            <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Inquiry Form</p>
+            <div className="mt-4">
+              <LeadForm
+                intro="The matching project area is preselected for this page, but you can adjust it if your needs span multiple areas."
+                submitLabel="Send Inquiry"
+                preselectedProjectAreas={content.preselectedProjectAreas}
               />
-
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-              >
-                Send Inquiry
-                <ArrowUpRight className="h-4 w-4" />
-              </button>
-            </form>
+            </div>
           </aside>
         </div>
       </section>

@@ -1,25 +1,94 @@
-import { useState, type FormEvent } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { ArrowRight, Check } from 'lucide-react';
 import { getHostedFormEndpoint, getSourceMetadata, openCalendly, submitHostedForm } from '../../lib/engagement';
+
+export const publicProjectAreas = ['Marketing', 'Financials', 'Operations'] as const;
+export type PublicProjectArea = (typeof publicProjectAreas)[number];
+export type NormalizedProjectArea = PublicProjectArea | 'End-to-End Rebuild';
+
+const arrRangeOptions = [
+  'Under $250k',
+  '$250k - $1M',
+  '$1M - $5M',
+  '$5M - $10M',
+  '$10M - $25M',
+  '$25M+',
+] as const;
+
+type ArrRange = (typeof arrRangeOptions)[number] | '';
 
 type LeadFormState = {
   name: string;
   email: string;
   businessName: string;
+  website: string;
+  arrRange: ArrRange;
+  selectedProjectAreas: PublicProjectArea[];
   message: string;
 };
 
-const initialState: LeadFormState = {
+type LeadFormProps = {
+  heading?: string;
+  intro?: string;
+  submitLabel?: string;
+  preselectedProjectAreas?: PublicProjectArea[];
+};
+
+const defaultState: LeadFormState = {
   name: '',
   email: '',
   businessName: '',
+  website: '',
+  arrRange: '',
+  selectedProjectAreas: [],
   message: '',
 };
 
-export default function LeadForm() {
-  const [state, setState] = useState<LeadFormState>(initialState);
+function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): NormalizedProjectArea | '' {
+  if (selectedProjectAreas.length === publicProjectAreas.length) {
+    return 'End-to-End Rebuild';
+  }
+
+  return selectedProjectAreas[0] ?? '';
+}
+
+export default function LeadForm({
+  heading = 'Tell us about your business',
+  intro = 'Share the basics first. Once we have your intake, you can book a call if you want to move faster.',
+  submitLabel = 'Request a consultation',
+  preselectedProjectAreas = [],
+}: LeadFormProps) {
+  const [state, setState] = useState<LeadFormState>({
+    ...defaultState,
+    selectedProjectAreas: preselectedProjectAreas,
+  });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    setState((current) => ({
+      ...current,
+      selectedProjectAreas: preselectedProjectAreas,
+    }));
+  }, [preselectedProjectAreas]);
+
+  const normalizedProjectArea = useMemo(
+    () => normalizeProjectArea(state.selectedProjectAreas),
+    [state.selectedProjectAreas],
+  );
+
+  function toggleProjectArea(area: PublicProjectArea) {
+    setState((current) => {
+      const nextAreas = current.selectedProjectAreas.includes(area)
+        ? current.selectedProjectAreas.filter((item) => item !== area)
+        : [...current.selectedProjectAreas, area];
+
+      return {
+        ...current,
+        selectedProjectAreas: nextAreas,
+      };
+    });
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -31,8 +100,12 @@ export default function LeadForm() {
       name: state.name.trim(),
       email: state.email.trim(),
       business_name: state.businessName.trim(),
+      website: state.website.trim(),
+      arr_range: state.arrRange,
+      project_areas: state.selectedProjectAreas.join(', '),
+      normalized_project_area: normalizedProjectArea,
       message: state.message.trim(),
-      _subject: `New B2W lead inquiry from ${state.businessName.trim() || state.name.trim()}`,
+      _subject: `New B2W lead inquiry: ${normalizedProjectArea || 'General inquiry'}`,
       ...getSourceMetadata({
         form_type: 'lead_inquiry',
         action_type: 'lead_submission',
@@ -46,17 +119,18 @@ export default function LeadForm() {
     }
 
     setStatus('success');
-    setState(initialState);
+    setState({
+      ...defaultState,
+      selectedProjectAreas: preselectedProjectAreas,
+    });
   }
 
   return (
     <div className="border border-black/10 bg-white p-6 md:p-7">
       <div className="mb-6">
         <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Lead Inquiry</p>
-        <h3 className="mt-2 text-2xl font-medium tracking-tight text-black">Tell us about your business</h3>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">
-          Share the basics first. Once we have your intake, you can book a call if you want to move faster.
-        </p>
+        <h3 className="mt-2 text-2xl font-medium tracking-tight text-black">{heading}</h3>
+        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">{intro}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -87,18 +161,79 @@ export default function LeadForm() {
           </label>
         </div>
 
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="block">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Business</span>
+            <input
+              type="text"
+              name="business_name"
+              value={state.businessName}
+              onChange={(event) => setState((current) => ({ ...current, businessName: event.target.value }))}
+              required
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+              placeholder="Business name"
+            />
+          </label>
+          <label className="block">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Website</span>
+            <input
+              type="url"
+              name="website"
+              value={state.website}
+              onChange={(event) => setState((current) => ({ ...current, website: event.target.value }))}
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+              placeholder="https://yourbusiness.com"
+            />
+          </label>
+        </div>
+
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-neutral-800">Business</span>
-          <input
-            type="text"
-            name="business_name"
-            value={state.businessName}
-            onChange={(event) => setState((current) => ({ ...current, businessName: event.target.value }))}
-            required
-            className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-            placeholder="Business name"
-          />
+          <span className="mb-2 block text-sm font-medium text-neutral-800">ARR</span>
+          <select
+            value={state.arrRange}
+            onChange={(event) => setState((current) => ({ ...current, arrRange: event.target.value as ArrRange }))}
+            className="w-full border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-black"
+          >
+            <option value="">Select ARR range</option>
+            {arrRangeOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </label>
+
+        <fieldset className="block">
+          <legend className="mb-2 block text-sm font-medium text-neutral-800">Project area</legend>
+          <p className="mb-3 text-xs leading-5 text-neutral-500">
+            Select one or more areas. Selecting all three maps to End-to-End Rebuild.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {publicProjectAreas.map((area) => {
+              const isSelected = state.selectedProjectAreas.includes(area);
+              return (
+                <label
+                  key={area}
+                  className={`flex cursor-pointer items-center gap-3 border px-4 py-3 text-sm transition-colors ${
+                    isSelected ? 'border-black bg-black text-white' : 'border-black/10 bg-white text-neutral-800'
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => toggleProjectArea(area)}
+                    className="sr-only"
+                  />
+                  <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
+                  <span>{area}</span>
+                </label>
+              );
+            })}
+          </div>
+          {normalizedProjectArea === 'End-to-End Rebuild' ? (
+            <p className="mt-3 text-xs leading-5 text-neutral-600">Normalized intake: End-to-End Rebuild</p>
+          ) : null}
+        </fieldset>
 
         <label className="block">
           <span className="mb-2 block text-sm font-medium text-neutral-800">What do you need help with?</span>
@@ -143,10 +278,10 @@ export default function LeadForm() {
           </p>
           <button
             type="submit"
-            disabled={status === 'submitting'}
+            disabled={status === 'submitting' || state.selectedProjectAreas.length === 0}
             className="inline-flex items-center justify-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {status === 'submitting' ? 'Submitting...' : 'Request a consultation'}
+            {status === 'submitting' ? 'Submitting...' : submitLabel}
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
