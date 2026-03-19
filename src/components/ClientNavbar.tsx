@@ -50,8 +50,8 @@ export default function ClientNavbar({
                   <span>{clientName}</span>
                   <motion.span
                     initial={{ opacity: 0, x: -4 }}
-                    whileHover={{ opacity: 1, x: 0 }}
-                    className="inline-flex"
+                    animate={{ opacity: 0, x: -4 }}
+                    className="inline-flex transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 opacity-0"
                   >
                     <ArrowRight className="w-3.5 h-3.5" />
                   </motion.span>
