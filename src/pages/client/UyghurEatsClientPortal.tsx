@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, TrendingUp, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
+import Footer from '../../components/Footer';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
 import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
@@ -545,18 +546,7 @@ export default function UyghurEatsClientPortal() {
                 onSubmit={handleOfferSubmit}
             />
 
-            <footer className="mt-20 border-t border-neutral-100 py-12 px-6 md:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-start gap-8 opacity-50">
-                    <div>
-                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">B2W LLC</p>
-                        <p className="text-xs text-neutral-500">M&A Advisory & Strategy Consulting</p>
-                    </div>
-                    <div>
-                        <p className="text-[10px] font-mono uppercase tracking-[0.2em] mb-2">Contact</p>
-                        <p className="text-xs text-neutral-500 underline underline-offset-4">ali@b2w-ai.com</p>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
 
             <AnimatePresence>
                 {showFloatingCta && (
