@@ -66,7 +66,7 @@ export default function ClientNavbar({
   const breadcrumbArrowClassName =
     'ml-0 inline-flex w-0 overflow-hidden opacity-0 transition-all duration-200 ease-out group-hover:ml-1.5 group-hover:w-3.5 group-hover:opacity-100';
   const mobileMenuLinkClassName =
-    'flex min-h-14 items-center justify-between py-4 text-left text-[15px] font-medium text-neutral-800 transition-colors hover:text-black';
+    'flex min-h-0 items-center gap-2 py-3 text-left text-[17px] font-medium text-stone-100 transition-colors hover:text-white';
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -102,18 +102,18 @@ export default function ClientNavbar({
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-neutral-100">
+    <nav className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors ${isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white md:border-neutral-100 md:bg-white/80 md:text-black' : 'border-neutral-100 bg-white/80 text-black'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-20 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link
             to="/"
-            className="inline-flex items-center text-xl font-medium tracking-tight text-black transition-all duration-200 ease-out hover:font-semibold"
+            className={`inline-flex items-center text-xl font-medium tracking-tight transition-all duration-200 ease-out hover:font-semibold ${isMobileMenuOpen ? 'text-white md:text-black' : 'text-black'}`}
           >
             <span className="b2w-wordmark">B2W</span>
           </Link>
           {clientName && (
             <>
-              <span className="text-neutral-300">/</span>
+              <span className={isMobileMenuOpen ? 'text-white/30 md:text-neutral-300' : 'text-neutral-300'}>/</span>
               {clientLink ? (
                 <>
                   <div
@@ -168,19 +168,19 @@ export default function ClientNavbar({
                       </div>
                     ) : null}
                   </div>
-                  <Link to={clientLink} className={`${breadcrumbLinkClassName} md:hidden`}>
+                  <Link to={clientLink} className={`${breadcrumbLinkClassName} md:hidden ${isMobileMenuOpen ? '!text-white/80 hover:!text-white' : ''}`}>
                     <span>{clientName}</span>
                   </Link>
                 </>
               ) : (
-                <span className="text-sm font-medium tracking-tight text-neutral-600">{clientName}</span>
+                <span className={`text-sm font-medium tracking-tight ${isMobileMenuOpen ? 'text-white/80 md:text-neutral-600' : 'text-neutral-600'}`}>{clientName}</span>
               )}
             </>
           )}
           {currentPageMeta ? (
             <>
-              <span className="text-neutral-300">/</span>
-              <Link to={currentPageMeta.to} className={breadcrumbLinkClassName}>
+              <span className={isMobileMenuOpen ? 'text-white/30 md:text-neutral-300' : 'text-neutral-300'}>/</span>
+              <Link to={currentPageMeta.to} className={`${breadcrumbLinkClassName} ${isMobileMenuOpen ? '!text-white/80 hover:!text-white md:!text-neutral-600 md:hover:!text-black' : ''}`}>
                 <span>{currentPageMeta.label}</span>
                 <span className={breadcrumbArrowClassName}>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -193,7 +193,7 @@ export default function ClientNavbar({
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen((current) => !current)}
-          className="md:hidden inline-flex items-center justify-center p-1 text-neutral-700 transition-colors hover:text-black"
+          className={`md:hidden inline-flex items-center justify-center p-1 transition-colors ${isMobileMenuOpen ? 'text-white hover:text-white' : 'text-neutral-700 hover:text-black'}`}
           aria-expanded={isMobileMenuOpen}
           aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
         >
@@ -287,7 +287,7 @@ export default function ClientNavbar({
             animate={{ opacity: 1, height: 'calc(100vh - 5rem)' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="overflow-hidden border-t border-neutral-100 bg-[#fbfbf8]/95 px-4 pb-5 pt-4 shadow-sm backdrop-blur-md md:hidden"
+            className="overflow-hidden border-t border-white/10 bg-black/82 px-4 pb-8 pt-4 text-white shadow-sm backdrop-blur-xl md:hidden"
           >
             <motion.div
               initial="closed"
@@ -297,21 +297,21 @@ export default function ClientNavbar({
                 open: { transition: { staggerChildren: 0.05, delayChildren: 0.03 } },
                 closed: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
               }}
-              className="mx-auto flex h-full max-w-7xl flex-col gap-3 overflow-y-auto"
+              className="mx-auto flex h-full max-w-7xl flex-col overflow-y-auto pb-14"
             >
               {clientSubpages.length > 0 ? (
-                <motion.div variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: -8 } }} className="border-b border-neutral-200 pb-2">
-                  <div className="flex flex-col divide-y divide-neutral-200">
+                <motion.div variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: -8 } }} className="flex-1 border-b border-white/10 pb-3">
+                  <div className="flex h-full flex-col divide-y divide-white/10">
                     {clientSubpages.map((item) =>
                       item.to ? (
                         <Link
                           key={item.label}
                           to={item.to}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className={`${mobileMenuLinkClassName} ${nestedDeliverableLabels.has(item.label) ? 'pl-5' : ''}`}
+                          className={`${mobileMenuLinkClassName} min-h-0 flex-1 ${currentPageMeta?.to === item.to ? 'font-semibold text-white' : ''}`}
                         >
                           <span>{item.label}</span>
-                          <ArrowRight className="h-4 w-4" />
+                          <ArrowRight className="h-4 w-4 shrink-0" />
                         </Link>
                       ) : (
                         <button
@@ -321,10 +321,10 @@ export default function ClientNavbar({
                             item.onClick?.();
                             setIsMobileMenuOpen(false);
                           }}
-                          className={`${mobileMenuLinkClassName} ${nestedDeliverableLabels.has(item.label) ? 'pl-5' : ''}`}
+                          className={`${mobileMenuLinkClassName} min-h-0 flex-1`}
                         >
                           <span>{item.label}</span>
-                          <ArrowRight className="h-4 w-4" />
+                          <ArrowRight className="h-4 w-4 shrink-0" />
                         </button>
                       )
                     )}
@@ -344,22 +344,40 @@ export default function ClientNavbar({
 
                 if (item.type === 'cta') {
                   return (
-                    <motion.div key={item.label} variants={itemVariants} className="pt-2">
+                    <motion.div key={item.label} variants={itemVariants} className="pt-6">
                       <button
                         type="button"
                         onClick={() => {
                           item.onClick?.();
                           setIsMobileMenuOpen(false);
                         }}
-                        className="flex min-h-12 w-full items-center justify-between rounded-full bg-black px-5 py-3 text-left text-sm font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-neutral-800"
+                        className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
                       >
                         <span>{item.label}</span>
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-4 w-4 shrink-0" />
                       </button>
                     </motion.div>
                   );
                 }
               })}
+
+              <motion.div
+                variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: -8 } }}
+                className="mt-8 border-t border-white/10 pt-6"
+              >
+                <div className="text-sm text-white/70">
+                  <p className="text-base font-medium text-white">
+                    <span className="b2w-wordmark">B2W LLC</span>
+                  </p>
+                  <p className="mt-2 text-sm text-white/50">© {new Date().getFullYear()} All rights reserved.</p>
+                  <a
+                    href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
+                    className="mt-3 inline-block text-sm font-medium text-white/80 transition-colors hover:text-white"
+                  >
+                    Contact
+                  </a>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         ) : null}
