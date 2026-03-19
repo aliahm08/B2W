@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, DollarSign, BarChart3, TrendingUp, Scale } from 'lucide-react';
@@ -6,11 +6,12 @@ import Seo from '../../../components/Seo';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
 import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNavbar';
 import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
-import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
+    projectPageHeroTitleClassName,
+    projectPageSectionTitleClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
 } from '../../../components/projectPageLayout';
@@ -18,39 +19,125 @@ import {
 /* ─── Section content ──────────────────────────────────── */
 type SectionDef = { id: string; label: string; content: ReactNode };
 
+const revenueStats = [
+    {
+        label: 'Avg Monthly REV',
+        value: '$30k-$50k',
+        note: 'Observed Monthly Range',
+        detailTitle: 'Monthly Revenue Range',
+        detailBody:
+            'This range frames the business as a stable neighborhood operation rather than a distressed asset or a breakout growth story. It gives buyers a realistic topline band for underwriting the base case.',
+    },
+    {
+        label: 'Y-O-Y REV',
+        value: '-5% to 5%',
+        note: 'Trailing 12 Months',
+        detailTitle: 'Revenue Trend',
+        detailBody:
+            'The business appears relatively flat year over year, which supports a steady-state assumption. That makes future upside more attributable to new management or marketing interventions rather than existing momentum.',
+    },
+    {
+        label: 'Gross Margin',
+        value: '40%',
+        note: 'COGS: $300k',
+        detailTitle: 'Margin Profile',
+        detailBody:
+            'A 40% gross margin with roughly $300k in cost of goods suggests the concept has an understandable cost base, but still leaves room for procurement, pricing, and menu-engineering improvements.',
+    },
+    {
+        label: 'Growth Rate',
+        value: '0% to 2%',
+        note: 'Baseline Estimate',
+        detailTitle: 'Organic Growth Assumption',
+        detailBody:
+            'Before adding management, marketing, or merchandising programs, the business should be modeled as essentially flat to slightly growing. This is the clean base case against which the scenario packages can show incremental value.',
+    },
+] as const;
+
 function RevenueContent() {
+    const [activeMetricLabel, setActiveMetricLabel] = useState(revenueStats[0].label);
+    const mobileTooltipRefs = useRef<Record<string, HTMLDivElement | null>>({});
+    const activeMetric = revenueStats.find((stat) => stat.label === activeMetricLabel) ?? revenueStats[0];
+
+    const handleMetricSelect = (label: string) => {
+        setActiveMetricLabel(label);
+
+        if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+            window.requestAnimationFrame(() => {
+                mobileTooltipRefs.current[label]?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                });
+            });
+        }
+    };
+
     return (
         <section className="space-y-12">
-            <h2 className="text-3xl font-medium tracking-tight border-b pb-6">Revenue & Composition</h2>
-            <div className="grid md:grid-cols-4 gap-6">
-                {[
-                    { label: 'Avg Monthly REV', value: '—', note: 'Pending Final Review' },
-                    { label: 'Y-O-Y REV', value: '—', note: 'Trailing 12 Months' },
-                    { label: 'Gross Margin', value: '—', note: 'Pre-normalization' },
-                    { label: 'Growth Rate', value: '—', note: 'Trend Analysis' }
-                ].map(stat => (
-                    <div key={stat.label} className="p-6 border border-neutral-100 bg-white shadow-sm">
-                        <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-2 font-bold">{stat.label}</p>
-                        <p className="text-2xl font-medium">{stat.value}</p>
-                        <p className="text-[9px] text-neutral-400 mt-2 font-mono">{stat.note}</p>
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] items-start">
+                <div className="space-y-6">
+                    <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
+                        {revenueStats.map((stat) => {
+                            const isActive = stat.label === activeMetric.label;
+
+                            return (
+                                <div key={stat.label} className="space-y-0">
+                                    <button
+                                        type="button"
+                                        onMouseEnter={() => setActiveMetricLabel(stat.label)}
+                                        onFocus={() => setActiveMetricLabel(stat.label)}
+                                        onClick={() => handleMetricSelect(stat.label)}
+                                        className={`min-h-[132px] w-full p-6 border bg-white shadow-sm text-left transition-colors ${
+                                            isActive
+                                                ? 'border-emerald-500 bg-emerald-50'
+                                                : 'border-neutral-100 hover:border-emerald-300'
+                                        }`}
+                                    >
+                                        <p className="text-[10px] font-mono uppercase tracking-widest text-neutral-400 mb-2 font-bold">{stat.label}</p>
+                                        <p className="text-2xl font-medium">{stat.value}</p>
+                                        <p className="text-[9px] text-neutral-400 mt-2 font-mono">{stat.note}</p>
+                                    </button>
+
+                                    {isActive ? (
+                                        <div
+                                            ref={(element) => {
+                                                mobileTooltipRefs.current[stat.label] = element;
+                                            }}
+                                            className="border-x border-b border-emerald-500 bg-emerald-50 p-5 lg:hidden"
+                                        >
+                                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-emerald-700">Metric Insight</p>
+                                            <h3 className="mt-3 text-lg font-medium text-emerald-950">{stat.detailTitle}</h3>
+                                            <p className="mt-3 text-sm leading-6 text-emerald-900/80">{stat.detailBody}</p>
+                                        </div>
+                                    ) : null}
+                                </div>
+                            );
+                        })}
                     </div>
-                ))}
-            </div>
-            <div className="p-10 border border-neutral-200 bg-neutral-900 text-white flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg rounded-sm gap-8">
-                <div>
-                    <h3 className="text-xl font-medium mb-2">Revenue Streams</h3>
-                    <p className="text-neutral-400 text-sm">Balanced mix between Dine-in and Carry-out.</p>
+
+                    <div className="p-10 border border-neutral-200 bg-neutral-900 text-white flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg rounded-sm gap-8">
+                        <div>
+                            <h3 className="text-xl font-medium mb-2">Revenue Streams</h3>
+                            <p className="text-neutral-400 text-sm">Balanced mix between Dine-in and Carry-out.</p>
+                        </div>
+                        <div className="flex gap-8">
+                            <div className="text-center font-mono">
+                                <span className="block text-2xl mb-1">55%</span>
+                                <span className="text-[10px] uppercase text-neutral-400 tracking-widest">Dine-in</span>
+                            </div>
+                            <div className="text-center font-mono border-l border-white/20 pl-8">
+                                <span className="block text-2xl mb-1">45%</span>
+                                <span className="text-[10px] uppercase text-neutral-400 tracking-widest">Takeout</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex gap-8">
-                    <div className="text-center font-mono">
-                        <span className="block text-2xl mb-1">55%</span>
-                        <span className="text-[10px] uppercase text-neutral-400 tracking-widest">Dine-in</span>
-                    </div>
-                    <div className="text-center font-mono border-l border-white/20 pl-8">
-                        <span className="block text-2xl mb-1">45%</span>
-                        <span className="text-[10px] uppercase text-neutral-400 tracking-widest">Takeout</span>
-                    </div>
-                </div>
+
+                <aside className="hidden border border-emerald-500 bg-emerald-50 p-6 lg:sticky lg:top-32 lg:block self-stretch min-h-full">
+                    <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-emerald-700">Metric Insight</p>
+                    <h3 className="mt-4 text-xl font-medium text-emerald-950">{activeMetric.detailTitle}</h3>
+                    <p className="mt-4 text-sm leading-6 text-emerald-900/80">{activeMetric.detailBody}</p>
+                </aside>
             </div>
         </section>
     );
@@ -186,19 +273,19 @@ export default function ValuationModelPage() {
     }, []);
 
     const sections: SectionDef[] = [
-        { id: 'revenue', label: '1 - Existing Restaurant', content: <RevenueContent /> },
-        { id: 'earnings', label: '2 - Add Management Services', content: <EarningsContent /> },
-        { id: 'comparables', label: '3 - Add Marketing Services', content: <ComparablesContent /> },
-        { id: 'range', label: '4 - Add Merchandising', content: <ValuationRangeContent /> },
+        { id: 'revenue', label: 'Revenue & Composition', content: <RevenueContent /> },
+        { id: 'earnings', label: 'Model Methodology', content: <EarningsContent /> },
+        { id: 'comparables', label: 'Comparables', content: <ComparablesContent /> },
+        { id: 'range', label: 'Executive Summary', content: <ValuationRangeContent /> },
     ];
 
     const sectionNavItems = sections.map((s) => ({ id: s.id, label: s.label }));
-    const sectionIds = sectionNavItems.map((s) => s.id);
-    useScrollSectionNav(sectionIds, activeSection, setActiveSection);
     const currentSection = sections.find((s) => s.id === activeSection) ?? sections[0];
     const currentIndex = sections.findIndex((s) => s.id === activeSection);
     const nextSection = sections[currentIndex + 1];
     const Icon = sectionIconMap[currentSection.id];
+    const sheetLabel = `Sheet ${currentIndex + 1} / ${currentSection.label}`;
+    const sectionHeader = currentSection.id === 'revenue' ? 'Financial Profile' : currentSection.label;
 
     return (
         <article className={projectPageShellClassName}>
@@ -234,14 +321,14 @@ export default function ValuationModelPage() {
 
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
-                            <h1 className="mb-6 text-4xl font-medium tracking-tighter md:tracking-tight md:text-6xl">
+                            <h1 className={projectPageHeroTitleClassName}>
                                 Valuation Modeling & Estimated Sale Range
                             </h1>
                             <p className="mb-8 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl">
                                 Revenue review, earnings normalization, comparable sale benchmarks, and an estimated price range to help position the business for sale.
                             </p>
 
-                            <div className="grid gap-3 md:grid-cols-3">
+                            <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                                 <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
                                     <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Client</span>
                                     <span className="mt-2 block font-medium text-black">Uyghur Eats</span>
@@ -250,7 +337,7 @@ export default function ValuationModelPage() {
                                     <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Deliverable</span>
                                     <span className="mt-2 block font-medium text-black">Valuation Model</span>
                                 </div>
-                                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
+                                <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700 col-span-2 md:col-span-1">
                                     <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Status</span>
                                     <span className="mt-2 block font-medium text-black">Sample Format</span>
                                 </div>
@@ -284,7 +371,7 @@ export default function ValuationModelPage() {
                 />
 
                 <main className="mt-8 md:mt-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-8 lg:gap-12 items-start">
+                    <div>
                         <AnimatePresence mode="wait">
                             <motion.section
                                 key={currentSection.id}
@@ -299,7 +386,12 @@ export default function ValuationModelPage() {
                                             <Icon className="h-5 w-5 text-black" />
                                         </div>
                                     )}
-                                    <h2 className="text-xl font-medium md:text-2xl">{currentSection.label}</h2>
+                                    <div>
+                                        <p className="mb-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+                                            {sheetLabel}
+                                        </p>
+                                        <h2 className={projectPageSectionTitleClassName}>{sectionHeader}</h2>
+                                    </div>
                                 </div>
                                 <div className="pb-6">
                                     {currentSection.content}
@@ -323,28 +415,6 @@ export default function ValuationModelPage() {
                                 </div>
                             </motion.section>
                         </AnimatePresence>
-
-                        {/* Right sidebar: section index (desktop) */}
-                        <aside className="hidden lg:block sticky top-40">
-                            <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400 mb-4">Package Items</p>
-                            <nav className="space-y-1">
-                                {sections.map((s, i) => (
-                                    <button
-                                        key={s.id}
-                                        type="button"
-                                        onClick={() => setActiveSection(s.id)}
-                                        className={`w-full text-left px-3 py-2.5 text-sm transition-colors border-l-2 ${
-                                            s.id === activeSection
-                                                ? 'border-black text-black font-medium bg-neutral-50'
-                                                : 'border-transparent text-neutral-400 hover:text-black hover:border-neutral-300'
-                                        }`}
-                                    >
-                                        <span className="font-mono text-[10px] tracking-[0.18em] mr-2">{String(i + 1).padStart(2, '0')}</span>
-                                        {s.label}
-                                    </button>
-                                ))}
-                            </nav>
-                        </aside>
                     </div>
                 </main>
             </motion.div>

@@ -6,6 +6,7 @@ import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavba
 import {
   projectPageEyebrowClassName,
   projectPageHeaderClassName,
+  projectPageHeroTitleClassName,
   projectPageShellClassName,
   projectHeroGridClassNames,
 } from '../../components/projectPageLayout';
@@ -127,7 +128,7 @@ export default function UyghurEatsTermsPage() {
 
         <div className={projectHeroGridClassNames.profile}>
           <div>
-            <h1 className="mb-6 max-w-[12ch] text-4xl font-medium tracking-tight text-black md:max-w-none md:text-6xl">
+            <h1 className={projectPageHeroTitleClassName}>
               Key Terms of the Proposal
             </h1>
             <p className="max-w-2xl text-lg leading-relaxed text-neutral-600 md:text-xl">

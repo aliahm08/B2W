@@ -8,6 +8,12 @@ export const projectPageBackLinkClassName =
 export const projectPageEyebrowClassName =
   'mb-6 flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-500';
 
+export const projectPageHeroTitleClassName =
+  'mb-6 text-4xl font-medium tracking-tighter text-black md:tracking-tight md:text-6xl';
+
+export const projectPageSectionTitleClassName =
+  'text-xl font-medium tracking-tight md:text-2xl';
+
 export const projectHeroGridClassNames = {
   proposal: 'grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.9fr)] lg:items-start',
   operations: 'grid gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.85fr)] lg:items-start',

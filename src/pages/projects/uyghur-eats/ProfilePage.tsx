@@ -15,6 +15,8 @@ import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
+    projectPageHeroTitleClassName,
+    projectPageSectionTitleClassName,
     projectPageShellClassName,
     projectHeroGridClassNames,
 } from '../../../components/projectPageLayout';
@@ -360,7 +362,7 @@ export default function UyghurEats() {
 
                     <div className={projectHeroGridClassNames.profile}>
                         <div>
-                            <h1 className="mb-6 text-4xl font-medium tracking-tighter md:tracking-tight md:text-6xl">
+                            <h1 className={projectPageHeroTitleClassName}>
                                 Fine Dining in Washington, DC
                             </h1>
 
@@ -444,7 +446,7 @@ export default function UyghurEats() {
                                             <Icon className="h-5 w-5 text-black" />
                                         </div>
                                     )}
-                                    <h2 className="text-xl font-medium md:text-2xl">{currentSection.label}</h2>
+                                    <h2 className={projectPageSectionTitleClassName}>{currentSection.label}</h2>
                                 </div>
                                 <div data-project-detail-body className="pb-6">
                                     {currentSection.content}
