@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, DollarSign, BarChart3, TrendingUp, Scale } from 'lucide-react';
 import Seo from '../../../components/Seo';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
@@ -146,11 +146,10 @@ function RevenueContent() {
 function EarningsContent() {
     return (
         <section className="space-y-12">
-            <h2 className="text-3xl font-medium tracking-tight border-b pb-6">Model Methodology</h2>
             <div className="grid md:grid-cols-2 gap-12">
                 <div className="space-y-8">
                     <div className="p-8 border border-neutral-100 bg-neutral-50/50 shadow-sm">
-                        <h3 className="text-sm font-mono uppercase tracking-[0.25em] text-neutral-400 mb-6 font-bold">Primary: SDE-Based Multiple</h3>
+                        <p className="mb-6 text-sm font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold">Primary: SDE-Based Multiple</p>
                         <p className="text-neutral-600 leading-relaxed text-lg">
                             Determining true earning power (Seller Discretionary Earnings) via detailed normalization of owner compensation, one-time expenses, and discretionary spending.
                         </p>
@@ -207,10 +206,12 @@ function ComparablesContent() {
 function ValuationRangeContent() {
     return (
         <section className="space-y-8">
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold mb-4">Executive Summary</p>
-            <h1 className="text-4xl md:text-7xl font-medium tracking-tight mb-8">
-                Strategic Valuation.
-            </h1>
+            <div className="border border-neutral-200 bg-neutral-50/50 p-8 shadow-sm">
+                <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.25em] text-neutral-400 font-bold">Valuation Range</p>
+                <p className="max-w-2xl text-lg leading-relaxed text-neutral-600">
+                    A benchmarked range based on normalized earnings and comparable restaurant transactions in the DC market.
+                </p>
+            </div>
             <div className="grid md:grid-cols-3 gap-1 grid-cols-1 border border-neutral-200 bg-neutral-200">
                 <div className="p-12 bg-white text-center">
                      <p className="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-4 font-bold">Conservative Multiple</p>
@@ -242,8 +243,9 @@ const sectionIconMap: Record<string, typeof BarChart3> = {
 
 /* ─── Main component ──────────────────────────────────── */
 export default function ValuationModelPage() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams] = useSearchParams();
-    const [activeSection, setActiveSection] = useState('revenue');
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
 
@@ -281,13 +283,21 @@ export default function ValuationModelPage() {
         { id: 'range', label: 'Executive Summary', content: <ValuationRangeContent /> },
     ];
 
+    const hashSectionId = location.hash.replace('#', '');
+    const activeSection = sections.some((section) => section.id === hashSectionId) ? hashSectionId : sections[0].id;
+
     const sectionNavItems = sections.map((s) => ({ id: s.id, label: s.label }));
     const currentSection = sections.find((s) => s.id === activeSection) ?? sections[0];
     const currentIndex = sections.findIndex((s) => s.id === activeSection);
     const nextSection = sections[currentIndex + 1];
     const Icon = sectionIconMap[currentSection.id];
     const sheetLabel = `Sheet ${currentIndex + 1} / ${currentSection.label}`;
-    const sectionHeader = currentSection.id === 'revenue' ? 'Financial Profile' : currentSection.label;
+    const sectionHeader =
+        currentSection.id === 'revenue'
+            ? 'Financial Profile'
+            : currentSection.id === 'range'
+              ? 'Strategic Valuation'
+              : currentSection.label;
 
     return (
         <article className={projectPageShellClassName}>
@@ -369,7 +379,7 @@ export default function ValuationModelPage() {
                 <ProfileSectionNav
                     items={sectionNavItems}
                     activeId={activeSection}
-                    onSelect={setActiveSection}
+                    onSelect={(id) => navigate(`/client/uyghur-eats/valuation#${id}`)}
                 />
 
                 <main className="mt-8 md:mt-12">
@@ -404,7 +414,11 @@ export default function ValuationModelPage() {
                                         {String(currentIndex + 1).padStart(2, '0')} / {String(sections.length).padStart(2, '0')}
                                     </p>
                                     {nextSection ? (
-                                        <button type="button" onClick={() => setActiveSection(nextSection.id)} className="inline-flex items-center gap-2 text-sm font-medium text-black">
+                                        <button
+                                            type="button"
+                                            onClick={() => navigate(`/client/uyghur-eats/valuation#${nextSection.id}`)}
+                                            className="inline-flex items-center gap-2 text-sm font-medium text-black"
+                                        >
                                             {nextSection.label}
                                             <ArrowRight className="h-4 w-4" />
                                         </button>

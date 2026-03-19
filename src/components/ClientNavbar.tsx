@@ -28,6 +28,7 @@ export default function ClientNavbar({
 
   const getCurrentPageMeta = () => {
     const pathname = location.pathname.replace(/\/+$/, '') || '/';
+    const pathWithHash = `${pathname}${location.hash}`;
 
     if (pathname === '/client/uyghur-eats' || pathname === '/portal/uyghur-eats') {
       return null;
@@ -36,6 +37,10 @@ export default function ClientNavbar({
     const routeMap: Record<string, string> = {
       '/client/uyghur-eats/profile': 'Profile',
       '/client/uyghur-eats/valuation': 'Valuation',
+      '/client/uyghur-eats/valuation#revenue': 'Valuation',
+      '/client/uyghur-eats/valuation#earnings': 'Valuation',
+      '/client/uyghur-eats/valuation#comparables': 'Valuation',
+      '/client/uyghur-eats/valuation#range': 'Valuation',
       '/client/uyghur-eats/data-room': 'Data Room',
       '/client/uyghur-eats/terms': 'Terms',
       '/portal/uyghur-eats/profile': 'Profile',
@@ -44,12 +49,12 @@ export default function ClientNavbar({
       '/portal/uyghur-eats/terms': 'Terms',
     };
 
-    const label = routeMap[pathname];
+    const label = routeMap[pathWithHash] ?? routeMap[pathname];
     if (!label) {
       return null;
     }
 
-    return { label, to: pathname };
+    return { label, to: pathWithHash };
   };
 
   const currentPageMeta = getCurrentPageMeta();

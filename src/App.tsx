@@ -49,6 +49,10 @@ function ScrollToTop() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (pathname.startsWith('/client/uyghur-eats/valuation') && hash) {
+      return;
+    }
+
     if (hash) {
       setTimeout(() => {
         const id = hash.replace('#', '');
