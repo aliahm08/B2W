@@ -39,9 +39,9 @@ export const expertiseMatrix: ExpertiseMatrix = {
       terms: 'Includes findings summary and prioritized recommendations',
     },
     'M&A': {
-      value: '$100 + $100/lead',
+      value: '$1,200',
       deliverable: 'Sale Profile',
-      terms: 'Exclusively publish on our site',
+      terms: 'Fixed cost for a buyer-facing sale profile',
     },
   },
   Consulting: {
@@ -58,9 +58,9 @@ export const expertiseMatrix: ExpertiseMatrix = {
       terms: 'Structured over a defined engagement period',
     },
     'M&A': {
-      value: '$500 + 15% profits',
-      deliverable: 'Due Diligence',
-      terms: 'Requires full disclosure of financial documents',
+      value: '$2,000 - $6,000',
+      deliverable: 'Value Modeling',
+      terms: 'Scoped to business complexity and model depth',
     },
   },
   Implementation: {
@@ -77,9 +77,9 @@ export const expertiseMatrix: ExpertiseMatrix = {
       terms: 'Scoped based on business needs and implementation complexity',
     },
     'M&A': {
-      value: '$300/month',
-      deliverable: 'Negotiations',
-      terms: 'Our negotiations technology requires an NDA',
+      value: 'Dependent on documentation and business readiness',
+      deliverable: 'Due Diligence',
+      terms: 'Our due diligence technology requires an NDA and is scoped only after records, materials, and business readiness are confirmed',
     },
   },
 };
