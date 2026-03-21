@@ -1,130 +1,73 @@
 # Forms and Booking Setup
 
-This site now uses two separate browser-safe conversion flows:
+This site now uses internal Vercel API routes for form submission.
 
-- Public landing pages: a hosted lead form endpoint first, then Calendly as an optional second step after successful submission.
-- Client proposal and portal pages: a separate hosted client form endpoint for proposal acceptance, signing acknowledgment, and client communications.
+## Submission routes
+
+- `POST /api/contact-lead`
+  Public lead inquiries from the homepage, landing pages, and project/service pages.
+- `POST /api/client-communication`
+  Existing client communication forms inside portal/client pages.
+- `POST /api/proposal-signature`
+  Proposal acceptance and signature-related submission flows.
+
+Each route:
+
+- validates and sanitizes input
+- applies a honeypot spam check
+- rate-limits by IP
+- sends an internal email to `info@b2w-ai.com`
+- sends a confirmation email to the submitter
+- appends a row to Google Sheets
 
 ## Required environment variables
 
-Add these in local `.env` files and in Vercel project environment variables:
-
 ```bash
 VITE_CALENDLY_URL="https://calendly.com/your-team/consultation"
-VITE_FORM_ENDPOINT_LEADS="https://formspree.io/f/your-leads-id"
-VITE_FORM_ENDPOINT_CLIENT="https://formspree.io/f/your-client-id"
+RESEND_API_KEY="re_xxx"
+RESEND_FROM_EMAIL="B2W <info@b2w-ai.com>"
+INTERNAL_NOTIFICATION_EMAIL="info@b2w-ai.com"
+GOOGLE_SHEETS_SPREADSHEET_ID="your-google-sheet-id"
+GOOGLE_SERVICE_ACCOUNT_EMAIL="service-account@project.iam.gserviceaccount.com"
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+SHEET_TAB_LEADS="Lead Inquiries"
+SHEET_TAB_CLIENT_COMMUNICATIONS="Client Communications"
+SHEET_TAB_PROPOSAL_SIGNATURES="Proposal Signatures"
 ```
 
-## Where each value is used
+You can also keep using `GOOGLE_SERVICE_ACCOUNT_JSON` instead of `GOOGLE_SERVICE_ACCOUNT_EMAIL` and `GOOGLE_PRIVATE_KEY` if you prefer a single JSON credential.
 
-- `VITE_CALENDLY_URL`
-  Used by the Expertise section CTA and by the post-submit "Book a call" CTA after successful public lead submissions.
+## Google Sheets workbook expectations
 
-- `VITE_FORM_ENDPOINT_LEADS`
-  Used by the public lead inquiry form on the homepage contact section.
+Create one spreadsheet and add these tabs:
 
-- `VITE_FORM_ENDPOINT_CLIENT`
-  Used by client-side proposal acceptance and client communication forms on proposal and portal pages.
+- `Lead Inquiries`
+- `Client Communications`
+- `Proposal Signatures`
 
-## Formspree setup
+If you use different tab names, set them through:
 
-### 1. Create the public lead endpoint
+- `SHEET_TAB_LEADS`
+- `SHEET_TAB_CLIENT_COMMUNICATIONS`
+- `SHEET_TAB_PROPOSAL_SIGNATURES`
 
-Create a hosted form such as Formspree for public lead capture.
+If a tab is missing, the append call will fail and the server logs will show the Google Sheets error.
 
-Recommended fields:
+## Local testing
 
-- `name`
-- `email`
-- `business_name`
-- `website`
-- `arr_range`
-- `project_areas`
-- `normalized_project_area`
-- `message`
-- `form_type`
-- `action_type`
-- `source_page`
-- `source_path`
-- `source_url`
-- `submitted_at`
-- `site_context`
+1. Set the environment variables in `.env.local`.
+2. Run `npm run dev:full` when you need the Vercel API routes locally.
+3. Submit:
+   - the homepage or service-page lead form
+   - a client communication form
+   - a proposal signature flow
+4. Verify:
+   - internal email arrives at `info@b2w-ai.com`
+   - confirmation email arrives at the submitter email
+   - a row appears in the correct Google Sheets tab
 
-Configure email notifications to route new submissions to [info@b2w-ai.com](mailto:info@b2w-ai.com).
+## Notes
 
-After a successful public lead submission, the site should reveal a secondary `Book a call` CTA that opens the Calendly URL from `VITE_CALENDLY_URL`.
-
-Public intake normalization:
-
-- The public `project_areas` field is multi-select.
-- Selecting all three core project areas (`Marketing`, `Financials`, and `Operations`) should set `normalized_project_area` to `End-to-End Rebuild`.
-- Service landing pages should use the same public form and preselect the matching area while keeping the field editable.
-
-### 2. Create the client endpoint
-
-Create a second hosted form for client-side actions. Keep this endpoint separate from public leads.
-
-Recommended fields:
-
-- `client_name`
-- `email`
-- `client_email`
-- `authorized_representative`
-- `company`
-- `message`
-- `project_name`
-- `proposal_name`
-- `selected_option_id`
-- `selected_option_title`
-- `selected_option_price`
-- `form_type`
-- `action_type`
-- `accepted_terms`
-- `signature_name`
-- `signature_present`
-- `signature_data_url`
-- `source_page`
-- `source_path`
-- `source_url`
-- `submitted_at`
-- `site_context`
-
-Configure notification emails to route to [info@b2w-ai.com](mailto:info@b2w-ai.com).
-
-Important:
-
-- Use the submitted client email field in the notification template so replies can go directly back to the client.
-- If Formspree supports reply-to mapping on your plan, map the reply address to the submitted `email` or `client_email` field.
-
-### 3. Configure client receipts / confirmations
-
-If your hosted form provider supports autoresponders:
-
-- Enable an autoresponse on the client form.
-- Set the recipient to the submitted client email field.
-- Keep the receipt simple: confirm that B2W received the action and will follow up directly.
-
-You can also enable an autoresponse on the public lead form if desired, but that is optional.
-
-## Site surface mapping
-
-- Calendly:
-  Expertise section and the success state after public lead form submission.
-
-- Public hosted lead form:
-  Public homepage contact section only.
-
-- Client hosted form flow:
-  Borek-G proposal acceptance drawer, Uyghur Eats proposal acceptance modal, and client communication form on the Uyghur Eats portal.
-
-## Manual test checklist
-
-1. Set the three `VITE_*` environment variables locally.
-2. Run `npm run dev`.
-3. On the homepage, submit the public lead form and confirm Formspree accepts it and routes the notification correctly.
-4. After successful public submission, click `Book a call` and confirm it opens the Calendly URL in a new tab.
-5. In the Expertise section, click `Book a call` and confirm it opens the Calendly URL in a new tab.
-6. Open `/borek-g-operations`, complete the acceptance flow, and confirm the client endpoint receives the payload.
-7. Open `/client/uyghur-eats`, submit the acceptance modal, and confirm the client endpoint receives the payload.
-8. Submit the client communication form on `/client/uyghur-eats` and confirm the notification includes the client email.
-9. If autoresponse is enabled, confirm the submitting email receives a receipt.
+- Rate limiting is intentionally lightweight and in-memory. It is appropriate for a small Vercel site but not a substitute for a distributed abuse-prevention service.
+- If email succeeds and Sheets fails, or vice versa, the API returns success with a warning and logs the partial failure server-side for operator follow-up.
+- Calendly is still optional and only used as a follow-on CTA after successful lead intake.

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
 import {
   categories,
   tiers,
@@ -28,6 +28,12 @@ const categoryAccentClasses: Record<Category, { active: string; card: string }> 
   },
 };
 
+const categoryBookingBadgeClasses: Record<Category, string> = {
+  Growth: 'text-emerald-700 border-emerald-300/70',
+  Optimization: 'text-sky-700 border-sky-300/70',
+  'M&A': 'text-amber-700 border-amber-300/70',
+};
+
 const infoTypeLabels = [
   { key: 'deliverable' as const, label: 'Deliverable', mono: false },
   { key: 'terms' as const, label: 'Terms', mono: false },
@@ -36,6 +42,7 @@ const infoTypeLabels = [
 export default function Expertise() {
   const [activeCategory, setActiveCategory] = useState<Category>('Growth');
   const accent = categoryAccentClasses[activeCategory];
+  const bookingBadgeClassName = categoryBookingBadgeClasses[activeCategory];
   const [selectedBooking, setSelectedBooking] = useState<{ tier: Tier; serviceLabel: string } | null>(null);
 
   return (
@@ -102,7 +109,7 @@ export default function Expertise() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: tierIndex * 0.06 }}
-              className={`group relative border bg-white transition-colors duration-300 ${accent.card}`}
+              className={`group relative overflow-hidden border bg-white transition-all duration-300 hover:border-black ${accent.card}`}
             >
               <button
                 type="button"
@@ -110,19 +117,26 @@ export default function Expertise() {
                 className="absolute inset-0 z-10"
                 aria-label={`Book a call for ${serviceLabel}`}
               />
-              <div className="pointer-events-none absolute inset-3 border border-black/0 opacity-0 transition-all duration-200 group-hover:border-black/15 group-hover:opacity-100" />
-              <div className="pointer-events-none absolute right-6 top-6 z-20 translate-y-1 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
-                Book a call
-              </div>
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.02),transparent_45%)] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-3 border border-black/0 opacity-0 transition-all duration-200 group-hover:inset-2 group-hover:border-black/15 group-hover:opacity-100" />
               {/* Tier header */}
               <div className="relative border-b border-neutral-100 px-6 py-5 md:px-8">
-                <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-4">
+                <div className="flex flex-col gap-1 pr-12 md:flex-row md:items-center md:gap-4">
                   <span className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">
                     {tier}
                   </span>
-                  <span className="text-xs text-neutral-400 leading-relaxed">
+                  <span className="text-xs leading-relaxed text-neutral-400">
                     {tierDescriptions[tier]}
                   </span>
+                </div>
+                <div
+                  className={`pointer-events-none absolute right-6 top-5 flex items-center justify-between gap-2 px-0 py-0 text-sm font-medium transition-all duration-200 group-hover:border-black group-hover:bg-black group-hover:px-5 group-hover:py-3.5 group-hover:text-white ${bookingBadgeClassName}`}
+                >
+                  <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-200 group-hover:mr-1 group-hover:max-w-32 group-hover:opacity-100">
+                    Book a call
+                  </span>
+                  <span className="h-4 w-px bg-current transition-opacity duration-200 opacity-0 group-hover:opacity-40" />
+                  <ArrowUpRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                 </div>
               </div>
 

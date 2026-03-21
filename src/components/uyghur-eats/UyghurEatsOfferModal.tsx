@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, ArrowRight } from 'lucide-react';
-import { getHostedFormEndpoint, getSourceMetadata, submitHostedForm } from '../../lib/engagement';
+import { getSourceMetadata, submitInternalForm } from '../../lib/engagement';
 
 interface UyghurEatsOfferModalProps {
     isOpen: boolean;
@@ -32,20 +32,24 @@ export default function UyghurEatsOfferModal({
         const signature = String(formData.get('signature') ?? '').trim();
         const comments = String(formData.get('comments') ?? '').trim();
 
-        const result = await submitHostedForm(getHostedFormEndpoint('client'), {
-            client_name: clientName,
-            authorized_representative: representative,
-            email,
-            client_email: email,
-            signature_name: signature,
-            message: comments,
-            project_name: 'Uyghur Eats Strategic Exit',
-            proposal_name: 'Business Sale Preparation & Opportunity Packaging',
-            action_type: 'proposal_acceptance',
-            form_type: 'proposal_acceptance',
-            accepted_terms: true,
-            _subject: 'Uyghur Eats: proposal acceptance',
-            ...getSourceMetadata(),
+        const result = await submitInternalForm('/api/proposal-signature', {
+            signerName: representative,
+            signerEmail: email,
+            company: clientName,
+            proposalName: 'Business Sale Preparation & Opportunity Packaging',
+            proposalId: 'uyghur-eats-strategic-exit',
+            proposalUrl: typeof window !== 'undefined' ? window.location.href : '/client/uyghur-eats',
+            actionTaken: 'proposal_acceptance',
+            notes: comments,
+            acceptedTerms: true,
+            signatureName: signature,
+            signatureDataUrl: '',
+            companyWebsite: '',
+            ...getSourceMetadata({
+                formType: 'proposal_acceptance',
+                actionType: 'proposal_acceptance',
+                sourcePage: 'Uyghur Eats proposal acceptance',
+            }),
         });
 
         setIsSubmitting(false);
@@ -164,7 +168,7 @@ export default function UyghurEatsOfferModal({
 
                         <div className="mt-6 flex flex-col gap-3 border-t border-neutral-200 pt-5 md:flex-row md:items-center md:justify-between">
                             <p className="text-xs leading-5 text-neutral-500">
-                                This routes through the client submission form and should notify info@b2w-ai.com while sending a confirmation to the submitted client email when enabled in the form provider.
+                                This routes through the internal proposal-signature API and should notify info@b2w-ai.com while sending a confirmation to the submitted client email.
                             </p>
                             <div className="flex flex-col gap-3 md:flex-row">
                                 <button
@@ -196,7 +200,7 @@ export default function UyghurEatsOfferModal({
                                 Letter of Intent Received
                             </h3>
                             <p className="max-w-xl text-sm leading-6 text-neutral-600">
-                                Your acceptance has been captured through the client workflow. B2W can reply directly to the submitted email, and a receipt can be sent from the hosted form provider when autoresponse is configured.
+                                Your acceptance has been captured through the internal proposal workflow. B2W can reply directly to the submitted email, and a confirmation email should be sent automatically.
                             </p>
                             <div className="mt-6 flex gap-3">
                                 <button

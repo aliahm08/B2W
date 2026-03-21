@@ -1,75 +1,60 @@
-type HostedFormIntent = 'lead' | 'client';
-
-export type HostedFormResult = {
+export type SubmissionResult = {
   ok: boolean;
   error?: string;
+  warning?: string;
 };
 
 export function getCalendlyUrl(): string {
   return import.meta.env.VITE_CALENDLY_URL?.trim() ?? '';
 }
 
-export function getHostedFormEndpoint(intent: HostedFormIntent): string {
-  const value =
-    intent === 'lead'
-      ? import.meta.env.VITE_FORM_ENDPOINT_LEADS
-      : import.meta.env.VITE_FORM_ENDPOINT_CLIENT;
-
-  return value?.trim() ?? '';
-}
-
 export function getSourceMetadata(overrides?: Record<string, string>): Record<string, string> {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const href = typeof window !== 'undefined' ? window.location.href : '';
+  const referrer = typeof document !== 'undefined' ? document.referrer : '';
 
   return {
-    source_page: typeof document !== 'undefined' ? document.title : '',
-    source_path: pathname,
-    source_url: href,
-    submitted_at: new Date().toISOString(),
-    site_context: pathname.startsWith('/client/') || pathname.startsWith('/portal/') ? 'client' : 'public',
+    sourcePage: typeof document !== 'undefined' ? document.title : '',
+    sourcePath: pathname,
+    sourceUrl: href,
+    referrer,
+    submittedAt: new Date().toISOString(),
     ...overrides,
   };
 }
 
-export async function submitHostedForm(
+export async function submitInternalForm(
   endpoint: string,
-  fields: Record<string, string | boolean | undefined>,
-): Promise<HostedFormResult> {
-  if (!endpoint) {
-    return { ok: false, error: 'Form routing is not configured yet.' };
-  }
-
-  const formData = new FormData();
-
-  Object.entries(fields).forEach(([key, value]) => {
-    if (value === undefined) return;
-    formData.append(key, String(value));
-  });
-
+  payload: Record<string, unknown>,
+): Promise<SubmissionResult> {
   try {
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: formData,
+      body: JSON.stringify(payload),
     });
 
-    if (response.ok) {
-      return { ok: true };
+    const raw = await response.text();
+    let data: Record<string, unknown> = {};
+
+    try {
+      data = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};
+    } catch {
+      data = {};
     }
 
-    const payload = (await response.json().catch(() => null)) as
-      | { errors?: Array<{ message?: string }>; error?: string }
-      | null;
+    if (!response.ok) {
+      return {
+        ok: false,
+        error: String(data.error ?? 'Unable to submit the form right now.'),
+      };
+    }
 
     return {
-      ok: false,
-      error:
-        payload?.errors?.[0]?.message ??
-        payload?.error ??
-        'Unable to submit the form right now.',
+      ok: true,
+      warning: typeof data.warning === 'string' ? data.warning : undefined,
     };
   } catch (error) {
     return {

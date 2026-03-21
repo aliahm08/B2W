@@ -42,7 +42,7 @@ export default function ProjectShowcase() {
           <div className="h-px w-full bg-neutral-200" />
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
           {showcaseProjects.map((project, index) => (
             <motion.article
               key={project.id}
@@ -50,7 +50,9 @@ export default function ProjectShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.06 }}
-              className="group relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300"
+              className={`group relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300 ${
+                project.id === 'business-revamp-projects' ? 'xl:col-span-3' : ''
+              }`}
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_35%)]" />
 

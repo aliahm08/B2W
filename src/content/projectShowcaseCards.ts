@@ -23,7 +23,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     statusLabel: 'Accepting Requests',
     statusTone: 'active',
     inquiryType: 'Marketing',
-    title: 'Grow your Business by 24%',
+    title: 'Grow your Business by 10%+',
     clientDescription:
       'Brand positioning, campaign planning, channel strategy, and customer acquisition work tailored to small and midsize businesses.',
     description:

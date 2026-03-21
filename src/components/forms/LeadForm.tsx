@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
-import { getHostedFormEndpoint, getSourceMetadata, openCalendly, submitHostedForm } from '../../lib/engagement';
+import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
 
 export const publicProjectAreas = ['Marketing', 'Financials', 'Operations'] as const;
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
@@ -21,10 +21,12 @@ type LeadFormState = {
   name: string;
   email: string;
   businessName: string;
+  phone: string;
   website: string;
   arrRange: ArrRange;
   selectedProjectAreas: PublicProjectArea[];
   message: string;
+  websiteUrl: string;
 };
 
 type LeadFormProps = {
@@ -38,10 +40,12 @@ const defaultState: LeadFormState = {
   name: '',
   email: '',
   businessName: '',
+  phone: '',
   website: '',
   arrRange: '',
   selectedProjectAreas: [],
   message: '',
+  websiteUrl: '',
 };
 
 function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): NormalizedProjectArea | '' {
@@ -96,19 +100,21 @@ export default function LeadForm({
     setStatus('submitting');
     setErrorMessage('');
 
-    const result = await submitHostedForm(getHostedFormEndpoint('lead'), {
+    const result = await submitInternalForm('/api/contact-lead', {
       name: state.name.trim(),
       email: state.email.trim(),
-      business_name: state.businessName.trim(),
+      company: state.businessName.trim(),
+      phone: state.phone.trim(),
       website: state.website.trim(),
-      arr_range: state.arrRange,
-      project_areas: state.selectedProjectAreas.join(', '),
-      normalized_project_area: normalizedProjectArea,
+      arrRange: state.arrRange,
+      projectAreas: state.selectedProjectAreas,
+      inquiryType: normalizedProjectArea || 'General inquiry',
+      normalizedProjectArea,
       message: state.message.trim(),
-      _subject: `New B2W lead inquiry: ${normalizedProjectArea || 'General inquiry'}`,
+      websiteUrl: state.websiteUrl.trim(),
       ...getSourceMetadata({
-        form_type: 'lead_inquiry',
-        action_type: 'lead_submission',
+        formType: 'lead_inquiry',
+        actionType: 'lead_submission',
       }),
     });
 
@@ -175,6 +181,20 @@ export default function LeadForm({
             />
           </label>
           <label className="block">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Phone</span>
+            <input
+              type="tel"
+              name="phone"
+              value={state.phone}
+              onChange={(event) => setState((current) => ({ ...current, phone: event.target.value }))}
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+              placeholder="Optional"
+            />
+          </label>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="block">
             <span className="mb-2 block text-sm font-medium text-neutral-800">Website</span>
             <input
               type="url"
@@ -183,6 +203,18 @@ export default function LeadForm({
               onChange={(event) => setState((current) => ({ ...current, website: event.target.value }))}
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="https://yourbusiness.com"
+            />
+          </label>
+          <label className="hidden">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Leave this field empty</span>
+            <input
+              type="text"
+              name="websiteUrl"
+              tabIndex={-1}
+              autoComplete="off"
+              value={state.websiteUrl}
+              onChange={(event) => setState((current) => ({ ...current, websiteUrl: event.target.value }))}
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none"
             />
           </label>
         </div>

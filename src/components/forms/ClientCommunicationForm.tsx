@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { getHostedFormEndpoint, getSourceMetadata, submitHostedForm } from '../../lib/engagement';
+import { getSourceMetadata, submitInternalForm } from '../../lib/engagement';
 
 type ClientCommunicationFormProps = {
   clientName: string;
@@ -13,7 +13,9 @@ type ClientCommunicationFormProps = {
 type ClientCommunicationState = {
   clientName: string;
   clientEmail: string;
+  company: string;
   message: string;
+  faxNumber: string;
 };
 
 export default function ClientCommunicationForm({
@@ -26,7 +28,9 @@ export default function ClientCommunicationForm({
   const [state, setState] = useState<ClientCommunicationState>({
     clientName,
     clientEmail: '',
+    company: '',
     message: '',
+    faxNumber: '',
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
@@ -36,16 +40,18 @@ export default function ClientCommunicationForm({
     setStatus('submitting');
     setErrorMessage('');
 
-    const result = await submitHostedForm(getHostedFormEndpoint('client'), {
-      client_name: state.clientName.trim(),
-      email: state.clientEmail.trim(),
-      client_email: state.clientEmail.trim(),
+    const result = await submitInternalForm('/api/client-communication', {
+      clientName: state.clientName.trim(),
+      clientEmail: state.clientEmail.trim(),
+      company: state.company.trim(),
       message: state.message.trim(),
-      project_name: projectName,
-      action_type: actionType,
-      form_type: 'client_communication',
-      _subject: `${projectName}: client communication`,
-      ...getSourceMetadata(),
+      projectName,
+      messageCategory: actionType,
+      faxNumber: state.faxNumber.trim(),
+      ...getSourceMetadata({
+        formType: 'client_communication',
+        actionType,
+      }),
     });
 
     if (!result.ok) {
@@ -55,7 +61,7 @@ export default function ClientCommunicationForm({
     }
 
     setStatus('success');
-    setState((current) => ({ ...current, clientEmail: '', message: '' }));
+    setState((current) => ({ ...current, clientEmail: '', company: '', message: '', faxNumber: '' }));
   }
 
   return (
@@ -85,6 +91,30 @@ export default function ClientCommunicationForm({
               required
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="name@company.com"
+            />
+          </label>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <label className="block">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Company</span>
+            <input
+              type="text"
+              value={state.company}
+              onChange={(event) => setState((current) => ({ ...current, company: event.target.value }))}
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+              placeholder="Company name"
+            />
+          </label>
+          <label className="hidden">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Leave this field empty</span>
+            <input
+              type="text"
+              value={state.faxNumber}
+              onChange={(event) => setState((current) => ({ ...current, faxNumber: event.target.value }))}
+              tabIndex={-1}
+              autoComplete="off"
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none"
             />
           </label>
         </div>

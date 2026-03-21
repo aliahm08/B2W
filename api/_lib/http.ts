@@ -4,15 +4,23 @@ export function sendJson(res: any, status: number, payload: unknown): void {
   res.end(JSON.stringify(payload));
 }
 
-export async function readJsonBody<T>(req: any): Promise<T> {
+export async function readJsonBody<T>(req: any, maxBytes = 512_000): Promise<T> {
   if (req.body && typeof req.body === 'object') {
     return req.body as T;
   }
 
   const chunks: Buffer[] = [];
+  let totalBytes = 0;
 
   for await (const chunk of req) {
-    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+    const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+    totalBytes += buffer.length;
+
+    if (totalBytes > maxBytes) {
+      throw new Error(`Request body too large. Max ${maxBytes} bytes.`);
+    }
+
+    chunks.push(buffer);
   }
 
   const raw = Buffer.concat(chunks).toString('utf8').trim();

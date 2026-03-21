@@ -2,7 +2,7 @@ import { type FormEvent, PointerEvent as ReactPointerEvent, useEffect, useRef, u
 import { AnimatePresence, motion } from 'motion/react';
 import { CheckCircle2, PenSquare, Send, X } from 'lucide-react';
 import type { ProposalContent } from '../content/proposals';
-import { getHostedFormEndpoint, getSourceMetadata, submitHostedForm } from '../lib/engagement';
+import { getSourceMetadata, submitInternalForm } from '../lib/engagement';
 
 type ProposalAcceptanceSectionProps = {
   pathname: string;
@@ -174,29 +174,29 @@ export default function ProposalAcceptanceSection({
     if (!state.acceptedTerms || !signature.hasSignature) return;
 
     setIsSubmitting(true);
-    setSubmitError('');
+        setSubmitError('');
 
     try {
-      const result = await submitHostedForm(getHostedFormEndpoint('client'), {
-        client_name: state.fullName.trim(),
-        email: state.email.trim(),
-        client_email: state.email.trim(),
+      const result = await submitInternalForm('/api/proposal-signature', {
+        signerName: state.fullName.trim(),
+        signerEmail: state.email.trim(),
         company: state.company.trim(),
-        message: state.notes.trim(),
-        proposal_name: proposal.proposalTitle,
-        project_name: proposal.proposalTitle,
-        selected_option_id: state.selectedOptionId,
-        selected_option_title: selectedOption?.title ?? '',
-        selected_option_price: selectedOption?.price ?? '',
-        action_type: 'proposal_acceptance',
-        form_type: 'proposal_acceptance',
-        accepted_terms: state.acceptedTerms,
-        signature_present: signature.hasSignature,
-        signature_name: state.fullName.trim(),
-        signature_data_url: signature.toDataUrl(),
-        _subject: `${proposal.proposalTitle}: proposal accepted`,
+        notes: state.notes.trim(),
+        proposalName: proposal.proposalTitle,
+        proposalId: state.selectedOptionId,
+        proposalUrl: typeof window !== 'undefined' ? window.location.href : pathname,
+        selectedOptionId: state.selectedOptionId,
+        selectedOptionTitle: selectedOption?.title ?? '',
+        selectedOptionPrice: selectedOption?.price ?? '',
+        actionTaken: 'proposal_acceptance',
+        acceptedTerms: state.acceptedTerms,
+        signatureName: state.fullName.trim(),
+        signatureDataUrl: signature.toDataUrl(),
+        companyWebsite: '',
         ...getSourceMetadata({
-          source_path: pathname,
+          sourcePath: pathname,
+          formType: 'proposal_acceptance',
+          actionType: 'proposal_acceptance',
         }),
       });
 
@@ -411,7 +411,7 @@ export default function ProposalAcceptanceSection({
 
                   <div className="flex flex-col gap-3 border-t border-black/10 pt-5 md:flex-row md:items-center md:justify-between">
                     <p className="text-xs leading-5 text-neutral-500">
-                      This acceptance routes through the client submission endpoint and should notify info@b2w-ai.com plus the signer email.
+                      This acceptance routes through the internal proposal-signature API and should notify info@b2w-ai.com plus the signer email.
                     </p>
                     <button
                       type="submit"
@@ -432,7 +432,7 @@ export default function ProposalAcceptanceSection({
                   <h3 className="mt-4 text-2xl font-medium tracking-tight text-black">{proposal.successHeading}</h3>
                   <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-600">{proposal.successBody}</p>
                   <p className="mt-5 border border-black/10 bg-neutral-50 px-4 py-3 text-sm text-neutral-700">
-                    B2W should receive the notification at <span className="font-medium">info@b2w-ai.com</span>, and the signer should receive a confirmation email when the hosted form provider autoresponse is enabled.
+                    B2W should receive the notification at <span className="font-medium">info@b2w-ai.com</span>, and the signer should receive a confirmation email through the internal submission system.
                   </p>
                 </div>
               )}

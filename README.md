@@ -39,23 +39,32 @@
 - Calendar reads and event creation are restricted to `GOOGLE_ALLOWED_CALENDAR_IDS`, and Drive writes are restricted to `GOOGLE_DRIVE_BOOKING_FOLDER_ID` when that folder is also allowlisted.
 
 ## Booking and Forms Setup
-- Public landing pages now use a hosted lead form as the primary intake flow, with Calendly shown as a follow-on booking option.
-- Client proposal and portal pages use a separate hosted form endpoint for proposal acceptance and client communications.
-- Add these browser-safe environment variables locally and in Vercel:
+- Public landing pages, service pages, client communications, and proposal signatures now submit to internal Vercel API routes.
+- The API routes validate input, rate-limit requests, send email through Resend, and append rows to Google Sheets.
+- Calendly remains optional as a follow-on CTA after successful lead submissions.
+- Add these environment variables locally and in Vercel:
 
 ```bash
 VITE_CALENDLY_URL="https://calendly.com/your-team/consultation"
-VITE_FORM_ENDPOINT_LEADS="https://formspree.io/f/your-leads-id"
-VITE_FORM_ENDPOINT_CLIENT="https://formspree.io/f/your-client-id"
+RESEND_API_KEY="re_xxx"
+RESEND_FROM_EMAIL="B2W <info@b2w-ai.com>"
+INTERNAL_NOTIFICATION_EMAIL="info@b2w-ai.com"
+GOOGLE_SHEETS_SPREADSHEET_ID="your-google-sheet-id"
+GOOGLE_SERVICE_ACCOUNT_EMAIL="service-account@project.iam.gserviceaccount.com"
+GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+SHEET_TAB_LEADS="Lead Inquiries"
+SHEET_TAB_CLIENT_COMMUNICATIONS="Client Communications"
+SHEET_TAB_PROPOSAL_SIGNATURES="Proposal Signatures"
 ```
 
 - `VITE_CALENDLY_URL` is used in the Expertise section and in the success state after public lead submissions.
-- `VITE_FORM_ENDPOINT_LEADS` is used by the public lead inquiry form.
-- `VITE_FORM_ENDPOINT_CLIENT` is used by client-side proposal acceptance and communication forms.
+- `/api/contact-lead` handles public lead inquiries.
+- `/api/client-communication` handles client portal / client communication forms.
+- `/api/proposal-signature` handles proposal acceptance and signature-related actions.
+- Resend credentials and Google credentials stay server-side only and are never exposed to the browser bundle.
 - All non-client landing pages now use the same `Tell us about your business` intake form, including ARR and multi-select project areas.
 - Selecting all three public project areas normalizes the lead to `End-to-End Rebuild`.
-- Configure the client hosted form so notifications go to `info@b2w-ai.com` and replies can use the submitted client email.
-- If the provider supports autoresponders, enable a confirmation email on the client form.
+- Google Sheets logging expects the workbook tabs to already exist or match the configured names.
 - Full operator setup is documented in [docs/forms-and-booking-setup.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/forms-and-booking-setup.md).
 
 ## Project Pipeline Sync
