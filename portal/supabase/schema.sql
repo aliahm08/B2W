@@ -104,6 +104,30 @@ create table if not exists public.audit_logs (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.form_submissions (
+  id uuid primary key default gen_random_uuid(),
+  audience text not null check (audience in ('landing', 'client')),
+  submission_type text not null,
+  template_key text not null,
+  notification_email text not null default 'info@b2w-ai.com',
+  contact_name text not null,
+  contact_email text not null,
+  company text,
+  phone text,
+  website text,
+  subject text,
+  message text not null,
+  project_name text,
+  project_area text,
+  source_page text,
+  source_path text,
+  source_url text,
+  referrer text,
+  submitted_at timestamptz not null default now(),
+  metadata jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql

@@ -15,6 +15,7 @@ export type LeadSubmission = {
   email: string;
   company: string;
   phone: string;
+  website: string;
   inquiryType: string;
   message: string;
   arrRange: string;
@@ -167,6 +168,7 @@ export function validateLeadSubmission(payload: Record<string, unknown>): Valida
       email: email.value,
       company: optionalText(payload.company ?? payload.businessName, 200),
       phone: optionalText(payload.phone, 80),
+      website: optionalText(payload.website, 500),
       inquiryType: inquiryType.value,
       message: message.value,
       arrRange: optionalText(payload.arrRange, 80),

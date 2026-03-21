@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
+import { FormStatus, FormTemplate } from './FormTemplate';
 
 export const publicProjectAreas = ['Marketing', 'Financials', 'Operations'] as const;
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
@@ -132,14 +133,17 @@ export default function LeadForm({
   }
 
   return (
-    <div className="border border-black/10 bg-white p-6 md:p-7">
-      <div className="mb-6">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">Lead Inquiry</p>
-        <h3 className="mt-2 text-2xl font-medium tracking-tight text-black">{heading}</h3>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">{intro}</p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <FormTemplate
+      eyebrow="Lead Inquiry"
+      title={heading}
+      intro={intro}
+      onSubmit={handleSubmit}
+      footerNote="This is the primary intake flow for prospective businesses. Booking is offered after submission as a follow-on option."
+      submitLabel={submitLabel}
+      submittingLabel="Submitting..."
+      submitDisabled={status === 'submitting' || state.selectedProjectAreas.length === 0}
+      isSubmitting={status === 'submitting'}
+    >
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block">
             <span className="mb-2 block text-sm font-medium text-neutral-800">Name</span>
@@ -280,8 +284,11 @@ export default function LeadForm({
           />
         </label>
 
-        {status === 'success' ? (
-          <div className="space-y-3 border border-emerald-500/30 bg-emerald-500/10 px-4 py-4">
+        <FormStatus
+          status={status}
+          errorMessage={errorMessage}
+          successContent={
+            <>
             <p className="text-sm text-emerald-700">
               Inquiry received. We will follow up using the email you submitted.
             </p>
@@ -298,26 +305,9 @@ export default function LeadForm({
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
-          </div>
-        ) : null}
-        {status === 'error' ? (
-          <p className="border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{errorMessage}</p>
-        ) : null}
-
-        <div className="flex flex-col gap-3 border-t border-black/10 pt-4 md:flex-row md:items-center md:justify-between">
-          <p className="text-xs leading-5 text-neutral-500">
-            This is the primary intake flow for prospective businesses. Booking is offered after submission as a follow-on option.
-          </p>
-          <button
-            type="submit"
-            disabled={status === 'submitting' || state.selectedProjectAreas.length === 0}
-            className="inline-flex items-center justify-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {status === 'submitting' ? 'Submitting...' : submitLabel}
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-      </form>
-    </div>
+            </>
+          }
+        />
+    </FormTemplate>
   );
 }

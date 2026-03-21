@@ -1,5 +1,6 @@
 import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
 import { appendSheetRow } from './lib/googleSheets.js';
+import { insertClientFormSubmission } from './lib/formSubmissions.js';
 import { checkRateLimit, getClientIp } from './lib/rateLimit.js';
 import { sendEmail } from './lib/resend.js';
 import { buildClientCommunicationEmails } from './lib/emailTemplates.js';
@@ -14,6 +15,8 @@ async function processSubmission(submission: ClientCommunicationSubmission) {
   const emails = buildClientCommunicationEmails(submission);
   const internalEmail = getInternalEmail();
   const errors: string[] = [];
+
+  await insertClientFormSubmission(submission, internalEmail);
 
   try {
     await sendEmail({
