@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
+import MobileMenuDrawer from './MobileMenuDrawer';
 
 export type ClientNavAction = {
   label: string;
@@ -280,108 +281,71 @@ export default function ClientNavbar({
         </div>
       </div>
 
-      <AnimatePresence>
-        {isMobileMenuOpen ? (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'calc(100vh - 5rem)' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: 'easeOut' }}
-            className="overflow-hidden border-t border-white/10 bg-black/82 px-4 pb-8 pt-4 text-white shadow-sm backdrop-blur-xl md:hidden"
-          >
-            <motion.div
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={{
-                open: { transition: { staggerChildren: 0.05, delayChildren: 0.03 } },
-                closed: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
-              }}
-              className="mx-auto flex h-full max-w-7xl flex-col overflow-y-auto pb-14"
-            >
-              {clientSubpages.length > 0 ? (
-                <motion.div variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: -8 } }} className="flex-1 border-b border-white/10 pb-3">
-                  <div className="flex h-full flex-col divide-y divide-white/10">
-                    {clientSubpages.map((item) =>
-                      item.to ? (
-                        <Link
-                          key={item.label}
-                          to={item.to}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className={`${mobileMenuLinkClassName} min-h-0 flex-1 ${currentPageMeta?.to === item.to ? 'font-semibold text-white' : ''}`}
-                        >
-                          <span>{item.label}</span>
-                          <ArrowRight className="h-4 w-4 shrink-0" />
-                        </Link>
-                      ) : (
-                        <button
-                          key={item.label}
-                          type="button"
-                          onClick={() => {
-                            item.onClick?.();
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className={`${mobileMenuLinkClassName} min-h-0 flex-1`}
-                        >
-                          <span>{item.label}</span>
-                          <ArrowRight className="h-4 w-4 shrink-0" />
-                        </button>
-                      )
-                    )}
-                  </div>
-                </motion.div>
-              ) : null}
-
-              {navItems?.map((item) => {
-                const itemVariants = {
-                  open: { opacity: 1, y: 0 },
-                  closed: { opacity: 0, y: -8 },
-                };
-
-                if (item.type !== 'cta') {
-                  return null;
-                }
-
-                if (item.type === 'cta') {
-                  return (
-                    <motion.div key={item.label} variants={itemVariants} className="pt-6">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          item.onClick?.();
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
-                      >
-                        <span>{item.label}</span>
-                        <ArrowRight className="h-4 w-4 shrink-0" />
-                      </button>
-                    </motion.div>
-                  );
-                }
-              })}
-
-              <motion.div
-                variants={{ open: { opacity: 1, y: 0 }, closed: { opacity: 0, y: -8 } }}
-                className="mt-8 border-t border-white/10 pt-6"
-              >
-                <div className="text-sm text-white/70">
-                  <p className="text-base font-medium text-white">
-                    <span className="b2w-wordmark">B2W LLC</span>
-                  </p>
-                  <p className="mt-2 text-sm text-white/50">© {new Date().getFullYear()} All rights reserved.</p>
-                  <a
-                    href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
-                    className="mt-3 inline-block text-sm font-medium text-white/80 transition-colors hover:text-white"
+      <MobileMenuDrawer
+        isOpen={isMobileMenuOpen}
+        theme="dark"
+        list={
+          clientSubpages.length > 0 ? (
+            <>
+              {clientSubpages.map((item) =>
+                item.to ? (
+                  <Link
+                    key={item.label}
+                    to={item.to}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`${mobileMenuLinkClassName} min-h-0 flex-1 ${currentPageMeta?.to === item.to ? 'font-semibold text-white' : ''}`}
                   >
-                    Contact
-                  </a>
-                </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+                    <span>{item.label}</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </Link>
+                ) : (
+                  <button
+                    key={item.label}
+                    type="button"
+                    onClick={() => {
+                      item.onClick?.();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`${mobileMenuLinkClassName} min-h-0 flex-1`}
+                  >
+                    <span>{item.label}</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </button>
+                ),
+              )}
+            </>
+          ) : null
+        }
+        cta={
+          navItems?.find((item) => item.type === 'cta') ? (
+            <button
+              type="button"
+              onClick={() => {
+                navItems.find((item) => item.type === 'cta')?.onClick?.();
+                setIsMobileMenuOpen(false);
+              }}
+              className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
+            >
+              <span>{navItems.find((item) => item.type === 'cta')?.label}</span>
+              <ArrowRight className="h-4 w-4 shrink-0" />
+            </button>
+          ) : null
+        }
+        footer={
+          <div className="text-sm text-white/70">
+            <p className="text-base font-medium text-white">
+              <span className="b2w-wordmark">B2W LLC</span>
+            </p>
+            <p className="mt-2 text-sm text-white/50">© {new Date().getFullYear()} All rights reserved.</p>
+            <a
+              href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
+              className="mt-3 inline-block text-sm font-medium text-white/80 transition-colors hover:text-white"
+            >
+              Contact
+            </a>
+          </div>
+        }
+      />
     </nav>
   );
 }

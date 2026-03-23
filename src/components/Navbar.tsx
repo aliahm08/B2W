@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Menu, Search, X } from 'lucide-react';
+import { ArrowRight, Menu, Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import MobileMenuDrawer from './MobileMenuDrawer';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,69 +57,76 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-20 left-0 right-0 border-b border-neutral-200 bg-[#faf8f2]/95 px-5 py-5 shadow-[0_24px_80px_rgba(15,23,42,0.16)] backdrop-blur-xl"
-        >
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.26em] text-neutral-500">Home Navigation</p>
-              <p className="mt-1 text-sm text-neutral-600">Explore the public site without entering the client portal.</p>
-            </div>
-          </div>
+      <MobileMenuDrawer
+        isOpen={isOpen}
+        theme="light"
+        header={
+          <>
+            <p className="text-[11px] uppercase tracking-[0.26em] text-neutral-500">Home Navigation</p>
+            <p className="mt-2 text-sm text-neutral-600">Explore the public site without entering the client portal.</p>
 
-          <div className="mobile-menu-search-shell">
-            <div className="mobile-menu-search">
-              <Search className="h-4 w-4 text-neutral-500" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search sections"
-                autoComplete="off"
-                className="w-full bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
-              />
+            <div className="mobile-menu-search-shell mt-4">
+              <div className="mobile-menu-search">
+                <Search className="h-4 w-4 text-neutral-500" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search sections"
+                  autoComplete="off"
+                  className="w-full bg-transparent text-sm text-neutral-900 outline-none placeholder:text-neutral-400"
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="mt-5 flex flex-col gap-2">
-            {filteredMenuItems.length > 0 ? (
-              filteredMenuItems.map((item) => (
+          </>
+        }
+        list={
+          filteredMenuItems.length > 0 ? (
+            <>
+              {filteredMenuItems.map((item) => (
                 <Link
                   key={item.label}
                   to={item.to}
-                  className="rounded-[1.4rem] border border-black/8 bg-white/90 px-4 py-3 transition-all hover:border-black/20 hover:bg-white"
                   onClick={() => {
                     setIsOpen(false);
                     setSearchQuery('');
                   }}
+                  className="flex min-h-0 flex-1 items-center justify-between gap-3 py-3 text-left"
                 >
-                  <span className="block text-base font-medium text-neutral-900">{item.label}</span>
-                  <span className="mt-1 block text-xs leading-5 text-neutral-500">{item.note}</span>
+                  <div>
+                    <span className="block text-[17px] font-medium text-neutral-900">{item.label}</span>
+                    <span className="mt-1 block text-sm text-neutral-500">{item.note}</span>
+                  </div>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-neutral-400" />
                 </Link>
-              ))
-            ) : (
-              <div className="rounded-[1.4rem] border border-dashed border-black/10 bg-white/70 px-4 py-4 text-sm text-neutral-500">
-                No matching home sections.
-              </div>
-            )}
-          </div>
-
+              ))}
+            </>
+          ) : (
+            <div className="pt-4 text-sm text-neutral-500">No matching home sections.</div>
+          )
+        }
+        cta={
           <a
             href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
-            className="mt-5 inline-flex items-center justify-center rounded-full bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
             onClick={() => {
               setIsOpen(false);
               setSearchQuery('');
             }}
+            className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-black px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-neutral-800"
           >
-            Contact
+            <span>Contact</span>
           </a>
-        </motion.div>
-      )}
+        }
+        footer={
+          <div className="text-sm text-neutral-600">
+            <p className="text-base font-medium text-black">
+              <span className="b2w-wordmark">B2W LLC</span>
+            </p>
+            <p className="mt-2 text-sm text-neutral-500">© {new Date().getFullYear()} All rights reserved.</p>
+            <p className="mt-3 text-sm text-neutral-500">Public site menu. Client navigation remains separate.</p>
+          </div>
+        }
+      />
     </nav>
   );
 }

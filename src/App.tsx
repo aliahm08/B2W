@@ -115,6 +115,8 @@ export default function App() {
           <Route path="/capabilities" element={<CapabilitiesIndex />} />
           <Route path="/capabilities/:slug" element={<CapabilityPage />} />
           <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
+          {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
+              Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
           <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
           <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
           <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
