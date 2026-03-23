@@ -40,11 +40,13 @@ function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): Normal
   return selectedProjectAreas[0] ?? '';
 }
 
+const EMPTY_ARRAY: PublicProjectArea[] = [];
+
 export default function LeadForm({
   heading = 'Tell us about your business',
   intro = 'Share the basics first. Once we have your intake, you can book a call if you want to move faster.',
   submitLabel = 'Request a consultation',
-  preselectedProjectAreas = [],
+  preselectedProjectAreas = EMPTY_ARRAY,
 }: LeadFormProps) {
   const [state, setState] = useState<LeadFormState>({
     ...defaultState,
