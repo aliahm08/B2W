@@ -1,12 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { motion } from 'motion/react';
 import { Bot, CalendarDays, Loader2, RefreshCcw, Send, Sparkles, User } from 'lucide-react';
-
-type ChatMessage = {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-};
 
 type BookingSlot = {
   start: string;
@@ -18,12 +11,7 @@ type ChatBotProps = {
   onTabChange?: (tab: 'chat' | 'book') => void;
 };
 
-const INITIAL_MESSAGE: ChatMessage = {
-  id: 'assistant-intro',
-  role: 'assistant',
-  content:
-    'Ask about B2W services, industries, case studies, or use the booking tab to schedule a consultation.',
-};
+// Chat functionality was removed
 
 async function readApiResponse(response: Response) {
   const raw = await response.text();
@@ -57,11 +45,8 @@ function formatSlotLabel(slot: BookingSlot, timeZone: string): string {
   return formatter.format(start);
 }
 
-export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const [selectedTab, setSelectedTab] = useState<'chat' | 'book'>(activeTab);
+export default function ChatBot({ activeTab = 'book', onTabChange }: ChatBotProps) {
+  const [selectedTab, setSelectedTab] = useState<'chat' | 'book'>('book');
   const [slots, setSlots] = useState<BookingSlot[]>([]);
   const [slotsTimezone, setSlotsTimezone] = useState('America/New_York');
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
@@ -76,12 +61,8 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setSelectedTab(activeTab);
+    setSelectedTab('book');
   }, [activeTab]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
 
   useEffect(() => {
     if (selectedTab === 'book') {
@@ -128,71 +109,7 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
     onTabChange?.(tab);
   }
 
-  async function handleChatSubmit(event: FormEvent) {
-    event.preventDefault();
-    if (!input.trim() || isTyping) {
-      return;
-    }
-
-    const nextMessages = [
-      ...messages,
-      {
-        id: `user-${Date.now()}`,
-        role: 'user' as const,
-        content: input.trim(),
-      },
-    ];
-
-    setMessages(nextMessages);
-    setInput('');
-    setIsTyping(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          messages: nextMessages.map(({ role, content }) => ({ role, content })),
-        }),
-      });
-
-      const result = await readApiResponse(response);
-
-      if (!result.ok) {
-        throw new Error(
-          result.data?.error ??
-            (result.raw?.trim()
-              ? `Assistant request failed (${result.status}).`
-              : 'Unable to reach the assistant.'),
-        );
-      }
-
-      setMessages((current) => [
-        ...current,
-        {
-          id: `assistant-${Date.now()}`,
-          role: 'assistant',
-          content: result.data.reply,
-        },
-      ]);
-    } catch (error) {
-      setMessages((current) => [
-        ...current,
-        {
-          id: `assistant-error-${Date.now()}`,
-          role: 'assistant',
-          content:
-            error instanceof Error
-              ? `I hit a configuration problem: ${error.message}`
-              : 'I hit a configuration problem reaching the assistant.',
-        },
-      ]);
-    } finally {
-      setIsTyping(false);
-    }
-  }
+  // Chat submission logic removed
 
   async function handleBookingSubmit(event: FormEvent) {
     event.preventDefault();
@@ -253,93 +170,7 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            onClick={() => switchTab('chat')}
-            className={`rounded-full px-3 py-2 text-sm transition-colors ${
-              selectedTab === 'chat' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-600'
-            }`}
-          >
-            Chat
-          </button>
-          <button
-            type="button"
-            onClick={() => switchTab('book')}
-            className={`rounded-full px-3 py-2 text-sm transition-colors ${
-              selectedTab === 'book' ? 'bg-black text-white' : 'bg-neutral-100 text-neutral-600'
-            }`}
-          >
-            Book time
-          </button>
-        </div>
-      </div>
-
-      {selectedTab === 'chat' ? (
-        <>
-          <div className="flex-1 space-y-4 overflow-y-auto p-4">
-            {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
-              >
-                <div
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                    message.role === 'user' ? 'bg-black text-white' : 'bg-neutral-200 text-black'
-                  }`}
-                >
-                  {message.role === 'user' ? <User size={15} /> : <Bot size={15} />}
-                </div>
-
-                <div
-                  className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                    message.role === 'user'
-                      ? 'rounded-tr-sm bg-black text-white'
-                      : 'rounded-tl-sm border border-neutral-200 bg-white text-neutral-800'
-                  }`}
-                >
-                  {message.content}
-                </div>
-              </motion.div>
-            ))}
-
-            {isTyping && (
-              <div className="flex gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-neutral-200 text-black">
-                  <Bot size={15} />
-                </div>
-                <div className="flex items-center gap-2 rounded-2xl rounded-tl-sm border border-neutral-200 bg-white px-4 py-3 text-xs text-neutral-500">
-                  <Loader2 size={14} className="animate-spin" />
-                  Thinking
-                </div>
-              </div>
-            )}
-
-            <div ref={messagesEndRef} />
-          </div>
-
-          <div className="border-t border-neutral-200 bg-white p-3">
-            <form onSubmit={handleChatSubmit} className="flex gap-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                placeholder="Ask what B2W can build for your team..."
-                className="flex-1 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2 text-sm text-black outline-none transition-colors focus:border-black"
-              />
-              <button
-                type="submit"
-                disabled={!input.trim() || isTyping}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                <Send size={16} />
-              </button>
-            </form>
-          </div>
-        </>
-      ) : (
+      {/* Chat UI removed */}
         <div className="flex flex-1 flex-col overflow-y-auto bg-white p-4">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm font-medium text-black">
@@ -440,7 +271,7 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
             </button>
           </form>
         </div>
-      )}
+      </div>
     </div>
   );
 }
