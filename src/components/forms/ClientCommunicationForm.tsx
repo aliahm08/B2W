@@ -11,9 +11,7 @@ type ClientCommunicationFormProps = {
 };
 
 type ClientCommunicationState = {
-  clientName: string;
   clientEmail: string;
-  company: string;
   message: string;
   faxNumber: string;
 };
@@ -26,9 +24,7 @@ export default function ClientCommunicationForm({
   intro = 'Use this form for comments, requested edits, or next-step questions related to this proposal or portal.',
 }: ClientCommunicationFormProps) {
   const [state, setState] = useState<ClientCommunicationState>({
-    clientName,
     clientEmail: '',
-    company: '',
     message: '',
     faxNumber: '',
   });
@@ -41,9 +37,9 @@ export default function ClientCommunicationForm({
     setErrorMessage('');
 
     const result = await submitInternalForm('/api/client-communication', {
-      clientName: state.clientName.trim(),
+      clientName: clientName.trim(),
       clientEmail: state.clientEmail.trim(),
-      company: state.company.trim(),
+      company: clientName.trim(),
       message: state.message.trim(),
       projectName,
       messageCategory: actionType,
@@ -61,7 +57,7 @@ export default function ClientCommunicationForm({
     }
 
     setStatus('success');
-    setState((current) => ({ ...current, clientEmail: '', company: '', message: '', faxNumber: '' }));
+    setState({ clientEmail: '', message: '', faxNumber: '' });
   }
 
   return (
@@ -78,37 +74,15 @@ export default function ClientCommunicationForm({
     >
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-800">Client name</span>
-            <input
-              type="text"
-              value={state.clientName}
-              onChange={(event) => setState((current) => ({ ...current, clientName: event.target.value }))}
-              required
-              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-            />
-          </label>
-          <label className="block">
             <span className="mb-2 block text-sm font-medium text-neutral-800">Email</span>
             <input
               type="email"
               value={state.clientEmail}
               onChange={(event) => setState((current) => ({ ...current, clientEmail: event.target.value }))}
               required
+              autoComplete="email"
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="name@company.com"
-            />
-          </label>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-800">Company</span>
-            <input
-              type="text"
-              value={state.company}
-              onChange={(event) => setState((current) => ({ ...current, company: event.target.value }))}
-              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-              placeholder="Company name"
             />
           </label>
           <label className="hidden">
@@ -130,9 +104,10 @@ export default function ClientCommunicationForm({
             value={state.message}
             onChange={(event) => setState((current) => ({ ...current, message: event.target.value }))}
             required
+            autoComplete="off"
             rows={5}
             className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-            placeholder="Share feedback, requested changes, approvals needed, or scheduling constraints."
+            placeholder="Share your update, question, or requested change."
           />
         </label>
 

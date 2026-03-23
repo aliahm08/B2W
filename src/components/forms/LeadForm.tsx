@@ -7,24 +7,10 @@ export const publicProjectAreas = ['Marketing', 'Financials', 'Operations'] as c
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
 export type NormalizedProjectArea = PublicProjectArea | 'End-to-End Rebuild';
 
-const arrRangeOptions = [
-  'Under $250k',
-  '$250k - $1M',
-  '$1M - $5M',
-  '$5M - $10M',
-  '$10M - $25M',
-  '$25M+',
-] as const;
-
-type ArrRange = (typeof arrRangeOptions)[number] | '';
-
 type LeadFormState = {
   name: string;
   email: string;
   businessName: string;
-  phone: string;
-  website: string;
-  arrRange: ArrRange;
   selectedProjectAreas: PublicProjectArea[];
   message: string;
   websiteUrl: string;
@@ -41,9 +27,6 @@ const defaultState: LeadFormState = {
   name: '',
   email: '',
   businessName: '',
-  phone: '',
-  website: '',
-  arrRange: '',
   selectedProjectAreas: [],
   message: '',
   websiteUrl: '',
@@ -105,9 +88,9 @@ export default function LeadForm({
       name: state.name.trim(),
       email: state.email.trim(),
       company: state.businessName.trim(),
-      phone: state.phone.trim(),
-      website: state.website.trim(),
-      arrRange: state.arrRange,
+      phone: '',
+      website: '',
+      arrRange: '',
       projectAreas: state.selectedProjectAreas,
       inquiryType: normalizedProjectArea || 'General inquiry',
       normalizedProjectArea,
@@ -153,6 +136,7 @@ export default function LeadForm({
               value={state.name}
               onChange={(event) => setState((current) => ({ ...current, name: event.target.value }))}
               required
+              autoComplete="name"
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="Your name"
             />
@@ -165,6 +149,7 @@ export default function LeadForm({
               value={state.email}
               onChange={(event) => setState((current) => ({ ...current, email: event.target.value }))}
               required
+              autoComplete="email"
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="name@business.com"
             />
@@ -180,69 +165,30 @@ export default function LeadForm({
               value={state.businessName}
               onChange={(event) => setState((current) => ({ ...current, businessName: event.target.value }))}
               required
+              autoComplete="organization"
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="Business name"
             />
           </label>
-          <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-800">Phone</span>
-            <input
-              type="tel"
-              name="phone"
-              value={state.phone}
-              onChange={(event) => setState((current) => ({ ...current, phone: event.target.value }))}
-              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-              placeholder="Optional"
-            />
-          </label>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-800">Website</span>
-            <input
-              type="url"
-              name="website"
-              value={state.website}
-              onChange={(event) => setState((current) => ({ ...current, website: event.target.value }))}
-              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-              placeholder="https://yourbusiness.com"
-            />
-          </label>
-          <label className="hidden">
-            <span className="mb-2 block text-sm font-medium text-neutral-800">Leave this field empty</span>
-            <input
-              type="text"
-              name="websiteUrl"
-              tabIndex={-1}
-              autoComplete="off"
-              value={state.websiteUrl}
-              onChange={(event) => setState((current) => ({ ...current, websiteUrl: event.target.value }))}
-              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none"
-            />
-          </label>
-        </div>
-
-        <label className="block">
-          <span className="mb-2 block text-sm font-medium text-neutral-800">ARR</span>
-          <select
-            value={state.arrRange}
-            onChange={(event) => setState((current) => ({ ...current, arrRange: event.target.value as ArrRange }))}
-            className="w-full border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-black"
-          >
-            <option value="">Select ARR range</option>
-            {arrRangeOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+        <label className="hidden">
+          <span className="mb-2 block text-sm font-medium text-neutral-800">Leave this field empty</span>
+          <input
+            type="text"
+            name="websiteUrl"
+            tabIndex={-1}
+            autoComplete="off"
+            value={state.websiteUrl}
+            onChange={(event) => setState((current) => ({ ...current, websiteUrl: event.target.value }))}
+            className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none"
+          />
         </label>
 
         <fieldset className="block">
           <legend className="mb-2 block text-sm font-medium text-neutral-800">Project area</legend>
           <p className="mb-3 text-xs leading-5 text-neutral-500">
-            Select one or more areas. Selecting all three maps to End-to-End Rebuild.
+            Choose the closest fit. You can select more than one if needed.
           </p>
           <div className="grid gap-3 sm:grid-cols-3">
             {publicProjectAreas.map((area) => {
@@ -278,9 +224,10 @@ export default function LeadForm({
             value={state.message}
             onChange={(event) => setState((current) => ({ ...current, message: event.target.value }))}
             required
+            autoComplete="off"
             rows={5}
             className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-            placeholder="Share the business, problem, timing, and what a good outcome looks like."
+            placeholder="What do you want to improve, and how urgent is it?"
           />
         </label>
 

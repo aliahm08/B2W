@@ -16,7 +16,11 @@ async function processSubmission(submission: ClientCommunicationSubmission) {
   const internalEmail = getInternalEmail();
   const errors: string[] = [];
 
-  await insertClientFormSubmission(submission, internalEmail);
+  try {
+    await insertClientFormSubmission(submission, internalEmail);
+  } catch (error) {
+    errors.push(`supabase: ${error instanceof Error ? error.message : 'unknown error'}`);
+  }
 
   try {
     await sendEmail({
