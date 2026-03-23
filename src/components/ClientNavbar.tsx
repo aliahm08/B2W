@@ -289,28 +289,30 @@ export default function ClientNavbar({
             <>
               {clientSubpages.map((item) =>
                 item.to ? (
-                  <Link
-                    key={item.label}
-                    to={item.to}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`${mobileMenuLinkClassName} min-h-0 flex-1 ${currentPageMeta?.to === item.to ? 'font-semibold text-white' : ''}`}
-                  >
-                    <span>{item.label}</span>
-                    <ArrowRight className="h-4 w-4 shrink-0" />
-                  </Link>
+                  <motion.div key={item.label} whileTap={{ scale: 0.985, x: 4 }} transition={{ duration: 0.14 }}>
+                    <Link
+                      to={item.to}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`${mobileMenuLinkClassName} min-h-0 flex-1 ${currentPageMeta?.to === item.to ? 'font-semibold text-white' : ''}`}
+                    >
+                      <span>{item.label}</span>
+                      <ArrowRight className="h-4 w-4 shrink-0" />
+                    </Link>
+                  </motion.div>
                 ) : (
-                  <button
-                    key={item.label}
-                    type="button"
-                    onClick={() => {
-                      item.onClick?.();
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`${mobileMenuLinkClassName} min-h-0 flex-1`}
-                  >
-                    <span>{item.label}</span>
-                    <ArrowRight className="h-4 w-4 shrink-0" />
-                  </button>
+                  <motion.div key={item.label} whileTap={{ scale: 0.985, x: 4 }} transition={{ duration: 0.14 }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        item.onClick?.();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`${mobileMenuLinkClassName} min-h-0 flex-1`}
+                    >
+                      <span>{item.label}</span>
+                      <ArrowRight className="h-4 w-4 shrink-0" />
+                    </button>
+                  </motion.div>
                 ),
               )}
             </>
@@ -318,7 +320,9 @@ export default function ClientNavbar({
         }
         cta={
           navItems?.find((item) => item.type === 'cta') ? (
-            <button
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.14 }}
               type="button"
               onClick={() => {
                 navItems.find((item) => item.type === 'cta')?.onClick?.();
@@ -328,7 +332,7 @@ export default function ClientNavbar({
             >
               <span>{navItems.find((item) => item.type === 'cta')?.label}</span>
               <ArrowRight className="h-4 w-4 shrink-0" />
-            </button>
+            </motion.button>
           ) : null
         }
         footer={

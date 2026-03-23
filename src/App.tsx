@@ -17,6 +17,7 @@ import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
+import { scrollToHashTarget } from './lib/hashNavigation';
 
 const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
 const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
@@ -40,13 +41,17 @@ function ScrollToTop() {
     }
 
     if (hash) {
-      setTimeout(() => {
-        const id = hash.replace('#', '');
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+      const attemptScroll = () => {
+        if (scrollToHashTarget(hash)) {
+          return;
         }
-      }, 100);
+
+        window.setTimeout(() => {
+          scrollToHashTarget(hash);
+        }, 180);
+      };
+
+      window.requestAnimationFrame(attemptScroll);
     } else {
       window.scrollTo(0, 0);
     }

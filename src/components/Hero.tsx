@@ -1,10 +1,41 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import type { MouseEvent } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { projectPipelineContent } from '../content/projectPipeline';
+import { scrollToHashTarget } from '../lib/hashNavigation';
 
 export default function Hero() {
   const { hero } = projectPipelineContent;
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleAnchorClick = (target: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+    const hashIndex = target.indexOf('#');
+    const hash = hashIndex >= 0 ? target.slice(hashIndex) : '';
+    if (!hash) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const performScroll = () => {
+      window.requestAnimationFrame(() => {
+        scrollToHashTarget(hash);
+      });
+    };
+
+    if (location.pathname === '/') {
+      if (location.hash !== hash) {
+        navigate({ pathname: '/', hash }, { replace: false });
+      }
+      performScroll();
+      return;
+    }
+
+    navigate({ pathname: '/', hash }, { replace: false });
+    window.setTimeout(performScroll, 180);
+  };
 
   return (
     <section className="min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto pt-20">
@@ -24,6 +55,7 @@ export default function Hero() {
         <div className="flex flex-wrap gap-4">
           <Link
             to={hero.primaryCtaHref}
+            onClick={handleAnchorClick(hero.primaryCtaHref)}
             className="group inline-flex min-h-12 items-center gap-2 border border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:bg-black hover:text-white"
           >
             <span>{hero.primaryCtaLabel}</span>
@@ -31,6 +63,7 @@ export default function Hero() {
           </Link>
           <Link
             to="/#contact"
+            onClick={handleAnchorClick('/#contact')}
             className="group inline-flex items-center gap-2 border-b border-black pb-1 text-lg font-medium text-black transition-colors hover:text-neutral-600"
           >
             <span>Tell us about your business</span>

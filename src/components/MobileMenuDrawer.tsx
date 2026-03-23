@@ -11,7 +11,7 @@ type MobileMenuDrawerProps = {
 };
 
 const containerClassName = {
-  light: 'overflow-hidden border-t border-black/8 bg-[#faf8f2]/96 px-4 pb-8 pt-4 text-black shadow-sm backdrop-blur-xl md:hidden',
+  light: 'overflow-hidden border-t border-black/8 bg-white px-4 pb-8 pt-4 text-black shadow-sm md:hidden',
   dark: 'overflow-hidden border-t border-white/10 bg-black/82 px-4 pb-8 pt-4 text-white shadow-sm backdrop-blur-xl md:hidden',
 } as const;
 
@@ -50,7 +50,7 @@ export default function MobileMenuDrawer({
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'calc(100vh - 5rem)' }}
           exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
+          transition={{ duration: 0.26, ease: 'easeOut' }}
           className={containerClassName[theme]}
         >
           <motion.div

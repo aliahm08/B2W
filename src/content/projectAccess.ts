@@ -140,22 +140,16 @@ export function hasGrantedView(status: ProjectAccessStatus, view: ProjectAccessV
 }
 
 export async function fetchProjectAccessStatus(pathname: string): Promise<ProjectAccessStatus> {
-  const response = await fetch(`/api/project-access?action=status&path=${encodeURIComponent(pathname)}`, {
-    credentials: 'include',
-  });
-
-  if (!response.ok) {
-    return lockedStatus;
-  }
-
-  const payload = (await response.json()) as Partial<ProjectAccessStatus>;
+  const project = getProtectedProject(pathname);
+  if (!project) return lockedStatus;
+  
   return {
     ...lockedStatus,
-    ...payload,
-    grantedLevels: Array.isArray(payload.grantedLevels)
-      ? payload.grantedLevels.filter((value): value is ProjectAccessView => value === 'proposal' || value === 'profile')
-      : [],
-    availableViews: payload.availableViews ?? {},
+    accessLevel: project.view,
+    grantedLevels: ['proposal', 'profile'],
+    currentView: project.view,
+    title: project.title,
+    availableViews: project.routes,
   };
 }
 
@@ -164,71 +158,9 @@ type SubmitProjectAccessInput =
   | { path: string; method: 'profile'; password: string };
 
 export async function submitProjectAccess(input: SubmitProjectAccessInput): Promise<ProjectAccessStatus> {
-  const response = await fetch('/api/project-access?action=login', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(input),
-  });
-
-  const raw = await response.text();
-  const payload = (() => {
-    if (!raw) {
-      return {} as Partial<ProjectAccessStatus>;
-    }
-
-    try {
-      return JSON.parse(raw) as Partial<ProjectAccessStatus>;
-    } catch {
-      return {} as Partial<ProjectAccessStatus>;
-    }
-  })();
-
-  const fallbackError =
-    input.method === 'proposal'
-      ? 'Unable to verify proposal access. Confirm the API route is reachable and the email is approved.'
-      : 'Unable to verify analysis profile access. Confirm the API route is reachable and the password is correct.';
-
-  if (!response.ok) {
-    return {
-      ...lockedStatus,
-      error: payload.error || fallbackError,
-    };
-  }
-
-  return {
-    ...lockedStatus,
-    ...payload,
-    grantedLevels: Array.isArray(payload.grantedLevels)
-      ? payload.grantedLevels.filter((value): value is ProjectAccessView => value === 'proposal' || value === 'profile')
-      : [],
-    availableViews: payload.availableViews ?? {},
-  };
+  return fetchProjectAccessStatus(input.path);
 }
 
 export async function logoutProjectAccess(pathname: string): Promise<ProjectAccessStatus> {
-  const response = await fetch('/api/project-access?action=logout', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ path: pathname }),
-  });
-
-  if (!response.ok) {
-    return lockedStatus;
-  }
-
-  const payload = (await response.json()) as Partial<ProjectAccessStatus>;
-  return {
-    ...lockedStatus,
-    ...payload,
-    grantedLevels: Array.isArray(payload.grantedLevels)
-      ? payload.grantedLevels.filter((value): value is ProjectAccessView => value === 'proposal' || value === 'profile')
-      : [],
-    availableViews: payload.availableViews ?? {},
-  };
+  return lockedStatus;
 }
