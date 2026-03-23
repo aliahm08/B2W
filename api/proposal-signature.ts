@@ -1,10 +1,11 @@
 import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
-import { appendSheetRow } from './lib/googleSheets.js';
-import { checkRateLimit, getClientIp } from './lib/rateLimit.js';
-import { sendEmail } from './lib/resend.js';
-import { buildProposalSignatureEmails } from './lib/emailTemplates.js';
-import type { ProposalSignatureSubmission } from './lib/validation.js';
-import { validateHoneypot, validateProposalSignatureSubmission } from './lib/validation.js';
+import { appendSheetRow } from './_common/googleSheets.js';
+import { insertClientFormSubmission } from './_common/formSubmissions.js';
+import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
+import { sendEmail } from './_common/resend.js';
+import { buildProposalSignatureEmails } from './_common/emailTemplates.js';
+import type { ProposalSignatureSubmission } from './_common/validation.js';
+import { validateHoneypot, validateProposalSignatureSubmission } from './_common/validation.js';
 
 function getInternalEmail() {
   return String(process.env.INTERNAL_NOTIFICATION_EMAIL ?? 'info@b2w-ai.com').trim() || 'info@b2w-ai.com';
@@ -54,6 +55,24 @@ async function processSubmission(submission: ProposalSignatureSubmission) {
     ]);
   } catch (error) {
     errors.push(`sheets: ${error instanceof Error ? error.message : 'unknown error'}`);
+  }
+
+  try {
+    await insertClientFormSubmission({
+      clientName: submission.signerName,
+      clientEmail: submission.signerEmail,
+      company: submission.company,
+      projectName: submission.proposalName,
+      messageCategory: `proposal_${submission.actionTaken}`.toLowerCase() || 'proposal_signature',
+      message: `Proposal action recorded.\n\nAction: ${submission.actionTaken}\nSelected Option: ${submission.selectedOptionTitle || 'N/A'}\nPrice: ${submission.selectedOptionPrice || 'N/A'}\nNotes: ${submission.notes || 'None'}`,
+      sourcePage: submission.sourcePage,
+      sourcePath: submission.sourcePath,
+      sourceUrl: submission.sourceUrl,
+      referrer: submission.referrer,
+      submittedAt: submission.submittedAt,
+    }, internalEmail);
+  } catch (error) {
+    errors.push(`supabase client form: ${error instanceof Error ? error.message : 'unknown error'}`);
   }
 
   return errors;

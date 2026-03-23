@@ -1,11 +1,11 @@
 import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
-import { appendSheetRow } from './lib/googleSheets.js';
-import { insertClientFormSubmission } from './lib/formSubmissions.js';
-import { checkRateLimit, getClientIp } from './lib/rateLimit.js';
-import { sendEmail } from './lib/resend.js';
-import { buildClientCommunicationEmails } from './lib/emailTemplates.js';
-import type { ClientCommunicationSubmission } from './lib/validation.js';
-import { validateClientCommunicationSubmission, validateHoneypot } from './lib/validation.js';
+import { appendSheetRow } from './_common/googleSheets.js';
+import { insertClientFormSubmission } from './_common/formSubmissions.js';
+import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
+import { sendEmail } from './_common/resend.js';
+import { buildClientCommunicationEmails } from './_common/emailTemplates.js';
+import type { ClientCommunicationSubmission } from './_common/validation.js';
+import { validateClientCommunicationSubmission, validateHoneypot } from './_common/validation.js';
 
 function getInternalEmail() {
   return String(process.env.INTERNAL_NOTIFICATION_EMAIL ?? 'info@b2w-ai.com').trim() || 'info@b2w-ai.com';
