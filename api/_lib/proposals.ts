@@ -215,13 +215,13 @@ export function parseProposalAccessToken(token: string): ProposalAccessTokenPayl
 export function getProposalDocumentUrl(req: any, documentId: string, storage: ProposalStorageDescriptor): string {
   const { protocol, host } = getRequestOriginParts(req);
   const token = createProposalAccessToken({ documentId, storage });
-  return `${protocol}://${host}/api/proposals/document?id=${encodeURIComponent(documentId)}&token=${encodeURIComponent(token)}`;
+  return `${protocol}://${host}/api/proposals?action=document&id=${encodeURIComponent(documentId)}&token=${encodeURIComponent(token)}`;
 }
 
 export function getProposalPdfUrl(req: any, documentId: string, storage: ProposalStorageDescriptor): string {
   const { protocol, host } = getRequestOriginParts(req);
   const token = createProposalAccessToken({ documentId, storage });
-  return `${protocol}://${host}/api/proposals/document?id=${encodeURIComponent(documentId)}&token=${encodeURIComponent(token)}&format=pdf`;
+  return `${protocol}://${host}/api/proposals?action=document&id=${encodeURIComponent(documentId)}&token=${encodeURIComponent(token)}&format=pdf`;
 }
 
 function getRequestOriginParts(req: any): { protocol: string; host: string } {

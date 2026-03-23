@@ -96,7 +96,7 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
     setAvailabilityError('');
 
     try {
-      const response = await fetch('/api/consultations/availability');
+      const response = await fetch('/api/consultations?action=availability');
       const data = await response.json();
 
       if (!response.ok) {
@@ -204,7 +204,7 @@ export default function ChatBot({ activeTab = 'chat', onTabChange }: ChatBotProp
     setBookingStatus('');
 
     try {
-      const response = await fetch('/api/consultations/book', {
+      const response = await fetch('/api/consultations?action=book', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

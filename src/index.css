@@ -33,6 +33,45 @@ html {
   scroll-behavior: smooth;
 }
 
+.mobile-menu-search-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 999px;
+  padding: 1px;
+  background:
+    linear-gradient(120deg, rgba(0, 0, 0, 0.12), rgba(212, 175, 55, 0.42), rgba(0, 0, 0, 0.12));
+}
+
+.mobile-menu-search-shell::before {
+  content: "";
+  position: absolute;
+  inset: -140%;
+  background:
+    conic-gradient(from 180deg, rgba(0, 0, 0, 0.06), rgba(212, 175, 55, 0.45), rgba(245, 245, 245, 0.92), rgba(0, 0, 0, 0.08));
+  animation: mobile-menu-gradient-spin 8s linear infinite;
+}
+
+.mobile-menu-search {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(246, 243, 234, 0.98));
+  padding: 0.95rem 1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+@keyframes mobile-menu-gradient-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .b2w-wordmark {
   display: inline-block;
   transform: scaleY(0.96);

@@ -140,7 +140,7 @@ export function hasGrantedView(status: ProjectAccessStatus, view: ProjectAccessV
 }
 
 export async function fetchProjectAccessStatus(pathname: string): Promise<ProjectAccessStatus> {
-  const response = await fetch(`/api/project-access/status?path=${encodeURIComponent(pathname)}`, {
+  const response = await fetch(`/api/project-access?action=status&path=${encodeURIComponent(pathname)}`, {
     credentials: 'include',
   });
 
@@ -164,7 +164,7 @@ type SubmitProjectAccessInput =
   | { path: string; method: 'profile'; password: string };
 
 export async function submitProjectAccess(input: SubmitProjectAccessInput): Promise<ProjectAccessStatus> {
-  const response = await fetch('/api/project-access/login', {
+  const response = await fetch('/api/project-access?action=login', {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -209,7 +209,7 @@ export async function submitProjectAccess(input: SubmitProjectAccessInput): Prom
 }
 
 export async function logoutProjectAccess(pathname: string): Promise<ProjectAccessStatus> {
-  const response = await fetch('/api/project-access/logout', {
+  const response = await fetch('/api/project-access?action=logout', {
     method: 'POST',
     credentials: 'include',
     headers: {

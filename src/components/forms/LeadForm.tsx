@@ -194,21 +194,18 @@ export default function LeadForm({
             {publicProjectAreas.map((area) => {
               const isSelected = state.selectedProjectAreas.includes(area);
               return (
-                <label
+                <button
                   key={area}
-                  className={`flex cursor-pointer items-center gap-3 border px-4 py-3 text-sm transition-colors ${
+                  type="button"
+                  aria-pressed={isSelected}
+                  onClick={() => toggleProjectArea(area)}
+                  className={`flex items-center gap-3 border px-4 py-3 text-sm transition-colors ${
                     isSelected ? 'border-black bg-black text-white' : 'border-black/10 bg-white text-neutral-800'
                   }`}
                 >
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => toggleProjectArea(area)}
-                    className="sr-only"
-                  />
                   <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
                   <span>{area}</span>
-                </label>
+                </button>
               );
             })}
           </div>

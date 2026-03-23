@@ -93,7 +93,7 @@ export default function ExpertiseBookingModal({
     setAvailabilityError('');
 
     try {
-      const response = await fetch('/api/consultations/availability');
+      const response = await fetch('/api/consultations?action=availability');
       const result = await readApiResponse(response);
 
       if (!result.ok) {
@@ -131,7 +131,7 @@ export default function ExpertiseBookingModal({
     setBookingStatus('');
 
     try {
-      const response = await fetch('/api/consultations/book', {
+      const response = await fetch('/api/consultations?action=book', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
