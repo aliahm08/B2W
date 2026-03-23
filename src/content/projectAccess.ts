@@ -141,15 +141,14 @@ export function hasGrantedView(status: ProjectAccessStatus, view: ProjectAccessV
 
 export async function fetchProjectAccessStatus(pathname: string): Promise<ProjectAccessStatus> {
   const project = getProtectedProject(pathname);
-  if (!project) return lockedStatus;
   
   return {
     ...lockedStatus,
-    accessLevel: project.view,
+    accessLevel: project?.view || 'profile',
     grantedLevels: ['proposal', 'profile'],
-    currentView: project.view,
-    title: project.title,
-    availableViews: project.routes,
+    currentView: project?.view || 'profile',
+    title: project?.title || 'B2W Project',
+    availableViews: project?.routes || {},
   };
 }
 
