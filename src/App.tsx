@@ -3,10 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useEffect } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate, useSearchParams } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import ClientNavbar from './components/ClientNavbar';
 import Hero from './components/Hero';
 import CapabilitiesVisualization from './components/CapabilitiesVisualization';
 import Expertise from './components/Expertise';
@@ -16,20 +15,21 @@ import OurProcess from './components/OurProcess';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
-import BorekGProfilePage from './pages/projects/borek-g/ProfilePage';
-import BorekGProposalPage from './pages/projects/borek-g/ProposalPage';
-import UyghurEatsProfilePage from './pages/projects/uyghur-eats/ProfilePage';
-import UyghurEatsClientPortal from './pages/client/UyghurEatsClientPortal';
-import UyghurEatsTermsPage from './pages/client/UyghurEatsTermsPage';
-import UyghurEatsBasicPreviewPage from './pages/projects/uyghur-eats/previews/ValuationModelPage';
-import UyghurEatsValuationModelPage from './pages/projects/uyghur-eats/ValuationModelPage';
-import UyghurEatsDataRoomPage from './pages/projects/uyghur-eats/previews/DataRoomPage';
-import CapabilityPage from './pages/capabilities/CapabilityPage';
-import CapabilitiesIndex from './pages/capabilities/CapabilitiesIndex';
-import ServiceProjectPage from './pages/ServiceProjectPage';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
-import SabucnuProfilePage from './pages/projects/sabucnu/ProfilePage';
+
+const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
+const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
+const UyghurEatsProfilePage = lazy(() => import('./pages/projects/uyghur-eats/ProfilePage'));
+const UyghurEatsClientPortal = lazy(() => import('./pages/client/UyghurEatsClientPortal'));
+const UyghurEatsTermsPage = lazy(() => import('./pages/client/UyghurEatsTermsPage'));
+const UyghurEatsBasicPreviewPage = lazy(() => import('./pages/projects/uyghur-eats/previews/ValuationModelPage'));
+const UyghurEatsValuationModelPage = lazy(() => import('./pages/projects/uyghur-eats/ValuationModelPage'));
+const UyghurEatsDataRoomPage = lazy(() => import('./pages/projects/uyghur-eats/previews/DataRoomPage'));
+const CapabilityPage = lazy(() => import('./pages/capabilities/CapabilityPage'));
+const CapabilitiesIndex = lazy(() => import('./pages/capabilities/CapabilitiesIndex'));
+const ServiceProjectPage = lazy(() => import('./pages/ServiceProjectPage'));
+const SabucnuProfilePage = lazy(() => import('./pages/projects/sabucnu/ProfilePage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -85,6 +85,10 @@ function LandingPage() {
   );
 }
 
+function RouteLoadingFallback() {
+  return <div className="min-h-[40vh] bg-white" aria-hidden="true" />;
+}
+
 export default function App() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -107,36 +111,38 @@ export default function App() {
       <ScrollToTop />
       {!isIsolatedView && <Navbar />}
       <main>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
-          <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
-          <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-          <Route path="/capabilities" element={<CapabilitiesIndex />} />
-          <Route path="/capabilities/:slug" element={<CapabilityPage />} />
-          <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
-          {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
-              Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
-          <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
-          <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
-          <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
-          <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
-          <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
-          <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
-          <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
-          
-          {/* Redirects for legacy routes */}
-          <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
-          <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
-          <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
-          
-          <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
-          <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
-          <Route path="/services/financial-review" element={<ServiceProjectPage />} />
-          <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
-          <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Suspense fallback={<RouteLoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
+            <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
+            <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
+            <Route path="/capabilities" element={<CapabilitiesIndex />} />
+            <Route path="/capabilities/:slug" element={<CapabilityPage />} />
+            <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
+            {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
+                Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
+            <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
+            <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
+            <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
+            <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
+            <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
+            <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
+            <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
+            
+            {/* Redirects for legacy routes */}
+            <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
+            <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
+            <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
+            
+            <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
+            <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
+            <Route path="/services/financial-review" element={<ServiceProjectPage />} />
+            <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
+            <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </main>
       {!isIsolatedView && <Footer />}
       <AssistantWidget />

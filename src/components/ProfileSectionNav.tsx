@@ -13,6 +13,7 @@ type ProfileSectionNavProps = {
   activeId?: string;
   /** Called when a tab is clicked (controlled mode). */
   onSelect?: (id: string) => void;
+  tone?: 'neutral' | 'green';
 };
 
 function cx(...values: Array<string | false | null | undefined>) {
@@ -24,6 +25,7 @@ export default function ProfileSectionNav({
   description,
   activeId: controlledActiveId,
   onSelect,
+  tone = 'neutral',
 }: ProfileSectionNavProps) {
   const isControlled = controlledActiveId !== undefined;
   const [internalActiveId, setInternalActiveId] = useState(items[0]?.id ?? '');
@@ -98,6 +100,19 @@ export default function ProfileSectionNav({
     }
   };
 
+  const activeClassName =
+    tone === 'green'
+      ? 'border-emerald-700 bg-emerald-600 text-white'
+      : 'border-black bg-black text-white';
+  const inactiveClassName =
+    tone === 'green'
+      ? 'border-emerald-200 bg-white text-emerald-800 hover:border-emerald-500 hover:text-emerald-900'
+      : 'border-neutral-200 bg-white text-neutral-600 hover:border-black hover:text-black';
+  const actionClassName =
+    tone === 'green'
+      ? 'border-emerald-700 bg-emerald-600 text-white hover:bg-emerald-700'
+      : 'border-black bg-black text-white hover:bg-neutral-800';
+
   return (
     <nav aria-label="Profile section navigation" className="sticky top-20 z-30 -mx-4 border-y border-neutral-200 bg-white/92 backdrop-blur-sm sm:-mx-6">
       <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6">
@@ -113,7 +128,10 @@ export default function ProfileSectionNav({
                 <button
                   key={item.id}
                   onClick={() => handleClick(item)}
-                  className="snap-start whitespace-nowrap border border-black bg-black px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-neutral-800 md:text-sm"
+                  className={cx(
+                    'snap-start whitespace-nowrap border px-4 py-2 text-xs font-medium transition-colors md:text-sm',
+                    actionClassName,
+                  )}
                 >
                   <span className="mr-2 font-mono text-[10px] uppercase tracking-[0.18em] text-neutral-400">
                     {String(index + 1).padStart(2, '0')}
@@ -131,9 +149,7 @@ export default function ProfileSectionNav({
                 onClick={() => handleClick(item)}
                 className={cx(
                   'snap-start whitespace-nowrap border px-4 py-2 text-xs font-medium transition-colors md:text-sm',
-                  isActive
-                    ? 'border-black bg-black text-white'
-                    : 'border-neutral-200 bg-white text-neutral-600 hover:border-black hover:text-black',
+                  isActive ? activeClassName : inactiveClassName,
                 )}
               >
                 <span className={cx('mr-2 font-mono text-[10px] uppercase tracking-[0.18em]', isActive ? 'text-neutral-400' : 'text-neutral-400')}>

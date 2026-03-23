@@ -381,6 +381,7 @@ export default function ValuationModelPage() {
                     items={sectionNavItems}
                     activeId={activeSection}
                     onSelect={(id) => navigate(`/client/uyghur-eats/valuation#${id}`)}
+                    tone="green"
                 />
 
                 <main className="mt-8 md:mt-12">
@@ -418,7 +419,7 @@ export default function ValuationModelPage() {
                                         <button
                                             type="button"
                                             onClick={() => navigate(`/client/uyghur-eats/valuation#${nextSection.id}`)}
-                                            className="inline-flex items-center gap-2 text-sm font-medium text-black"
+                                            className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700"
                                         >
                                             {nextSection.label}
                                             <ArrowRight className="h-4 w-4" />
