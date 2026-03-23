@@ -128,6 +128,15 @@ create table if not exists public.form_submissions (
   created_at timestamptz not null default now()
 );
 
+alter table public.form_submissions enable row level security;
+
+drop policy if exists "public_can_insert_form_submissions" on public.form_submissions;
+create policy "public_can_insert_form_submissions"
+on public.form_submissions
+for insert
+to anon, authenticated
+with check (true);
+
 create or replace function public.set_updated_at()
 returns trigger
 language plpgsql

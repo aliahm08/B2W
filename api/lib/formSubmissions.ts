@@ -1,4 +1,8 @@
+import path from 'node:path';
+import dotenv from 'dotenv';
 import type { ClientCommunicationSubmission, LeadSubmission } from './validation.js';
+
+dotenv.config({ path: path.join(process.cwd(), '.env.local') });
 
 type FormAudience = 'landing' | 'client';
 
@@ -31,22 +35,25 @@ function getEnv(name: string, fallback = ''): string {
 function getSupabaseConfig() {
   return {
     url: getEnv('NEXT_PUBLIC_SUPABASE_URL', getEnv('SUPABASE_URL')),
-    serviceRoleKey: getEnv('SUPABASE_SERVICE_ROLE_KEY'),
+    accessKey: getEnv(
+      'SUPABASE_SERVICE_ROLE_KEY',
+      getEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', getEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY')),
+    ),
   };
 }
 
 async function insertFormSubmission(payload: FormSubmissionInsert) {
-  const { url, serviceRoleKey } = getSupabaseConfig();
+  const { url, accessKey } = getSupabaseConfig();
 
-  if (!url || !serviceRoleKey) {
+  if (!url || !accessKey) {
     throw new Error('Supabase form submission env vars are not configured.');
   }
 
   const response = await fetch(`${url.replace(/\/$/, '')}/rest/v1/form_submissions`, {
     method: 'POST',
     headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
+      apikey: accessKey,
+      Authorization: `Bearer ${accessKey}`,
       'Content-Type': 'application/json',
       Prefer: 'return=minimal',
     },

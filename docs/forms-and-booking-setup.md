@@ -24,7 +24,7 @@ Each route:
 
 ```bash
 VITE_CALENDLY_URL="https://calendly.com/your-team/consultation"
-RESEND_API_KEY="re_xxx"
+RESEND_API_KEY="re_xxxxxxxxx"
 RESEND_FROM_EMAIL="B2W <info@b2w-ai.com>"
 INTERNAL_NOTIFICATION_EMAIL="info@b2w-ai.com"
 GOOGLE_SHEETS_SPREADSHEET_ID="your-google-sheet-id"

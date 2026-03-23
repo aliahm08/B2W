@@ -11,6 +11,14 @@ function getInternalEmail() {
   return String(process.env.INTERNAL_NOTIFICATION_EMAIL ?? 'info@b2w-ai.com').trim() || 'info@b2w-ai.com';
 }
 
+function hasResendConfig() {
+  return Boolean(String(process.env.RESEND_API_KEY ?? '').trim());
+}
+
+function hasSheetsConfig() {
+  return Boolean(String(process.env.GOOGLE_SHEETS_SPREADSHEET_ID ?? '').trim());
+}
+
 async function processLeadSubmission(submission: LeadSubmission) {
   const emails = buildLeadEmails(submission);
   const internalEmail = getInternalEmail();
@@ -22,45 +30,51 @@ async function processLeadSubmission(submission: LeadSubmission) {
     errors.push(`supabase: ${error instanceof Error ? error.message : 'unknown error'}`);
   }
 
-  try {
-    await sendEmail({
-      to: internalEmail,
-      subject: emails.internal.subject,
-      text: emails.internal.text,
-      html: emails.internal.html,
-      replyTo: emails.internal.replyTo,
-    });
-  } catch (error) {
-    errors.push(`internal email: ${error instanceof Error ? error.message : 'unknown error'}`);
+  if (hasResendConfig()) {
+    try {
+      await sendEmail({
+        to: internalEmail,
+        subject: emails.internal.subject,
+        text: emails.internal.text,
+        html: emails.internal.html,
+        replyTo: emails.internal.replyTo,
+      });
+    } catch (error) {
+      errors.push(`internal email: ${error instanceof Error ? error.message : 'unknown error'}`);
+    }
   }
 
-  try {
-    await sendEmail({
-      to: submission.email,
-      subject: emails.confirmation.subject,
-      text: emails.confirmation.text,
-      html: emails.confirmation.html,
-    });
-  } catch (error) {
-    errors.push(`confirmation email: ${error instanceof Error ? error.message : 'unknown error'}`);
+  if (hasResendConfig()) {
+    try {
+      await sendEmail({
+        to: submission.email,
+        subject: emails.confirmation.subject,
+        text: emails.confirmation.text,
+        html: emails.confirmation.html,
+      });
+    } catch (error) {
+      errors.push(`confirmation email: ${error instanceof Error ? error.message : 'unknown error'}`);
+    }
   }
 
-  try {
-    await appendSheetRow('lead', [
-      submission.submittedAt,
-      submission.name,
-      submission.email,
-      submission.company,
-      submission.phone,
-      submission.website,
-      submission.inquiryType,
-      submission.message,
-      submission.sourcePage || submission.sourcePath,
-      submission.referrer,
-      errors.length === 0 ? 'received' : `partial_failure: ${errors.join(' | ')}`,
-    ]);
-  } catch (error) {
-    errors.push(`sheets: ${error instanceof Error ? error.message : 'unknown error'}`);
+  if (hasSheetsConfig()) {
+    try {
+      await appendSheetRow('lead', [
+        submission.submittedAt,
+        submission.name,
+        submission.email,
+        submission.company,
+        submission.phone,
+        submission.website,
+        submission.inquiryType,
+        submission.message,
+        submission.sourcePage || submission.sourcePath,
+        submission.referrer,
+        errors.length === 0 ? 'received' : `partial_failure: ${errors.join(' | ')}`,
+      ]);
+    } catch (error) {
+      errors.push(`sheets: ${error instanceof Error ? error.message : 'unknown error'}`);
+    }
   }
 
   return errors;

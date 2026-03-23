@@ -1,4 +1,4 @@
-const RESEND_API_URL = 'https://api.resend.com/emails';
+import { Resend } from 'resend';
 
 export type EmailMessage = {
   to: string | string[];
@@ -26,26 +26,19 @@ export async function sendEmail(message: EmailMessage) {
     throw new Error('RESEND_API_KEY is not configured.');
   }
 
-  const response = await fetch(RESEND_API_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${config.apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  const resend = new Resend(config.apiKey);
+  const response = await resend.emails.send({
       from: config.from,
       to: Array.isArray(message.to) ? message.to : [message.to],
       subject: message.subject,
       text: message.text,
       html: message.html,
-      reply_to: message.replyTo,
-    }),
+      replyTo: message.replyTo,
   });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Resend request failed (${response.status}): ${errorText}`);
+  if (response.error) {
+    throw new Error(`Resend request failed: ${response.error.message}`);
   }
 
-  return response.json();
+  return response.data;
 }
