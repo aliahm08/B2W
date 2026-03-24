@@ -1,8 +1,5 @@
 import path from 'node:path';
-import dotenv from 'dotenv';
 import type { ClientCommunicationSubmission, LeadSubmission } from './validation.js';
-
-dotenv.config({ path: path.join(process.cwd(), '.env.local') });
 
 type FormAudience = 'landing' | 'client';
 
@@ -35,10 +32,7 @@ function getEnv(name: string, fallback = ''): string {
 function getSupabaseConfig() {
   return {
     url: getEnv('NEXT_PUBLIC_SUPABASE_URL', getEnv('SUPABASE_URL')),
-    accessKey: getEnv(
-      'SUPABASE_SERVICE_ROLE_KEY',
-      getEnv('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY', getEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY')),
-    ),
+    accessKey: getEnv('SUPABASE_SECRET_KEY', getEnv('SUPABASE_SERVICE_ROLE_KEY')),
   };
 }
 
