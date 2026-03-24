@@ -1,4 +1,4 @@
-import path from 'node:path';
+import { createClient } from '@supabase/supabase-js';
 import type { ClientCommunicationSubmission, LeadSubmission } from './validation.js';
 
 type FormAudience = 'landing' | 'client';
@@ -43,19 +43,18 @@ async function insertFormSubmission(payload: FormSubmissionInsert) {
     throw new Error('Supabase form submission env vars are not configured.');
   }
 
-  const response = await fetch(`${url.replace(/\/$/, '')}/rest/v1/form_submissions`, {
-    method: 'POST',
-    headers: {
-      apikey: accessKey,
-      Authorization: `Bearer ${accessKey}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
+  const supabase = createClient(url, accessKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
     },
-    body: JSON.stringify(payload),
   });
 
-  if (!response.ok) {
-    throw new Error(`Supabase insert failed (${response.status}): ${await response.text()}`);
+  const { error } = await supabase.from('form_submissions').insert(payload);
+
+  if (error) {
+    throw new Error(`Supabase insert failed: ${error.message} (${error.code || 'unknown'})`);
   }
 }
 

@@ -84,7 +84,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const clientIp = getClientIp(req);
-  const rateLimit = checkRateLimit(`proposal-signature:${clientIp}`);
+  const rateLimit = await checkRateLimit(`proposal-signature:${clientIp}`);
   if (rateLimit.ok === false) {
     res.setHeader('Retry-After', String(rateLimit.retryAfterSeconds));
     sendJson(res, 429, { ok: false, error: 'Too many requests. Try again later.' });
