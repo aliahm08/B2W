@@ -76,10 +76,13 @@ export default function CapabilitiesVisualization() {
             >
                 <h2 className="text-4xl font-medium tracking-tight mb-4">Capabilities</h2>
                 <p className="max-w-3xl text-base text-neutral-600 leading-relaxed mb-6">
-                    Think of us as a solutions kitchen. We take high-fidelity inputs, connect them 
-                    through strategic integrations, and produce operational leverage. 
-                    <br/><br/>
-                    <strong>Select a recipe below</strong> to see how our ingredients combine into measurable solutions.
+                    We take marketing data, financials, and operational performance inputs. We analyze them using our{' '}
+                    <Link to="/#expertise" className="font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black">
+                        expertise
+                    </Link>{' '}
+                    to implement solutions that increase revenue.
+                    <br /><br />
+                    <strong>Select a solution below</strong> to see how these inputs combine into measurable outcomes.
                 </p>
 
                 {/* Recipe Selectors */}
