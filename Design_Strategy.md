@@ -58,3 +58,11 @@ Not allowed:
 - Use one CTA contract everywhere:
   - Label: `Book Intro Call`
   - Target: `mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call`
+
+## 7. Landing Buttons vs Links
+
+- Scope: these rules apply to the B2W landing site only.
+- Buttons are action controls. Use them when the user is being redirected to an external page, opening a dialog or modal, executing a command or UI function, or jumping to a section on the same page.
+- Buttons do not need directional arrow icons just because they redirect. Their button styling already communicates the action.
+- Links are navigational items. Use them for clickable text or link-styled elements that send the user to another page, usually within the same ecosystem.
+- On B2W, the landing site and the client portal are separate ecosystems. Cross-page navigation inside one of those ecosystems should generally be expressed as links, not buttons, unless the element is functioning as an action control.

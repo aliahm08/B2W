@@ -16,6 +16,17 @@ function shouldSkipSegment(segment: string): boolean {
   return config.corpus.excludedSegments.includes(segment);
 }
 
+function shouldSkipPath(filePath: string): boolean {
+  const relativePath = resolveRelativePath(filePath).replace(/\\/g, '/');
+
+  return [
+    'src/pages/client/',
+    'src/app/client/',
+    'portal/',
+    'client-portal.registry.json',
+  ].some((blockedPath) => relativePath.includes(blockedPath));
+}
+
 async function walkDirectory(dirPath: string, collected: string[]): Promise<void> {
   const entries = await fs.readdir(dirPath, { withFileTypes: true });
 
@@ -27,11 +38,19 @@ async function walkDirectory(dirPath: string, collected: string[]): Promise<void
     const nextPath = path.join(dirPath, entry.name);
 
     if (entry.isDirectory()) {
+      if (shouldSkipPath(nextPath)) {
+        continue;
+      }
+
       await walkDirectory(nextPath, collected);
       continue;
     }
 
     if (!config.corpus.includeExtensions.includes(path.extname(entry.name).toLowerCase())) {
+      continue;
+    }
+
+    if (shouldSkipPath(nextPath)) {
       continue;
     }
 

@@ -11,7 +11,7 @@ type MobileMenuDrawerProps = {
 };
 
 const containerClassName = {
-  light: 'overflow-hidden border-t border-black/8 bg-white px-4 pb-8 pt-4 text-black shadow-sm md:hidden',
+  light: 'overflow-hidden border-t border-black/8 bg-white/96 px-4 pb-8 pt-4 text-black shadow-sm backdrop-blur-xl md:hidden',
   dark: 'overflow-hidden border-t border-white/10 bg-black/82 px-4 pb-8 pt-4 text-white shadow-sm backdrop-blur-xl md:hidden',
 } as const;
 

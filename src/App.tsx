@@ -18,6 +18,7 @@ import AssistantWidget from './components/AssistantWidget';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
 import { scrollToHashTarget } from './lib/hashNavigation';
+import HomeTestOnePage from './pages/HomeTestOnePage';
 
 const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
 const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
@@ -28,7 +29,8 @@ const UyghurEatsBasicPreviewPage = lazy(() => import('./pages/projects/uyghur-ea
 const UyghurEatsValuationModelPage = lazy(() => import('./pages/projects/uyghur-eats/ValuationModelPage'));
 const UyghurEatsDataRoomPage = lazy(() => import('./pages/projects/uyghur-eats/previews/DataRoomPage'));
 const CapabilityPage = lazy(() => import('./pages/capabilities/CapabilityPage'));
-const CapabilitiesIndex = lazy(() => import('./pages/capabilities/CapabilitiesIndex'));
+const KitchenPage = lazy(() => import('./pages/capabilities/KitchenPage'));
+const DataExplainerPage = lazy(() => import('./pages/capabilities/DataExplainerPage'));
 const ServiceProjectPage = lazy(() => import('./pages/ServiceProjectPage'));
 const SabucnuProfilePage = lazy(() => import('./pages/projects/sabucnu/ProfilePage'));
 
@@ -100,11 +102,12 @@ export default function App() {
 
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
+  const isPrototypeHome = location.pathname === '/home-test-1';
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model');
   const hasReturnParam = searchParams.has('return');
-  const isIsolatedView = isClientPortal || isDataRoom || isProjectPage || hasReturnParam;
+  const isIsolatedView = isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome;
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -119,10 +122,14 @@ export default function App() {
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/home-test-1" element={<HomeTestOnePage />} />
             <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
             <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
             <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-            <Route path="/capabilities" element={<CapabilitiesIndex />} />
+            <Route path="/capabilities" element={<KitchenPage />} />
+            <Route path="/capabilities/marketing-data" element={<DataExplainerPage />} />
+            <Route path="/capabilities/financials" element={<DataExplainerPage />} />
+            <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
             <Route path="/capabilities/:slug" element={<CapabilityPage />} />
             <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
             {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.

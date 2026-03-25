@@ -24,6 +24,17 @@
   - Cards: Bordered, no shadow (or very subtle), clear hierarchy.
   - Buttons: Solid black with white text, or outlined.
 
+## Landing Interaction Terms
+- Scope: this section applies only to the B2W landing experience.
+- Buttons are for actions:
+  - redirecting to an external page
+  - opening a dialog or modal
+  - executing a command or interface function
+  - moving to a section on the same page
+- Links are for navigation to another page, usually within the same ecosystem.
+- Within B2W, the landing site and the client environment are separate ecosystems. Page-to-page movement inside one ecosystem should usually be presented as a link.
+- Do not add arrow icons to landing buttons only because they redirect. Button treatment already signals the action.
+
 ## Tech Stack
 - React
 - Vite
