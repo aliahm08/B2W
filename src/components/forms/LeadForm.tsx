@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
+import { showcaseProjects } from '../../content/projectShowcaseCards';
 import { FormStatus, FormTemplate } from './FormTemplate';
 
-export const publicProjectAreas = ['Marketing', 'Financials', 'Operations'] as const;
+export const publicProjectAreas = ['Marketing', 'Financials', 'Operations', 'Business Revamp'] as const;
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
 export type NormalizedProjectArea = PublicProjectArea | 'End-to-End Rebuild';
 
@@ -41,6 +42,17 @@ function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): Normal
 }
 
 const EMPTY_ARRAY: PublicProjectArea[] = [];
+const publicProjectAreaLabels: Record<PublicProjectArea, string> = {
+  Marketing: 'Marketing Audit',
+  Financials: 'Financial Review',
+  Operations: 'Operations Support',
+  'Business Revamp': 'Business Revamp',
+};
+
+const publicProjectAreaOptions = showcaseProjects.map((project) => ({
+  area: project.category as PublicProjectArea,
+  href: project.link,
+}));
 
 export default function LeadForm({
   heading = 'Tell us about your business',
@@ -192,22 +204,29 @@ export default function LeadForm({
           <p className="mb-3 text-xs leading-5 text-neutral-500">
             Choose the closest fit. You can select more than one if needed.
           </p>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {publicProjectAreas.map((area) => {
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {publicProjectAreaOptions.map(({ area, href }) => {
               const isSelected = state.selectedProjectAreas.includes(area);
               return (
-                <button
-                  key={area}
-                  type="button"
-                  aria-pressed={isSelected}
-                  onClick={() => toggleProjectArea(area)}
-                  className={`flex items-center gap-3 border px-4 py-3 text-sm transition-colors ${
-                    isSelected ? 'border-black bg-black text-white' : 'border-black/10 bg-white text-neutral-800'
-                  }`}
-                >
-                  <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
-                  <span>{area}</span>
-                </button>
+                <div key={area} className="space-y-2">
+                  <button
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => toggleProjectArea(area)}
+                    className={`flex w-full items-center gap-3 border px-4 py-3 text-sm transition-colors ${
+                      isSelected ? 'border-black bg-black text-white' : 'border-black/10 bg-white text-neutral-800'
+                    }`}
+                  >
+                    <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
+                    <span>{publicProjectAreaLabels[area]}</span>
+                  </button>
+                  <a
+                    href={href}
+                    className="inline-flex text-xs font-medium text-neutral-500 underline-offset-4 transition-colors hover:text-black hover:underline"
+                  >
+                    View project page
+                  </a>
+                </div>
               );
             })}
           </div>

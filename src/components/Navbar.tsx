@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import B2WLogoMark from './B2WLogoMark';
 import { scrollToHashTarget } from '../lib/hashNavigation';
+import { showcaseProjects } from '../content/projectShowcaseCards';
 
 type NavChild = {
   label: string;
@@ -41,11 +42,10 @@ const navItems: NavItem[] = [
   {
     label: 'Projects',
     to: '/#projects',
-    children: [
-      { label: 'Borek-G Marketing', to: '/borek-g-social-media-management' },
-      { label: 'Borek-G Operations', to: '/borek-g-operations' },
-      { label: 'Sabucnu Operations', to: '/sabucnu-operations' },
-    ],
+    children: showcaseProjects.map((project) => ({
+      label: project.category,
+      to: project.link,
+    })),
   },
   {
     label: 'Process',
