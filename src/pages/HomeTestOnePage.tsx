@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import B2WLogoMark from '../components/B2WLogoMark';
 import Seo from '../components/Seo';
 
 const rotatingClients = [
@@ -83,32 +84,7 @@ export default function HomeTestOnePage() {
 
           <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 pt-6">
             <div className="flex items-start justify-between gap-4">
-              <motion.div
-                aria-hidden="true"
-                className="text-black/80"
-                animate={{ rotate: [0, 3, -2, 0], y: [0, -2, 1, 0], opacity: [0.82, 1, 0.88, 0.82] }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <svg viewBox="0 0 140 120" className="h-12 w-14 md:h-14 md:w-16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  {[
-                    'M70 8C95 19 109 39 112 58C116 81 101 101 78 111C56 119 31 112 18 92C5 73 7 48 24 29C37 14 53 7 70 8Z',
-                    'M70 12C92 22 104 40 106 57C109 77 96 94 76 103C57 110 37 104 25 87C14 71 15 50 29 34C40 21 54 13 70 12Z',
-                    'M70 16C89 25 99 41 101 56C103 73 91 88 74 95C58 102 42 97 32 83C22 69 22 52 34 39C43 28 55 19 70 16Z',
-                    'M70 21C85 29 94 43 95 56C97 70 87 82 73 88C59 94 46 90 37 79C29 67 29 54 39 43C47 34 56 26 70 21Z',
-                  ].map((path, index) => (
-                    <motion.path
-                      key={path}
-                      d={path}
-                      stroke="currentColor"
-                      strokeWidth="1.15"
-                      strokeLinecap="round"
-                      opacity={0.24 + index * 0.12}
-                      animate={{ pathLength: [0.88, 1, 0.9], opacity: [0.18 + index * 0.1, 0.34 + index * 0.12, 0.18 + index * 0.1] }}
-                      transition={{ duration: 5.5 + index * 0.4, repeat: Infinity, ease: 'easeInOut' }}
-                    />
-                  ))}
-                </svg>
-              </motion.div>
+              <B2WLogoMark className="shrink-0" />
 
               <Link
                 to="/client/uyghur-eats"
@@ -123,12 +99,12 @@ export default function HomeTestOnePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="w-full max-w-6xl"
+                className="w-full max-w-6xl pl-14 pr-14 md:pl-16 md:pr-16 lg:pl-20 lg:pr-20"
               >
-                <h1 className="flex w-full items-baseline gap-[0.22em] whitespace-nowrap text-[clamp(1.65rem,7.1vw,6.8rem)] font-medium leading-[0.88] tracking-[-0.065em] [transform:scaleY(0.92)] origin-left">
+                <h1 className="flex w-full max-w-full items-baseline gap-[0.16em] whitespace-nowrap text-[clamp(1.35rem,5.9vw,5.9rem)] font-medium leading-[0.88] tracking-[-0.065em] [transform:scaleY(0.92)] origin-left">
                   <span className="b2w-wordmark inline-block shrink-0 tracking-[-0.09em] text-black">B2W</span>
-                  <span className="shrink-0 text-black/72">/</span>
-                  <span className={`relative inline-block min-h-[0.98em] min-w-[23ch] overflow-hidden ${activeClientColorClass}`}>
+                  <span className="shrink-0 font-light text-black">/</span>
+                  <span className={`relative inline-flex min-h-[1.18em] min-w-[23ch] items-center overflow-visible py-[0.08em] ${activeClientColorClass}`}>
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={activeClient.label}
@@ -145,18 +121,18 @@ export default function HomeTestOnePage() {
                 </h1>
 
                 <p className="mt-8 max-w-xl text-base leading-7 text-neutral-600 md:text-lg">
-                  B2W helps businesses improve management execution, deploy practical AI systems, and build the operating structure needed to scale with more control.
+                  Improve management execution, deploy practical AI systems, and build the operating structure needed to scale with more control.
                 </p>
 
-                <div className="mt-12 flex flex-wrap gap-4">
+                <div className="mt-12 flex flex-wrap gap-x-4 gap-y-2">
                   {pathways.map((pathway, index) => (
                     <Link
                       key={pathway.title}
                       to={pathway.href}
                       className={
                         index === 0
-                          ? 'inline-flex min-h-12 items-center border border-black bg-black px-5 py-3 text-lg font-medium text-white transition-colors hover:bg-neutral-800'
-                          : 'inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:text-neutral-600'
+                          ? 'inline-flex min-h-12 items-center border border-black bg-black px-5 py-3 text-lg font-medium text-white outline-none transition-colors duration-150 hover:border-black hover:bg-white hover:text-black focus:outline-none'
+                          : 'inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-[color,border-bottom-width] duration-150 hover:border-b-2 hover:text-neutral-600'
                       }
                     >
                       {pathway.title}
@@ -166,7 +142,14 @@ export default function HomeTestOnePage() {
               </motion.div>
             </div>
 
-            <footer className="flex justify-start pb-6 pt-10">
+            <footer className="flex flex-col gap-5 pb-6 pt-10 sm:flex-row sm:items-end sm:justify-between">
+              <div className="text-sm text-neutral-500">
+                <p className="font-medium text-black">
+                  <span className="b2w-wordmark">B2W LLC</span>
+                </p>
+                <p className="mt-1">© {new Date().getFullYear()} All rights reserved.</p>
+              </div>
+
               <a
                 href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
                 className="inline-flex min-h-10 items-center text-sm font-medium text-neutral-500 transition-colors hover:text-black"
