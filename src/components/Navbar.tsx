@@ -4,6 +4,7 @@ import { motion } from 'motion/react';
 import { ChevronRight, Menu, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import MobileMenuDrawer from './MobileMenuDrawer';
+import B2WLogoMark from './B2WLogoMark';
 import { scrollToHashTarget } from '../lib/hashNavigation';
 
 type NavChild = {
@@ -153,9 +154,7 @@ export default function Navbar() {
   return (
     <nav className="fixed left-0 right-0 top-0 z-50 border-b border-neutral-100 bg-white">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="text-xl font-medium tracking-tight">
-          <span className="b2w-wordmark">B2W</span>
-        </Link>
+        <B2WLogoMark className="shrink-0" />
 
         <div className="hidden md:flex items-center gap-6 text-sm text-neutral-600">
           {navItems.map((item) => {

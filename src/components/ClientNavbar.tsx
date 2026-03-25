@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import MobileMenuDrawer from './MobileMenuDrawer';
+import B2WLogoMark from './B2WLogoMark';
 
 export type ClientNavAction = {
   label: string;
@@ -106,12 +107,7 @@ export default function ClientNavbar({
     <nav className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors ${isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white md:border-neutral-100 md:bg-white/80 md:text-black' : 'border-neutral-100 bg-white/80 text-black'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-20 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link
-            to="/"
-            className={`inline-flex items-center text-xl font-medium tracking-tight transition-all duration-200 ease-out hover:font-semibold ${isMobileMenuOpen ? 'text-white md:text-black' : 'text-black'}`}
-          >
-            <span className="b2w-wordmark">B2W</span>
-          </Link>
+          <B2WLogoMark className={`shrink-0 ${isMobileMenuOpen ? 'text-white md:text-black' : 'text-black'}`} />
           {clientName && (
             <>
               <span className={isMobileMenuOpen ? 'text-white/30 md:text-neutral-300' : 'text-neutral-300'}>/</span>
