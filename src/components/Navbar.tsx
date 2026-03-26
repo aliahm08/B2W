@@ -42,7 +42,7 @@ const navItems: NavItem[] = [
       { label: 'Marketing Data', to: '/capabilities/marketing-data' },
       { label: 'Financials', to: '/capabilities/financials' },
       { label: 'Operational Performance', to: '/capabilities/operational-performance' },
-      { label: 'Kitchen', to: '/capabilities' },
+      { label: 'Kitchen by B2W', to: '/kitchen' },
     ],
   },
   {
@@ -63,20 +63,25 @@ const navItems: NavItem[] = [
     })),
   },
   {
-    label: 'Process',
-    to: '/#process',
-    children: [],
-  },
-  {
-    label: 'Team',
-    to: '/#team',
-    children: [],
+    label: 'About',
+    to: '/about',
+    children: [
+      { label: 'Process', to: '/about#process' },
+      { label: 'Team', to: '/about#team' },
+      { label: 'Join B2W', to: '/about#join-team' },
+    ],
   },
 ];
 
 function getHashTarget(path: string): string {
   const hashIndex = path.indexOf('#');
   return hashIndex >= 0 ? path.slice(hashIndex) : '';
+}
+
+function parseTarget(target: string) {
+  const hash = getHashTarget(target);
+  const pathname = hash ? target.slice(0, target.indexOf('#')) || '/' : target;
+  return { pathname, hash };
 }
 
 export default function Navbar() {
@@ -128,15 +133,19 @@ export default function Navbar() {
     }
 
     const matchingParent = navItems.find((item) => {
-      if (location.pathname === item.to) {
+      const itemTarget = parseTarget(item.to);
+      if (location.pathname === itemTarget.pathname && (!itemTarget.hash || location.hash === itemTarget.hash)) {
         return true;
       }
 
-      return item.children.some((child) => child.to === location.pathname);
+      return item.children.some((child) => {
+        const childTarget = parseTarget(child.to);
+        return location.pathname === childTarget.pathname && (!childTarget.hash || location.hash === childTarget.hash);
+      });
     });
 
     return matchingParent?.to ?? '';
-  }, [activeSection, location.pathname]);
+  }, [activeSection, location.hash, location.pathname]);
 
   const searchEntries = useMemo<SearchEntry[]>(() => {
     const sectionEntries = navItems.map((item) => ({
@@ -196,10 +205,10 @@ export default function Navbar() {
   const hasMobileSearchQuery = searchQuery.trim().length > 0;
 
   const navigateToTarget = (target: string) => {
-    const hash = getHashTarget(target);
-    const hasHashOnlyTarget = hash.length > 0;
+    const { pathname, hash } = parseTarget(target);
+    const hasHashTarget = hash.length > 0;
 
-    if (!hasHashOnlyTarget) {
+    if (!hasHashTarget) {
       setIsOpen(false);
       setIsSearchOpen(false);
       setSearchQuery('');
@@ -211,8 +220,8 @@ export default function Navbar() {
     setIsSearchOpen(false);
     setSearchQuery('');
 
-    if (location.pathname !== '/' || location.hash !== hash) {
-      navigate({ pathname: '/', hash }, { replace: false });
+    if (location.pathname !== pathname || location.hash !== hash) {
+      navigate({ pathname, hash }, { replace: false });
     }
 
     const performScroll = () => {
@@ -221,7 +230,7 @@ export default function Navbar() {
       });
     };
 
-    if (location.pathname === '/') {
+    if (location.pathname === pathname) {
       performScroll();
       return;
     }
@@ -230,10 +239,10 @@ export default function Navbar() {
   };
 
   const handleNavigation = (target: string) => (event: MouseEvent<HTMLAnchorElement>) => {
-    const hash = getHashTarget(target);
-    const hasHashOnlyTarget = hash.length > 0;
+    const { hash } = parseTarget(target);
+    const hasHashTarget = hash.length > 0;
 
-    if (!hasHashOnlyTarget) {
+    if (!hasHashTarget) {
       setIsOpen(false);
       setIsSearchOpen(false);
       setSearchQuery('');
@@ -316,7 +325,10 @@ export default function Navbar() {
       }
 
       const matchingChildParent = navItems.find((item) =>
-        item.children.some((child) => child.to === location.pathname),
+        item.children.some((child) => {
+          const childTarget = parseTarget(child.to);
+          return location.pathname === childTarget.pathname && (!childTarget.hash || location.hash === childTarget.hash);
+        }),
       );
       if (matchingChildParent) {
         setExpandedMobileSections({ [matchingChildParent.label]: true });
@@ -325,7 +337,7 @@ export default function Navbar() {
     } else {
       setExpandedMobileSections({});
     }
-  }, [activeDesktopLink, isOpen, location.pathname]);
+  }, [activeDesktopLink, isOpen, location.hash, location.pathname]);
 
   const searchResultsContent =
     hasSearchQuery && filteredSearchEntries.length > 0 ? (

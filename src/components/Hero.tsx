@@ -37,7 +37,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto pt-20">
+    <section id="landing-hero" className="min-h-screen flex flex-col justify-center px-6 max-w-7xl mx-auto pt-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

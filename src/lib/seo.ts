@@ -1,6 +1,7 @@
 import { allCapabilities, getCapabilityBySlug } from '../content/capabilities';
 import { explainerContent } from '../content/dataExplainers';
 import { expertisePages } from '../content/expertisePages';
+import { parseKitchenSolutionSlug } from '../content/kitchen';
 import { servicePageContent } from '../content/servicePages';
 
 type TwitterCard = 'summary' | 'summary_large_image';
@@ -53,11 +54,28 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/kitchen',
+    {
+      title: 'Kitchen by B2W',
+      description:
+        'Build a custom B2W solution by combining information, integration, and production into a preview proposal, or start from Growth, Optimization, and Diligence presets.',
+    },
+  ],
+  [
     '/capabilities',
     {
-      title: 'Business Automation and AI Capabilities for SMB Teams',
+      title: 'Kitchen by B2W',
       description:
-        'Explore B2W capabilities across guest experience, kitchen operations, management workflows, and analysis pages for marketing data, financial performance, and operational execution.',
+        'Legacy Kitchen by B2W route that forwards to the current solution builder and preview flow.',
+      canonicalPath: '/kitchen',
+    },
+  ],
+  [
+    '/kitchen/demo/original',
+    {
+      title: 'Original Kitchen Demo',
+      description:
+        'Archived Kitchen by B2W demo preserving the original information, integrations, production ingredients, and selectable solution combinations.',
     },
   ],
   [
@@ -301,6 +319,44 @@ function buildExpertiseMetadata(pathname: string) {
   });
 }
 
+function buildKitchenPreviewMetadata(pathname: string) {
+  if (!pathname.startsWith('/kitchen/preview/')) {
+    return null;
+  }
+
+  const slug = pathname.replace('/kitchen/preview/', '');
+  const solution = parseKitchenSolutionSlug(slug);
+
+  if (!solution) {
+    return null;
+  }
+
+  return buildMetadata(pathname, {
+    title: `${solution.name} Preview Proposal`,
+    description: `Preview proposal for ${solution.name}, combining ${solution.information.map((item) => item.title.toLowerCase()).join(', ')}, ${solution.integration.map((item) => item.title.toLowerCase()).join(', ')}, and ${solution.production.map((item) => item.title.toLowerCase()).join(', ')} in the Kitchen by B2W flow.`,
+    robots: PRIVATE_ROBOTS,
+  });
+}
+
+function buildSolutionMetadata(pathname: string) {
+  if (!pathname.startsWith('/solutions/')) {
+    return null;
+  }
+
+  const slug = pathname.replace('/solutions/', '');
+  const solution = parseKitchenSolutionSlug(slug);
+
+  if (!solution) {
+    return null;
+  }
+
+  return buildMetadata(pathname, {
+    title: `${solution.name} Solution Template`,
+    description: `Mock deliverable template for ${solution.name}, including editable model inputs, benchmark scorecards, and summary calculations across the selected Kitchen by B2W ingredient stack.`,
+    robots: PRIVATE_ROBOTS,
+  });
+}
+
 function buildExplainerMetadata(pathname: string) {
   const content = explainerContent[pathname];
 
@@ -330,6 +386,16 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
   const expertiseMetadata = buildExpertiseMetadata(normalizedPathname);
   if (expertiseMetadata) {
     return expertiseMetadata;
+  }
+
+  const kitchenPreviewMetadata = buildKitchenPreviewMetadata(normalizedPathname);
+  if (kitchenPreviewMetadata) {
+    return kitchenPreviewMetadata;
+  }
+
+  const solutionMetadata = buildSolutionMetadata(normalizedPathname);
+  if (solutionMetadata) {
+    return solutionMetadata;
   }
 
   const explainerMetadata = buildExplainerMetadata(normalizedPathname);

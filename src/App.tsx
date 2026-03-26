@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { Suspense, lazy, useEffect } from 'react';
-import { Routes, Route, useLocation, Navigate, useSearchParams } from 'react-router-dom';
+import { Suspense, lazy, useEffect, useState } from 'react';
+import { Routes, Route, useLocation, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import CapabilitiesVisualization from './components/CapabilitiesVisualization';
@@ -15,6 +16,7 @@ import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
+import { ArrowUpRight } from 'lucide-react';
 import { scrollToHashTarget } from './lib/hashNavigation';
 import HomeTestOnePage from './pages/HomeTestOnePage';
 
@@ -32,9 +34,10 @@ const DataExplainerPage = lazy(() => import('./pages/capabilities/DataExplainerP
 const ServiceProjectPage = lazy(() => import('./pages/ServiceProjectPage'));
 const SabucnuProfilePage = lazy(() => import('./pages/projects/sabucnu/ProfilePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
-const AboutProcessPage = lazy(() => import('./pages/AboutProcessPage'));
-const AboutTeamPage = lazy(() => import('./pages/AboutTeamPage'));
 const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
+const KitchenPreviewPage = lazy(() => import('./pages/kitchen/KitchenPreviewPage'));
+const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitchenDemoPage'));
+const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTemplatePage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -65,6 +68,29 @@ function ScrollToTop() {
 }
 
 function LandingPage() {
+  const navigate = useNavigate();
+  const [showProjectButton, setShowProjectButton] = useState(false);
+
+  useEffect(() => {
+    const heroElement = document.getElementById('landing-hero');
+
+    if (!heroElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowProjectButton(!entry.isIntersecting);
+      },
+      {
+        threshold: 0.12,
+      },
+    );
+
+    observer.observe(heroElement);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <Seo />
@@ -81,6 +107,26 @@ function LandingPage() {
       <section id="contact">
         <CTA />
       </section>
+      <AnimatePresence>
+        {showProjectButton ? (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            className="pointer-events-none fixed inset-x-0 bottom-5 z-40 flex justify-center px-4 md:bottom-10"
+          >
+            <button
+              type="button"
+              onClick={() => navigate('/kitchen')}
+              aria-label="Begin Your Project"
+              className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-black text-white shadow-[0_20px_50px_rgba(0,0,0,0.22)] transition-colors hover:bg-neutral-800 h-12 w-12 md:h-auto md:w-auto md:px-8 md:py-4 md:text-base md:font-semibold"
+            >
+              <ArrowUpRight className="h-5 w-5 md:hidden" />
+              <span className="hidden md:inline">Begin Your Project</span>
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </>
   );
 }
@@ -119,15 +165,19 @@ export default function App() {
             <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
             <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
             <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-            <Route path="/capabilities" element={<KitchenPage />} />
+            <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
+            <Route path="/kitchen" element={<KitchenPage />} />
+            <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
+            <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />
+            <Route path="/solutions/:slug" element={<SolutionTemplatePage />} />
             <Route path="/capabilities/marketing-data" element={<DataExplainerPage />} />
             <Route path="/capabilities/financials" element={<DataExplainerPage />} />
             <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
             <Route path="/capabilities/:slug" element={<CapabilityPage />} />
             <Route path="/expertise/:slug" element={<ExpertisePage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/about/process" element={<AboutProcessPage />} />
-            <Route path="/about/team" element={<AboutTeamPage />} />
+            <Route path="/about/process" element={<Navigate to="/about#process" replace />} />
+            <Route path="/about/team" element={<Navigate to="/about#team" replace />} />
             <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
             {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
                 Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
