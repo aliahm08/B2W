@@ -29,8 +29,8 @@ export const showcaseProjects: ShowcaseProject[] = [
     description:
       'This package centers on diagnosis, structured recommendations, and the first round of profile, valuation, and documentation thinking without requiring a full execution engagement.',
     tags: ['Advisory', 'Scoping', 'Decision Support', 'Profile'],
-    ctaLabel: 'Open Project Builder',
-    link: '/',
+    ctaLabel: 'View Tier Details',
+    link: '/tiers/basic-advisory',
   },
   {
     id: 'consulting-package',
@@ -46,8 +46,8 @@ export const showcaseProjects: ShowcaseProject[] = [
     description:
       'Consulting includes everything in Basic Advisory, then adds a deeper operating cadence, model-based reasoning, and iteration around the business decisions that matter most.',
     tags: ['Consulting', 'Valuation', 'Working Sessions', 'Iteration'],
-    ctaLabel: 'Open Project Builder',
-    link: '/',
+    ctaLabel: 'View Tier Details',
+    link: '/tiers/consulting',
   },
   {
     id: 'implementation-package',
@@ -63,8 +63,8 @@ export const showcaseProjects: ShowcaseProject[] = [
     description:
       'Implementation includes everything in Consulting, then adds execution ownership, build coordination, documentation systems, and launch readiness work.',
     tags: ['Implementation', 'Execution', 'Documentation', 'Systems'],
-    ctaLabel: 'Open Project Builder',
-    link: '/',
+    ctaLabel: 'View Tier Details',
+    link: '/tiers/implementation',
   },
   {
     id: 'custom-tool-package',
@@ -80,7 +80,7 @@ export const showcaseProjects: ShowcaseProject[] = [
     description:
       'Custom Tool Solution includes everything in End to End Implementation, then extends the engagement into a purpose-built product or automation layer tailored to the business.',
     tags: ['Custom Tool', 'AI', 'Web App', 'Automation'],
-    ctaLabel: 'Open Project Builder',
-    link: '/',
+    ctaLabel: 'View Tier Details',
+    link: '/tiers/custom-tool',
   },
 ];

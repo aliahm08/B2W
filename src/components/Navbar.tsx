@@ -487,12 +487,19 @@ export default function Navbar({
           >
             <Search className="h-4.5 w-4.5" />
           </motion.button>
-          <a
-            href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
-            className="rounded-full border border-black bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-neutral-800"
+          <Link
+            to={`${basePath}#contact`}
+            onClick={handleNavigation(`${basePath}#contact`)}
+            className={`font-medium transition-colors ${isSearchOpen ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'}`}
           >
             Contact
-          </a>
+          </Link>
+          <Link
+            to="/?project-builder=open"
+            className="rounded-full border border-black bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-neutral-800"
+          >
+            Start
+          </Link>
         </div>
 
         <button

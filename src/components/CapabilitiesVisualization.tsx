@@ -73,9 +73,9 @@ export default function CapabilitiesVisualization() {
         </p>
         <Link
           to="/#contact"
-          className="inline-flex items-center gap-3 border border-neutral-200 bg-white px-6 py-4 text-sm font-medium text-neutral-800 transition-all hover:border-black hover:bg-black hover:text-white group shadow-sm"
+          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black"
         >
-          Get a Business Audit
+          Schedule a Business Audit
           <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
         </Link>
       </motion.div>

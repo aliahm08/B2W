@@ -39,6 +39,7 @@ const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
 const KitchenPreviewPage = lazy(() => import('./pages/kitchen/KitchenPreviewPage'));
 const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitchenDemoPage'));
 const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTemplatePage'));
+const TierPage = lazy(() => import('./pages/TierPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -71,13 +72,21 @@ function ScrollToTop() {
 function LandingPage({
   onHeroVisibilityChange,
   onOfferClick,
+  openBuilderOnLoad = false,
 }: {
   onHeroVisibilityChange: (isVisible: boolean) => void;
   onOfferClick: () => void;
+  openBuilderOnLoad?: boolean;
 }) {
   const [showProjectButton, setShowProjectButton] = useState(false);
   const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
   const [isHeroOfferDismissed, setIsHeroOfferDismissed] = useState(false);
+
+  useEffect(() => {
+    if (openBuilderOnLoad) {
+      setIsProjectDrawerOpen(true);
+    }
+  }, [openBuilderOnLoad]);
 
   useEffect(() => {
     const heroElement = document.getElementById('landing-hero');
@@ -215,6 +224,7 @@ export default function App() {
                     const contact = document.getElementById('contact');
                     contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
+                  openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
                 />
               }
             />
@@ -227,6 +237,10 @@ export default function App() {
             <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
             <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />
             <Route path="/solutions/:slug" element={<SolutionTemplatePage />} />
+            <Route path="/tiers/basic-advisory" element={<TierPage />} />
+            <Route path="/tiers/consulting" element={<TierPage />} />
+            <Route path="/tiers/implementation" element={<TierPage />} />
+            <Route path="/tiers/custom-tool" element={<TierPage />} />
             <Route path="/capabilities/marketing-data" element={<DataExplainerPage />} />
             <Route path="/capabilities/financials" element={<DataExplainerPage />} />
             <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />

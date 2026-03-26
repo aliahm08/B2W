@@ -89,13 +89,13 @@ export default function Expertise() {
         className="mt-12 flex flex-col gap-2 border-t border-neutral-200 pt-8 sm:flex-row sm:items-center sm:justify-between"
       >
         <p className="text-base text-neutral-600">Need customized expertise?</p>
-        <a
-          href="mailto:info@b2w-ai.com?subject=Custom%20Solution%20Inquiry"
+        <Link
+          to="/?project-builder=open"
           className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black"
         >
-          Reach out for custom solution development
+          Get a project estimate today.
           <ArrowUpRight className="h-4 w-4" />
-        </a>
+        </Link>
       </motion.div>
     </section>
   );

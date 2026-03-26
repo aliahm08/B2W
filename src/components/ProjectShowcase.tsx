@@ -105,6 +105,19 @@ export default function ProjectShowcase() {
             </motion.article>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-12 flex flex-col gap-2 border-t border-neutral-200 pt-8 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <p className="text-base text-neutral-600">Already Have a Project with Us?</p>
+          <span className="inline-flex items-center gap-3 border border-neutral-200 bg-white px-6 py-4 text-sm font-medium text-neutral-800 shadow-sm">
+            Enter Client Portal
+          </span>
+        </motion.div>
       </div>
     </section>
   );

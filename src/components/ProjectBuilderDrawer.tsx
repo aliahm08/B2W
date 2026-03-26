@@ -79,7 +79,7 @@ const projectTypes: Array<{ id: ProjectTypeId; title: string; summary: string; p
     title: 'Custom Tool Solution',
     summary: 'A custom software or AI system build. Final pricing requires direct scoping.',
     price: null,
-    priceLabel: 'Contact for pricing',
+    priceLabel: 'PRICE TBD',
   },
 ];
 
@@ -507,10 +507,11 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
                     <p className={`text-[11px] font-mono uppercase tracking-[0.22em] ${isSelected ? 'text-neutral-400' : 'text-neutral-500'}`}>Tier {index + 1}</p>
                     <p className={`mt-3 text-lg font-medium ${isSelected ? 'text-white' : 'text-black'}`}>{item.title}</p>
                     <p className={`mt-3 text-sm leading-6 ${isSelected ? 'text-neutral-300' : 'text-neutral-600'}`}>{item.summary}</p>
-                    <div className={`mt-4 border p-3 ${isSelected ? 'border-white/15 bg-white/5' : 'border-black/10 bg-neutral-50'}`}>
-                      <p className={`text-[11px] font-mono uppercase tracking-[0.18em] ${isSelected ? 'text-neutral-400' : 'text-neutral-500'}`}>Tier Build</p>
-                      <p className={`mt-2 text-sm leading-6 ${isSelected ? 'text-neutral-200' : 'text-neutral-700'}`}>{inheritedCopy}</p>
-                    </div>
+                    {index > 0 ? (
+                      <div className={`mt-4 border p-3 ${isSelected ? 'border-white/15 bg-white/5' : 'border-black/10 bg-neutral-50'}`}>
+                        <p className={`text-sm leading-6 ${isSelected ? 'text-neutral-200' : 'text-neutral-700'}`}>{inheritedCopy}</p>
+                      </div>
+                    ) : null}
                   </div>
                   <div className="mt-6">
                     <p className={`text-[11px] font-mono uppercase tracking-[0.18em] ${isSelected ? 'text-neutral-400' : 'text-neutral-500'}`}>{item.priceLabel}</p>
@@ -695,9 +696,11 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
                                       <button type="button" onClick={() => previousSection && setOpenSectionId(previousSection.id)} disabled={!previousSection} className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${previousSection ? 'border-black/15 bg-white text-black hover:border-black' : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'}`}>
                                         Previous
                                       </button>
-                                      <button type="button" onClick={() => nextSection && setOpenSectionId(nextSection.id)} disabled={!nextSection || !canAdvance(section.id)} className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${nextSection && canAdvance(section.id) ? 'border-black bg-black text-white hover:bg-neutral-800' : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'}`}>
-                                        Next
-                                      </button>
+                                      {section.id !== 'project-types' ? (
+                                        <button type="button" onClick={() => nextSection && setOpenSectionId(nextSection.id)} disabled={!nextSection || !canAdvance(section.id)} className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${nextSection && canAdvance(section.id) ? 'border-black bg-black text-white hover:bg-neutral-800' : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'}`}>
+                                          Next
+                                        </button>
+                                      ) : <div />}
                                     </div>
                                   </div>
                                 </motion.div>
