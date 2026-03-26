@@ -308,10 +308,24 @@ export default function Navbar() {
   }, [location.pathname, location.hash]);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
+      const activeItem = navItems.find((item) => activeDesktopLink === item.to);
+      if (activeItem?.children.length) {
+        setExpandedMobileSections({ [activeItem.label]: true });
+        return;
+      }
+
+      const matchingChildParent = navItems.find((item) =>
+        item.children.some((child) => child.to === location.pathname),
+      );
+      if (matchingChildParent) {
+        setExpandedMobileSections({ [matchingChildParent.label]: true });
+        return;
+      }
+    } else {
       setExpandedMobileSections({});
     }
-  }, [isOpen]);
+  }, [activeDesktopLink, isOpen, location.pathname]);
 
   const searchResultsContent =
     hasSearchQuery && filteredSearchEntries.length > 0 ? (
@@ -576,20 +590,30 @@ export default function Navbar() {
                     </Link>
                   )}
 
-                  {item.children.length > 0 && isExpanded ? (
-                    <div className="mt-3 space-y-2 pl-4">
-                      {item.children.map((child) => (
-                        <Link
-                          key={child.label}
-                          to={child.to}
-                          onClick={child.to.includes('#') ? handleNavigation(child.to) : () => setIsOpen(false)}
-                          className="block text-sm font-medium text-neutral-400 transition-colors hover:text-white"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  ) : null}
+                  <AnimatePresence initial={false}>
+                    {item.children.length > 0 && isExpanded ? (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.18, ease: 'easeOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-3 space-y-2 pl-4">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.label}
+                              to={child.to}
+                              onClick={child.to.includes('#') ? handleNavigation(child.to) : () => setIsOpen(false)}
+                              className="block text-sm font-medium text-neutral-400 transition-colors hover:text-white"
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    ) : null}
+                  </AnimatePresence>
                 </div>
               );
             })}
