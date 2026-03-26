@@ -20,7 +20,6 @@ import ProjectBuilderDrawer from './components/ProjectBuilderDrawer';
 import { ArrowUpRight } from 'lucide-react';
 import { scrollToHashTarget } from './lib/hashNavigation';
 import HomeTestOnePage from './pages/HomeTestOnePage';
-import HomeTestTwoPage from './pages/HomeTestTwoPage';
 
 const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
 const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
@@ -144,7 +143,7 @@ export default function App() {
 
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
-  const isPrototypeHome = location.pathname === '/home-test-1' || location.pathname === '/home-test-2';
+  const isPrototypeHome = location.pathname === '/home-test-1';
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model');
@@ -165,7 +164,6 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home-test-1" element={<HomeTestOnePage />} />
-            <Route path="/home-test-2" element={<HomeTestTwoPage />} />
             <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
             <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
             <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
