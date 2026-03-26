@@ -10,8 +10,6 @@ import Hero from './components/Hero';
 import CapabilitiesVisualization from './components/CapabilitiesVisualization';
 import Expertise from './components/Expertise';
 import ProjectShowcase from './components/ProjectShowcase';
-import Team from './components/Team';
-import OurProcess from './components/OurProcess';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
@@ -33,6 +31,10 @@ const KitchenPage = lazy(() => import('./pages/capabilities/KitchenPage'));
 const DataExplainerPage = lazy(() => import('./pages/capabilities/DataExplainerPage'));
 const ServiceProjectPage = lazy(() => import('./pages/ServiceProjectPage'));
 const SabucnuProfilePage = lazy(() => import('./pages/projects/sabucnu/ProfilePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const AboutProcessPage = lazy(() => import('./pages/AboutProcessPage'));
+const AboutTeamPage = lazy(() => import('./pages/AboutTeamPage'));
+const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -75,12 +77,6 @@ function LandingPage() {
       </section>
       <section id="projects">
         <ProjectShowcase />
-      </section>
-      <section id="process">
-        <OurProcess />
-      </section>
-      <section id="team">
-        <Team />
       </section>
       <section id="contact">
         <CTA />
@@ -128,6 +124,10 @@ export default function App() {
             <Route path="/capabilities/financials" element={<DataExplainerPage />} />
             <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
             <Route path="/capabilities/:slug" element={<CapabilityPage />} />
+            <Route path="/expertise/:slug" element={<ExpertisePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/about/process" element={<AboutProcessPage />} />
+            <Route path="/about/team" element={<AboutTeamPage />} />
             <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
             {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
                 Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}

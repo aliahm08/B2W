@@ -49,9 +49,9 @@ const navItems: NavItem[] = [
     label: 'Expertise',
     to: '/#expertise',
     children: [
-      { label: 'Growth', to: '/services/marketing-advisory' },
-      { label: 'Optimization', to: '/services/operations-implementation' },
-      { label: 'M&A', to: '/services/financial-review' },
+      { label: 'Growth', to: '/expertise/growth' },
+      { label: 'Optimization', to: '/expertise/optimization' },
+      { label: 'Diligence', to: '/expertise/diligence' },
     ],
   },
   {

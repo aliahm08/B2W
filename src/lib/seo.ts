@@ -1,5 +1,6 @@
 import { allCapabilities, getCapabilityBySlug } from '../content/capabilities';
 import { explainerContent } from '../content/dataExplainers';
+import { expertisePages } from '../content/expertisePages';
 import { servicePageContent } from '../content/servicePages';
 
 type TwitterCard = 'summary' | 'summary_large_image';
@@ -287,6 +288,19 @@ function buildServiceMetadata(pathname: string) {
   });
 }
 
+function buildExpertiseMetadata(pathname: string) {
+  const content = expertisePages[pathname];
+
+  if (!content) {
+    return null;
+  }
+
+  return buildMetadata(pathname, {
+    title: content.seoTitle,
+    description: `${content.description} Review how B2W scopes this expertise area, what it prioritizes, and how engagements begin.`,
+  });
+}
+
 function buildExplainerMetadata(pathname: string) {
   const content = explainerContent[pathname];
 
@@ -311,6 +325,11 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
   const serviceMetadata = buildServiceMetadata(normalizedPathname);
   if (serviceMetadata) {
     return serviceMetadata;
+  }
+
+  const expertiseMetadata = buildExpertiseMetadata(normalizedPathname);
+  if (expertiseMetadata) {
+    return expertiseMetadata;
   }
 
   const explainerMetadata = buildExplainerMetadata(normalizedPathname);
@@ -352,6 +371,7 @@ export function listStaticSeoRoutes() {
   const paths = new Set<string>([
     ...directRoutes.keys(),
     ...Object.keys(servicePageContent),
+    ...Object.keys(expertisePages),
     ...Object.keys(explainerContent),
     ...allCapabilities.map((capability) => `/capabilities/${capability.slug}`),
   ]);

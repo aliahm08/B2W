@@ -13,22 +13,22 @@ type ExpertiseCard = {
 const expertiseCards: ExpertiseCard[] = [
   {
     title: 'Growth',
-    description: 'Marketing, positioning, and customer acquisition support for businesses that need a clearer path to demand.',
-    href: '/services/marketing-advisory',
+    description: 'We turn marketing data, operational performance, and financial context into a growth roadmap that clarifies what should be amplified, redesigned, or newly built.',
+    href: '/expertise/growth',
     accentClassName: 'text-emerald-700',
     borderClassName: 'border-emerald-200',
   },
   {
     title: 'Optimization',
-    description: 'Operational systems, workflow improvements, and implementation support that make day-to-day execution more reliable.',
-    href: '/services/operations-implementation',
+    description: 'We build decision models that help owners evaluate risk, value the business, and move on expansion, hiring, or restructuring with more confidence.',
+    href: '/expertise/optimization',
     accentClassName: 'text-sky-700',
     borderClassName: 'border-sky-200',
   },
   {
-    title: 'M&A',
-    description: 'Financial review, valuation support, and transaction-facing analysis for owners preparing for major business decisions.',
-    href: '/services/financial-review',
+    title: 'Diligence',
+    description: 'We organize the records, materials, and business context needed to help future transitions, transactions, and major next steps proceed more smoothly.',
+    href: '/expertise/diligence',
     accentClassName: 'text-amber-700',
     borderClassName: 'border-amber-200',
   },
@@ -46,7 +46,7 @@ export default function Expertise() {
       >
         <h2 className="mb-4 text-4xl font-medium tracking-tight">Expertise</h2>
         <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-          We shape your business to grow by discovering what additional elements drive most value.
+          We use marketing data, operational performance, and financials to build a client profile, then prioritize the growth, optimization, and diligence work that matters most.
         </p>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
