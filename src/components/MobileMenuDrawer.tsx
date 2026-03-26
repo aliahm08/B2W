@@ -26,8 +26,8 @@ const listDividerClassName = {
 } as const;
 
 const ctaWrapperClassName = {
-  light: 'border-t border-black/8 bg-white/70 backdrop-blur-xl',
-  dark: 'border-t border-white/10 bg-black/82',
+  light: 'border-t border-black/8 pt-4',
+  dark: 'border-t border-white/10 pt-4',
 } as const;
 
 const itemVariants = {
@@ -74,17 +74,21 @@ export default function MobileMenuDrawer({
               </motion.div>
             ) : null}
 
-            {list ? (
+            {list || cta ? (
               <motion.div variants={itemVariants} className="min-h-0 flex-1 overflow-y-auto">
-                <div className={`flex flex-col divide-y border-b pb-3 ${dividerClassName[theme]} ${listDividerClassName[theme]}`}>
-                  {list}
-                </div>
-              </motion.div>
-            ) : null}
+                {list ? (
+                  <div
+                    className={`flex flex-col divide-y border-b pb-3 ${dividerClassName[theme]} ${listDividerClassName[theme]}`}
+                  >
+                    {list}
+                  </div>
+                ) : null}
 
-            {cta ? (
-              <motion.div variants={itemVariants} className={`mt-auto px-1 pb-2 pt-4 ${ctaWrapperClassName[theme]}`}>
-                {cta}
+                {cta ? (
+                  <div className={`px-1 pb-2 ${ctaWrapperClassName[theme]}`}>
+                    {cta}
+                  </div>
+                ) : null}
               </motion.div>
             ) : null}
 

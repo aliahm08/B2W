@@ -562,26 +562,35 @@ export default function Navbar() {
               return (
                 <div key={item.label} className="border-b border-white/10 py-3 last:border-b-0">
                   {item.children.length > 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => toggleMobileSection(item.label)}
-                      aria-expanded={isExpanded}
-                      className={`inline-flex items-center gap-2 text-[17px] ${
-                        isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <ChevronRight
-                        className={`h-4 w-4 shrink-0 text-neutral-500 transition-transform duration-150 ${
-                          isExpanded ? 'rotate-90' : ''
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to={item.to}
+                        onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
+                        className={`inline-flex items-center text-[17px] ${
+                          isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
                         }`}
-                      />
-                    </button>
+                      >
+                        <span>{item.label}</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => toggleMobileSection(item.label)}
+                        aria-expanded={isExpanded}
+                        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${item.label}`}
+                        className="flex min-h-6 flex-1 items-center justify-end"
+                      >
+                        <ChevronRight
+                          className={`h-4 w-4 shrink-0 text-neutral-500 transition-transform duration-150 ${
+                            isExpanded ? 'rotate-90' : ''
+                          }`}
+                        />
+                      </button>
+                    </div>
                   ) : (
                     <Link
                       to={item.to}
                       onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
-                      className={`inline-flex items-center gap-2 text-[17px] ${
+                      className={`flex items-center justify-between gap-4 text-[17px] ${
                         isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
                       }`}
                     >
