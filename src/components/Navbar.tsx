@@ -5,6 +5,7 @@ import { ArrowUpRight, ChevronRight, Menu, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import B2WLogoMark from './B2WLogoMark';
+import OfferBanner from './OfferBanner';
 import { scrollToHashTarget } from '../lib/hashNavigation';
 import { showcaseProjects } from '../content/projectShowcaseCards';
 import { capabilityLanes } from '../content/capabilities';
@@ -88,9 +89,17 @@ function parseTarget(target: string) {
 
 type NavbarProps = {
   basePath?: string;
+  showOfferBanner?: boolean;
+  onOfferClick?: () => void;
+  onOfferClose?: () => void;
 };
 
-export default function Navbar({ basePath = '/' }: NavbarProps) {
+export default function Navbar({
+  basePath = '/',
+  showOfferBanner = false,
+  onOfferClick,
+  onOfferClose,
+}: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -391,6 +400,22 @@ export default function Navbar({ basePath = '/' }: NavbarProps) {
           to={basePath}
           className={`shrink-0 transition-colors duration-150 ${isHeaderDark ? 'text-white' : 'text-black'}`}
         />
+
+        <div className="flex items-center gap-3">
+          <AnimatePresence initial={false}>
+            {showOfferBanner && !isHeaderDark ? (
+              <motion.div
+                key="header-offer-banner"
+                initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                <OfferBanner compact onClick={onOfferClick} onClose={onOfferClose} />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </div>
 
         <div className={`hidden items-center gap-6 text-sm md:flex ${isSearchOpen ? 'text-neutral-300' : 'text-neutral-600'}`}>
           {navItems.map((item) => {

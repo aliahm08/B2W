@@ -3,10 +3,14 @@ import type { MouseEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { projectPipelineContent } from '../content/projectPipeline';
 import { scrollToHashTarget } from '../lib/hashNavigation';
+import OfferBanner from './OfferBanner';
 
 type HeroProps = {
   basePath?: string;
   onPrimaryAction?: () => void;
+  showOfferBanner?: boolean;
+  onOfferClick?: () => void;
+  onOfferClose?: () => void;
 };
 
 function resolveAnchorTarget(basePath: string, fallbackTarget: string) {
@@ -15,7 +19,13 @@ function resolveAnchorTarget(basePath: string, fallbackTarget: string) {
   return hash ? `${basePath}${hash}` : fallbackTarget;
 }
 
-export default function Hero({ basePath = '/', onPrimaryAction }: HeroProps) {
+export default function Hero({
+  basePath = '/',
+  onPrimaryAction,
+  showOfferBanner = true,
+  onOfferClick,
+  onOfferClose,
+}: HeroProps) {
   const { hero } = projectPipelineContent;
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,10 +67,11 @@ export default function Hero({ basePath = '/', onPrimaryAction }: HeroProps) {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="max-w-4xl"
       >
-        <div className="mb-6 inline-flex flex-col border border-amber-300 bg-amber-50 px-4 py-3">
-          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-amber-800">Offer</span>
-          <span className="mt-1 text-sm font-medium text-amber-950">Next 3 Clients Receive 80% off</span>
-        </div>
+        {showOfferBanner ? (
+          <div className="mb-6">
+            <OfferBanner onClick={onOfferClick} onClose={onOfferClose} />
+          </div>
+        ) : null}
         <h1 className="text-6xl md:text-8xl font-medium tracking-tight mb-8 leading-[0.9]">
           {hero.headline}
         </h1>

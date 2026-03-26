@@ -68,9 +68,16 @@ function ScrollToTop() {
   return null;
 }
 
-function LandingPage() {
+function LandingPage({
+  onHeroVisibilityChange,
+  onOfferClick,
+}: {
+  onHeroVisibilityChange: (isVisible: boolean) => void;
+  onOfferClick: () => void;
+}) {
   const [showProjectButton, setShowProjectButton] = useState(false);
   const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
+  const [isHeroOfferDismissed, setIsHeroOfferDismissed] = useState(false);
 
   useEffect(() => {
     const heroElement = document.getElementById('landing-hero');
@@ -82,6 +89,7 @@ function LandingPage() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setShowProjectButton(!entry.isIntersecting);
+        onHeroVisibilityChange(entry.isIntersecting);
       },
       {
         threshold: 0.12,
@@ -89,13 +97,21 @@ function LandingPage() {
     );
 
     observer.observe(heroElement);
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      observer.disconnect();
+      onHeroVisibilityChange(false);
+    };
+  }, [onHeroVisibilityChange]);
 
   return (
     <>
       <Seo />
-      <Hero onPrimaryAction={() => setIsProjectDrawerOpen(true)} />
+      <Hero
+        onPrimaryAction={() => setIsProjectDrawerOpen(true)}
+        showOfferBanner={!showProjectButton && !isHeroOfferDismissed}
+        onOfferClick={onOfferClick}
+        onOfferClose={() => setIsHeroOfferDismissed(true)}
+      />
       <section id="capabilities">
         <CapabilitiesVisualization />
       </section>
@@ -140,6 +156,26 @@ function RouteLoadingFallback() {
 export default function App() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const [isLandingHeroVisible, setIsLandingHeroVisible] = useState(false);
+  const [isHeaderOfferDismissed, setIsHeaderOfferDismissed] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setIsLandingHeroVisible(false);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setIsHeaderOfferDismissed(false);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (isLandingHeroVisible) {
+      setIsHeaderOfferDismissed(false);
+    }
+  }, [isLandingHeroVisible]);
 
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
@@ -158,11 +194,30 @@ export default function App() {
   return (
     <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
       <ScrollToTop />
-      {!isIsolatedView && <Navbar />}
+      {!isIsolatedView && (
+        <Navbar
+          showOfferBanner={location.pathname === '/' && !isLandingHeroVisible && !isHeaderOfferDismissed}
+          onOfferClick={() => {
+            window.location.hash = 'contact';
+          }}
+          onOfferClose={() => setIsHeaderOfferDismissed(true)}
+        />
+      )}
       <main>
         <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route
+              path="/"
+              element={
+                <LandingPage
+                  onHeroVisibilityChange={setIsLandingHeroVisible}
+                  onOfferClick={() => {
+                    const contact = document.getElementById('contact');
+                    contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                />
+              }
+            />
             <Route path="/home-test-1" element={<HomeTestOnePage />} />
             <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
             <Route path="/borek-g-operations" element={<BorekGProposalPage />} />

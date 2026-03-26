@@ -1,6 +1,6 @@
 import { type FormEvent, PointerEvent as ReactPointerEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Check, ChevronDown, Eye, Send, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ChevronDown, Eye, Send, X } from 'lucide-react';
 import {
   getRankedProjectAreas,
   homeTestCapabilities,
@@ -11,6 +11,8 @@ import {
 import { getSourceMetadata, submitInternalForm } from '../lib/engagement';
 
 type ProjectTypeId = 'basic-advisory' | 'consulting' | 'implementation' | 'custom-tool';
+type CapabilityCollectionMode = 'manual' | 'digital';
+type BuilderScreenId = 'selection' | 'preview' | 'acceptance';
 
 type BusinessDetails = {
   businessName: string;
@@ -18,7 +20,6 @@ type BusinessDetails = {
   website: string;
   email: string;
   arr: string;
-  summary: string;
 };
 
 type AcceptanceDetails = {
@@ -27,22 +28,13 @@ type AcceptanceDetails = {
   acceptedTerms: boolean;
 };
 
-type CapabilityCollectionMode = 'manual' | 'digital';
-
 const lanePricing: Record<HomeTestExpertiseId, { multiplier: number; label: string }> = {
   growth: { multiplier: 2, label: '2x lane multiplier' },
   optimization: { multiplier: 2, label: '2x lane multiplier' },
   diligence: { multiplier: 3, label: '3x lane multiplier' },
 };
 
-const expertiseSelectionStyles: Record<
-  HomeTestExpertiseId,
-  {
-    selectedCard: string;
-    selectedBadge: string;
-    selectedCheck: string;
-  }
-> = {
+const expertiseSelectionStyles: Record<HomeTestExpertiseId, { selectedCard: string; selectedBadge: string; selectedCheck: string }> = {
   growth: {
     selectedCard: 'border-emerald-500 bg-emerald-50',
     selectedBadge: 'text-emerald-800',
@@ -60,13 +52,7 @@ const expertiseSelectionStyles: Record<
   },
 };
 
-const projectTypes: Array<{
-  id: ProjectTypeId;
-  title: string;
-  summary: string;
-  price: number | null;
-  priceLabel: string;
-}> = [
+const projectTypes: Array<{ id: ProjectTypeId; title: string; summary: string; price: number | null; priceLabel: string }> = [
   {
     id: 'basic-advisory',
     title: 'Basic Advisory',
@@ -117,8 +103,6 @@ const timelineByProjectType: Record<Exclude<ProjectTypeId, 'custom-tool'>, { lab
   ],
 };
 
-const customToolExamples = ['WhatsApp chatbot', 'Internal web app', 'New website', 'Client portal', 'AI operations assistant'];
-
 function toggleStringValue<T extends string>(current: T[], value: T): T[] {
   return current.includes(value) ? current.filter((item) => item !== value) : [...current, value];
 }
@@ -138,13 +122,10 @@ function useSignaturePad(isOpen: boolean) {
 
   useEffect(() => {
     if (!isOpen) return;
-
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const context = canvas.getContext('2d');
     if (!context) return;
-
     const ratio = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     canvas.width = rect.width * ratio;
@@ -218,13 +199,13 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
     website: '',
     email: '',
     arr: '',
-    summary: '',
   });
   const [selectedCapabilityIds, setSelectedCapabilityIds] = useState<HomeTestCapabilityId[]>([]);
   const [capabilityModes, setCapabilityModes] = useState<Partial<Record<HomeTestCapabilityId, CapabilityCollectionMode>>>({});
   const [selectedExpertiseIds, setSelectedExpertiseIds] = useState<HomeTestExpertiseId[]>([]);
   const [selectedProjectTypeId, setSelectedProjectTypeId] = useState<ProjectTypeId | null>(null);
   const [openSectionId, setOpenSectionId] = useState('business');
+  const [currentScreen, setCurrentScreen] = useState<BuilderScreenId>('selection');
   const [acceptanceDetails, setAcceptanceDetails] = useState<AcceptanceDetails>({
     fullName: '',
     email: '',
@@ -234,6 +215,32 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
   const [submitWarning, setSubmitWarning] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  function resetBuilder() {
+    setBusinessDetails({
+      businessName: '',
+      businessType: '',
+      website: '',
+      email: '',
+      arr: '',
+    });
+    setSelectedCapabilityIds([]);
+    setCapabilityModes({});
+    setSelectedExpertiseIds([]);
+    setSelectedProjectTypeId(null);
+    setOpenSectionId('business');
+    setCurrentScreen('selection');
+    setAcceptanceDetails({
+      fullName: '',
+      email: '',
+      acceptedTerms: false,
+    });
+    setSubmitError('');
+    setSubmitWarning('');
+    setIsSubmitting(false);
+    setHasSubmitted(false);
+    signature.clearSignature();
+  }
 
   const rankedProjectAreas = useMemo(
     () => getRankedProjectAreas(selectedCapabilityIds, selectedExpertiseIds),
@@ -247,10 +254,7 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
   const manualCapabilityCount = selectedCapabilityIds.filter((id) => (capabilityModes[id] ?? 'digital') === 'manual').length;
   const missingDataFee = missingCapabilityCount * 500;
   const digitizationFee = manualCapabilityCount * 500;
-
-  const businessReady = selectedCapabilityIds.length > 0;
-  const needsReady = selectedCapabilityIds.length > 0 && selectedExpertiseIds.length > 0 && Boolean(selectedProjectTypeId);
-  const canPreview = businessReady && needsReady;
+  const canConfirmSelections = selectedCapabilityIds.length > 0 && selectedExpertiseIds.length > 0 && Boolean(selectedProjectTypeId);
   const laneMultiplier = selectedExpertiseIds.reduce((total, id) => total * lanePricing[id].multiplier, 1);
   const estimatedMonthlyPrice = selectedProjectType?.price ? laneMultiplier * selectedProjectType.price + missingDataFee + digitizationFee : null;
   const discountedMonthlyPrice = estimatedMonthlyPrice ? getDiscountedPrice(estimatedMonthlyPrice) : null;
@@ -259,10 +263,7 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
 
   const proposalDeliverables = Array.from(
     new Set([
-      ...selectedCapabilities.map((item) => {
-        const mode = capabilityModes[item.id] ?? 'digital';
-        return `${item.title} workstream activated with ${mode} tracking inputs`;
-      }),
+      ...selectedCapabilities.map((item) => `${item.title} workstream activated with ${capabilityModes[item.id] ?? 'digital'} tracking inputs`),
       ...selectedExpertise.map((item) => `${item.title} lane applied to the selected business materials`),
       ...(recommendedProjectAreas[0] ? [`Recommended scope shape: ${recommendedProjectAreas[0].title}`] : []),
       ...(selectedProjectType ? [`Project tier: ${selectedProjectType.title}`] : []),
@@ -270,12 +271,11 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
   );
 
   const proposalProfile = [
-    `Business Tracks: ${
-      selectedCapabilities.map((item) => `${item.title} (${capabilityModes[item.id] ?? 'digital'})`).join(', ') || 'Pending'
-    }`,
+    `Business Tracks: ${selectedCapabilities.map((item) => `${item.title} (${capabilityModes[item.id] ?? 'digital'})`).join(', ') || 'Pending'}`,
     `Expertise Lanes: ${selectedExpertise.map((item) => item.title).join(', ') || 'Pending'}`,
     `Project Type: ${selectedProjectType?.title || 'Pending'}`,
   ];
+
   const previewHeadline =
     selectedProjectTypeId === 'basic-advisory'
       ? 'Business Profile Preview'
@@ -289,6 +289,8 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
 
   useEffect(() => {
     if (!isOpen) {
+      setCurrentScreen('selection');
+      setOpenSectionId('business');
       return;
     }
 
@@ -310,7 +312,7 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!canPreview || !acceptanceDetails.acceptedTerms || !signature.hasSignature || !selectedProjectType) {
+    if (!canConfirmSelections || !acceptanceDetails.acceptedTerms || !signature.hasSignature || !selectedProjectType) {
       return;
     }
 
@@ -319,12 +321,11 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
     setSubmitWarning('');
 
     const notes = [
-      `Non-binding proposal acceptance for homepage project builder.`,
+      'Non-binding proposal acceptance for homepage project builder.',
       `Business Type: ${businessDetails.businessType}`,
       `Website: ${businessDetails.website}`,
       `Business Email: ${businessDetails.email || 'Not provided'}`,
       `ARR: ${businessDetails.arr || 'Not provided'}`,
-      `Business Context: ${businessDetails.summary || 'None provided'}`,
       `Capabilities: ${selectedCapabilities.map((item) => `${item.title} (${capabilityModes[item.id] ?? 'digital'})`).join(', ')}`,
       `Expertise Lanes: ${selectedExpertise.map((item) => item.title).join(', ')}`,
       `Project Type: ${selectedProjectType.title}`,
@@ -333,9 +334,9 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
       `Digitization Fee: ${digitizationFee ? formatCurrency(digitizationFee) : '$0'}`,
       `Estimated Monthly Price: ${estimatedMonthlyPrice ? formatCurrency(estimatedMonthlyPrice) : 'Contact for pricing'}`,
       `Discounted Monthly Price: ${discountedMonthlyPrice ? formatCurrency(discountedMonthlyPrice) : 'Contact for pricing'}`,
-      `Term: 3-month minimum`,
+      'Term: 3-month minimum',
       `Recommended Project Areas: ${recommendedProjectAreas.map((item) => item.title).join(', ') || 'None'}`,
-      `Acknowledgment: Client understands this acceptance is not legally binding; B2W will share the contract and schedule a call.`,
+      'Acknowledgment: Client understands this acceptance is not legally binding; B2W will share the contract and schedule a call.',
     ].join('\n');
 
     try {
@@ -377,77 +378,74 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
     }
   }
 
-  const sections = [
+  function canAdvance(sectionId: string) {
+    if (sectionId === 'business') return selectedCapabilityIds.length > 0;
+    if (sectionId === 'needs') return selectedExpertiseIds.length > 0;
+    if (sectionId === 'project-types') return Boolean(selectedProjectTypeId);
+    return false;
+  }
+
+  const selectionSections = [
     {
       id: 'business',
       step: '01',
       interactionLabel: 'Business Intake',
-      interactionDetail: businessReady ? 'Ready' : 'Required',
+      interactionDetail: selectedCapabilityIds.length > 0 ? 'Ready' : 'Required',
       title: 'Tell Us About Your Business',
       content: (
-        <div className="grid gap-6">
-          <div>
-            <p className="mb-3 text-base font-medium text-black">Which of the following data does your business currently track?</p>
-            <p className="mb-4 text-sm leading-6 text-neutral-500">My Business Tracks:</p>
-            <div className="grid gap-3 md:grid-cols-3">
-              {homeTestCapabilities.map((item) => {
-                const isSelected = selectedCapabilityIds.includes(item.id);
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() =>
-                      setSelectedCapabilityIds((current) => {
-                        const next = toggleStringValue(current, item.id);
-                        setCapabilityModes((modeCurrent) => {
-                          if (next.includes(item.id)) {
-                            return { ...modeCurrent, [item.id]: modeCurrent[item.id] ?? 'digital' };
-                          }
-                          const { [item.id]: _removed, ...rest } = modeCurrent;
-                          return rest;
-                        });
-                        return next;
-                      })
-                    }
-                    className={`flex min-h-40 flex-col justify-between border p-4 text-left transition-colors ${isSelected ? 'border-black bg-neutral-50' : 'border-neutral-200 bg-white hover:border-black'}`}
-                  >
-                    <div>
-                      <p className="text-sm font-medium text-black">{item.title}</p>
-                      <p className="mt-3 text-sm leading-6 text-neutral-600">{item.body}</p>
-                      <div
-                        className="mt-4"
-                        onClick={(event) => event.stopPropagation()}
-                      >
-                        <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Tracking Mode</p>
-                        <div className="inline-flex rounded-full border border-black/10 bg-neutral-100 p-1">
-                          {(['manual', 'digital'] as CapabilityCollectionMode[]).map((mode) => {
-                            const isModeSelected = (capabilityModes[item.id] ?? 'digital') === mode;
-                            return (
-                              <button
-                                key={mode}
-                                type="button"
-                                role="switch"
-                                aria-checked={isModeSelected}
-                                onClick={() => setCapabilityModes((current) => ({ ...current, [item.id]: mode }))}
-                                className={`min-w-24 rounded-full px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors ${
-                                  isModeSelected ? 'bg-black text-white shadow-sm' : 'bg-transparent text-neutral-600'
-                                }`}
-                              >
-                                {mode}
-                              </button>
-                            );
-                          })}
-                        </div>
+        <div>
+          <p className="mb-3 text-base font-medium text-black">Which of the following data does your business currently track?</p>
+          <p className="mb-4 text-sm leading-6 text-neutral-500">My Business Tracks:</p>
+          <div className="grid gap-3 md:grid-cols-3">
+            {homeTestCapabilities.map((item) => {
+              const isSelected = selectedCapabilityIds.includes(item.id);
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() =>
+                    setSelectedCapabilityIds((current) => {
+                      const next = toggleStringValue(current, item.id);
+                      setCapabilityModes((modeCurrent) => {
+                        if (next.includes(item.id)) return { ...modeCurrent, [item.id]: modeCurrent[item.id] ?? 'digital' };
+                        const { [item.id]: _removed, ...rest } = modeCurrent;
+                        return rest;
+                      });
+                      return next;
+                    })
+                  }
+                  className={`flex min-h-40 flex-col justify-between border p-4 text-left transition-colors ${isSelected ? 'border-black bg-neutral-50' : 'border-neutral-200 bg-white hover:border-black'}`}
+                >
+                  <div>
+                    <p className="text-sm font-medium text-black">{item.title}</p>
+                    <p className="mt-3 text-sm leading-6 text-neutral-600">{item.body}</p>
+                    <div className="mt-4" onClick={(event) => event.stopPropagation()}>
+                      <p className="mb-2 text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Tracking Mode</p>
+                      <div className="inline-flex rounded-full border border-black/10 bg-neutral-100 p-1">
+                        {(['manual', 'digital'] as CapabilityCollectionMode[]).map((mode) => {
+                          const isModeSelected = (capabilityModes[item.id] ?? 'digital') === mode;
+                          return (
+                            <button
+                              key={mode}
+                              type="button"
+                              role="switch"
+                              aria-checked={isModeSelected}
+                              onClick={() => setCapabilityModes((current) => ({ ...current, [item.id]: mode }))}
+                              className={`min-w-24 rounded-full px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.18em] transition-colors ${isModeSelected ? 'bg-black text-white shadow-sm' : 'bg-transparent text-neutral-600'}`}
+                            >
+                              {mode}
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
-                    <span className={`mt-6 inline-flex h-5 w-5 items-center justify-center rounded-full border ${isSelected ? 'border-black bg-black text-white' : 'border-black/15 text-transparent'}`}>
-                      <Check className="h-3.5 w-3.5" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            <p className="mt-3 text-sm leading-6 text-neutral-500">Select up to all 3 tracks that best match the materials and operating signals available in your business.</p>
+                  </div>
+                  <span className={`mt-6 inline-flex h-5 w-5 items-center justify-center rounded-full border ${isSelected ? 'border-black bg-black text-white' : 'border-black/15 text-transparent'}`}>
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
       ),
@@ -459,37 +457,30 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
       interactionDetail: selectedExpertiseIds.length > 0 ? 'Configured' : 'In progress',
       title: 'Select Expertise Lanes',
       content: (
-        <div className="grid gap-6">
-          <div>
-            <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Expertise Lanes</p>
-            <div className="grid gap-3 md:grid-cols-3">
-              {homeTestExpertise.map((item) => {
-                const isSelected = selectedExpertiseIds.includes(item.id);
-                const selectionStyle = expertiseSelectionStyles[item.id];
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setSelectedExpertiseIds((current) => toggleStringValue(current, item.id))}
-                    className={`flex min-h-40 flex-col justify-between border p-4 text-left transition-colors ${
-                      isSelected ? selectionStyle.selectedCard : 'border-neutral-200 bg-white hover:border-black'
-                    }`}
-                  >
-                    <div>
-                      <p className={`text-sm font-medium ${isSelected ? selectionStyle.selectedBadge : item.accentClassName}`}>{item.title}</p>
-                      <p className="mt-3 text-sm leading-6 text-neutral-600">{item.description}</p>
-                      <p className={`mt-4 text-[11px] font-mono uppercase tracking-[0.18em] ${isSelected ? selectionStyle.selectedBadge : 'text-neutral-500'}`}>
-                        {lanePricing[item.id].label}
-                      </p>
-                    </div>
-                    <span className={`mt-6 inline-flex h-5 w-5 items-center justify-center rounded-full border ${isSelected ? selectionStyle.selectedCheck : 'border-black/15 text-transparent'}`}>
-                      <Check className="h-3.5 w-3.5" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+        <div className="grid gap-3 md:grid-cols-3">
+          {homeTestExpertise.map((item) => {
+            const isSelected = selectedExpertiseIds.includes(item.id);
+            const selectionStyle = expertiseSelectionStyles[item.id];
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setSelectedExpertiseIds((current) => toggleStringValue(current, item.id))}
+                className={`flex min-h-40 flex-col justify-between border p-4 text-left transition-colors ${isSelected ? selectionStyle.selectedCard : 'border-neutral-200 bg-white hover:border-black'}`}
+              >
+                <div>
+                  <p className={`text-sm font-medium ${isSelected ? selectionStyle.selectedBadge : item.accentClassName}`}>{item.title}</p>
+                  <p className="mt-3 text-sm leading-6 text-neutral-600">{item.description}</p>
+                  <p className={`mt-4 text-[11px] font-mono uppercase tracking-[0.18em] ${isSelected ? selectionStyle.selectedBadge : 'text-neutral-500'}`}>
+                    {lanePricing[item.id].label}
+                  </p>
+                </div>
+                <span className={`mt-6 inline-flex h-5 w-5 items-center justify-center rounded-full border ${isSelected ? selectionStyle.selectedCheck : 'border-black/15 text-transparent'}`}>
+                  <Check className="h-3.5 w-3.5" />
+                </span>
+              </button>
+            );
+          })}
         </div>
       ),
     },
@@ -501,28 +492,19 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
       title: 'Choose Project Tier',
       content: (
         <div className="grid gap-4">
-          <p className="text-sm leading-6 text-neutral-600">
-            Select one project tier. Each tier includes what was included in the tier before it, with added depth and delivery responsibility at every step.
-          </p>
           <div className="grid gap-3 lg:grid-cols-4">
             {projectTypes.map((item, index) => {
               const isSelected = selectedProjectTypeId === item.id;
-              const inheritedCopy =
-                index === 0 ? 'Foundation tier' : `Includes everything in ${projectTypes[index - 1].title}`;
-
+              const inheritedCopy = index === 0 ? 'Foundation tier' : `Includes everything in ${projectTypes[index - 1].title}`;
               return (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => setSelectedProjectTypeId(item.id)}
-                  className={`flex min-h-64 flex-col justify-between border p-5 text-left transition-colors ${
-                    isSelected ? 'border-black bg-neutral-950 text-white' : 'border-neutral-200 bg-white hover:border-black'
-                  }`}
+                  className={`flex min-h-64 flex-col justify-between border p-5 text-left transition-colors ${isSelected ? 'border-black bg-neutral-950 text-white' : 'border-neutral-200 bg-white hover:border-black'}`}
                 >
                   <div>
-                    <p className={`text-[11px] font-mono uppercase tracking-[0.22em] ${isSelected ? 'text-neutral-400' : 'text-neutral-500'}`}>
-                      Tier {index + 1}
-                    </p>
+                    <p className={`text-[11px] font-mono uppercase tracking-[0.22em] ${isSelected ? 'text-neutral-400' : 'text-neutral-500'}`}>Tier {index + 1}</p>
                     <p className={`mt-3 text-lg font-medium ${isSelected ? 'text-white' : 'text-black'}`}>{item.title}</p>
                     <p className={`mt-3 text-sm leading-6 ${isSelected ? 'text-neutral-300' : 'text-neutral-600'}`}>{item.summary}</p>
                     <div className={`mt-4 border p-3 ${isSelected ? 'border-white/15 bg-white/5' : 'border-black/10 bg-neutral-50'}`}>
@@ -540,239 +522,99 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
               );
             })}
           </div>
-          <p className="text-sm leading-6 text-neutral-500">Each tier includes what came before it. Users can select one project type only.</p>
         </div>
-      ),
-    },
-    {
-      id: 'preview',
-      step: '04',
-      interactionLabel: 'Proposal Preview',
-      interactionDetail: canPreview ? 'Calculated' : 'Locked',
-      title: 'Proposal Preview',
-      content: (
-        <>
-          {canPreview ? (
-            <div className="grid gap-4">
-              <div className="border border-black/10 bg-white p-4">
-                <div className="flex items-center gap-3">
-                  <Eye className="h-4 w-4 text-black" />
-                  <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Summary</p>
-                </div>
-                <div className="mt-3 grid gap-3 md:grid-cols-3">
-                  {proposalProfile.map((item) => (
-                    <div key={item} className="border border-black/10 bg-neutral-50 p-4">
-                      <p className="text-sm leading-6 text-neutral-700">{item}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border border-black bg-black p-4 text-white">
-                <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-400">Terms</p>
-                <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-                  <div>
-                    <p className="text-sm leading-6 text-neutral-300">Base price starts at $1,000. Selected lanes multiply that base, project tier pricing is applied, and missing-data or digitization fees are added before the discount.</p>
-                    {estimatedMonthlyPrice && discountedMonthlyPrice ? (
-                      <div className="mt-5">
-                        <p className="text-lg text-neutral-400 line-through">{formatCurrency(estimatedMonthlyPrice)}/month</p>
-                        <p className="mt-2 text-5xl font-medium tracking-tight text-white">{formatCurrency(discountedMonthlyPrice)}/month</p>
-                      </div>
-                    ) : (
-                      <p className="mt-5 text-3xl font-medium tracking-tight text-white">Contact for pricing</p>
-                    )}
-                  </div>
-                  <div className="border border-white/15 bg-white/5 p-4">
-                    <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-400">Pricing Breakdown</p>
-                    <div className="mt-3 space-y-2 text-sm leading-6 text-neutral-200">
-                      <p>Lane multiplier: {laneMultiplier}x</p>
-                      <p>Project type tier: {selectedProjectType?.priceLabel ?? 'Pending'}</p>
-                      <p>Missing data fee: {missingDataFee ? formatCurrency(missingDataFee) : '$0'}</p>
-                      <p>Digitization fee: {digitizationFee ? formatCurrency(digitizationFee) : '$0'}</p>
-                    </div>
-                    <div className="mt-5 border-t border-white/15 pt-4">
-                      <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-400">Term</p>
-                      <p className="mt-2 text-sm leading-6 text-neutral-200">3-month minimum</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="border border-black/10 bg-white p-4">
-                <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Overview</p>
-                <div className="mt-4 grid gap-3">
-                  {[
-                    {
-                      title: 'Profile',
-                      timeline: '1-2 weeks',
-                      valueAdd: 'Creates a clear business narrative and operating profile so decisions, positioning, and stakeholder conversations move faster.',
-                    },
-                    {
-                      title: 'Valuation',
-                      timeline: '2-3 weeks',
-                      valueAdd: 'Translates business inputs into financial reasoning, scenario analysis, and clearer tradeoff visibility for leadership.',
-                    },
-                    {
-                      title: 'Documentation',
-                      timeline: '2-4 weeks',
-                      valueAdd: 'Organizes records, process knowledge, and operating context into a usable system that improves handoff and execution readiness.',
-                    },
-                  ].map((item) => (
-                    <div key={item.title} className="border border-black/10 bg-neutral-50 p-4">
-                      <p className="text-sm font-medium text-black">{item.title}</p>
-                      <p className="mt-2 text-sm leading-6 text-neutral-600">{item.valueAdd}</p>
-                      <p className="mt-2 text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">{item.timeline}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 border border-black/10 bg-neutral-50 p-4">
-                  <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Expected Deliverables</p>
-                  <div className="mt-3 grid gap-3">
-                    {proposalDeliverables.map((item) => (
-                      <div key={item} className="border border-black/10 bg-white p-3">
-                        <p className="text-sm leading-6 text-neutral-700">{item}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="border border-dashed border-neutral-300 bg-white p-4 text-sm leading-6 text-neutral-500">
-              Complete the business details and selection stage to calculate the proposal preview.
-            </div>
-          )}
-        </>
-      ),
-    },
-    {
-      id: 'accept',
-      step: '05',
-      interactionLabel: 'Accept Proposal',
-      interactionDetail: hasSubmitted ? 'Submitted' : canPreview ? 'Ready' : 'Locked',
-      title: 'Accept Proposal',
-      content: hasSubmitted ? (
-        <div className="border border-emerald-200 bg-emerald-50 p-5">
-          <p className="text-sm font-medium text-emerald-900">Proposal acceptance received.</p>
-          <p className="mt-3 text-sm leading-6 text-emerald-900">
-            We will share the contract and schedule a call. This submission is recorded through the internal proposal workflow.
-          </p>
-          {submitWarning ? <p className="mt-3 text-sm leading-6 text-amber-900">{submitWarning}</p> : null}
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="grid gap-5 border border-neutral-200 bg-neutral-50 p-5">
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="grid gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Name</span>
-              <input
-                value={acceptanceDetails.fullName}
-                onChange={(event) => setAcceptanceDetails((current) => ({ ...current, fullName: event.target.value }))}
-                className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black"
-              />
-            </label>
-            <label className="grid gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Email Address</span>
-              <input
-                type="email"
-                value={acceptanceDetails.email}
-                onChange={(event) => setAcceptanceDetails((current) => ({ ...current, email: event.target.value }))}
-                className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black"
-              />
-            </label>
-            <label className="grid gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Business Name</span>
-              <input value={businessDetails.businessName} onChange={(event) => setBusinessDetails((current) => ({ ...current, businessName: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
-            </label>
-            <label className="grid gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Website</span>
-              <input value={businessDetails.website} onChange={(event) => setBusinessDetails((current) => ({ ...current, website: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
-            </label>
-            <label className="grid gap-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Business Type</span>
-              <input value={businessDetails.businessType} onChange={(event) => setBusinessDetails((current) => ({ ...current, businessType: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
-            </label>
-            <label className="grid gap-2 md:col-span-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Business Email</span>
-              <input type="email" value={businessDetails.email} onChange={(event) => setBusinessDetails((current) => ({ ...current, email: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
-            </label>
-            <label className="grid gap-2 md:col-span-2">
-              <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">ARR</span>
-              <input value={businessDetails.arr} onChange={(event) => setBusinessDetails((current) => ({ ...current, arr: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
-            </label>
-          </div>
-
-          <div className="border border-black/10 bg-white p-4">
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">E-Ink Signature</p>
-              <button type="button" onClick={signature.clearSignature} className="text-sm font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4 hover:text-black">
-                Clear
-              </button>
-            </div>
-            <canvas
-              ref={signature.canvasRef}
-              onPointerDown={signature.startDrawing}
-              onPointerMove={signature.draw}
-              onPointerUp={signature.stopDrawing}
-              onPointerLeave={signature.stopDrawing}
-              className="mt-3 h-40 w-full border border-dashed border-black/15 bg-white"
-            />
-            {!signature.hasSignature ? <p className="mt-3 text-xs text-neutral-500">Signature required before submitting.</p> : null}
-          </div>
-
-          <label className="flex items-start gap-3 text-sm leading-6 text-neutral-700">
-            <input
-              type="checkbox"
-              checked={acceptanceDetails.acceptedTerms}
-              onChange={(event) => setAcceptanceDetails((current) => ({ ...current, acceptedTerms: event.target.checked }))}
-              className="mt-1 h-4 w-4 rounded border border-black/20"
-            />
-            <span>
-              I acknowledge that accepting this proposal is not legally binding. B2W will share a contract and schedule a call before work begins.
-            </span>
-          </label>
-
-          {submitError ? <div className="border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-900">{submitError}</div> : null}
-
-          <button
-            type="submit"
-            disabled={!canPreview || !acceptanceDetails.acceptedTerms || !signature.hasSignature || isSubmitting}
-            className={`inline-flex min-h-12 items-center justify-center gap-2 border px-5 py-3 text-sm font-medium transition-colors ${
-              canPreview && acceptanceDetails.acceptedTerms && signature.hasSignature && !isSubmitting
-                ? 'border-black bg-black text-white hover:bg-neutral-800'
-                : 'cursor-not-allowed border-black/10 bg-neutral-200 text-neutral-500'
-            }`}
-          >
-            {isSubmitting ? 'Submitting...' : 'Accept Proposal'}
-            <Send className="h-4 w-4" />
-          </button>
-        </form>
       ),
     },
   ];
 
-  function canAdvance(sectionId: string) {
-    if (sectionId === 'business') {
-      return selectedCapabilityIds.length > 0;
-    }
+  const acceptanceContent = hasSubmitted ? (
+    <div className="border border-emerald-200 bg-emerald-50 p-5">
+      <p className="text-sm font-medium text-emerald-900">Proposal acceptance received.</p>
+      <p className="mt-3 text-sm leading-6 text-emerald-900">
+        We will share the contract and schedule a call. This submission is recorded through the internal proposal workflow.
+      </p>
+      {submitWarning ? <p className="mt-3 text-sm leading-6 text-amber-900">{submitWarning}</p> : null}
+      <div className="mt-5 border-t border-emerald-300/60 pt-5">
+        <button
+          type="button"
+          onClick={resetBuilder}
+          className="inline-flex min-h-11 items-center justify-center border border-emerald-900 bg-emerald-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-800"
+        >
+          Restart
+        </button>
+      </div>
+    </div>
+  ) : (
+    <form onSubmit={handleSubmit} className="grid gap-5 border border-neutral-200 bg-neutral-50 p-5">
+      <div className="grid gap-4 md:grid-cols-2">
+        <label className="grid gap-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Name</span>
+          <input value={acceptanceDetails.fullName} onChange={(event) => setAcceptanceDetails((current) => ({ ...current, fullName: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Email Address</span>
+          <input type="email" value={acceptanceDetails.email} onChange={(event) => setAcceptanceDetails((current) => ({ ...current, email: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Business Name</span>
+          <input value={businessDetails.businessName} onChange={(event) => setBusinessDetails((current) => ({ ...current, businessName: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Website</span>
+          <input value={businessDetails.website} onChange={(event) => setBusinessDetails((current) => ({ ...current, website: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Business Type</span>
+          <input value={businessDetails.businessType} onChange={(event) => setBusinessDetails((current) => ({ ...current, businessType: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+        <label className="grid gap-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Business Email</span>
+          <input type="email" value={businessDetails.email} onChange={(event) => setBusinessDetails((current) => ({ ...current, email: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+        <label className="grid gap-2 md:col-span-2">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">ARR</span>
+          <input value={businessDetails.arr} onChange={(event) => setBusinessDetails((current) => ({ ...current, arr: event.target.value }))} className="min-h-12 border border-black/10 px-4 py-3 text-sm text-neutral-900 outline-none transition-colors focus:border-black" />
+        </label>
+      </div>
 
-    if (sectionId === 'needs') {
-      return selectedExpertiseIds.length > 0;
-    }
+      <div className="border border-black/10 bg-white p-4">
+        <div className="flex items-center justify-between gap-4">
+          <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">E-Ink Signature</p>
+          <button type="button" onClick={signature.clearSignature} className="text-sm font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4 hover:text-black">
+            Clear
+          </button>
+        </div>
+        <canvas
+          ref={signature.canvasRef}
+          onPointerDown={signature.startDrawing}
+          onPointerMove={signature.draw}
+          onPointerUp={signature.stopDrawing}
+          onPointerLeave={signature.stopDrawing}
+          className="mt-3 h-40 w-full border border-dashed border-black/15 bg-white"
+        />
+      </div>
 
-    if (sectionId === 'project-types') {
-      return Boolean(selectedProjectTypeId);
-    }
+      <label className="flex items-start gap-3 text-sm leading-6 text-neutral-700">
+        <input type="checkbox" checked={acceptanceDetails.acceptedTerms} onChange={(event) => setAcceptanceDetails((current) => ({ ...current, acceptedTerms: event.target.checked }))} className="mt-1 h-4 w-4 rounded border border-black/20" />
+        <span>I acknowledge that accepting this proposal is not legally binding. B2W will share a contract and schedule a call before work begins.</span>
+      </label>
 
-    if (sectionId === 'preview') {
-      return canPreview;
-    }
+      {submitError ? <div className="border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-900">{submitError}</div> : null}
 
-    if (sectionId === 'accept') {
-      return false;
-    }
-
-    return false;
-  }
+      <button
+        type="submit"
+        disabled={!canConfirmSelections || !acceptanceDetails.acceptedTerms || !signature.hasSignature || isSubmitting}
+        className={`inline-flex min-h-12 items-center justify-center gap-2 border px-5 py-3 text-sm font-medium transition-colors ${
+          canConfirmSelections && acceptanceDetails.acceptedTerms && signature.hasSignature && !isSubmitting
+            ? 'border-black bg-black text-white hover:bg-neutral-800'
+            : 'cursor-not-allowed border-black/10 bg-neutral-200 text-neutral-500'
+        }`}
+      >
+        {isSubmitting ? 'Submitting...' : 'Accept Proposal'}
+        <Send className="h-4 w-4" />
+      </button>
+    </form>
+  );
 
   return (
     <AnimatePresence>
@@ -787,98 +629,222 @@ export default function ProjectBuilderDrawer({ isOpen, onClose }: ProjectBuilder
             className="fixed inset-x-0 bottom-0 z-50 max-h-[88vh] overflow-y-auto border-t border-black/10 bg-white shadow-[0_-24px_80px_rgba(0,0,0,0.18)]"
           >
             <div className="sticky top-0 z-10 border-b border-black/10 bg-white/95 px-6 py-4 backdrop-blur">
-              <div className="mx-auto flex max-w-6xl items-center justify-between gap-4">
+              <div className="mx-auto grid max-w-6xl gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)_auto] lg:items-center">
                 <div>
-                  <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Start New Project</p>
-                  <h2 className="mt-1 text-xl font-medium tracking-tight text-black">Project Builder</h2>
+                  <h2 className="text-xl font-medium tracking-tight text-black">Project Builder</h2>
+                  <p className="mt-2 text-[11px] font-mono uppercase tracking-[0.18em] text-amber-700">
+                    Offer: Next 3 Clients Receive 80% Off
+                  </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-neutral-700 transition-colors hover:border-black"
-                  aria-label="Close project drawer"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+
+                <div className="grid gap-2 sm:grid-cols-3">
+                  {[
+                    { id: 'selection', step: '01', title: 'Selections' },
+                    { id: 'preview', step: '02', title: 'Proposal Preview' },
+                    { id: 'acceptance', step: '03', title: 'Acceptance' },
+                  ].map((screen) => {
+                    const isActive = currentScreen === screen.id;
+                    return (
+                      <div
+                        key={screen.id}
+                        className={`border px-4 py-3 ${isActive ? 'border-black bg-black text-white' : 'border-neutral-200 bg-white text-neutral-500'}`}
+                      >
+                        <p className="text-[10px] font-mono uppercase tracking-[0.24em] text-neutral-400">{screen.step}</p>
+                        <p className="mt-2 text-sm font-medium">{screen.title}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="flex justify-end">
+                  <button type="button" onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white text-neutral-700 transition-colors hover:border-black" aria-label="Close project drawer">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
             <div className="mx-auto max-w-6xl px-6 py-6">
-              <div className="mb-4 border border-amber-300 bg-amber-50 px-4 py-3">
-                <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-amber-800">Offer</p>
-                <p className="mt-1 text-sm font-medium text-amber-950">Next 3 Clients Receive 80% off</p>
-              </div>
-              <div className="grid gap-3">
-                {sections.map((section, index) => {
-                  const isOpenSection = openSectionId === section.id;
-                  const previousSection = index > 0 ? sections[index - 1] : null;
-                  const nextSection = index < sections.length - 1 ? sections[index + 1] : null;
-                  return (
-                    <div key={section.id} className={`border-t transition-colors ${isOpenSection ? 'border-neutral-900' : 'border-neutral-200'}`}>
-                      <button
-                        type="button"
-                        onClick={() => setOpenSectionId((current) => (current === section.id ? '' : section.id))}
-                        className="flex w-full items-start gap-6 px-0 py-6 text-left"
-                        aria-expanded={isOpenSection}
-                      >
-                        <div className="min-w-14 pt-1 text-[10px] font-mono uppercase tracking-[0.28em] text-neutral-400">{section.step}</div>
-                        <div className="flex-1">
-                          <div className="mb-3 flex flex-wrap items-center gap-3">
-                            <span className={`border px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] ${isOpenSection ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-300 bg-white text-neutral-500'}`}>
-                              {section.interactionLabel}
-                            </span>
-                            <span className="text-xs text-neutral-400">{section.interactionDetail}</span>
-                          </div>
-                          <h3 className={`text-xl font-medium tracking-tight md:text-2xl ${isOpenSection ? 'text-neutral-950' : 'text-neutral-700'}`}>{section.title}</h3>
-                        </div>
-                        <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-neutral-400 transition-transform ${isOpenSection ? 'rotate-180' : ''}`} />
-                      </button>
-                      <AnimatePresence initial={false}>
-                        {isOpenSection ? (
-                          <motion.div
-                            key={`${section.id}-content`}
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.24, ease: 'easeOut' }}
-                            className="overflow-hidden"
-                          >
-                            <div className="border-t border-neutral-200 py-6">
-                              {section.content}
-                              <div className="mt-6 flex items-center justify-between gap-4 border-t border-neutral-200 pt-5">
-                                <button
-                                  type="button"
-                                  onClick={() => previousSection && setOpenSectionId(previousSection.id)}
-                                  disabled={!previousSection}
-                                  className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${
-                                    previousSection
-                                      ? 'border-black/15 bg-white text-black hover:border-black'
-                                      : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'
-                                  }`}
-                                >
-                                  Previous
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => nextSection && setOpenSectionId(nextSection.id)}
-                                  disabled={!nextSection || !canAdvance(section.id)}
-                                  className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${
-                                    nextSection && canAdvance(section.id)
-                                      ? 'border-black bg-black text-white hover:bg-neutral-800'
-                                      : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'
-                                  }`}
-                                >
-                                  Next
-                                </button>
+              <AnimatePresence mode="wait" initial={false}>
+                {currentScreen === 'selection' ? (
+                  <motion.div key="selection-screen" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.24, ease: 'easeOut' }} className="grid gap-6">
+                    <div className="grid gap-3">
+                      {selectionSections.map((section, index) => {
+                        const isOpenSection = openSectionId === section.id;
+                        const previousSection = index > 0 ? selectionSections[index - 1] : null;
+                        const nextSection = index < selectionSections.length - 1 ? selectionSections[index + 1] : null;
+                        return (
+                          <div key={section.id} className={`border-t transition-colors ${isOpenSection ? 'border-neutral-900' : 'border-neutral-200'}`}>
+                            <button type="button" onClick={() => setOpenSectionId((current) => (current === section.id ? '' : section.id))} className="flex w-full items-start gap-6 px-0 py-6 text-left" aria-expanded={isOpenSection}>
+                              <div className="min-w-14 pt-1 text-[10px] font-mono uppercase tracking-[0.28em] text-neutral-400">{section.step}</div>
+                              <div className="flex-1">
+                                <div className="mb-3 flex flex-wrap items-center gap-3">
+                                  <span className={`border px-3 py-1 text-[10px] font-mono uppercase tracking-[0.24em] ${isOpenSection ? 'border-neutral-900 bg-neutral-900 text-white' : 'border-neutral-300 bg-white text-neutral-500'}`}>{section.interactionLabel}</span>
+                                  <span className="text-xs text-neutral-400">{section.interactionDetail}</span>
+                                </div>
+                                <h3 className={`text-xl font-medium tracking-tight md:text-2xl ${isOpenSection ? 'text-neutral-950' : 'text-neutral-700'}`}>{section.title}</h3>
                               </div>
-                            </div>
-                          </motion.div>
-                        ) : null}
-                      </AnimatePresence>
+                              <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-neutral-400 transition-transform ${isOpenSection ? 'rotate-180' : ''}`} />
+                            </button>
+                            <AnimatePresence initial={false}>
+                              {isOpenSection ? (
+                                <motion.div key={`${section.id}-content`} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.24, ease: 'easeOut' }} className="overflow-hidden">
+                                  <div className="border-t border-neutral-200 py-6">
+                                    {section.content}
+                                    <div className="mt-6 flex items-center justify-between gap-4 border-t border-neutral-200 pt-5">
+                                      <button type="button" onClick={() => previousSection && setOpenSectionId(previousSection.id)} disabled={!previousSection} className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${previousSection ? 'border-black/15 bg-white text-black hover:border-black' : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'}`}>
+                                        Previous
+                                      </button>
+                                      <button type="button" onClick={() => nextSection && setOpenSectionId(nextSection.id)} disabled={!nextSection || !canAdvance(section.id)} className={`min-h-11 border px-4 py-2 text-sm font-medium transition-colors ${nextSection && canAdvance(section.id) ? 'border-black bg-black text-white hover:bg-neutral-800' : 'cursor-not-allowed border-black/10 bg-neutral-100 text-neutral-400'}`}>
+                                        Next
+                                      </button>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ) : null}
+                            </AnimatePresence>
+                          </div>
+                        );
+                      })}
                     </div>
-                  );
-                })}
-              </div>
+
+                    <div className="border border-black/10 bg-neutral-50 p-5">
+                      <div className="flex items-center gap-3">
+                        <Eye className="h-4 w-4 text-black" />
+                        <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Selection Summary</p>
+                      </div>
+                      <div className="mt-4 grid gap-4 md:grid-cols-3">
+                        <div className="border border-black/10 bg-white p-4">
+                          <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Business Audit</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {selectedCapabilities.length > 0 ? selectedCapabilities.map((item) => (
+                              <span key={item.id} className="border border-black/10 bg-neutral-50 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-700">{item.title}</span>
+                            )) : <span className="text-sm text-neutral-400">Pending</span>}
+                          </div>
+                        </div>
+                        <div className="border border-black/10 bg-white p-4">
+                          <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Expertise Lanes</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {selectedExpertise.length > 0 ? selectedExpertise.map((item) => (
+                              <span key={item.id} className="border border-black/10 bg-neutral-50 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-700">{item.title}</span>
+                            )) : <span className="text-sm text-neutral-400">Pending</span>}
+                          </div>
+                        </div>
+                        <div className="border border-black/10 bg-white p-4">
+                          <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Project Tier</p>
+                          <div className="mt-3">
+                            {selectedProjectType ? <span className="border border-black/10 bg-neutral-50 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-700">{selectedProjectType.title}</span> : <span className="text-sm text-neutral-400">Pending</span>}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-5 flex justify-end border-t border-neutral-200 pt-5">
+                        <button type="button" onClick={() => setCurrentScreen('preview')} disabled={!canConfirmSelections} className={`inline-flex min-h-12 items-center justify-center gap-2 border px-5 py-3 text-sm font-medium transition-colors ${canConfirmSelections ? 'border-black bg-black text-white hover:bg-neutral-800' : 'cursor-not-allowed border-black/10 bg-neutral-200 text-neutral-500'}`}>
+                          Confirm Selections
+                          <ArrowRight className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : null}
+
+                {currentScreen === 'preview' ? (
+                  <motion.div key="preview-screen" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.24, ease: 'easeOut' }} className="grid gap-4">
+                    <div className="border border-black/10 bg-white p-4">
+                      <div className="flex items-center gap-3">
+                        <Eye className="h-4 w-4 text-black" />
+                        <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">{previewHeadline}</p>
+                      </div>
+                      <div className="mt-3 grid gap-3 md:grid-cols-3">
+                        {proposalProfile.map((item) => (
+                          <div key={item} className="border border-black/10 bg-neutral-50 p-4">
+                            <p className="text-sm leading-6 text-neutral-700">{item}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="border border-black bg-black p-4 text-white">
+                      <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-400">Terms</p>
+                      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+                        <div>
+                          <p className="text-sm leading-6 text-neutral-300">Base price starts at $1,000. Selected lanes multiply that base, project tier pricing is applied, and missing-data or digitization fees are added before the discount.</p>
+                          {estimatedMonthlyPrice && discountedMonthlyPrice ? (
+                            <div className="mt-5">
+                              <p className="text-lg text-neutral-400 line-through">{formatCurrency(estimatedMonthlyPrice)}/month</p>
+                              <p className="mt-2 text-5xl font-medium tracking-tight text-white">{formatCurrency(discountedMonthlyPrice)}/month</p>
+                            </div>
+                          ) : (
+                            <p className="mt-5 text-3xl font-medium tracking-tight text-white">Contact for pricing</p>
+                          )}
+                        </div>
+                        <div className="border border-white/15 bg-white/5 p-4">
+                          <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-400">Pricing Breakdown</p>
+                          <div className="mt-3 space-y-2 text-sm leading-6 text-neutral-200">
+                            <p>Lane multiplier: {laneMultiplier}x</p>
+                            <p>Project type tier: {selectedProjectType?.priceLabel ?? 'Pending'}</p>
+                            <p>Missing data fee: {missingDataFee ? formatCurrency(missingDataFee) : '$0'}</p>
+                            <p>Digitization fee: {digitizationFee ? formatCurrency(digitizationFee) : '$0'}</p>
+                          </div>
+                          <div className="mt-5 border-t border-white/15 pt-4">
+                            <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-400">Term</p>
+                            <p className="mt-2 text-sm leading-6 text-neutral-200">3-month minimum</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border border-black/10 bg-white p-4">
+                      <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Expected Deliverables</p>
+                      <div className="mt-3 grid gap-3">
+                        {proposalDeliverables.map((item) => (
+                          <div key={item} className="border border-black/10 bg-neutral-50 p-4">
+                            <p className="text-sm leading-6 text-neutral-700">{item}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {timelineItems.length > 0 ? (
+                      <div className="border border-black/10 bg-neutral-50 p-4">
+                        <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">Timeline</p>
+                        <div className="mt-3 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+                          {timelineItems.map((item) => (
+                            <div key={item.label} className="border border-black/10 bg-white p-4">
+                              <p className="text-sm font-medium text-black">{item.label}</p>
+                              <p className="mt-2 text-sm leading-6 text-neutral-600">{item.detail}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    <div className="flex items-center justify-between gap-4 border-t border-neutral-200 pt-5">
+                      <button type="button" onClick={() => setCurrentScreen('selection')} className="inline-flex min-h-11 items-center gap-2 border border-black/15 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black">
+                        <ArrowLeft className="h-4 w-4" />
+                        Back
+                      </button>
+                      <button type="button" onClick={() => setCurrentScreen('acceptance')} className="inline-flex min-h-12 items-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800">
+                        Continue to Acceptance
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : null}
+
+                {currentScreen === 'acceptance' ? (
+                  <motion.div key="acceptance-screen" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.24, ease: 'easeOut' }} className="grid gap-5">
+                    {acceptanceContent}
+                    {!hasSubmitted ? (
+                      <div className="flex items-center justify-between gap-4 border-t border-neutral-200 pt-5">
+                        <button type="button" onClick={() => setCurrentScreen('preview')} className="inline-flex min-h-11 items-center gap-2 border border-black/15 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:border-black">
+                          <ArrowLeft className="h-4 w-4" />
+                          Back
+                        </button>
+                      </div>
+                    ) : null}
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
             </div>
           </motion.aside>
         </>

@@ -69,13 +69,13 @@ export default function CapabilitiesVisualization() {
         className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-t border-neutral-200 pt-8"
       >
         <p className="max-w-2xl text-sm leading-relaxed text-neutral-600">
-          Explore our AI Workflow (test).
+          Need help capturing better business data?
         </p>
         <Link
-          to="/capabilities"
+          to="/#contact"
           className="inline-flex items-center gap-3 border border-neutral-200 bg-white px-6 py-4 text-sm font-medium text-neutral-800 transition-all hover:border-black hover:bg-black hover:text-white group shadow-sm"
         >
-          Open Kitchen
+          Get a Business Audit
           <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
         </Link>
       </motion.div>
