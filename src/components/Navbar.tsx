@@ -19,6 +19,13 @@ type NavItem = {
   children: NavChild[];
 };
 
+const projectDropdownLabels: Record<string, string> = {
+  Marketing: 'Marketing Audit',
+  Financials: 'Financial Review',
+  Operations: 'Operations Support',
+  'Business Revamp': 'Business Revamp',
+};
+
 const navItems: NavItem[] = [
   {
     label: 'Capabilities',
@@ -43,7 +50,7 @@ const navItems: NavItem[] = [
     label: 'Projects',
     to: '/#projects',
     children: showcaseProjects.map((project) => ({
-      label: project.category,
+      label: projectDropdownLabels[project.category] ?? project.category,
       to: project.link,
     })),
   },

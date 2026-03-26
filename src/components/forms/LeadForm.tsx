@@ -42,13 +42,6 @@ function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): Normal
 }
 
 const EMPTY_ARRAY: PublicProjectArea[] = [];
-const publicProjectAreaLabels: Record<PublicProjectArea, string> = {
-  Marketing: 'Marketing Audit',
-  Financials: 'Financial Review',
-  Operations: 'Operations Support',
-  'Business Revamp': 'Business Revamp',
-};
-
 const publicProjectAreaOptions = showcaseProjects.map((project) => ({
   area: project.category as PublicProjectArea,
   href: project.link,
@@ -218,7 +211,7 @@ export default function LeadForm({
                     }`}
                   >
                     <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
-                    <span>{publicProjectAreaLabels[area]}</span>
+                    <span>{area}</span>
                   </button>
                   <a
                     href={href}
