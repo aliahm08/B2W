@@ -88,6 +88,7 @@ export default function Navbar() {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const isHeaderDark = isSearchOpen || isOpen;
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -335,11 +336,11 @@ export default function Navbar() {
     <nav
       ref={navRef}
       className={`fixed left-0 right-0 top-0 z-50 overflow-visible border-b transition-colors duration-150 ${
-        isSearchOpen ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-100 bg-white'
+        isHeaderDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-100 bg-white'
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <B2WLogoMark className={`shrink-0 transition-colors duration-150 ${isSearchOpen ? 'text-white' : 'text-black'}`} />
+        <B2WLogoMark className={`shrink-0 transition-colors duration-150 ${isHeaderDark ? 'text-white' : 'text-black'}`} />
 
         <div className={`hidden items-center gap-6 text-sm md:flex ${isSearchOpen ? 'text-neutral-300' : 'text-neutral-600'}`}>
           {navItems.map((item) => {
@@ -420,7 +421,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className={`p-2 md:hidden ${isSearchOpen ? 'text-white' : 'text-black'}`}
+          className={`p-2 md:hidden ${isHeaderDark ? 'text-white' : 'text-black'}`}
           type="button"
           onClick={() => setIsOpen((current) => !current)}
           aria-expanded={isOpen}
@@ -486,20 +487,35 @@ export default function Navbar() {
 
       <MobileMenuDrawer
         isOpen={isOpen}
-        theme="light"
+        theme="dark"
         list={
           <div className="py-2">
-            <div className="border-b border-black/8 py-3">
-              <div className="rounded-[1.4rem] border border-white/10 bg-neutral-900 px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <Search className="h-4 w-4 shrink-0 text-neutral-500" />
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Search pages, projects, capabilities..."
-                    className="w-full bg-transparent text-[15px] text-white outline-none placeholder:text-neutral-500"
-                  />
+            <div className="border-b border-white/10 py-3">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">Quick Actions</p>
+                  <motion.a
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ duration: 0.14 }}
+                    href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
+                    onClick={() => setIsOpen(false)}
+                    className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-white/10 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
+                  >
+                    Contact
+                  </motion.a>
+                </div>
+
+                <div className="rounded-[1.4rem] border border-white/10 bg-neutral-900 px-4 py-3">
+                  <div className="flex items-center gap-3">
+                    <Search className="h-4 w-4 shrink-0 text-neutral-500" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(event) => setSearchQuery(event.target.value)}
+                      placeholder="Search pages, projects, capabilities..."
+                      className="w-full bg-transparent text-[15px] text-white outline-none placeholder:text-neutral-500"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -509,7 +525,7 @@ export default function Navbar() {
                       <button
                         key={`mobile-${entry.group}-${entry.label}-${entry.to}`}
                         type="button"
-                        onClick={() => navigateToTarget(entry.to)}
+                    onClick={() => navigateToTarget(entry.to)}
                         className="flex w-full items-center justify-between gap-4 rounded-[1rem] bg-neutral-900 px-3 py-3 text-left transition-colors hover:bg-neutral-800"
                       >
                         <div className="min-w-0">
@@ -530,13 +546,14 @@ export default function Navbar() {
             {navItems.map((item) => {
               const isActive = activeDesktopLink === item.to;
               return (
-                <div key={item.label} className="border-b border-black/8 py-3 last:border-b-0">
+                <div key={item.label} className="border-b border-white/10 py-3 last:border-b-0">
                   <Link
                     to={item.to}
                     onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
-                    className={`block text-[17px] ${isActive ? 'font-semibold text-black' : 'font-medium text-neutral-900'}`}
+                    className={`inline-flex items-center gap-2 text-[17px] ${isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'}`}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-neutral-500" />
                   </Link>
 
                   {item.children.length > 0 ? (
@@ -546,7 +563,7 @@ export default function Navbar() {
                           key={child.label}
                           to={child.to}
                           onClick={child.to.includes('#') ? handleNavigation(child.to) : () => setIsOpen(false)}
-                          className="block text-sm font-medium text-neutral-500 transition-colors hover:text-black"
+                          className="block text-sm font-medium text-neutral-400 transition-colors hover:text-white"
                         >
                           {child.label}
                         </Link>
@@ -557,17 +574,6 @@ export default function Navbar() {
               );
             })}
           </div>
-        }
-        cta={
-          <motion.a
-            whileTap={{ scale: 0.97 }}
-            transition={{ duration: 0.14 }}
-            href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
-            onClick={() => setIsOpen(false)}
-            className="inline-flex min-h-12 items-center self-start rounded-full bg-black px-5 py-3 text-base font-medium text-white transition-colors hover:bg-neutral-800"
-          >
-            Contact
-          </motion.a>
         }
       />
     </nav>
