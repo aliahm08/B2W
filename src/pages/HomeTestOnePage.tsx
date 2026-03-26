@@ -56,8 +56,9 @@ export default function HomeTestOnePage() {
   return (
     <>
       <Seo
-        title="B2W | SMB Home Prototype"
+        title="B2W Homepage Prototype"
         description="Prototype homepage for B2W with rotating SMB positioning, consulting services, AI platform entry, and a client login."
+        robots="noindex, nofollow"
       />
 
       <main className="min-h-screen overflow-hidden bg-[#f5f0e6] text-black">

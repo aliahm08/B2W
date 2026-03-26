@@ -149,6 +149,7 @@ export default function ProjectPasswordGate({
       <Seo
         title={protectedProject?.maskedSeoTitle ?? 'Confidential Project'}
         description={protectedProject?.maskedSeoDescription ?? 'This project is access-controlled.'}
+        robots="noindex, nofollow"
       />
 
       <div className="mx-auto flex min-h-screen w-full max-w-7xl items-center px-6 py-20">

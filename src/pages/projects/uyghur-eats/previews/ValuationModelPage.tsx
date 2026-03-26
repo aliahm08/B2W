@@ -52,8 +52,8 @@ export default function BasicPreviewPage() {
 
   return (
     <PreviewPageFrame
-      title="Uyghur Eats | Valuation Model & Financial Scenarios"
-      description="Financial snapshot and valuation modeling for Uyghur Eats, featuring revenue mix, cost structure, buyer scenarios, and capacity analysis for a property sale."
+      title="Uyghur Eats Valuation Preview"
+      description="Preview of the Uyghur Eats valuation presentation showing how revenue, normalized earnings, and sale scenarios can be packaged for buyer review."
       returnPath={returnPath}
       returnLabel={searchParams.get('return') ? "Client Portal" : "Projects"}
       returnDetail={searchParams.get('return') ? "Back to the main presentation" : "Back to B2W Portfolio"}

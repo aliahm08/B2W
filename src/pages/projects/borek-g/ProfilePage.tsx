@@ -274,8 +274,8 @@ export default function BorekG() {
         <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
             <ClientNavbar clientName="Borek-G" />
             <Seo
-                title="Turkish Bistro in Falls Church, VA"
-                description="Social media management and marketing profile for Borek-G covering reputation strength, discovery coverage, social traction, channel depth, and restaurant growth potential in Falls Church."
+                title="Restaurant Marketing Profile for Borek-G in Falls Church, VA"
+                description="Review B2W's restaurant marketing profile for Borek-G covering local reputation, search visibility, Instagram opportunity, owned-channel conversion, and growth signals in Falls Church."
             />
 
             {isBlurredPreview ? (

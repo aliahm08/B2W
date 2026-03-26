@@ -1,106 +1,141 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { allCapabilities } from '../src/content/capabilities.ts';
+import { listStaticSeoRoutes, type SeoMetadata } from '../src/lib/seo.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const distPath = path.resolve(__dirname, '../dist');
 const indexPath = path.join(distPath, 'index.html');
+const siteUrl = 'https://www.b2w-ai.com';
 
 if (!fs.existsSync(indexPath)) {
-    console.error('dist/index.html not found. Please run vite build first.');
-    process.exit(1);
+  console.error('dist/index.html not found. Please run vite build first.');
+  process.exit(1);
 }
 
 const originalHtml = fs.readFileSync(indexPath, 'utf-8');
+const routes = listStaticSeoRoutes();
 
-interface RouteSeo {
-    path: string;
-    title: string;
-    description: string;
+function escapeHtml(value: string) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
 }
 
-const routes: RouteSeo[] = [
-    {
-        path: '/',
-        title: 'B2W | Consulting for Small to Midsize Businesses',
-        description: 'B2W helps small and midsize businesses analyze performance, identify operational gaps, and deploy modern tools to support sustainable expansion.'
-    },
-    {
-        path: '/capabilities',
-        title: 'Our Capabilities & Use Cases | B2W',
-        description: 'Explore our full range of consulting capabilities, from business performance analysis to evaluating operational gaps and deploying modern expansion tools.'
-    },
-    {
-        path: '/borek-g-social-media-management',
-        title: 'Turkish Bistro in Falls Church, VA',
-        description: 'Social media management and marketing profile for Borek-G covering reputation strength, discovery coverage, social traction, channel depth, and restaurant growth potential in Falls Church.'
-    },
-    {
-        path: '/borek-g-operations',
-        title: 'Borek-G | Growth Proposal',
-        description: 'Growth systems proposal for Borek-G. Review our consulting engagement scope, strategies for local discovery, and phased implementation recommendations.'
-    },
-    {
-        path: '/sabucnu-operations',
-        title: 'Sabucnu Contractors | Operations Profile',
-        description: 'Operations analysis for Sabucnu Contractors. Detailed evaluation of workforce coordination, standard operating procedures, and scheduling systems.'
-    },
-    {
-        path: '/uyghur-eats',
-        title: 'Uyghur Eats | Business Opportunity Profile',
-        description: 'Comprehensive business profile for Uyghur Eats. Explore the location footprint, culinary draw, community integration, and acquisition thesis for this Washington, DC restaurant.'
-    },
-    {
-        path: '/client/uyghur-eats',
-        title: 'Uyghur Eats | Client Portal',
-        description: 'Secure client portal for Uyghur Eats. Review business sale preparation deliverables, valuation models, operations documentation, and buyer packages from B2W.'
-    },
-    {
-        path: '/uyghur-eats-valuation',
-        title: 'Uyghur Eats | Valuation Model & Financial Scenarios',
-        description: 'Financial snapshot and valuation modeling for Uyghur Eats, featuring revenue mix, cost structure, buyer scenarios, and capacity analysis for a property sale.'
-    },
-    {
-        path: '/uyghur-eats-data-room',
-        title: 'Uyghur Eats | Buyer Due Diligence Data Room',
-        description: 'Secure buyer information package and data room for Uyghur Eats, organizing financial records, operations, leases, and digital assets for due diligence.'
+function upsertTag(html: string, regex: RegExp, tag: string) {
+  if (regex.test(html)) {
+    return html.replace(regex, tag);
+  }
+
+  return html.replace('</head>', `    ${tag}\n  </head>`);
+}
+
+function removeTag(html: string, regex: RegExp) {
+  return html.replace(regex, '');
+}
+
+function absoluteCanonicalUrl(pathname: string) {
+  return pathname === '/' ? `${siteUrl}/` : `${siteUrl}${pathname}`;
+}
+
+function replaceSeoTags(html: string, metadata: SeoMetadata) {
+  let nextHtml = html;
+
+  nextHtml = upsertTag(nextHtml, /<title>.*?<\/title>/s, `<title>${escapeHtml(metadata.title)}</title>`);
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="description" content="${escapeHtml(metadata.description)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+name="robots"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="robots" content="${escapeHtml(metadata.robots)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:type" content="${escapeHtml(metadata.type)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+property="og:site_name"\s+content="[^"]*"\s*\/?>/i,
+    '<meta property="og:site_name" content="B2W" />',
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:title" content="${escapeHtml(metadata.title)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:description" content="${escapeHtml(metadata.description)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:url" content="${escapeHtml(absoluteCanonicalUrl(metadata.canonicalPath))}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+name="twitter:card"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:card" content="${escapeHtml(metadata.twitterCard)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:title" content="${escapeHtml(metadata.title)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:description" content="${escapeHtml(metadata.description)}" />`,
+  );
+  nextHtml = upsertTag(
+    nextHtml,
+    /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
+    `<link rel="canonical" href="${escapeHtml(absoluteCanonicalUrl(metadata.canonicalPath))}" />`,
+  );
+
+  if (metadata.imageUrl) {
+    nextHtml = upsertTag(
+      nextHtml,
+      /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/i,
+      `<meta property="og:image" content="${escapeHtml(metadata.imageUrl)}" />`,
+    );
+    nextHtml = upsertTag(
+      nextHtml,
+      /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i,
+      `<meta name="twitter:image" content="${escapeHtml(metadata.imageUrl)}" />`,
+    );
+
+    if (metadata.imageAlt) {
+      nextHtml = upsertTag(
+        nextHtml,
+        /<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>/i,
+        `<meta property="og:image:alt" content="${escapeHtml(metadata.imageAlt)}" />`,
+      );
+      nextHtml = upsertTag(
+        nextHtml,
+        /<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>/i,
+        `<meta name="twitter:image:alt" content="${escapeHtml(metadata.imageAlt)}" />`,
+      );
+    } else {
+      nextHtml = removeTag(nextHtml, /<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>\s*/i);
+      nextHtml = removeTag(nextHtml, /<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>\s*/i);
     }
-];
+  } else {
+    nextHtml = removeTag(nextHtml, /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>\s*/i);
+    nextHtml = removeTag(nextHtml, /<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>\s*/i);
+    nextHtml = removeTag(nextHtml, /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>\s*/i);
+    nextHtml = removeTag(nextHtml, /<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>\s*/i);
+  }
 
-// Add dynamic capabilities pages
-allCapabilities.forEach(capability => {
-    routes.push({
-        path: `/capabilities/${capability.slug}`,
-        title: `${capability.title} | Capability`,
-        description: `Explore how our ${capability.title} capability helps address operational gaps, streamline workflows, and support expansion.`
-    });
-});
-
-function replaceSeoTags(html: string, title: string, description: string): string {
-    let newHtml = html;
-    
-    // Replace <title>
-    newHtml = newHtml.replace(/<title>.*?<\/title>/, `<title>${title}</title>`);
-    
-    // Replace standard description
-    newHtml = newHtml.replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?>/, `<meta name="description" content="${description}">`);
-    
-    // Replace Open Graph title and description
-    newHtml = newHtml.replace(/<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/, `<meta property="og:title" content="${title}">`);
-    newHtml = newHtml.replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/, `<meta property="og:description" content="${description}">`);
-    
-    // Replace Twitter title and description
-    newHtml = newHtml.replace(/<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/, `<meta name="twitter:title" content="${title}">`);
-    newHtml = newHtml.replace(/<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/, `<meta name="twitter:description" content="${description}">`);
-
-    // Ensure fallback if regex fails due to line breaks or slightly different formatting
-    if (!newHtml.includes(`content="${title}"`)) {
-        console.warn(`Warning: Regex replacement might have failed for ${title}`);
-    }
-
-    return newHtml;
+  return nextHtml;
 }
 
 console.log(`Generating static SEO HTML files for ${routes.length} routes...`);
@@ -108,28 +143,16 @@ console.log(`Generating static SEO HTML files for ${routes.length} routes...`);
 let successCount = 0;
 
 for (const route of routes) {
-    if (route.path === '/') continue; // We already have index.html, though we could rewrite it if needed, but Vite builds the global one correctly.
+  const routeDir = route.pathname === '/' ? distPath : path.join(distPath, route.pathname.substring(1));
+  const targetHtmlPath = path.join(routeDir, 'index.html');
 
-    // If it's a root route like `/capabilities`, Vercel serves `dist/capabilities/index.html` or `dist/capabilities.html`
-    // It's safest to create a folder and `index.html`
-    const routeDir = path.join(distPath, route.path.substring(1));
-    const targetHtmlPath = path.join(routeDir, 'index.html');
+  if (!fs.existsSync(routeDir)) {
+    fs.mkdirSync(routeDir, { recursive: true });
+  }
 
-    if (!fs.existsSync(routeDir)) {
-        fs.mkdirSync(routeDir, { recursive: true });
-    }
-
-    const customHtml = replaceSeoTags(originalHtml, route.title, route.description);
-    fs.writeFileSync(targetHtmlPath, customHtml, 'utf-8');
-    successCount++;
-}
-
-// Rewrite root index.html to have the default global SEO just to be safe
-const rootSeo = routes.find(r => r.path === '/');
-if (rootSeo) {
-    const customHtml = replaceSeoTags(originalHtml, rootSeo.title, rootSeo.description);
-    fs.writeFileSync(indexPath, customHtml, 'utf-8');
-    successCount++;
+  const customHtml = replaceSeoTags(originalHtml, route);
+  fs.writeFileSync(targetHtmlPath, customHtml, 'utf-8');
+  successCount++;
 }
 
 console.log(`Successfully generated ${successCount} static HTML files with custom SEO.`);

@@ -65,10 +65,7 @@ function ScrollToTop() {
 function LandingPage() {
   return (
     <>
-      <Seo
-        title="B2W | Consulting for Small to Midsize Businesses"
-        description="B2W helps small and midsize businesses analyze performance, identify operational gaps, and deploy modern tools to support sustainable expansion."
-      />
+      <Seo />
       <Hero />
       <section id="capabilities">
         <CapabilitiesVisualization />

@@ -9,10 +9,7 @@ export default function KitchenPage() {
 
   return (
     <article className="min-h-screen bg-white text-black pt-24 pb-24">
-      <Seo
-        title="Kitchen | B2W"
-        description="Archived B2W capabilities kitchen with the original text, graphics, animations, and engineering."
-      />
+      <Seo />
       <section id="capabilities-kitchen">
         <CapabilitiesKitchen />
       </section>

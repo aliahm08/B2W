@@ -86,8 +86,8 @@ export default function SabucnuProfilePage() {
     <article className={projectPageShellClassName}>
       <ClientNavbar clientName="Sabucnu Contractors" />
       <Seo
-        title="Sabucnu Contractors | Operations Profile"
-        description="Operations analysis for Sabucnu Contractors. Detailed evaluation of workforce coordination, standard operating procedures, and scheduling systems."
+        title="Operations Assessment for Sabucnu Contractors"
+        description="Operations analysis for Sabucnu Contractors covering workforce coordination, standard operating procedures, scheduling systems, and execution consistency."
       />
 
       <motion.div

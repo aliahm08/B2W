@@ -204,8 +204,11 @@ export default function DataRoomPage() {
     <article className={projectPageShellClassName}>
       <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} />
       <Seo
-        title="Uyghur Eats | Documentation"
-        description="Structured documentation package for Uyghur Eats including diligence materials, financial records, lease files, and transferable business documentation."
+        title="Uyghur Eats Due Diligence Documentation"
+        description="Structured documentation package for Uyghur Eats that organizes executive summary materials, financial records, operating documents, lease items, and digital assets for diligence."
+        robots="noindex, nofollow"
+        imageUrl="https://www.b2w-ai.com/images/uyghur-eats/interior.jpg"
+        imageAlt="Interior dining room at Uyghur Eats in Washington, DC."
       />
 
       <motion.div

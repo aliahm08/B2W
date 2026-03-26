@@ -86,10 +86,7 @@ export default function BorekGOperations() {
     return (
         <article className={projectPageShellClassName}>
             <ClientNavbar clientName="Borek-G" />
-            <Seo
-                title="Borek-G | Growth Proposal"
-                description="Growth systems proposal for Borek-G. Review our consulting engagement scope, strategies for local discovery, and phased implementation recommendations."
-            />
+            <Seo />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

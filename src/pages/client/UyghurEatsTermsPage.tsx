@@ -149,8 +149,11 @@ export default function UyghurEatsTermsPage() {
     <article className={projectPageShellClassName}>
       <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} />
       <Seo
-        title="Uyghur Eats | Key Terms"
-        description="Key proposal terms for the Uyghur Eats strategic exit engagement."
+        title="Uyghur Eats Proposal Terms and Scope"
+        description="Proposal terms for the Uyghur Eats strategic exit engagement, including scope, valuation assumptions, documentation limits, confidentiality, timeline, and payment expectations."
+        robots="noindex, nofollow"
+        imageUrl="https://www.b2w-ai.com/images/uyghur-eats/interior.jpg"
+        imageAlt="Interior dining room at Uyghur Eats in Washington, DC."
       />
 
       <header className={projectPageHeaderClassName}>

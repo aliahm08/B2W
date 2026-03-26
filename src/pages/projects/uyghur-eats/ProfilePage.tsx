@@ -325,8 +325,11 @@ export default function UyghurEats() {
                 navItems={navItems} 
             />
             <Seo
-                title="Uyghur Eats | Business Opportunity Profile"
-                description="Comprehensive business profile for Uyghur Eats. Explore the location footprint, culinary draw, community integration, and acquisition thesis for this Washington, DC restaurant."
+                title="Uyghur Eats Business Profile for Buyers"
+                description="Buyer-facing business profile for Uyghur Eats covering the concept story, location quality, demand drivers, market positioning, and ownership transition upside."
+                robots="noindex, nofollow"
+                imageUrl="https://www.b2w-ai.com/images/uyghur-eats/platter.jpg"
+                imageAlt="Signature Uyghur Eats platter prepared for diners."
             />
             {isBlurredPreview ? (
                 <PreviewAccessChrome

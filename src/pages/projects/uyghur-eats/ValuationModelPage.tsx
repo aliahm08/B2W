@@ -308,8 +308,11 @@ export default function ValuationModelPage() {
                 navItems={navItems} 
             />
             <Seo
-                title="Uyghur Eats | Valuation Model"
-                description="Estimated valuation model for Uyghur Eats. Revenue analysis, normalized earnings, comparable sales benchmarking, and estimated sale price range."
+                title="Uyghur Eats Valuation Model and Sale Range"
+                description="Valuation model for Uyghur Eats with revenue framing, normalized earnings logic, comparable sale context, and estimated pricing scenarios for a buyer conversation."
+                robots="noindex, nofollow"
+                imageUrl="https://www.b2w-ai.com/images/uyghur-eats/laghman.jpg"
+                imageAlt="Hand-pulled noodle dish from Uyghur Eats."
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

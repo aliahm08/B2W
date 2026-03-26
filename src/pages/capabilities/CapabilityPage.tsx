@@ -49,10 +49,7 @@ export default function CapabilityPage() {
 
     return (
         <article className="min-h-screen bg-[#0b1115] pt-24 pb-16 text-stone-100">
-            <Seo
-                title={`${capability.title} | Capability`}
-                description={`Explore how our ${capability.title} capability helps address operational gaps, streamline workflows, and support expansion.`}
-            />
+            <Seo />
 
             <div className="mx-auto max-w-7xl px-6">
                 <motion.div

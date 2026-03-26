@@ -237,8 +237,11 @@ export default function UyghurEatsClientPortal() {
                 navItems={navItems} 
             />
             <Seo
-                title="Uyghur Eats | Client Portal"
-                description="Secure client portal for Uyghur Eats. Review business sale preparation deliverables, valuation models, operations documentation, and buyer packages from B2W."
+                title="Uyghur Eats Strategic Exit Proposal"
+                description="Client portal for the Uyghur Eats strategic exit engagement, covering the proposal, buyer-facing business profile, valuation model, diligence documentation, and working terms."
+                robots="noindex, nofollow"
+                imageUrl="https://www.b2w-ai.com/images/uyghur-eats/interior.jpg"
+                imageAlt="Interior dining room at Uyghur Eats in Washington, DC."
             />
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
