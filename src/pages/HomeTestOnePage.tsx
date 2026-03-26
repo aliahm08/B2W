@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { LogIn } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import B2WLogoMark from '../components/B2WLogoMark';
@@ -57,7 +58,7 @@ export default function HomeTestOnePage() {
     <>
       <Seo
         title="B2W Homepage Prototype"
-        description="Prototype homepage for B2W with rotating SMB positioning, consulting services, AI platform entry, and a client login."
+        description="Prototype homepage for B2W with rotating SMB positioning, consulting services, AI platform entry, and direct access to the project builder."
         robots="noindex, nofollow"
       />
 
@@ -83,19 +84,29 @@ export default function HomeTestOnePage() {
             transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6 pt-6">
-            <div className="flex items-start justify-between gap-4">
+          <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6">
+            <header className="flex h-20 items-center justify-between gap-4">
               <B2WLogoMark className="shrink-0" />
 
-              <Link
-                to="/client/uyghur-eats"
-                className="inline-flex min-h-10 items-center rounded-full bg-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-neutral-800"
-              >
-                Client Login
-              </Link>
-            </div>
+              <div className="flex items-center gap-4">
+                <Link
+                  to="/client/uyghur-eats"
+                  aria-label="Client login"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/80 text-black transition-colors hover:border-black hover:bg-white"
+                >
+                  <LogIn className="h-4 w-4" />
+                </Link>
 
-            <div className="flex flex-1 items-center">
+                <Link
+                  to="/home-test-2"
+                  className="inline-flex h-10 items-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+                >
+                  Start New Project
+                </Link>
+              </div>
+            </header>
+
+            <div className="flex flex-1 items-center py-8">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -146,19 +157,24 @@ export default function HomeTestOnePage() {
               </motion.div>
             </div>
 
-            <footer className="flex flex-col gap-5 pb-6 pt-10 sm:flex-row sm:items-end sm:justify-between">
-              <div className="text-sm text-neutral-500">
-                <p className="font-medium text-black">
-                  <span className="b2w-wordmark">B2W LLC</span>
-                </p>
-              </div>
+            <footer className="border-t border-black/10 py-12">
+              <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+                <div>
+                  <h3 className="text-lg font-medium tracking-tight text-black">
+                    <span className="b2w-wordmark">B2W LLC</span>
+                  </h3>
+                  <p className="mt-2 text-sm text-neutral-500">© {new Date().getFullYear()} All rights reserved.</p>
+                </div>
 
-              <a
-                href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
-                className="inline-flex min-h-10 items-center text-sm font-medium text-neutral-500 transition-colors hover:text-black"
-              >
-                Contact
-              </a>
+                <div className="flex gap-8 text-sm text-neutral-600">
+                  <a
+                    href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
+                    className="hover:text-black transition-colors"
+                  >
+                    Contact
+                  </a>
+                </div>
+              </div>
             </footer>
           </div>
         </section>

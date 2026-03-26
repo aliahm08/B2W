@@ -37,7 +37,7 @@ export default function ProjectShowcase() {
             Projects
           </h2>
           <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-            B2W supports marketing, financial, and operations work across small and midsize businesses.
+            Four service packages, from lighter advisory work through full implementation and custom tool builds.
           </p>
           <div className="h-px w-full bg-neutral-200" />
         </motion.div>
@@ -50,8 +50,8 @@ export default function ProjectShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.06 }}
-              className={`group relative min-h-[360px] border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300 ${
-                project.id === 'business-revamp-projects' ? 'xl:col-span-3' : ''
+              className={`group relative border border-neutral-800 bg-neutral-950 p-8 transition-colors duration-300 ${
+                project.id === 'custom-tool-package' ? 'min-h-[280px] xl:col-span-3' : 'min-h-[360px]'
               }`}
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_35%)]" />

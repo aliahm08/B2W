@@ -34,44 +34,46 @@ const projectDropdownLabels: Record<string, string> = {
   'Business Revamp': 'Business Revamp',
 };
 
-const navItems: NavItem[] = [
-  {
-    label: 'Capabilities',
-    to: '/#capabilities',
-    children: [
-      { label: 'Marketing Data', to: '/capabilities/marketing-data' },
-      { label: 'Financials', to: '/capabilities/financials' },
-      { label: 'Operational Performance', to: '/capabilities/operational-performance' },
-      { label: 'Kitchen by B2W', to: '/kitchen' },
-    ],
-  },
-  {
-    label: 'Expertise',
-    to: '/#expertise',
-    children: [
-      { label: 'Growth', to: '/expertise/growth' },
-      { label: 'Optimization', to: '/expertise/optimization' },
-      { label: 'Diligence', to: '/expertise/diligence' },
-    ],
-  },
-  {
-    label: 'Projects',
-    to: '/#projects',
-    children: showcaseProjects.map((project) => ({
-      label: projectDropdownLabels[project.category] ?? project.category,
-      to: project.link,
-    })),
-  },
-  {
-    label: 'About',
-    to: '/about',
-    children: [
-      { label: 'Process', to: '/about#process' },
-      { label: 'Team', to: '/about#team' },
-      { label: 'Join B2W', to: '/about#join-team' },
-    ],
-  },
-];
+function buildNavItems(basePath: string): NavItem[] {
+  return [
+    {
+      label: 'Capabilities',
+      to: `${basePath}#capabilities`,
+      children: [
+        { label: 'Marketing Data', to: '/capabilities/marketing-data' },
+        { label: 'Financials', to: '/capabilities/financials' },
+        { label: 'Operational Performance', to: '/capabilities/operational-performance' },
+        { label: 'Kitchen', to: '/capabilities' },
+      ],
+    },
+    {
+      label: 'Expertise',
+      to: `${basePath}#expertise`,
+      children: [
+        { label: 'Growth', to: '/services/marketing-advisory' },
+        { label: 'Optimization', to: '/services/operations-implementation' },
+        { label: 'M&A', to: '/services/financial-review' },
+      ],
+    },
+    {
+      label: 'Projects',
+      to: `${basePath}#projects`,
+      children: showcaseProjects.map((project) => ({
+        label: projectDropdownLabels[project.category] ?? project.category,
+        to: project.link,
+      })),
+    },
+    {
+      label: 'About',
+      to: '/about',
+      children: [
+        { label: 'Overview', to: '/about' },
+        { label: 'Process', to: '/about#process' },
+        { label: 'Team', to: '/about#team' },
+      ],
+    },
+  ];
+}
 
 function getHashTarget(path: string): string {
   const hashIndex = path.indexOf('#');
@@ -84,7 +86,11 @@ function parseTarget(target: string) {
   return { pathname, hash };
 }
 
-export default function Navbar() {
+type NavbarProps = {
+  basePath?: string;
+};
+
+export default function Navbar({ basePath = '/' }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -95,9 +101,10 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHeaderDark = isSearchOpen || isOpen;
+  const navItems = useMemo(() => buildNavItems(basePath), [basePath]);
 
   useEffect(() => {
-    if (location.pathname !== '/') {
+    if (location.pathname !== basePath) {
       return;
     }
 
@@ -125,11 +132,11 @@ export default function Navbar() {
 
     sectionElements.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
-  }, [location.pathname]);
+  }, [basePath, location.pathname, navItems]);
 
   const activeDesktopLink = useMemo(() => {
-    if (location.pathname === '/') {
-      return `/#${activeSection}`;
+    if (location.pathname === basePath) {
+      return `${basePath}#${activeSection}`;
     }
 
     const matchingParent = navItems.find((item) => {
@@ -145,7 +152,7 @@ export default function Navbar() {
     });
 
     return matchingParent?.to ?? '';
-  }, [activeSection, location.hash, location.pathname]);
+  }, [activeSection, basePath, location.hash, location.pathname, navItems]);
 
   const searchEntries = useMemo<SearchEntry[]>(() => {
     const sectionEntries = navItems.map((item) => ({
@@ -181,7 +188,7 @@ export default function Navbar() {
     );
 
     return [...sectionEntries, ...childEntries, ...projectEntries, ...capabilityEntries];
-  }, []);
+  }, [navItems]);
 
   const filteredSearchEntries = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -380,7 +387,10 @@ export default function Navbar() {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <B2WLogoMark className={`shrink-0 transition-colors duration-150 ${isHeaderDark ? 'text-white' : 'text-black'}`} />
+        <B2WLogoMark
+          to={basePath}
+          className={`shrink-0 transition-colors duration-150 ${isHeaderDark ? 'text-white' : 'text-black'}`}
+        />
 
         <div className={`hidden items-center gap-6 text-sm md:flex ${isSearchOpen ? 'text-neutral-300' : 'text-neutral-600'}`}>
           {navItems.map((item) => {

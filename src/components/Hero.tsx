@@ -4,10 +4,23 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { projectPipelineContent } from '../content/projectPipeline';
 import { scrollToHashTarget } from '../lib/hashNavigation';
 
-export default function Hero() {
+type HeroProps = {
+  basePath?: string;
+  onPrimaryAction?: () => void;
+};
+
+function resolveAnchorTarget(basePath: string, fallbackTarget: string) {
+  const hashIndex = fallbackTarget.indexOf('#');
+  const hash = hashIndex >= 0 ? fallbackTarget.slice(hashIndex) : '';
+  return hash ? `${basePath}${hash}` : fallbackTarget;
+}
+
+export default function Hero({ basePath = '/', onPrimaryAction }: HeroProps) {
   const { hero } = projectPipelineContent;
   const location = useLocation();
   const navigate = useNavigate();
+  const primaryCtaHref = resolveAnchorTarget(basePath, hero.primaryCtaHref);
+  const contactHref = `${basePath}#contact`;
 
   const handleAnchorClick = (target: string) => (event: MouseEvent<HTMLAnchorElement>) => {
     const hashIndex = target.indexOf('#');
@@ -24,15 +37,15 @@ export default function Hero() {
       });
     };
 
-    if (location.pathname === '/') {
+    if (location.pathname === basePath) {
       if (location.hash !== hash) {
-        navigate({ pathname: '/', hash }, { replace: false });
+        navigate({ pathname: basePath, hash }, { replace: false });
       }
       performScroll();
       return;
     }
 
-    navigate({ pathname: '/', hash }, { replace: false });
+    navigate({ pathname: basePath, hash }, { replace: false });
     window.setTimeout(performScroll, 180);
   };
 
@@ -44,6 +57,10 @@ export default function Hero() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="max-w-4xl"
       >
+        <div className="mb-6 inline-flex flex-col border border-amber-300 bg-amber-50 px-4 py-3">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-amber-800">Offer</span>
+          <span className="mt-1 text-sm font-medium text-amber-950">Next 3 Clients Receive 80% off</span>
+        </div>
         <h1 className="text-6xl md:text-8xl font-medium tracking-tight mb-8 leading-[0.9]">
           {hero.headline}
         </h1>
@@ -53,15 +70,22 @@ export default function Hero() {
 
         <div className="flex flex-wrap gap-4">
           <Link
-            to={hero.primaryCtaHref}
-            onClick={handleAnchorClick(hero.primaryCtaHref)}
+            to={primaryCtaHref}
+            onClick={(event) => {
+              if (onPrimaryAction) {
+                event.preventDefault();
+                onPrimaryAction();
+                return;
+              }
+              handleAnchorClick(primaryCtaHref)(event);
+            }}
             className="inline-flex min-h-12 items-center border border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:bg-black hover:text-white"
           >
             <span>{hero.primaryCtaLabel}</span>
           </Link>
           <Link
-            to="/#contact"
-            onClick={handleAnchorClick('/#contact')}
+            to={contactHref}
+            onClick={handleAnchorClick(contactHref)}
             className="inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:text-neutral-600"
           >
             <span>Tell us about your business</span>

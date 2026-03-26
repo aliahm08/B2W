@@ -1,5 +1,4 @@
 import Seo from '../components/Seo';
-import AboutHeroGraphic from '../components/AboutHeroGraphic';
 import OurProcess from '../components/OurProcess';
 import Team from '../components/Team';
 
@@ -30,9 +29,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="space-y-8 border-l border-neutral-200 pl-0 lg:pl-8">
-            <AboutHeroGraphic />
-
+          <div className="border-l border-neutral-200 pl-0 lg:pl-8">
             <div className="grid gap-8 sm:grid-cols-3 lg:grid-cols-1">
               <div>
                 <p className="text-xs font-mono uppercase tracking-[0.22em] text-neutral-400">What We Do</p>

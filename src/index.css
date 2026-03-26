@@ -83,42 +83,6 @@ html {
   position: relative;
 }
 
-.about-hero-graphic::before {
-  content: "";
-  position: absolute;
-  inset: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  pointer-events: none;
-}
-
-.about-hero-graphic__scan {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0)),
-    repeating-linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.05) 0,
-      rgba(255, 255, 255, 0.05) 1px,
-      rgba(255, 255, 255, 0) 1px,
-      rgba(255, 255, 255, 0) 18px
-    );
-  opacity: 0.45;
-}
-
-.about-hero-graphic__logo-layer {
-  transform-origin: center;
-  animation: about-hero-logo-breathe 7.2s ease-in-out infinite;
-}
-
-@keyframes about-hero-logo-breathe {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(0, -2px, 0) scale(1.02);
-  }
-}
-
 .b2w-logo-layer {
   opacity: 0;
   animation-name: b2w-logo-layer-sequence;

@@ -34,9 +34,7 @@ export function FormTemplate({
   return (
     <section className="border border-black/10 bg-white p-6 md:p-7">
       <div className="mb-6">
-        <p className="text-[11px] uppercase tracking-[0.22em] text-neutral-500">{eyebrow}</p>
-        <h3 className="mt-2 text-2xl font-medium tracking-tight text-black">{title}</h3>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-600">{intro}</p>
+        <h3 className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">{title}</h3>
       </div>
 
       <form onSubmit={onSubmit} className="space-y-4">

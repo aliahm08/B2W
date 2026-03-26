@@ -19,6 +19,7 @@ export type KitchenPreset = {
   title: string;
   solutionName: string;
   description: string;
+  roughEstimate: string;
   selection: KitchenSelection;
   subpagePath: string;
 };
@@ -35,6 +36,7 @@ export type KitchenSolution = {
   proposalHighlights: string[];
   projectAreas: PublicProjectArea[];
   inquiryType: string;
+  roughEstimate: string;
 };
 
 export const kitchenInformationOptions: KitchenOption[] = [
@@ -149,6 +151,7 @@ export const kitchenPresets: KitchenPreset[] = [
     solutionName: 'Digital Growth Engine',
     description:
       'The preset for businesses that need stronger digital positioning, social traction, and build-ready growth execution.',
+    roughEstimate: '$6k - $12k',
     selection: {
       informationIds: ['project-proposals'],
       integrationIds: ['instagram-analytics'],
@@ -162,6 +165,7 @@ export const kitchenPresets: KitchenPreset[] = [
     solutionName: 'Performance Optimization Model',
     description:
       'The preset for owners who need stronger financial and operational analysis before making a consequential decision.',
+    roughEstimate: '$8k - $18k',
     selection: {
       informationIds: ['financial-statements'],
       integrationIds: ['pos-analytics'],
@@ -175,6 +179,7 @@ export const kitchenPresets: KitchenPreset[] = [
     solutionName: 'Acquisition Due Diligence',
     description:
       'The preset for businesses preparing for review, transition, or transaction support with stronger property and procurement context.',
+    roughEstimate: '$10k - $24k',
     selection: {
       informationIds: ['supplier-invoices'],
       integrationIds: ['google-analytics'],
@@ -316,6 +321,36 @@ function getProposalHighlights(
   ];
 }
 
+function getRoughEstimate(production: KitchenOption[], ingredientCount: number) {
+  let floor = 4500;
+  let ceiling = 9000;
+
+  if (production.some((item) => item.id === 'fullstack')) {
+    floor += 3500;
+    ceiling += 7000;
+  }
+
+  if (production.some((item) => item.id === 'senior-analysis')) {
+    floor += 2500;
+    ceiling += 5000;
+  }
+
+  if (production.some((item) => item.id === 'safety-risk')) {
+    floor += 2000;
+    ceiling += 4500;
+  }
+
+  if (production.some((item) => item.id === 'real-estate')) {
+    floor += 3000;
+    ceiling += 6500;
+  }
+
+  floor += Math.max(0, ingredientCount - 3) * 500;
+  ceiling += Math.max(0, ingredientCount - 3) * 1200;
+
+  return `$${Math.round(floor / 1000)}k - $${Math.round(ceiling / 1000)}k`;
+}
+
 export function buildKitchenSolution(selection: KitchenSelection): KitchenSolution {
   const information = getKitchenOptionsByIds(kitchenInformationOptions, selection.informationIds);
   const integration = getKitchenOptionsByIds(kitchenIntegrationOptions, selection.integrationIds);
@@ -339,6 +374,7 @@ export function buildKitchenSolution(selection: KitchenSelection): KitchenSoluti
     proposalHighlights: getProposalHighlights(information, integration, production),
     projectAreas: getProjectAreas(production.map((item) => item.id)),
     inquiryType: getInquiryType(production.map((item) => item.id)),
+    roughEstimate: getRoughEstimate(production, information.length + integration.length + production.length),
   };
 }
 
@@ -358,6 +394,7 @@ export function buildKitchenSolutionFromPreset(slug: string) {
   return {
     ...solution,
     name: preset.solutionName,
+    roughEstimate: preset.roughEstimate,
     preset,
   };
 }

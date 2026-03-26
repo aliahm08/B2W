@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
-import { showcaseProjects } from '../../content/projectShowcaseCards';
 import { FormStatus, FormTemplate } from './FormTemplate';
 
-export const publicProjectAreas = ['Marketing', 'Financials', 'Operations', 'Business Revamp'] as const;
+export const publicProjectAreas = ['Marketing', 'Financials', 'Ops Performance'] as const;
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
-export type NormalizedProjectArea = PublicProjectArea | 'End-to-End Rebuild';
+export type NormalizedProjectArea = PublicProjectArea;
 
 type LeadFormState = {
   name: string;
   email: string;
+  phone: string;
   businessName: string;
   selectedProjectAreas: PublicProjectArea[];
   message: string;
@@ -27,6 +27,7 @@ type LeadFormProps = {
 const defaultState: LeadFormState = {
   name: '',
   email: '',
+  phone: '',
   businessName: '',
   selectedProjectAreas: [],
   message: '',
@@ -34,22 +35,28 @@ const defaultState: LeadFormState = {
 };
 
 function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): NormalizedProjectArea | '' {
-  if (selectedProjectAreas.length === publicProjectAreas.length) {
-    return 'End-to-End Rebuild';
-  }
-
   return selectedProjectAreas[0] ?? '';
 }
 
 const EMPTY_ARRAY: PublicProjectArea[] = [];
-const publicProjectAreaOptions = showcaseProjects.map((project) => ({
-  area: project.category as PublicProjectArea,
-  href: project.link,
-}));
+const publicProjectAreaOptions: Array<{ area: PublicProjectArea; description: string }> = [
+  {
+    area: 'Marketing',
+    description: 'Ads, campaigns, CRM activity, reviews, website analytics, and demand generation signals.',
+  },
+  {
+    area: 'Financials',
+    description: 'Revenue, margins, forecasts, pricing logic, cash flow, and valuation-related records.',
+  },
+  {
+    area: 'Ops Performance',
+    description: 'Staffing, SOPs, workflows, scheduling, service logs, and execution-quality records.',
+  },
+];
 
 export default function LeadForm({
-  heading = 'Tell us about your business',
-  intro = 'Share the basics first. Once we have your intake, you can book a call if you want to move faster.',
+  heading = 'Contact Us',
+  intro = 'Share the basic first. Once we have your information, we will schedule a call with you.',
   submitLabel = 'Request a consultation',
   preselectedProjectAreas = EMPTY_ARRAY,
 }: LeadFormProps) {
@@ -95,7 +102,7 @@ export default function LeadForm({
       name: state.name.trim(),
       email: state.email.trim(),
       company: state.businessName.trim(),
-      phone: '',
+      phone: state.phone.trim(),
       website: '',
       arrRange: '',
       projectAreas: state.selectedProjectAreas,
@@ -124,7 +131,7 @@ export default function LeadForm({
 
   return (
     <FormTemplate
-      eyebrow="Lead Inquiry"
+      eyebrow="Contact Us"
       title={heading}
       intro={intro}
       onSubmit={handleSubmit}
@@ -177,6 +184,18 @@ export default function LeadForm({
               placeholder="Business name"
             />
           </label>
+          <label className="block">
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Phone Number (Optional)</span>
+            <input
+              type="tel"
+              name="phone"
+              value={state.phone}
+              onChange={(event) => setState((current) => ({ ...current, phone: event.target.value }))}
+              autoComplete="tel"
+              className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
+              placeholder="(555) 555-5555"
+            />
+          </label>
         </div>
 
         <label className="hidden">
@@ -193,12 +212,12 @@ export default function LeadForm({
         </label>
 
         <fieldset className="block">
-          <legend className="mb-2 block text-sm font-medium text-neutral-800">Project area</legend>
+          <legend className="mb-2 block text-sm font-medium text-neutral-800">What data does your business currently track?</legend>
           <p className="mb-3 text-xs leading-5 text-neutral-500">
-            Choose the closest fit. You can select more than one if needed.
+            Select every data category you can provide.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {publicProjectAreaOptions.map(({ area, href }) => {
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {publicProjectAreaOptions.map(({ area, description }) => {
               const isSelected = state.selectedProjectAreas.includes(area);
               return (
                 <div key={area} className="space-y-2">
@@ -206,26 +225,20 @@ export default function LeadForm({
                     type="button"
                     aria-pressed={isSelected}
                     onClick={() => toggleProjectArea(area)}
-                    className={`flex w-full items-center gap-3 border px-4 py-3 text-sm transition-colors ${
+                    className={`flex w-full flex-col items-start gap-3 border px-4 py-4 text-left text-sm transition-colors ${
                       isSelected ? 'border-black bg-black text-white' : 'border-black/10 bg-white text-neutral-800'
                     }`}
                   >
-                    <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
-                    <span>{area}</span>
+                    <div className="flex items-center gap-3">
+                      <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
+                      <span>{area}</span>
+                    </div>
+                    <span className={`text-xs leading-5 ${isSelected ? 'text-neutral-300' : 'text-neutral-500'}`}>{description}</span>
                   </button>
-                  <a
-                    href={href}
-                    className="inline-flex text-xs font-medium text-neutral-500 underline-offset-4 transition-colors hover:text-black hover:underline"
-                  >
-                    View project page
-                  </a>
                 </div>
               );
             })}
           </div>
-          {normalizedProjectArea === 'End-to-End Rebuild' ? (
-            <p className="mt-3 text-xs leading-5 text-neutral-600">Normalized intake: End-to-End Rebuild</p>
-          ) : null}
         </fieldset>
 
         <label className="block">

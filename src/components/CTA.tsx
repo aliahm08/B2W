@@ -11,11 +11,11 @@ export default function CTA() {
         transition={{ duration: 0.8 }}
         className="border-t border-black pt-12 md:pt-16"
       >
-        <h2 className="text-4xl md:text-6xl font-medium tracking-tight mb-8">Ready to simplify?</h2>
-        <p className="text-xl text-neutral-600 mb-12 max-w-xl">
-          Tell us about your business first. After you submit, we will give you a direct option to book a call.
+        <h2 className="mb-4 text-4xl font-medium tracking-tight text-neutral-950">Ready to Simplify?</h2>
+        <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
+          Tell us about your business. After we have your information, we will schedule a call with you.
         </p>
-        <div className="max-w-3xl">
+        <div className="w-full">
           <LeadForm />
         </div>
       </motion.div>

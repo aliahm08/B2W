@@ -24,6 +24,10 @@ function formatProjectAreas(areas: PublicProjectArea[]) {
   return areas.join(' + ');
 }
 
+function formatKitchenTitles(values: { title: string }[]) {
+  return values.map((item) => item.title).join(', ');
+}
+
 export default function ExpertisePage() {
   const { slug } = useParams();
   const page = slug ? getExpertisePageBySlug(slug) : undefined;
@@ -87,9 +91,9 @@ export default function ExpertisePage() {
                   <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Kitchen by B2W Preset</p>
                   <p className="mt-2 text-sm leading-6 text-neutral-200">{presetSolution.name}</p>
                   <div className="mt-4 space-y-2 text-xs leading-5 text-neutral-400">
-                    <p>Information: {presetSolution.information.title}</p>
-                    <p>Integration: {presetSolution.integration.title}</p>
-                    <p>Production: {presetSolution.production.title}</p>
+                    <p>Information: {formatKitchenTitles(presetSolution.information)}</p>
+                    <p>Integration: {formatKitchenTitles(presetSolution.integration)}</p>
+                    <p>Production: {formatKitchenTitles(presetSolution.production)}</p>
                   </div>
                   <div className="mt-5 flex flex-col gap-3">
                     <button

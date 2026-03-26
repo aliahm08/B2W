@@ -4,7 +4,7 @@
  */
 
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { Routes, Route, useLocation, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -16,9 +16,11 @@ import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
+import ProjectBuilderDrawer from './components/ProjectBuilderDrawer';
 import { ArrowUpRight } from 'lucide-react';
 import { scrollToHashTarget } from './lib/hashNavigation';
 import HomeTestOnePage from './pages/HomeTestOnePage';
+import HomeTestTwoPage from './pages/HomeTestTwoPage';
 
 const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
 const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
@@ -68,8 +70,8 @@ function ScrollToTop() {
 }
 
 function LandingPage() {
-  const navigate = useNavigate();
   const [showProjectButton, setShowProjectButton] = useState(false);
+  const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
 
   useEffect(() => {
     const heroElement = document.getElementById('landing-hero');
@@ -94,7 +96,7 @@ function LandingPage() {
   return (
     <>
       <Seo />
-      <Hero />
+      <Hero onPrimaryAction={() => setIsProjectDrawerOpen(true)} />
       <section id="capabilities">
         <CapabilitiesVisualization />
       </section>
@@ -117,7 +119,7 @@ function LandingPage() {
           >
             <button
               type="button"
-              onClick={() => navigate('/kitchen')}
+              onClick={() => setIsProjectDrawerOpen(true)}
               aria-label="Begin Your Project"
               className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-black text-white shadow-[0_20px_50px_rgba(0,0,0,0.22)] transition-colors hover:bg-neutral-800 h-12 w-12 md:h-auto md:w-auto md:px-8 md:py-4 md:text-base md:font-semibold"
             >
@@ -127,6 +129,7 @@ function LandingPage() {
           </motion.div>
         ) : null}
       </AnimatePresence>
+      <ProjectBuilderDrawer isOpen={isProjectDrawerOpen} onClose={() => setIsProjectDrawerOpen(false)} />
     </>
   );
 }
@@ -141,7 +144,7 @@ export default function App() {
 
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
-  const isPrototypeHome = location.pathname === '/home-test-1';
+  const isPrototypeHome = location.pathname === '/home-test-1' || location.pathname === '/home-test-2';
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model');
@@ -162,6 +165,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home-test-1" element={<HomeTestOnePage />} />
+            <Route path="/home-test-2" element={<HomeTestTwoPage />} />
             <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
             <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
             <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
