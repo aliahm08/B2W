@@ -30,14 +30,13 @@ const pathways = [
     href: '/',
   },
   {
-    title: 'AI Platform',
+    title: 'AI Solutions',
     href: '/capabilities',
   },
 ];
 
 export default function HomeTestOnePage() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
   const activeClient = rotatingClients[activeIndex];
   const activeClientColorClass =
     activeClient.intent === 'management'
@@ -52,16 +51,6 @@ export default function HomeTestOnePage() {
     }, 1650);
 
     return () => window.clearInterval(intervalId);
-  }, []);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 767px)');
-    const syncViewport = () => setIsMobile(mediaQuery.matches);
-
-    syncViewport();
-    mediaQuery.addEventListener('change', syncViewport);
-
-    return () => mediaQuery.removeEventListener('change', syncViewport);
   }, []);
 
   return (
@@ -99,7 +88,7 @@ export default function HomeTestOnePage() {
 
               <Link
                 to="/client/uyghur-eats"
-                className="inline-flex min-h-10 items-center rounded-full border border-black bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white hover:text-black"
+                className="inline-flex min-h-10 items-center rounded-full bg-black px-5 py-2.5 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-neutral-800"
               >
                 Client Login
               </Link>
@@ -122,9 +111,9 @@ export default function HomeTestOnePage() {
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={activeClient.label}
-                        initial={isMobile ? { opacity: 0, filter: 'blur(8px)' } : { y: 18, opacity: 0 }}
-                        animate={isMobile ? { opacity: 1, filter: 'blur(0px)' } : { y: 0, opacity: 1 }}
-                        exit={isMobile ? { opacity: 0, filter: 'blur(8px)' } : { y: -18, opacity: 0 }}
+                        initial={{ opacity: 0, filter: 'blur(8px)' }}
+                        animate={{ opacity: 1, filter: 'blur(0px)' }}
+                        exit={{ opacity: 0, filter: 'blur(8px)' }}
                         transition={{ duration: 0.36, ease: 'easeOut' }}
                         className="block font-[family-name:var(--font-serif)] italic tracking-[-0.03em]"
                       >
