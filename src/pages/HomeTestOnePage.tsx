@@ -26,7 +26,7 @@ const rotatingClients = [
 
 const pathways = [
   {
-    title: 'Management Services',
+    title: 'Consulting Services',
     href: '/',
   },
   {
