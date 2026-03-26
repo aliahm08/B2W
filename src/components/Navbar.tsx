@@ -84,6 +84,7 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSection, setActiveSection] = useState('capabilities');
+  const [expandedMobileSections, setExpandedMobileSections] = useState<Record<string, boolean>>({});
   const navRef = useRef<HTMLElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const location = useLocation();
@@ -244,6 +245,13 @@ export default function Navbar() {
     navigateToTarget(target);
   };
 
+  const toggleMobileSection = (label: string) => {
+    setExpandedMobileSections((current) => ({
+      ...current,
+      [label]: !current[label],
+    }));
+  };
+
   useEffect(() => {
     if (!isSearchOpen) {
       return;
@@ -298,6 +306,12 @@ export default function Navbar() {
     setIsSearchOpen(false);
     setSearchQuery('');
   }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setExpandedMobileSections({});
+    }
+  }, [isOpen]);
 
   const searchResultsContent =
     hasSearchQuery && filteredSearchEntries.length > 0 ? (
@@ -530,18 +544,39 @@ export default function Navbar() {
 
             {navItems.map((item) => {
               const isActive = activeDesktopLink === item.to;
+              const isExpanded = Boolean(expandedMobileSections[item.label]);
               return (
                 <div key={item.label} className="border-b border-white/10 py-3 last:border-b-0">
-                  <Link
-                    to={item.to}
-                    onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
-                    className={`inline-flex items-center gap-2 text-[17px] ${isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'}`}
-                  >
-                    <span>{item.label}</span>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-neutral-500" />
-                  </Link>
-
                   {item.children.length > 0 ? (
+                    <button
+                      type="button"
+                      onClick={() => toggleMobileSection(item.label)}
+                      aria-expanded={isExpanded}
+                      className={`inline-flex items-center gap-2 text-[17px] ${
+                        isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronRight
+                        className={`h-4 w-4 shrink-0 text-neutral-500 transition-transform duration-150 ${
+                          isExpanded ? 'rotate-90' : ''
+                        }`}
+                      />
+                    </button>
+                  ) : (
+                    <Link
+                      to={item.to}
+                      onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
+                      className={`inline-flex items-center gap-2 text-[17px] ${
+                        isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-neutral-500" />
+                    </Link>
+                  )}
+
+                  {item.children.length > 0 && isExpanded ? (
                     <div className="mt-3 space-y-2 pl-4">
                       {item.children.map((child) => (
                         <Link

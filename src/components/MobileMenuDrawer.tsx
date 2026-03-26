@@ -27,7 +27,7 @@ const listDividerClassName = {
 
 const ctaWrapperClassName = {
   light: 'border-t border-black/8 bg-white/70 backdrop-blur-xl',
-  dark: 'border-t border-white/10 bg-black/45 backdrop-blur-xl',
+  dark: 'border-t border-white/10 bg-black/82',
 } as const;
 
 const itemVariants = {
