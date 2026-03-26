@@ -46,7 +46,7 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
     {
-      title: 'AI Consulting for SMB Growth, Operations, and Financial Review',
+      title: 'Consulting Services for SMBs',
       description:
         'B2W helps small and midsize businesses improve marketing, operations, and financial performance with practical AI systems, diagnostics, and implementation support.',
     },
