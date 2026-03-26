@@ -84,6 +84,7 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSection, setActiveSection] = useState('capabilities');
+  const navRef = useRef<HTMLElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -271,6 +272,28 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (!isSearchOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: MouseEvent | PointerEvent | TouchEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) {
+        return;
+      }
+
+      if (navRef.current?.contains(target)) {
+        return;
+      }
+
+      setIsSearchOpen(false);
+    };
+
+    window.addEventListener('pointerdown', handlePointerDown);
+    return () => window.removeEventListener('pointerdown', handlePointerDown);
+  }, [isSearchOpen]);
+
+  useEffect(() => {
     setIsSearchOpen(false);
     setSearchQuery('');
   }, [location.pathname, location.hash]);
@@ -310,6 +333,7 @@ export default function Navbar() {
 
   return (
     <nav
+      ref={navRef}
       className={`fixed left-0 right-0 top-0 z-50 overflow-visible border-b transition-colors duration-150 ${
         isSearchOpen ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-100 bg-white'
       }`}
