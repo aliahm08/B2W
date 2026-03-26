@@ -25,6 +25,11 @@ const listDividerClassName = {
   dark: 'divide-white/10',
 } as const;
 
+const ctaWrapperClassName = {
+  light: 'border-t border-black/8 bg-white/70 backdrop-blur-xl',
+  dark: 'border-t border-white/10 bg-black/45 backdrop-blur-xl',
+} as const;
+
 const itemVariants = {
   closed: { opacity: 0, y: -10, filter: 'blur(4px)' },
   open: {
@@ -61,7 +66,7 @@ export default function MobileMenuDrawer({
               open: { transition: { staggerChildren: 0.06, delayChildren: 0.04 } },
               closed: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
             }}
-            className="mx-auto flex h-full max-w-7xl flex-col overflow-y-auto pb-14"
+            className="mx-auto flex h-full max-w-7xl flex-col"
           >
             {header ? (
               <motion.div variants={itemVariants} className={`border-b pb-4 ${dividerClassName[theme]}`}>
@@ -70,13 +75,15 @@ export default function MobileMenuDrawer({
             ) : null}
 
             {list ? (
-              <motion.div variants={itemVariants} className={`flex-1 border-b pb-3 ${dividerClassName[theme]}`}>
-                <div className={`flex h-full flex-col divide-y ${listDividerClassName[theme]}`}>{list}</div>
+              <motion.div variants={itemVariants} className="min-h-0 flex-1 overflow-y-auto">
+                <div className={`flex flex-col divide-y border-b pb-3 ${dividerClassName[theme]} ${listDividerClassName[theme]}`}>
+                  {list}
+                </div>
               </motion.div>
             ) : null}
 
             {cta ? (
-              <motion.div variants={itemVariants} className="pt-6">
+              <motion.div variants={itemVariants} className={`mt-auto px-1 pb-2 pt-4 ${ctaWrapperClassName[theme]}`}>
                 {cta}
               </motion.div>
             ) : null}

@@ -491,31 +491,16 @@ export default function Navbar() {
         list={
           <div className="py-2">
             <div className="border-b border-white/10 py-3">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-500">Quick Actions</p>
-                  <motion.a
-                    whileTap={{ scale: 0.97 }}
-                    transition={{ duration: 0.14 }}
-                    href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
-                    onClick={() => setIsOpen(false)}
-                    className="inline-flex min-h-11 shrink-0 items-center rounded-full border border-white/10 bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
-                  >
-                    Contact
-                  </motion.a>
-                </div>
-
-                <div className="rounded-[1.4rem] border border-white/10 bg-neutral-900 px-4 py-3">
-                  <div className="flex items-center gap-3">
-                    <Search className="h-4 w-4 shrink-0 text-neutral-500" />
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(event) => setSearchQuery(event.target.value)}
-                      placeholder="Search pages, projects, capabilities..."
-                      className="w-full bg-transparent text-[15px] text-white outline-none placeholder:text-neutral-500"
-                    />
-                  </div>
+              <div className="rounded-[1.4rem] border border-white/10 bg-neutral-900 px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <Search className="h-4 w-4 shrink-0 text-neutral-500" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder="Search pages, projects, capabilities..."
+                    className="w-full bg-transparent text-[15px] text-white outline-none placeholder:text-neutral-500"
+                  />
                 </div>
               </div>
 
@@ -574,6 +559,17 @@ export default function Navbar() {
               );
             })}
           </div>
+        }
+        cta={
+          <motion.a
+            whileTap={{ scale: 0.97 }}
+            transition={{ duration: 0.14 }}
+            href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
+            onClick={() => setIsOpen(false)}
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/10 bg-white px-5 py-3 text-base font-medium text-black transition-colors hover:bg-neutral-200"
+          >
+            Contact
+          </motion.a>
         }
       />
     </nav>
