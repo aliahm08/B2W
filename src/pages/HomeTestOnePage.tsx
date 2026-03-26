@@ -37,6 +37,7 @@ const pathways = [
 
 export default function HomeTestOnePage() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const activeClient = rotatingClients[activeIndex];
   const activeClientColorClass =
     activeClient.intent === 'management'
@@ -51,6 +52,16 @@ export default function HomeTestOnePage() {
     }, 1650);
 
     return () => window.clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    const syncViewport = () => setIsMobile(mediaQuery.matches);
+
+    syncViewport();
+    mediaQuery.addEventListener('change', syncViewport);
+
+    return () => mediaQuery.removeEventListener('change', syncViewport);
   }, []);
 
   return (
@@ -88,7 +99,7 @@ export default function HomeTestOnePage() {
 
               <Link
                 to="/client/uyghur-eats"
-                className="inline-flex min-h-10 items-center text-sm font-medium text-neutral-500 transition-colors hover:text-black"
+                className="inline-flex min-h-10 items-center rounded-full border border-black bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white hover:text-black"
               >
                 Client Login
               </Link>
@@ -101,6 +112,9 @@ export default function HomeTestOnePage() {
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 className="w-full max-w-6xl pl-14 pr-14 md:pl-16 md:pr-16 lg:pl-20 lg:pr-20"
               >
+                <p className="mb-5 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500 md:mb-6">
+                  Now Accepting Clients
+                </p>
                 <h1 className="flex w-full max-w-full items-baseline gap-[0.16em] whitespace-nowrap text-[clamp(1.35rem,5.9vw,5.9rem)] font-medium leading-[0.88] tracking-[-0.065em] [transform:scaleY(0.92)] origin-left">
                   <span className="b2w-wordmark inline-block shrink-0 tracking-[-0.09em] text-black">B2W</span>
                   <span className="shrink-0 font-light text-black">/</span>
@@ -108,9 +122,9 @@ export default function HomeTestOnePage() {
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={activeClient.label}
-                        initial={{ y: 18, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={{ y: -18, opacity: 0 }}
+                        initial={isMobile ? { opacity: 0, filter: 'blur(8px)' } : { y: 18, opacity: 0 }}
+                        animate={isMobile ? { opacity: 1, filter: 'blur(0px)' } : { y: 0, opacity: 1 }}
+                        exit={isMobile ? { opacity: 0, filter: 'blur(8px)' } : { y: -18, opacity: 0 }}
                         transition={{ duration: 0.36, ease: 'easeOut' }}
                         className="block font-[family-name:var(--font-serif)] italic tracking-[-0.03em]"
                       >
@@ -131,8 +145,8 @@ export default function HomeTestOnePage() {
                       to={pathway.href}
                       className={
                         index === 0
-                          ? 'inline-flex min-h-12 items-center border border-black bg-black px-5 py-3 text-lg font-medium text-white outline-none transition-colors duration-150 hover:border-black hover:bg-white hover:text-black focus:outline-none'
-                          : 'inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-[color,border-bottom-width] duration-150 hover:border-b-2 hover:text-neutral-600'
+                          ? 'inline-flex min-h-12 items-center whitespace-nowrap border border-black bg-black px-5 py-3 text-lg font-medium text-white outline-none transition-colors duration-150 hover:border-black hover:bg-white hover:text-black focus:outline-none'
+                          : 'inline-flex min-h-12 items-center whitespace-nowrap border-b border-black px-5 py-3 text-lg font-medium text-black transition-[color,border-bottom-width] duration-150 hover:border-b-2 hover:text-neutral-600'
                       }
                     >
                       {pathway.title}
@@ -147,7 +161,6 @@ export default function HomeTestOnePage() {
                 <p className="font-medium text-black">
                   <span className="b2w-wordmark">B2W LLC</span>
                 </p>
-                <p className="mt-1">© {new Date().getFullYear()} All rights reserved.</p>
               </div>
 
               <a

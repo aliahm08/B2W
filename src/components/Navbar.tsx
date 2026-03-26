@@ -57,16 +57,12 @@ const navItems: NavItem[] = [
   {
     label: 'Process',
     to: '/#process',
-    children: [
-      { label: 'Go to Process', to: '/#process' },
-    ],
+    children: [],
   },
   {
     label: 'Team',
     to: '/#team',
-    children: [
-      { label: 'Go to Team', to: '/#team' },
-    ],
+    children: [],
   },
 ];
 
@@ -235,18 +231,20 @@ export default function Navbar() {
                     {item.label}
                   </Link>
 
-                  <div className="mt-3 space-y-2 pl-4">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.label}
-                        to={child.to}
-                        onClick={child.to.includes('#') ? handleNavigation(child.to) : () => setIsOpen(false)}
-                        className="block text-sm font-medium text-neutral-500 transition-colors hover:text-black"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
-                  </div>
+                  {item.children.length > 0 ? (
+                    <div className="mt-3 space-y-2 pl-4">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.label}
+                          to={child.to}
+                          onClick={child.to.includes('#') ? handleNavigation(child.to) : () => setIsOpen(false)}
+                          className="block text-sm font-medium text-neutral-500 transition-colors hover:text-black"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
               );
             })}
