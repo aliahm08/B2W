@@ -13,22 +13,22 @@ type ExpertiseCard = {
 const expertiseCards: ExpertiseCard[] = [
   {
     title: 'Growth',
-    description: 'We turn marketing data, operational performance, and financial context into a growth roadmap that clarifies what should be amplified, redesigned, or newly built.',
-    href: '/expertise/growth',
+    description: 'Marketing data reveals where demand is forming, where conversion is weak, and where growth effort should be redirected or amplified.',
+    href: '/capabilities/marketing-data',
     accentClassName: 'text-emerald-700',
     borderClassName: 'border-emerald-200',
   },
   {
     title: 'Optimization',
-    description: 'We build decision models that help owners evaluate risk, value the business, and move on expansion, hiring, or restructuring with more confidence.',
-    href: '/expertise/optimization',
+    description: 'Operational performance analysis exposes execution drag, bottlenecks, and process gaps so the business can run with more consistency and less waste.',
+    href: '/capabilities/operational-performance',
     accentClassName: 'text-sky-700',
     borderClassName: 'border-sky-200',
   },
   {
     title: 'Diligence',
-    description: 'We organize the records, materials, and business context needed to help future transitions, transactions, and major next steps proceed more smoothly.',
-    href: '/expertise/diligence',
+    description: 'Financial review clarifies margins, cash flow, and hidden pressure points so major decisions are grounded in the numbers behind the business.',
+    href: '/capabilities/financials',
     accentClassName: 'text-amber-700',
     borderClassName: 'border-amber-200',
   },
@@ -44,9 +44,9 @@ export default function Expertise() {
         transition={{ duration: 0.6 }}
         className="mb-10"
       >
-        <h2 className="mb-4 text-4xl font-medium tracking-tight">Expertise</h2>
+        <h2 className="mb-4 text-4xl font-medium tracking-tight">Our Capabilities</h2>
         <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
-          We use marketing data, operational performance, and financials to build a client profile, then prioritize the growth, optimization, and diligence work that matters most.
+          We use marketing data, operational performance, and financials to understand how the business is actually performing, then frame the growth, optimization, and diligence work that matters most.
         </p>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>

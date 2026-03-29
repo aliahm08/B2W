@@ -1,24 +1,17 @@
 import type { MouseEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowUpRight, ChevronRight, Menu, Search, X } from 'lucide-react';
+import { ArrowUpRight, Menu, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import B2WLogoMark from './B2WLogoMark';
 import OfferBanner from './OfferBanner';
 import { scrollToHashTarget } from '../lib/hashNavigation';
-import { showcaseProjects } from '../content/projectShowcaseCards';
 import { capabilityLanes } from '../content/capabilities';
-
-type NavChild = {
-  label: string;
-  to: string;
-};
 
 type NavItem = {
   label: string;
   to: string;
-  children: NavChild[];
 };
 
 type SearchEntry = {
@@ -28,50 +21,23 @@ type SearchEntry = {
   to: string;
 };
 
-const projectDropdownLabels: Record<string, string> = {
-  Marketing: 'Marketing Audit',
-  Financials: 'Financial Review',
-  Operations: 'Operations Support',
-  'Business Revamp': 'Business Revamp',
-};
-
 function buildNavItems(basePath: string): NavItem[] {
   return [
     {
-      label: 'Capabilities',
-      to: `${basePath}#capabilities`,
-      children: [
-        { label: 'Marketing Data', to: '/capabilities/marketing-data' },
-        { label: 'Financials', to: '/capabilities/financials' },
-        { label: 'Operational Performance', to: '/capabilities/operational-performance' },
-        { label: 'Kitchen', to: '/capabilities' },
-      ],
+      label: 'Growth',
+      to: '/capabilities/marketing-data',
     },
     {
-      label: 'Expertise',
-      to: `${basePath}#expertise`,
-      children: [
-        { label: 'Growth', to: '/services/marketing-advisory' },
-        { label: 'Optimization', to: '/services/operations-implementation' },
-        { label: 'M&A', to: '/services/financial-review' },
-      ],
+      label: 'Optimization',
+      to: '/capabilities/operational-performance',
     },
     {
-      label: 'Projects',
-      to: `${basePath}#projects`,
-      children: showcaseProjects.map((project) => ({
-        label: projectDropdownLabels[project.category] ?? project.category,
-        to: project.link,
-      })),
+      label: 'Diligence',
+      to: '/capabilities/financials',
     },
     {
       label: 'About',
       to: '/about',
-      children: [
-        { label: 'Overview', to: '/about' },
-        { label: 'Process', to: '/about#process' },
-        { label: 'Team', to: '/about#team' },
-      ],
     },
   ];
 }
@@ -111,6 +77,8 @@ export default function Navbar({
   const navigate = useNavigate();
   const isHeaderDark = isSearchOpen || isOpen;
   const navItems = useMemo(() => buildNavItems(basePath), [basePath]);
+  const featuredNavItems = navItems.slice(0, 3);
+  const aboutNavItem = navItems[3];
 
   useEffect(() => {
     if (location.pathname !== basePath) {
@@ -166,25 +134,9 @@ export default function Navbar({
   const searchEntries = useMemo<SearchEntry[]>(() => {
     const sectionEntries = navItems.map((item) => ({
       label: item.label,
-      description: item.children.length > 0 ? `${item.children.length} related pages` : 'Landing page section',
+      description: 'Navigation',
       group: 'Sections',
       to: item.to,
-    }));
-
-    const childEntries = navItems.flatMap((item) =>
-      item.children.map((child) => ({
-        label: child.label,
-        description: item.label,
-        group: 'Navigation',
-        to: child.to,
-      })),
-    );
-
-    const projectEntries = showcaseProjects.map((project) => ({
-      label: project.title,
-      description: project.clientDescription,
-      group: 'Projects',
-      to: project.link,
     }));
 
     const capabilityEntries = capabilityLanes.flatMap((lane) =>
@@ -196,7 +148,7 @@ export default function Navbar({
       })),
     );
 
-    return [...sectionEntries, ...childEntries, ...projectEntries, ...capabilityEntries];
+    return [...sectionEntries, ...capabilityEntries];
   }, [navItems]);
 
   const filteredSearchEntries = useMemo(() => {
@@ -333,24 +285,7 @@ export default function Navbar({
   }, [location.pathname, location.hash]);
 
   useEffect(() => {
-    if (isOpen) {
-      const activeItem = navItems.find((item) => activeDesktopLink === item.to);
-      if (activeItem?.children.length) {
-        setExpandedMobileSections({ [activeItem.label]: true });
-        return;
-      }
-
-      const matchingChildParent = navItems.find((item) =>
-        item.children.some((child) => {
-          const childTarget = parseTarget(child.to);
-          return location.pathname === childTarget.pathname && (!childTarget.hash || location.hash === childTarget.hash);
-        }),
-      );
-      if (matchingChildParent) {
-        setExpandedMobileSections({ [matchingChildParent.label]: true });
-        return;
-      }
-    } else {
+    if (!isOpen) {
       setExpandedMobileSections({});
     }
   }, [activeDesktopLink, isOpen, location.hash, location.pathname]);
@@ -396,10 +331,37 @@ export default function Navbar({
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <B2WLogoMark
-          to={basePath}
-          className={`shrink-0 transition-colors duration-150 ${isHeaderDark ? 'text-white' : 'text-black'}`}
-        />
+        <div className="flex items-center gap-4">
+          <B2WLogoMark
+            to={basePath}
+            className={`shrink-0 transition-colors duration-150 ${isHeaderDark ? 'text-white' : 'text-black'}`}
+          />
+          <div className={`hidden items-center gap-5 text-sm md:flex ${isSearchOpen ? 'text-neutral-300' : 'text-neutral-600'}`}>
+            {featuredNavItems.map((item) => {
+              const isActive = activeDesktopLink === item.to;
+              const usesHashNavigation = item.to.includes('#');
+
+              return (
+                <Link
+                  key={item.label}
+                  to={item.to}
+                  onClick={usesHashNavigation ? handleNavigation(item.to) : undefined}
+                  className={`transition-colors ${
+                    isSearchOpen
+                      ? isActive
+                        ? 'font-semibold text-white'
+                        : 'font-medium hover:text-white'
+                      : isActive
+                        ? 'font-semibold text-black'
+                        : 'font-medium hover:text-black'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
 
         <div className="flex items-center gap-3">
           <AnimatePresence initial={false}>
@@ -418,60 +380,6 @@ export default function Navbar({
         </div>
 
         <div className={`hidden items-center gap-6 text-sm md:flex ${isSearchOpen ? 'text-neutral-300' : 'text-neutral-600'}`}>
-          {navItems.map((item) => {
-            const isActive = activeDesktopLink === item.to;
-            const usesHashNavigation = item.to.includes('#');
-            const hasChildren = item.children.length > 0;
-
-            return (
-              <div key={item.label} className="group relative">
-                <Link
-                  to={item.to}
-                  onClick={usesHashNavigation ? handleNavigation(item.to) : undefined}
-                  className={`transition-colors ${
-                    isSearchOpen
-                      ? isActive
-                        ? 'font-semibold text-white'
-                        : 'font-medium hover:text-white'
-                      : isActive
-                        ? 'font-semibold text-black'
-                        : 'font-medium hover:text-black'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-
-                {hasChildren ? (
-                  <div className="pointer-events-none absolute left-0 top-full pt-4 opacity-0 transition-opacity duration-150 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100">
-                    <div
-                      className={`min-w-56 py-3 shadow-sm ${
-                        isSearchOpen ? 'border border-white/10 bg-neutral-900' : 'border border-neutral-200 bg-white'
-                      }`}
-                    >
-                      {item.children.map((child) => {
-                        const childUsesHashNavigation = child.to.includes('#');
-                        return (
-                          <Link
-                            key={child.label}
-                            to={child.to}
-                            onClick={childUsesHashNavigation ? handleNavigation(child.to) : () => setIsOpen(false)}
-                            className={`flex items-center justify-between gap-4 px-4 py-2 text-sm font-medium transition-colors ${
-                              isSearchOpen ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'
-                            }`}
-                          >
-                            <span>{child.label}</span>
-                            <ChevronRight
-                              className={`h-3.5 w-3.5 ${isSearchOpen ? 'text-neutral-600' : 'text-neutral-300'}`}
-                            />
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            );
-          })}
           <motion.button
             type="button"
             whileTap={{ scale: 0.95 }}
@@ -487,6 +395,14 @@ export default function Navbar({
           >
             <Search className="h-4.5 w-4.5" />
           </motion.button>
+          {aboutNavItem ? (
+            <Link
+              to={aboutNavItem.to}
+              className={`font-medium transition-colors ${isSearchOpen ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'}`}
+            >
+              {aboutNavItem.label}
+            </Link>
+          ) : null}
           <Link
             to={`${basePath}#contact`}
             onClick={handleNavigation(`${basePath}#contact`)}
@@ -612,71 +528,18 @@ export default function Navbar({
 
             {navItems.map((item) => {
               const isActive = activeDesktopLink === item.to;
-              const isExpanded = Boolean(expandedMobileSections[item.label]);
               return (
                 <div key={item.label} className="border-b border-white/10 py-3 last:border-b-0">
-                  {item.children.length > 0 ? (
-                    <div className="flex items-center gap-2">
-                      <Link
-                        to={item.to}
-                        onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
-                        className={`inline-flex items-center text-[17px] ${
-                          isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
-                        }`}
-                      >
-                        <span>{item.label}</span>
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => toggleMobileSection(item.label)}
-                        aria-expanded={isExpanded}
-                        aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${item.label}`}
-                        className="flex min-h-6 flex-1 items-center justify-end"
-                      >
-                        <ChevronRight
-                          className={`h-4 w-4 shrink-0 text-neutral-500 transition-transform duration-150 ${
-                            isExpanded ? 'rotate-90' : ''
-                          }`}
-                        />
-                      </button>
-                    </div>
-                  ) : (
-                    <Link
-                      to={item.to}
-                      onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
-                      className={`flex items-center justify-between gap-4 text-[17px] ${
-                        isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <ChevronRight className="h-4 w-4 shrink-0 text-neutral-500" />
-                    </Link>
-                  )}
-
-                  <AnimatePresence initial={false}>
-                    {item.children.length > 0 && isExpanded ? (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
-                        className="overflow-hidden"
-                      >
-                        <div className="mt-3 space-y-2 pl-4">
-                          {item.children.map((child) => (
-                            <Link
-                              key={child.label}
-                              to={child.to}
-                              onClick={child.to.includes('#') ? handleNavigation(child.to) : () => setIsOpen(false)}
-                              className="block text-sm font-medium text-neutral-400 transition-colors hover:text-white"
-                            >
-                              {child.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    ) : null}
-                  </AnimatePresence>
+                  <Link
+                    to={item.to}
+                    onClick={item.to.includes('#') ? handleNavigation(item.to) : () => setIsOpen(false)}
+                    className={`flex items-center justify-between gap-4 text-[17px] ${
+                      isActive ? 'font-semibold text-white' : 'font-medium text-neutral-100'
+                    }`}
+                  >
+                    <span>{item.label}</span>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-neutral-500" />
+                  </Link>
                 </div>
               );
             })}

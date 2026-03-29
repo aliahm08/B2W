@@ -1,6 +1,7 @@
 export type HeroContent = {
   headline: string;
   subheadline: string;
+  tags?: string[];
   primaryCtaLabel: string;
   primaryCtaHref: string;
 };

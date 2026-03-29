@@ -16,6 +16,7 @@ export type LeadSubmission = {
   company: string;
   phone: string;
   website: string;
+  budgetRange: string;
   inquiryType: string;
   message: string;
   arrRange: string;
@@ -154,6 +155,10 @@ export function validateLeadSubmission(payload: Record<string, unknown>): Valida
   if (name.ok === false) return { ok: false, status: name.status, error: name.error };
   const email = requireEmail(payload.email);
   if (email.ok === false) return { ok: false, status: email.status, error: email.error };
+  const company = requireText('Business', payload.company ?? payload.businessName, { maxLength: 200 });
+  if (company.ok === false) return { ok: false, status: company.status, error: company.error };
+  const phone = requireText('Phone', payload.phone, { maxLength: 80 });
+  if (phone.ok === false) return { ok: false, status: phone.status, error: phone.error };
   const message = requireText('Message', payload.message, { maxLength: 5000 });
   if (message.ok === false) return { ok: false, status: message.status, error: message.error };
   const inquiryType = requireText('Inquiry type', payload.inquiryType ?? payload.normalizedProjectArea, { maxLength: 120 });
@@ -166,9 +171,10 @@ export function validateLeadSubmission(payload: Record<string, unknown>): Valida
     value: {
       name: name.value,
       email: email.value,
-      company: optionalText(payload.company ?? payload.businessName, 200),
-      phone: optionalText(payload.phone, 80),
+      company: company.value,
+      phone: phone.value,
       website: optionalText(payload.website, 500),
+      budgetRange: optionalText(payload.budgetRange ?? payload.arrRange, 120),
       inquiryType: inquiryType.value,
       message: message.value,
       arrRange: optionalText(payload.arrRange, 80),

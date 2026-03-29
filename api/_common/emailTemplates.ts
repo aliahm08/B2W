@@ -38,6 +38,7 @@ export function buildLeadEmails(submission: LeadSubmission) {
     ['Company', submission.company],
     ['Phone', submission.phone],
     ['Website', submission.website],
+    ['Budget', submission.budgetRange],
     ['Inquiry Type', submission.inquiryType],
     ['ARR', submission.arrRange],
     ['Project Areas', submission.projectAreas.join(', ')],

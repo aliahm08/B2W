@@ -51,10 +51,57 @@ async function insertFormSubmission(payload: FormSubmissionInsert) {
     },
   });
 
-  const { error } = await supabase.from('form_submissions').insert(payload);
+  const { data, error } = await supabase.from('form_submissions').insert(payload).select('id').single();
 
   if (error) {
     throw new Error(`Supabase insert failed: ${error.message} (${error.code || 'unknown'})`);
+  }
+
+  return String(data.id);
+}
+
+async function updateFormSubmissionBudget(id: string, budgetRange: string) {
+  const { url, accessKey } = getSupabaseConfig();
+
+  if (!url || !accessKey) {
+    throw new Error('Supabase form submission env vars are not configured.');
+  }
+
+  const supabase = createClient(url, accessKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+
+  const { data: existing, error: fetchError } = await supabase
+    .from('form_submissions')
+    .select('metadata')
+    .eq('id', id)
+    .single();
+
+  if (fetchError) {
+    throw new Error(`Supabase fetch failed: ${fetchError.message} (${fetchError.code || 'unknown'})`);
+  }
+
+  const currentMetadata = existing?.metadata && typeof existing.metadata === 'object'
+    ? (existing.metadata as Record<string, unknown>)
+    : {};
+
+  const { error: updateError } = await supabase
+    .from('form_submissions')
+    .update({
+      metadata: {
+        ...currentMetadata,
+        arrRange: budgetRange,
+        budgetRange,
+      },
+    })
+    .eq('id', id);
+
+  if (updateError) {
+    throw new Error(`Supabase update failed: ${updateError.message} (${updateError.code || 'unknown'})`);
   }
 }
 
@@ -79,11 +126,16 @@ export async function insertLeadFormSubmission(submission: LeadSubmission, notif
     submitted_at: submission.submittedAt,
     metadata: {
       arrRange: submission.arrRange,
+      budgetRange: submission.budgetRange,
       projectAreas: submission.projectAreas,
       inquiryType: submission.inquiryType,
       normalizedProjectArea: submission.normalizedProjectArea,
     },
   });
+}
+
+export async function saveLeadSubmissionBudget(submissionId: string, budgetRange: string) {
+  return updateFormSubmissionBudget(submissionId, budgetRange);
 }
 
 export async function insertClientFormSubmission(submission: ClientCommunicationSubmission, notificationEmail: string) {

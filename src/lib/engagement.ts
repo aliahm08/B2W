@@ -2,6 +2,7 @@ export type SubmissionResult = {
   ok: boolean;
   error?: string;
   warning?: string;
+  submissionId?: string;
 };
 
 export function getCalendlyUrl(): string {
@@ -55,6 +56,7 @@ export async function submitInternalForm(
     return {
       ok: true,
       warning: typeof data.warning === 'string' ? data.warning : undefined,
+      submissionId: typeof data.submissionId === 'string' ? data.submissionId : undefined,
     };
   } catch (error) {
     return {

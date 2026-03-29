@@ -8,9 +8,7 @@ import { Routes, Route, useLocation, Navigate, useSearchParams } from 'react-rou
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import CapabilitiesVisualization from './components/CapabilitiesVisualization';
 import Expertise from './components/Expertise';
-import ProjectShowcase from './components/ProjectShowcase';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AssistantWidget from './components/AssistantWidget';
@@ -20,6 +18,8 @@ import ProjectBuilderDrawer from './components/ProjectBuilderDrawer';
 import { ArrowUpRight } from 'lucide-react';
 import { scrollToHashTarget } from './lib/hashNavigation';
 import HomeTestOnePage from './pages/HomeTestOnePage';
+
+const OFFER_BANNER_STORAGE_KEY = 'b2w-offer-banner-dismissed';
 
 const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
 const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
@@ -72,15 +72,18 @@ function ScrollToTop() {
 function LandingPage({
   onHeroVisibilityChange,
   onOfferClick,
+  isOfferBannerDismissed,
+  onOfferClose,
   openBuilderOnLoad = false,
 }: {
   onHeroVisibilityChange: (isVisible: boolean) => void;
   onOfferClick: () => void;
+  isOfferBannerDismissed: boolean;
+  onOfferClose: () => void;
   openBuilderOnLoad?: boolean;
 }) {
   const [showProjectButton, setShowProjectButton] = useState(false);
   const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
-  const [isHeroOfferDismissed, setIsHeroOfferDismissed] = useState(false);
 
   useEffect(() => {
     if (openBuilderOnLoad) {
@@ -116,19 +119,12 @@ function LandingPage({
     <>
       <Seo />
       <Hero
-        onPrimaryAction={() => setIsProjectDrawerOpen(true)}
-        showOfferBanner={!showProjectButton && !isHeroOfferDismissed}
+        showOfferBanner={!showProjectButton && !isOfferBannerDismissed}
         onOfferClick={onOfferClick}
-        onOfferClose={() => setIsHeroOfferDismissed(true)}
+        onOfferClose={onOfferClose}
       />
-      <section id="capabilities">
-        <CapabilitiesVisualization />
-      </section>
       <section id="expertise">
         <Expertise />
-      </section>
-      <section id="projects">
-        <ProjectShowcase />
       </section>
       <section id="contact">
         <CTA />
@@ -166,7 +162,13 @@ export default function App() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [isLandingHeroVisible, setIsLandingHeroVisible] = useState(false);
-  const [isHeaderOfferDismissed, setIsHeaderOfferDismissed] = useState(false);
+  const [isOfferBannerDismissed, setIsOfferBannerDismissed] = useState<boolean>(() => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    return window.localStorage.getItem(OFFER_BANNER_STORAGE_KEY) === 'true';
+  });
 
   useEffect(() => {
     if (location.pathname !== '/') {
@@ -174,17 +176,13 @@ export default function App() {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (location.pathname !== '/') {
-      setIsHeaderOfferDismissed(false);
-    }
-  }, [location.pathname]);
+  const dismissOfferBanner = () => {
+    setIsOfferBannerDismissed(true);
 
-  useEffect(() => {
-    if (isLandingHeroVisible) {
-      setIsHeaderOfferDismissed(false);
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(OFFER_BANNER_STORAGE_KEY, 'true');
     }
-  }, [isLandingHeroVisible]);
+  };
 
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
@@ -205,11 +203,11 @@ export default function App() {
       <ScrollToTop />
       {!isIsolatedView && (
         <Navbar
-          showOfferBanner={location.pathname === '/' && !isLandingHeroVisible && !isHeaderOfferDismissed}
+          showOfferBanner={location.pathname === '/' && !isLandingHeroVisible && !isOfferBannerDismissed}
           onOfferClick={() => {
             window.location.hash = 'contact';
           }}
-          onOfferClose={() => setIsHeaderOfferDismissed(true)}
+          onOfferClose={dismissOfferBanner}
         />
       )}
       <main>
@@ -224,6 +222,8 @@ export default function App() {
                     const contact = document.getElementById('contact');
                     contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
+                  isOfferBannerDismissed={isOfferBannerDismissed}
+                  onOfferClose={dismissOfferBanner}
                   openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
                 />
               }

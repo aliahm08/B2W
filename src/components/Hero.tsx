@@ -29,7 +29,8 @@ export default function Hero({
   const { hero } = projectPipelineContent;
   const location = useLocation();
   const navigate = useNavigate();
-  const primaryCtaHref = resolveAnchorTarget(basePath, hero.primaryCtaHref);
+  const primaryCtaTarget = hero.primaryCtaHref.replace('#capabilities', '#expertise');
+  const primaryCtaHref = resolveAnchorTarget(basePath, primaryCtaTarget);
   const contactHref = `${basePath}#contact`;
 
   const handleAnchorClick = (target: string) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -82,24 +83,17 @@ export default function Hero({
         <div className="flex flex-wrap gap-4">
           <Link
             to={primaryCtaHref}
-            onClick={(event) => {
-              if (onPrimaryAction) {
-                event.preventDefault();
-                onPrimaryAction();
-                return;
-              }
-              handleAnchorClick(primaryCtaHref)(event);
-            }}
+            onClick={handleAnchorClick(primaryCtaHref)}
             className="inline-flex min-h-12 items-center border border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:bg-black hover:text-white"
           >
-            <span>{hero.primaryCtaLabel}</span>
+            <span>Explore Services</span>
           </Link>
           <Link
             to={contactHref}
             onClick={handleAnchorClick(contactHref)}
             className="inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:text-neutral-600"
           >
-            <span>Tell us about your business</span>
+            <span>Get in Touch</span>
           </Link>
         </div>
       </motion.div>

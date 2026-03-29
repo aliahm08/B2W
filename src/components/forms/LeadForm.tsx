@@ -1,9 +1,10 @@
+import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
 import { FormStatus, FormTemplate } from './FormTemplate';
 
-export const publicProjectAreas = ['Marketing', 'Financials', 'Ops Performance'] as const;
+export const publicProjectAreas = ['Growth', 'Optimization', 'Due Diligence'] as const;
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
 export type NormalizedProjectArea = PublicProjectArea;
 
@@ -39,20 +40,43 @@ function normalizeProjectArea(selectedProjectAreas: PublicProjectArea[]): Normal
 }
 
 const EMPTY_ARRAY: PublicProjectArea[] = [];
-const publicProjectAreaOptions: Array<{ area: PublicProjectArea; description: string }> = [
+const publicProjectAreaOptions: PublicProjectArea[] = ['Growth', 'Optimization', 'Due Diligence'];
+const FULL_SERVICE_PACKAGE = 'Full Service Package';
+const budgetOptions = [
+  'Under $2,500',
+  '$2,500 - $5,000',
+  '$5,000 - $10,000',
+  '$10,000+',
+] as const;
+const serviceCardStyles: Record<
+  PublicProjectArea,
   {
-    area: 'Marketing',
-    description: 'Ads, campaigns, CRM activity, reviews, website analytics, and demand generation signals.',
+    selected: string;
+    unselected: string;
+    checkSelected: string;
+    checkUnselected: string;
+  }
+> = {
+  Growth: {
+    selected: 'border-emerald-300 bg-emerald-50 text-emerald-950',
+    unselected: 'border-emerald-200 bg-white text-emerald-900 hover:bg-emerald-50/60',
+    checkSelected: 'text-emerald-700 opacity-100',
+    checkUnselected: 'text-emerald-400 opacity-40',
   },
-  {
-    area: 'Financials',
-    description: 'Revenue, margins, forecasts, pricing logic, cash flow, and valuation-related records.',
+  Optimization: {
+    selected: 'border-sky-300 bg-sky-50 text-sky-950',
+    unselected: 'border-sky-200 bg-white text-sky-900 hover:bg-sky-50/60',
+    checkSelected: 'text-sky-700 opacity-100',
+    checkUnselected: 'text-sky-400 opacity-40',
   },
-  {
-    area: 'Ops Performance',
-    description: 'Staffing, SOPs, workflows, scheduling, service logs, and execution-quality records.',
+  'Due Diligence': {
+    selected: 'border-amber-300 bg-amber-50 text-amber-950',
+    unselected: 'border-amber-200 bg-white text-amber-900 hover:bg-amber-50/60',
+    checkSelected: 'text-amber-700 opacity-100',
+    checkUnselected: 'text-amber-400 opacity-40',
   },
-];
+};
+const fullServiceCheckOrder: PublicProjectArea[] = ['Growth', 'Optimization', 'Due Diligence'];
 
 export default function LeadForm({
   heading = 'Contact Us',
@@ -66,6 +90,10 @@ export default function LeadForm({
   });
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [submittedLeadId, setSubmittedLeadId] = useState('');
+  const [selectedBudgetRange, setSelectedBudgetRange] = useState('');
+  const [isBudgetSubmitting, setIsBudgetSubmitting] = useState(false);
+  const [isBudgetConfirmed, setIsBudgetConfirmed] = useState(false);
 
   useEffect(() => {
     setState((current) => ({
@@ -78,6 +106,7 @@ export default function LeadForm({
     () => normalizeProjectArea(state.selectedProjectAreas),
     [state.selectedProjectAreas],
   );
+  const hasFullServiceSelection = publicProjectAreaOptions.every((area) => state.selectedProjectAreas.includes(area));
 
   function toggleProjectArea(area: PublicProjectArea) {
     setState((current) => {
@@ -88,6 +117,17 @@ export default function LeadForm({
       return {
         ...current,
         selectedProjectAreas: nextAreas,
+      };
+    });
+  }
+
+  function toggleFullServicePackage() {
+    setState((current) => {
+      const hasCompleteSelection = publicProjectAreaOptions.every((area) => current.selectedProjectAreas.includes(area));
+
+      return {
+        ...current,
+        selectedProjectAreas: hasCompleteSelection ? [] : [...publicProjectAreaOptions],
       };
     });
   }
@@ -104,7 +144,6 @@ export default function LeadForm({
       company: state.businessName.trim(),
       phone: state.phone.trim(),
       website: '',
-      arrRange: '',
       projectAreas: state.selectedProjectAreas,
       inquiryType: normalizedProjectArea || 'General inquiry',
       normalizedProjectArea,
@@ -122,11 +161,39 @@ export default function LeadForm({
       return;
     }
 
+    setSubmittedLeadId(result.submissionId ?? '');
+    setSelectedBudgetRange('');
+    setIsBudgetConfirmed(false);
     setStatus('success');
     setState({
       ...defaultState,
       selectedProjectAreas: preselectedProjectAreas,
     });
+  }
+
+  async function handleBudgetSelect(option: (typeof budgetOptions)[number]) {
+    if (!submittedLeadId || isBudgetSubmitting) {
+      return;
+    }
+
+    setIsBudgetSubmitting(true);
+    setErrorMessage('');
+
+    const result = await submitInternalForm('/api/contact-lead', {
+      submissionId: submittedLeadId,
+      budgetRange: option,
+    });
+
+    if (!result.ok) {
+      setErrorMessage(result.error ?? 'Unable to save budget.');
+      setIsBudgetSubmitting(false);
+      return;
+    }
+
+    setSelectedBudgetRange(option);
+    setIsBudgetConfirmed(true);
+    setIsBudgetSubmitting(false);
+    setStatus('success');
   }
 
   return (
@@ -185,12 +252,13 @@ export default function LeadForm({
             />
           </label>
           <label className="block">
-            <span className="mb-2 block text-sm font-medium text-neutral-800">Phone Number (Optional)</span>
+            <span className="mb-2 block text-sm font-medium text-neutral-800">Phone Number</span>
             <input
               type="tel"
               name="phone"
               value={state.phone}
               onChange={(event) => setState((current) => ({ ...current, phone: event.target.value }))}
+              required
               autoComplete="tel"
               className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
               placeholder="(555) 555-5555"
@@ -212,32 +280,103 @@ export default function LeadForm({
         </label>
 
         <fieldset className="block">
-          <legend className="mb-2 block text-sm font-medium text-neutral-800">What data does your business currently track?</legend>
+          <legend className="mb-2 block text-sm font-medium text-neutral-800">Services Desired</legend>
           <p className="mb-3 text-xs leading-5 text-neutral-500">
-            Select every data category you can provide.
+            Select the services you want to discuss.
           </p>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {publicProjectAreaOptions.map(({ area, description }) => {
-              const isSelected = state.selectedProjectAreas.includes(area);
-              return (
-                <div key={area} className="space-y-2">
-                  <button
-                    type="button"
-                    aria-pressed={isSelected}
-                    onClick={() => toggleProjectArea(area)}
-                    className={`flex w-full flex-col items-start gap-3 border px-4 py-4 text-left text-sm transition-colors ${
-                      isSelected ? 'border-black bg-black text-white' : 'border-black/10 bg-white text-neutral-800'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <Check className={`h-4 w-4 ${isSelected ? 'opacity-100' : 'opacity-30'}`} />
-                      <span>{area}</span>
-                    </div>
-                    <span className={`text-xs leading-5 ${isSelected ? 'text-neutral-300' : 'text-neutral-500'}`}>{description}</span>
-                  </button>
+          <div className="space-y-3">
+            <AnimatePresence initial={false}>
+              {!hasFullServiceSelection ? (
+                <motion.div
+                  key="individual-services"
+                  initial={{ height: 0, opacity: 0, y: -8 }}
+                  animate={{ height: 'auto', opacity: 1, y: 0 }}
+                  exit={{ height: 0, opacity: 0, y: -8 }}
+                  transition={{ duration: 0.28, ease: 'easeOut' }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                    {publicProjectAreaOptions.map((area) => {
+                      const isSelected = state.selectedProjectAreas.includes(area);
+                      const styles = serviceCardStyles[area];
+
+                      return (
+                        <div key={area}>
+                          <button
+                            type="button"
+                            aria-pressed={isSelected}
+                            onClick={() => toggleProjectArea(area)}
+                            className={`flex w-full items-center gap-3 border px-4 py-4 text-left text-sm transition-all duration-200 ${
+                              isSelected ? styles.selected : styles.unselected
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <Check className={`h-4 w-4 ${isSelected ? styles.checkSelected : styles.checkUnselected}`} />
+                              <span>{area}</span>
+                            </div>
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+            <motion.div
+              animate={{
+                scale: hasFullServiceSelection ? 1 : 1,
+                y: hasFullServiceSelection ? 0 : 0,
+              }}
+              transition={{ duration: 0.24, ease: 'easeOut' }}
+            >
+              <button
+                type="button"
+                aria-pressed={hasFullServiceSelection}
+                onClick={toggleFullServicePackage}
+                className={`flex w-full items-center gap-3 border px-4 text-left text-sm transition-all duration-300 ${
+                  hasFullServiceSelection
+                    ? 'border-black bg-black py-5 text-white shadow-[0_18px_40px_rgba(0,0,0,0.16)]'
+                    : 'border-black/10 bg-white py-4 text-neutral-800'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Check className={`h-4 w-4 ${hasFullServiceSelection ? 'opacity-100' : 'opacity-30'}`} />
+                  <div>
+                    <span className="block">{FULL_SERVICE_PACKAGE}</span>
+                    {hasFullServiceSelection ? (
+                      <motion.span
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-2 flex items-center gap-2"
+                      >
+                        {fullServiceCheckOrder.map((area, index) => {
+                          const styles = serviceCardStyles[area];
+
+                          return (
+                            <motion.span
+                              key={area}
+                              initial={{ opacity: 0, scale: 0.8, y: 4 }}
+                              animate={{ opacity: 1, scale: 1, y: 0 }}
+                              transition={{ duration: 0.2, delay: index * 0.08, ease: 'easeOut' }}
+                              className={`inline-flex h-6 w-6 items-center justify-center rounded-full border bg-white/8 ${styles.checkSelected.replace(' opacity-100', '')} ${
+                                area === 'Growth'
+                                  ? 'border-emerald-500/40'
+                                  : area === 'Optimization'
+                                    ? 'border-sky-500/40'
+                                    : 'border-amber-500/40'
+                              }`}
+                              aria-hidden="true"
+                            >
+                              <Check className="h-3.5 w-3.5" />
+                            </motion.span>
+                          );
+                        })}
+                      </motion.span>
+                    ) : null}
+                  </div>
                 </div>
-              );
-            })}
+              </button>
+            </motion.div>
           </div>
         </fieldset>
 
@@ -263,6 +402,57 @@ export default function LeadForm({
             <p className="text-sm text-emerald-700">
               Inquiry received. We will follow up using the email you submitted.
             </p>
+            {submittedLeadId ? (
+              <div className="space-y-3 border-t border-emerald-500/20 pt-3">
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-emerald-800/80">Budget</p>
+                {isBudgetConfirmed && selectedBudgetRange ? (
+                  <div className="space-y-2">
+                    <div className="inline-flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-800">
+                      <Check className="h-4 w-4" />
+                      <span>{selectedBudgetRange}</span>
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={() => setIsBudgetConfirmed(false)}
+                        className="text-sm font-medium text-emerald-800 underline decoration-emerald-400 underline-offset-4"
+                      >
+                        Edit budget
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <p className="text-sm text-emerald-800/80">
+                      Add your budget to complete this submission.
+                    </p>
+                    {errorMessage ? (
+                      <p className="border border-red-400/30 bg-red-400/10 px-3 py-2 text-sm text-red-700">
+                        {errorMessage}
+                      </p>
+                    ) : null}
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      {budgetOptions.map((option) => (
+                        <button
+                          key={option}
+                          type="button"
+                          onClick={() => void handleBudgetSelect(option)}
+                          disabled={isBudgetSubmitting}
+                          className={`flex items-center gap-3 border px-4 py-4 text-left text-sm transition-colors ${
+                            selectedBudgetRange === option || isBudgetConfirmed
+                              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-800'
+                              : 'border-emerald-500/20 bg-white text-neutral-800 hover:border-emerald-500/40'
+                          } disabled:cursor-not-allowed disabled:opacity-70`}
+                        >
+                          <Check className={`h-4 w-4 ${selectedBudgetRange === option ? 'opacity-100 text-emerald-700' : 'opacity-25'}`} />
+                          <span>{option}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : null}
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs leading-5 text-emerald-800/80">
                 Want to move faster? Book a call as the next step.
