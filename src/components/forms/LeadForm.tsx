@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { ArrowRight, Check } from 'lucide-react';
 import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
-import { FormStatus, FormTemplate } from './FormTemplate';
+import { FormTemplate } from './FormTemplate';
 
 export const publicProjectAreas = ['Growth', 'Optimization', 'Due Diligence'] as const;
 export type PublicProjectArea = (typeof publicProjectAreas)[number];
@@ -48,6 +48,11 @@ const budgetOptions = [
   '$5,000 - $10,000',
   '$10,000+',
 ] as const;
+const submissionTimeline = [
+  'Request received and logged.',
+  'Budget and service fit reviewed by B2W.',
+  'Follow-up email or call scheduled with next steps.',
+] as const;
 const serviceCardStyles: Record<
   PublicProjectArea,
   {
@@ -59,21 +64,21 @@ const serviceCardStyles: Record<
 > = {
   Growth: {
     selected: 'border-emerald-300 bg-emerald-50 text-emerald-950',
-    unselected: 'border-emerald-200 bg-white text-emerald-900 hover:bg-emerald-50/60',
+    unselected: 'border-black/10 bg-white text-neutral-800 hover:border-black/25 hover:bg-neutral-50',
     checkSelected: 'text-emerald-700 opacity-100',
-    checkUnselected: 'text-emerald-400 opacity-40',
+    checkUnselected: 'text-neutral-400 opacity-35',
   },
   Optimization: {
     selected: 'border-sky-300 bg-sky-50 text-sky-950',
-    unselected: 'border-sky-200 bg-white text-sky-900 hover:bg-sky-50/60',
+    unselected: 'border-black/10 bg-white text-neutral-800 hover:border-black/25 hover:bg-neutral-50',
     checkSelected: 'text-sky-700 opacity-100',
-    checkUnselected: 'text-sky-400 opacity-40',
+    checkUnselected: 'text-neutral-400 opacity-35',
   },
   'Due Diligence': {
     selected: 'border-amber-300 bg-amber-50 text-amber-950',
-    unselected: 'border-amber-200 bg-white text-amber-900 hover:bg-amber-50/60',
+    unselected: 'border-black/10 bg-white text-neutral-800 hover:border-black/25 hover:bg-neutral-50',
     checkSelected: 'text-amber-700 opacity-100',
-    checkUnselected: 'text-amber-400 opacity-40',
+    checkUnselected: 'text-neutral-400 opacity-35',
   },
 };
 const fullServiceCheckOrder: PublicProjectArea[] = ['Growth', 'Optimization', 'Due Diligence'];
@@ -194,6 +199,117 @@ export default function LeadForm({
     setIsBudgetConfirmed(true);
     setIsBudgetSubmitting(false);
     setStatus('success');
+  }
+
+  if (status === 'success') {
+    return (
+      <section className="border border-black/10 bg-white p-6 md:p-7">
+        <div className="mb-6">
+          <h3 className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">{heading}</h3>
+        </div>
+
+        <div className="space-y-6">
+          <div className="border border-black/10 bg-neutral-50 px-4 py-4">
+            <p className="text-sm font-medium text-neutral-900">Submission received.</p>
+            <p className="mt-1 text-sm text-neutral-600">
+              We have your request and will review the information you submitted.
+            </p>
+          </div>
+
+          {submittedLeadId ? (
+            <div className="space-y-3 border-t border-black/10 pt-4">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">Budget</p>
+              {isBudgetConfirmed && selectedBudgetRange ? (
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-2 border border-black bg-black px-4 py-3 text-sm font-medium text-white">
+                    <Check className="h-4 w-4" />
+                    <span>{selectedBudgetRange}</span>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={() => setIsBudgetConfirmed(false)}
+                      className="text-sm font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4"
+                    >
+                      Edit budget
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-sm text-neutral-600">
+                    Add your budget to this submission.
+                  </p>
+                  {errorMessage ? (
+                    <p className="border border-red-400/30 bg-red-400/10 px-3 py-2 text-sm text-red-700">
+                      {errorMessage}
+                    </p>
+                  ) : null}
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {budgetOptions.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        onClick={() => void handleBudgetSelect(option)}
+                        disabled={isBudgetSubmitting}
+                        className={`flex items-center gap-3 border px-4 py-4 text-left text-sm transition-colors ${
+                          selectedBudgetRange === option
+                            ? 'border-black bg-black text-white'
+                            : 'border-black/10 bg-white text-neutral-800 hover:border-black/30'
+                        } disabled:cursor-not-allowed disabled:opacity-70`}
+                      >
+                        <Check className={`h-4 w-4 ${selectedBudgetRange === option ? 'opacity-100' : 'opacity-25'}`} />
+                        <span>{option}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          <div className="space-y-3 border-t border-black/10 pt-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">Book a Call</p>
+            <p className="text-sm text-neutral-600">
+              Want to move faster? Book a call as the next step.
+            </p>
+            <button
+              type="button"
+              onClick={openCalendly}
+              className="inline-flex items-center justify-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+            >
+              Book a call
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="space-y-3 border-t border-black/10 pt-4">
+            <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-500">Timeline</p>
+            <div className="space-y-2">
+              {submissionTimeline.map((item, index) => (
+                <div key={item} className="flex items-start gap-3 text-sm text-neutral-700">
+                  <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center border border-black/10 bg-neutral-50 text-[11px] font-medium text-neutral-600">
+                    {index + 1}
+                  </span>
+                  <span className="pt-1">{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3 border-t border-black/10 pt-4 md:flex-row md:items-center md:justify-between">
+            <p className="text-xs leading-5 text-neutral-500">{'This request has been submitted. Additional budget details can still be attached above.'}</p>
+            <button
+              type="button"
+              disabled
+              className="inline-flex items-center justify-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white opacity-80"
+            >
+              Request Submitted
+            </button>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -394,81 +510,9 @@ export default function LeadForm({
           />
         </label>
 
-        <FormStatus
-          status={status}
-          errorMessage={errorMessage}
-          successContent={
-            <>
-            <p className="text-sm text-emerald-700">
-              Inquiry received. We will follow up using the email you submitted.
-            </p>
-            {submittedLeadId ? (
-              <div className="space-y-3 border-t border-emerald-500/20 pt-3">
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-emerald-800/80">Budget</p>
-                {isBudgetConfirmed && selectedBudgetRange ? (
-                  <div className="space-y-2">
-                    <div className="inline-flex items-center gap-2 border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm font-medium text-emerald-800">
-                      <Check className="h-4 w-4" />
-                      <span>{selectedBudgetRange}</span>
-                    </div>
-                    <div>
-                      <button
-                        type="button"
-                        onClick={() => setIsBudgetConfirmed(false)}
-                        className="text-sm font-medium text-emerald-800 underline decoration-emerald-400 underline-offset-4"
-                      >
-                        Edit budget
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <p className="text-sm text-emerald-800/80">
-                      Add your budget to complete this submission.
-                    </p>
-                    {errorMessage ? (
-                      <p className="border border-red-400/30 bg-red-400/10 px-3 py-2 text-sm text-red-700">
-                        {errorMessage}
-                      </p>
-                    ) : null}
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {budgetOptions.map((option) => (
-                        <button
-                          key={option}
-                          type="button"
-                          onClick={() => void handleBudgetSelect(option)}
-                          disabled={isBudgetSubmitting}
-                          className={`flex items-center gap-3 border px-4 py-4 text-left text-sm transition-colors ${
-                            selectedBudgetRange === option || isBudgetConfirmed
-                              ? 'border-emerald-500 bg-emerald-500/10 text-emerald-800'
-                              : 'border-emerald-500/20 bg-white text-neutral-800 hover:border-emerald-500/40'
-                          } disabled:cursor-not-allowed disabled:opacity-70`}
-                        >
-                          <Check className={`h-4 w-4 ${selectedBudgetRange === option ? 'opacity-100 text-emerald-700' : 'opacity-25'}`} />
-                          <span>{option}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : null}
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs leading-5 text-emerald-800/80">
-                Want to move faster? Book a call as the next step.
-              </p>
-              <button
-                type="button"
-                onClick={openCalendly}
-                className="inline-flex items-center justify-center gap-2 border border-emerald-700 px-4 py-2 text-sm font-medium text-emerald-800 transition-colors hover:bg-emerald-700 hover:text-white"
-              >
-                Book a call
-                <ArrowRight className="h-4 w-4" />
-              </button>
-            </div>
-            </>
-          }
-        />
+        {status === 'error' ? (
+          <p className="border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{errorMessage}</p>
+        ) : null}
     </FormTemplate>
   );
 }
