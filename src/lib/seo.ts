@@ -1,4 +1,5 @@
 import { allCapabilities, getCapabilityBySlug } from '../content/capabilities';
+import { aiSolutions, getAiSolutionBySlug } from '../content/aiSolutions';
 import { explainerContent } from '../content/dataExplainers';
 import { expertisePages } from '../content/expertisePages';
 import { parseKitchenSolutionSlug } from '../content/kitchen';
@@ -51,6 +52,14 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'Consulting Services for SMBs',
       description:
         'B2W helps small and midsize businesses improve marketing, operations, and financial performance with practical AI systems, diagnostics, and implementation support.',
+    },
+  ],
+  [
+    '/solutions',
+    {
+      title: 'B2W AI Solutions',
+      description:
+        'Explore the AI side of B2W: chatbots, estimations, financial models, and voice-to-plan systems designed to show the product in action.',
     },
   ],
   [
@@ -344,16 +353,15 @@ function buildSolutionMetadata(pathname: string) {
   }
 
   const slug = pathname.replace('/solutions/', '');
-  const solution = parseKitchenSolutionSlug(slug);
+  const solution = getAiSolutionBySlug(slug);
 
   if (!solution) {
     return null;
   }
 
   return buildMetadata(pathname, {
-    title: `${solution.name} Solution Template`,
-    description: `Mock deliverable template for ${solution.name}, including editable model inputs, benchmark scorecards, and summary calculations across the selected Kitchen by B2W ingredient stack.`,
-    robots: PRIVATE_ROBOTS,
+    title: solution.seoTitle,
+    description: solution.seoDescription,
   });
 }
 
@@ -440,6 +448,7 @@ export function listStaticSeoRoutes() {
     ...Object.keys(expertisePages),
     ...Object.keys(explainerContent),
     ...allCapabilities.map((capability) => `/capabilities/${capability.slug}`),
+    ...aiSolutions.map((solution) => `/solutions/${solution.slug}`),
   ]);
 
   return Array.from(paths)

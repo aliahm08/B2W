@@ -186,3 +186,22 @@ html {
     transition: none;
   }
 }
+
+/* ─── Solutions Page ─── */
+
+.solutions-page {
+  --solutions-bg: #080a0f;
+}
+
+.solutions-scroll-section {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .solutions-scroll-section {
+    position: relative;
+  }
+}

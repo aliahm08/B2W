@@ -203,7 +203,7 @@ export default function LeadForm({
 
   if (status === 'success') {
     return (
-      <section className="border border-black/10 bg-white p-6 md:p-7">
+      <section className="border border-black/10 bg-white p-5 sm:p-6 md:p-7">
         <div className="mb-6">
           <h3 className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">{heading}</h3>
         </div>
@@ -273,13 +273,13 @@ export default function LeadForm({
             <p className="text-sm text-neutral-600">
               Want to move faster? Book a call as the next step.
             </p>
-            <button
-              type="button"
-              onClick={openCalendly}
-              className="inline-flex items-center justify-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
-            >
-              Book a call
-              <ArrowRight className="h-4 w-4" />
+                    <button
+                      type="button"
+                      onClick={openCalendly}
+                      className="inline-flex min-h-11 w-full items-center justify-center gap-2 border border-black px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white sm:w-auto"
+                    >
+                      Book a call
+                      <ArrowRight className="h-4 w-4" />
             </button>
           </div>
 
@@ -422,7 +422,7 @@ export default function LeadForm({
                             type="button"
                             aria-pressed={isSelected}
                             onClick={() => toggleProjectArea(area)}
-                            className={`flex w-full items-center gap-3 border px-4 py-4 text-left text-sm transition-all duration-200 ${
+                            className={`flex min-h-14 w-full items-center gap-3 border px-4 py-4 text-left text-sm transition-all duration-200 ${
                               isSelected ? styles.selected : styles.unselected
                             }`}
                           >
@@ -449,7 +449,7 @@ export default function LeadForm({
                 type="button"
                 aria-pressed={hasFullServiceSelection}
                 onClick={toggleFullServicePackage}
-                className={`flex w-full items-center gap-3 border px-4 text-left text-sm transition-all duration-300 ${
+                className={`flex min-h-14 w-full items-center gap-3 border px-4 text-left text-sm transition-all duration-300 ${
                   hasFullServiceSelection
                     ? 'border-black bg-black py-5 text-white shadow-[0_18px_40px_rgba(0,0,0,0.16)]'
                     : 'border-black/10 bg-white py-4 text-neutral-800'

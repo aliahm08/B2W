@@ -32,9 +32,15 @@ export function FormTemplate({
   isSubmitting = false,
 }: FormTemplateProps) {
   return (
-    <section className="border border-black/10 bg-white p-6 md:p-7">
+    <section className="border border-black/10 bg-white p-5 sm:p-6 md:p-7">
       <div className="mb-6">
-        <h3 className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">{title}</h3>
+        <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">{eyebrow}</p>
+        <h3 className="mt-3 max-w-2xl text-2xl font-medium tracking-tight text-neutral-950 sm:text-[1.9rem]">
+          {title}
+        </h3>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-neutral-600 sm:text-base sm:leading-7">
+          {intro}
+        </p>
       </div>
 
       <form onSubmit={onSubmit} className="space-y-4">
@@ -45,7 +51,7 @@ export function FormTemplate({
           <button
             type="submit"
             disabled={submitDisabled}
-            className="inline-flex items-center justify-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70 md:w-auto"
           >
             {isSubmitting ? submittingLabel : submitLabel}
           </button>

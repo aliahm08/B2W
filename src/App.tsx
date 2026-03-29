@@ -38,6 +38,7 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
 const KitchenPreviewPage = lazy(() => import('./pages/kitchen/KitchenPreviewPage'));
 const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitchenDemoPage'));
+const SolutionsLandingPage = lazy(() => import('./pages/solutions/SolutionsLandingPage'));
 const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTemplatePage'));
 const TierPage = lazy(() => import('./pages/TierPage'));
 
@@ -187,11 +188,13 @@ export default function App() {
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
   const isPrototypeHome = location.pathname === '/home-test-1';
+  const isAiSolutionsLanding = location.pathname.startsWith('/solutions');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model');
   const hasReturnParam = searchParams.has('return');
-  const isIsolatedView = isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome;
+  const isIsolatedView =
+    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAiSolutionsLanding;
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -242,6 +245,7 @@ export default function App() {
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
                 <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
+                <Route path="/solutions" element={<SolutionsLandingPage />} />
                 <Route path="/kitchen" element={<KitchenPage />} />
                 <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
                 <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />

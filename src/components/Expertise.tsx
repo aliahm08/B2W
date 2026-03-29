@@ -36,22 +36,24 @@ const expertiseCards: ExpertiseCard[] = [
 
 export default function Expertise() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-32">
+    <section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 sm:py-24 lg:py-32">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="mb-10"
+        className="mb-8 sm:mb-10"
       >
-        <h2 className="mb-4 text-4xl font-medium tracking-tight">Our Capabilities</h2>
-        <p className="mb-8 max-w-3xl text-base leading-relaxed text-neutral-600">
+        <h2 className="mb-4 max-w-[12ch] text-3xl font-medium tracking-tight text-neutral-950 sm:text-4xl">
+          Our Capabilities
+        </h2>
+        <p className="mb-7 max-w-3xl text-base leading-7 text-neutral-600 sm:mb-8 sm:text-lg sm:leading-8">
           We use marketing data, operational performance, and financials to understand how the business is actually performing, then frame the growth, optimization, and diligence work that matters most.
         </p>
         <div className="h-px w-full bg-neutral-200" />
       </motion.div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 md:grid-cols-3">
         {expertiseCards.map((card, index) => (
           <motion.div
             key={card.title}
@@ -62,16 +64,16 @@ export default function Expertise() {
             className={`group relative overflow-hidden border bg-white transition-all duration-300 hover:-translate-y-0.5 hover:border-black ${card.borderClassName}`}
           >
             <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.02),transparent_45%)] opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-            <div className="relative flex h-full flex-col p-6 md:p-8">
-              <p className={`mb-6 text-[11px] font-mono uppercase tracking-[0.28em] ${card.accentClassName}`}>
+            <div className="relative flex h-full flex-col p-5 sm:p-6 md:p-8">
+              <p className={`mb-5 text-[11px] font-mono uppercase tracking-[0.28em] ${card.accentClassName}`}>
                 {card.title}
               </p>
-              <p className="mb-8 flex-1 text-lg leading-relaxed text-neutral-700">
+              <p className="mb-7 flex-1 text-base leading-7 text-neutral-700 sm:text-lg sm:leading-8">
                 {card.description}
               </p>
               <Link
                 to={card.href}
-                className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 transition-colors hover:text-black"
+                className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-neutral-900 transition-colors hover:text-black"
               >
                 View options
                 <ArrowUpRight className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -86,12 +88,12 @@ export default function Expertise() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4, delay: 0.2 }}
-        className="mt-12 flex flex-col gap-2 border-t border-neutral-200 pt-8 sm:flex-row sm:items-center sm:justify-between"
+        className="mt-10 flex flex-col gap-3 border-t border-neutral-200 pt-7 sm:mt-12 sm:flex-row sm:items-center sm:justify-between sm:pt-8"
       >
         <p className="text-base text-neutral-600">Need customized expertise?</p>
         <Link
           to="/?project-builder=open"
-          className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black"
+          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black"
         >
           Get a project estimate today.
           <ArrowUpRight className="h-4 w-4" />

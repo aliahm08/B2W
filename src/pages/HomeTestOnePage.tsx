@@ -32,7 +32,7 @@ const pathways = [
   },
   {
     title: 'AI Solutions',
-    href: '/capabilities',
+    href: '/solutions',
   },
 ];
 

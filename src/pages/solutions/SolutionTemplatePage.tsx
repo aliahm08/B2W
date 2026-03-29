@@ -1,413 +1,236 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { ArrowLeft, Calculator, CheckCircle2, ExternalLink, Send, SlidersHorizontal } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
+import AiDemoPanel from '../../components/solutions/AiDemoPanel';
+import { aiSolutions, getAiSolutionBySlug } from '../../content/aiSolutions';
 import Seo from '../../components/Seo';
-import { parseKitchenSolutionSlug } from '../../content/kitchen';
-import {
-  buildSolutionTemplateData,
-  formatCurrency,
-  formatPercent,
-  getDefaultSolutionInputs,
-  getInitialInputValues,
-  type SolutionInput,
-} from '../../content/solutionTemplates';
-import { getSourceMetadata, openCalendly, submitInternalForm } from '../../lib/engagement';
-
-function formatInputValue(input: SolutionInput, value: number) {
-  if (input.unit === 'currency') {
-    return formatCurrency(value);
-  }
-
-  if (input.unit === 'percent') {
-    return formatPercent(value);
-  }
-
-  return value.toLocaleString();
-}
-
-const defaultLeadState = {
-  name: '',
-  email: '',
-  company: '',
-  notes: '',
-  websiteUrl: '',
-};
 
 export default function SolutionTemplatePage() {
   const { slug } = useParams();
-  const solution = slug ? parseKitchenSolutionSlug(slug) : null;
+  const solution = slug ? getAiSolutionBySlug(slug) : null;
 
-  const defaultInputs = useMemo(() => (solution ? getDefaultSolutionInputs(solution) : null), [solution]);
-  const baseInputs = useMemo(() => (defaultInputs ? getInitialInputValues(defaultInputs) : null), [defaultInputs]);
-  const [values, setValues] = useState(baseInputs);
-  const [leadState, setLeadState] = useState(defaultLeadState);
-  const [leadStatus, setLeadStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useEffect(() => {
-    setValues(baseInputs);
-  }, [baseInputs]);
-
-  if (!solution || !values) {
+  if (!solution) {
     return (
-      <section className="mx-auto max-w-7xl px-6 py-32">
-        <div className="border border-neutral-200 bg-white p-8">
-          <Link to="/kitchen" className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black">
-            <ArrowLeft className="h-4 w-4" />
-            Back to project builder
-          </Link>
-          <h1 className="mt-8 text-4xl font-medium tracking-tight text-neutral-950">Solution template not found</h1>
-        </div>
-      </section>
+      <>
+        <Seo title="AI Solution Not Found" canonicalPath="/solutions" robots="noindex, nofollow" />
+        <article className="min-h-screen bg-[#090b0f] px-6 py-24 text-white">
+          <div className="mx-auto max-w-5xl rounded-[32px] border border-white/10 bg-[#11151b] p-8">
+            <Link to="/solutions" className="inline-flex items-center gap-2 text-sm text-neutral-300 hover:text-white">
+              <ArrowLeft className="h-4 w-4" />
+              Back to AI solutions
+            </Link>
+            <h1 className="mt-8 text-4xl font-medium tracking-tight text-white">Solution not found</h1>
+          </div>
+        </article>
+      </>
     );
   }
 
-  const template = buildSolutionTemplateData(solution, values);
-
-  async function handleAcceptPreview(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    setLeadStatus('submitting');
-    setErrorMessage('');
-
-    const result = await submitInternalForm('/api/contact-lead', {
-      name: leadState.name.trim(),
-      email: leadState.email.trim(),
-      company: leadState.company.trim(),
-      phone: '',
-      website: '',
-      arrRange: solution.roughEstimate,
-      projectAreas: solution.projectAreas,
-      inquiryType: solution.inquiryType,
-      normalizedProjectArea: solution.projectAreas[0] ?? solution.inquiryType,
-      message: [
-        `Accepted preview for ${solution.name}.`,
-        `Estimate: ${solution.roughEstimate}.`,
-        `Information: ${solution.information.map((item) => item.title).join(', ')}.`,
-        `Integration: ${solution.integration.map((item) => item.title).join(', ')}.`,
-        `Production: ${solution.production.map((item) => item.title).join(', ')}.`,
-        leadState.notes.trim() ? `Notes: ${leadState.notes.trim()}` : '',
-      ]
-        .filter(Boolean)
-        .join(' '),
-      websiteUrl: leadState.websiteUrl.trim(),
-      ...getSourceMetadata({
-        formType: 'solution_acceptance',
-        actionType: 'solution_acceptance',
-        sourcePage: `Solution acceptance: ${solution.name}`,
-      }),
-    });
-
-    if (!result.ok) {
-      setLeadStatus('error');
-      setErrorMessage(result.error ?? 'Unable to submit your request right now.');
-      return;
-    }
-
-    setLeadStatus('success');
-    setLeadState(defaultLeadState);
-  }
+  const relatedSolutions = aiSolutions.filter((item) => solution.related.includes(item.slug));
 
   return (
     <>
-      <Seo />
-      <section className="mx-auto max-w-7xl px-6 py-32">
-        <div className="border-b border-neutral-200 pb-10 md:pb-12">
-          <Link to="/kitchen" className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black">
-            <ArrowLeft className="h-4 w-4" />
-            Back to project builder
-          </Link>
+      <Seo
+        title={solution.seoTitle}
+        description={solution.seoDescription}
+        canonicalPath={`/solutions/${solution.slug}`}
+      />
 
-          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
+        <article className="min-h-screen bg-[#090b0f] text-white">
+        <header className="border-b border-white/8">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
             <div>
-              <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">Project Preview</p>
-              <h1 className="mt-5 max-w-4xl text-5xl font-medium tracking-tight text-neutral-950 md:text-7xl leading-[0.95]">
-                {solution.name}
+              <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">B2W</p>
+              <p className="mt-1 text-sm font-medium text-white">AI Solutions</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <Link
+                to="/solutions"
+                className="inline-flex rounded-full border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] px-4 py-2 text-sm text-neutral-300 transition-colors hover:border-white/25 hover:text-white"
+              >
+                All AI pages
+              </Link>
+              <Link
+                to="/#contact"
+                className="inline-flex rounded-full bg-[linear-gradient(135deg,#ffffff_0%,#dfe8ff_100%)] px-4 py-2 text-sm font-medium text-black transition-opacity hover:opacity-90"
+              >
+                Talk to B2W
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        <section className="relative mx-auto max-w-7xl px-6 pb-14 pt-16 md:pb-18 md:pt-20">
+          <motion.div
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 right-0 top-20 mx-auto h-72 max-w-5xl rounded-full bg-[radial-gradient(circle,rgba(88,120,255,0.16),transparent_65%)] blur-3xl"
+            animate={{ opacity: [0.35, 0.7, 0.35], scale: [0.96, 1.04, 0.96] }}
+            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+          <div className="flex flex-wrap gap-3">
+            {aiSolutions.map((item) => (
+              <Link
+                key={item.slug}
+                to={`/solutions/${item.slug}`}
+                className={`rounded-full px-4 py-2 text-sm transition-colors ${
+                  item.slug === solution.slug
+                    ? 'bg-[linear-gradient(135deg,#ffffff_0%,#dfe8ff_100%)] text-black'
+                    : 'border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01))] text-neutral-300 hover:border-white/25 hover:text-white'
+                }`}
+              >
+                {item.navLabel}
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-10 grid gap-10 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] xl:items-start">
+            <div>
+              <Link
+                to="/solutions"
+                className="inline-flex items-center gap-2 text-sm text-neutral-300 transition-colors hover:text-white"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to AI solutions
+              </Link>
+              <p className="mt-8 text-xs uppercase tracking-[0.28em] text-neutral-500">{solution.eyebrow}</p>
+              <h1 className="mt-5 max-w-4xl text-5xl font-medium tracking-[-0.06em] text-white md:text-7xl md:leading-[0.92]">
+                {solution.title}
               </h1>
-              <p className="mt-6 max-w-3xl text-xl leading-relaxed text-neutral-600 md:text-2xl">
-                {template.profile.summary}
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-neutral-300 md:text-2xl md:leading-10">
+                {solution.description}
               </p>
+              <div className="mt-10 grid gap-4 sm:grid-cols-3">
+                {solution.stats.map((stat) => (
+                  <div key={stat.label} className="rounded-[999px] border border-white/10 bg-[linear-gradient(135deg,#141a24_0%,#10151d_100%)] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">{stat.label}</p>
+                    <p className="mt-3 text-xl font-medium tracking-tight text-white">{stat.value}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <aside className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-7">
-              <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">Preview Summary</p>
-              <div className="mt-5 space-y-3 text-sm leading-6 text-neutral-300">
-                <p><span className="text-neutral-500">Business</span> {template.profile.businessName}</p>
-                <p><span className="text-neutral-500">Sector</span> {template.profile.sector}</p>
-                <p><span className="text-neutral-500">Region</span> {template.profile.geography}</p>
-                <p><span className="text-neutral-500">Estimate</span> {solution.roughEstimate}</p>
-              </div>
-              <p className="mt-6 text-sm leading-6 text-neutral-300">{template.profile.marketContext}</p>
-              <button
-                type="button"
-                onClick={openCalendly}
-                className="mt-6 inline-flex items-center gap-2 border border-white bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
-              >
-                Schedule a call
-                <ExternalLink className="h-4 w-4" />
-              </button>
-            </aside>
+            <div className="relative rounded-[44px] border border-white/10 bg-[linear-gradient(180deg,#141923_0%,#0d1117_100%)] p-4 shadow-[0_32px_120px_rgba(0,0,0,0.38)]">
+              <motion.div
+                aria-hidden="true"
+                className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent"
+                animate={{ opacity: [0.2, 0.9, 0.2], x: ['-8%', '8%', '-8%'] }}
+                transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut' }}
+              />
+              <AiDemoPanel mode={solution.slug} />
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="grid gap-10 pt-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:items-start">
-          <div className="space-y-8">
-            <section className="border border-neutral-200 bg-white p-6 md:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <SlidersHorizontal className="h-5 w-5 text-neutral-500" />
-                <div>
-                  <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Interactive Inputs</p>
-                  <h2 className="mt-2 text-2xl font-medium tracking-tight text-neutral-950">Adjust the mock model</h2>
-                </div>
+        <section className="border-t border-white/8 bg-[#0d1116]">
+          <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">What It Produces</p>
+                <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] text-white md:text-5xl">
+                  Outputs designed for action.
+                </h2>
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-neutral-300">
+                  The point of this system is not just analysis or interface. It is a usable output that the next person
+                  in the workflow can immediately operate from.
+                </p>
               </div>
-
-              <div className="grid gap-6 md:grid-cols-2">
-                {template.inputs.map((input) => (
-                  <div key={input.key} className="space-y-3 border border-neutral-200 bg-neutral-50 p-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-sm font-medium text-neutral-900">{input.label}</p>
-                        <p className="mt-1 text-xs leading-5 text-neutral-500">{input.help}</p>
-                      </div>
-                      <span className="text-sm font-medium text-neutral-900">{formatInputValue(input, values[input.key])}</span>
-                    </div>
-                    <input
-                      type="range"
-                      min={input.min}
-                      max={input.max}
-                      step={input.step}
-                      value={values[input.key]}
-                      onChange={(event) =>
-                        setValues((current) =>
-                          current
-                            ? {
-                                ...current,
-                                [input.key]: Number(event.target.value),
-                              }
-                            : current,
-                        )
-                      }
-                      className="w-full"
-                    />
-                    <input
-                      type="number"
-                      min={input.min}
-                      max={input.max}
-                      step={input.step}
-                      value={values[input.key]}
-                      onChange={(event) =>
-                        setValues((current) =>
-                          current
-                            ? {
-                                ...current,
-                                [input.key]: Number(event.target.value),
-                              }
-                            : current,
-                        )
-                      }
-                      className="w-full border border-black/10 px-3 py-2 text-sm text-black outline-none transition-colors focus:border-black"
-                    />
-                  </div>
+              <div className="grid gap-4">
+                {solution.outputs.map((output) => (
+                  <motion.div
+                    key={output}
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.16 }}
+                  className="rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,#141a24_0%,#10151d_100%)] p-5"
+                >
+                  <p className="text-sm leading-7 text-neutral-200">{output}</p>
+                </motion.div>
                 ))}
               </div>
-            </section>
+            </div>
+          </div>
+        </section>
 
-            <section className="border border-neutral-200 bg-white p-6 md:p-8">
-              <div className="mb-6 flex items-center gap-3">
-                <Calculator className="h-5 w-5 text-neutral-500" />
-                <div>
-                  <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Calculated Summary</p>
-                  <h2 className="mt-2 text-2xl font-medium tracking-tight text-neutral-950">Modeled outputs</h2>
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {[
-                  ['Annual Revenue', formatCurrency(template.derived.annualRevenue)],
-                  ['Operating Income', formatCurrency(template.derived.operatingIncome)],
-                  ['Implied Multiple', `${template.derived.impliedMultiple.toFixed(2)}x`],
-                  ['Enterprise Value', formatCurrency(template.derived.enterpriseValue)],
-                  ['Revenue per Visitor', formatCurrency(template.derived.revenuePerVisitor)],
-                  ['Repeat Revenue', formatCurrency(template.derived.repeatRevenueShare)],
-                ].map(([label, value]) => (
-                  <div key={label} className="border border-neutral-200 bg-neutral-50 p-4">
-                    <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">{label}</p>
-                    <p className="mt-3 text-2xl font-medium tracking-tight text-neutral-950">{value}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="space-y-6">
-              {template.deliverableSections.map((section) => (
-                <div key={section.title} className="border border-neutral-200 bg-white p-6 md:p-8">
-                  <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Deliverable View</p>
-                  <h2 className="mt-3 text-2xl font-medium tracking-tight text-neutral-950">{section.title}</h2>
-                  <p className="mt-4 text-base leading-7 text-neutral-700">{section.body}</p>
-                  <ul className="mt-5 space-y-3">
-                    {section.bullets.map((item) => (
-                      <li key={item} className="flex items-start gap-3 text-sm leading-6 text-neutral-600">
-                        <span className="mt-2 h-2 w-2 shrink-0 bg-black" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+        <section className="border-t border-white/8">
+          <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
+            <div className="max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Workflow</p>
+              <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] text-white md:text-5xl">
+                How this part of the AI stack works.
+              </h2>
+            </div>
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {solution.workflow.map((step, index) => (
+                <motion.div
+                  key={step.title}
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.18 }}
+                  className="rounded-[40px] border border-white/10 bg-[linear-gradient(135deg,#141a24_0%,#10151d_100%)] p-6"
+                >
+                  <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">0{index + 1}</p>
+                  <h3 className="mt-4 text-2xl font-medium tracking-tight text-white">{step.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-neutral-300">{step.body}</p>
+                </motion.div>
               ))}
-            </section>
+            </div>
           </div>
+        </section>
 
-          <aside className="space-y-6 lg:sticky lg:top-28">
-            <section className="border border-neutral-200 bg-white p-6 md:p-7">
-              <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Benchmark Scorecards</p>
-              <div className="mt-5 space-y-4">
-                {template.scorecards.map((card) => (
-                  <div key={card.id} className="border border-neutral-200 bg-neutral-50 p-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-base font-medium text-neutral-950">{card.label}</h3>
-                      <span className="text-lg font-medium text-neutral-950">{card.score}/100</span>
-                    </div>
-                    <p className="mt-2 text-xs font-mono uppercase tracking-[0.18em] text-neutral-500">{card.benchmarkLabel}</p>
-                    <p className="mt-3 text-sm leading-6 text-neutral-600">{card.summary}</p>
-                  </div>
-                ))}
+        <section className="border-t border-white/8 bg-[#0d1116]">
+          <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
+            <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              <div>
+                <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Integrations</p>
+                <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] text-white md:text-5xl">
+                  Built to work through the systems already in place.
+                </h2>
               </div>
-            </section>
-
-            <section className="border border-neutral-200 bg-white p-6 md:p-7">
-              <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Ingredient Stack</p>
-              <div className="mt-5 space-y-4">
-                {[
-                  ['Information', solution.information],
-                  ['Integration', solution.integration],
-                  ['Production', solution.production],
-                ].map(([label, items]) => (
-                  <div key={label}>
-                    <p className="text-sm font-medium text-neutral-900">{label}</p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {(items as typeof solution.information).map((item) => (
-                        <span key={item.id} className="border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs font-mono uppercase tracking-[0.18em] text-neutral-700">
-                          {item.shortTitle}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="border border-black bg-[#f8f4ec] p-6 md:p-7">
-              <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Accept This Preview</p>
-              <h2 className="mt-3 text-2xl font-medium tracking-tight text-neutral-950">Send this project to B2W.</h2>
-              <p className="mt-3 text-sm leading-6 text-neutral-600">
-                Preview stays open. If this is close to what you want, submit your information here and we will follow up with a tailored proposal.
-              </p>
-
-              {leadStatus === 'success' ? (
-                <div className="mt-6 border border-emerald-500/30 bg-emerald-500/10 p-4">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-700" />
-                    <div>
-                      <p className="text-sm font-medium text-emerald-900">Your request has been submitted.</p>
-                      <p className="mt-2 text-sm leading-6 text-emerald-800">
-                        B2W now has your selected project stack and the preview context.
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={openCalendly}
-                    className="mt-4 inline-flex items-center gap-2 border border-black bg-black px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
-                  >
-                    Schedule a call
-                    <ExternalLink className="h-4 w-4" />
-                  </button>
+              <div className="rounded-[44px] border border-white/10 bg-[linear-gradient(180deg,#141a24_0%,#10151d_100%)] p-6">
+                <div className="flex flex-wrap gap-3">
+                  {solution.integrations.map((integration) => (
+                    <span
+                      key={integration}
+                      className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.16em] text-neutral-300"
+                    >
+                      {integration}
+                    </span>
+                  ))}
                 </div>
-              ) : (
-                <form onSubmit={handleAcceptPreview} className="mt-6 space-y-4">
-                  <div className="grid gap-4">
-                    <label className="block">
-                      <span className="mb-2 block text-sm font-medium text-neutral-800">Name</span>
-                      <input
-                        type="text"
-                        value={leadState.name}
-                        onChange={(event) => setLeadState((current) => ({ ...current, name: event.target.value }))}
-                        required
-                        autoComplete="name"
-                        className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-                        placeholder="Your name"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="mb-2 block text-sm font-medium text-neutral-800">Work email</span>
-                      <input
-                        type="email"
-                        value={leadState.email}
-                        onChange={(event) => setLeadState((current) => ({ ...current, email: event.target.value }))}
-                        required
-                        autoComplete="email"
-                        className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-                        placeholder="name@business.com"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="mb-2 block text-sm font-medium text-neutral-800">Business</span>
-                      <input
-                        type="text"
-                        value={leadState.company}
-                        onChange={(event) => setLeadState((current) => ({ ...current, company: event.target.value }))}
-                        required
-                        autoComplete="organization"
-                        className="w-full border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-                        placeholder="Business name"
-                      />
-                    </label>
-                    <label className="block">
-                      <span className="mb-2 block text-sm font-medium text-neutral-800">Context</span>
-                      <textarea
-                        value={leadState.notes}
-                        onChange={(event) => setLeadState((current) => ({ ...current, notes: event.target.value }))}
-                        rows={4}
-                        className="w-full resize-y border border-black/10 bg-white px-4 py-3 text-sm text-black outline-none transition-colors focus:border-black"
-                        placeholder="What is the decision, timeline, or outcome you want this project to support?"
-                      />
-                    </label>
-                  </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                  <label className="hidden">
-                    <span className="mb-2 block text-sm font-medium text-neutral-800">Leave this field empty</span>
-                    <input
-                      type="text"
-                      value={leadState.websiteUrl}
-                      onChange={(event) => setLeadState((current) => ({ ...current, websiteUrl: event.target.value }))}
-                      tabIndex={-1}
-                      autoComplete="off"
-                      className="w-full border border-black/10 px-4 py-3 text-sm text-black outline-none"
-                    />
-                  </label>
-
-                  {leadStatus === 'error' ? (
-                    <p className="border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-700">{errorMessage}</p>
-                  ) : null}
-
-                  <button
-                    type="submit"
-                    disabled={leadStatus === 'submitting'}
-                    className="inline-flex w-full items-center justify-center gap-2 border border-black bg-black px-5 py-4 text-sm font-medium text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
+        <section className="border-t border-white/8">
+          <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
+            <div className="flex items-end justify-between gap-6">
+              <div className="max-w-3xl">
+                <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Related Pages</p>
+                <h2 className="mt-4 text-4xl font-medium tracking-[-0.05em] text-white md:text-5xl">
+                  Explore the rest of the AI side.
+                </h2>
+              </div>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {relatedSolutions.map((item) => (
+                <motion.div key={item.slug} whileHover={{ y: -6 }} transition={{ duration: 0.18 }}>
+                  <Link
+                    to={`/solutions/${item.slug}`}
+                    className="group block rounded-[40px] border border-white/10 bg-[linear-gradient(135deg,#141a24_0%,#10151d_100%)] p-6 transition-colors hover:border-white/24"
                   >
-                    {leadStatus === 'submitting' ? 'Submitting...' : 'Accept preview and send inquiry'}
-                    <Send className="h-4 w-4" />
-                  </button>
-                </form>
-              )}
-            </section>
-          </aside>
-        </div>
-      </section>
+                    <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{item.navLabel}</p>
+                    <p className="mt-4 text-2xl font-medium tracking-tight text-white">{item.title}</p>
+                    <p className="mt-4 text-sm leading-7 text-neutral-300">{item.summary}</p>
+                    <div className="mt-6 flex items-center gap-2 text-sm font-medium text-white">
+                      Open subpage
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </article>
     </>
   );
 }
