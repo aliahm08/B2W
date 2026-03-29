@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Check, ChevronDown } from 'lucide-react';
+import { motion } from 'motion/react';
 import Seo from '../../components/Seo';
 import { explainerContent } from '../../content/dataExplainers';
 
@@ -24,7 +25,12 @@ export default function DataExplainerPage() {
     <>
       <Seo />
       <section className="mx-auto max-w-7xl px-6 py-32">
-        <div className="mb-12 border-b border-neutral-200 pb-10 md:pb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-12 border-b border-neutral-200 pb-10 md:pb-12"
+        >
           <Link
             to="/#capabilities"
             className="inline-flex items-center gap-2 text-sm font-medium text-neutral-500 transition-colors hover:text-black"
@@ -50,9 +56,14 @@ export default function DataExplainerPage() {
               <p className="text-sm leading-6 text-neutral-300">{content.description}</p>
             </aside>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          className="grid gap-8 md:grid-cols-2"
+        >
           <div className="border border-neutral-200 bg-white p-6 md:p-7">
             <h2 className="mb-4 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-400">Example Inputs</h2>
             <ul className="space-y-3">
@@ -93,9 +104,14 @@ export default function DataExplainerPage() {
               ))}
             </ul>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="mt-12 border-t border-neutral-200 pt-8">
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-12 border-t border-neutral-200 pt-8"
+        >
           <div className="flex flex-col gap-5 border border-neutral-900 bg-neutral-950 p-6 text-white md:flex-row md:items-center md:justify-between md:p-8">
             <div className="max-w-2xl">
               <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">Next Step</p>
@@ -122,7 +138,7 @@ export default function DataExplainerPage() {
               </a>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
     </>
   );

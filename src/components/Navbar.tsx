@@ -12,6 +12,7 @@ import { capabilityLanes } from '../content/capabilities';
 type NavItem = {
   label: string;
   to: string;
+  children?: NavItem[];
 };
 
 type SearchEntry = {
@@ -56,6 +57,7 @@ function parseTarget(target: string) {
 type NavbarProps = {
   basePath?: string;
   showOfferBanner?: boolean;
+  transparentAtTop?: boolean;
   onOfferClick?: () => void;
   onOfferClose?: () => void;
 };
@@ -63,6 +65,7 @@ type NavbarProps = {
 export default function Navbar({
   basePath = '/',
   showOfferBanner = false,
+  transparentAtTop = false,
   onOfferClick,
   onOfferClose,
 }: NavbarProps) {
@@ -75,10 +78,28 @@ export default function Navbar({
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
   const isHeaderDark = isSearchOpen || isOpen;
+  const isTransparent = transparentAtTop && !isScrolled && !isHeaderDark;
   const navItems = useMemo(() => buildNavItems(basePath), [basePath]);
   const featuredNavItems = navItems.slice(0, 3);
   const aboutNavItem = navItems[3];
+
+  useEffect(() => {
+    if (!transparentAtTop) {
+      setIsScrolled(false);
+      return;
+    }
+
+    const updateScrolled = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    updateScrolled();
+    window.addEventListener('scroll', updateScrolled, { passive: true });
+
+    return () => window.removeEventListener('scroll', updateScrolled);
+  }, [transparentAtTop]);
 
   useEffect(() => {
     if (location.pathname !== basePath) {
@@ -122,10 +143,10 @@ export default function Navbar({
         return true;
       }
 
-      return item.children.some((child) => {
+      return item.children?.some((child) => {
         const childTarget = parseTarget(child.to);
         return location.pathname === childTarget.pathname && (!childTarget.hash || location.hash === childTarget.hash);
-      });
+      }) ?? false;
     });
 
     return matchingParent?.to ?? '';
@@ -327,7 +348,11 @@ export default function Navbar({
     <nav
       ref={navRef}
       className={`fixed left-0 right-0 top-0 z-50 overflow-visible border-b transition-colors duration-150 ${
-        isHeaderDark ? 'border-neutral-800 bg-neutral-950' : 'border-neutral-100 bg-white'
+        isHeaderDark
+          ? 'border-neutral-800 bg-neutral-950'
+          : isTransparent
+            ? 'border-transparent bg-transparent'
+            : 'border-neutral-100 bg-white'
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">

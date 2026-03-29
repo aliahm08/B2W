@@ -1,176 +1,106 @@
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react';
-import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type PointerEvent } from 'react';
 
 type HeroAnimationProps = {
   theme?: 'light' | 'dark';
   className?: string;
 };
 
-type AccentTone = 'emerald' | 'sky' | 'amber';
-
-type StreamRowProps = {
-  label: string;
-  tone: AccentTone;
-  active: boolean;
-  compact?: boolean;
-  children: ReactNode;
-  rowClassName: string;
-  absolute?: boolean;
+type SignalPoint = {
+  x: number;
+  y: number;
+  tone: 'teal' | 'sky' | 'amber' | 'ink';
+  size: number;
+  delay: number;
 };
 
-const toneClasses: Record<AccentTone, { chip: string; dot: string; line: string }> = {
-  emerald: {
-    chip: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-    dot: 'bg-emerald-500',
-    line: 'bg-emerald-200/80',
-  },
-  sky: {
-    chip: 'border-sky-200 bg-sky-50 text-sky-800',
-    dot: 'bg-sky-500',
-    line: 'bg-sky-200/80',
-  },
-  amber: {
-    chip: 'border-amber-200 bg-amber-50 text-amber-900',
-    dot: 'bg-amber-500',
-    line: 'bg-amber-200/80',
-  },
+type SignalPath = {
+  id: string;
+  d: string;
+  tone: 'teal' | 'sky' | 'amber' | 'ink';
+  duration: number;
+  delay: number;
 };
 
-const marketingNodes = [
-  { top: '10%', left: '10%', size: '0.45rem', delay: 0 },
-  { top: '28%', left: '24%', size: '0.34rem', delay: 0.08 },
-  { top: '42%', left: '36%', size: '0.52rem', delay: 0.18 },
-  { top: '18%', left: '52%', size: '0.3rem', delay: 0.26 },
-  { top: '36%', left: '64%', size: '0.44rem', delay: 0.34 },
+const signalPoints: SignalPoint[] = [
+  { x: 82, y: 118, tone: 'teal', size: 2.5, delay: 0.1 },
+  { x: 168, y: 154, tone: 'ink', size: 1.5, delay: 0.34 },
+  { x: 258, y: 108, tone: 'sky', size: 1.75, delay: 0.52 },
+  { x: 354, y: 162, tone: 'teal', size: 2.75, delay: 0.76 },
+  { x: 452, y: 112, tone: 'amber', size: 1.75, delay: 0.94 },
+  { x: 556, y: 152, tone: 'ink', size: 1.5, delay: 1.2 },
+  { x: 112, y: 252, tone: 'sky', size: 2.25, delay: 0.28 },
+  { x: 218, y: 232, tone: 'teal', size: 1.875, delay: 0.88 },
+  { x: 330, y: 254, tone: 'ink', size: 1.5, delay: 1.08 },
+  { x: 426, y: 238, tone: 'teal', size: 3, delay: 1.44 },
+  { x: 536, y: 262, tone: 'sky', size: 1.875, delay: 1.74 },
+  { x: 620, y: 224, tone: 'amber', size: 1.5, delay: 1.92 },
+  { x: 96, y: 372, tone: 'amber', size: 2.125, delay: 0.42 },
+  { x: 188, y: 338, tone: 'ink', size: 1.5, delay: 1.02 },
+  { x: 286, y: 388, tone: 'teal', size: 2.5, delay: 1.28 },
+  { x: 390, y: 346, tone: 'sky', size: 1.875, delay: 1.56 },
+  { x: 494, y: 396, tone: 'teal', size: 2.75, delay: 1.86 },
+  { x: 604, y: 352, tone: 'amber', size: 1.75, delay: 2.08 },
 ];
 
-const operationsBlocks = [
-  { left: '12%', top: '22%', width: '1.45rem', height: '0.52rem', delay: 0 },
-  { left: '28%', top: '22%', width: '1.05rem', height: '0.52rem', delay: 0.08 },
-  { left: '12%', top: '40%', width: '0.92rem', height: '0.52rem', delay: 0.16 },
-  { left: '26%', top: '40%', width: '1.62rem', height: '0.52rem', delay: 0.24 },
+const signalPaths: SignalPath[] = [
+  { id: 'a', d: 'M 82 118 C 132 118, 146 146, 168 154', tone: 'teal', duration: 6.1, delay: 0.2 },
+  { id: 'b', d: 'M 168 154 C 208 164, 226 116, 258 108', tone: 'ink', duration: 6.5, delay: 1.1 },
+  { id: 'c', d: 'M 258 108 C 292 104, 320 144, 354 162', tone: 'sky', duration: 5.9, delay: 0.9 },
+  { id: 'd', d: 'M 354 162 C 390 178, 416 122, 452 112', tone: 'teal', duration: 6.3, delay: 1.5 },
+  { id: 'e', d: 'M 452 112 C 500 96, 522 138, 556 152', tone: 'amber', duration: 6.8, delay: 2 },
+  { id: 'f', d: 'M 112 252 C 158 238, 188 224, 218 232', tone: 'sky', duration: 6.2, delay: 0.6 },
+  { id: 'g', d: 'M 218 232 C 260 246, 292 248, 330 254', tone: 'teal', duration: 5.8, delay: 1.4 },
+  { id: 'h', d: 'M 330 254 C 366 262, 394 242, 426 238', tone: 'ink', duration: 6.7, delay: 2.1 },
+  { id: 'i', d: 'M 426 238 C 472 226, 500 270, 536 262', tone: 'teal', duration: 6.1, delay: 0.8 },
+  { id: 'j', d: 'M 536 262 C 572 270, 590 238, 620 224', tone: 'sky', duration: 6.4, delay: 1.8 },
+  { id: 'k', d: 'M 96 372 C 142 348, 160 334, 188 338', tone: 'amber', duration: 6.6, delay: 0.4 },
+  { id: 'l', d: 'M 188 338 C 234 334, 250 376, 286 388', tone: 'ink', duration: 5.7, delay: 1.2 },
+  { id: 'm', d: 'M 286 388 C 336 402, 354 356, 390 346', tone: 'teal', duration: 6, delay: 1.7 },
+  { id: 'n', d: 'M 390 346 C 436 330, 462 386, 494 396', tone: 'sky', duration: 6.3, delay: 2.2 },
+  { id: 'o', d: 'M 494 396 C 540 410, 562 368, 604 352', tone: 'amber', duration: 6.9, delay: 1 },
+  { id: 'p', d: 'M 168 154 C 182 208, 176 284, 188 338', tone: 'ink', duration: 7.2, delay: 2.4 },
+  { id: 'q', d: 'M 354 162 C 346 212, 342 220, 330 254', tone: 'teal', duration: 5.6, delay: 0.3 },
+  { id: 'r', d: 'M 452 112 C 446 176, 438 212, 426 238', tone: 'amber', duration: 7, delay: 1.3 },
+  { id: 's', d: 'M 426 238 C 418 292, 406 318, 390 346', tone: 'teal', duration: 6.4, delay: 2.5 },
+  { id: 't', d: 'M 258 108 C 248 184, 234 208, 218 232', tone: 'sky', duration: 6.8, delay: 0.7 },
 ];
 
-const financialBars = [
-  { height: '2.3rem', delay: 0 },
-  { height: '3.4rem', delay: 0.08 },
-  { height: '2.1rem', delay: 0.16 },
-  { height: '4rem', delay: 0.24 },
+const haloOrbs = [
+  { size: 150, top: '4%', left: '10%', color: 'rgba(21, 140, 140, 0.12)' },
+  { size: 170, top: '58%', left: '58%', color: 'rgba(97, 113, 129, 0.09)' },
+  { size: 120, top: '18%', left: '76%', color: 'rgba(201, 163, 92, 0.1)' },
 ];
 
-function StreamRow({ label, tone, active, compact = false, children, rowClassName, absolute = true }: StreamRowProps) {
-  const toneStyle = toneClasses[tone];
-  const xMotion = compact ? [0, 8, 14, 8, 0] : [0, 12, 24, 14, 0];
-  const opacityMotion = compact ? [0.72, 0.9, 1, 0.94, 0.72] : [0.68, 0.92, 1, 0.94, 0.68];
+const ambientBands = [
+  { top: '18%', left: '10%', width: '44%', rotate: '-7deg', color: 'rgba(21, 140, 140, 0.08)' },
+  { top: '46%', left: '28%', width: '34%', rotate: '12deg', color: 'rgba(109, 149, 196, 0.08)' },
+  { top: '70%', left: '42%', width: '30%', rotate: '-10deg', color: 'rgba(201, 163, 92, 0.08)' },
+];
+
+const toneStyles = {
+  teal: { fill: '#158c8c', glow: 'rgba(21, 140, 140, 0.24)', stroke: 'rgba(21, 140, 140, 0.26)' },
+  sky: { fill: '#6d95c4', glow: 'rgba(109, 149, 196, 0.2)', stroke: 'rgba(109, 149, 196, 0.22)' },
+  amber: { fill: '#c9a35c', glow: 'rgba(201, 163, 92, 0.2)', stroke: 'rgba(201, 163, 92, 0.22)' },
+  ink: { fill: '#617181', glow: 'rgba(97, 113, 129, 0.18)', stroke: 'rgba(97, 113, 129, 0.2)' },
+} as const;
+
+function FlowPulse({ path, active }: { path: SignalPath; active: boolean }) {
+  const tone = toneStyles[path.tone];
 
   return (
-    <motion.div
-      className={`${absolute ? 'absolute' : 'relative'} ${rowClassName} transform-gpu`}
-      animate={
-        active
-          ? {
-              x: xMotion,
-              opacity: opacityMotion,
-            }
-          : { x: 0, opacity: 0.8 }
-      }
-      transition={{
-        duration: compact ? 5.8 : 5,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-    >
-      <div className="flex items-center gap-3">
-        <span
-          className={`inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-medium uppercase tracking-[0.24em] ${toneStyle.chip}`}
-        >
-          {label}
-        </span>
-        <div className={`h-px flex-1 ${toneStyle.line}`} />
-      </div>
-
-      <div className="relative mt-4 min-h-14">{children}</div>
-    </motion.div>
-  );
-}
-
-function UnifiedLayer({
-  active,
-  compact = false,
-  theme,
-}: {
-  active: boolean;
-  compact?: boolean;
-  theme: 'light' | 'dark';
-}) {
-  const isDark = theme === 'dark';
-
-  return (
-    <motion.div
-      className={`absolute right-5 top-1/2 ${compact ? 'w-[46%]' : 'w-[39%]'} -translate-y-1/2 transform-gpu overflow-hidden rounded-[1.5rem] border backdrop-blur-sm ${
-        isDark ? 'border-white/10 bg-neutral-950/80 shadow-[0_18px_50px_rgba(0,0,0,0.35)]' : 'border-neutral-200 bg-white/88 shadow-[0_18px_50px_rgba(0,0,0,0.08)]'
-      } ${compact ? 'p-4' : 'p-5'}`}
-      animate={
-        active
-          ? {
-              scale: [0.985, 1, 1.012, 1, 0.985],
-              opacity: [0.72, 0.92, 1, 0.95, 0.72],
-            }
-          : { scale: 1, opacity: 0.88 }
-      }
-      transition={{
-        duration: compact ? 6.1 : 5.4,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-    >
-      <div
-        className={`absolute inset-0 ${
-          isDark
-            ? 'bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.08),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.02),transparent)]'
-            : 'bg-[radial-gradient(circle_at_20%_0%,rgba(0,0,0,0.04),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.5),transparent)]'
-        }`}
-      />
-      <div className="relative flex items-start justify-between gap-4">
-        <div>
-          <p className={`text-[10px] font-mono uppercase tracking-[0.28em] ${isDark ? 'text-white/45' : 'text-neutral-500'}`}>
-            Unified Layer
-          </p>
-          <p className={`mt-2 text-sm font-medium ${isDark ? 'text-white' : 'text-neutral-950'}`}>Clear signal</p>
-        </div>
-        <div className={`mt-1 h-2.5 w-2.5 rounded-full ${isDark ? 'bg-white/75' : 'bg-neutral-900'}`} />
-      </div>
-
-      <div className="relative mt-6 space-y-3">
-        <div className={`h-px w-full ${isDark ? 'bg-white/10' : 'bg-neutral-200'}`} />
-        <div className={`h-px w-[86%] ${isDark ? 'bg-white/10' : 'bg-neutral-200'}`} />
-        <div className={`h-px w-[68%] ${isDark ? 'bg-white/10' : 'bg-neutral-200'}`} />
-      </div>
-
-      <div className="relative mt-6 flex items-end gap-2">
-        <motion.span
-          className={`h-10 w-1.5 rounded-full ${isDark ? 'bg-white/30' : 'bg-neutral-300'}`}
-          animate={active ? { scaleY: [0.95, 1.04, 0.98, 1, 0.95] } : { scaleY: 1 }}
-          transition={{ duration: compact ? 5.8 : 5, repeat: Infinity, ease: 'easeInOut', delay: 0.05 }}
-          style={{ transformOrigin: 'bottom' }}
-        />
-        <motion.span
-          className={`h-14 w-1.5 rounded-full ${isDark ? 'bg-white/42' : 'bg-neutral-400'}`}
-          animate={active ? { scaleY: [0.9, 1.06, 1, 1.02, 0.9] } : { scaleY: 1 }}
-          transition={{ duration: compact ? 5.8 : 5, repeat: Infinity, ease: 'easeInOut', delay: 0.14 }}
-          style={{ transformOrigin: 'bottom' }}
-        />
-        <motion.span
-          className={`h-9 w-1.5 rounded-full ${isDark ? 'bg-white/30' : 'bg-neutral-300'}`}
-          animate={active ? { scaleY: [1, 0.96, 1.05, 0.98, 1] } : { scaleY: 1 }}
-          transition={{ duration: compact ? 5.8 : 5, repeat: Infinity, ease: 'easeInOut', delay: 0.22 }}
-          style={{ transformOrigin: 'bottom' }}
-        />
-        <div className={`ml-2 flex-1 self-center rounded-full ${isDark ? 'bg-white/8' : 'bg-neutral-100'} px-3 py-2`}>
-          <div className={`h-1.5 w-[72%] rounded-full ${isDark ? 'bg-white/20' : 'bg-neutral-300'}`} />
-        </div>
-      </div>
-    </motion.div>
+    <>
+      <circle cx="0" cy="0" r="2.2" fill={tone.fill} opacity={active ? 0.95 : 0.42}>
+        {active ? (
+          <animateMotion dur={`${path.duration}s`} begin={`${path.delay}s`} repeatCount="indefinite" path={path.d} />
+        ) : null}
+      </circle>
+      <circle cx="0" cy="0" r="5.5" fill={tone.fill} opacity={active ? 0.14 : 0.07}>
+        {active ? (
+          <animateMotion dur={`${path.duration}s`} begin={`${path.delay}s`} repeatCount="indefinite" path={path.d} />
+        ) : null}
+      </circle>
+    </>
   );
 }
 
@@ -179,30 +109,23 @@ export default function HeroAnimation({ theme = 'light', className = '' }: HeroA
   const boundsRef = useRef<DOMRect | null>(null);
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
-  const springX = useSpring(pointerX, { stiffness: 130, damping: 24, mass: 0.28 });
-  const springY = useSpring(pointerY, { stiffness: 130, damping: 24, mass: 0.28 });
+  const springX = useSpring(pointerX, { stiffness: 100, damping: 18, mass: 0.5 });
+  const springY = useSpring(pointerY, { stiffness: 100, damping: 18, mass: 0.5 });
   const shouldReduceMotion = Boolean(useReducedMotion());
   const [isVisible, setIsVisible] = useState(true);
   const [canHover, setCanHover] = useState(false);
   const active = !shouldReduceMotion && isVisible;
+  const gradientId = useId().replace(/:/g, '');
   const isDark = theme === 'dark';
 
   useEffect(() => {
     const node = rootRef.current;
-
     if (!node || typeof IntersectionObserver === 'undefined') {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      { threshold: 0.18 },
-    );
-
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), { threshold: 0.2 });
     observer.observe(node);
-
     return () => observer.disconnect();
   }, []);
 
@@ -213,10 +136,8 @@ export default function HeroAnimation({ theme = 'light', className = '' }: HeroA
 
     const query = window.matchMedia('(hover: hover) and (pointer: fine)');
     const update = () => setCanHover(query.matches);
-
     update();
     query.addEventListener?.('change', update);
-
     return () => query.removeEventListener?.('change', update);
   }, []);
 
@@ -224,7 +145,6 @@ export default function HeroAnimation({ theme = 'light', className = '' }: HeroA
     if (!canHover || !active) {
       return;
     }
-
     boundsRef.current = event.currentTarget.getBoundingClientRect();
   };
 
@@ -235,12 +155,11 @@ export default function HeroAnimation({ theme = 'light', className = '' }: HeroA
 
     const rect = boundsRef.current ?? event.currentTarget.getBoundingClientRect();
     boundsRef.current = rect;
-
     const normalizedX = (event.clientX - rect.left) / rect.width - 0.5;
     const normalizedY = (event.clientY - rect.top) / rect.height - 0.5;
 
-    pointerX.set(normalizedX * 10);
-    pointerY.set(normalizedY * 8);
+    pointerX.set(normalizedX * 18);
+    pointerY.set(normalizedY * 14);
   };
 
   const handlePointerLeave = () => {
@@ -249,231 +168,99 @@ export default function HeroAnimation({ theme = 'light', className = '' }: HeroA
   };
 
   return (
-    <div ref={rootRef} aria-hidden="true" className={`relative w-full ${className}`.trim()}>
+    <div ref={rootRef} aria-hidden="true" className={`relative h-full w-full ${className}`.trim()}>
       <motion.div
         style={canHover && active ? { x: springX, y: springY } : undefined}
         onPointerEnter={handlePointerEnter}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className={`relative overflow-hidden rounded-[1.9rem] border transform-gpu ${
-          isDark
-            ? 'border-white/10 bg-neutral-950 text-white shadow-[0_24px_90px_rgba(0,0,0,0.36)]'
-            : 'border-neutral-200 bg-white text-black shadow-[0_24px_90px_rgba(0,0,0,0.08)]'
-        }`}
+        className={`relative h-full overflow-hidden ${isDark ? 'bg-neutral-950' : 'bg-transparent'}`}
       >
-        <div
-          className={`absolute inset-0 ${
-            isDark
-              ? 'bg-[radial-gradient(circle_at_14%_16%,rgba(255,255,255,0.08),transparent_22%),radial-gradient(circle_at_82%_18%,rgba(255,255,255,0.05),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01))]'
-              : 'bg-[radial-gradient(circle_at_14%_16%,rgba(0,0,0,0.05),transparent_22%),radial-gradient(circle_at_82%_18%,rgba(0,0,0,0.04),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.95),rgba(247,247,245,1))]'
-          }`}
-        />
-        <div
-          className={`absolute inset-0 opacity-55 ${
-            isDark
-              ? 'bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px)]'
-              : 'bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)]'
-          } bg-[size:32px_32px]`}
-        />
-        <div
-          className={`absolute inset-0 ${
-            isDark
-              ? 'bg-[linear-gradient(135deg,rgba(255,255,255,0.05),transparent_28%,transparent_72%,rgba(255,255,255,0.04))]'
-              : 'bg-[linear-gradient(135deg,rgba(255,255,255,0.88),transparent_28%,transparent_72%,rgba(255,255,255,0.4))]'
-          }`}
-        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_16%,rgba(255,255,255,0.44),transparent_24%),radial-gradient(circle_at_84%_14%,rgba(255,255,255,0.34),transparent_22%),linear-gradient(135deg,rgba(240,237,230,0.28),rgba(255,255,255,0.08)_40%,rgba(236,242,248,0.28))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.14),transparent_34%,rgba(255,255,255,0.2)_72%,transparent)]" />
 
-        <div className="relative hidden min-h-[30rem] md:block">
-          <div className="absolute left-6 top-5 z-10 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-neutral-500">
-            <span className={`h-px w-6 ${isDark ? 'bg-white/20' : 'bg-neutral-300'}`} />
-            <span>Systems view</span>
-          </div>
+        {haloOrbs.map((orb) => (
+          <motion.div
+            key={`${orb.top}-${orb.left}`}
+            className="absolute rounded-full blur-3xl"
+            style={{ top: orb.top, left: orb.left, width: orb.size, height: orb.size, background: orb.color }}
+            animate={active ? { scale: [1, 1.06, 0.99, 1], opacity: [0.34, 0.52, 0.4, 0.34] } : undefined}
+            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
 
-          <StreamRow
-            label="Marketing Data"
-            tone="emerald"
-            active={active}
-            rowClassName="left-6 right-[27%] top-[17%]"
-          >
-            <div className="relative h-14">
-              {marketingNodes.map((node, index) => (
-                <motion.span
-                  key={`${node.left}-${node.top}`}
-                  className={`absolute rounded-full ${toneClasses.emerald.dot}`}
-                  style={{
-                    left: node.left,
-                    top: node.top,
-                    width: node.size,
-                    height: node.size,
-                  }}
-                  animate={
-                    active
-                      ? {
-                          x: [0, 12, 22, 10, 0],
-                          y: [0, -2, 4, 1, 0],
-                          opacity: [0.48, 1, 0.92, 1, 0.48],
-                          scale: [0.95, 1.06, 1.01, 1.04, 0.95],
-                        }
-                      : { x: 0, y: 0, opacity: 0.72, scale: 1 }
-                  }
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: node.delay + index * 0.02,
-                  }}
-                />
-              ))}
-              <div className="absolute right-[8%] top-1/2 h-px w-[28%] -translate-y-1/2 bg-neutral-200/80" />
-            </div>
-          </StreamRow>
+        {ambientBands.map((band, index) => (
+          <motion.div
+            key={`${band.top}-${band.left}`}
+            className="absolute h-px rounded-full blur-[1px]"
+            style={{
+              top: band.top,
+              left: band.left,
+              width: band.width,
+              height: '1px',
+              background: `linear-gradient(90deg, transparent, ${band.color}, transparent)`,
+              transform: `rotate(${band.rotate})`,
+              transformOrigin: 'left center',
+            }}
+            animate={active ? { opacity: [0.22, 0.5, 0.22], scaleX: [0.96, 1.03, 0.96] } : undefined}
+            transition={{ duration: 7 + index, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        ))}
 
-          <StreamRow
-            label="Operational Performance"
-            tone="sky"
-            active={active}
-            rowClassName="left-6 right-[24%] top-[44%]"
-          >
-            <div className="relative h-14">
-              <div className="absolute left-[10%] top-[24%] h-px w-[66%] bg-neutral-200/80" />
-              {operationsBlocks.map((block, index) => (
-                <motion.span
-                  key={`${block.left}-${block.top}`}
-                  className={`absolute rounded-full ${toneClasses.sky.dot}`}
-                  style={{
-                    left: block.left,
-                    top: block.top,
-                    width: block.width,
-                    height: block.height,
-                  }}
-                  animate={
-                    active
-                      ? {
-                          x: [0, 8, 16, 6, 0],
-                          opacity: [0.44, 0.92, 1, 0.95, 0.44],
-                          scaleX: [0.96, 1.04, 1, 1.03, 0.96],
-                        }
-                      : { x: 0, opacity: 0.72, scaleX: 1 }
-                  }
-                  transition={{
-                    duration: 5.2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: block.delay + index * 0.03,
-                  }}
-                />
-              ))}
-              <motion.div
-                className="absolute left-[18%] top-[59%] h-0.5 w-[40%] rounded-full bg-sky-300/70"
-                animate={active ? { x: [0, 8, 18, 10, 0], opacity: [0.45, 0.9, 1, 0.9, 0.45] } : { x: 0, opacity: 0.65 }}
-                transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
+        <div className="relative h-full min-h-[24rem] md:min-h-[33rem]">
+          <div className="absolute inset-0">
+            <svg className="h-full w-full" viewBox="0 0 700 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id={`${gradientId}-main`} x1="72" y1="96" x2="628" y2="402" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stopColor="rgba(21,140,140,0.12)" />
+                <stop offset="0.5" stopColor="rgba(97,113,129,0.12)" />
+                <stop offset="1" stopColor="rgba(201,163,92,0.12)" />
+              </linearGradient>
+            </defs>
+
+            {signalPaths.map((path) => (
+              <path
+                key={path.id}
+                d={path.d}
+                stroke={`url(#${gradientId}-main)`}
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeDasharray="4 10"
+                opacity="0.62"
               />
-            </div>
-          </StreamRow>
+            ))}
 
-          <StreamRow label="Financials" tone="amber" active={active} rowClassName="left-6 right-[26%] top-[71%]">
-            <div className="relative flex h-14 items-end gap-3">
-              <div className="absolute left-[9%] right-[18%] top-[11%] h-px bg-neutral-200/80" />
-              {financialBars.map((bar, index) => (
-                <motion.span
-                  key={`${bar.height}-${index}`}
-                  className={`w-2 rounded-full ${toneClasses.amber.dot}`}
-                  style={{ height: bar.height, transformOrigin: 'bottom' }}
-                  animate={
-                    active
-                      ? {
-                          scaleY: [0.94, 1.04, 0.98, 1.01, 0.94],
-                          opacity: [0.5, 0.95, 1, 0.92, 0.5],
-                        }
-                      : { scaleY: 1, opacity: 0.72 }
-                  }
-                  transition={{
-                    duration: 5.4,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: bar.delay,
-                  }}
-                />
-              ))}
-              <motion.div
-                className="absolute left-[16%] right-[13%] top-[24%] h-px rounded-full bg-amber-300/70"
-                animate={active ? { x: [0, 8, 18, 10, 0], opacity: [0.5, 0.92, 1, 0.92, 0.5] } : { x: 0, opacity: 0.72 }}
-                transition={{ duration: 5.4, repeat: Infinity, ease: 'easeInOut' }}
-              />
-            </div>
-          </StreamRow>
+            {active ? signalPaths.map((path) => <FlowPulse key={`pulse-${path.id}`} path={path} active={active} />) : null}
 
-          <UnifiedLayer active={active} theme={theme} />
-        </div>
+            {signalPoints.map((point) => {
+              const tone = toneStyles[point.tone];
 
-        <div className="relative min-h-[20rem] px-4 py-5 md:hidden">
-          <div className="mb-4 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.28em] text-neutral-500">
-            <span className={`h-px w-6 ${isDark ? 'bg-white/20' : 'bg-neutral-300'}`} />
-            <span>Systems view</span>
+              return (
+                <g key={`${point.x}-${point.y}`}>
+                  <motion.circle
+                    cx={point.x}
+                    cy={point.y}
+                    r={point.size * 1.2}
+                    fill={tone.glow}
+                    animate={active ? { opacity: [0.06, 0.16, 0.06], scale: [0.96, 1.06, 0.96] } : undefined}
+                    transition={{ duration: 3.6, delay: point.delay, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ originX: `${point.x}px`, originY: `${point.y}px` }}
+                  />
+                  <motion.circle
+                    cx={point.x}
+                    cy={point.y}
+                    r={point.size}
+                    fill={tone.fill}
+                    animate={active ? { opacity: [0.42, 0.9, 0.42], scale: [0.98, 1.04, 0.98] } : undefined}
+                    transition={{ duration: 2.8, delay: point.delay, repeat: Infinity, ease: 'easeInOut' }}
+                    style={{ originX: `${point.x}px`, originY: `${point.y}px` }}
+                  />
+                  <circle cx={point.x} cy={point.y} r={point.size + 3.5} stroke={tone.stroke} strokeWidth="0.8" opacity="0.6" />
+                </g>
+              );
+            })}
+            </svg>
           </div>
-
-          <div className="space-y-3">
-            <StreamRow label="Marketing" tone="emerald" active={active} compact absolute={false} rowClassName="w-full">
-              <div className="relative h-10">
-                {marketingNodes.slice(0, 3).map((node, index) => (
-                  <motion.span
-                    key={`mobile-marketing-${node.left}-${index}`}
-                    className={`absolute rounded-full ${toneClasses.emerald.dot}`}
-                    style={{
-                      left: `${16 + index * 12}%`,
-                      top: `${32 + index * 10}%`,
-                      width: index === 1 ? '0.42rem' : '0.34rem',
-                      height: index === 1 ? '0.42rem' : '0.34rem',
-                    }}
-                    animate={active ? { x: [0, 10, 18, 8, 0], opacity: [0.5, 1, 0.92, 1, 0.5] } : { x: 0, opacity: 0.76 }}
-                    transition={{ duration: 5.8, repeat: Infinity, ease: 'easeInOut', delay: node.delay }}
-                  />
-                ))}
-              </div>
-            </StreamRow>
-
-            <StreamRow label="Operations" tone="sky" active={active} compact absolute={false} rowClassName="w-full">
-              <div className="relative h-10">
-                {operationsBlocks.slice(0, 3).map((block, index) => (
-                  <motion.span
-                    key={`mobile-ops-${block.left}-${index}`}
-                    className={`absolute rounded-full ${toneClasses.sky.dot}`}
-                    style={{
-                      left: `${18 + index * 14}%`,
-                      top: `${26 + (index % 2) * 10}%`,
-                      width: index === 1 ? '1.45rem' : '0.95rem',
-                      height: '0.48rem',
-                    }}
-                    animate={active ? { x: [0, 8, 14, 6, 0], opacity: [0.46, 0.92, 1, 0.94, 0.46] } : { x: 0, opacity: 0.76 }}
-                    transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: block.delay }}
-                  />
-                ))}
-              </div>
-            </StreamRow>
-
-            <StreamRow label="Financials" tone="amber" active={active} compact absolute={false} rowClassName="w-full">
-              <div className="relative flex h-10 items-end gap-2">
-                {financialBars.slice(0, 3).map((bar, index) => (
-                  <motion.span
-                    key={`mobile-fin-${index}`}
-                    className={`w-2 rounded-full ${toneClasses.amber.dot}`}
-                    style={{ height: index === 1 ? '2.8rem' : '1.8rem', transformOrigin: 'bottom' }}
-                    animate={
-                      active
-                        ? {
-                            scaleY: [0.94, 1.04, 0.99, 1.01, 0.94],
-                            opacity: [0.5, 0.95, 1, 0.92, 0.5],
-                          }
-                        : { scaleY: 1, opacity: 0.76 }
-                    }
-                    transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: bar.delay }}
-                  />
-                ))}
-              </div>
-            </StreamRow>
-          </div>
-
-          <UnifiedLayer active={active} compact theme={theme} />
         </div>
       </motion.div>
     </div>

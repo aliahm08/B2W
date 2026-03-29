@@ -119,7 +119,7 @@ function LandingPage({
     <>
       <Seo />
       <Hero
-        showOfferBanner={!showProjectButton && !isOfferBannerDismissed}
+        showOfferBanner
         onOfferClick={onOfferClick}
         onOfferClose={onOfferClose}
       />
@@ -204,6 +204,7 @@ export default function App() {
       {!isIsolatedView && (
         <Navbar
           showOfferBanner={location.pathname === '/' && !isLandingHeroVisible && !isOfferBannerDismissed}
+          transparentAtTop={location.pathname === '/' && isLandingHeroVisible}
           onOfferClick={() => {
             window.location.hash = 'contact';
           }}
@@ -212,66 +213,76 @@ export default function App() {
       )}
       <main>
         <Suspense fallback={<RouteLoadingFallback />}>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <LandingPage
-                  onHeroVisibilityChange={setIsLandingHeroVisible}
-                  onOfferClick={() => {
-                    const contact = document.getElementById('contact');
-                    contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                  isOfferBannerDismissed={isOfferBannerDismissed}
-                  onOfferClose={dismissOfferBanner}
-                  openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <Routes location={location}>
+                <Route
+                  path="/"
+                  element={
+                    <LandingPage
+                      onHeroVisibilityChange={setIsLandingHeroVisible}
+                      onOfferClick={() => {
+                        const contact = document.getElementById('contact');
+                        contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      isOfferBannerDismissed={isOfferBannerDismissed}
+                      onOfferClose={dismissOfferBanner}
+                      openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
+                    />
+                  }
                 />
-              }
-            />
-            <Route path="/home-test-1" element={<HomeTestOnePage />} />
-            <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
-            <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
-            <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-            <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
-            <Route path="/kitchen" element={<KitchenPage />} />
-            <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
-            <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />
-            <Route path="/solutions/:slug" element={<SolutionTemplatePage />} />
-            <Route path="/tiers/basic-advisory" element={<TierPage />} />
-            <Route path="/tiers/consulting" element={<TierPage />} />
-            <Route path="/tiers/implementation" element={<TierPage />} />
-            <Route path="/tiers/custom-tool" element={<TierPage />} />
-            <Route path="/capabilities/marketing-data" element={<DataExplainerPage />} />
-            <Route path="/capabilities/financials" element={<DataExplainerPage />} />
-            <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
-            <Route path="/capabilities/:slug" element={<CapabilityPage />} />
-            <Route path="/expertise/:slug" element={<ExpertisePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/about/process" element={<Navigate to="/about#process" replace />} />
-            <Route path="/about/team" element={<Navigate to="/about#team" replace />} />
-            <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
-            {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
-                Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
-            <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
-            <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
-            <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
-            <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
-            <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
-            <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
-            <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
-            
-            {/* Redirects for legacy routes */}
-            <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
-            <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
-            <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
-            
-            <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
-            <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
-            <Route path="/services/financial-review" element={<ServiceProjectPage />} />
-            <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
-            <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+                <Route path="/home-test-1" element={<HomeTestOnePage />} />
+                <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
+                <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
+                <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
+                <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
+                <Route path="/kitchen" element={<KitchenPage />} />
+                <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
+                <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />
+                <Route path="/solutions/:slug" element={<SolutionTemplatePage />} />
+                <Route path="/tiers/basic-advisory" element={<TierPage />} />
+                <Route path="/tiers/consulting" element={<TierPage />} />
+                <Route path="/tiers/implementation" element={<TierPage />} />
+                <Route path="/tiers/custom-tool" element={<TierPage />} />
+                <Route path="/capabilities/marketing-data" element={<DataExplainerPage />} />
+                <Route path="/capabilities/financials" element={<DataExplainerPage />} />
+                <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
+                <Route path="/capabilities/:slug" element={<CapabilityPage />} />
+                <Route path="/expertise/:slug" element={<ExpertisePage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/about/process" element={<Navigate to="/about#process" replace />} />
+                <Route path="/about/team" element={<Navigate to="/about#team" replace />} />
+                <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
+                {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
+                    Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
+                <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
+                <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
+                <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
+                <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
+                <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
+                <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
+                <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
+
+                {/* Redirects for legacy routes */}
+                <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
+                <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
+                <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
+
+                <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
+                <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
+                <Route path="/services/financial-review" element={<ServiceProjectPage />} />
+                <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
+                <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </motion.div>
+          </AnimatePresence>
         </Suspense>
       </main>
       {!isIsolatedView && <Footer />}

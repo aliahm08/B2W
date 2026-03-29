@@ -1,14 +1,25 @@
+import { motion } from 'motion/react';
 import { useState } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 
 type OfferBannerProps = {
   compact?: boolean;
+  variant?: 'default' | 'hero';
   onClick?: () => void;
   onClose?: () => void;
 };
 
-export default function OfferBanner({ compact = false, onClick, onClose }: OfferBannerProps) {
+export const OFFER_BANNER_LABEL = 'Next 3 Clients Receive 80% off';
+export const OFFER_BANNER_HEADLINE = 'Next 3 clients receive 80% off their first month.';
+
+export default function OfferBanner({
+  compact = false,
+  variant = 'default',
+  onClick,
+  onClose,
+}: OfferBannerProps) {
   const [isMobileCardOpen, setIsMobileCardOpen] = useState(false);
+  const isHeroVariant = variant === 'hero';
 
   const handleBannerClick = () => {
     if (typeof window !== 'undefined' && window.innerWidth < 768) {
@@ -27,9 +38,13 @@ export default function OfferBanner({ compact = false, onClick, onClose }: Offer
   return (
     <>
       <div
-        className={`inline-flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 ${
-          compact ? 'px-3 py-2' : 'px-4 py-3'
-        }`}
+        className={
+          isHeroVariant
+            ? 'inline-flex items-center gap-3 rounded-full border border-neutral-200/80 bg-white/78 px-4 py-2 text-neutral-950 shadow-[0_12px_30px_rgba(16,24,40,0.05)] backdrop-blur-sm'
+            : `inline-flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 ${
+                compact ? 'px-3 py-2' : 'px-4 py-3'
+              }`
+        }
       >
         <button
           type="button"
@@ -37,18 +52,45 @@ export default function OfferBanner({ compact = false, onClick, onClose }: Offer
           className="inline-flex min-w-0 items-center gap-2 text-left"
           aria-label="Open offer"
         >
-          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-amber-800">Offer</span>
-          <span className={`whitespace-nowrap font-medium text-amber-950 ${compact ? 'text-xs' : 'text-sm'}`}>
-            Next 3 Clients Receive 80% off
+          <span
+            className={
+              isHeroVariant
+                ? 'inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.28em] text-neutral-500'
+                : 'text-[11px] font-mono uppercase tracking-[0.22em] text-amber-800'
+            }
+          >
+            {isHeroVariant ? (
+              <>
+                <motion.span
+                  className="h-2.5 w-2.5 rounded-full bg-teal-500 shadow-[0_0_0_4px_rgba(20,184,166,0.14)]"
+                  animate={{ opacity: [0.45, 1, 0.45], scale: [0.96, 1.08, 0.96] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+                <span>Offer</span>
+              </>
+            ) : (
+              'Offer'
+            )}
           </span>
-          <ArrowUpRight className="h-3.5 w-3.5 text-amber-800 md:hidden" />
+          <span
+            className={
+              isHeroVariant
+                ? 'whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.28em] text-neutral-700'
+                : `whitespace-nowrap font-medium text-amber-950 ${compact ? 'text-xs' : 'text-sm'}`
+            }
+          >
+            {OFFER_BANNER_LABEL}
+          </span>
+          <ArrowUpRight className={`h-3.5 w-3.5 md:hidden ${isHeroVariant ? 'text-neutral-500' : 'text-amber-800'}`} />
         </button>
 
         <button
           type="button"
           onClick={onClose}
           aria-label="Dismiss offer"
-          className="hidden h-5 w-5 items-center justify-center text-amber-800 transition-colors hover:text-amber-950 md:inline-flex"
+          className={`hidden h-5 w-5 items-center justify-center transition-colors md:inline-flex ${
+            isHeroVariant ? 'text-neutral-500 hover:text-neutral-950' : 'text-amber-800 hover:text-amber-950'
+          }`}
         >
           <X className="h-3.5 w-3.5" />
         </button>
@@ -59,9 +101,7 @@ export default function OfferBanner({ compact = false, onClick, onClose }: Offer
             <div className="mb-4 flex items-start justify-between gap-4">
               <div>
                 <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-amber-700">Limited Offer</p>
-                <h3 className="mt-2 text-xl font-medium tracking-tight text-neutral-950">
-                  Next 3 clients receive 80% off their first month.
-                </h3>
+                <h3 className="mt-2 text-xl font-medium tracking-tight text-neutral-950">{OFFER_BANNER_HEADLINE}</h3>
               </div>
               <button
                 type="button"
