@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Bot,
+  ArrowRight,
   Download,
   Eye,
   FileText,
@@ -11,69 +11,98 @@ import {
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { FieldBossShell } from './UyghurEatsFieldBossShared';
+import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
+import {
+  projectPageShellClassName,
+  projectPageHeaderClassName,
+} from '../../components/projectPageLayout';
 import { getUyghurEatsRoutes } from './uyghurEatsRoutes';
 
-/* ─────────────────────────────────────────────── data ─── */
+/* ─── FieldBoss Logo (derived from B2W mark) ────────────── */
+
+/**
+ * The B2W base shape, re-centered in a tighter viewBox.
+ * Added: a subtle crosshair/signal element behind the mark
+ * to distinguish FieldBoss as the AI product layer.
+ */
+function FieldBossIcon({ size = 20, className = '' }: { size?: number; className?: string }) {
+  return (
+    <svg
+      viewBox="20 14 56 62"
+      width={size}
+      height={size}
+      className={className}
+      aria-hidden="true"
+    >
+      {/* Crosshair — AI signal */}
+      <line x1="48" y1="18" x2="48" y2="72" stroke="currentColor" strokeOpacity={0.12} strokeWidth={0.8} />
+      <line x1="24" y1="45" x2="72" y2="45" stroke="currentColor" strokeOpacity={0.12} strokeWidth={0.8} />
+      <circle cx="48" cy="45" r="18" fill="none" stroke="currentColor" strokeOpacity={0.08} strokeWidth={0.7} />
+      {/* B2W base mark */}
+      <path
+        d="M 34 20 L 58 20 Q 76 20 76 38 L 76 60 Q 76 70 69 63 L 31 25 Q 26 20 34 20 Z"
+        fill="currentColor"
+        fillOpacity={0.92}
+      />
+    </svg>
+  );
+}
+
+/* ─── Data ───────────────────────────────────────────────── */
 
 const suggestionChips = [
   {
     id: 'evaluate' as const,
-    label: 'Give me a Business Evaluation.',
+    label: 'Evaluate my business.',
     icon: Sparkles,
   },
   {
     id: 'risks' as const,
-    label: 'Identify Risks when Selling.',
+    label: 'Show me the selling risks.',
     icon: MessageSquareText,
   },
   {
     id: 'package' as const,
-    label: 'Package a List of my Assets and SOPs.',
+    label: 'Package my assets and SOPs.',
     icon: FileText,
   },
 ] as const;
 
 type ChipId = (typeof suggestionChips)[number]['id'];
 
-/* scripted answers keyed by chip id */
 const scriptedReplies: Record<
   ChipId,
   { lines: string[]; blurredValue?: string; basis?: string[] }
 > = {
   evaluate: {
     lines: [
-      'I can give you a working evaluation based on three things:',
-      'Normalized seller earnings after one-time and owner-specific adjustments, comparable restaurant transactions in the local market, and how easy the business is to hand off.',
+      'I can build you an evaluation right now. It\u2019s based on three things:',
+      'First, your normalized earnings after we strip out one-time and owner-specific expenses. Second, comparable restaurant sales in the DC metro area. Third, how transfer-ready the business actually is \u2014 documentation, lease status, and operational handoff difficulty.',
     ],
-    blurredValue: '$XXX,XXX – $XXX,XXX',
+    blurredValue: '$XXX,XXX \u2013 $XXX,XXX',
     basis: [
-      'Normalized seller earnings after one-time and owner-specific adjustments',
-      'Comparable restaurant transactions in the local market and adjacent buyer sets',
-      'Transfer readiness, operational documentation, and how easy the business is to hand off',
+      'Normalized seller discretionary earnings',
+      'Comparable restaurant transactions within 15 miles',
+      'Transfer readiness and documentation quality',
     ],
   },
   risks: {
     lines: [
-      'Here are the main selling risks I see based on publicly available information and the materials you've shared:',
-      '① Lease transfer uncertainty – A buyer needs a fresh lease or an approved assignment. Any lapse creates deal risk.',
-      '② Key-person dependency – If the head chef or the hand-pull noodle technique is tied to one individual, the buyer's perceived risk goes up.',
-      '③ Revenue concentration – Heavy reliance on dine-in vs. delivery means external disruptions (construction, weather, pandemic) directly hit topline.',
+      'Three risks that will come up in any serious buyer conversation:',
+      'Lease transfer \u2014 your lease assignment language is ambiguous, and a buyer can\u2019t close without a clean transfer or a fresh agreement from the landlord.',
+      'Key-person dependency \u2014 the hand-pull noodle technique is reputation-critical and currently tied to one individual.',
+      'Revenue concentration \u2014 85% dine-in exposure means a single external disruption (construction, pandemic, weather) hits topline directly.',
     ],
-    blurredValue: undefined,
-    basis: undefined,
   },
   package: {
     lines: [
-      'I'll start building a list of transferable assets and standard operating procedures that a buyer will want to review:',
-      'Equipment and fixtures inventory (FFE), vendor and supplier contact list, current POS system configuration, staffing overview with wages and tenure, health permits and licensing, and recipe documentation for signature items.',
+      'Here\u2019s what a buyer will want to see organized and ready:',
+      'Equipment and fixtures inventory, vendor and supplier contacts, POS configuration, staffing overview with wages and tenure, health and alcohol permits, recipe documentation for signature items, and a daily/weekly operations checklist.',
     ],
-    blurredValue: undefined,
-    basis: undefined,
   },
 };
 
-/* ─────────────────────────── animated typing component ─── */
+/* ─── Typewriter hook ────────────────────────────────────── */
 
 function useTypewriter(text: string, speed = 18) {
   const [displayed, setDisplayed] = useState('');
@@ -124,7 +153,7 @@ function TypewriterBubble({
 
   if (!started) {
     return (
-      <div className="ml-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50">
+      <div className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50">
         <span className="inline-block h-4 w-4 animate-pulse rounded-full bg-cyan-200/40" />
       </div>
     );
@@ -134,7 +163,7 @@ function TypewriterBubble({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="ml-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50"
+      className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50"
     >
       {displayed}
       {!done && (
@@ -144,7 +173,7 @@ function TypewriterBubble({
   );
 }
 
-/* ─────────────────────────────── document preview modal ─── */
+/* ─── Document preview modal ─────────────────────────────── */
 
 function DocumentPreviewModal({
   isOpen,
@@ -157,9 +186,30 @@ function DocumentPreviewModal({
 }) {
   const [showSignUp, setShowSignUp] = useState(false);
 
-  if (!isOpen || !selectedChip) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const original = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, [isOpen]);
 
+  if (!isOpen || !selectedChip) return null;
   const reply = scriptedReplies[selectedChip];
+
+  const docTitle =
+    selectedChip === 'evaluate'
+      ? 'Business Evaluation Summary'
+      : selectedChip === 'risks'
+        ? 'Selling Risk Assessment'
+        : 'Asset & SOP Inventory';
+  const docFile =
+    selectedChip === 'evaluate'
+      ? 'Evaluation Summary.pdf'
+      : selectedChip === 'risks'
+        ? 'Risk Assessment.pdf'
+        : 'Asset Package.pdf';
 
   return (
     <AnimatePresence>
@@ -176,25 +226,19 @@ function DocumentPreviewModal({
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 40, scale: 0.96 }}
           transition={{ type: 'spring', bounce: 0.18, duration: 0.5 }}
-          className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-white/10 bg-[#0b1722] shadow-[0_40px_120px_rgba(0,0,0,0.6)]"
+          className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-white/10 bg-[#08131b] shadow-[0_40px_120px_rgba(0,0,0,0.5)]"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
-          <div className="sticky top-0 flex items-center justify-between border-b border-white/10 bg-[#0b1722]/95 backdrop-blur-md px-6 py-4 z-10">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#08131b]/95 backdrop-blur-md px-6 py-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
-                <FileText className="h-4 w-4" />
-              </div>
+              <span className="text-cyan-200">
+                <FileText className="h-5 w-5" />
+              </span>
               <div>
-                <p className="text-sm font-semibold text-white">
-                  {selectedChip === 'evaluate'
-                    ? 'Evaluation Summary.pdf'
-                    : selectedChip === 'risks'
-                      ? 'Selling Risks Report.pdf'
-                      : 'Asset & SOP Package.pdf'}
-                </p>
-                <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">
-                  AI-Generated Document
+                <p className="text-sm font-semibold text-white">{docFile}</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-cyan-300/60">
+                  AI-generated document
                 </p>
               </div>
             </div>
@@ -205,7 +249,7 @@ function DocumentPreviewModal({
                 className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/10 hover:text-cyan-100"
               >
                 <Download className="h-3.5 w-3.5" />
-                <span>Download</span>
+                Download
                 <Lock className="h-3 w-3 text-slate-500 group-hover:text-cyan-200" />
               </button>
               <button
@@ -218,7 +262,7 @@ function DocumentPreviewModal({
             </div>
           </div>
 
-          {/* Document Body – blurred content */}
+          {/* White document body */}
           <div className="p-6 sm:p-10">
             <div className="border border-black/30 bg-white p-8 text-black shadow-[0_18px_60px_rgba(0,0,0,0.35)]">
               <div className="flex items-start justify-between border-b border-neutral-200 pb-5">
@@ -226,13 +270,7 @@ function DocumentPreviewModal({
                   <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">
                     B2W {selectedChip === 'evaluate' ? 'evaluation brief' : selectedChip === 'risks' ? 'risk report' : 'asset package'}
                   </p>
-                  <h3 className="mt-2 text-2xl font-medium tracking-tight">
-                    {selectedChip === 'evaluate'
-                      ? 'Business Evaluation Summary'
-                      : selectedChip === 'risks'
-                        ? 'Selling Risk Assessment'
-                        : 'Asset & SOP Inventory'}
-                  </h3>
+                  <h3 className="mt-2 text-2xl font-medium tracking-tight">{docTitle}</h3>
                 </div>
                 {reply.blurredValue && (
                   <div className="text-right">
@@ -245,67 +283,42 @@ function DocumentPreviewModal({
                   </div>
                 )}
               </div>
-
               <div className="mt-6 space-y-5 text-sm leading-6 text-neutral-700">
-                {reply.lines.map((line, i) => (
-                  <p key={i} className={i > 0 ? 'blur-[3px] select-none' : ''}>
-                    {line}
-                  </p>
+                <p>{reply.lines[0]}</p>
+                {reply.lines.slice(1).map((line, i) => (
+                  <p key={i} className="blur-[3px] select-none">{line}</p>
                 ))}
-
                 {reply.basis && (
                   <div className="grid gap-3 md:grid-cols-3 blur-[3px] select-none">
                     {reply.basis.map((item) => (
                       <div key={item} className="border border-neutral-200 p-3">
-                        <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">
-                          Basis
-                        </p>
-                        <p className="mt-2 font-medium text-black">{item.split(',')[0]}</p>
+                        <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">Basis</p>
+                        <p className="mt-2 font-medium text-black">{item}</p>
                       </div>
                     ))}
                   </div>
                 )}
-
-                {/* blurred body sections */}
                 <div className="space-y-4 blur-[4px] select-none">
                   <div className="border border-neutral-200 p-4">
-                    <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">
-                      Detailed analysis
-                    </p>
-                    <p className="mt-2">
-                      The comprehensive analysis covers market positioning, operational efficiency metrics, and comparable transaction benchmarks within a 15-mile radius of the subject property.
-                    </p>
-                  </div>
-                  <div className="border border-neutral-200 p-4">
-                    <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">
-                      Methodology notes
-                    </p>
-                    <p className="mt-2">
-                      SDE multiples were cross-referenced against BizBuySell, DealStats, and regional restaurant brokerage data for the trailing 24-month window.
-                    </p>
+                    <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">Detail</p>
+                    <p className="mt-2">Market positioning, efficiency metrics, and comparable benchmarks within a 15-mile radius of the subject property.</p>
                   </div>
                 </div>
               </div>
-
-              {/* Lock overlay */}
               <div className="mt-8 flex items-center gap-3 border-t border-neutral-200 pt-5">
                 <Lock className="h-4 w-4 text-neutral-400" />
-                <p className="text-xs text-neutral-500">
-                  Full document available after FieldBoss AI activation
-                </p>
+                <p className="text-xs text-neutral-500">Full document available after FieldBoss AI activation</p>
               </div>
             </div>
           </div>
 
-          {/* Footer CTA */}
-          <div className="sticky bottom-0 border-t border-white/10 bg-[#0b1722]/95 backdrop-blur-md px-6 py-4 flex items-center justify-between">
-            <p className="text-sm text-slate-400">
-              Preview only – sign up to unlock the full document and download.
-            </p>
+          {/* Footer */}
+          <div className="sticky bottom-0 flex items-center justify-between border-t border-white/10 bg-[#08131b]/95 backdrop-blur-md px-6 py-4">
+            <p className="text-sm text-slate-400">Preview only &mdash; sign up to unlock.</p>
             <button
               type="button"
               onClick={() => setShowSignUp(true)}
-              className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/20"
+              className="rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/15"
             >
               Unlock with FieldBoss
             </button>
@@ -316,7 +329,7 @@ function DocumentPreviewModal({
         <AnimatePresence>
           {showSignUp && (
             <motion.div
-              key="signup-overlay"
+              key="signup"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -328,56 +341,28 @@ function DocumentPreviewModal({
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 30, scale: 0.96 }}
                 transition={{ type: 'spring', bounce: 0.15, duration: 0.45 }}
-                className="w-full max-w-md border border-white/15 bg-[#0b1722] p-8 shadow-2xl"
+                className="w-full max-w-md border border-white/15 bg-[#08131b] p-8 shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200">
-                    <Sparkles className="h-5 w-5" />
-                  </div>
+                  <span className="text-cyan-200">
+                    <FieldBossIcon size={28} />
+                  </span>
                   <div>
-                    <h3 className="text-lg font-medium text-white">
-                      Activate FieldBoss AI
-                    </h3>
+                    <h3 className="text-lg font-medium text-white">Activate FieldBoss AI</h3>
                     <p className="text-xs text-slate-400">
                       Unlock full documents, downloads, and the buyer-prospect agent
                     </p>
                   </div>
                 </div>
-
-                <form
-                  className="space-y-4"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setShowSignUp(false);
-                  }}
-                >
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    required
-                    className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-cyan-300/40"
-                  />
-                  <input
-                    type="email"
-                    placeholder="Work email"
-                    required
-                    className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-cyan-300/40"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Company name"
-                    className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-cyan-300/40"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-neutral-200"
-                  >
+                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setShowSignUp(false); }}>
+                  <input type="text" placeholder="Your name" required className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-cyan-300/40" />
+                  <input type="email" placeholder="Work email" required className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-cyan-300/40" />
+                  <input type="text" placeholder="Company name" className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition-colors focus:border-cyan-300/40" />
+                  <button type="submit" className="w-full rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-black transition-colors hover:bg-neutral-200">
                     Request Access
                   </button>
-                  <p className="text-center text-[10px] text-slate-500">
-                    We'll reach out within 24 hours with your FieldBoss activation.
-                  </p>
+                  <p className="text-center text-[10px] text-slate-500">We&rsquo;ll follow up within 24 hours.</p>
                 </form>
               </motion.div>
             </motion.div>
@@ -388,7 +373,7 @@ function DocumentPreviewModal({
   );
 }
 
-/* ────────────────────────────────── main page component ─── */
+/* ────────────────────────────── Main page ────────────────── */
 
 export default function UyghurEatsFieldBossChatbotPage() {
   const routes = getUyghurEatsRoutes();
@@ -414,15 +399,11 @@ export default function UyghurEatsFieldBossChatbotPage() {
     if (lineIndex < reply.lines.length - 1) {
       setLineIndex((prev) => prev + 1);
     } else {
-      // all lines typed – show extras
-      if (reply.basis) {
-        setTimeout(() => setShowBasisCards(true), 300);
-      }
+      if (reply.basis) setTimeout(() => setShowBasisCards(true), 300);
       setTimeout(() => setShowDocPreview(true), reply.basis ? 900 : 400);
     }
   }, [lineIndex, reply]);
 
-  // auto-scroll chat
   useEffect(() => {
     chatContainerRef.current?.scrollTo({
       top: chatContainerRef.current.scrollHeight,
@@ -430,28 +411,119 @@ export default function UyghurEatsFieldBossChatbotPage() {
     });
   }, [lineIndex, showBasisCards, showDocPreview]);
 
+  const navItems: ClientNavAction[] = [
+    { label: 'Proposal', to: routes.proposal },
+    { label: 'Profile', to: routes.profile },
+    { label: 'Valuation', to: routes.valuation },
+    { label: 'Documentation', to: routes.dataRoom },
+    { label: 'Terms', to: routes.terms },
+    { label: 'FieldBoss AI', to: routes.fieldBossChatbot, type: 'link' },
+  ];
+
+  const docFile =
+    selectedChip === 'evaluate'
+      ? 'Evaluation Summary.pdf'
+      : selectedChip === 'risks'
+        ? 'Risk Assessment.pdf'
+        : 'Asset Package.pdf';
+
   return (
-    <FieldBossShell
-      active="chatbot"
-      eyebrow="FieldBoss AI / Chatbot"
-      title="Ask questions. Get real answers. Preview the document before you commit."
-      intro="FieldBoss is our AI advisory layer. Select a prompt below to see how the system evaluates your business, identifies selling risks, or builds your asset package — with key details and full downloads gated behind activation."
-    >
-      <section className="space-y-6">
-        {/* ──── Chat Landing ──── */}
-        <div className="border border-white/10 bg-[linear-gradient(180deg,rgba(8,19,27,0.9),rgba(9,18,26,0.76))] px-6 py-12 sm:px-10 sm:py-14">
+    <div className="min-h-screen bg-[#061017] text-white selection:bg-cyan-200/20 selection:text-white">
+      {/* Atmosphere */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 opacity-90"
+        style={{
+          background:
+            'radial-gradient(circle at 12% 14%, rgba(93,197,255,0.1), transparent 28%), radial-gradient(circle at 84% 12%, rgba(241,196,91,0.08), transparent 24%), linear-gradient(180deg, #061017 0%, #07131b 52%, #061017 100%)',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 opacity-[0.05]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.55) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.55) 1px, transparent 1px)',
+          backgroundSize: '72px 72px',
+        }}
+      />
+
+      <ClientNavbar
+        clientName="Uyghur Eats"
+        clientLink={routes.proposal}
+        navItems={navItems}
+        theme="dark"
+      />
+
+      <article className={`${projectPageShellClassName} relative z-10 text-white`}>
+        {/* ──── Hero ──── */}
+        <header className={`${projectPageHeaderClassName} border-white/10 pb-10`}>
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-stretch lg:gap-6">
+            <div className="grid content-start gap-3">
+              <div>
+                <motion.p
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-3 flex items-center gap-2.5 text-[11px] font-mono uppercase tracking-[0.28em] text-cyan-300/70"
+                >
+                  <FieldBossIcon size={16} className="text-cyan-200" />
+                  FieldBoss AI
+                </motion.p>
+                <motion.h1
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.04, duration: 0.45 }}
+                  className="max-w-[14ch] text-[2.2rem] font-medium leading-[0.98] tracking-tight text-white sm:max-w-none sm:text-5xl md:text-6xl"
+                >
+                  Your AI advisor for selling&nbsp;readiness.
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08, duration: 0.45 }}
+                  className="mt-5 max-w-3xl text-base leading-7 text-slate-300 md:text-xl md:leading-8"
+                >
+                  Choose a topic below. FieldBoss walks through the analysis, surfaces the key numbers,
+                  and generates a document you can preview before you commit to anything.
+                </motion.p>
+              </div>
+            </div>
+
+            {/* Aside */}
+            <aside className="flex h-full flex-col border border-white/10 bg-[#08131b] p-5 text-white sm:p-6 md:p-7">
+              <p className="mb-4 text-[11px] font-mono uppercase tracking-[0.28em] text-cyan-300/70">
+                What to expect
+              </p>
+              <h2 className="mb-5 max-w-md text-xl font-medium leading-tight tracking-tight text-white sm:text-2xl md:mb-6 md:text-3xl">
+                See the answer, preview the document, then decide.
+              </h2>
+              <div className="mt-auto space-y-3 border-y border-white/10 py-4 md:py-5">
+                {[
+                  'Pick one of three prompts. No free-form required.',
+                  'The AI builds its answer live with a typewriter animation.',
+                  'Key financials stay blurred. The full PDF is previewable but locked until you activate.',
+                ].map((step, i) => (
+                  <p key={i} className="text-sm leading-6 text-slate-300">
+                    <span className="mr-2 text-cyan-300/60">{String(i + 1).padStart(2, '0')}</span>
+                    {step}
+                  </p>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </header>
+
+        {/* ──── Chat landing ──── */}
+        <section className="mb-10 border border-white/10 bg-[linear-gradient(180deg,rgba(8,19,27,0.9),rgba(9,18,26,0.76))] px-6 py-12 sm:px-10 sm:py-14">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="text-[11px] font-mono uppercase tracking-[0.26em] text-cyan-300/75">
-              FieldBoss AI
-            </p>
+            <span className="text-cyan-200">
+              <FieldBossIcon size={32} />
+            </span>
             <h2 className="mt-5 text-3xl font-medium tracking-tight text-white sm:text-5xl">
               What can I help with?
             </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-400">
-              Select one of the prompts below. The assistant will walk through the analysis and generate a document you can preview on-page.
-            </p>
 
-            {/* suggestion chips */}
+            {/* Chips */}
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               {suggestionChips.map((chip) => {
                 const Icon = chip.icon;
@@ -476,229 +548,246 @@ export default function UyghurEatsFieldBossChatbotPage() {
               })}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* ──── Chat animation area ──── */}
+        {/* ──── Chat area ──── */}
         <AnimatePresence mode="wait">
           {selectedChip && reply && (
-            <motion.div
+            <motion.section
               key={selectedChip}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.35 }}
-              className="border border-white/10 bg-[#08131b]"
+              className="mb-12"
             >
-              {/* top bar */}
-              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
-                    <Bot className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-white">FieldBoss</p>
-                    <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">
-                      Analyzing
-                    </p>
-                  </div>
-                </div>
-                <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
-                  Live demo
-                </div>
-              </div>
-
-              {/* chat body */}
-              <div
-                ref={chatContainerRef}
-                className="max-h-[60vh] overflow-y-auto p-5 sm:p-6 space-y-4"
-              >
-                {/* user message */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="max-w-[88%] rounded-[26px] border border-white/8 bg-white/[0.04] px-5 py-4 text-sm leading-7 text-slate-200"
-                >
-                  {suggestionChips.find((c) => c.id === selectedChip)?.label}
-                </motion.div>
-
-                {/* streamed reply lines */}
-                {currentLines.map((line, i) => (
-                  <TypewriterBubble
-                    key={`${selectedChip}-${i}`}
-                    text={line}
-                    delay={i === 0 ? 400 : 200}
-                    onFinished={i === lineIndex ? handleLineFinished : undefined}
-                  />
-                ))}
-
-                {/* Blurred evaluation range */}
-                {reply.blurredValue && showBasisCards && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="ml-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50"
-                  >
-                    Your indicative evaluation range is{' '}
-                    <span className="inline-block rounded px-2 py-0.5 text-white blur-[6px] select-none bg-white/10">
-                      {reply.blurredValue}
+              <div className="border border-white/10 bg-[#08131b]">
+                {/* Top bar */}
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
+                  <div className="flex items-center gap-3">
+                    <span className="text-cyan-200">
+                      <FieldBossIcon size={22} />
                     </span>
-                    . I am keeping the final figure blurred here while the supporting narrative
-                    remains shareable.
-                  </motion.div>
-                )}
-
-                {/* Basis cards */}
-                {reply.basis && showBasisCards && (
-                  <div className="border border-white/8 bg-black/20 p-4">
-                    <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-slate-500">
-                      This evaluation is based on
-                    </p>
-                    <div className="mt-4 space-y-3">
-                      {reply.basis.map((item, index) => (
-                        <motion.div
-                          key={item}
-                          initial={{ opacity: 0, x: -6 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.12 }}
-                          className="flex items-start gap-3 border border-white/6 bg-white/[0.03] px-4 py-3"
-                        >
-                          <span className="mt-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full border border-white/10 text-[10px] font-mono uppercase tracking-[0.16em] text-slate-300">
-                            {String(index + 1).padStart(2, '0')}
-                          </span>
-                          <span className="text-sm leading-6 text-slate-200">{item}</span>
-                        </motion.div>
-                      ))}
+                    <div>
+                      <p className="text-sm font-semibold text-white">FieldBoss</p>
+                      <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">Analyzing</p>
                     </div>
                   </div>
-                )}
+                  <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-200">
+                    Live demo
+                  </div>
+                </div>
 
-                {/* Generated document preview card */}
-                {showDocPreview && (
+                {/* Body */}
+                <div
+                  ref={chatContainerRef}
+                  className="max-h-[60vh] overflow-y-auto p-5 sm:p-6 space-y-4"
+                >
+                  {/* User message */}
                   <motion.div
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.45 }}
-                    className="border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))]"
+                    className="ml-auto max-w-[88%] rounded-[26px] border border-white/8 bg-white/[0.04] px-5 py-4 text-sm leading-7 text-slate-200"
                   >
-                    <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200">
-                          <FileText className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-white">
-                            {selectedChip === 'evaluate'
-                              ? 'Evaluation Summary.pdf'
-                              : selectedChip === 'risks'
-                                ? 'Selling Risks Report.pdf'
-                                : 'Asset & SOP Package.pdf'}
-                          </p>
-                          <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">
-                            AI-generated document
-                          </p>
-                        </div>
-                      </div>
-                      <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-200">
-                        Ready
+                    {suggestionChips.find((c) => c.id === selectedChip)?.label}
+                  </motion.div>
+
+                  {/* AI reply lines */}
+                  {currentLines.map((line, i) => (
+                    <div key={`${selectedChip}-${i}`}>
+                      <TypewriterBubble
+                        text={line}
+                        delay={i === 0 ? 400 : 200}
+                        onFinished={i === lineIndex ? handleLineFinished : undefined}
+                      />
+                    </div>
+                  ))}
+
+                  {/* Blurred range */}
+                  {reply.blurredValue && showBasisCards && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 14 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="ml-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50"
+                    >
+                      Your indicative range is{' '}
+                      <span className="inline-block rounded px-2 py-0.5 text-white blur-[6px] select-none bg-white/10">
+                        {reply.blurredValue}
+                      </span>
+                      . The supporting narrative is shareable &mdash; the figure stays protected.
+                    </motion.div>
+                  )}
+
+                  {/* Basis cards */}
+                  {reply.basis && showBasisCards && (
+                    <div className="border border-white/8 bg-black/20 p-4">
+                      <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-slate-500">
+                        Valuation basis
+                      </p>
+                      <div className="mt-4 space-y-3">
+                        {reply.basis.map((item, index) => (
+                          <motion.div
+                            key={item}
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.12 }}
+                            className="flex items-start gap-3 border border-white/6 bg-white/[0.03] px-4 py-3"
+                          >
+                            <span className="mt-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full border border-white/10 text-[10px] font-mono uppercase tracking-[0.16em] text-slate-300">
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <span className="text-sm leading-6 text-slate-200">{item}</span>
+                          </motion.div>
+                        ))}
                       </div>
                     </div>
+                  )}
 
-                    {/* Mini preview – the floating white document */}
+                  {/* Document preview card */}
+                  {showDocPreview && (
                     <motion.div
-                      animate={{ y: [0, -4, 0] }}
-                      transition={{
-                        duration: 3.6,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      className="mx-auto my-5 w-[88%] border border-black/30 bg-white p-6 text-black shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.45 }}
+                      className="border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))]"
                     >
-                      <div className="flex items-start justify-between border-b border-neutral-200 pb-4">
-                        <div>
-                          <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">
-                            B2W {selectedChip === 'evaluate' ? 'evaluation brief' : selectedChip === 'risks' ? 'risk report' : 'asset package'}
-                          </p>
-                          <h3 className="mt-2 text-lg font-medium tracking-tight">
-                            {selectedChip === 'evaluate'
-                              ? 'Business Evaluation Summary'
-                              : selectedChip === 'risks'
-                                ? 'Selling Risk Assessment'
-                                : 'Asset & SOP Inventory'}
-                          </h3>
-                        </div>
-                        {reply.blurredValue && (
-                          <div className="text-right">
-                            <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">
-                              Indicative range
-                            </p>
-                            <p className="mt-2 text-base font-semibold blur-[5px] select-none">
-                              {reply.blurredValue}
-                            </p>
+                      <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                        <div className="flex items-center gap-3">
+                          <span className="text-cyan-200">
+                            <FileText className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <p className="text-sm font-semibold text-white">{docFile}</p>
+                            <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">AI-generated document</p>
                           </div>
-                        )}
+                        </div>
+                        <div className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-200">
+                          Ready
+                        </div>
                       </div>
-                      <div className="mt-4 space-y-3 text-sm leading-6 text-neutral-700">
-                        <p>{reply.lines[0]}</p>
-                        <p className="blur-[3px] select-none">
-                          {reply.lines[1] ?? 'Additional detail is available in the full document.'}
-                        </p>
+
+                      {/* Floating white doc */}
+                      <motion.div
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
+                        className="mx-auto my-5 w-[88%] border border-black/30 bg-white p-6 text-black shadow-[0_18px_60px_rgba(0,0,0,0.35)]"
+                      >
+                        <div className="flex items-start justify-between border-b border-neutral-200 pb-4">
+                          <div>
+                            <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">
+                              B2W {selectedChip === 'evaluate' ? 'evaluation brief' : selectedChip === 'risks' ? 'risk report' : 'asset package'}
+                            </p>
+                            <h3 className="mt-2 text-lg font-medium tracking-tight">
+                              {selectedChip === 'evaluate' ? 'Business Evaluation Summary' : selectedChip === 'risks' ? 'Selling Risk Assessment' : 'Asset & SOP Inventory'}
+                            </h3>
+                          </div>
+                          {reply.blurredValue && (
+                            <div className="text-right">
+                              <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">Indicative range</p>
+                              <p className="mt-2 text-base font-semibold blur-[5px] select-none">{reply.blurredValue}</p>
+                            </div>
+                          )}
+                        </div>
+                        <div className="mt-4 space-y-3 text-sm leading-6 text-neutral-700">
+                          <p>{reply.lines[0]}</p>
+                          <p className="blur-[3px] select-none">{reply.lines[1] ?? 'Additional detail is available in the full document.'}</p>
+                        </div>
+                      </motion.div>
+
+                      {/* Actions */}
+                      <div className="border-t border-white/10 bg-black/15 px-5 py-4 flex flex-wrap items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setShowModal(true)}
+                          className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/15"
+                        >
+                          <Eye className="h-4 w-4" />
+                          Preview Document
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setShowModal(true)}
+                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+                        >
+                          <Download className="h-4 w-4" />
+                          Download
+                          <Lock className="h-3 w-3 text-slate-500" />
+                        </button>
+                        <Link
+                          to={routes.fieldBossManager}
+                          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
+                        >
+                          <MessageSquareText className="h-4 w-4" />
+                          Send to buyer agent
+                        </Link>
                       </div>
                     </motion.div>
-
-                    {/* Action row */}
-                    <div className="border-t border-white/10 bg-black/15 px-5 py-4 flex flex-wrap items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => setShowModal(true)}
-                        className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/15"
-                      >
-                        <Eye className="h-4 w-4" />
-                        Preview Document
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setShowModal(true)}
-                        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
-                      >
-                        <Download className="h-4 w-4" />
-                        Download
-                        <Lock className="h-3 w-3 text-slate-500" />
-                      </button>
-                      <Link
-                        to={routes.fieldBossManager}
-                        className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300 transition-colors hover:border-white/20 hover:text-white"
-                      >
-                        <MessageSquareText className="h-4 w-4" />
-                        Use with buyer agent
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
+                  )}
+                </div>
               </div>
-            </motion.div>
+            </motion.section>
           )}
         </AnimatePresence>
 
-        {/* ──── Empty state when no chip is selected ──── */}
+        {/* ──── Empty state ──── */}
         {!selectedChip && (
-          <div className="border border-white/8 bg-[#08131b] p-8 sm:p-12 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-cyan-200 mb-5">
-              <Bot className="h-6 w-6" />
+          <section className="mb-12">
+            <div className="border border-white/8 bg-[#08131b] p-8 sm:p-12 text-center">
+              <span className="inline-block text-cyan-200 mb-5">
+                <FieldBossIcon size={32} />
+              </span>
+              <p className="text-lg font-medium text-white mb-2">Pick a topic above to start</p>
+              <p className="text-sm text-slate-400 max-w-md mx-auto">
+                The AI will walk through the analysis, surface key findings, and generate a document you can preview right here.
+              </p>
             </div>
-            <p className="text-lg font-medium text-white mb-2">Select a prompt above to begin</p>
-            <p className="text-sm text-slate-400 max-w-md mx-auto">
-              Choose one of the three suggested topics. The AI will walk through its analysis, show you the key findings, and generate a document you can preview right here.
-            </p>
-          </div>
+          </section>
         )}
-      </section>
 
-      {/* Document Preview Modal */}
-      <DocumentPreviewModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        selectedChip={selectedChip}
-      />
-    </FieldBossShell>
+        {/* ──── Next steps ──── */}
+        <section className="mb-12 border-t border-white/10 pt-10 md:pt-12">
+          <div className="mb-6 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-slate-500">
+            <span>Continue</span>
+            <span className="text-white/20">/</span>
+            <span>Agent handoff</span>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {[
+              {
+                title: 'Feed this to the buyer agent',
+                body: 'The generated document becomes the context the AI uses when buyer prospects start asking questions.',
+                cta: 'Open Agent Manager',
+                to: routes.fieldBossManager,
+              },
+              {
+                title: 'Track what the AI is doing',
+                body: 'See files produced, data processed, and what the AI system is costing across all workflows.',
+                cta: 'Open Dashboard',
+                to: routes.fieldBossDashboard,
+              },
+            ].map((card) => (
+              <div key={card.title} className="border border-white/10 bg-[#08131b] p-6">
+                <div className="mb-4 flex items-center gap-3">
+                  <span className="text-cyan-200">
+                    <FieldBossIcon size={20} />
+                  </span>
+                  <h3 className="text-lg font-medium tracking-tight text-white">{card.title}</h3>
+                </div>
+                <p className="text-sm leading-6 text-slate-300 mb-5">{card.body}</p>
+                <Link
+                  to={card.to}
+                  className="inline-flex items-center gap-2 text-sm font-medium text-cyan-200 transition-colors hover:text-white"
+                >
+                  {card.cta}
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+      </article>
+
+      <DocumentPreviewModal isOpen={showModal} onClose={() => setShowModal(false)} selectedChip={selectedChip} />
+    </div>
   );
 }
