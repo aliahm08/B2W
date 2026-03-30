@@ -72,17 +72,17 @@ export default function Hero({
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="relative z-10 flex min-h-[calc(100svh-6rem)] items-center py-4 sm:min-h-[calc(100svh-7rem)] sm:py-6"
         >
-          <div className="max-w-4xl">
+          <div className="w-full max-w-5xl">
             {showOfferBanner ? (
               <div className="mb-5 sm:mb-6">
                 <OfferBanner variant="hero" onClick={onOfferClick} onClose={onOfferClose} />
               </div>
             ) : null}
 
-            <h1 className="max-w-[13ch] text-[clamp(2.85rem,12vw,5.5rem)] font-medium leading-[0.92] tracking-[-0.05em] text-neutral-950 sm:max-w-[11ch]">
+            <h1 className="max-w-[11ch] text-[clamp(2.85rem,11vw,6.8rem)] font-medium leading-[0.92] tracking-[-0.05em] text-neutral-950 lg:max-w-[12ch]">
               {hero.headline}
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:mt-8 sm:text-lg sm:leading-8 md:text-2xl">
+            <p className="mt-6 max-w-3xl text-base leading-7 text-neutral-600 sm:mt-8 sm:text-lg sm:leading-8 md:text-2xl">
               {hero.subheadline}
             </p>
 

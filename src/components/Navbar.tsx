@@ -436,7 +436,8 @@ export default function Navbar({
             Contact
           </Link>
           <Link
-            to="/?project-builder=open"
+            to={`${basePath}#contact`}
+            onClick={handleNavigation(`${basePath}#contact`)}
             className="rounded-full border border-black bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-neutral-800"
           >
             Start

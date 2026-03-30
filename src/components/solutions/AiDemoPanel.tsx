@@ -28,34 +28,25 @@ function DemoShell({
 }) {
   return (
     <section
-      className={`relative overflow-hidden rounded-[32px] border p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] md:p-6 ${
+      className={`relative overflow-hidden rounded-[30px] p-5 md:p-6 ${
         dark
-          ? 'border-white/10 bg-[linear-gradient(180deg,#121822_0%,#0b1016_100%)] text-white'
-          : 'border-[#dbe3f4]/70 bg-[linear-gradient(180deg,#ffffff_0%,#eff5ff_100%)] text-black shadow-[inset_0_1px_0_rgba(255,255,255,0.9)]'
+          ? 'bg-[linear-gradient(180deg,rgba(18,24,34,0.86)_0%,rgba(11,16,22,0.88)_100%)] text-white'
+          : 'bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(239,245,255,0.92)_100%)] text-black'
       }`}
     >
-      <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
       <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span
-            className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
-              dark
-                ? 'bg-[linear-gradient(135deg,#ffffff_0%,#dce8ff_100%)] text-black'
-                : 'bg-[linear-gradient(135deg,#0f1319_0%,#253345_100%)] text-white'
-            }`}
-          >
-            {icon}
-          </span>
+        <div className="flex items-start gap-3">
+          <span className={`${dark ? 'text-white' : 'text-neutral-950'}`}>{icon}</span>
           <div>
             <p className={`text-sm font-medium ${dark ? 'text-white' : 'text-neutral-950'}`}>{title}</p>
             <p className={`mt-1 text-xs ${dark ? 'text-neutral-500' : 'text-neutral-500'}`}>{subtitle}</p>
           </div>
         </div>
         <span
-          className={`rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.18em] ${
+          className={`text-[10px] uppercase tracking-[0.18em] ${
             dark
-              ? 'border-emerald-400/20 bg-[linear-gradient(135deg,rgba(16,185,129,0.18),rgba(59,130,246,0.14))] text-emerald-300'
-              : 'border-neutral-200 bg-white/75 text-neutral-600'
+              ? 'text-emerald-300/80'
+              : 'text-neutral-500'
           }`}
         >
           {badge}
@@ -77,10 +68,10 @@ function StatTile({
 }) {
   return (
     <div
-      className={`rounded-[24px] border p-4 ${
+      className={`rounded-[22px] p-4 ${
         dark
-          ? 'border-white/8 bg-[linear-gradient(135deg,#111822_0%,#0d131b_100%)]'
-          : 'border-[#dbe3f4] bg-[linear-gradient(135deg,#ffffff_0%,#eef4ff_100%)]'
+          ? 'bg-white/[0.045]'
+          : 'bg-white/70'
       }`}
     >
       <p className={`text-[11px] uppercase tracking-[0.18em] ${dark ? 'text-neutral-500' : 'text-neutral-500'}`}>{label}</p>
@@ -133,11 +124,11 @@ function ChatbotsDemo() {
             Existing wiring works in the front. The rear entrance needs new conduit and weekend scheduling.
           </ChatBubble>
         </div>
-        <div className="mt-5 rounded-[24px] border border-white/8 bg-white/4 p-4">
+        <div className="mt-5 rounded-[22px] bg-white/[0.045] p-4">
           <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">Detected intent</p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-neutral-300">
             {['Commercial install', 'Weekend work', 'Conduit needed', 'Estimate request'].map((item) => (
-              <span key={item} className="rounded-full border border-white/10 px-3 py-2 text-xs text-neutral-300">
+              <span key={item}>
                 {item}
               </span>
             ))}
@@ -160,7 +151,7 @@ function ChatbotsDemo() {
             <StatTile key={label} label={label} value={value} />
           ))}
         </div>
-        <div className="mt-4 rounded-[24px] border border-[#dbe3f4] bg-white/80 p-4">
+        <div className="mt-4 rounded-[22px] bg-white/72 p-4">
           <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">System output</p>
           <ul className="mt-3 space-y-2 text-sm leading-7 text-neutral-700">
             <li>Scope captured and tagged in CRM</li>
@@ -191,7 +182,7 @@ function EstimationsDemo() {
         icon={<BarChart3 className="h-4 w-4" />}
       >
         <div className="space-y-4">
-          <div className="rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,#0f141b_0%,#0b0f14_100%)] p-4">
+          <div className="rounded-[22px] bg-white/[0.045] p-4">
             <div className="flex items-center justify-between">
               <p className="text-sm text-white">Units</p>
               <p className="text-sm font-medium text-white">{units} cameras</p>
@@ -206,7 +197,7 @@ function EstimationsDemo() {
               className="mt-4 w-full accent-sky-300"
             />
           </div>
-          <div className="rounded-[24px] border border-white/8 bg-[linear-gradient(180deg,#0f141b_0%,#0b0f14_100%)] p-4">
+          <div className="rounded-[22px] bg-white/[0.045] p-4">
             <div className="flex items-center justify-between">
               <p className="text-sm text-white">Labor</p>
               <p className="text-sm font-medium text-white">{hours} hours</p>
@@ -221,7 +212,7 @@ function EstimationsDemo() {
               className="mt-4 w-full accent-teal-300"
             />
           </div>
-          <div className="rounded-[24px] border border-white/8 bg-white/4 p-4">
+          <div className="rounded-[22px] bg-white/[0.045] p-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">Assumptions</p>
             <p className="mt-3 text-sm leading-7 text-neutral-300">
               Weekend scheduling, rear conduit work, mobile alerts, and field-access coordination included.
@@ -249,11 +240,11 @@ function EstimationsDemo() {
             </motion.div>
           ))}
         </div>
-        <div className="mt-4 rounded-[24px] border border-white/8 bg-white/4 p-4">
+        <div className="mt-4 rounded-[22px] bg-white/[0.045] p-4">
           <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">Actions</p>
-          <div className="mt-3 flex flex-wrap gap-2 text-sm text-neutral-300">
+          <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm text-neutral-300">
             {['Send estimate', 'Export worksheet', 'Create follow-up task'].map((item) => (
-              <span key={item} className="rounded-full border border-white/10 px-3 py-2">
+              <span key={item}>
                 {item}
               </span>
             ))}
@@ -287,7 +278,7 @@ function FinancialModelsDemo() {
             ['Gross margin', grossMargin, 35, 72, 1, setGrossMargin, '%'],
             ['Labor load', laborLoad, 12, 45, 1, setLaborLoad, '%'],
           ].map(([label, value, min, max, step, setter, suffix]) => (
-            <div key={label} className="rounded-[24px] border border-[#dbe3f4] bg-[linear-gradient(135deg,#ffffff_0%,#eef3ff_100%)] p-4">
+            <div key={label} className="rounded-[22px] bg-white/72 p-4">
               <div className="flex items-center justify-between gap-4">
                 <p className="text-sm font-medium text-neutral-900">{label}</p>
                 <p className="text-sm font-medium text-neutral-950">
@@ -306,7 +297,7 @@ function FinancialModelsDemo() {
             </div>
           ))}
         </div>
-        <div className="mt-4 overflow-hidden rounded-[24px] border border-[#dbe3f4]">
+        <div className="mt-4 overflow-hidden rounded-[22px] bg-white/72">
           <table className="min-w-full divide-y divide-neutral-200 text-left text-sm">
             <thead className="bg-neutral-50 text-neutral-500">
               <tr>
@@ -341,13 +332,13 @@ function FinancialModelsDemo() {
         icon={<BarChart3 className="h-4 w-4" />}
       >
         <div className="space-y-4">
-          <div className="rounded-[24px] border border-white/8 bg-white/4 p-4">
+          <div className="rounded-[22px] bg-white/[0.045] p-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">Recommendation</p>
             <p className="mt-3 text-base font-medium leading-7 text-white md:text-lg">
               Reprice low-margin bundles and consolidate weekend labor before adding new paid demand.
             </p>
           </div>
-          <div className="rounded-[24px] border border-white/8 bg-white/4 p-4">
+          <div className="rounded-[22px] bg-white/[0.045] p-4">
             <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">Expected effect</p>
             <ul className="mt-3 space-y-2 text-sm leading-7 text-neutral-300">
               <li>Modeled revenue lift to {formatCurrency(modeledRevenue)}</li>
@@ -373,7 +364,7 @@ function VoiceToPlanDemo() {
         badge="Processing"
         icon={<Mic className="h-4 w-4" />}
       >
-        <div className="rounded-[24px] border border-white/8 bg-[linear-gradient(135deg,#0d1117_0%,#0b0f14_100%)] px-4 py-4">
+        <div className="rounded-[22px] bg-white/[0.045] px-4 py-4">
           <div className="flex h-16 items-end gap-1">
             {bars.map((height, index) => (
               <motion.span
@@ -386,7 +377,7 @@ function VoiceToPlanDemo() {
             ))}
           </div>
         </div>
-        <div className="mt-4 rounded-[24px] border border-white/8 bg-white/4 p-4 text-sm leading-7 text-neutral-300">
+        <div className="mt-4 rounded-[22px] bg-white/[0.045] p-4 text-sm leading-7 text-neutral-300">
           "Customer wants six cameras, front-door access control, and after-hours mobile alerts. Existing wiring works
           in front, rear entrance needs new conduit. They want the job staged over two weekends."
         </div>
@@ -407,7 +398,7 @@ function VoiceToPlanDemo() {
             <StatTile key={label} label={label} value={value} />
           ))}
         </div>
-        <div className="mt-4 rounded-[24px] border border-[#dbe3f4] bg-white/80 p-4">
+        <div className="mt-4 rounded-[22px] bg-white/72 p-4">
           <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">Plan export</p>
           <ul className="mt-3 space-y-2 text-sm leading-7 text-neutral-700">
             <li>Scope broken into equipment, labor, wiring, and contingency</li>

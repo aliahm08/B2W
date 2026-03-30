@@ -40,7 +40,7 @@ export default function OfferBanner({
       <div
         className={
           isHeroVariant
-            ? 'inline-flex items-center gap-3 rounded-full border border-neutral-200/80 bg-white/78 px-4 py-2 text-neutral-950 shadow-[0_12px_30px_rgba(16,24,40,0.05)] backdrop-blur-sm'
+            ? 'flex w-full max-w-full items-center gap-2 rounded-[1.25rem] border border-neutral-200/80 bg-white/78 px-3 py-2 text-neutral-950 shadow-[0_12px_30px_rgba(16,24,40,0.05)] backdrop-blur-sm sm:inline-flex sm:w-auto sm:gap-3 sm:rounded-full sm:px-4'
             : `inline-flex items-center gap-2 border border-amber-300 bg-amber-50 text-amber-950 ${
                 compact ? 'px-3 py-2' : 'px-4 py-3'
               }`
@@ -49,13 +49,13 @@ export default function OfferBanner({
         <button
           type="button"
           onClick={handleBannerClick}
-          className="inline-flex min-w-0 items-center gap-2 text-left"
+          className="inline-flex min-w-0 flex-1 items-center gap-2 text-left"
           aria-label="Open offer"
         >
           <span
             className={
               isHeroVariant
-                ? 'inline-flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.28em] text-neutral-500'
+                ? 'inline-flex shrink-0 items-center gap-2 text-[10px] font-medium uppercase tracking-[0.22em] text-neutral-500 sm:tracking-[0.28em]'
                 : 'text-[11px] font-mono uppercase tracking-[0.22em] text-amber-800'
             }
           >
@@ -75,20 +75,20 @@ export default function OfferBanner({
           <span
             className={
               isHeroVariant
-                ? 'whitespace-nowrap text-[10px] font-medium uppercase tracking-[0.28em] text-neutral-700'
+                ? 'min-w-0 text-[10px] font-medium uppercase leading-[1.35] tracking-[0.16em] text-neutral-700 sm:whitespace-nowrap sm:tracking-[0.28em]'
                 : `whitespace-nowrap font-medium text-amber-950 ${compact ? 'text-xs' : 'text-sm'}`
             }
           >
             {OFFER_BANNER_LABEL}
           </span>
-          <ArrowUpRight className={`h-3.5 w-3.5 md:hidden ${isHeroVariant ? 'text-neutral-500' : 'text-amber-800'}`} />
+          <ArrowUpRight className={`h-3.5 w-3.5 shrink-0 md:hidden ${isHeroVariant ? 'text-neutral-500' : 'text-amber-800'}`} />
         </button>
 
         <button
           type="button"
           onClick={onClose}
           aria-label="Dismiss offer"
-          className={`hidden h-5 w-5 items-center justify-center transition-colors md:inline-flex ${
+          className={`hidden h-5 w-5 shrink-0 items-center justify-center transition-colors md:inline-flex ${
             isHeroVariant ? 'text-neutral-500 hover:text-neutral-950' : 'text-amber-800 hover:text-amber-950'
           }`}
         >

@@ -1,9 +1,10 @@
-import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Mic, Sparkles, MessageSquare, Cpu, Shield, Send, Bot, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
+import AiSolutionsForm from '../../components/forms/AiSolutionsForm';
+import { aiSolutions } from '../../content/aiSolutions';
 
 /* ─────────────────────────────────────────────────────────────────────────────
    B2W Solutions Page — Product walkthrough
@@ -21,37 +22,6 @@ import Seo from '../../components/Seo';
    ───────────────────────────────────────────────────────────────────────── */
 
 type StageId = 'hero' | 'chatbot' | 'engine' | 'guarantee';
-
-/* ─── Logo ─── */
-
-const logoPath = 'M 34 20 L 58 20 Q 76 20 76 38 L 76 60 Q 76 70 69 63 L 31 25 Q 26 20 34 20 Z';
-const logoRotations = [-28, -20, -12, -5, 6, 14, 22];
-const logoOpacities = [0.12, 0.18, 0.26, 0.35, 0.47, 0.61, 0.74];
-
-function B2WAiLockup() {
-  return (
-    <Link to="/solutions" aria-label="B2W AI" className="b2w-logo-link inline-flex items-center overflow-visible text-white">
-      <svg viewBox="0 0 96 96" className="h-10 w-12 shrink-0 overflow-visible md:h-12 md:w-14">
-        <path d={logoPath} fill="currentColor" fillOpacity="0.93" />
-        {logoRotations.map((r, i) => (
-          <path
-            key={r}
-            d={logoPath}
-            fill="currentColor"
-            fillOpacity={logoOpacities[i]}
-            className="b2w-logo-layer"
-            style={{ animationDelay: `${i * 0.34}s`, animationDuration: '7.2s' } as CSSProperties}
-            transform={`rotate(${r} 48 48)`}
-          />
-        ))}
-      </svg>
-      <span aria-hidden="true" className="b2w-logo-wordmark-shell pr-1">
-        <span className="b2w-wordmark inline-block text-xl font-medium tracking-[-0.09em] [transform:scaleY(0.94)] md:text-2xl">B2W</span>
-      </span>
-      <span className="ml-1 text-lg font-medium tracking-[-0.08em] text-white/92 md:text-xl">-ai</span>
-    </Link>
-  );
-}
 
 /* ─── Audio Bars ─── */
 
@@ -340,6 +310,12 @@ function GuaranteeVisual() {
     { text: 'Project timeline updated on Teams', active: true },
     { text: 'WhatsApp group created for site crew', pending: true },
   ];
+  const integrations = [
+    { name: 'Slack', slug: 'slack' },
+    { name: 'WhatsApp', slug: 'whatsapp' },
+    { name: 'Gmail', slug: 'gmail' },
+    { name: 'Teams', slug: 'microsoftteams' },
+  ];
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -392,10 +368,16 @@ function GuaranteeVisual() {
         transition={{ delay: 1.6, duration: 0.5 }}
         className="mt-4 grid grid-cols-4 gap-2"
       >
-        {['Slack', 'WhatsApp', 'Gmail', 'Teams'].map((n, i) => (
-          <div key={n} className="rounded-lg border border-white/5 bg-white/[0.02] px-2 py-2 text-center">
-            <div className="mx-auto mb-1 h-1.5 w-1.5 rounded-full bg-emerald-400" />
-            <span className="text-[8px] uppercase tracking-[0.15em] text-neutral-500">{n}</span>
+        {integrations.map((integration) => (
+          <div key={integration.name} className="rounded-lg border border-emerald-400/10 bg-white/[0.02] px-2 py-2 text-center">
+            <img
+              src={`https://cdn.simpleicons.org/${integration.slug}/22c55e?viewbox=auto`}
+              alt={`${integration.name} icon`}
+              className="mx-auto mb-1 h-4 w-4"
+              loading="lazy"
+              decoding="async"
+            />
+            <span className="text-[8px] uppercase tracking-[0.15em] text-emerald-300">{integration.name}</span>
           </div>
         ))}
       </motion.div>
@@ -548,38 +530,9 @@ export default function SolutionsLandingPage() {
         canonicalPath="/solutions"
       />
 
-      <div className="solutions-page bg-[#080a0f] text-white">
-        {/* ─── Nav ─── */}
-        <header className="fixed inset-x-0 top-0 z-[100] border-b border-white/5 bg-[#080a0f]/70 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
-            <B2WAiLockup />
-            <div className="flex items-center gap-3">
-              <Link
-                to="/"
-                className="hidden rounded-full border border-white/8 px-4 py-2 text-[13px] text-neutral-400 transition-colors hover:border-white/20 hover:text-white md:inline-flex"
-              >
-                Consulting
-              </Link>
-              <Link
-                to="/#contact"
-                className="inline-flex rounded-full bg-white px-4 py-2 text-[13px] font-medium text-black transition-opacity hover:opacity-90"
-              >
-                Talk to B2W
-              </Link>
-            </div>
-          </div>
-        </header>
-
+      <div className="solutions-page text-white">
         {/* ─── HERO — Voice to Plan (viewport 1) ─── */}
         <section className="relative flex min-h-screen flex-col justify-center overflow-hidden">
-          {/* BG grid */}
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.025]"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
-              backgroundSize: '72px 72px',
-            }}
-          />
           {/* Bottom fade */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#080a0f] to-transparent" />
 
@@ -624,19 +577,26 @@ export default function SolutionsLandingPage() {
                 transition={{ duration: 0.5, delay: 0.24 }}
                 className="mt-8 flex flex-wrap justify-center gap-4"
               >
+                <Link
+                  to="/solutions/voice-to-plan"
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                >
+                  Open voice-to-plan
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
                 <a
                   href="#flow"
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
                 >
                   See the system
                   <ArrowRight className="h-4 w-4" />
                 </a>
-                <Link
-                  to="/#contact"
+                <a
+                  href="#ai-intake"
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
                 >
-                  Talk to B2W
-                </Link>
+                  Talk to B2W AI
+                </a>
               </motion.div>
             </div>
 
@@ -685,23 +645,74 @@ export default function SolutionsLandingPage() {
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  <Link
-                    to="/#contact"
+                  <a
+                    href="#ai-intake"
                     className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
                   >
-                    Contact B2W
+                    Talk to B2W AI
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
-                  <Link
-                    to="/"
+                  </a>
+                  <a
+                    href="https://chat.b2w-ai.com"
+                    target="_blank"
+                    rel="noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
                   >
-                    Consulting site
+                    Live demo
                     <ArrowRight className="h-4 w-4" />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="border-t border-white/8 bg-[#0d1116]">
+          <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+            <div className="max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Solution Pages</p>
+              <h2 className="mt-4 text-[2.4rem] font-medium leading-[1.06] tracking-[-0.04em] text-white md:text-[3.2rem]">
+                Open the exact workflow you want to explore.
+              </h2>
+              <p className="mt-4 text-lg leading-8 text-neutral-400">
+                Each page explains where the system fits, what B2W builds, and what the output looks like in practice.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {aiSolutions.map((solution) => (
+                <motion.div key={solution.slug} whileHover={{ y: -6 }} transition={{ duration: 0.18 }}>
+                  <Link
+                    to={`/solutions/${solution.slug}`}
+                    className="group block h-full rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,#141a24_0%,#10151d_100%)] p-6 transition-colors hover:border-white/24"
+                  >
+                    <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{solution.navLabel}</p>
+                    <p className="mt-4 text-2xl font-medium tracking-tight text-white">{solution.title}</p>
+                    <p className="mt-4 text-sm leading-7 text-neutral-300">{solution.summary}</p>
+                    <div className="mt-6 flex items-center gap-2 text-sm font-medium text-white">
+                      Open subpage
+                      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="ai-intake" className="scroll-mt-32 border-t border-white/8 bg-[#080a0f]">
+          <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
+            <div className="mb-8 max-w-3xl">
+              <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Start Here</p>
+              <h2 className="mt-4 text-[2.4rem] font-medium leading-[1.06] tracking-[-0.04em] text-white md:text-[3.2rem]">
+                Tell B2W what the AI should do.
+              </h2>
+              <p className="mt-4 text-lg leading-8 text-neutral-400">
+                This intake is specific to AI systems. Use it to describe the workflow, the business logic, and the
+                systems the AI needs to touch.
+              </p>
+            </div>
+            <AiSolutionsForm sourceLabel="AI Solutions landing" />
           </div>
         </section>
       </div>

@@ -4,7 +4,7 @@
  */
 
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { Routes, Route, useLocation, Navigate, useSearchParams } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, Outlet, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -15,6 +15,7 @@ import AssistantWidget from './components/AssistantWidget';
 import Seo from './components/Seo';
 import NotFound from './components/NotFound';
 import ProjectBuilderDrawer from './components/ProjectBuilderDrawer';
+import SolutionsNavbar from './components/solutions/SolutionsNavbar';
 import { ArrowUpRight } from 'lucide-react';
 import { scrollToHashTarget } from './lib/hashNavigation';
 import HomeTestOnePage from './pages/HomeTestOnePage';
@@ -73,18 +74,21 @@ function ScrollToTop() {
 function LandingPage({
   onHeroVisibilityChange,
   onOfferClick,
-  isOfferBannerDismissed,
   onOfferClose,
   openBuilderOnLoad = false,
 }: {
   onHeroVisibilityChange: (isVisible: boolean) => void;
   onOfferClick: () => void;
-  isOfferBannerDismissed: boolean;
   onOfferClose: () => void;
   openBuilderOnLoad?: boolean;
 }) {
   const [showProjectButton, setShowProjectButton] = useState(false);
   const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
+
+  const scrollToContact = () => {
+    const contact = document.getElementById('contact');
+    contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   useEffect(() => {
     if (openBuilderOnLoad) {
@@ -140,7 +144,7 @@ function LandingPage({
           >
             <button
               type="button"
-              onClick={() => setIsProjectDrawerOpen(true)}
+              onClick={scrollToContact}
               aria-label="Begin Your Project"
               className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-black text-white shadow-[0_20px_50px_rgba(0,0,0,0.22)] transition-colors hover:bg-neutral-800 h-12 w-12 md:h-auto md:w-auto md:px-8 md:py-4 md:text-base md:font-semibold"
             >
@@ -157,6 +161,33 @@ function LandingPage({
 
 function RouteLoadingFallback() {
   return <div className="min-h-[40vh] bg-white" aria-hidden="true" />;
+}
+
+function SolutionsLayout() {
+  return (
+    <div className="relative min-h-screen overflow-x-clip bg-[#080a0f] text-white">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
+          backgroundSize: '72px 72px',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0"
+        style={{
+          background:
+            'radial-gradient(ellipse 60% 45% at 20% 15%, rgba(56,189,248,0.08), transparent 60%), radial-gradient(ellipse 55% 45% at 82% 22%, rgba(45,212,191,0.05), transparent 62%), radial-gradient(ellipse 58% 50% at 50% 100%, rgba(168,85,247,0.05), transparent 70%)',
+        }}
+      />
+      <div className="relative z-10 pt-28 md:pt-32 xl:pt-24">
+        <Outlet />
+      </div>
+    </div>
+  );
 }
 
 export default function App() {
@@ -195,6 +226,7 @@ export default function App() {
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
     isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAiSolutionsLanding;
+  const routeTransitionKey = isAiSolutionsLanding ? '/solutions' : location.pathname;
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -214,11 +246,12 @@ export default function App() {
           onOfferClose={dismissOfferBanner}
         />
       )}
+      {isAiSolutionsLanding && <SolutionsNavbar />}
       <main>
         <Suspense fallback={<RouteLoadingFallback />}>
           <AnimatePresence mode="wait">
             <motion.div
-              key={location.pathname}
+              key={routeTransitionKey}
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -234,7 +267,6 @@ export default function App() {
                         const contact = document.getElementById('contact');
                         contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                       }}
-                      isOfferBannerDismissed={isOfferBannerDismissed}
                       onOfferClose={dismissOfferBanner}
                       openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
                     />
@@ -245,11 +277,13 @@ export default function App() {
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
                 <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
-                <Route path="/solutions" element={<SolutionsLandingPage />} />
+                <Route path="/solutions" element={<SolutionsLayout />}>
+                  <Route index element={<SolutionsLandingPage />} />
+                  <Route path=":slug" element={<SolutionTemplatePage />} />
+                </Route>
                 <Route path="/kitchen" element={<KitchenPage />} />
                 <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
                 <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />
-                <Route path="/solutions/:slug" element={<SolutionTemplatePage />} />
                 <Route path="/tiers/basic-advisory" element={<TierPage />} />
                 <Route path="/tiers/consulting" element={<TierPage />} />
                 <Route path="/tiers/implementation" element={<TierPage />} />
