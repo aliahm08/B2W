@@ -27,6 +27,18 @@ const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalP
 const UyghurEatsProfilePage = lazy(() => import('./pages/projects/uyghur-eats/ProfilePage'));
 const UyghurEatsClientPortal = lazy(() => import('./pages/client/UyghurEatsClientPortal'));
 const UyghurEatsTermsPage = lazy(() => import('./pages/client/UyghurEatsTermsPage'));
+const UyghurEatsFieldBossChatbotPage = lazy(() => import('./pages/client/UyghurEatsFieldBossChatbotPage'));
+const UyghurEatsFieldBossAgentManagerPage = lazy(() => import('./pages/client/UyghurEatsFieldBossAgentManagerPage'));
+const UyghurEatsFieldBossDashboardPage = lazy(() => import('./pages/client/UyghurEatsFieldBossDashboardPage'));
+const FosterPartnersOverviewPage = lazy(() => import('./pages/client/FosterPartnersOverviewPage'));
+const FosterPartnersDevelopmentDashboardPage = lazy(() => import('./pages/client/FosterPartnersDevelopmentDashboardPage'));
+const FosterPartnersDesignLifecyclePage = lazy(() => import('./pages/client/FosterPartnersDesignLifecyclePage'));
+const FosterPartnersBuildLifecyclePage = lazy(() => import('./pages/client/FosterPartnersBuildLifecyclePage'));
+const FosterPartnersDevelopmentLifecyclePage = lazy(() => import('./pages/client/FosterPartnersDevelopmentLifecyclePage'));
+const FosterPartnersScopePage = lazy(() => import('./pages/client/FosterPartnersScopePage'));
+const FosterPartnersOperatingModelPage = lazy(() => import('./pages/client/FosterPartnersOperatingModelPage'));
+const FosterPartnersGovernancePage = lazy(() => import('./pages/client/FosterPartnersGovernancePage'));
+const FosterPartnersTermsPage = lazy(() => import('./pages/client/FosterPartnersTermsPage'));
 const UyghurEatsBasicPreviewPage = lazy(() => import('./pages/projects/uyghur-eats/previews/ValuationModelPage'));
 const UyghurEatsValuationModelPage = lazy(() => import('./pages/projects/uyghur-eats/ValuationModelPage'));
 const UyghurEatsDataRoomPage = lazy(() => import('./pages/projects/uyghur-eats/previews/DataRoomPage'));
@@ -306,6 +318,19 @@ export default function App() {
                 <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
                 <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
                 <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
+                <Route path="/client/uyghur-eats/fieldboss-chatbot" element={<UyghurEatsFieldBossChatbotPage />} />
+                <Route path="/client/uyghur-eats/fieldboss-agent-manager" element={<UyghurEatsFieldBossAgentManagerPage />} />
+                <Route path="/client/uyghur-eats/fieldboss-dashboard" element={<UyghurEatsFieldBossDashboardPage />} />
+                <Route path="/client/foster-partners" element={<FosterPartnersOverviewPage />} />
+                <Route path="/client/foster-partners/development-dashboard" element={<FosterPartnersDevelopmentDashboardPage />} />
+                <Route path="/client/foster-partners/development-dashboard/design" element={<FosterPartnersDesignLifecyclePage />} />
+                <Route path="/client/foster-partners/development-dashboard/build" element={<FosterPartnersBuildLifecyclePage />} />
+                <Route path="/client/foster-partners/development-dashboard/development" element={<FosterPartnersDevelopmentLifecyclePage />} />
+                <Route path="/client/foster-partners/scope" element={<FosterPartnersScopePage />} />
+                <Route path="/client/foster-partners/operating-model" element={<FosterPartnersOperatingModelPage />} />
+                <Route path="/client/foster-partners/governance" element={<FosterPartnersGovernancePage />} />
+                <Route path="/client/foster-partners/terms" element={<FosterPartnersTermsPage />} />
+                <Route path="/client/narinder-sagoo" element={<Navigate to="/client/foster-partners" replace />} />
 
                 {/* Redirects for legacy routes */}
                 <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />

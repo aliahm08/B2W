@@ -97,6 +97,8 @@ export default function ProfileSectionNav({
       onSelect(item.id);
     } else {
       setInternalActiveId(item.id);
+      const section = document.getElementById(item.id);
+      section?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 

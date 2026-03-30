@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, TrendingUp, ShieldCheck, ChevronDown } from 'lucide-react';
+import { ArrowRight, TrendingUp, ShieldCheck, ChevronDown, Bot, RadioTower, ChartNoAxesCombined } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
@@ -14,6 +14,7 @@ import {
     projectPageShellClassName,
     projectHeroGridClassNames,
 } from '../../components/projectPageLayout';
+import { getUyghurEatsRoutes } from './uyghurEatsRoutes';
 
 const proposalValueAdds = [
     {
@@ -156,6 +157,7 @@ function StrategicObjectivesCards() {
 
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
+    const routes = getUyghurEatsRoutes();
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [showPricingWhy, setShowPricingWhy] = useState(false);
     const [isFinalSectionVisible, setIsFinalSectionVisible] = useState(false);
@@ -221,13 +223,35 @@ export default function UyghurEatsClientPortal() {
     };
 
     const navItems: ClientNavAction[] = [
-        { label: 'Proposal', to: '/client/uyghur-eats' },
-        { label: 'Profile', to: '/client/uyghur-eats/profile' },
-        { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
-        { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
-        { label: 'Terms', to: '/client/uyghur-eats/terms' },
+        { label: 'Proposal', to: routes.proposal },
+        { label: 'Profile', to: routes.profile },
+        { label: 'Valuation', to: routes.valuation },
+        { label: 'Documentation', to: routes.dataRoom },
+        { label: 'Terms', to: routes.terms },
+        { label: 'FieldBoss AI', to: routes.fieldBossChatbot, type: 'link' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal }
     ];
+
+    const fieldBossPages = [
+        {
+            title: 'Chatbot',
+            to: routes.fieldBossChatbot,
+            description: 'Record notes, transcribe them, and generate minimalist B2W estimates.',
+            icon: Bot,
+        },
+        {
+            title: 'AI Agent Manager',
+            to: routes.fieldBossManager,
+            description: 'Monitor how WhatsApp, email, and phone workflows are performing.',
+            icon: RadioTower,
+        },
+        {
+            title: 'AI Dashboard',
+            to: routes.fieldBossDashboard,
+            description: 'Track AI data volume, files produced, and cost management.',
+            icon: ChartNoAxesCombined,
+        },
+    ] as const;
 
     return (
         <article className={projectPageShellClassName}>
@@ -596,13 +620,71 @@ export default function UyghurEatsClientPortal() {
                                 </p>
                             </div>
                             <Link
-                                to="/client/uyghur-eats/terms"
+                                to={routes.terms}
                                 className="mt-6 inline-flex items-center gap-2 text-sm text-white transition-all hover:font-semibold"
                             >
                                 View Key Terms
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
                         </motion.div>
+                    </div>
+                </section>
+
+                <section className="mb-12 border-t border-neutral-100 pt-10 md:pt-12">
+                    <motion.div
+                        {...copyReveal}
+                        className="mb-5 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500 md:mb-6"
+                    >
+                        <span>Second AI Header Link</span>
+                        <span className="text-neutral-300">/</span>
+                        <span>FieldBoss AI</span>
+                    </motion.div>
+                    <div className="grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
+                        <motion.div
+                            {...copyReveal}
+                            className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-8"
+                        >
+                            <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-300/75">FieldBoss AI</p>
+                            <h2 className="max-w-2xl text-2xl font-medium tracking-tight md:text-3xl">
+                                The live AI workspace for recorded notes, estimate generation, workflow oversight, and cost control.
+                            </h2>
+                            <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-300 md:text-base">
+                                This is the second AI track in the Uyghur Eats client portal header. It is a darker operational layer where recorded notes become estimates, integrations are managed across channels, and AI outputs are tracked with cost discipline.
+                            </p>
+                            <Link
+                                to={routes.fieldBossChatbot}
+                                className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/10"
+                            >
+                                Open FieldBoss AI
+                                <ArrowRight className="h-4 w-4" />
+                            </Link>
+                        </motion.div>
+
+                        <div className="grid gap-px border border-[#122230] bg-[#122230]">
+                            {fieldBossPages.map((page) => {
+                                const Icon = page.icon;
+
+                                return (
+                                    <motion.div key={page.title} {...copyReveal}>
+                                        <Link
+                                            to={page.to}
+                                            className="group flex h-full items-center justify-between bg-[#08131b] p-5 transition-colors hover:bg-[#0d1d29]"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-cyan-100 transition-colors group-hover:border-cyan-200/30 group-hover:bg-cyan-200/10">
+                                                    <Icon className="h-5 w-5" />
+                                                </div>
+                                                <div>
+                                                    <span className="block text-sm font-semibold text-white">{page.title}</span>
+                                                    <span className="text-xs leading-5 text-slate-400">{page.description}</span>
+                                                </div>
+                                            </div>
+                                            <ArrowRight className="h-4 w-4 text-slate-600 transition-colors group-hover:text-cyan-100" />
+                                        </Link>
+                                    </motion.div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </section>
 

@@ -44,7 +44,7 @@ export default function Deliverables() {
               {/* Mock Link for Property Profile if it's the opportunity deliverable */}
               {deliverable.id === 'opportunity' ? (
                 <a 
-                  href="/client/uyghur-eats-v3"
+                  href="/client/uyghur-eats"
                   className="inline-flex items-center gap-2 text-sm font-medium text-black group-hover:underline"
                 >
                   View Opportunity Overview <ArrowRight className="w-4 h-4" />
