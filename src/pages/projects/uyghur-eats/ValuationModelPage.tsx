@@ -305,7 +305,8 @@ export default function ValuationModelPage() {
             <ClientNavbar 
                 clientName="Uyghur Eats" 
                 clientLink="/client/uyghur-eats"
-                navItems={navItems} 
+                navItems={navItems}
+                hasFieldBoss={true}
             />
             <Seo
                 title="Uyghur Eats Valuation Model and Sale Range"
@@ -365,8 +366,12 @@ export default function ValuationModelPage() {
                                 Deliverable Preview
                             </p>
                             <h2 className="mb-6 text-2xl font-medium tracking-tight md:text-3xl">
-                                How this model adds value to your exit.
+                                Objectively Defend Your Asking Price
                             </h2>
+                            <div className="mb-6 border border-white/15 bg-white/5 p-4">
+                                <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">Potential Added Value to Sale</p>
+                                <p className="mt-2 text-lg font-medium text-white">$15,000+</p>
+                            </div>
                             <div className="space-y-4 text-sm text-neutral-300">
                                 <ul className="list-disc pl-4 space-y-2">
                                     <li>Establishes an objective, defensible baseline for your asking price.</li>

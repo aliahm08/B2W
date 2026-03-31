@@ -202,7 +202,7 @@ export default function DataRoomPage() {
 
   return (
     <article className={projectPageShellClassName}>
-      <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} />
+      <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} hasFieldBoss={true} />
       <Seo
         title="Uyghur Eats Due Diligence Documentation"
         description="Structured documentation package for Uyghur Eats that organizes executive summary materials, financial records, operating documents, lease items, and digital assets for diligence."

@@ -318,15 +318,39 @@ export default function ClientNavbar({
           ) : null}
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsMobileMenuOpen((current) => !current)}
-          className={`md:hidden inline-flex items-center justify-center p-1 transition-colors ${isDarkTheme ? 'text-white hover:text-white' : isMobileMenuOpen ? 'text-white hover:text-white' : 'text-neutral-700 hover:text-black'}`}
-          aria-expanded={isMobileMenuOpen}
-          aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        >
-          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          {hasFieldBoss ? (
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                setIsFieldBossOpen((current) => !current);
+              }}
+              aria-label="Open proposal summary"
+              aria-expanded={isFieldBossOpen}
+              className={`inline-flex min-h-10 items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium transition-colors ${
+                isFieldBossOpen
+                  ? 'border-cyan-300/30 bg-cyan-300/10 text-cyan-200'
+                  : isDarkTheme
+                    ? 'border-white/10 text-white hover:border-cyan-300/40 hover:bg-cyan-300/10'
+                    : 'border-neutral-200 text-neutral-700 hover:border-cyan-400 hover:bg-cyan-50 hover:text-cyan-700'
+              }`}
+            >
+              <FieldBossIcon size={16} className="shrink-0" />
+              <span>Summarize</span>
+            </button>
+          ) : null}
+
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+            className={`inline-flex items-center justify-center p-1 transition-colors ${isDarkTheme ? 'text-white hover:text-white' : isMobileMenuOpen ? 'text-white hover:text-white' : 'text-neutral-700 hover:text-black'}`}
+            aria-expanded={isMobileMenuOpen}
+            aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
 
         {/* Desktop Navigation */}
         <div className={desktopNavClassName}>
@@ -372,17 +396,31 @@ export default function ClientNavbar({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
               onClick={() => setIsFieldBossOpen(false)}
-              className="fixed inset-x-0 bottom-0 top-20 hidden cursor-pointer bg-black/50 backdrop-blur-md md:block"
+              className="fixed inset-x-0 bottom-0 top-20 cursor-pointer bg-black/50 backdrop-blur-md"
               style={{ zIndex: 40 }}
             />
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              exit={{ opacity: 0, y: 12 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="absolute left-0 right-0 top-full hidden border-t border-white/10 bg-[#08131b] shadow-2xl md:block pointer-events-auto"
+              className="fixed inset-x-0 bottom-0 top-20 overflow-y-auto border-t border-white/10 bg-[#08131b] shadow-2xl pointer-events-auto md:absolute md:left-0 md:right-0 md:top-full md:bottom-auto md:max-h-[calc(100vh-5rem)]"
               style={{ zIndex: 50 }}
             >
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#08131b]/95 px-4 py-3 backdrop-blur md:hidden">
+                <div className="flex items-center gap-2 text-white">
+                  <FieldBossIcon size={16} className="text-cyan-200" />
+                  <span className="text-sm font-medium">Summarize Proposal</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsFieldBossOpen(false)}
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-300 transition-colors hover:bg-white/10 hover:text-white"
+                  aria-label="Close proposal summary"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
               <FieldBossChatTray onClose={() => setIsFieldBossOpen(false)} />
             </motion.div>
           </>

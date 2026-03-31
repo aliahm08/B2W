@@ -35,7 +35,7 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
   },
   '/uyghur-eats': {
     publicTitle: 'Business Sale Preparation & Opportunity Packaging',
-    publicClientDescription: 'Fine dining property sale opportunity',
+    publicClientDescription: 'Fine dining business acquisition opportunity',
     publicDescription: 'A four-step engagement covering business overview creation, valuation modeling, operations documentation, and buyer due diligence packaging for a local restaurant asset.',
     publicImpact: 'Organized asset sale package',
     tags: [

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Download, Eye, FileText, Lock, MessageSquareText, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Download, Eye, FileText, Lock, MessageSquareText, Sparkles, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FieldBossIcon from './FieldBossIcon';
 import { getUyghurEatsRoutes } from '../../pages/client/uyghurEatsRoutes';
@@ -14,21 +14,25 @@ const suggestionChips = [
 
 type ChipId = (typeof suggestionChips)[number]['id'];
 
-const scriptedReplies: Record<ChipId, { lines: string[]; blurredValue?: string; basis?: string[] }> = {
+const scriptedReplies: Record<ChipId, { lines: string[]; scores?: { section: string; score: number; note: string }[] }> = {
   evaluate: {
     lines: [
-      'I can build you an evaluation right now. It\u2019s based on three things:',
-      'First, your normalized earnings after we strip out one-time and owner-specific expenses. Second, comparable restaurant sales in the DC metro area. Third, how transfer-ready the business actually is \u2014 documentation, lease status, and operational handoff difficulty.',
+      'Here is the evaluation summary based on how the business compares with nearby restaurant competition:',
+      'The business stands out because the cuisine is differentiated, the neighborhood demand is established, and the brand has clear operating upside.',
     ],
-    blurredValue: '$XXX,XXX \u2013 $XXX,XXX',
-    basis: ['Normalized seller discretionary earnings', 'Comparable restaurant transactions within 15 miles', 'Transfer readiness and documentation quality'],
+    scores: [
+      { section: 'Location & Footprint', score: 89, note: 'Better corridor quality and foot traffic than most nearby independents.' },
+      { section: 'Culinary Draw', score: 94, note: 'The handmade noodle offering is more differentiated than most local competitors.' },
+      { section: 'Community Integration', score: 86, note: 'Repeat demand and neighborhood loyalty are already established.' },
+      { section: 'Market Analysis', score: 84, note: 'The market is competitive, but direct substitutes are limited.' },
+      { section: 'Acquisition Thesis', score: 88, note: 'The business story is easy for buyers to understand quickly.' },
+      { section: 'Use Cases & Growth', score: 82, note: 'There is credible upside, though some growth depends on stronger systems.' },
+    ],
   },
   risks: {
     lines: [
-      'Three risks that will come up in any serious buyer conversation:',
-      'Lease transfer \u2014 your lease assignment language is ambiguous, and a buyer can\u2019t close without a clean transfer or a fresh agreement from the landlord.',
-      'Key-person dependency \u2014 the hand-pull noodle technique is reputation-critical and currently tied to one individual.',
-      'Revenue concentration \u2014 85% dine-in exposure means a single external disruption (construction, pandemic, weather) hits topline directly.',
+      'Three risks will come up in any serious buyer conversation:',
+      'These are the main issues buyers will want addressed before they feel fully comfortable with the business.',
     ],
   },
   package: {
@@ -105,12 +109,29 @@ function DocumentPreviewModal({ isOpen, onClose, selectedChip }: { isOpen: boole
             <div className="border border-black/30 bg-white p-8 text-black shadow-[0_18px_60px_rgba(0,0,0,0.35)]">
               <div className="flex items-start justify-between border-b border-neutral-200 pb-5">
                 <div><p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">B2W {selectedChip === 'evaluate' ? 'evaluation brief' : selectedChip === 'risks' ? 'risk report' : 'asset package'}</p><h3 className="mt-2 text-2xl font-medium tracking-tight">{docTitle}</h3></div>
-                {reply.blurredValue && <div className="text-right"><p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">Indicative range</p><p className="mt-2 text-lg font-semibold blur-[5px] select-none">{reply.blurredValue}</p></div>}
+                {selectedChip === 'evaluate' ? (
+                  <div className="text-right">
+                    <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-neutral-500">As-is Value</p>
+                    <p className="mt-2 text-lg font-semibold">$180,000</p>
+                  </div>
+                ) : null}
               </div>
               <div className="mt-6 space-y-5 text-sm leading-6 text-neutral-700">
                 <p>{reply.lines[0]}</p>
                 {reply.lines.slice(1).map((line, i) => <p key={i} className="blur-[3px] select-none">{line}</p>)}
-                {reply.basis && <div className="grid gap-3 md:grid-cols-3 blur-[3px] select-none">{reply.basis.map((item) => <div key={item} className="border border-neutral-200 p-3"><p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">Basis</p><p className="mt-2 font-medium text-black">{item}</p></div>)}</div>}
+                {reply.scores ? (
+                  <div className="grid gap-3 md:grid-cols-2">
+                    {reply.scores.map((item) => (
+                      <div key={item.section} className="border border-neutral-200 p-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <p className="text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-500">{item.section}</p>
+                          <p className="text-sm font-semibold text-black">{item.score}/100</p>
+                        </div>
+                        <p className="mt-2 text-sm text-neutral-700">{item.note}</p>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -145,6 +166,7 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
   const [showBasisCards, setShowBasisCards] = useState(false);
   const [showDocPreview, setShowDocPreview] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const reply = selectedChip ? scriptedReplies[selectedChip] : null;
@@ -159,20 +181,42 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
     if (lineIndex < reply.lines.length - 1) {
       setLineIndex((prev) => prev + 1);
     } else {
-      if (reply.basis) setTimeout(() => setShowBasisCards(true), 300);
-      setTimeout(() => setShowDocPreview(true), reply.basis ? 900 : 400);
+      const shouldShowFollowupCard = Boolean(reply.scores) || selectedChip === 'risks' || selectedChip === 'package';
+      if (shouldShowFollowupCard) setTimeout(() => setShowBasisCards(true), 300);
+      setTimeout(() => setShowDocPreview(true), shouldShowFollowupCard ? 900 : 400);
     }
-  }, [lineIndex, reply]);
+  }, [lineIndex, reply, selectedChip]);
 
   useEffect(() => {
-    chatContainerRef.current?.scrollTo({ top: chatContainerRef.current.scrollHeight, behavior: 'smooth' });
-  }, [lineIndex, showBasisCards, showDocPreview]);
+    const container = chatContainerRef.current;
+    if (!container) return;
+
+    const updateScrollHint = () => {
+      const hasOverflow = container.scrollHeight > container.clientHeight + 8;
+      const isNearBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 8;
+      setShowScrollHint(hasOverflow && !isNearBottom);
+    };
+
+    const frame = window.requestAnimationFrame(updateScrollHint);
+    container.addEventListener('scroll', updateScrollHint);
+    window.addEventListener('resize', updateScrollHint);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      container.removeEventListener('scroll', updateScrollHint);
+      window.removeEventListener('resize', updateScrollHint);
+    };
+  }, [selectedChip, lineIndex, showBasisCards, showDocPreview]);
+
+  useEffect(() => {
+    chatContainerRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+  }, [selectedChip]);
 
   const docFile = selectedChip === 'evaluate' ? 'Evaluation Summary.pdf' : selectedChip === 'risks' ? 'Risk Assessment.pdf' : 'Asset Package.pdf';
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-6 pb-10">
-      <div className="flex items-center justify-between mb-8">
+    <div className="mx-auto max-w-4xl px-4 py-4 pb-8 sm:px-6 sm:py-6 sm:pb-10">
+      <div className="mb-6 flex items-center justify-between sm:mb-8">
         <div className="flex items-center gap-3">
           <span className="text-cyan-200"><FieldBossIcon size={24} /></span>
           <div>
@@ -183,15 +227,15 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
       </div>
 
       {!selectedChip && (
-         <div className="flex flex-col items-center justify-center p-8 border border-white/10 bg-white/[0.02] rounded-2xl mb-6">
+         <div className="mb-6 flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-8">
             <span className="text-cyan-200 mb-4"><FieldBossIcon size={32} /></span>
             <p className="text-white font-medium mb-1">What would you like summarized?</p>
-            <p className="text-sm text-cyan-100/60 mb-8 max-w-sm text-center">Pick a topic below to review a quick summary and preview the supporting document.</p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <p className="mb-6 max-w-sm text-center text-sm text-cyan-100/60 sm:mb-8">Pick a topic below to review a quick summary and preview the supporting document.</p>
+            <div className="grid w-full gap-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center">
               {suggestionChips.map((chip) => {
                 const Icon = chip.icon;
                 return (
-                  <motion.button key={chip.id} onClick={() => handleChipClick(chip.id)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-medium tracking-tight text-slate-300 transition-all hover:border-white/20 hover:text-white">
+                  <motion.button key={chip.id} onClick={() => handleChipClick(chip.id)} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="flex w-full items-center gap-2.5 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-left text-sm font-medium tracking-tight text-slate-300 transition-all hover:border-white/20 hover:text-white sm:w-auto sm:rounded-full sm:px-5">
                     <Icon className="h-4 w-4 text-cyan-200" />
                     {chip.label}
                   </motion.button>
@@ -202,8 +246,8 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
       )}
 
       {selectedChip && reply && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="border border-white/10 bg-[#08131b] rounded-2xl overflow-hidden">
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="overflow-hidden rounded-2xl border border-white/10 bg-[#08131b]">
+          <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-5">
             <div className="flex items-center gap-3">
               <button 
                 onClick={() => setSelectedChip(null)} 
@@ -218,67 +262,137 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
             <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100/70">Live demo</div>
           </div>
           
-          <div ref={chatContainerRef} className="max-h-[50vh] overflow-y-auto p-5 space-y-4">
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="ml-auto max-w-[88%] rounded-[26px] border border-white/8 bg-white/[0.04] px-5 py-4 text-sm leading-7 text-slate-200">
-              {suggestionChips.find((c) => c.id === selectedChip)?.label}
-            </motion.div>
-
-            {currentLines.map((line, i) => (
-              <div key={`${selectedChip}-${i}`}>
-                <TypewriterBubble text={line} delay={i === 0 ? 400 : 200} onFinished={i === lineIndex ? handleLineFinished : undefined} />
+          <div className="relative">
+            <div ref={chatContainerRef} className="max-h-[calc(100vh-14rem)] overflow-y-auto p-4 space-y-4 sm:max-h-[50vh] sm:p-5">
+              <div className="flex justify-end">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="max-w-[92%] rounded-[26px] border border-white/8 bg-white/[0.04] px-4 py-4 text-right text-sm leading-7 text-slate-200 sm:max-w-[88%] sm:px-5">
+                  {suggestionChips.find((c) => c.id === selectedChip)?.label}
+                </motion.div>
               </div>
-            ))}
 
-            {reply.blurredValue && showBasisCards && (
+              {currentLines.map((line, i) => (
+                <div key={`${selectedChip}-${i}`}>
+                  <TypewriterBubble text={line} delay={i === 0 ? 400 : 200} onFinished={i === lineIndex ? handleLineFinished : undefined} />
+                </div>
+              ))}
+
+            {selectedChip === 'evaluate' && showBasisCards && (
               <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50">
-                Your indicative range is <span className="inline-block rounded px-2 py-0.5 text-white blur-[6px] select-none bg-white/10">{reply.blurredValue}</span>. The supporting narrative is shareable &mdash; the figure stays protected.
+                Your As-is Value if you sell today is{' '}
+                <Link to={routes.profile} onClick={onClose} className="font-bold text-white underline underline-offset-4">
+                  $180,000
+                </Link>.
               </motion.div>
             )}
 
-            {reply.basis && showBasisCards && (
+            {selectedChip === 'risks' && showBasisCards ? (
+              <>
+                <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50">
+                  <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-slate-500">Top Risks</p>
+                  <div className="mt-4 space-y-3">
+                    <div className="rounded-lg border border-cyan-300/20 bg-cyan-300/[0.08] px-4 py-3">
+                      <p className="text-sm font-medium text-cyan-50">1. Lease transfer</p>
+                      <p className="mt-1 pl-4 text-sm leading-6 text-cyan-50/70">
+                        The lease assignment language is ambiguous, and a buyer cannot close without a clean transfer or a fresh agreement from the landlord.
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-cyan-300/20 bg-cyan-300/[0.08] px-4 py-3">
+                      <p className="text-sm font-medium text-cyan-50">2. Key-person dependency</p>
+                      <p className="mt-1 pl-4 text-sm leading-6 text-cyan-50/70">
+                        The hand-pull noodle technique is reputation-critical and currently tied to one individual.
+                      </p>
+                    </div>
+                    <div className="rounded-lg border border-cyan-300/20 bg-cyan-300/[0.08] px-4 py-3">
+                      <p className="text-sm font-medium text-cyan-50">3. Revenue concentration</p>
+                      <p className="mt-1 pl-4 text-sm leading-6 text-cyan-50/70">
+                        Heavy dine-in exposure means a single external disruption can hit topline directly.
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+                <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50">
+                  Having a{' '}
+                  <Link to={routes.valuation} onClick={onClose} className="font-bold text-white underline underline-offset-4">
+                    Valuation Model
+                  </Link>{' '}
+                  can add over <span className="font-bold text-white">$15,000</span> more in the value of your sale.
+                </motion.div>
+              </>
+            ) : null}
+
+            {selectedChip === 'package' && showBasisCards ? (
+              <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50">
+                A complete SOP and diligence package makes the business easier to review and easier to buy. See the{' '}
+                <Link to={routes.dataRoom} onClick={onClose} className="font-bold text-white underline underline-offset-4">
+                  Diligence Package
+                </Link>{' '}
+                for the full structure.
+              </motion.div>
+            ) : null}
+
+            {reply.scores && showBasisCards && (
               <div className="border border-white/8 bg-black/20 p-4 rounded-xl">
-                <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-slate-500">Valuation basis</p>
-                <div className="mt-4 space-y-3">
-                  {reply.basis.map((item, index) => (
-                    <motion.div key={item} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.12 }} className="flex items-start gap-3 border border-white/6 bg-white/[0.03] px-4 py-3 rounded-lg">
-                      <span className="mt-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full border border-white/10 text-[10px] font-mono uppercase tracking-[0.16em] text-cyan-100/60">{String(index + 1).padStart(2, '0')}</span>
-                      <span className="text-sm leading-6 text-cyan-50/90">{item}</span>
-                    </motion.div>
-                  ))}
+                <p className="text-[11px] font-mono uppercase tracking-[0.2em] text-slate-500">Section Scores</p>
+                  <div className="mt-4 space-y-3">
+                    {reply.scores.map((item, index) => (
+                      <motion.div key={item.section} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: index * 0.12 }} className="flex items-start justify-between gap-3 border border-white/6 bg-white/[0.03] px-4 py-3 rounded-lg">
+                        <div>
+                          <p className="text-sm font-medium text-cyan-50">{item.section}</p>
+                          <p className="mt-1 text-sm leading-6 text-cyan-50/70">{item.note}</p>
+                        </div>
+                        <span className="shrink-0 rounded-full border border-white/10 px-3 py-1 text-sm font-semibold text-cyan-100">{item.score}/100</span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {showDocPreview && (
-              <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))] rounded-xl overflow-hidden mt-6">
-                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                  <div className="flex items-center gap-3"><span className="text-cyan-200"><FileText className="h-5 w-5" /></span><div><p className="text-sm font-semibold text-cyan-50">{docFile}</p><p className="text-[10px] uppercase tracking-[0.22em] text-cyan-200/50">Proposal summary</p></div></div>
-                  <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Ready</div>
-                </div>
-                
-                <div className="px-5 py-4 flex flex-wrap items-center gap-3">
-                  <button onClick={() => setShowModal(true)} className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/15"><Eye className="h-4 w-4" />Preview Document</button>
-                  <Link to={routes.fieldBossManager} onClick={onClose} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-50 transition-colors hover:border-white/20 hover:text-white"><MessageSquareText className="h-4 w-4" />Agent Manager</Link>
-                </div>
-              </motion.div>
-            )}
+              {showDocPreview && (
+                <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="mt-6 overflow-hidden rounded-xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))]">
+                  <div className="flex items-center justify-between border-b border-white/10 px-4 py-4 sm:px-5">
+                    <div className="flex items-center gap-3"><span className="text-cyan-200"><FileText className="h-5 w-5" /></span><div><p className="text-sm font-semibold text-cyan-50">{docFile}</p><p className="text-[10px] uppercase tracking-[0.22em] text-cyan-200/50">Proposal summary</p></div></div>
+                    <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Ready</div>
+                  </div>
+                  
+                  <div className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:flex-wrap sm:items-center sm:px-5">
+                    <button onClick={() => setShowModal(true)} className="inline-flex items-center justify-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 transition-colors hover:bg-cyan-300/15"><Eye className="h-4 w-4" />Preview Document</button>
+                  </div>
+                </motion.div>
+              )}
 
-            {showDocPreview && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-6 border-t border-white/10 mt-6 flex flex-col">
-                 <p className="text-sm text-cyan-100/60 mb-4 text-center">Want to explore another topic?</p>
-                 <div className="flex flex-wrap items-center justify-center gap-2">
-                   {suggestionChips.filter(c => c.id !== selectedChip).map(chip => {
-                     const Icon = chip.icon;
-                     return (
-                        <button key={chip.id} onClick={() => handleChipClick(chip.id)} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-all">
-                           <Icon className="h-3.5 w-3.5 text-cyan-200" />
-                           {chip.label}
-                        </button>
-                     );
-                   })}
-                 </div>
-              </motion.div>
-            )}
+              {showDocPreview && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-6 border-t border-white/10 mt-6 flex flex-col">
+                   <p className="text-sm text-cyan-100/60 mb-4 text-center">Want to explore another topic?</p>
+                   <div className="flex flex-wrap items-center justify-center gap-2">
+                     {suggestionChips.filter(c => c.id !== selectedChip).map(chip => {
+                       const Icon = chip.icon;
+                       return (
+                          <button key={chip.id} onClick={() => handleChipClick(chip.id)} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-[13px] font-medium text-slate-300 hover:text-white hover:bg-white/[0.06] transition-all">
+                             <Icon className="h-3.5 w-3.5 text-cyan-200" />
+                             {chip.label}
+                          </button>
+                       );
+                     })}
+                   </div>
+                </motion.div>
+              )}
+            </div>
+
+            <AnimatePresence>
+              {showScrollHint ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center"
+                >
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#08131b]/90 px-3 py-1.5 text-[11px] font-medium text-cyan-100 shadow-lg backdrop-blur">
+                    <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
+                    <span>Scroll to see more</span>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </div>
         </motion.div>
       )}

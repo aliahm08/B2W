@@ -171,6 +171,33 @@ const sectionIconMap: Record<string, typeof MapPin> = {
     growth: TrendingUp,
 };
 
+const profileSectionScores: Partial<Record<string, { score: number; note: string }>> = {
+    location: {
+        score: 89,
+        note: 'Better corridor quality and foot traffic than most nearby independents.',
+    },
+    culinary: {
+        score: 94,
+        note: 'The handmade noodle offering is more differentiated than most local competitors.',
+    },
+    community: {
+        score: 86,
+        note: 'Repeat demand and neighborhood loyalty are already established.',
+    },
+    market: {
+        score: 84,
+        note: 'The market is competitive, but direct substitutes are limited.',
+    },
+    thesis: {
+        score: 88,
+        note: 'The business story is easy for buyers to understand quickly.',
+    },
+    growth: {
+        score: 82,
+        note: 'There is credible upside, though some growth depends on stronger systems.',
+    },
+};
+
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEats() {
     const projectPath = '/uyghur-eats';
@@ -316,13 +343,15 @@ export default function UyghurEats() {
     const currentIndex = sections.findIndex((s) => s.id === activeSection);
     const nextSection = sections[currentIndex + 1];
     const Icon = sectionIconMap[currentSection.id];
+    const currentSectionScore = profileSectionScores[currentSection.id];
 
     return (
         <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
             <ClientNavbar 
                 clientName="Uyghur Eats" 
                 clientLink="/client/uyghur-eats"
-                navItems={navItems} 
+                navItems={navItems}
+                hasFieldBoss={true}
             />
             <Seo
                 title="Uyghur Eats Business Profile for Buyers"
@@ -365,7 +394,7 @@ export default function UyghurEats() {
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
                         <span className="text-neutral-300">•</span>
-                        <span>Real Estate Acquisition</span>
+                        <span>Business Acquisition</span>
                     </div>
 
                     <div className={projectHeroGridClassNames.profile}>
@@ -385,7 +414,7 @@ export default function UyghurEats() {
                                 </div>
                                 <div className="border border-neutral-200 p-4 text-sm leading-6 text-neutral-700">
                                     <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Project Type</span>
-                                    <span className="mt-2 block font-medium text-black">Property Sale</span>
+                                    <span className="mt-2 block font-medium text-black">Business Acquisition</span>
                                 </div>
                             </div>
 
@@ -413,16 +442,13 @@ export default function UyghurEats() {
                                     <p className="font-medium">Individual Operators</p>
                                 </div>
                             </div>
-                            <button
-                                type="button"
-                                onClick={isPublicProfilePreview ? undefined : handleShareProfile}
-                                disabled={isBlurredPreview}
+                            <div
                                 data-preview-cta="true"
-                                className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
+                                className="border border-white bg-white px-4 py-3 text-black"
                             >
-                                {isPublicProfilePreview ? 'Share your Offer' : isProfileLinkCopied ? 'Link Copied' : 'Share this Profile'}
-                                <ArrowRight className="w-4 h-4" />
-                            </button>
+                                <p className="text-[10px] uppercase tracking-[0.22em] text-neutral-500">As-is Value</p>
+                                <p className="mt-2 text-sm font-medium">$180,000</p>
+                            </div>
                             <p className="mt-4 border-t border-white/10 pt-4 text-[11px] leading-5 text-neutral-400">
                                 B2W LLC is not acting as a brokerage or agent in this matter. B2W LLC provides consulting services to the client only.
                             </p>
@@ -455,7 +481,21 @@ export default function UyghurEats() {
                                         </div>
                                     )}
                                     <h2 className={projectPageSectionTitleClassName}>{currentSection.label}</h2>
+                                    {currentSectionScore ? (
+                                        <span className="inline-flex items-center rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-sm font-semibold text-black">
+                                            {currentSectionScore.score}/100
+                                        </span>
+                                    ) : null}
                                 </div>
+                                {currentSectionScore ? (
+                                    <div className="mb-6 border border-neutral-200 bg-neutral-50 p-4">
+                                        <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">Competitive Score</p>
+                                        <div className="mt-3 flex items-start justify-between gap-4">
+                                            <p className="max-w-xl text-sm leading-6 text-neutral-700">{currentSectionScore.note}</p>
+                                            <p className="shrink-0 text-lg font-semibold text-black">{currentSectionScore.score}/100</p>
+                                        </div>
+                                    </div>
+                                ) : null}
                                 <div data-project-detail-body className="pb-6">
                                     {currentSection.content}
                                 </div>

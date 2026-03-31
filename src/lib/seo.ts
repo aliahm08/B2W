@@ -237,7 +237,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'Uyghur Eats Business Profile for Buyers',
       description:
-        'Legacy route that forwards to the Uyghur Eats buyer-facing profile covering the location, concept narrative, and acquisition positioning.',
+        'Legacy route that forwards to the Uyghur Eats buyer-facing profile covering the location, concept narrative, and business acquisition positioning.',
       canonicalPath: '/client/uyghur-eats/profile',
       robots: PRIVATE_ROBOTS,
       imagePath: uyghurImages.plating,

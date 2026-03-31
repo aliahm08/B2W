@@ -67,7 +67,7 @@ export default function PreviewPageFrame({
 
   return (
     <article className={articleClassName}>
-      <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} />
+      <ClientNavbar clientName="Uyghur Eats" clientLink="/client/uyghur-eats" navItems={navItems} hasFieldBoss={true} />
       <Seo title={title} description={description} robots="noindex, nofollow" />
 
       <PreviewReturnBar returnPath={returnPath} label={returnLabel} detail={returnDetail} />
