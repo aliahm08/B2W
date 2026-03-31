@@ -47,9 +47,9 @@ const deliveryPackageItems = [
             'Location, market, and concept overview',
             'Visual profile for buyer outreach',
         ],
-        value: 'Increases lead generation with a stronger marketing profile and creates new use cases to engage broader outreach.',
+        value: 'Gets more buyer interest by making the business easier to understand fast.',
         ctaLabel: 'Preview How It Will Look',
-        ctaClassName: 'text-emerald-600 group-hover:text-emerald-500',
+        ctaClassName: 'text-neutral-200 group-hover:text-white',
         to: '/client/uyghur-eats/profile',
     },
     {
@@ -61,9 +61,9 @@ const deliveryPackageItems = [
             'Comparable sale logic and range framing',
             'Pricing support for buyer conversations',
         ],
-        value: 'Profiles existing financials and creates custom scenarios so buyers can see how specific services can increase revenue from the business.',
+        value: 'Shows buyers how the business makes money and why it is worth more.',
         ctaLabel: 'Explore Our Model',
-        ctaClassName: 'text-emerald-600 group-hover:text-emerald-500',
+        ctaClassName: 'text-neutral-200 group-hover:text-white',
         to: '/client/uyghur-eats/valuation',
     },
     {
@@ -75,9 +75,9 @@ const deliveryPackageItems = [
             'Transfer-ready business information',
             'Buyer diligence support materials',
         ],
-        value: 'Keeps the transfer package compliance-ready so the business can be handed over as a more turnkey solution.',
+        value: 'Makes the business easier to buy, which can help you sell for more.',
         ctaLabel: 'See Progress Tracker',
-        ctaClassName: 'text-sky-600 group-hover:text-sky-500',
+        ctaClassName: 'text-neutral-200 group-hover:text-white',
         to: '/client/uyghur-eats/data-room',
     },
 ] as const;
@@ -233,21 +233,21 @@ export default function UyghurEatsClientPortal() {
 
     const fieldBossPages = [
         {
-            title: 'Chatbot',
+            title: 'Proposal Summary',
             to: routes.fieldBossChatbot,
-            description: 'Record notes, transcribe them, and generate minimalist B2W estimates.',
+            description: 'Read a quick summary of the proposal and key deliverables.',
             icon: Bot,
         },
         {
-            title: 'AI Agent Manager',
+            title: 'Communication Notes',
             to: routes.fieldBossManager,
-            description: 'Monitor how WhatsApp, email, and phone workflows are performing.',
+            description: 'Review supporting notes and communication context.',
             icon: RadioTower,
         },
         {
-            title: 'AI Dashboard',
+            title: 'Project Snapshot',
             to: routes.fieldBossDashboard,
-            description: 'Track AI data volume, files produced, and cost management.',
+            description: 'See the current status of the proposal materials.',
             icon: ChartNoAxesCombined,
         },
     ] as const;
@@ -513,11 +513,11 @@ export default function UyghurEatsClientPortal() {
                                     {
                                         id: 'investment' as const,
                                         title: 'Investment',
-                                        question: 'How much is it?',
+                                        question: 'Why don\'t I hire a broker instead?',
                                         answer: (
                                             <div className="border border-neutral-300 p-4">
                                                 <p className="text-sm leading-6 text-neutral-700">
-                                                    <span className="font-semibold text-orange-600">$4K - $7.5K</span> depending on final scope and deliverable depth. This pricing covers strategic framing, financial scenario work, and a sale-ready documentation package rather than a single design deliverable.
+                                                    Brokers charge <span className="font-semibold text-orange-600">$20K+</span>. We charge <span className="font-semibold text-emerald-600">$4K - $7.5K</span>. That&apos;s actually less than half. Our deliverables can be used however you want. They can be given to brokers to negotiate on your behalf.
                                                 </p>
                                             </div>
                                         ),
@@ -637,25 +637,25 @@ export default function UyghurEatsClientPortal() {
                     >
                         <span>Project Implementation</span>
                         <span className="text-neutral-300">/</span>
-                        <span>FieldBoss AI</span>
+                        <span>Summarize Proposal</span>
                     </motion.div>
                     <div className="grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
                         <motion.div
                             {...copyReveal}
                             className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-8"
                         >
-                            <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-300/75">FieldBoss AI</p>
+                            <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-300/75">Summarize Proposal</p>
                             <h2 className="max-w-2xl text-2xl font-medium tracking-tight md:text-3xl">
-                                The live AI workspace for recorded notes, estimate generation, workflow oversight, and cost control.
+                                A quick summary panel for the viewer to review the proposal, deliverables, and supporting notes.
                             </h2>
                             <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-300 md:text-base">
-                                This is the second AI track in the Uyghur Eats client portal header. It is a darker operational layer where recorded notes become estimates, integrations are managed across channels, and AI outputs are tracked with cost discipline.
+                                Use this panel to scan the proposal faster. It condenses the key points into a simple viewer-friendly summary without changing the underlying proposal content.
                             </p>
                             <Link
                                 to={routes.fieldBossChatbot}
                                 className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/10"
                             >
-                                Open FieldBoss AI
+                                Open Summary Panel
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
                         </motion.div>

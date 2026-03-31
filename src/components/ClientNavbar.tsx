@@ -56,9 +56,9 @@ export default function ClientNavbar({
       '/client/uyghur-eats/valuation#range': 'Valuation',
       '/client/uyghur-eats/data-room': 'Data Room',
       '/client/uyghur-eats/terms': 'Terms',
-      '/client/uyghur-eats/fieldboss-chatbot': 'FieldBoss Chatbot',
-      '/client/uyghur-eats/fieldboss-agent-manager': 'FieldBoss Agent Manager',
-      '/client/uyghur-eats/fieldboss-dashboard': 'FieldBoss Dashboard',
+      '/client/uyghur-eats/fieldboss-chatbot': 'Summarize Proposal',
+      '/client/uyghur-eats/fieldboss-agent-manager': 'Communication Notes',
+      '/client/uyghur-eats/fieldboss-dashboard': 'Project Snapshot',
       '/client/foster-partners/development-dashboard': 'Development Dashboard',
       '/client/foster-partners/development-dashboard/design': 'Design Lifecycle',
       '/client/foster-partners/development-dashboard/build': 'Build Lifecycle',
@@ -336,7 +336,7 @@ export default function ClientNavbar({
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.14 }}
               onClick={() => setIsFieldBossOpen((current) => !current)}
-              aria-label="Open FieldBoss AI"
+              aria-label="Open proposal summary"
               aria-expanded={isFieldBossOpen}
               className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border transition-all duration-300 ease-in-out active:scale-95 px-2.5 ${
                 isFieldBossOpen
@@ -354,7 +354,7 @@ export default function ClientNavbar({
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}
               >
-                FieldBoss AI
+                Summarize Proposal
               </span>
             </motion.button>
           )}

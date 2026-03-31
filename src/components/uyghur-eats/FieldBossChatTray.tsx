@@ -93,7 +93,7 @@ function DocumentPreviewModal({ isOpen, onClose, selectedChip }: { isOpen: boole
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#08131b]/95 backdrop-blur-md px-6 py-4">
             <div className="flex items-center gap-3">
               <span className="text-cyan-200"><FileText className="h-5 w-5" /></span>
-              <div><p className="text-sm font-semibold text-white">{docFile}</p><p className="text-[10px] uppercase tracking-[0.22em] text-cyan-300/60">AI-generated document</p></div>
+              <div><p className="text-sm font-semibold text-white">{docFile}</p><p className="text-[10px] uppercase tracking-[0.22em] text-cyan-300/60">Proposal summary</p></div>
             </div>
             <div className="flex items-center gap-3">
               <button type="button" onClick={() => setShowSignUp(true)} className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 transition-colors hover:border-cyan-300/30 hover:bg-cyan-300/10 hover:text-cyan-100"><Download className="h-3.5 w-3.5" />Download<Lock className="h-3 w-3 text-slate-500 group-hover:text-cyan-200" /></button>
@@ -126,7 +126,7 @@ function DocumentPreviewModal({ isOpen, onClose, selectedChip }: { isOpen: boole
           {showSignUp && (
             <motion.div key="signup" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={() => setShowSignUp(false)}>
               <motion.div initial={{ opacity: 0, y: 30, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 30, scale: 0.96 }} className="w-full max-w-md border border-white/15 bg-[#08131b] p-8 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                <div className="mb-6 flex items-center gap-3"><span className="text-cyan-200"><FieldBossIcon size={28} /></span><div><h3 className="text-lg font-medium text-white">Activate FieldBoss AI</h3><p className="text-xs text-slate-400">Unlock full documents, downloads, and the buyer-prospect agent</p></div></div>
+                <div className="mb-6 flex items-center gap-3"><span className="text-cyan-200"><FieldBossIcon size={28} /></span><div><h3 className="text-lg font-medium text-white">Open Full Proposal Summary</h3><p className="text-xs text-slate-400">Unlock full documents and downloads</p></div></div>
                 <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setShowSignUp(false); }}><input type="text" placeholder="Your name" required className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-cyan-300/40" /><input type="email" placeholder="Work email" required className="w-full border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white outline-none focus:border-cyan-300/40" /><button type="submit" className="w-full rounded-full bg-white px-5 py-3.5 text-sm font-semibold text-black hover:bg-neutral-200">Request Access</button></form>
               </motion.div>
             </motion.div>
@@ -176,8 +176,8 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
         <div className="flex items-center gap-3">
           <span className="text-cyan-200"><FieldBossIcon size={24} /></span>
           <div>
-            <h2 className="text-lg font-medium text-white">FieldBoss AI</h2>
-            <p className="text-xs text-cyan-300/70">Your AI advisor for selling readiness.</p>
+            <h2 className="text-lg font-medium text-white">Summarize Proposal</h2>
+            <p className="text-xs text-cyan-300/70">A quick summary panel for the viewer.</p>
           </div>
         </div>
       </div>
@@ -185,8 +185,8 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
       {!selectedChip && (
          <div className="flex flex-col items-center justify-center p-8 border border-white/10 bg-white/[0.02] rounded-2xl mb-6">
             <span className="text-cyan-200 mb-4"><FieldBossIcon size={32} /></span>
-            <p className="text-white font-medium mb-1">What can I help with?</p>
-            <p className="text-sm text-cyan-100/60 mb-8 max-w-sm text-center">Pick a topic below to see FieldBoss walk through the analysis and generate a document live.</p>
+            <p className="text-white font-medium mb-1">What would you like summarized?</p>
+            <p className="text-sm text-cyan-100/60 mb-8 max-w-sm text-center">Pick a topic below to review a quick summary and preview the supporting document.</p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               {suggestionChips.map((chip) => {
                 const Icon = chip.icon;
@@ -213,7 +213,7 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
                 <ArrowLeft className="h-4 w-4" />
               </button>
               <span className="text-cyan-200"><FieldBossIcon size={20} /></span>
-              <div><p className="text-sm font-semibold text-white">FieldBoss</p><p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">Analyzing</p></div>
+              <div><p className="text-sm font-semibold text-white">Proposal Summary</p><p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">Summarizing</p></div>
             </div>
             <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100/70">Live demo</div>
           </div>
@@ -252,7 +252,7 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
             {showDocPreview && (
               <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.02))] rounded-xl overflow-hidden mt-6">
                 <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
-                  <div className="flex items-center gap-3"><span className="text-cyan-200"><FileText className="h-5 w-5" /></span><div><p className="text-sm font-semibold text-cyan-50">{docFile}</p><p className="text-[10px] uppercase tracking-[0.22em] text-cyan-200/50">AI-generated document</p></div></div>
+                  <div className="flex items-center gap-3"><span className="text-cyan-200"><FileText className="h-5 w-5" /></span><div><p className="text-sm font-semibold text-cyan-50">{docFile}</p><p className="text-[10px] uppercase tracking-[0.22em] text-cyan-200/50">Proposal summary</p></div></div>
                   <div className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-300">Ready</div>
                 </div>
                 
