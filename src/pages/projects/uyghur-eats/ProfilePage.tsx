@@ -10,7 +10,7 @@ import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNa
 import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
 import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
 import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
-import { fetchProjectAccessStatus, hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
+import { hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
 import { projectShowcaseOverridesByPath } from '../../../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
@@ -221,7 +221,7 @@ export default function UyghurEats() {
     ];
     const isProposalPreview = searchParams.get('preview') === 'proposal';
     const proposalReturnPath = '/client/uyghur-eats';
-    const isBlurredPreview = isProposalPreview && !hasPreviewAccess;
+    const isBlurredPreview = isProposalPreview;
 
     useEffect(() => {
         if (!isProposalPreview) {
@@ -230,20 +230,6 @@ export default function UyghurEats() {
             setProfilePassword('');
             return;
         }
-
-        let isActive = true;
-
-        void fetchProjectAccessStatus(projectPath).then((status) => {
-            if (!isActive) {
-                return;
-            }
-
-            setHasPreviewAccess(hasGrantedView(status, 'profile'));
-        });
-
-        return () => {
-            isActive = false;
-        };
     }, [isProposalPreview]);
 
     useEffect(() => {

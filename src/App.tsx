@@ -333,7 +333,7 @@ export default function App() {
                 <Route path="/client/narinder-sagoo" element={<Navigate to="/client/foster-partners" replace />} />
 
                 {/* Redirects for legacy routes */}
-                <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
+                <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
                 <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
                 <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
 
