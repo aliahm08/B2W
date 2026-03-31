@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, type FormEvent, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { MapPin, ChefHat, Users, LineChart, Target, TrendingUp, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import Seo from '../../../components/Seo';
@@ -175,6 +175,7 @@ const sectionIconMap: Record<string, typeof MapPin> = {
 export default function UyghurEats() {
     const projectPath = '/uyghur-eats';
     const showcase = projectShowcaseOverridesByPath['/uyghur-eats'];
+    const location = useLocation();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
@@ -201,7 +202,7 @@ export default function UyghurEats() {
     };
 
     const handleShareProfile = async () => {
-        const profileUrl = 'https://www.b2w-ai.com/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options';
+        const profileUrl = 'https://www.b2w-ai.com/uyghur-eats-profile';
 
         try {
             await navigator.clipboard.writeText(profileUrl);
@@ -220,8 +221,9 @@ export default function UyghurEats() {
         { label: 'Accept', type: 'cta', onClick: openOfferModal },
     ];
     const isProposalPreview = searchParams.get('preview') === 'proposal';
+    const isPublicProfilePreview = location.pathname === '/uyghur-eats-profile';
     const proposalReturnPath = '/client/uyghur-eats';
-    const isBlurredPreview = isProposalPreview;
+    const isBlurredPreview = isProposalPreview || isPublicProfilePreview;
 
     useEffect(() => {
         if (!isProposalPreview) {
@@ -329,7 +331,7 @@ export default function UyghurEats() {
                 imageUrl="https://www.b2w-ai.com/images/uyghur-eats/platter.jpg"
                 imageAlt="Signature Uyghur Eats platter prepared for diners."
             />
-            {isBlurredPreview ? (
+            {isProposalPreview ? (
                 <PreviewAccessChrome
                     returnPath={proposalReturnPath}
                     previewLabel="This analysis profile preview"
@@ -349,14 +351,16 @@ export default function UyghurEats() {
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    <div className="mb-8 flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <Link to="/client/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
-                                <ArrowLeft className="w-4 h-4" />
-                                Return to Proposal
-                            </Link>
+                    {!isPublicProfilePreview ? (
+                        <div className="mb-8 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <Link to="/client/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
+                                    <ArrowLeft className="w-4 h-4" />
+                                    Return to Proposal
+                                </Link>
+                            </div>
                         </div>
-                    </div>
+                    ) : null}
 
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
@@ -411,12 +415,12 @@ export default function UyghurEats() {
                             </div>
                             <button
                                 type="button"
-                                onClick={handleShareProfile}
+                                onClick={isPublicProfilePreview ? undefined : handleShareProfile}
                                 disabled={isBlurredPreview}
                                 data-preview-cta="true"
                                 className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
                             >
-                                {isProfileLinkCopied ? 'Link Copied' : 'Share this Profile'}
+                                {isPublicProfilePreview ? 'Share your Offer' : isProfileLinkCopied ? 'Link Copied' : 'Share this Profile'}
                                 <ArrowRight className="w-4 h-4" />
                             </button>
                             <p className="mt-4 border-t border-white/10 pt-4 text-[11px] leading-5 text-neutral-400">

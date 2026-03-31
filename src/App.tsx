@@ -334,6 +334,7 @@ export default function App() {
 
                 {/* Redirects for legacy routes */}
                 <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
+                <Route path="/uyghur-eats-profile" element={<UyghurEatsProfilePage />} />
                 <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
                 <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
 
