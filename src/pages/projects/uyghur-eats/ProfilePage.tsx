@@ -184,6 +184,7 @@ export default function UyghurEats() {
     const [isUnlockingPreview, setIsUnlockingPreview] = useState(false);
     const [hasPreviewAccess, setHasPreviewAccess] = useState(false);
     const [activeSection, setActiveSection] = useState('location');
+    const [isProfileLinkCopied, setIsProfileLinkCopied] = useState(false);
 
     const openOfferModal = () => {
         setIsOfferSubmitted(false);
@@ -197,6 +198,17 @@ export default function UyghurEats() {
     const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsOfferSubmitted(true);
+    };
+
+    const handleShareProfile = async () => {
+        const profileUrl = 'https://www.b2w-ai.com/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options';
+
+        try {
+            await navigator.clipboard.writeText(profileUrl);
+            setIsProfileLinkCopied(true);
+        } catch {
+            setIsProfileLinkCopied(false);
+        }
     };
 
     const navItems: ClientNavAction[] = [
@@ -413,12 +425,12 @@ export default function UyghurEats() {
                             </div>
                             <button
                                 type="button"
-                                onClick={openOfferModal}
+                                onClick={handleShareProfile}
                                 disabled={isBlurredPreview}
                                 data-preview-cta="true"
                                 className="inline-flex w-full items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
                             >
-                                Make an Offer
+                                {isProfileLinkCopied ? 'Link Copied' : 'Share this Profile'}
                                 <ArrowRight className="w-4 h-4" />
                             </button>
                             <p className="mt-4 border-t border-white/10 pt-4 text-[11px] leading-5 text-neutral-400">

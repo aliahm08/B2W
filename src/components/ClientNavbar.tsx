@@ -354,7 +354,7 @@ export default function ClientNavbar({
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}
               >
-                Summarize Proposal
+                Summarize
               </span>
             </motion.button>
           )}

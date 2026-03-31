@@ -5,8 +5,7 @@ import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
-import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
-import ClientCommunicationForm from '../../components/forms/ClientCommunicationForm';
+import UyghurEatsAcceptanceForm from '../../components/uyghur-eats/UyghurEatsAcceptanceForm';
 import {
     projectPageEyebrowClassName,
     projectPageHeaderClassName,
@@ -95,6 +94,24 @@ const heroReveal = {
     transition: { duration: 0.45, ease: 'easeOut' as const },
 };
 
+const proposalSummaryItems = [
+    {
+        title: 'Evaluate my business.',
+        description: 'Quick summary of valuation logic, normalized earnings, and likely sale range framing.',
+        icon: Bot,
+    },
+    {
+        title: 'Show me the selling risks.',
+        description: 'Summary of the main buyer objections, diligence concerns, and transfer risks.',
+        icon: RadioTower,
+    },
+    {
+        title: 'Package my assets and SOPs.',
+        description: 'Summary of the documents, assets, and operating notes buyers will want organized.',
+        icon: ChartNoAxesCombined,
+    },
+] as const;
+
 const proposalObjectives = [
     {
         id: 'advertise',
@@ -158,68 +175,18 @@ function StrategicObjectivesCards() {
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEatsClientPortal() {
     const routes = getUyghurEatsRoutes();
-    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
     const [showPricingWhy, setShowPricingWhy] = useState(false);
-    const [isFinalSectionVisible, setIsFinalSectionVisible] = useState(false);
     const [openQuestion, setOpenQuestion] = useState<'investment' | 'timeline' | 'scope' | 'approval'>('investment');
     const qnaCardRef = useRef<HTMLDivElement>(null);
     const workingTermsRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        const observedNodes = [qnaCardRef.current, workingTermsRef.current].filter(Boolean) as HTMLDivElement[];
-        if (observedNodes.length === 0) {
-            return;
-        }
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const anyVisible = entries.some(
-                    (entry) => entry.isIntersecting && entry.intersectionRatio >= 0.35
-                );
-                setIsFinalSectionVisible(anyVisible);
-            },
-            { threshold: [0.35, 0.5, 0.7], rootMargin: '0px 0px -15% 0px' }
-        );
-
-        observedNodes.forEach((node) => observer.observe(node));
-
-        return () => observer.disconnect();
-    }, []);
-
-    const showFloatingCta = isFinalSectionVisible && !isOfferModalOpen;
+    const acceptanceSectionRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    useEffect(() => {
-        if (!isOfferModalOpen) {
-            return;
-        }
-
-        const originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                setIsOfferModalOpen(false);
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.body.style.overflow = originalOverflow;
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [isOfferModalOpen]);
-
-    const openOfferModal = () => {
-        setIsOfferModalOpen(true);
-    };
-
-    const closeOfferModal = () => {
-        setIsOfferModalOpen(false);
+    const scrollToAcceptance = () => {
+        acceptanceSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
     const navItems: ClientNavAction[] = [
@@ -228,29 +195,8 @@ export default function UyghurEatsClientPortal() {
         { label: 'Valuation', to: routes.valuation },
         { label: 'Documentation', to: routes.dataRoom },
         { label: 'Terms', to: routes.terms },
-        { label: 'Accept', type: 'cta', onClick: openOfferModal }
+        { label: 'Accept', type: 'cta', onClick: scrollToAcceptance }
     ];
-
-    const fieldBossPages = [
-        {
-            title: 'Proposal Summary',
-            to: routes.fieldBossChatbot,
-            description: 'Read a quick summary of the proposal and key deliverables.',
-            icon: Bot,
-        },
-        {
-            title: 'Communication Notes',
-            to: routes.fieldBossManager,
-            description: 'Review supporting notes and communication context.',
-            icon: RadioTower,
-        },
-        {
-            title: 'Project Snapshot',
-            to: routes.fieldBossDashboard,
-            description: 'See the current status of the proposal materials.',
-            icon: ChartNoAxesCombined,
-        },
-    ] as const;
 
     return (
         <article className={projectPageShellClassName}>
@@ -408,7 +354,7 @@ export default function UyghurEatsClientPortal() {
                             >
                                 <button
                                     type="button"
-                                    onClick={openOfferModal}
+                                    onClick={scrollToAcceptance}
                                     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200 group"
                                 >
                                     Accept Proposal
@@ -661,26 +607,22 @@ export default function UyghurEatsClientPortal() {
                         </motion.div>
 
                         <div className="grid gap-px border border-[#122230] bg-[#122230]">
-                            {fieldBossPages.map((page) => {
-                                const Icon = page.icon;
+                            {proposalSummaryItems.map((item) => {
+                                const Icon = item.icon;
 
                                 return (
-                                    <motion.div key={page.title} {...copyReveal}>
-                                        <Link
-                                            to={page.to}
-                                            className="group flex h-full items-center justify-between bg-[#08131b] p-5 transition-colors hover:bg-[#0d1d29]"
-                                        >
+                                    <motion.div key={item.title} {...copyReveal}>
+                                        <div className="flex h-full items-center justify-between bg-[#08131b] p-5">
                                             <div className="flex items-center gap-4">
-                                                <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-cyan-100 transition-colors group-hover:border-cyan-200/30 group-hover:bg-cyan-200/10">
+                                                <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-cyan-100">
                                                     <Icon className="h-5 w-5" />
                                                 </div>
                                                 <div>
-                                                    <span className="block text-sm font-semibold text-white">{page.title}</span>
-                                                    <span className="text-xs leading-5 text-slate-400">{page.description}</span>
+                                                    <span className="block text-sm font-semibold text-white">{item.title}</span>
+                                                    <span className="text-xs leading-5 text-slate-400">{item.description}</span>
                                                 </div>
                                             </div>
-                                            <ArrowRight className="h-4 w-4 text-slate-600 transition-colors group-hover:text-cyan-100" />
-                                        </Link>
+                                        </div>
                                     </motion.div>
                                 );
                             })}
@@ -688,53 +630,27 @@ export default function UyghurEatsClientPortal() {
                     </div>
                 </section>
 
-                <section className="mb-12 border-t border-neutral-100 pt-10 md:pt-12">
+                <section
+                    ref={acceptanceSectionRef}
+                    id="accept-proposal"
+                    className="mb-12 border-t border-neutral-100 pt-10 md:pt-12"
+                >
                     <motion.div
                         {...copyReveal}
                         className="mb-5 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500 md:mb-6"
                     >
-                        <span>Client Routing</span>
+                        <span>Proposal Acceptance</span>
                         <span className="text-neutral-300">/</span>
-                        <span>Communication</span>
+                        <span>Confirmation</span>
                     </motion.div>
                     <motion.div {...copyReveal}>
-                        <ClientCommunicationForm
-                            clientName="Uyghur Eats"
-                            projectName="Uyghur Eats Strategic Exit"
-                            title="Send a message to B2W"
-                            intro="Use this client-side channel for proposal questions, requested edits, or approval follow-up. This is separate from public consultation booking."
-                        />
+                        <UyghurEatsAcceptanceForm />
                     </motion.div>
                 </section>
 
             </motion.div>
 
-            <UyghurEatsOfferModal 
-                isOpen={isOfferModalOpen}
-                onClose={closeOfferModal}
-            />
-
             <Footer />
-
-            <AnimatePresence>
-                {showFloatingCta && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 50 }}
-                        className="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none"
-                    >
-                        <button
-                            type="button"
-                            onClick={openOfferModal}
-                            className="pointer-events-auto shadow-[0_8px_30px_rgb(0,0,0,0.12)] inline-flex items-center gap-2 rounded-full bg-black px-6 py-3.5 text-sm font-medium text-white transition-all hover:scale-105 hover:bg-neutral-800"
-                        >
-                            Accept Proposal
-                            <ArrowRight className="h-4 w-4" />
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
         </article>
     );
 }
