@@ -26,7 +26,6 @@ export function FieldBossShell({ active, eyebrow, title, intro, children }: Fiel
     { label: 'Valuation', to: routes.valuation },
     { label: 'Documentation', to: routes.dataRoom },
     { label: 'Terms', to: routes.terms },
-    { label: 'FieldBoss AI', to: routes.fieldBossChatbot, type: 'link' },
   ];
 
   return (
@@ -48,7 +47,7 @@ export function FieldBossShell({ active, eyebrow, title, intro, children }: Fiel
           backgroundSize: '72px 72px',
         }}
       />
-      <ClientNavbar clientName="Uyghur Eats" clientLink={routes.proposal} navItems={navItems} theme="dark" />
+      <ClientNavbar clientName="Uyghur Eats" clientLink={routes.proposal} navItems={navItems} theme="dark" hasFieldBoss={true} />
       <article className={`${projectPageShellClassName} relative z-10 text-white`}>
         <header className={`${projectPageHeaderClassName} border-white/10 pb-10`}>
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-stretch lg:gap-6">

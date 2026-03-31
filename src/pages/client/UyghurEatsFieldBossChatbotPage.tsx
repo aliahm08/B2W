@@ -35,9 +35,9 @@ function FieldBossIcon({ size = 20, className = '' }: { size?: number; className
       aria-hidden="true"
     >
       {/* Crosshair — AI signal */}
-      <line x1="48" y1="18" x2="48" y2="72" stroke="currentColor" strokeOpacity={0.12} strokeWidth={0.8} />
-      <line x1="24" y1="45" x2="72" y2="45" stroke="currentColor" strokeOpacity={0.12} strokeWidth={0.8} />
-      <circle cx="48" cy="45" r="18" fill="none" stroke="currentColor" strokeOpacity={0.08} strokeWidth={0.7} />
+      <line x1="48" y1="18" x2="48" y2="72" stroke="currentColor" strokeOpacity={0.22} strokeWidth={0.9} />
+      <line x1="24" y1="45" x2="72" y2="45" stroke="currentColor" strokeOpacity={0.22} strokeWidth={0.9} />
+      <circle cx="48" cy="45" r="18" fill="none" stroke="currentColor" strokeOpacity={0.15} strokeWidth={0.8} />
       {/* B2W base mark */}
       <path
         d="M 34 20 L 58 20 Q 76 20 76 38 L 76 60 Q 76 70 69 63 L 31 25 Q 26 20 34 20 Z"
@@ -516,9 +516,9 @@ export default function UyghurEatsFieldBossChatbotPage() {
         {/* ──── Chat landing ──── */}
         <section className="mb-10 border border-white/10 bg-[linear-gradient(180deg,rgba(8,19,27,0.9),rgba(9,18,26,0.76))] px-6 py-12 sm:px-10 sm:py-14">
           <div className="mx-auto max-w-4xl text-center">
-            <span className="text-cyan-200">
+            <div className="flex justify-center text-cyan-200">
               <FieldBossIcon size={32} />
-            </span>
+            </div>
             <h2 className="mt-5 text-3xl font-medium tracking-tight text-white sm:text-5xl">
               What can I help with?
             </h2>
@@ -608,7 +608,7 @@ export default function UyghurEatsFieldBossChatbotPage() {
                     <motion.div
                       initial={{ opacity: 0, y: 14 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="ml-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50"
+                      className="mr-auto max-w-[92%] rounded-[26px] border border-cyan-300/20 bg-cyan-300/[0.09] px-5 py-4 text-sm leading-7 text-cyan-50"
                     >
                       Your indicative range is{' '}
                       <span className="inline-block rounded px-2 py-0.5 text-white blur-[6px] select-none bg-white/10">

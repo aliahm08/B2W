@@ -1,9 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import B2WLogoMark from './B2WLogoMark';
+import FieldBossIcon from './uyghur-eats/FieldBossIcon';
+import FieldBossChatTray from './uyghur-eats/FieldBossChatTray';
 
 export type ClientNavAction = {
   label: string;
@@ -18,14 +20,17 @@ export default function ClientNavbar({
   clientLink,
   navItems,
   theme = 'light',
+  hasFieldBoss = false,
 }: { 
   clientName?: string;
   clientLink?: string;
   navItems?: ClientNavAction[];
   theme?: 'light' | 'dark';
+  hasFieldBoss?: boolean;
 }) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isFieldBossOpen, setIsFieldBossOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const closeDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
@@ -75,7 +80,7 @@ export default function ClientNavbar({
   const currentPageMeta = getCurrentPageMeta();
   const clientSubpages = navItems?.filter((item) => item.type !== 'cta') ?? [];
   const nestedDeliverableLabels = new Set(['Profile', 'Valuation', 'Documentation']);
-  const isDarkTheme = theme === 'dark';
+  const isDarkTheme = theme === 'dark' || isFieldBossOpen;
 
   const breadcrumbLinkClassName =
     `group inline-flex items-center text-sm font-medium tracking-tight transition-colors ${isDarkTheme ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'}`;
@@ -83,13 +88,17 @@ export default function ClientNavbar({
     'ml-0 inline-flex w-0 overflow-hidden opacity-0 transition-all duration-200 ease-out group-hover:ml-1.5 group-hover:w-3.5 group-hover:opacity-100';
   const mobileMenuLinkClassName =
     'flex min-h-0 items-center gap-2 py-3 text-left text-[17px] font-medium text-stone-100 transition-colors hover:text-white';
-  const navClassName = isDarkTheme
-    ? `fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors ${
-        isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white' : 'border-white/10 bg-[#071019]/88 text-white'
-      }`
-    : `fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors ${
-        isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white md:border-neutral-100 md:bg-white/80 md:text-black' : 'border-neutral-100 bg-white/80 text-black'
-      }`;
+  
+  const navClassName = isFieldBossOpen
+    ? 'fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#08131b] text-white transition-colors duration-150'
+    : isDarkTheme
+      ? `fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors duration-150 ${
+          isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white' : 'border-white/10 bg-[#071019]/88 text-white'
+        }`
+      : `fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors duration-150 ${
+          isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white md:border-neutral-100 md:bg-white/80 md:text-black' : 'border-neutral-100 bg-white/80 text-black'
+        }`;
+
   const dropdownClassName = isDarkTheme
     ? 'absolute top-full left-0 mt-2 min-w-56 border border-white/10 bg-[#08131b] py-2 shadow-xl'
     : 'absolute top-full left-0 mt-2 min-w-56 border border-neutral-200 bg-white py-2 shadow-xl';
@@ -108,6 +117,15 @@ export default function ClientNavbar({
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
+
+    // Watch for hash change to open FieldBoss
+    const currentHash = window.location.hash;
+    if (currentHash === '#fieldboss') {
+      setIsFieldBossOpen(true);
+      // Optional: remove hash without scroll jump
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       if (closeDropdownTimeoutRef.current) {
@@ -115,6 +133,13 @@ export default function ClientNavbar({
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (location.hash === '#fieldboss') {
+      setIsFieldBossOpen(true);
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+  }, [location.hash, location.pathname]);
 
   const openClientDropdown = () => {
     if (closeDropdownTimeoutRef.current) {
@@ -132,6 +157,73 @@ export default function ClientNavbar({
       setOpenDropdown((current) => (current === 'client-pages' ? null : current));
       closeDropdownTimeoutRef.current = null;
     }, 180);
+  };
+
+  const renderNavItem = (item: ClientNavAction) => {
+    if (item.type === 'link' && item.to) {
+      return (
+        <Link key={item.label} to={item.to} className={desktopLinkClassName}>
+          {item.label}
+        </Link>
+      );
+    }
+
+    if (item.items) {
+      return (
+        <div key={item.label} className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+            className={`flex items-center gap-1 transition-colors ${isDarkTheme ? 'hover:text-white' : 'hover:text-black'}`}
+          >
+            {item.label}
+            <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
+          </button>
+          
+          {openDropdown === item.label && (
+            <div className={isDarkTheme ? 'absolute top-full left-0 mt-2 w-56 bg-[#08131b] border border-white/10 shadow-xl py-2' : 'absolute top-full left-0 mt-2 w-56 bg-white border border-neutral-100 shadow-xl py-2'}>
+              {item.items.map((subItem) => (
+                <button
+                  key={subItem.label}
+                  onClick={() => {
+                    subItem.onClick?.();
+                    setOpenDropdown(null);
+                  }}
+                  className={`w-full text-left px-4 py-2 transition-colors ${isDarkTheme ? 'text-neutral-300 hover:bg-white/5 hover:text-white' : 'hover:bg-neutral-50 text-neutral-600 hover:text-black'}`}
+                >
+                  {subItem.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (item.type === 'cta') {
+      return (
+        <button key={item.label} onClick={item.onClick} className={ctaClassName}>
+          {item.label}
+        </button>
+      );
+    }
+
+    if (item.onClick) {
+      return (
+        <button key={item.label} onClick={item.onClick} className={desktopLinkClassName}>
+          {item.label}
+        </button>
+      );
+    }
+
+    if (item.to) {
+      return (
+        <Link key={item.label} to={item.to} className={desktopLinkClassName}>
+          {item.label}
+        </Link>
+      );
+    }
+
+    return <span key={item.label}>{item.label}</span>;
   };
 
   return (
@@ -238,95 +330,64 @@ export default function ClientNavbar({
 
         {/* Desktop Navigation */}
         <div className={desktopNavClassName}>
-          {navItems?.map((item) => {
-            if (item.type === 'link' && item.to) {
-              return (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  className={desktopLinkClassName}
-                >
-                  {item.label}
-                </Link>
-              );
-            }
+          {hasFieldBoss && (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.14 }}
+              onClick={() => setIsFieldBossOpen((current) => !current)}
+              aria-label="Open FieldBoss AI"
+              aria-expanded={isFieldBossOpen}
+              className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border transition-all duration-300 ease-in-out active:scale-95 px-2.5 ${
+                isFieldBossOpen
+                  ? 'border-cyan-300/30 bg-cyan-300/10 text-cyan-200'
+                  : isDarkTheme
+                    ? 'border-white/10 text-neutral-300 hover:border-cyan-300/40 hover:bg-cyan-300/10 hover:text-cyan-200'
+                    : 'border-neutral-200 text-neutral-600 hover:border-cyan-400 hover:bg-cyan-50 hover:text-cyan-600'
+              }`}
+            >
+              <FieldBossIcon size={18} className="shrink-0" />
+              <span 
+                className={`whitespace-nowrap font-medium text-[13px] tracking-wide transition-all duration-300 ease-in-out ${
+                  isFieldBossOpen 
+                    ? 'ml-2 max-w-[100px] opacity-100' 
+                    : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
+                }`}
+              >
+                FieldBoss AI
+              </span>
+            </motion.button>
+          )}
 
-            if (item.type !== 'cta') {
-              return null;
-            }
-
-            if (item.items) {
-              return (
-                <div key={item.label} className="relative" ref={dropdownRef}>
-                  <button
-                    onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
-                    className={`flex items-center gap-1 transition-colors ${isDarkTheme ? 'hover:text-white' : 'hover:text-black'}`}
-                  >
-                    {item.label}
-                    <ChevronDown className={`w-4 h-4 transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
-                  </button>
-                  
-                  {openDropdown === item.label && (
-                    <div className={isDarkTheme ? 'absolute top-full left-0 mt-2 w-56 bg-[#08131b] border border-white/10 shadow-xl py-2' : 'absolute top-full left-0 mt-2 w-56 bg-white border border-neutral-100 shadow-xl py-2'}>
-                      {item.items.map((subItem) => (
-                        <button
-                          key={subItem.label}
-                          onClick={() => {
-                            subItem.onClick?.();
-                            setOpenDropdown(null);
-                          }}
-                          className={`w-full text-left px-4 py-2 transition-colors ${isDarkTheme ? 'text-neutral-300 hover:bg-white/5 hover:text-white' : 'hover:bg-neutral-50 text-neutral-600 hover:text-black'}`}
-                        >
-                          {subItem.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-
-            if (item.type === 'cta') {
-              return (
-                <button
-                  key={item.label}
-                  onClick={item.onClick}
-                  className={ctaClassName}
-                >
-                  {item.label}
-                </button>
-              );
-            }
-
-            if (item.onClick) {
-              return (
-                <button
-                  key={item.label}
-                  onClick={item.onClick}
-                  className={desktopLinkClassName}
-                >
-                  {item.label}
-                </button>
-              );
-            }
-
-            if (item.to) {
-              return (
-                <Link
-                  key={item.label}
-                  to={item.to}
-                  className={desktopLinkClassName}
-                >
-                  {item.label}
-                </Link>
-              );
-            }
-
-            return <span key={item.label}>{item.label}</span>;
-          })}
-          
+          {navItems?.filter(item => item.type === 'cta').map(renderNavItem)}
         </div>
       </div>
+
+      <AnimatePresence>
+        {isFieldBossOpen && hasFieldBoss ? (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              onClick={() => setIsFieldBossOpen(false)}
+              className="fixed inset-x-0 bottom-0 top-20 hidden cursor-pointer bg-black/50 backdrop-blur-md md:block"
+              style={{ zIndex: 40 }}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="absolute left-0 right-0 top-full hidden border-t border-white/10 bg-[#08131b] shadow-2xl md:block pointer-events-auto"
+              style={{ zIndex: 50 }}
+            >
+              <FieldBossChatTray onClose={() => setIsFieldBossOpen(false)} />
+            </motion.div>
+          </>
+        ) : null}
+      </AnimatePresence>
 
       <MobileMenuDrawer
         isOpen={isMobileMenuOpen}

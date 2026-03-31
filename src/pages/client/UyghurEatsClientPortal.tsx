@@ -228,7 +228,6 @@ export default function UyghurEatsClientPortal() {
         { label: 'Valuation', to: routes.valuation },
         { label: 'Documentation', to: routes.dataRoom },
         { label: 'Terms', to: routes.terms },
-        { label: 'FieldBoss AI', to: routes.fieldBossChatbot, type: 'link' },
         { label: 'Accept', type: 'cta', onClick: openOfferModal }
     ];
 
@@ -259,6 +258,7 @@ export default function UyghurEatsClientPortal() {
                 clientName="Uyghur Eats" 
                 clientLink="/client/uyghur-eats"
                 navItems={navItems} 
+                hasFieldBoss={true}
             />
             <Seo
                 title="Uyghur Eats Strategic Exit Proposal"
@@ -635,7 +635,7 @@ export default function UyghurEatsClientPortal() {
                         {...copyReveal}
                         className="mb-5 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500 md:mb-6"
                     >
-                        <span>Second AI Header Link</span>
+                        <span>Project Implementation</span>
                         <span className="text-neutral-300">/</span>
                         <span>FieldBoss AI</span>
                     </motion.div>
