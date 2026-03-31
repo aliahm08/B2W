@@ -1,3 +1,4 @@
+import './env.js';
 import { Resend } from 'resend';
 
 export type EmailMessage = {

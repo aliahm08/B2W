@@ -80,7 +80,7 @@ export default function ClientNavbar({
   const currentPageMeta = getCurrentPageMeta();
   const clientSubpages = navItems?.filter((item) => item.type !== 'cta') ?? [];
   const nestedDeliverableLabels = new Set(['Profile', 'Valuation', 'Documentation']);
-  const isDarkTheme = theme === 'dark' || isFieldBossOpen;
+  const isDarkTheme = theme === 'dark' || isFieldBossOpen || isMobileMenuOpen;
 
   const breadcrumbLinkClassName =
     `group inline-flex items-center text-sm font-medium tracking-tight transition-colors ${isDarkTheme ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'}`;
@@ -96,7 +96,7 @@ export default function ClientNavbar({
           isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white' : 'border-white/10 bg-[#071019]/88 text-white'
         }`
       : `fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md transition-colors duration-150 ${
-          isMobileMenuOpen ? 'border-white/10 bg-black/92 text-white md:border-neutral-100 md:bg-white/80 md:text-black' : 'border-neutral-100 bg-white/80 text-black'
+          isMobileMenuOpen ? 'border-white/10 bg-[#050b10]/96 text-white' : 'border-neutral-100 bg-white/80 text-black'
         }`;
 
   const dropdownClassName = isDarkTheme
@@ -326,9 +326,10 @@ export default function ClientNavbar({
                 setIsMobileMenuOpen(false);
                 setIsFieldBossOpen((current) => !current);
               }}
-              aria-label="Open proposal summary"
+              aria-label="Summarize"
               aria-expanded={isFieldBossOpen}
-              className={`inline-flex min-h-10 items-center gap-2 rounded-full border px-3 py-2 text-sm font-medium transition-colors ${
+              title="Summarize"
+              className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border px-2.5 transition-all duration-300 ease-in-out ${
                 isFieldBossOpen
                   ? 'border-cyan-300/30 bg-cyan-300/10 text-cyan-200'
                   : isDarkTheme
@@ -337,7 +338,15 @@ export default function ClientNavbar({
               }`}
             >
               <FieldBossIcon size={16} className="shrink-0" />
-              <span>Summarize</span>
+              <span
+                className={`whitespace-nowrap font-medium text-[13px] tracking-wide transition-all duration-300 ease-in-out ${
+                  isFieldBossOpen
+                    ? 'ml-2 max-w-[100px] opacity-100'
+                    : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
+                }`}
+              >
+                Summarize
+              </span>
             </button>
           ) : null}
 
@@ -360,9 +369,10 @@ export default function ClientNavbar({
               whileTap={{ scale: 0.95 }}
               transition={{ duration: 0.14 }}
               onClick={() => setIsFieldBossOpen((current) => !current)}
-              aria-label="Open proposal summary"
+              aria-label="Summarize"
               aria-expanded={isFieldBossOpen}
-              className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border transition-all duration-300 ease-in-out active:scale-95 px-2.5 ${
+              title="Summarize"
+              className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border px-2.5 transition-all duration-300 ease-in-out active:scale-95 ${
                 isFieldBossOpen
                   ? 'border-cyan-300/30 bg-cyan-300/10 text-cyan-200'
                   : isDarkTheme
@@ -371,10 +381,10 @@ export default function ClientNavbar({
               }`}
             >
               <FieldBossIcon size={18} className="shrink-0" />
-              <span 
+              <span
                 className={`whitespace-nowrap font-medium text-[13px] tracking-wide transition-all duration-300 ease-in-out ${
-                  isFieldBossOpen 
-                    ? 'ml-2 max-w-[100px] opacity-100' 
+                  isFieldBossOpen
+                    ? 'ml-2 max-w-[100px] opacity-100'
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}
               >

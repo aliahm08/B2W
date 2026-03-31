@@ -1,3 +1,4 @@
+import './env.js';
 import { createClient } from '@supabase/supabase-js';
 import type { ClientCommunicationSubmission, LeadSubmission } from './validation.js';
 

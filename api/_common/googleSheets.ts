@@ -1,3 +1,4 @@
+import './env.js';
 import { GoogleAuth } from 'google-auth-library';
 
 type SheetIntent = 'lead' | 'clientCommunication' | 'proposalSignature';

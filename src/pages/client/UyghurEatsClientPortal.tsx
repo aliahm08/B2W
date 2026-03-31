@@ -47,7 +47,7 @@ const deliveryPackageItems = [
             'Visual profile for buyer outreach',
         ],
         value: 'Gets more buyer interest by making the business easier to understand fast.',
-        ctaLabel: 'Preview How It Will Look',
+        ctaLabel: 'Confidently sell your business for $180,000.',
         ctaClassName: 'text-neutral-200 group-hover:text-white',
         to: '/client/uyghur-eats/profile',
     },
@@ -177,6 +177,7 @@ export default function UyghurEatsClientPortal() {
     const routes = getUyghurEatsRoutes();
     const [showPricingWhy, setShowPricingWhy] = useState(false);
     const [openQuestion, setOpenQuestion] = useState<'investment' | 'timeline' | 'scope' | 'approval'>('investment');
+    const [revealedMetric, setRevealedMetric] = useState<'revenue' | 'savings' | null>(null);
     const qnaCardRef = useRef<HTMLDivElement>(null);
     const workingTermsRef = useRef<HTMLDivElement>(null);
     const acceptanceSectionRef = useRef<HTMLElement>(null);
@@ -187,6 +188,10 @@ export default function UyghurEatsClientPortal() {
 
     const scrollToAcceptance = () => {
         acceptanceSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const toggleMetricReveal = (metric: 'revenue' | 'savings') => {
+        setRevealedMetric((current) => (current === metric ? null : metric));
     };
 
     const navItems: ClientNavAction[] = [
@@ -256,18 +261,97 @@ export default function UyghurEatsClientPortal() {
                             <motion.div
                                 {...heroReveal}
                                 transition={{ ...heroReveal.transition, delay: 0.14 }}
-                                className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                                className="group border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                                title="Revenue Missed* Estimates are dependent on the quality of the diligence material and whether or not client utilizes the deliverables."
+                                onMouseEnter={() => setRevealedMetric('revenue')}
+                                onMouseLeave={() => setRevealedMetric((current) => (current === 'revenue' ? null : current))}
+                                onClick={() => toggleMetricReveal('revenue')}
                             >
-                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Revenue Missed</span>
-                                <span className="mt-2 block font-medium text-black blur-[4px] select-none">$XXX,XXX+</span>
+                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Revenue Missed*</span>
+                                <span className="mt-2 block font-medium text-black">
+                                    <span className="relative inline-block">
+                                        <span
+                                            className={`relative z-10 inline-block select-none transition duration-300 ${
+                                                revealedMetric === 'revenue' ? 'blur-none opacity-100' : 'blur-[4px] opacity-90 group-hover:blur-none group-hover:opacity-100'
+                                            }`}
+                                        >
+                                            $15,000 - $50,000+
+                                        </span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={`pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.72)_0,rgba(255,255,255,0.72)_2px,transparent_2px,transparent_6px)] mix-blend-screen transition duration-300 ${
+                                                revealedMetric === 'revenue' ? 'opacity-0' : 'opacity-75 group-hover:opacity-0'
+                                            }`}
+                                        />
+                                        <span
+                                            aria-hidden="true"
+                                            className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(255,255,255,0.7),transparent_30%),radial-gradient(circle_at_52%_38%,rgba(255,255,255,0.32),transparent_28%),radial-gradient(circle_at_84%_52%,rgba(255,255,255,0.6),transparent_34%)] transition duration-300 ${
+                                                revealedMetric === 'revenue' ? 'opacity-0' : 'animate-pulse opacity-70 group-hover:opacity-0'
+                                            }`}
+                                        />
+                                    </span>
+                                </span>
                             </motion.div>
                             <motion.div
                                 {...heroReveal}
                                 transition={{ ...heroReveal.transition, delay: 0.18 }}
-                                className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                                className="group border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                                title="Potential Savings: $20,000+ in brokerage fees, save 1-2 months."
+                                onMouseEnter={() => setRevealedMetric('savings')}
+                                onMouseLeave={() => setRevealedMetric((current) => (current === 'savings' ? null : current))}
+                                onClick={() => toggleMetricReveal('savings')}
                             >
-                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Potential Time Saved</span>
-                                <span className="mt-2 block font-medium text-black blur-[4px] select-none">XX+ hours</span>
+                                <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Potential Savings</span>
+                                <span className="mt-2 block font-medium text-black">
+                                    Save{' '}
+                                    <span className="relative inline-block">
+                                        <span
+                                            className={`relative z-10 inline-block select-none transition duration-300 ${
+                                                revealedMetric === 'savings' ? 'blur-none opacity-100' : 'blur-[4px] opacity-90 group-hover:blur-none group-hover:opacity-100'
+                                            }`}
+                                        >
+                                            $20,000+
+                                        </span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={`pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.72)_0,rgba(255,255,255,0.72)_2px,transparent_2px,transparent_6px)] mix-blend-screen transition duration-300 ${
+                                                revealedMetric === 'savings' ? 'opacity-0' : 'opacity-75 group-hover:opacity-0'
+                                            }`}
+                                        />
+                                        <span
+                                            aria-hidden="true"
+                                            className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(255,255,255,0.7),transparent_30%),radial-gradient(circle_at_52%_38%,rgba(255,255,255,0.32),transparent_28%),radial-gradient(circle_at_84%_52%,rgba(255,255,255,0.6),transparent_34%)] transition duration-300 ${
+                                                revealedMetric === 'savings' ? 'opacity-0' : 'animate-pulse opacity-70 group-hover:opacity-0'
+                                            }`}
+                                        />
+                                    </span>{' '}
+                                    in brokerage fees
+                                </span>
+                                <span className="block font-medium text-black">
+                                    Save{' '}
+                                    <span className="relative inline-block">
+                                        <span
+                                            className={`relative z-10 inline-block select-none transition duration-300 ${
+                                                revealedMetric === 'savings' ? 'blur-none opacity-100' : 'blur-[4px] opacity-90 group-hover:blur-none group-hover:opacity-100'
+                                            }`}
+                                        >
+                                            1-2
+                                        </span>
+                                        <span
+                                            aria-hidden="true"
+                                            className={`pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.72)_0,rgba(255,255,255,0.72)_2px,transparent_2px,transparent_6px)] mix-blend-screen transition duration-300 ${
+                                                revealedMetric === 'savings' ? 'opacity-0' : 'opacity-75 group-hover:opacity-0'
+                                            }`}
+                                        />
+                                        <span
+                                            aria-hidden="true"
+                                            className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(255,255,255,0.7),transparent_30%),radial-gradient(circle_at_52%_38%,rgba(255,255,255,0.32),transparent_28%),radial-gradient(circle_at_84%_52%,rgba(255,255,255,0.6),transparent_34%)] transition duration-300 ${
+                                                revealedMetric === 'savings' ? 'opacity-0' : 'animate-pulse opacity-70 group-hover:opacity-0'
+                                            }`}
+                                        />
+                                    </span>{' '}
+                                    months
+                                </span>
                             </motion.div>
                             </div>
                         </div>
