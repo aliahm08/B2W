@@ -93,14 +93,14 @@ const deliverableValueContent = {
         cta: 'Add Over $15,000',
     },
     'diligence-package': {
-        label: 'Finalize Your Sale',
-        body: 'Package your assets, notes, and operating materials so buyers can move faster and justify paying more.',
+        label: 'Package your Handoff',
+        body: 'Faster handover of assets, notes, and operating materials.',
         cta: 'Get Paid Even More',
     },
 } as const;
 
 const deliverableValueLabelClassName = 'mb-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400';
-const deliverableValueBodyClassName = 'text-sm font-semibold leading-6 tracking-tight text-white';
+const deliverableValueBodyClassName = 'min-h-[3rem] text-sm font-semibold leading-6 tracking-tight text-white';
 const deliverableValueCtaClassName = 'inline-flex min-h-11 items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-semibold tracking-tight text-white transition-all duration-300 group-hover:border-white/25 group-hover:bg-white/10 sm:text-[0.96rem]';
 
 const copyReveal = {
@@ -448,7 +448,7 @@ export default function UyghurEatsClientPortal() {
                                         <div className="border border-neutral-900 bg-neutral-950 p-4 text-white sm:p-5">
                                             <p className={deliverableValueLabelClassName}>{valueContent.label}</p>
                                             <p className={deliverableValueBodyClassName}>{valueContent.body}</p>
-                                            <div className="mt-5">
+                                            <div className="mt-5 min-h-11">
                                                 <div className={deliverableValueCtaClassName}>
                                                     <span>{valueContent.cta}</span>
                                                     <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:translate-x-0.5">
