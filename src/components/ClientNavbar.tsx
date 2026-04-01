@@ -33,6 +33,7 @@ export default function ClientNavbar({
   const [isFieldBossOpen, setIsFieldBossOpen] = useState(false);
   const [isSummaryHovered, setIsSummaryHovered] = useState(false);
   const [isSummaryExpanded, setIsSummaryExpanded] = useState(hasFieldBoss);
+  const [hasMountedPulse, setHasMountedPulse] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const closeDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
@@ -142,6 +143,11 @@ export default function ClientNavbar({
       window.history.replaceState(null, '', window.location.pathname + window.location.search);
     }
   }, [location.hash, location.pathname]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setHasMountedPulse(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!hasFieldBoss) {
@@ -355,12 +361,12 @@ export default function ClientNavbar({
               title="Summarize"
               initial={false}
               animate={
-                !isFieldBossOpen && !isSummaryHovered
+                hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
                   ? { scale: [1, 1.08, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 8px rgba(103,232,249,0.12)', '0 0 0 rgba(103,232,249,0)'] }
                   : { scale: 1, boxShadow: '0 0 0 rgba(103,232,249,0)' }
               }
               transition={
-                !isFieldBossOpen && !isSummaryHovered
+                hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
                   ? { duration: 0.75, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }
                   : { duration: 0.2 }
               }
@@ -406,12 +412,12 @@ export default function ClientNavbar({
               onMouseEnter={() => setIsSummaryHovered(true)}
               onMouseLeave={() => setIsSummaryHovered(false)}
               animate={
-                !isFieldBossOpen && !isSummaryHovered
+                hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
                   ? { scale: [1, 1.08, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 10px rgba(103,232,249,0.14)', '0 0 0 rgba(103,232,249,0)'] }
                   : { scale: 1, boxShadow: '0 0 0 rgba(103,232,249,0)' }
               }
               transition={
-                !isFieldBossOpen && !isSummaryHovered
+                hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
                   ? { duration: 0.75, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }
                   : { duration: 0.14 }
               }
