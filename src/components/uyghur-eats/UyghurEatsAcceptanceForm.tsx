@@ -211,9 +211,6 @@ export default function UyghurEatsAcceptanceForm() {
                 Prefer not to use the form? Email <a className="text-white underline underline-offset-4" href="mailto:info@b2w-ai.com?subject=Uyghur%20Eats%20Proposal%20Acceptance">info@b2w-ai.com</a>
                 {' '}or text <a className="text-white underline underline-offset-4" href="sms:2022109491">202-210-9491</a>.
               </p>
-              <p>
-                You can also call <a className="text-white underline underline-offset-4" href="tel:2022109491">202-210-9491</a> to confirm acceptance.
-              </p>
             </div>
             <button
               type="submit"

@@ -220,8 +220,8 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
         <div className="flex items-center gap-3">
           <span className="text-cyan-200"><FieldBossIcon size={24} /></span>
           <div>
-            <h2 className="text-lg font-medium text-white">Summarize Proposal</h2>
-            <p className="text-xs text-cyan-300/70">A quick summary panel for the viewer.</p>
+            <h2 className="text-lg font-medium text-white">Package the Business for Sale.</h2>
+            <p className="text-xs text-cyan-300/70">A quick summary panel for restaurant management.</p>
           </div>
         </div>
       </div>
@@ -259,7 +259,6 @@ export default function FieldBossChatTray({ onClose }: { onClose: () => void }) 
               <span className="text-cyan-200"><FieldBossIcon size={20} /></span>
               <div><p className="text-sm font-semibold text-white">Proposal Summary</p><p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">Summarizing</p></div>
             </div>
-            <div className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-100/70">Live demo</div>
           </div>
           
           <div className="relative">

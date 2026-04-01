@@ -31,6 +31,8 @@ export default function ClientNavbar({
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFieldBossOpen, setIsFieldBossOpen] = useState(false);
+  const [isSummaryHovered, setIsSummaryHovered] = useState(false);
+  const [isSummaryExpanded, setIsSummaryExpanded] = useState(hasFieldBoss);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const closeDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
@@ -140,6 +142,26 @@ export default function ClientNavbar({
       window.history.replaceState(null, '', window.location.pathname + window.location.search);
     }
   }, [location.hash, location.pathname]);
+
+  useEffect(() => {
+    if (!hasFieldBoss) {
+      setIsSummaryExpanded(false);
+      return;
+    }
+
+    setIsSummaryExpanded(true);
+
+    const handleScroll = () => {
+      setIsSummaryExpanded(window.scrollY < 24);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [hasFieldBoss, location.pathname]);
 
   const openClientDropdown = () => {
     if (closeDropdownTimeoutRef.current) {
@@ -320,15 +342,28 @@ export default function ClientNavbar({
 
         <div className="flex items-center gap-2 md:hidden">
           {hasFieldBoss ? (
-            <button
+            <motion.button
               type="button"
               onClick={() => {
                 setIsMobileMenuOpen(false);
                 setIsFieldBossOpen((current) => !current);
               }}
+              onMouseEnter={() => setIsSummaryHovered(true)}
+              onMouseLeave={() => setIsSummaryHovered(false)}
               aria-label="Summarize"
               aria-expanded={isFieldBossOpen}
               title="Summarize"
+              initial={false}
+              animate={
+                !isFieldBossOpen && !isSummaryHovered
+                  ? { scale: [1, 1.08, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 8px rgba(103,232,249,0.12)', '0 0 0 rgba(103,232,249,0)'] }
+                  : { scale: 1, boxShadow: '0 0 0 rgba(103,232,249,0)' }
+              }
+              transition={
+                !isFieldBossOpen && !isSummaryHovered
+                  ? { duration: 0.75, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }
+                  : { duration: 0.2 }
+              }
               className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border px-2.5 transition-all duration-300 ease-in-out ${
                 isFieldBossOpen
                   ? 'border-cyan-300/30 bg-cyan-300/10 text-cyan-200'
@@ -340,14 +375,14 @@ export default function ClientNavbar({
               <FieldBossIcon size={16} className="shrink-0" />
               <span
                 className={`whitespace-nowrap font-medium text-[13px] tracking-wide transition-all duration-300 ease-in-out ${
-                  isFieldBossOpen
+                  isFieldBossOpen || isSummaryExpanded
                     ? 'ml-2 max-w-[100px] opacity-100'
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}
               >
                 Summarize
               </span>
-            </button>
+            </motion.button>
           ) : null}
 
           <button
@@ -367,7 +402,19 @@ export default function ClientNavbar({
             <motion.button
               type="button"
               whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.14 }}
+              initial={false}
+              onMouseEnter={() => setIsSummaryHovered(true)}
+              onMouseLeave={() => setIsSummaryHovered(false)}
+              animate={
+                !isFieldBossOpen && !isSummaryHovered
+                  ? { scale: [1, 1.08, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 10px rgba(103,232,249,0.14)', '0 0 0 rgba(103,232,249,0)'] }
+                  : { scale: 1, boxShadow: '0 0 0 rgba(103,232,249,0)' }
+              }
+              transition={
+                !isFieldBossOpen && !isSummaryHovered
+                  ? { duration: 0.75, repeat: Infinity, repeatDelay: 2.2, ease: 'easeInOut' }
+                  : { duration: 0.14 }
+              }
               onClick={() => setIsFieldBossOpen((current) => !current)}
               aria-label="Summarize"
               aria-expanded={isFieldBossOpen}
@@ -383,7 +430,7 @@ export default function ClientNavbar({
               <FieldBossIcon size={18} className="shrink-0" />
               <span
                 className={`whitespace-nowrap font-medium text-[13px] tracking-wide transition-all duration-300 ease-in-out ${
-                  isFieldBossOpen
+                  isFieldBossOpen || isSummaryExpanded
                     ? 'ml-2 max-w-[100px] opacity-100'
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}

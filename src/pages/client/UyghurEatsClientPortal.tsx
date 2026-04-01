@@ -60,8 +60,8 @@ const deliveryPackageItems = [
             'Comparable sale logic and range framing',
             'Pricing support for buyer conversations',
         ],
-        value: 'Shows buyers how the business makes money and why it is worth more.',
-        ctaLabel: 'Explore Our Model',
+        value: 'Show buyers why your business is worth more.',
+        ctaLabel: 'Add Over $15,000',
         ctaClassName: 'text-neutral-200 group-hover:text-white',
         to: '/client/uyghur-eats/valuation',
     },
@@ -74,12 +74,34 @@ const deliveryPackageItems = [
             'Transfer-ready business information',
             'Buyer diligence support materials',
         ],
-        value: 'Makes the business easier to buy, which can help you sell for more.',
-        ctaLabel: 'See Progress Tracker',
+        value: 'Package your assets, notes, and operating materials so buyers can move faster and justify paying more.',
+        ctaLabel: 'Get Paid Even More',
         ctaClassName: 'text-neutral-200 group-hover:text-white',
         to: '/client/uyghur-eats/data-room',
     },
 ] as const;
+
+const deliverableValueContent = {
+    'business-profile': {
+        label: 'Get More Buyer Interest',
+        body: 'Make your business easier to understand, fast.',
+        cta: 'Confidently Sell at $180,000',
+    },
+    'valuation-model': {
+        label: 'Add Value To Sale',
+        body: 'Show buyers why your business is worth more.',
+        cta: 'Add Over $15,000',
+    },
+    'diligence-package': {
+        label: 'Finalize Your Sale',
+        body: 'Package your assets, notes, and operating materials so buyers can move faster and justify paying more.',
+        cta: 'Get Paid Even More',
+    },
+} as const;
+
+const deliverableValueLabelClassName = 'mb-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400';
+const deliverableValueBodyClassName = 'text-sm font-semibold leading-6 tracking-tight text-white';
+const deliverableValueCtaClassName = 'inline-flex min-h-11 items-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-semibold tracking-tight text-white transition-all duration-300 group-hover:border-white/25 group-hover:bg-white/10 sm:text-[0.96rem]';
 
 const copyReveal = {
     initial: { opacity: 0, y: 14 },
@@ -177,7 +199,6 @@ export default function UyghurEatsClientPortal() {
     const routes = getUyghurEatsRoutes();
     const [showPricingWhy, setShowPricingWhy] = useState(false);
     const [openQuestion, setOpenQuestion] = useState<'investment' | 'timeline' | 'scope' | 'approval'>('investment');
-    const [revealedMetric, setRevealedMetric] = useState<'revenue' | 'savings' | null>(null);
     const qnaCardRef = useRef<HTMLDivElement>(null);
     const workingTermsRef = useRef<HTMLDivElement>(null);
     const acceptanceSectionRef = useRef<HTMLElement>(null);
@@ -188,10 +209,6 @@ export default function UyghurEatsClientPortal() {
 
     const scrollToAcceptance = () => {
         acceptanceSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    const toggleMetricReveal = (metric: 'revenue' | 'savings') => {
-        setRevealedMetric((current) => (current === metric ? null : metric));
     };
 
     const navItems: ClientNavAction[] = [
@@ -261,97 +278,21 @@ export default function UyghurEatsClientPortal() {
                             <motion.div
                                 {...heroReveal}
                                 transition={{ ...heroReveal.transition, delay: 0.14 }}
-                                className="group border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                                className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
                                 title="Revenue Missed* Estimates are dependent on the quality of the diligence material and whether or not client utilizes the deliverables."
-                                onMouseEnter={() => setRevealedMetric('revenue')}
-                                onMouseLeave={() => setRevealedMetric((current) => (current === 'revenue' ? null : current))}
-                                onClick={() => toggleMetricReveal('revenue')}
                             >
                                 <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Revenue Missed*</span>
-                                <span className="mt-2 block font-medium text-black">
-                                    <span className="relative inline-block">
-                                        <span
-                                            className={`relative z-10 inline-block select-none transition duration-300 ${
-                                                revealedMetric === 'revenue' ? 'blur-none opacity-100' : 'blur-[4px] opacity-90 group-hover:blur-none group-hover:opacity-100'
-                                            }`}
-                                        >
-                                            $15,000 - $50,000+
-                                        </span>
-                                        <span
-                                            aria-hidden="true"
-                                            className={`pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.72)_0,rgba(255,255,255,0.72)_2px,transparent_2px,transparent_6px)] mix-blend-screen transition duration-300 ${
-                                                revealedMetric === 'revenue' ? 'opacity-0' : 'opacity-75 group-hover:opacity-0'
-                                            }`}
-                                        />
-                                        <span
-                                            aria-hidden="true"
-                                            className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(255,255,255,0.7),transparent_30%),radial-gradient(circle_at_52%_38%,rgba(255,255,255,0.32),transparent_28%),radial-gradient(circle_at_84%_52%,rgba(255,255,255,0.6),transparent_34%)] transition duration-300 ${
-                                                revealedMetric === 'revenue' ? 'opacity-0' : 'animate-pulse opacity-70 group-hover:opacity-0'
-                                            }`}
-                                        />
-                                    </span>
-                                </span>
+                                <span className="mt-2 block font-medium text-black">$15,000 - $50,000+</span>
                             </motion.div>
                             <motion.div
                                 {...heroReveal}
                                 transition={{ ...heroReveal.transition, delay: 0.18 }}
-                                className="group border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
-                                title="Potential Savings: $20,000+ in brokerage fees, save 1-2 months."
-                                onMouseEnter={() => setRevealedMetric('savings')}
-                                onMouseLeave={() => setRevealedMetric((current) => (current === 'savings' ? null : current))}
-                                onClick={() => toggleMetricReveal('savings')}
+                                className="border border-neutral-200 bg-white p-4 text-sm leading-6 text-neutral-700"
+                                title="Potential Savings: $20,000+ in fees, save 1-2 months."
                             >
                                 <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">Potential Savings</span>
-                                <span className="mt-2 block font-medium text-black">
-                                    Save{' '}
-                                    <span className="relative inline-block">
-                                        <span
-                                            className={`relative z-10 inline-block select-none transition duration-300 ${
-                                                revealedMetric === 'savings' ? 'blur-none opacity-100' : 'blur-[4px] opacity-90 group-hover:blur-none group-hover:opacity-100'
-                                            }`}
-                                        >
-                                            $20,000+
-                                        </span>
-                                        <span
-                                            aria-hidden="true"
-                                            className={`pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.72)_0,rgba(255,255,255,0.72)_2px,transparent_2px,transparent_6px)] mix-blend-screen transition duration-300 ${
-                                                revealedMetric === 'savings' ? 'opacity-0' : 'opacity-75 group-hover:opacity-0'
-                                            }`}
-                                        />
-                                        <span
-                                            aria-hidden="true"
-                                            className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(255,255,255,0.7),transparent_30%),radial-gradient(circle_at_52%_38%,rgba(255,255,255,0.32),transparent_28%),radial-gradient(circle_at_84%_52%,rgba(255,255,255,0.6),transparent_34%)] transition duration-300 ${
-                                                revealedMetric === 'savings' ? 'opacity-0' : 'animate-pulse opacity-70 group-hover:opacity-0'
-                                            }`}
-                                        />
-                                    </span>{' '}
-                                    in brokerage fees
-                                </span>
-                                <span className="block font-medium text-black">
-                                    Save{' '}
-                                    <span className="relative inline-block">
-                                        <span
-                                            className={`relative z-10 inline-block select-none transition duration-300 ${
-                                                revealedMetric === 'savings' ? 'blur-none opacity-100' : 'blur-[4px] opacity-90 group-hover:blur-none group-hover:opacity-100'
-                                            }`}
-                                        >
-                                            1-2
-                                        </span>
-                                        <span
-                                            aria-hidden="true"
-                                            className={`pointer-events-none absolute inset-0 bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.72)_0,rgba(255,255,255,0.72)_2px,transparent_2px,transparent_6px)] mix-blend-screen transition duration-300 ${
-                                                revealedMetric === 'savings' ? 'opacity-0' : 'opacity-75 group-hover:opacity-0'
-                                            }`}
-                                        />
-                                        <span
-                                            aria-hidden="true"
-                                            className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(255,255,255,0.7),transparent_30%),radial-gradient(circle_at_52%_38%,rgba(255,255,255,0.32),transparent_28%),radial-gradient(circle_at_84%_52%,rgba(255,255,255,0.6),transparent_34%)] transition duration-300 ${
-                                                revealedMetric === 'savings' ? 'opacity-0' : 'animate-pulse opacity-70 group-hover:opacity-0'
-                                            }`}
-                                        />
-                                    </span>{' '}
-                                    months
-                                </span>
+                                <span className="mt-2 block font-medium text-black">Save $20,000+ in fees</span>
+                                <span className="block font-medium text-black">Save 1-2 months</span>
                             </motion.div>
                             </div>
                         </div>
@@ -472,47 +413,55 @@ export default function UyghurEatsClientPortal() {
                         <span>Scope</span>
                     </motion.div>
                     <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-4 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0">
-                        {deliveryPackageItems.map((item, index) => (
-                            <Link
-                                key={item.id}
-                                to={item.to}
-                                className="group flex min-h-[38rem] h-full min-w-[88%] snap-center snap-always flex-col border border-neutral-200 bg-white p-6 transition-all duration-300 hover:border-neutral-900 hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:min-h-[40rem] sm:min-w-[72%] sm:p-7 lg:min-w-0"
-                            >
-                                <div className="mb-4 flex items-center justify-between sm:mb-5">
-                                    <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </span>
-                                    <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-300 lg:hidden">
-                                        <span>Next</span>
-                                        <ArrowRight className="h-3.5 w-3.5" />
-                                    </span>
-                                </div>
-                                <h2 className="mb-3 min-h-[3.5rem] text-[1.6rem] font-medium tracking-tight text-black sm:min-h-[4rem] sm:text-2xl">{item.title}</h2>
-                                <p className="mb-4 min-h-[4.5rem] text-sm leading-6 text-neutral-600 sm:mb-5 sm:min-h-[5rem]">{item.description}</p>
-                                <div className="flex flex-1 flex-col overflow-hidden">
-                                    <div className="mb-4 flex-1 border-t border-neutral-100 pt-4 sm:mb-5 sm:pt-5">
-                                        <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">Includes</p>
-                                        <ul className="space-y-2 text-sm leading-6 text-neutral-700">
-                                            {item.includes.map((bullet) => (
-                                                <li key={bullet} className="flex items-start gap-2">
-                                                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-black" />
-                                                    <span>{bullet}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                        {deliveryPackageItems.map((item, index) => {
+                            const valueContent = deliverableValueContent[item.id];
+
+                            return (
+                                <Link
+                                    key={item.id}
+                                    to={item.to}
+                                    className="group flex h-[40rem] min-w-[88%] snap-center snap-always flex-col border border-neutral-200 bg-white p-6 transition-all duration-300 hover:border-neutral-900 hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)] sm:h-[41rem] sm:min-w-[72%] sm:p-7 lg:min-w-0"
+                                >
+                                    <div className="mb-4 flex items-center justify-between sm:mb-5">
+                                        <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+                                            {String(index + 1).padStart(2, '0')}
+                                        </span>
+                                        <span className="inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-[0.18em] text-neutral-300 lg:hidden">
+                                            <span>Next</span>
+                                            <ArrowRight className="h-3.5 w-3.5" />
+                                        </span>
                                     </div>
-                                    <div className="border border-neutral-900 bg-neutral-950 p-4 text-white sm:p-5">
-                                        <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">Client Value</p>
-                                        <p className="text-sm leading-6 text-neutral-200">{item.value}</p>
-                                        <div className={`mt-4 inline-flex items-center gap-2 text-sm transition-colors ${item.ctaClassName}`}>
-                                            {item.ctaLabel}
-                                            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                    <h2 className="mb-3 min-h-[3.5rem] text-[1.6rem] font-medium tracking-tight text-black sm:min-h-[4rem] sm:text-2xl">{item.title}</h2>
+                                    <p className="mb-4 min-h-[4.5rem] text-sm leading-6 text-neutral-600 sm:mb-5 sm:min-h-[5rem]">{item.description}</p>
+                                    <div className="flex flex-1 flex-col overflow-hidden">
+                                        <div className="mb-4 flex-1 border-t border-neutral-100 pt-4 sm:mb-5 sm:pt-5">
+                                            <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">Includes</p>
+                                            <ul className="space-y-2 text-sm leading-6 text-neutral-700">
+                                                {item.includes.map((bullet) => (
+                                                    <li key={bullet} className="flex items-start gap-2">
+                                                        <span className="mt-2 h-1.5 w-1.5 rounded-full bg-black" />
+                                                        <span>{bullet}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
+                                        <div className="border border-neutral-900 bg-neutral-950 p-4 text-white sm:p-5">
+                                            <p className={deliverableValueLabelClassName}>{valueContent.label}</p>
+                                            <p className={deliverableValueBodyClassName}>{valueContent.body}</p>
+                                            <div className="mt-5">
+                                                <div className={deliverableValueCtaClassName}>
+                                                    <span>{valueContent.cta}</span>
+                                                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:translate-x-0.5">
+                                                        <ArrowRight className="h-3.5 w-3.5" />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex-1" />
                                     </div>
-                                    <div className="flex-1" />
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </section>
 
@@ -676,16 +625,16 @@ export default function UyghurEatsClientPortal() {
                         >
                             <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.24em] text-cyan-300/75">Summarize Proposal</p>
                             <h2 className="max-w-2xl text-2xl font-medium tracking-tight md:text-3xl">
-                                A quick summary panel for the viewer to review the proposal, deliverables, and supporting notes.
+                                Want the short version first?
                             </h2>
                             <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-300 md:text-base">
-                                Use this panel to scan the proposal faster. It condenses the key points into a simple viewer-friendly summary without changing the underlying proposal content.
+                                This summary panel gives you a faster way to understand the proposal, the deliverables, and what each part is meant to help you achieve. It is simply there if you want a quicker read before going deeper into the full proposal.
                             </p>
                             <Link
                                 to={routes.fieldBossChatbot}
                                 className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-medium text-white transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/10"
                             >
-                                Open Summary Panel
+                                View Summary
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
                         </motion.div>
