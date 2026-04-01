@@ -33,7 +33,7 @@ export const projectShowcaseOverridesByPath: Record<string, ProjectShowcaseOverr
       { label: 'Local Growth', tier: 3 },
     ],
   },
-  '/uyghur-eats': {
+  '/client/uyghur-eats/profile': {
     publicTitle: 'Business Sale Preparation & Opportunity Packaging',
     publicClientDescription: 'Fine dining business acquisition opportunity',
     publicDescription: 'A four-step engagement covering business overview creation, valuation modeling, operations documentation, and buyer due diligence packaging for a local restaurant asset.',

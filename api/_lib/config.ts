@@ -367,16 +367,6 @@ const fallbackProjectAccessScopes: ProjectAccessScopeRecord[] = [
     ],
     notes: '',
   },
-  {
-    scopeId: 'uyghur_eats',
-    title: 'Uyghur Eats',
-    password: getEnv('PROJECT_PASSWORD_UYGHUR_EATS'),
-    proposalEmails: unique(splitCsv(getEnv('PROJECT_PROPOSAL_EMAILS_UYGHUR_EATS')).map((email) => email.toLowerCase())),
-    pages: [
-      { path: '/uyghur-eats', view: 'profile' },
-    ],
-    notes: '',
-  },
 ];
 
 const projectAccessScopes = loadProjectAccessRegistry() ?? fallbackProjectAccessScopes;

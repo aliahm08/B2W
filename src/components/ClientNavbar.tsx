@@ -227,6 +227,14 @@ export default function ClientNavbar({
       );
     }
 
+    if (item.type === 'cta' && item.to) {
+      return (
+        <Link key={item.label} to={item.to} className={ctaClassName}>
+          {item.label}
+        </Link>
+      );
+    }
+
     if (item.type === 'cta') {
       return (
         <button key={item.label} onClick={item.onClick} className={ctaClassName}>
@@ -362,7 +370,7 @@ export default function ClientNavbar({
               initial={false}
               animate={
                 hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
-                  ? { scale: [1, 1.08, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 8px rgba(103,232,249,0.12)', '0 0 0 rgba(103,232,249,0)'] }
+                  ? { scale: [1, 1.1, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 10px rgba(103,232,249,0.16)', '0 0 0 rgba(103,232,249,0)'] }
                   : { scale: 1, boxShadow: '0 0 0 rgba(103,232,249,0)' }
               }
               transition={
@@ -413,7 +421,7 @@ export default function ClientNavbar({
               onMouseLeave={() => setIsSummaryHovered(false)}
               animate={
                 hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
-                  ? { scale: [1, 1.08, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 10px rgba(103,232,249,0.14)', '0 0 0 rgba(103,232,249,0)'] }
+                  ? { scale: [1, 1.1, 1], boxShadow: ['0 0 0 rgba(103,232,249,0)', '0 0 0 12px rgba(103,232,249,0.18)', '0 0 0 rgba(103,232,249,0)'] }
                   : { scale: 1, boxShadow: '0 0 0 rgba(103,232,249,0)' }
               }
               transition={

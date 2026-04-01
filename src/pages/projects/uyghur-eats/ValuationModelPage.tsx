@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, DollarSign, BarChart3, TrendingUp, Scale } from 'lucide-react';
@@ -6,7 +6,6 @@ import Seo from '../../../components/Seo';
 import Footer from '../../../components/Footer';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
 import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNavbar';
-import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
     projectPageBackLinkClassName,
     projectPageEyebrowClassName,
@@ -247,22 +246,6 @@ export default function ValuationModelPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
-    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-    const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
-
-    const openOfferModal = () => {
-        setIsOfferSubmitted(false);
-        setIsOfferModalOpen(true);
-    };
-
-    const closeOfferModal = () => {
-        setIsOfferModalOpen(false);
-    };
-
-    const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsOfferSubmitted(true);
-    };
 
     const navItems: ClientNavAction[] = [
         { label: 'Proposal', to: '/client/uyghur-eats' },
@@ -270,7 +253,7 @@ export default function ValuationModelPage() {
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
         { label: 'Terms', to: '/client/uyghur-eats/terms' },
-        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+        { label: 'Accept', type: 'cta', to: '/client/uyghur-eats#accept-proposal' },
     ];
 
     useEffect(() => {
@@ -444,14 +427,6 @@ export default function ValuationModelPage() {
                     </div>
                 </main>
             </motion.div>
-
-            <UyghurEatsOfferModal 
-                isOpen={isOfferModalOpen}
-                onClose={closeOfferModal}
-                isSubmitted={isOfferSubmitted}
-                onSubmit={handleOfferSubmit}
-            />
-
             <Footer />
         </article>
     );

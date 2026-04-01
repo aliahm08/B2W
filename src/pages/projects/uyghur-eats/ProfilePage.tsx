@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useMemo, type FormEvent, type ReactNode } from 'react';
+import React, { useState, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { MapPin, ChefHat, Users, LineChart, Target, TrendingUp, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import ProjectTagPill from '../../../components/ProjectTagPill';
 import Seo from '../../../components/Seo';
 import Footer from '../../../components/Footer';
 import ProfileSectionNav from '../../../components/ProfileSectionNav';
 import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNavbar';
-import UyghurEatsOfferModal from '../../../components/uyghur-eats/UyghurEatsOfferModal';
 import { useScrollSectionNav } from '../../../hooks/useScrollSectionNav';
-import PreviewAccessChrome from '../../../components/PreviewAccessChrome';
-import { hasGrantedView, submitProjectAccess } from '../../../content/projectAccess';
 import { projectShowcaseOverridesByPath } from '../../../content/projectShowcase';
 import {
     projectPageBackLinkClassName,
@@ -200,44 +197,8 @@ const profileSectionScores: Partial<Record<string, { score: number; note: string
 
 /* ─── Main component ──────────────────────────────────── */
 export default function UyghurEats() {
-    const projectPath = '/uyghur-eats';
-    const showcase = projectShowcaseOverridesByPath['/uyghur-eats'];
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-    const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
-    const [profilePassword, setProfilePassword] = useState('');
-    const [previewError, setPreviewError] = useState('');
-    const [isUnlockingPreview, setIsUnlockingPreview] = useState(false);
-    const [hasPreviewAccess, setHasPreviewAccess] = useState(false);
+    const showcase = projectShowcaseOverridesByPath['/client/uyghur-eats/profile'];
     const [activeSection, setActiveSection] = useState('location');
-    const [isProfileLinkCopied, setIsProfileLinkCopied] = useState(false);
-
-    const openOfferModal = () => {
-        setIsOfferSubmitted(false);
-        setIsOfferModalOpen(true);
-    };
-
-    const closeOfferModal = () => {
-        setIsOfferModalOpen(false);
-    };
-
-    const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsOfferSubmitted(true);
-    };
-
-    const handleShareProfile = async () => {
-        const profileUrl = 'https://www.b2w-ai.com/uyghur-eats-profile';
-
-        try {
-            await navigator.clipboard.writeText(profileUrl);
-            setIsProfileLinkCopied(true);
-        } catch {
-            setIsProfileLinkCopied(false);
-        }
-    };
 
     const navItems: ClientNavAction[] = [
         { label: 'Proposal', to: '/client/uyghur-eats' },
@@ -245,77 +206,8 @@ export default function UyghurEats() {
         { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
         { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
         { label: 'Terms', to: '/client/uyghur-eats/terms' },
-        { label: 'Accept', type: 'cta', onClick: openOfferModal },
+        { label: 'Accept', type: 'cta', to: '/client/uyghur-eats#accept-proposal' },
     ];
-    const isProposalPreview = searchParams.get('preview') === 'proposal';
-    const isPublicProfilePreview = location.pathname === '/uyghur-eats-profile';
-    const proposalReturnPath = '/client/uyghur-eats';
-    const isBlurredPreview = isProposalPreview || isPublicProfilePreview;
-
-    useEffect(() => {
-        if (!isProposalPreview) {
-            setHasPreviewAccess(false);
-            setPreviewError('');
-            setProfilePassword('');
-            return;
-        }
-    }, [isProposalPreview]);
-
-    useEffect(() => {
-        if (!isOfferModalOpen) {
-            return;
-        }
-
-        const originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                setIsOfferModalOpen(false);
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.body.style.overflow = originalOverflow;
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [isOfferModalOpen]);
-
-    useEffect(() => {
-        const handleOfferOpen = () => {
-            openOfferModal();
-        };
-
-        window.addEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
-        return () => window.removeEventListener('b2w-uyghur-offer:open', handleOfferOpen as EventListener);
-    }, [isBlurredPreview]);
-
-    const handlePreviewUnlock = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsUnlockingPreview(true);
-
-        try {
-            const result = await submitProjectAccess({
-                path: projectPath,
-                method: 'profile',
-                password: profilePassword,
-            });
-
-            if (!hasGrantedView(result, 'profile')) {
-                setPreviewError(result.error || 'Incorrect password.');
-                return;
-            }
-
-            setHasPreviewAccess(true);
-            setPreviewError('');
-            setProfilePassword('');
-            navigate(projectPath, { replace: true });
-        } finally {
-            setIsUnlockingPreview(false);
-        }
-    };
 
     const images = [
         { url: '/images/uyghur-eats/interior.jpg', alt: 'Uyghur Eats Interior with Cultural Murals', span: 'col-span-2' },
@@ -346,7 +238,7 @@ export default function UyghurEats() {
     const currentSectionScore = profileSectionScores[currentSection.id];
 
     return (
-        <article className={projectPageShellClassName} data-project-preview={isBlurredPreview ? 'blurred' : undefined}>
+        <article className={projectPageShellClassName}>
             <ClientNavbar 
                 clientName="Uyghur Eats" 
                 clientLink="/client/uyghur-eats"
@@ -360,36 +252,20 @@ export default function UyghurEats() {
                 imageUrl="https://www.b2w-ai.com/images/uyghur-eats/platter.jpg"
                 imageAlt="Signature Uyghur Eats platter prepared for diners."
             />
-            {isProposalPreview ? (
-                <PreviewAccessChrome
-                    returnPath={proposalReturnPath}
-                    previewLabel="This analysis profile preview"
-                    previewMessage="Hero content, scoping context, and section headings remain visible, while analysis details stay blurred until the profile password is entered."
-                    unlockLabel="Unlock Full Profile"
-                    passwordPlaceholder="Analysis profile password"
-                    passwordValue={profilePassword}
-                    onPasswordChange={setProfilePassword}
-                    onSubmit={handlePreviewUnlock}
-                    isSubmitting={isUnlockingPreview}
-                    error={previewError}
-                />
-            ) : null}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
                 <header className={projectPageHeaderClassName}>
-                    {!isPublicProfilePreview ? (
-                        <div className="mb-8 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <Link to="/client/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
-                                    <ArrowLeft className="w-4 h-4" />
-                                    Return to Proposal
-                                </Link>
-                            </div>
+                    <div className="mb-8 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <Link to="/client/uyghur-eats" className="inline-flex items-center gap-2 text-xs font-medium text-neutral-500 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-4 py-2 rounded-full">
+                                <ArrowLeft className="w-4 h-4" />
+                                Return to Proposal
+                            </Link>
                         </div>
-                    ) : null}
+                    </div>
 
                     <div className={projectPageEyebrowClassName}>
                         <span className="font-semibold text-neutral-900">Food & Beverage</span>
@@ -538,13 +414,6 @@ export default function UyghurEats() {
                     </div>
                 </main>
             </motion.div>
-
-            <UyghurEatsOfferModal 
-                isOpen={isOfferModalOpen}
-                onClose={closeOfferModal}
-                isSubmitted={isOfferSubmitted}
-                onSubmit={handleOfferSubmit}
-            />
 
             <Footer />
         </article>

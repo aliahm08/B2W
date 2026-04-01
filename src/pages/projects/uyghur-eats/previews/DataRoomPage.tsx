@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import {
@@ -16,7 +16,6 @@ import Seo from '../../../../components/Seo';
 import Footer from '../../../../components/Footer';
 import ProfileSectionNav from '../../../../components/ProfileSectionNav';
 import ClientNavbar, { type ClientNavAction } from '../../../../components/ClientNavbar';
-import UyghurEatsOfferModal from '../../../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
   projectPageEyebrowClassName,
   projectPageHeaderClassName,
@@ -132,23 +131,7 @@ const sectionIconMap: Record<string, typeof Building2> = {
 };
 
 export default function DataRoomPage() {
-  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-  const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
   const [activeSection, setActiveSection] = useState('executive-summary');
-
-  const openOfferModal = () => {
-    setIsOfferSubmitted(false);
-    setIsOfferModalOpen(true);
-  };
-
-  const closeOfferModal = () => {
-    setIsOfferModalOpen(false);
-  };
-
-  const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsOfferSubmitted(true);
-  };
 
   const navItems: ClientNavAction[] = [
     { label: 'Proposal', to: '/client/uyghur-eats' },
@@ -156,34 +139,12 @@ export default function DataRoomPage() {
     { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
     { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
     { label: 'Terms', to: '/client/uyghur-eats/terms' },
-    { label: 'Accept', type: 'cta', onClick: openOfferModal },
+    { label: 'Accept', type: 'cta', to: '/client/uyghur-eats#accept-proposal' },
   ];
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    if (!isOfferModalOpen) {
-      return;
-    }
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsOfferModalOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOfferModalOpen]);
 
   const sections: SectionDef[] = [
     { id: 'executive-summary', label: 'Executive Summary', content: <ExecutiveSummaryContent /> },
@@ -327,14 +288,6 @@ export default function DataRoomPage() {
           </AnimatePresence>
         </main>
       </motion.div>
-
-      <UyghurEatsOfferModal
-        isOpen={isOfferModalOpen}
-        onClose={closeOfferModal}
-        isSubmitted={isOfferSubmitted}
-        onSubmit={handleOfferSubmit}
-      />
-
       <Footer />
     </article>
   );

@@ -24,7 +24,7 @@ export default function UyghurEatsAcceptanceForm() {
     acceptedTerms: false,
     companyWebsite: '',
   });
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'warning' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -68,6 +68,12 @@ export default function UyghurEatsAcceptanceForm() {
       return;
     }
 
+    if (result.warning) {
+      setStatus('warning');
+      setErrorMessage(result.warning);
+      return;
+    }
+
     setStatus('success');
     setState({
       clientName: '',
@@ -85,7 +91,7 @@ export default function UyghurEatsAcceptanceForm() {
     <div className="border border-neutral-900 bg-neutral-950 p-6 text-white md:p-8">
       <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.24em] text-neutral-400">Accept Proposal</p>
       <h2 className="max-w-2xl text-2xl font-medium tracking-tight md:text-3xl">
-        Submit your acceptance here, or send it by email or text.
+        Begin Your Journey With B2W.
       </h2>
       <p className="mt-4 max-w-2xl text-sm leading-7 text-neutral-300 md:text-base">
         This is a non-binding agreement. We will send you a full contract upon acceptance of this proposal.
@@ -97,6 +103,14 @@ export default function UyghurEatsAcceptanceForm() {
           <p className="mt-2 text-sm leading-6 text-emerald-50/90">
             We sent the submission through the internal workflow and a receipt should go to the email you entered.
           </p>
+        </div>
+      ) : status === 'warning' ? (
+        <div className="mt-6 border border-amber-400/30 bg-amber-400/10 p-5">
+          <p className="text-sm font-medium text-amber-100">Submission recorded with follow-up warning.</p>
+          <p className="mt-2 text-sm leading-6 text-amber-50/90">
+            The acceptance reached the API, but downstream delivery was not fully confirmed. Do not assume the receipt email or inbox notification was delivered yet.
+          </p>
+          <p className="mt-3 text-sm leading-6 text-amber-50/90">{errorMessage}</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="mt-6 space-y-5">

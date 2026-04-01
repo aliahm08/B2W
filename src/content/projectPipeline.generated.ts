@@ -107,7 +107,7 @@ export const projectPipelineContent: ProjectPipelineContent = {
         }
       ],
       "date": "March 2026",
-      "link": "/uyghur-eats-acquisition"
+      "link": "/client/uyghur-eats"
     },
     {
       "id": 4,

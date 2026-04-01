@@ -1,11 +1,10 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import Seo from '../../components/Seo';
 import Footer from '../../components/Footer';
 import ClientNavbar, { type ClientNavAction } from '../../components/ClientNavbar';
-import UyghurEatsOfferModal from '../../components/uyghur-eats/UyghurEatsOfferModal';
 import {
   projectPageEyebrowClassName,
   projectPageHeaderClassName,
@@ -16,22 +15,6 @@ import {
 
 export default function UyghurEatsTermsPage() {
   const [showPricingWhy, setShowPricingWhy] = useState(false);
-  const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
-  const [isOfferSubmitted, setIsOfferSubmitted] = useState(false);
-
-  const openOfferModal = () => {
-    setIsOfferSubmitted(false);
-    setIsOfferModalOpen(true);
-  };
-
-  const closeOfferModal = () => {
-    setIsOfferModalOpen(false);
-  };
-
-  const handleOfferSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsOfferSubmitted(true);
-  };
 
   const navItems: ClientNavAction[] = [
     { label: 'Proposal', to: '/client/uyghur-eats' },
@@ -39,30 +22,8 @@ export default function UyghurEatsTermsPage() {
     { label: 'Valuation', to: '/client/uyghur-eats/valuation' },
     { label: 'Documentation', to: '/client/uyghur-eats/data-room' },
     { label: 'Terms', to: '/client/uyghur-eats/terms' },
-    { label: 'Accept', type: 'cta', onClick: openOfferModal },
+    { label: 'Accept', type: 'cta', to: '/client/uyghur-eats#accept-proposal' },
   ];
-
-  useEffect(() => {
-    if (!isOfferModalOpen) {
-      return;
-    }
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setIsOfferModalOpen(false);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOfferModalOpen]);
 
   const terms = [
     {
@@ -261,32 +222,19 @@ export default function UyghurEatsTermsPage() {
         </div>
       </section>
 
-      <UyghurEatsOfferModal
-        isOpen={isOfferModalOpen}
-        onClose={closeOfferModal}
-        isSubmitted={isOfferSubmitted}
-        onSubmit={handleOfferSubmit}
-      />
-
-      <AnimatePresence>
-        {!isOfferModalOpen ? (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none"
-          >
-            <button
-              type="button"
-              onClick={openOfferModal}
-              className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-black px-6 py-3.5 text-sm font-medium text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:scale-105 hover:bg-neutral-800"
-            >
-              Accept Proposal
-              <ArrowRight className="h-4 w-4" />
-            </button>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed bottom-8 left-0 right-0 z-40 flex justify-center pointer-events-none"
+      >
+        <Link
+          to="/client/uyghur-eats#accept-proposal"
+          className="pointer-events-auto inline-flex items-center gap-2 rounded-full bg-black px-6 py-3.5 text-sm font-medium text-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all hover:scale-105 hover:bg-neutral-800"
+        >
+          Accept Proposal
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </motion.div>
 
       <Footer />
     </article>

@@ -39,7 +39,6 @@ const FosterPartnersScopePage = lazy(() => import('./pages/client/FosterPartners
 const FosterPartnersOperatingModelPage = lazy(() => import('./pages/client/FosterPartnersOperatingModelPage'));
 const FosterPartnersGovernancePage = lazy(() => import('./pages/client/FosterPartnersGovernancePage'));
 const FosterPartnersTermsPage = lazy(() => import('./pages/client/FosterPartnersTermsPage'));
-const UyghurEatsBasicPreviewPage = lazy(() => import('./pages/projects/uyghur-eats/previews/ValuationModelPage'));
 const UyghurEatsValuationModelPage = lazy(() => import('./pages/projects/uyghur-eats/ValuationModelPage'));
 const UyghurEatsDataRoomPage = lazy(() => import('./pages/projects/uyghur-eats/previews/DataRoomPage'));
 const CapabilityPage = lazy(() => import('./pages/capabilities/CapabilityPage'));
@@ -313,9 +312,7 @@ export default function App() {
                     Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
                 <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
                 <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
-                <Route path="/client/uyghur-eats/:section" element={<UyghurEatsClientPortal />} />
                 <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
-                <Route path="/client/uyghur-eats/opportunity" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
                 <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
                 <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
                 <Route path="/client/uyghur-eats/fieldboss-chatbot" element={<UyghurEatsFieldBossChatbotPage />} />
@@ -333,12 +330,12 @@ export default function App() {
                 <Route path="/client/narinder-sagoo" element={<Navigate to="/client/foster-partners" replace />} />
 
                 {/* Redirects for legacy routes */}
-                <Route path="/uyghur-eats" element={<UyghurEatsProfilePage />} />
-                <Route path="/uyghur-eats-profile" element={<UyghurEatsProfilePage />} />
+                <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats" replace />} />
+                <Route path="/uyghur-eats-profile" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
                 <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
                 <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
-
-                <Route path="/uyghur-eats-valuation" element={<UyghurEatsBasicPreviewPage />} />
+                <Route path="/uyghur-eats-acquisition" element={<Navigate to="/client/uyghur-eats" replace />} />
+                <Route path="/uyghur-eats-valuation" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
                 <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
                 <Route path="/services/financial-review" element={<ServiceProjectPage />} />
                 <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />

@@ -167,17 +167,6 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
-    '/uyghur-eats-valuation',
-    {
-      title: 'Uyghur Eats Valuation Preview',
-      description:
-        'Preview of the Uyghur Eats valuation presentation showing how revenue, normalized earnings, and sale scenarios can be packaged for buyer review.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: uyghurImages.noodles,
-      imageAlt: 'Hand-pulled noodle dish from Uyghur Eats.',
-    },
-  ],
-  [
     '/home-test-1',
     {
       title: 'B2W Homepage Prototype',
@@ -194,54 +183,6 @@ const directRoutes = new Map<string, SeoDefinition>([
         'Legacy route that forwards to the Borek-G restaurant marketing profile covering reputation, search visibility, and growth signals.',
       canonicalPath: '/borek-g-social-media-management',
       robots: PRIVATE_ROBOTS,
-    },
-  ],
-  [
-    '/uyghur-eats',
-    {
-      title: 'Uyghur Eats Business Profile for Buyers',
-      description:
-        'Legacy route that forwards to the Uyghur Eats buyer profile covering concept story, market positioning, valuation context, and diligence materials.',
-      canonicalPath: '/client/uyghur-eats/profile',
-      robots: PRIVATE_ROBOTS,
-      imagePath: uyghurImages.plating,
-      imageAlt: 'Signature Uyghur Eats platter prepared for diners.',
-    },
-  ],
-  [
-    '/uyghur-eats-valuation-model',
-    {
-      title: 'Uyghur Eats Valuation Model and Sale Range',
-      description:
-        'Legacy route that forwards to the Uyghur Eats valuation model and buyer pricing scenario page.',
-      canonicalPath: '/client/uyghur-eats/valuation',
-      robots: PRIVATE_ROBOTS,
-      imagePath: uyghurImages.noodles,
-      imageAlt: 'Hand-pulled noodle dish from Uyghur Eats.',
-    },
-  ],
-  [
-    '/uyghur-eats-data-room',
-    {
-      title: 'Uyghur Eats Due Diligence Documentation',
-      description:
-        'Legacy route that forwards to the Uyghur Eats documentation page organizing diligence materials, operating records, and transfer assets.',
-      canonicalPath: '/client/uyghur-eats/data-room',
-      robots: PRIVATE_ROBOTS,
-      imagePath: uyghurImages.main,
-      imageAlt: 'Interior dining room at Uyghur Eats in Washington, DC.',
-    },
-  ],
-  [
-    '/client/uyghur-eats/opportunity',
-    {
-      title: 'Uyghur Eats Business Profile for Buyers',
-      description:
-        'Legacy route that forwards to the Uyghur Eats buyer-facing profile covering the location, concept narrative, and business acquisition positioning.',
-      canonicalPath: '/client/uyghur-eats/profile',
-      robots: PRIVATE_ROBOTS,
-      imagePath: uyghurImages.plating,
-      imageAlt: 'Signature Uyghur Eats platter prepared for diners.',
     },
   ],
 ]);

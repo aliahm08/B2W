@@ -12,15 +12,6 @@ type FloatingPageCta =
 
 const floatingPageCtas: Record<string, FloatingPageCta[]> = {
   '/borek-g-operations': [{ type: 'proposal', label: 'Key Terms & Sign' }],
-  '/uyghur-eats-acquisition': [
-    {
-      type: 'link',
-      label: 'Preview Analysis Profile',
-      href: '/uyghur-eats?preview=proposal&return=%2Fuyghur-eats-acquisition%23scope-options',
-    },
-    { type: 'proposal', label: 'Key Terms & Sign' },
-  ],
-  '/uyghur-eats': [{ type: 'event', label: 'Make an Offer', eventName: 'b2w-uyghur-offer:open' }],
 };
 
 export default function AssistantWidget() {
