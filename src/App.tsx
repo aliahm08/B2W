@@ -53,6 +53,7 @@ const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitch
 const SolutionsLandingPage = lazy(() => import('./pages/solutions/SolutionsLandingPage'));
 const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTemplatePage'));
 const TierPage = lazy(() => import('./pages/TierPage'));
+const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -230,13 +231,14 @@ export default function App() {
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
   const isPrototypeHome = location.pathname === '/home-test-1';
+  const isAppTest = location.pathname === '/app-test-1';
   const isAiSolutionsLanding = location.pathname.startsWith('/solutions');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model');
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAiSolutionsLanding;
+    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isAiSolutionsLanding;
   const routeTransitionKey = isAiSolutionsLanding ? '/solutions' : location.pathname;
 
   let clientName: string | undefined = undefined;
@@ -284,6 +286,7 @@ export default function App() {
                   }
                 />
                 <Route path="/home-test-1" element={<HomeTestOnePage />} />
+                <Route path="/app-test-1" element={<AppTestOnePage />} />
                 <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
