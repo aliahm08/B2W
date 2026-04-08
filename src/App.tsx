@@ -54,6 +54,7 @@ const SolutionsLandingPage = lazy(() => import('./pages/solutions/SolutionsLandi
 const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTemplatePage'));
 const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
+const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -235,7 +236,8 @@ export default function App() {
   const isAiSolutionsLanding = location.pathname.startsWith('/solutions');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
-                        location.pathname.includes('-valuation-model');
+                        location.pathname.includes('-valuation-model') ||
+                        location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
     isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isAiSolutionsLanding;
@@ -343,6 +345,7 @@ export default function App() {
                 <Route path="/services/financial-review" element={<ServiceProjectPage />} />
                 <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
                 <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
+                <Route path="/work/coffeeshop-financing/model" element={<CoffeeShopFinancingModelPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </motion.div>
