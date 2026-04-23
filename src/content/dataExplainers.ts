@@ -11,10 +11,12 @@ export type ExplainerContent = {
   summary: string;
   examples: ExplainerItem[];
   decisions: string[];
+  examplesLabel?: string;
+  accent?: 'default' | 'green';
 };
 
 export const explainerContent: Record<string, ExplainerContent> = {
-  '/capabilities/marketing-data': {
+  '/growth': {
     eyebrow: 'Marketing Data',
     title: 'See What Marketing Data Is Really Saying',
     seoTitle: 'Marketing Data Analysis for Small Business Growth',
@@ -54,6 +56,8 @@ export const explainerContent: Record<string, ExplainerContent> = {
       'Find where interest is dropping before it becomes revenue',
       'Improve website, campaign, and content decisions using observed user behavior',
     ],
+    examplesLabel: 'High ROI Priorities',
+    accent: 'green',
   },
   '/capabilities/financials': {
     eyebrow: 'Financials',

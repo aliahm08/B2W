@@ -47,7 +47,6 @@ const DataExplainerPage = lazy(() => import('./pages/capabilities/DataExplainerP
 const ServiceProjectPage = lazy(() => import('./pages/ServiceProjectPage'));
 const SabucnuProfilePage = lazy(() => import('./pages/projects/sabucnu/ProfilePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
-const GrowthMarketingPage = lazy(() => import('./pages/GrowthMarketingPage'));
 const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
 const KitchenPreviewPage = lazy(() => import('./pages/kitchen/KitchenPreviewPage'));
 const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitchenDemoPage'));
@@ -305,7 +304,8 @@ export default function App() {
                 <Route path="/tiers/consulting" element={<TierPage />} />
                 <Route path="/tiers/implementation" element={<TierPage />} />
                 <Route path="/tiers/custom-tool" element={<TierPage />} />
-                <Route path="/capabilities/marketing-data" element={<DataExplainerPage />} />
+                <Route path="/growth" element={<DataExplainerPage />} />
+                <Route path="/capabilities/marketing-data" element={<Navigate to="/growth" replace />} />
                 <Route path="/capabilities/financials" element={<DataExplainerPage />} />
                 <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
                 <Route path="/capabilities/:slug" element={<CapabilityPage />} />
@@ -313,7 +313,6 @@ export default function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/about/process" element={<Navigate to="/about#process" replace />} />
                 <Route path="/about/team" element={<Navigate to="/about#team" replace />} />
-                <Route path="/growth-marketing" element={<GrowthMarketingPage />} />
                 <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
                 {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
                     Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}

@@ -14,7 +14,7 @@ const expertiseCards: ExpertiseCard[] = [
   {
     title: 'Growth',
     description: 'Marketing data reveals where demand is forming, where conversion is weak, and where growth effort should be redirected or amplified.',
-    href: '/capabilities/marketing-data',
+    href: '/growth',
     accentClassName: 'text-emerald-700',
     borderClassName: 'border-emerald-200',
   },

@@ -8,10 +8,11 @@ import { explainerContent } from '../../content/dataExplainers';
 export default function DataExplainerPage() {
   const location = useLocation();
   const content = useMemo(
-    () => explainerContent[location.pathname] ?? explainerContent['/capabilities/marketing-data'],
+    () => explainerContent[location.pathname] ?? explainerContent['/growth'],
     [location.pathname],
   );
   const [openItem, setOpenItem] = useState(content.examples[0]?.label ?? '');
+  const isGreenAccent = content.accent === 'green';
 
   useEffect(() => {
     setOpenItem(content.examples[0]?.label ?? '');
@@ -64,18 +65,31 @@ export default function DataExplainerPage() {
           transition={{ duration: 0.45, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
           className="grid gap-8 md:grid-cols-2"
         >
-          <div className="border border-neutral-200 bg-white p-6 md:p-7">
-            <h2 className="mb-4 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-400">Example Inputs</h2>
+          <div
+            className={`p-6 md:p-7 ${
+              isGreenAccent ? 'border border-emerald-200 bg-emerald-50/40' : 'border border-neutral-200 bg-white'
+            }`}
+          >
+            <h2 className="mb-4 text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-400">
+              {content.examplesLabel ?? 'Example Inputs'}
+            </h2>
             <ul className="space-y-3">
               {content.examples.map((item) => (
-                <li key={item.label} className="border border-neutral-200 bg-neutral-50 transition-colors hover:border-neutral-300">
+                <li
+                  key={item.label}
+                  className={`transition-colors ${
+                    isGreenAccent
+                      ? 'border border-emerald-200 bg-white hover:border-emerald-300'
+                      : 'border border-neutral-200 bg-neutral-50 hover:border-neutral-300'
+                  }`}
+                >
                   <button
                     type="button"
                     onClick={() => handleToggle(item.label)}
                     className="flex w-full items-center gap-3 px-4 py-4 text-left"
                     aria-expanded={openItem === item.label}
                   >
-                    <Check className="h-4 w-4 shrink-0 text-neutral-700" />
+                    <Check className={`h-4 w-4 shrink-0 ${isGreenAccent ? 'text-emerald-700' : 'text-neutral-700'}`} />
                     <span className="flex-1 text-base font-medium leading-relaxed text-neutral-900">{item.label}</span>
                     <ChevronDown
                       className={`h-4 w-4 shrink-0 text-neutral-400 transition-transform ${
@@ -84,7 +98,11 @@ export default function DataExplainerPage() {
                     />
                   </button>
                   {openItem === item.label ? (
-                    <div className="border-t border-neutral-200 px-4 py-4 text-sm leading-relaxed text-neutral-600">
+                    <div
+                      className={`px-4 py-4 text-sm leading-relaxed text-neutral-600 ${
+                        isGreenAccent ? 'border-t border-emerald-200 bg-emerald-50/50' : 'border-t border-neutral-200'
+                      }`}
+                    >
                       {item.detail}
                     </div>
                   ) : null}

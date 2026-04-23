@@ -16,6 +16,7 @@ async function runTest() {
     name: 'Test Verifier',
     email: 'test@b2w-ai.com',
     company: 'Verification Labs',
+    phone: '555-0100',
     message: 'I am verifying the workflow routing.',
     projectAreas: ['Marketing'],
     inquiryType: 'Marketing',

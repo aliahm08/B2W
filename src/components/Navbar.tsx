@@ -26,7 +26,7 @@ function buildNavItems(basePath: string): NavItem[] {
   return [
     {
       label: 'Growth',
-      to: '/capabilities/marketing-data',
+      to: '/growth',
     },
     {
       label: 'Optimization',

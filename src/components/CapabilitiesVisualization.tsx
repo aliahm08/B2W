@@ -7,7 +7,7 @@ export default function CapabilitiesVisualization() {
     {
       title: 'Marketing Data',
       body: 'Instagram analytics, Google reviews and ads, website visits, click behavior, and conversion signals.',
-      to: '/capabilities/marketing-data',
+      to: '/growth',
     },
     {
       title: 'Financials',
