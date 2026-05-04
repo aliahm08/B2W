@@ -13,7 +13,7 @@ const logoOpacities = [0.12, 0.18, 0.26, 0.35, 0.47, 0.61, 0.74];
 
 function SolutionsLockup() {
   return (
-    <Link to="/solutions" aria-label="B2W AI" className="inline-flex items-center overflow-visible text-white">
+    <Link to="/solutions" aria-label="B2W" className="inline-flex items-center overflow-visible text-white">
       <svg viewBox="0 0 96 96" className="h-10 w-12 shrink-0 overflow-visible md:h-12 md:w-14">
         <path d={logoPath} fill="currentColor" fillOpacity="0.93" />
         {logoRotations.map((rotation, index) => (
@@ -33,7 +33,6 @@ function SolutionsLockup() {
           B2W
         </span>
       </span>
-      <span className="ml-1 text-lg font-medium tracking-[-0.08em] text-white/92 md:text-xl">-ai</span>
     </Link>
   );
 }
@@ -66,7 +65,7 @@ export default function SolutionsNavbar({
             to="/solutions"
             className={`transition-colors ${desktopNavLinkClasses(location.pathname === '/solutions')}`}
           >
-            Platform
+            Clara
           </Link>
           {aiSolutions.map((solution) => {
             const target = `/solutions/${solution.slug}`;
@@ -106,7 +105,7 @@ export default function SolutionsNavbar({
             to="/solutions"
             className={`whitespace-nowrap transition-colors ${mobileNavLinkClasses(location.pathname === '/solutions')}`}
           >
-            Platform
+            Clara
           </Link>
           {aiSolutions.map((solution) => {
             const target = `/solutions/${solution.slug}`;

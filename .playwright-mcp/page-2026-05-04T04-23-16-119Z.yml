@@ -1,0 +1,358 @@
+- main [ref=e4]:
+  - generic [ref=e6]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - link "JasonAI landing page" [ref=e10] [cursor=pointer]:
+          - /url: /jasonai
+          - img [ref=e11]
+          - generic [ref=e15]: JasonAI
+        - generic [ref=e17]:
+          - generic [ref=e18]: by
+          - link "B2W home" [ref=e19] [cursor=pointer]:
+            - /url: /
+            - text: B2W
+      - navigation [ref=e20]:
+        - link "The problem" [ref=e21] [cursor=pointer]:
+          - /url: "#problem"
+        - link "How it works" [ref=e22] [cursor=pointer]:
+          - /url: "#how-it-works"
+        - link "Questions" [ref=e23] [cursor=pointer]:
+          - /url: "#questions"
+      - link "Book review" [ref=e24] [cursor=pointer]:
+        - /url: "#business-review"
+        - text: Book review
+        - img [ref=e25]
+    - main [ref=e27]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - paragraph [ref=e31]: JasonAI
+          - heading "Built around your business. Not the other way around." [level=1] [ref=e32]:
+            - generic "Built around your business. Not the other way around." [ref=e33]
+          - paragraph [ref=e35]: JasonAI works inside the tools your team already uses - text, email, WhatsApp, and calls - and keeps track of everything that matters. No new app. No new process. Built around the way you already work.
+          - generic [ref=e36]:
+            - link "Book Your Free 15-Minute Business Review" [ref=e37] [cursor=pointer]:
+              - /url: "#business-review"
+              - text: Book Your Free 15-Minute Business Review
+              - img [ref=e38]
+            - link "Not ready? Join the waitlist" [ref=e40] [cursor=pointer]:
+              - /url: "#waitlist"
+              - text: Not ready? Join the waitlist
+              - img [ref=e41]
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - img [ref=e45]
+              - text: Texts
+            - generic [ref=e47]:
+              - img [ref=e48]
+              - text: Email
+            - generic [ref=e50]:
+              - img [ref=e51]
+              - text: WhatsApp and calls
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: Friday owner summary
+              - paragraph [ref=e58]: Maple Avenue Bath Remodel
+            - generic [ref=e59]: Open
+          - generic [ref=e60]:
+            - generic [ref=e61]:
+              - paragraph [ref=e62]: Mon 8:14 AM
+              - paragraph [ref=e63]: Tech text
+              - paragraph [ref=e64]: Customer asked about adding laundry sink.
+            - generic [ref=e65]:
+              - paragraph [ref=e66]: Mon 8:37 AM
+              - paragraph [ref=e67]: Call note
+              - paragraph [ref=e68]: Owner approved rough-in if price is sent today.
+            - generic [ref=e69]:
+              - paragraph [ref=e70]: Tue 4:10 PM
+              - paragraph [ref=e71]: Email
+              - paragraph [ref=e72]: Permit question still needs reply.
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - paragraph [ref=e75]: Scope change
+              - paragraph [ref=e76]: Price laundry sink rough-in.
+            - generic [ref=e77]:
+              - paragraph [ref=e78]: Follow-up
+              - paragraph [ref=e79]: Reply on permit status.
+            - generic [ref=e80]:
+              - paragraph [ref=e81]: Money risk
+              - paragraph [ref=e82]: Extra not billed yet.
+      - generic [ref=e84]:
+        - generic [ref=e85]:
+          - heading "You Already Know This Is Costing You" [level=2] [ref=e86]:
+            - generic "You Already Know This Is Costing You" [ref=e87]
+          - paragraph [ref=e88]: Scroll through the work your team is already doing. Each one is a real place where money, trust, or time leaks out of the business.
+        - generic [ref=e89]:
+          - article [ref=e90]:
+            - button "Cost 1 You got off a call. Something was agreed to. Nobody wrote it down. Now the customer says it never happened." [ref=e91]:
+              - generic [ref=e92]: Cost 1
+              - generic [ref=e93]: You got off a call. Something was agreed to. Nobody wrote it down. Now the customer says it never happened.
+            - img "Contractor owner in a truck cab after a job call with a blank notebook nearby." [ref=e97]
+          - article [ref=e98]:
+            - button "Cost 2 Your tech handled a \"while you are here\" request. Nobody billed it." [ref=e99]:
+              - generic [ref=e100]: Cost 2
+              - generic [ref=e101]: Your tech handled a "while you are here" request. Nobody billed it.
+            - img "Field technician in a residential utility space handling an extra customer request." [ref=e104]
+          - article [ref=e105]:
+            - button "Cost 3 Your PM is on WhatsApp. Your tech texts. The customer emails. Nothing connects." [ref=e106]:
+              - generic [ref=e107]: Cost 3
+              - generic [ref=e108]: Your PM is on WhatsApp. Your tech texts. The customer emails. Nothing connects.
+            - img "Operations manager looking across several devices and a job folder on a contractor office desk." [ref=e111]
+          - article [ref=e112]:
+            - button "Cost 4 You have tried tools before. Your crew never used them. You still have the subscription." [ref=e113]:
+              - generic [ref=e114]: Cost 4
+              - generic [ref=e115]: You have tried tools before. Your crew never used them. You still have the subscription.
+            - img "Contractor office with an unused tablet beside paper work orders." [ref=e118]
+          - article [ref=e119]:
+            - button "Cost 5 You spent Sunday night rereading six weeks of messages to figure out what happened on one job." [ref=e120]:
+              - generic [ref=e121]: Cost 5
+              - generic [ref=e122]: You spent Sunday night rereading six weeks of messages to figure out what happened on one job.
+            - img "Contractor owner working late at a kitchen table with phone, laptop, and job papers." [ref=e125]
+          - article [ref=e126]:
+            - button "Cost 6 A job closed. You know you left money on the table. You just do not know exactly how much." [ref=e127]:
+              - generic [ref=e128]: Cost 6
+              - generic [ref=e129]: A job closed. You know you left money on the table. You just do not know exactly how much.
+            - img "Contractor owner reviewing final job paperwork in a completed residential job space." [ref=e132]
+      - generic [ref=e134]:
+        - generic [ref=e135]:
+          - paragraph [ref=e136]:
+            - generic "What JasonAI does" [ref=e137]
+          - heading "It keeps track of what matters across every role." [level=2] [ref=e138]:
+            - generic "It keeps track of what matters across every role." [ref=e139]
+        - generic [ref=e141]:
+          - generic [ref=e142]:
+            - button "Project management Turns scattered messages into a working job list." [ref=e143]:
+              - generic [ref=e144]: Project management
+              - generic [ref=e145]: Turns scattered messages into a working job list.
+            - button "Risk tracking Catches scope, follow-up, and dispute risk inside the chat." [ref=e146]:
+              - generic [ref=e147]: Risk tracking
+              - generic [ref=e148]: Catches scope, follow-up, and dispute risk inside the chat.
+            - button "Documentation lookup Finds the paper trail without making anyone search old threads." [ref=e150]:
+              - generic [ref=e151]: Documentation lookup
+              - generic [ref=e152]: Finds the paper trail without making anyone search old threads.
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - paragraph [ref=e155]: JasonAI works inside the communication tools your team already uses - texts, email, WhatsApp, and calls. It learns how your business operates and keeps track of what matters across every role.
+              - paragraph [ref=e156]: "For your techs in the field: relevant job information and reminders, right where they already communicate. No new app to open."
+            - generic [ref=e157]:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - paragraph: Chat history
+                  - paragraph: Field texts + PM thread
+                - generic:
+                  - generic:
+                    - img
+                    - paragraph: Emails
+                  - paragraph: Approvals + recap
+                - generic:
+                  - generic:
+                    - img
+                    - paragraph: Cloud storage
+                  - paragraph: Photos + job docs
+              - generic [ref=e160]:
+                - generic [ref=e163]:
+                  - paragraph [ref=e164]: Maple Ave Team
+                  - paragraph [ref=e165]: Luis, Maya, Owner, JasonAI
+                - generic [ref=e167]:
+                  - generic [ref=e168]:
+                    - paragraph [ref=e169]: Luis - field
+                    - paragraph [ref=e170]: Homeowner asked about adding the laundry sink.
+                  - generic [ref=e171]:
+                    - paragraph [ref=e172]: Maya - PM
+                    - paragraph [ref=e173]: Need the open items before I call them back.
+                  - generic [ref=e373]:
+                    - generic [ref=e374]:
+                      - paragraph [ref=e375]: Owner
+                      - paragraph [ref=e376]: JasonAI, what is still open on Maple Ave?
+                    - generic [ref=e377]:
+                      - generic [ref=e378]:
+                        - generic [ref=e379]: J
+                        - paragraph [ref=e380]: JasonAI
+                      - generic [ref=e381]:
+                        - generic [ref=e382]: Chat history
+                        - generic [ref=e383]: Emails
+                        - generic [ref=e384]: Cloud storage
+                      - paragraph [ref=e385]: "Open: permit status reply, laundry sink price, and Friday customer recap. PM owns permit. Owner approval needed on extra work."
+                - generic [ref=e187]:
+                  - paragraph [ref=e188]: Pipeline connected
+                  - generic [ref=e189]:
+                    - generic [ref=e190]: Jobs
+                    - generic [ref=e191]: Risks
+                    - generic [ref=e192]: Docs
+            - generic [ref=e193]:
+              - paragraph [ref=e194]: "For your admin and PM: organized records, flagged scope changes, and open follow-ups across every active job. Automatically."
+              - paragraph [ref=e195]: "For you as the owner: weekly clarity on every job. Every commitment made. Every extra that needs to be billed. Every follow-up still open. Delivered to you."
+        - paragraph [ref=e197]: JasonAI does not ask your business to fit into a template. It is set up around the way you already work.
+      - generic [ref=e199]:
+        - paragraph [ref=e200]:
+          - generic "How it works" [ref=e201]
+        - generic [ref=e202]:
+          - heading "Three steps. No new habits." [level=2] [ref=e203]:
+            - generic "Three steps. No new habits." [ref=e204]
+          - generic [ref=e205]:
+            - generic [ref=e206]:
+              - paragraph [ref=e207]: "01"
+              - heading "We learn your business." [level=3] [ref=e208]
+              - paragraph [ref=e209]: We spend time understanding how your team communicates, how jobs move through your operation, and where things tend to fall through. No assumptions.
+            - generic [ref=e210]:
+              - paragraph [ref=e211]: "02"
+              - heading "We set up JasonAI around your process." [level=3] [ref=e212]
+              - paragraph [ref=e213]: Not a generic template. Built around how your specific business operates - your tools, your workflow, your team.
+            - generic [ref=e214]:
+              - paragraph [ref=e215]: "03"
+              - heading "Your team keeps working the same way." [level=3] [ref=e216]
+              - paragraph [ref=e217]: JasonAI runs in the background and is available whenever anyone needs it. Everyone gets help that is relevant to their role. You get visibility across all of it.
+      - generic [ref=e219]:
+        - generic [ref=e220]:
+          - paragraph [ref=e221]:
+            - generic "Use cases" [ref=e222]
+          - heading "The places where money and trust usually slip." [level=2] [ref=e223]:
+            - generic "The places where money and trust usually slip." [ref=e224]
+        - generic [ref=e225]:
+          - generic [ref=e226]:
+            - heading "Scope change protection" [level=3] [ref=e227]
+            - paragraph [ref=e228]: A homeowner asks for additional work while your tech is on-site. JasonAI flags it as an undocumented scope change so you can issue a change order before the job closes.
+          - generic [ref=e229]:
+            - heading "Dispute defense" [level=3] [ref=e230]
+            - paragraph [ref=e231]: A customer claims you never mentioned an extra cost. JasonAI pulls the message thread where they approved it - timestamped and organized.
+          - generic [ref=e232]:
+            - heading "Missed follow-up" [level=3] [ref=e233]
+            - paragraph [ref=e234]: Your PM promised to call back about permit status. JasonAI flags it before it becomes a problem.
+          - generic [ref=e235]:
+            - heading "Weekly job clarity" [level=3] [ref=e236]
+            - paragraph [ref=e237]: Every Friday, you get a clean summary of every active job - what happened, what was agreed, what is open, what still needs action. Five minutes. No logins.
+          - generic [ref=e238]:
+            - heading "Field support" [level=3] [ref=e239]
+            - paragraph [ref=e240]: Your tech needs to know what was agreed on a job last week. JasonAI pulls it up instantly in the tool they are already using.
+      - generic [ref=e242]:
+        - generic [ref=e243]:
+          - paragraph [ref=e244]:
+            - generic "Founding contractors" [ref=e245]
+          - heading "We are working with a small group of founding contractor businesses." [level=2] [ref=e246]:
+            - generic "We are working with a small group of founding contractor businesses." [ref=e247]
+        - generic [ref=e248]:
+          - figure "Plumbing owner, 12 techs" [ref=e250]:
+            - paragraph [ref=e251]: "\"I have tried three different apps. Nobody used them. This actually works the way my team already works.\""
+            - generic [ref=e252]: Plumbing owner, 12 techs
+          - figure "Remodeling GC" [ref=e254]:
+            - paragraph [ref=e255]: "\"We lost $14,000 last year on extras we did not document. This is the first thing I have seen that would actually catch it.\""
+            - generic [ref=e256]: Remodeling GC
+          - figure "HVAC operator" [ref=e258]:
+            - paragraph [ref=e259]: "\"My guys will never use a dashboard. I stopped asking. This is different.\""
+            - generic [ref=e260]: HVAC operator
+      - generic [ref=e262]:
+        - generic [ref=e263]:
+          - paragraph [ref=e264]:
+            - generic "Free 15-minute business review" [ref=e265]
+          - heading "We will look at how your job communication works right now." [level=2] [ref=e266]:
+            - generic "We will look at how your job communication works right now." [ref=e267]
+          - paragraph [ref=e269]: No pitch. No demo. Just a real conversation about where job details fall through, what gets missed, and what might already be costing you money.
+        - generic [ref=e271]:
+          - generic [ref=e272]:
+            - generic [ref=e273]:
+              - text: Name
+              - textbox "Name" [ref=e274]
+            - generic [ref=e275]:
+              - text: Company
+              - textbox "Company" [ref=e276]
+            - generic [ref=e277]:
+              - text: Email
+              - textbox "Email" [ref=e278]
+            - generic [ref=e279]:
+              - text: Phone
+              - textbox "Phone" [ref=e280]
+            - generic [ref=e281]:
+              - text: Trade
+              - combobox "Trade" [ref=e282]:
+                - option "Select one" [selected]
+                - option "Plumbing"
+                - option "HVAC"
+                - option "Remodeling / GC"
+                - option "Electrical"
+                - option "Other contractor business"
+            - generic [ref=e283]:
+              - text: Team size
+              - combobox "Team size" [ref=e284]:
+                - option "Select one" [selected]
+                - option "1-4 people"
+                - option "5-10 people"
+                - option "11-25 people"
+                - option "26-50 people"
+                - option "50+ people"
+          - generic [ref=e285]:
+            - text: Tools currently used to communicate about jobs
+            - textbox "Tools currently used to communicate about jobs" [ref=e286]:
+              - /placeholder: Text, email, WhatsApp, calls, Jobber, Buildertrend...
+          - generic [ref=e287]:
+            - text: Biggest job communication challenge right now
+            - textbox "Biggest job communication challenge right now" [ref=e288]
+          - button "Book Your Free 15-Minute Business Review" [ref=e289]:
+            - text: Book Your Free 15-Minute Business Review
+            - img [ref=e290]
+      - generic [ref=e294]:
+        - generic [ref=e295]:
+          - paragraph [ref=e296]:
+            - generic "Objections" [ref=e297]
+          - heading "The questions contractors usually ask first." [level=2] [ref=e298]:
+            - generic "The questions contractors usually ask first." [ref=e299]
+        - generic [ref=e300]:
+          - generic [ref=e301]:
+            - button "Show objection 1" [ref=e302]
+            - button "Show objection 2" [ref=e303]
+            - button "Show objection 3" [ref=e304]
+            - button "Show objection 4" [ref=e305]
+            - button "Show objection 5" [ref=e306]
+          - generic [ref=e386]:
+            - 'heading "Objection 4: I do not want AI reading my job communications." [level=3] [ref=e387]'
+            - generic [ref=e388]:
+              - paragraph [ref=e389]: Answer
+              - paragraph [ref=e390]: We understand. You control which channels JasonAI connects to. Your data is only used to generate your summaries and alerts - never shared, never sold. During the founding beta, you work directly with our team, so you always know exactly what is being reviewed and how.
+      - generic [ref=e314]:
+        - generic [ref=e315]:
+          - paragraph [ref=e316]:
+            - generic "FAQ" [ref=e317]
+          - heading "Details before you talk to us." [level=2] [ref=e318]:
+            - generic "Details before you talk to us." [ref=e319]
+        - generic [ref=e320]:
+          - group [ref=e322]:
+            - generic "What tools does JasonAI connect to?" [ref=e323] [cursor=pointer]
+          - group [ref=e325]:
+            - generic "How does the weekly summary work?" [ref=e326] [cursor=pointer]
+          - group [ref=e328]:
+            - generic "How long does setup take?" [ref=e329] [cursor=pointer]
+          - group [ref=e331]:
+            - generic "What does it cost?" [ref=e332] [cursor=pointer]
+          - group [ref=e334]:
+            - generic "Is my data private?" [ref=e335] [cursor=pointer]
+          - group [ref=e337]:
+            - generic "What if I already use project management tools?" [ref=e338] [cursor=pointer]
+          - group [ref=e340]:
+            - generic "What trades does it work for?" [ref=e341] [cursor=pointer]
+          - group [ref=e343]:
+            - generic "Is it the same setup for every business?" [ref=e344] [cursor=pointer]
+          - group [ref=e346]:
+            - generic "Can I cancel?" [ref=e347] [cursor=pointer]
+      - generic [ref=e349]:
+        - generic [ref=e350]:
+          - paragraph [ref=e351]: Waitlist
+          - heading "Not ready for a review yet?" [level=2] [ref=e352]:
+            - generic "Not ready for a review yet?" [ref=e353]
+          - paragraph [ref=e355]: Join the JasonAI waitlist and get updates as founding access opens for more contractor businesses.
+        - iframe [ref=e357]:
+          
+      - generic [ref=e359]:
+        - paragraph [ref=e360]: A B2W Product
+        - heading "Stop losing money on jobs you cannot track." [level=2] [ref=e361]:
+          - generic "Stop losing money on jobs you cannot track." [ref=e362]
+        - paragraph [ref=e364]: Book a free 15-minute business review. We will look at how your job communication works right now and where things are falling through. No pitch. No demo. Just a real conversation.
+        - generic [ref=e365]:
+          - link "Book My Free Business Review" [ref=e366] [cursor=pointer]:
+            - /url: "#business-review"
+            - text: Book My Free Business Review
+            - img [ref=e367]
+          - link "Just want updates? Join the waitlist" [ref=e369] [cursor=pointer]:
+            - /url: "#waitlist"
+            - text: Just want updates? Join the waitlist
+            - img [ref=e370]

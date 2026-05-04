@@ -55,6 +55,7 @@ const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTempla
 const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
+const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -234,13 +235,14 @@ export default function App() {
   const isPrototypeHome = location.pathname === '/home-test-1';
   const isAppTest = location.pathname === '/app-test-1';
   const isAiSolutionsLanding = location.pathname.startsWith('/solutions');
+  const isJasonAIPage = location.pathname === '/jasonai';
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isAiSolutionsLanding;
+    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isAiSolutionsLanding || isJasonAIPage;
   const routeTransitionKey = isAiSolutionsLanding ? '/solutions' : location.pathname;
 
   let clientName: string | undefined = undefined;
@@ -289,6 +291,7 @@ export default function App() {
                 />
                 <Route path="/home-test-1" element={<HomeTestOnePage />} />
                 <Route path="/app-test-1" element={<AppTestOnePage />} />
+                <Route path="/jasonai" element={<JasonAIPage />} />
                 <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />

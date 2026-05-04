@@ -305,7 +305,7 @@ export const aiSolutions: AiSolution[] = [
   },
   {
     slug: 'voice-to-plan',
-    navLabel: 'Voice to Plan',
+    navLabel: 'Voice to Estimate',
     eyebrow: 'Recording in, structured plan out',
     title: 'AI workflows that accept recordings and export calculated plans.',
     summary:
@@ -388,9 +388,9 @@ export const aiSolutions: AiSolution[] = [
     intakePrompt:
       'Tell us where the recordings come from, what details must be extracted, and what the final export should enable for the next person.',
     related: ['estimations', 'chatbots'],
-    seoTitle: 'Voice to Plan AI',
+    seoTitle: 'Voice to Estimate AI',
     seoDescription:
-      'B2W builds voice-to-plan AI systems that accept recordings, extract scope, calculate outputs, and export structured plans.',
+      'B2W builds voice-to-estimate AI systems that accept recordings, extract scope, calculate outputs, and export structured plans.',
   },
 ];
 

@@ -11,7 +11,7 @@ import { aiSolutions } from '../../content/aiSolutions';
    
    Layout:
      Hero       → Voice recording entering the AI (full viewport cinematic)
-     Section 1  → Voice to Plan — chatbot resolves the recording into a plan
+     Section 1  → Voice to Estimate — chatbot resolves the recording into a plan
      Section 2  → Estimation Engine — proprietary model, $200M+ commercial value
      Section 3  → The B2W Guarantee — deliverables + AI agent + integrations
    
@@ -401,7 +401,7 @@ const sections: Array<{
   {
     id: 'chatbot',
     step: '02',
-    label: 'Voice To Plan',
+    label: 'Voice To Estimate',
     headline: 'Your recording becomes a conversation.',
     sub: 'The AI picks up where the recording left off — asking follow-ups, resolving scope, and locking in the details that turn a field note into a plan.',
     accent: 'rgba(45,212,191,0.9)',
@@ -531,7 +531,7 @@ export default function SolutionsLandingPage() {
       />
 
       <div className="solutions-page text-white">
-        {/* ─── HERO — Voice to Plan (viewport 1) ─── */}
+        {/* ─── HERO — Voice to Estimate (viewport 1) ─── */}
         <section className="relative flex min-h-screen flex-col justify-center overflow-hidden">
           {/* Bottom fade */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#080a0f] to-transparent" />
@@ -546,7 +546,7 @@ export default function SolutionsLandingPage() {
                 className="inline-flex items-center gap-2 rounded-full border border-sky-400/15 bg-sky-400/[0.06] px-4 py-1.5"
               >
                 <Mic className="h-3.5 w-3.5 text-sky-300" />
-                <span className="text-[10px] uppercase tracking-[0.28em] text-sky-200/80">Voice To Plan</span>
+                <span className="text-[10px] uppercase tracking-[0.28em] text-sky-200/80">Voice To Estimate</span>
               </motion.div>
 
               <motion.h1

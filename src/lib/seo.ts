@@ -63,6 +63,14 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/jasonai',
+    {
+      title: 'JasonAI for Contractor Businesses',
+      description:
+        'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
+    },
+  ],
+  [
     '/kitchen',
     {
       title: 'Kitchen by B2W',

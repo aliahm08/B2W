@@ -1,0 +1,13 @@
+<svg width="1024" height="1024" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>B2W icon</title>
+  <g>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.93"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.077" transform="rotate(-28 48 48)"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.166" transform="rotate(-20 48 48)"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.258" transform="rotate(-12 48 48)"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.279" transform="rotate(-5 48 48)"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.227" transform="rotate(6 48 48)"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.176" transform="rotate(14 48 48)"/>
+    <path d="M34 20L58 20Q76 20 76 38V60Q76 70 69 63L31 25Q26 20 34 20Z" fill="#111111" fill-opacity="0.265" transform="rotate(22 48 48)"/>
+  </g>
+</svg>
