@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react';
-import { ArrowRight, Check, Cloud, Mail, MessageSquareText, Send } from 'lucide-react';
+import {
+  ArrowRight,
+  Check,
+  ClipboardList,
+  FolderSearch,
+  MessageSquareText,
+  Send,
+  ShieldAlert,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
 import { getSourceMetadata, submitInternalForm } from '../lib/engagement';
@@ -339,24 +347,33 @@ function SectionLabel({ children }: { children: string }) {
   );
 }
 
-function JasonAILockup() {
+function JasonAILockup({ showByline = true }: { showByline?: boolean }) {
   return (
     <div className="flex items-center gap-3 text-[#141414]">
       <Link to="/jasonai" aria-label="JasonAI landing page" className="inline-flex items-center gap-2.5">
-        <svg aria-hidden="true" viewBox="0 0 48 48" className="h-9 w-9 shrink-0">
+        <svg aria-hidden="true" viewBox="0 0 48 48" className="h-8 w-8 shrink-0 sm:h-9 sm:w-9">
           <rect x="4" y="4" width="40" height="40" fill="#141414" />
           <path d="M17 14h15v5H23v8.5c0 5.2-3.2 8.5-8.4 8.5H13v-5h1.4c2.4 0 3.6-1.2 3.6-3.6V14Z" fill="#fffaf0" />
           <path d="M30 25h5l-7 10 1.5-7h-5l7-10L30 25Z" fill="#f1b37b" />
         </svg>
-        <span className="text-xl font-semibold tracking-[-0.04em] md:text-2xl">JasonAI</span>
+        <span className="text-lg font-semibold tracking-[-0.04em] sm:text-xl md:text-2xl">JasonAI</span>
       </Link>
-      <span className="h-6 w-px bg-[#cfc6b7]" aria-hidden="true" />
-      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#5d554b]">
+      <motion.span
+        className="hidden h-6 w-px bg-[#cfc6b7] sm:block"
+        aria-hidden="true"
+        animate={{ opacity: showByline ? 1 : 0, x: showByline ? 0 : -8 }}
+        transition={{ duration: 0.25 }}
+      />
+      <motion.span
+        className="hidden items-center gap-1.5 text-sm font-semibold text-[#5d554b] sm:inline-flex"
+        animate={{ opacity: showByline ? 1 : 0, x: showByline ? 0 : -10, width: showByline ? 'auto' : 0 }}
+        transition={{ duration: 0.25 }}
+      >
         <span>by</span>
         <Link to="/" className="text-[#141414] underline-offset-4 hover:underline" aria-label="B2W home">
           B2W
         </Link>
-      </span>
+      </motion.span>
     </div>
   );
 }
@@ -778,6 +795,8 @@ const chatScenarios = [
   },
 ] as const;
 
+const chatModeIcons = [ClipboardList, ShieldAlert, FolderSearch] as const;
+
 const jasonAiBodyCopy = [
   'JasonAI works inside the communication tools your team already uses - texts, email, WhatsApp, and calls. It learns how your business operates and keeps track of what matters across every role.',
   'For your techs in the field: relevant job information and reminders, right where they already communicate. No new app to open.',
@@ -785,15 +804,17 @@ const jasonAiBodyCopy = [
   'For you as the owner: weekly clarity on every job. Every commitment made. Every extra that needs to be billed. Every follow-up still open. Delivered to you.',
 ] as const;
 
-const chatSources = [
-  { label: 'Chat history', detail: 'Field texts + PM thread', Icon: MessageSquareText, side: 'left' },
-  { label: 'Emails', detail: 'Approvals + recap', Icon: Mail, side: 'right' },
-  { label: 'Cloud storage', detail: 'Photos + job docs', Icon: Cloud, side: 'right' },
+const jasonAiCallouts = [
+  { label: 'Works where they already talk', body: jasonAiBodyCopy[0], Icon: MessageSquareText, side: 'left' },
+  { label: 'Field support', body: jasonAiBodyCopy[1], Icon: ClipboardList, side: 'right' },
+  { label: 'Admin and PM clarity', body: jasonAiBodyCopy[2], Icon: ShieldAlert, side: 'left' },
+  { label: 'Owner visibility', body: jasonAiBodyCopy[3], Icon: FolderSearch, side: 'right' },
 ] as const;
 
 function TeamChatPhone() {
   const shouldReduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeCalloutIndex, setActiveCalloutIndex] = useState(0);
   const activeScenario = chatScenarios[activeIndex];
 
   useEffect(() => {
@@ -808,27 +829,44 @@ function TeamChatPhone() {
     return () => window.clearInterval(interval);
   }, [shouldReduceMotion]);
 
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setActiveCalloutIndex((current) => (current + 1) % jasonAiCallouts.length);
+    }, 3900);
+
+    return () => window.clearInterval(interval);
+  }, [shouldReduceMotion]);
+
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <div className="mx-auto mb-8 grid max-w-3xl gap-2 sm:grid-cols-3">
+      <div className="mx-auto mb-5 grid max-w-[12rem] grid-cols-3 gap-2 sm:mb-8 sm:max-w-3xl">
         {chatScenarios.map((scenario, index) => (
           <button
             key={scenario.mode}
             type="button"
             onClick={() => setActiveIndex(index)}
-            className={`relative overflow-hidden border px-3 py-3 text-left transition-colors ${
+            aria-label={scenario.mode}
+            className={`relative grid aspect-square place-items-center overflow-hidden border transition-colors sm:aspect-auto sm:block sm:px-3 sm:py-3 sm:text-left ${
               index === activeIndex
                 ? 'border-[#141414] bg-[#141414] text-white'
                 : 'border-[#d9d2c3] bg-white text-[#4f463c] hover:border-[#141414]'
             }`}
           >
-            <span className="relative z-10 block text-xs font-semibold uppercase">{scenario.mode}</span>
-            <span className="relative z-10 mt-1 block text-xs leading-5 opacity-70">{scenario.detail}</span>
+            {(() => {
+              const ModeIcon = chatModeIcons[index];
+              return <ModeIcon className="relative z-10 h-5 w-5 sm:hidden" />;
+            })()}
+            <span className="relative z-10 hidden text-xs font-semibold uppercase sm:block">{scenario.mode}</span>
+            <span className="relative z-10 mt-1 hidden text-xs leading-5 opacity-70 sm:block">{scenario.detail}</span>
             {index === activeIndex && !shouldReduceMotion ? (
               <motion.span
                 key={scenario.mode}
                 aria-hidden="true"
-                className="absolute inset-x-0 bottom-0 h-0.5 bg-[#f1b37b]"
+                className="absolute inset-x-0 bottom-0 h-1 origin-left bg-[#f1b37b] sm:h-0.5"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ duration: 5.2, ease: 'linear' }}
@@ -839,22 +877,7 @@ function TeamChatPhone() {
         ))}
       </div>
 
-      <div className="grid gap-7 lg:grid-cols-[minmax(0,0.82fr)_minmax(18rem,24rem)_minmax(0,0.82fr)] lg:items-center">
-        <div className="hidden space-y-5 lg:block">
-          {jasonAiBodyCopy.slice(0, 2).map((item, index) => (
-            <motion.p
-              key={item}
-              className="border-l-4 border-[#9b3d1e] bg-[#fffaf0] p-4 text-sm leading-7 text-[#3c362f]"
-              initial={shouldReduceMotion ? false : { opacity: 0, x: -18, filter: 'blur(8px)' }}
-              whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {item}
-            </motion.p>
-          ))}
-        </div>
-
+      <div className="grid gap-7 lg:items-center">
         <motion.div
           className="relative mx-auto w-full max-w-[22rem] lg:max-w-[24rem]"
           initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.96, filter: 'blur(10px)' }}
@@ -864,18 +887,18 @@ function TeamChatPhone() {
         >
           <div
             aria-hidden="true"
-            className="absolute -inset-8 bg-[radial-gradient(circle,rgba(31,95,122,0.16),transparent_64%)]"
+            className="absolute -inset-8 hidden bg-[radial-gradient(circle,rgba(31,95,122,0.16),transparent_64%)] sm:block"
           />
           <div className="pointer-events-none absolute inset-x-0 top-[47%] z-20 hidden -translate-y-1/2 lg:block">
-            {chatSources.map(({ label, detail, Icon, side }, index) => {
+            {jasonAiCallouts.map(({ label, body, Icon, side }, index) => {
               const isLeft = side === 'left';
               return (
                 <motion.div
                   key={label}
-                  className={`absolute w-40 border border-[#d9d2c3] bg-white/95 p-3 shadow-sm ${
-                    isLeft ? '-left-44' : '-right-44'
+                  className={`absolute w-72 border border-[#d9d2c3] bg-white/95 p-4 shadow-sm ${
+                    isLeft ? '-left-80' : '-right-80'
                   }`}
-                  style={{ top: `${index * 5.6 - 5.2}rem` }}
+                  style={{ top: `${index * 5.15 - 8.1}rem` }}
                   animate={
                     shouldReduceMotion
                       ? undefined
@@ -891,18 +914,18 @@ function TeamChatPhone() {
                     <Icon className="h-4 w-4 text-[#1f5f7a]" />
                     <p className="text-[11px] font-semibold uppercase text-[#9b3d1e]">{label}</p>
                   </div>
-                  <p className="mt-2 text-xs leading-5 text-[#4f463c]">{detail}</p>
+                  <p className="mt-2 text-xs leading-5 text-[#4f463c]">{body}</p>
                 </motion.div>
               );
             })}
 
-            {chatSources.map(({ label, side }, index) => {
+            {jasonAiCallouts.map(({ label, side }, index) => {
               const isLeft = side === 'left';
               return (
                 <motion.div
                   key={`${label}-line`}
-                  className={`absolute h-px w-24 bg-[#1f5f7a]/45 ${isLeft ? 'left-[-1.5rem]' : 'right-[-1.5rem]'}`}
-                  style={{ top: `${index * 5.6 - 2.4}rem` }}
+                  className={`absolute h-px w-28 bg-[#1f5f7a]/45 ${isLeft ? 'left-[-2.25rem]' : 'right-[-2.25rem]'}`}
+                  style={{ top: `${index * 5.15 - 5.15}rem` }}
                   animate={
                     shouldReduceMotion
                       ? undefined
@@ -958,7 +981,7 @@ function TeamChatPhone() {
                         <p className="text-[11px] font-semibold uppercase text-[#9b3d1e]">JasonAI</p>
                       </div>
                       <div className="mt-2 flex flex-wrap gap-1.5">
-                        {chatSources.map(({ label }) => (
+                        {jasonAiCallouts.map(({ label }) => (
                           <span key={label} className="border border-[#d9d2c3] bg-[#fffaf0] px-1.5 py-0.5 text-[10px] font-semibold text-[#6b6256]">
                             {label}
                           </span>
@@ -983,37 +1006,39 @@ function TeamChatPhone() {
             </div>
           </div>
         </motion.div>
-
-        <div className="hidden space-y-5 lg:block">
-          {jasonAiBodyCopy.slice(2).map((item, index) => (
-            <motion.p
-              key={item}
-              className="border-l-4 border-[#9b3d1e] bg-[#fffaf0] p-4 text-sm leading-7 text-[#3c362f]"
-              initial={shouldReduceMotion ? false : { opacity: 0, x: 18, filter: 'blur(8px)' }}
-              whileInView={shouldReduceMotion ? undefined : { opacity: 1, x: 0, filter: 'blur(0px)' }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.55, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {item}
-            </motion.p>
-          ))}
-        </div>
       </div>
 
-      <div className="mt-8 grid gap-4 text-base leading-7 text-[#3c362f] lg:hidden">
-        {jasonAiBodyCopy.map((item) => (
-          <p key={item} className="border-l-4 border-[#9b3d1e] bg-[#fffaf0] p-4">
-            {item}
-          </p>
-        ))}
+      <div className="mx-auto mt-6 max-w-[22rem] border-t border-[#d9d2c3] pt-4 text-sm leading-6 text-[#3c362f] lg:hidden">
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={jasonAiCallouts[activeCalloutIndex]?.label}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 8, filter: 'blur(6px)' }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -8, filter: 'blur(6px)' }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {jasonAiCallouts[activeCalloutIndex]?.body}
+          </motion.p>
+        </AnimatePresence>
       </div>
     </div>
   );
 }
 
 export default function JasonAIPage() {
+  const [hasScrolled, setHasScrolled] = useState(false);
+
   useEffect(() => {
     loadTallyEmbeds();
+  }, []);
+
+  useEffect(() => {
+    const updateScrollState = () => setHasScrolled(window.scrollY > 24);
+
+    updateScrollState();
+    window.addEventListener('scroll', updateScrollState, { passive: true });
+
+    return () => window.removeEventListener('scroll', updateScrollState);
   }, []);
 
   return (
@@ -1024,10 +1049,23 @@ export default function JasonAIPage() {
         canonicalPath="/jasonai"
       />
       <div className="min-h-screen bg-[#fffaf0] text-[#141414]">
-        <header className="sticky top-0 z-40 border-b border-[#d9d2c3] bg-[#fffaf0]/95 backdrop-blur">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-8">
-            <JasonAILockup />
-            <nav className="hidden items-center gap-6 text-sm font-semibold text-[#4f463c] md:flex">
+        <header
+          className={`sticky -top-px z-40 bg-[#fffaf0]/95 pt-[env(safe-area-inset-top)] backdrop-blur transition-[border-color,box-shadow] duration-300 ${
+            hasScrolled ? 'border-b border-[#d9d2c3] shadow-sm' : 'border-b border-transparent'
+          }`}
+        >
+          <div
+            className={`mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[padding] duration-300 sm:px-5 md:px-8 ${
+              hasScrolled ? 'py-2.5' : 'py-3.5 md:py-5'
+            }`}
+          >
+            <JasonAILockup showByline={!hasScrolled} />
+            <motion.nav
+              className="hidden items-center gap-6 text-sm font-semibold text-[#4f463c] md:flex"
+              initial={false}
+              animate={{ opacity: hasScrolled ? 1 : 0, y: hasScrolled ? 0 : -8, pointerEvents: hasScrolled ? 'auto' : 'none' }}
+              transition={{ duration: 0.25 }}
+            >
               <a href="#problem" className="hover:text-[#141414]">
                 The problem
               </a>
@@ -1037,13 +1075,14 @@ export default function JasonAIPage() {
               <a href="#questions" className="hover:text-[#141414]">
                 Questions
               </a>
-            </nav>
+            </motion.nav>
             <a
               href="#business-review"
-              className="inline-flex min-h-10 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+              className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
             >
-              Book review
-              <ArrowRight className="h-4 w-4" />
+              <span className="hidden sm:inline">Book review</span>
+              <span className="sm:hidden">Review</span>
+              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </a>
           </div>
         </header>
@@ -1052,7 +1091,7 @@ export default function JasonAIPage() {
           <section className="border-b border-[#d9d2c3]">
             <div className="mx-auto grid max-w-7xl gap-12 px-5 py-12 md:px-8 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,0.7fr)] lg:items-center">
               <div>
-                <p className="text-sm font-semibold uppercase text-[#9b3d1e]">JasonAI</p>
+                <p className="text-sm font-semibold uppercase text-[#9b3d1e]">Accepting new accounts</p>
                 <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.02] text-[#141414] md:text-7xl">
                   <ScrambleText text="Built around your business. Not the other way around." />
                 </h1>
@@ -1087,7 +1126,7 @@ export default function JasonAIPage() {
                   ))}
                 </Reveal>
               </div>
-              <Reveal delay={0.22}>
+              <Reveal className="hidden lg:block" delay={0.22}>
                 <HeroVisual />
               </Reveal>
             </div>
