@@ -71,6 +71,22 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/jasonai/how-it-works',
+    {
+      title: 'How JasonAI Works for Contractors',
+      description:
+        'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
+    },
+  ],
+  [
+    '/jasonai/questions',
+    {
+      title: 'JasonAI Questions and Waitlist',
+      description:
+        'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
+    },
+  ],
+  [
     '/kitchen',
     {
       title: 'Kitchen by B2W',

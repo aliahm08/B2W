@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Check,
   ClipboardList,
+  ChevronDown,
   FolderSearch,
   MessageSquareText,
   Send,
@@ -637,22 +638,37 @@ function ObjectionCarousel() {
   const progressItems = useMemo(() => objections.map((_, index) => index), []);
 
   return (
-    <div className="mt-10 grid gap-5 lg:grid-cols-[0.28fr_0.72fr]">
-      <div className="flex gap-2 lg:flex-col">
+    <div className="mt-10 grid gap-5 lg:grid-cols-[0.36fr_0.64fr]">
+      <div className="grid gap-2">
         {progressItems.map((index) => (
           <button
             key={index}
             type="button"
             onClick={() => setActiveIndex(index)}
             aria-label={`Show objection ${index + 1}`}
-            className={`h-2 flex-1 border border-[#141414] transition-colors lg:h-12 lg:flex-none ${
-              activeIndex === index ? 'bg-[#141414]' : 'bg-transparent hover:bg-[#f8f3e8]'
+            className={`relative overflow-hidden border px-4 py-3 text-left transition-colors ${
+              activeIndex === index
+                ? 'border-[#141414] bg-[#141414] text-white'
+                : 'border-[#d9d2c3] bg-white text-[#4f463c] hover:border-[#141414]'
             }`}
-          />
+          >
+            <span className="block text-[11px] font-semibold uppercase opacity-70">Objection {index + 1}</span>
+            <span className="mt-1 hidden text-sm font-semibold leading-5 sm:block">{objections[index].question}</span>
+            {activeIndex === index && !shouldReduceMotion ? (
+              <motion.span
+                aria-hidden="true"
+                className="absolute inset-x-0 bottom-0 h-0.5 bg-[#f1b37b]"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 8.2, ease: 'linear' }}
+                style={{ transformOrigin: 'left' }}
+              />
+            ) : null}
+          </button>
         ))}
       </div>
 
-      <div className="min-h-[28rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 md:min-h-[22rem] md:p-7">
+      <div className="min-h-[27rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 md:min-h-[22rem] md:p-7">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeObjection.question}
@@ -661,10 +677,10 @@ function ObjectionCarousel() {
             exit={shouldReduceMotion ? undefined : { opacity: 0, y: -12, filter: 'blur(14px)' }}
             transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h3 className="mt-4 text-3xl font-semibold leading-tight text-[#141414] md:text-5xl">
+            <h3 className="text-2xl font-semibold leading-tight text-[#141414] md:text-4xl">
               Objection {activeIndex + 1}: {activeObjection.question}
             </h3>
-            <div className="mt-8 border-l-4 border-[#1f5f7a] pl-5">
+            <div className="mt-7 border-l-4 border-[#1f5f7a] pl-5">
               <p className="text-xs font-semibold uppercase text-[#1f5f7a]">Answer</p>
               <p aria-live="polite" className="mt-3 min-h-[12rem] text-lg leading-8 text-[#3c362f] md:min-h-[8rem]">
                 {typedAnswer}
@@ -1025,8 +1041,223 @@ function TeamChatPhone() {
   );
 }
 
-export default function JasonAIPage() {
+function HowItWorksSection() {
+  return (
+    <section id="how-it-works" className="border-b border-[#d9d2c3]">
+      <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+        <SectionLabel>How it works</SectionLabel>
+        <div className="mt-4 grid gap-8 lg:grid-cols-[0.6fr_1fr]">
+          <h2 className="text-4xl font-semibold leading-tight md:text-5xl">
+            <ScrambleText text="Three steps. No new habits." />
+          </h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {howItWorks.map((step, index) => (
+              <Reveal key={step.title} delay={index * 0.08} className="border border-[#d9d2c3] bg-white p-5">
+                <p className="text-sm font-semibold text-[#9b3d1e]">0{index + 1}</p>
+                <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-[#4f463c]">{step.body}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function UseCasesSection() {
+  return (
+    <section className="border-b border-[#d9d2c3] bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+        <div className="max-w-3xl">
+          <SectionLabel>Use cases</SectionLabel>
+          <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+            <ScrambleText text="The places where money and trust usually slip." />
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {useCases.map((useCase, index) => (
+            <Reveal key={useCase.title} delay={index * 0.06} className="border border-[#d9d2c3] bg-[#fffaf0] p-5">
+              <h3 className="text-xl font-semibold">{useCase.title}</h3>
+              <p className="mt-4 text-sm leading-7 text-[#4f463c]">{useCase.body}</p>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BusinessReviewSection() {
+  return (
+    <section id="business-review" className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.7fr_1fr]">
+        <div>
+          <SectionLabel>Free 15-minute business review</SectionLabel>
+          <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+            <ScrambleText text="We will look at how your job communication works right now." />
+          </h2>
+          <Reveal>
+            <p className="mt-6 text-lg leading-8 text-[#4f463c]">
+              No pitch. No demo. Just a real conversation about where job details fall through, what gets missed, and
+              what might already be costing you money.
+            </p>
+          </Reveal>
+        </div>
+        <Reveal className="border border-[#d9d2c3] bg-white p-5 md:p-6">
+          <ReviewForm />
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function QuestionsSection() {
+  return (
+    <section id="questions" className="border-b border-[#d9d2c3] bg-white">
+      <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+        <div className="max-w-3xl">
+          <SectionLabel>Objections</SectionLabel>
+          <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+            <ScrambleText text="The questions contractors usually ask first." />
+          </h2>
+        </div>
+        <ObjectionCarousel />
+      </div>
+    </section>
+  );
+}
+
+function FaqSection() {
+  return (
+    <section className="border-b border-[#d9d2c3]">
+      <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+        <div className="max-w-3xl">
+          <SectionLabel>FAQ</SectionLabel>
+          <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+            <ScrambleText text="Details before you talk to us." />
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-3 lg:grid-cols-2">
+          {faqs.map((item, index) => (
+            <Reveal key={item.question} delay={index * 0.035} className="border border-[#d9d2c3] bg-white">
+              <details className="group">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold">
+                  <span>{item.question}</span>
+                  <ChevronDown className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="border-t border-[#d9d2c3] px-5 py-4 text-sm leading-7 text-[#4f463c]">{item.answer}</p>
+              </details>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WaitlistSection() {
+  const tallyUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
+
+  return (
+    <section id="waitlist" className="border-b border-[#d9d2c3] bg-[#141414] text-white">
+      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.65fr_1fr]">
+        <div>
+          <p className="text-xs font-semibold uppercase text-[#f1b37b]">Waitlist</p>
+          <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+            <ScrambleText text="Not ready for a review yet?" />
+          </h2>
+          <Reveal>
+            <p className="mt-6 text-lg leading-8 text-[#f8f3e8]">
+              Join the JasonAI waitlist and get updates as founding access opens for more contractor businesses.
+            </p>
+          </Reveal>
+        </div>
+        <Reveal className="overflow-hidden border border-white/15 bg-white p-0 text-[#141414]">
+          <iframe
+            src={tallyUrl}
+            data-tally-src={tallyUrl}
+            loading="lazy"
+            width="100%"
+            height="1450"
+            frameBorder="0"
+            marginHeight={0}
+            marginWidth={0}
+            title="Join the JasonAI waitlist"
+          />
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function JasonAISubpageIntro({
+  label,
+  title,
+  body,
+}: {
+  label: string;
+  title: string;
+  body: string;
+}) {
+  return (
+    <section className="border-b border-[#d9d2c3]">
+      <div className="mx-auto max-w-5xl px-5 py-16 md:px-8 md:py-24">
+        <p className="text-sm font-semibold uppercase text-[#9b3d1e]">{label}</p>
+        <h1 className="mt-4 text-5xl font-semibold leading-[1.02] md:text-7xl">
+          <ScrambleText text={title} />
+        </h1>
+        <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">{body}</p>
+      </div>
+    </section>
+  );
+}
+
+function JasonAILandingLinks() {
+  return (
+    <section className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
+      <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-2">
+        <Link to="/jasonai/how-it-works" className="border border-[#d9d2c3] bg-white p-6 hover:border-[#141414]">
+          <p className="text-xs font-semibold uppercase text-[#9b3d1e]">How it works</p>
+          <h2 className="mt-3 text-3xl font-semibold">Setup, use cases, and review intake.</h2>
+          <p className="mt-4 text-sm leading-7 text-[#4f463c]">
+            See how we learn the business, set JasonAI around your process, and review the places details fall through.
+          </p>
+        </Link>
+        <Link to="/jasonai/questions" className="border border-[#d9d2c3] bg-white p-6 hover:border-[#141414]">
+          <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Questions</p>
+          <h2 className="mt-3 text-3xl font-semibold">Objections, FAQs, and waitlist.</h2>
+          <p className="mt-4 text-sm leading-7 text-[#4f463c]">
+            Clear answers for the things owners usually ask before they book a review.
+          </p>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | 'how-it-works' | 'questions' }) {
   const [hasScrolled, setHasScrolled] = useState(false);
+  const seoByPage = {
+    landing: {
+      title: 'JasonAI for Contractor Businesses',
+      description:
+        'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
+      canonicalPath: '/jasonai',
+    },
+    'how-it-works': {
+      title: 'How JasonAI Works for Contractors',
+      description:
+        'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
+      canonicalPath: '/jasonai/how-it-works',
+    },
+    questions: {
+      title: 'JasonAI Questions and Waitlist',
+      description:
+        'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
+      canonicalPath: '/jasonai/questions',
+    },
+  }[page];
 
   useEffect(() => {
     loadTallyEmbeds();
@@ -1044,9 +1275,9 @@ export default function JasonAIPage() {
   return (
     <>
       <Seo
-        title="JasonAI for Contractor Businesses"
-        description="JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras."
-        canonicalPath="/jasonai"
+        title={seoByPage.title}
+        description={seoByPage.description}
+        canonicalPath={seoByPage.canonicalPath}
       />
       <div className="min-h-screen bg-[#fffaf0] text-[#141414]">
         <header
@@ -1066,18 +1297,18 @@ export default function JasonAIPage() {
               animate={{ opacity: hasScrolled ? 1 : 0, y: hasScrolled ? 0 : -8, pointerEvents: hasScrolled ? 'auto' : 'none' }}
               transition={{ duration: 0.25 }}
             >
-              <a href="#problem" className="hover:text-[#141414]">
+              <Link to="/jasonai#problem" className="hover:text-[#141414]">
                 The problem
-              </a>
-              <a href="#how-it-works" className="hover:text-[#141414]">
+              </Link>
+              <Link to="/jasonai/how-it-works" className="hover:text-[#141414]">
                 How it works
-              </a>
-              <a href="#questions" className="hover:text-[#141414]">
+              </Link>
+              <Link to="/jasonai/questions" className="hover:text-[#141414]">
                 Questions
-              </a>
+              </Link>
             </motion.nav>
             <a
-              href="#business-review"
+              href="/jasonai/how-it-works#business-review"
               className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
             >
               <span className="hidden sm:inline">Book review</span>
@@ -1088,112 +1319,106 @@ export default function JasonAIPage() {
         </header>
 
         <main>
-          <section className="border-b border-[#d9d2c3]">
-            <div className="mx-auto grid max-w-7xl gap-12 px-5 py-12 md:px-8 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,0.7fr)] lg:items-center">
-              <div>
-                <p className="text-sm font-semibold uppercase text-[#9b3d1e]">Accepting new accounts</p>
-                <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.02] text-[#141414] md:text-7xl">
-                  <ScrambleText text="Built around your business. Not the other way around." />
-                </h1>
-                <Reveal delay={0.18}>
-                  <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
-                    JasonAI works inside the tools your team already uses - text, email, WhatsApp, and calls - and keeps
-                    track of everything that matters. No new app. No new process. Built around the way you already work.
-                  </p>
-                </Reveal>
-                <Reveal className="mt-9 flex flex-col gap-3 sm:flex-row" delay={0.28}>
-                  <a
-                    href="#business-review"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
-                  >
-                    Book Your Free 15-Minute Business Review
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="#waitlist"
-                    className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
-                  >
-                    Not ready? Join the waitlist
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                </Reveal>
-                <Reveal className="mt-9 hidden gap-3 text-sm font-semibold text-[#4f463c] sm:grid sm:grid-cols-3" delay={0.36}>
-                  {['Texts', 'Email', 'WhatsApp and calls'].map((item) => (
-                    <div key={item} className="flex items-center gap-2 border-l border-[#9b3d1e] pl-3">
-                      <Check className="h-4 w-4 text-[#1f5f7a]" />
-                      {item}
-                    </div>
-                  ))}
-                </Reveal>
-              </div>
-              <Reveal className="hidden lg:block" delay={0.22}>
-                <HeroVisual />
-              </Reveal>
-            </div>
-          </section>
-
-          <ProblemCostsSection />
-
-          <section id="what-jasonai-does" className="scroll-mt-24 border-b border-[#d9d2c3] bg-white">
-            <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-              <div className="mx-auto max-w-3xl text-center">
-                <SectionLabel>What JasonAI does</SectionLabel>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="It keeps track of what matters across every role." />
-                </h2>
-              </div>
-
-              <div className="mt-12">
-                <TeamChatPhone />
-              </div>
-
-              <Reveal>
-                <p className="mx-auto mt-8 max-w-3xl border-l-4 border-[#141414] pl-5 text-lg font-semibold leading-8 text-[#141414]">
-                  JasonAI does not ask your business to fit into a template. It is set up around the way you already
-                  work.
-                </p>
-              </Reveal>
-            </div>
-          </section>
-
-          <section id="how-it-works" className="border-b border-[#d9d2c3]">
-            <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-              <SectionLabel>How it works</SectionLabel>
-              <div className="mt-4 grid gap-8 lg:grid-cols-[0.6fr_1fr]">
-                <h2 className="text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="Three steps. No new habits." />
-                </h2>
-                <div className="grid gap-4 md:grid-cols-3">
-                  {howItWorks.map((step, index) => (
-                    <Reveal key={step.title} delay={index * 0.08} className="border border-[#d9d2c3] bg-white p-5">
-                      <p className="text-sm font-semibold text-[#9b3d1e]">0{index + 1}</p>
-                      <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
-                      <p className="mt-4 text-sm leading-7 text-[#4f463c]">{step.body}</p>
+          {page === 'landing' ? (
+            <>
+              <section className="border-b border-[#d9d2c3]">
+                <div className="mx-auto grid max-w-7xl gap-12 px-5 py-12 md:px-8 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,0.7fr)] lg:items-center">
+                  <div>
+                    <p className="text-sm font-semibold uppercase text-[#9b3d1e]">Accepting new accounts</p>
+                    <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.02] text-[#141414] md:text-7xl">
+                      <ScrambleText text="Built around your business. Not the other way around." />
+                    </h1>
+                    <Reveal delay={0.18}>
+                      <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
+                        JasonAI works inside the tools your team already uses - text, email, WhatsApp, and calls - and
+                        keeps track of everything that matters. No new app. No new process. Built around the way you
+                        already work.
+                      </p>
                     </Reveal>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="border-b border-[#d9d2c3] bg-white">
-            <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-              <div className="max-w-3xl">
-                <SectionLabel>Use cases</SectionLabel>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="The places where money and trust usually slip." />
-                </h2>
-              </div>
-              <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {useCases.map((useCase, index) => (
-                  <Reveal key={useCase.title} delay={index * 0.06} className="border border-[#d9d2c3] bg-[#fffaf0] p-5">
-                    <h3 className="text-xl font-semibold">{useCase.title}</h3>
-                    <p className="mt-4 text-sm leading-7 text-[#4f463c]">{useCase.body}</p>
+                    <Reveal className="mt-9 flex flex-col gap-3 sm:flex-row" delay={0.28}>
+                      <a
+                        href="/jasonai/how-it-works#business-review"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+                      >
+                        Book Your Free 15-Minute Business Review
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                      <a
+                        href="/jasonai/questions#waitlist"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
+                      >
+                        Not ready? Join the waitlist
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                    </Reveal>
+                    <Reveal className="mt-9 hidden gap-3 text-sm font-semibold text-[#4f463c] sm:grid sm:grid-cols-3" delay={0.36}>
+                      {['Texts', 'Email', 'WhatsApp and calls'].map((item) => (
+                        <div key={item} className="flex items-center gap-2 border-l border-[#9b3d1e] pl-3">
+                          <Check className="h-4 w-4 text-[#1f5f7a]" />
+                          {item}
+                        </div>
+                      ))}
+                    </Reveal>
+                  </div>
+                  <Reveal className="hidden lg:block" delay={0.22}>
+                    <HeroVisual />
                   </Reveal>
-                ))}
-              </div>
-            </div>
-          </section>
+                </div>
+              </section>
+
+              <ProblemCostsSection />
+
+              <section id="what-jasonai-does" className="scroll-mt-24 border-b border-[#d9d2c3] bg-white">
+                <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+                  <div className="mx-auto max-w-3xl text-center">
+                    <SectionLabel>What JasonAI does</SectionLabel>
+                    <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+                      <ScrambleText text="It keeps track of what matters across every role." />
+                    </h2>
+                  </div>
+
+                  <div className="mt-12">
+                    <TeamChatPhone />
+                  </div>
+
+                  <Reveal>
+                    <p className="mx-auto mt-8 max-w-3xl border-l-4 border-[#141414] pl-5 text-lg font-semibold leading-8 text-[#141414]">
+                      JasonAI does not ask your business to fit into a template. It is set up around the way you already
+                      work.
+                    </p>
+                  </Reveal>
+                </div>
+              </section>
+
+              <JasonAILandingLinks />
+            </>
+          ) : null}
+
+          {page === 'how-it-works' ? (
+            <>
+              <JasonAISubpageIntro
+                label="How it works"
+                title="Built around the way your jobs already move."
+                body="This is the deeper look at setup, the day-to-day use cases, and the business review intake. No new habits for the crew."
+              />
+              <HowItWorksSection />
+              <UseCasesSection />
+              <BusinessReviewSection />
+            </>
+          ) : null}
+
+          {page === 'questions' ? (
+            <>
+              <JasonAISubpageIntro
+                label="Questions"
+                title="The things contractor owners ask first."
+                body="What changes for the crew, what JasonAI connects to, what happens to your data, and how to stay updated if you are not ready for a review."
+              />
+              <QuestionsSection />
+              <FaqSection />
+              <WaitlistSection />
+            </>
+          ) : null}
 
           <section className="border-b border-[#d9d2c3]">
             <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
@@ -1216,87 +1441,6 @@ export default function JasonAIPage() {
             </div>
           </section>
 
-          <section id="business-review" className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
-            <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.7fr_1fr]">
-              <div>
-                <SectionLabel>Free 15-minute business review</SectionLabel>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="We will look at how your job communication works right now." />
-                </h2>
-                <Reveal>
-                  <p className="mt-6 text-lg leading-8 text-[#4f463c]">
-                    No pitch. No demo. Just a real conversation about where job details fall through, what gets missed,
-                    and what might already be costing you money.
-                  </p>
-                </Reveal>
-              </div>
-              <Reveal className="border border-[#d9d2c3] bg-white p-5 md:p-6">
-                <ReviewForm />
-              </Reveal>
-            </div>
-          </section>
-
-          <section id="questions" className="border-b border-[#d9d2c3] bg-white">
-            <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-              <div className="max-w-3xl">
-                <SectionLabel>Objections</SectionLabel>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="The questions contractors usually ask first." />
-                </h2>
-              </div>
-              <ObjectionCarousel />
-            </div>
-          </section>
-
-          <section className="border-b border-[#d9d2c3]">
-            <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-              <div className="max-w-3xl">
-                <SectionLabel>FAQ</SectionLabel>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="Details before you talk to us." />
-                </h2>
-              </div>
-              <div className="mt-10 grid gap-4 lg:grid-cols-3">
-                {faqs.map((item, index) => (
-                  <Reveal key={item.question} delay={index * 0.04} className="border border-[#d9d2c3] bg-white p-5">
-                    <details>
-                    <summary className="cursor-pointer list-none text-base font-semibold">{item.question}</summary>
-                    <p className="mt-4 text-sm leading-7 text-[#4f463c]">{item.answer}</p>
-                    </details>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section id="waitlist" className="border-b border-[#d9d2c3] bg-[#141414] text-white">
-            <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.65fr_1fr]">
-              <div>
-                <p className="text-xs font-semibold uppercase text-[#f1b37b]">Waitlist</p>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="Not ready for a review yet?" />
-                </h2>
-                <Reveal>
-                  <p className="mt-6 text-lg leading-8 text-[#f8f3e8]">
-                    Join the JasonAI waitlist and get updates as founding access opens for more contractor businesses.
-                  </p>
-                </Reveal>
-              </div>
-              <Reveal className="border border-white/15 bg-white p-2 text-[#141414]">
-                <iframe
-                  data-tally-src="https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-                  loading="lazy"
-                  width="100%"
-                  height="1951"
-                  frameBorder="0"
-                  marginHeight={0}
-                  marginWidth={0}
-                  title="Join the JasonAI waitlist"
-                />
-              </Reveal>
-            </div>
-          </section>
-
           <section className="bg-[#fffaf0]">
             <div className="mx-auto max-w-5xl px-5 py-16 text-center md:px-8 md:py-24">
               <p className="text-sm font-semibold uppercase text-[#9b3d1e]">A B2W Product</p>
@@ -1311,14 +1455,14 @@ export default function JasonAIPage() {
               </Reveal>
               <Reveal className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
-                  href="#business-review"
+                  href="/jasonai/how-it-works#business-review"
                   className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                 >
                   Book My Free Business Review
                   <ArrowRight className="h-4 w-4" />
                 </a>
                 <a
-                  href="#waitlist"
+                  href="/jasonai/questions#waitlist"
                   className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                 >
                   Just want updates? Join the waitlist

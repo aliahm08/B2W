@@ -235,7 +235,7 @@ export default function App() {
   const isPrototypeHome = location.pathname === '/home-test-1';
   const isAppTest = location.pathname === '/app-test-1';
   const isAiSolutionsLanding = location.pathname.startsWith('/solutions');
-  const isJasonAIPage = location.pathname === '/jasonai';
+  const isJasonAIPage = location.pathname.startsWith('/jasonai');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
@@ -292,6 +292,8 @@ export default function App() {
                 <Route path="/home-test-1" element={<HomeTestOnePage />} />
                 <Route path="/app-test-1" element={<AppTestOnePage />} />
                 <Route path="/jasonai" element={<JasonAIPage />} />
+                <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
+                <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
