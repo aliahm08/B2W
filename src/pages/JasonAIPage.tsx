@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
@@ -8,13 +8,11 @@ import {
   ChevronDown,
   FolderSearch,
   MessageSquareText,
-  Send,
   ShieldAlert,
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
-import { getCalendlyUrl, getSourceMetadata, submitInternalForm } from '../lib/engagement';
 
 declare global {
   interface Window {
@@ -24,34 +22,10 @@ declare global {
   }
 }
 
-type ReviewFormState = {
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  trade: string;
-  teamSize: string;
-  currentTools: string;
-  challenge: string;
-  websiteUrl: string;
-};
-
-const initialReviewFormState: ReviewFormState = {
-  name: '',
-  email: '',
-  phone: '',
-  company: '',
-  trade: '',
-  teamSize: '',
-  currentTools: '',
-  challenge: '',
-  websiteUrl: '',
-};
-
 const scrambleCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const waitlistUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
 const jasonAiCalendlyUrl =
-  'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=0fd5c2';
+  'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=00ffc3';
 
 const problemStatements = [
   {
@@ -305,8 +279,6 @@ function ModalFrame({
 }
 
 function CalendlyModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
-  const calendlyUrl = getCalendlyUrl() || jasonAiCalendlyUrl;
-
   return (
     <ModalFrame
       isOpen={isOpen}
@@ -314,24 +286,12 @@ function CalendlyModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
       title="Book a JasonAI business review"
       subtitle="Pick a time that works for you."
     >
-      {calendlyUrl ? (
-        <iframe
-          src={calendlyUrl}
-          title="Book a JasonAI business review"
-          className="h-[calc(100%-58px)] w-full"
-          loading="lazy"
-        />
-      ) : (
-        <div className="grid h-[calc(100%-58px)] place-items-center px-6 text-center">
-          <div className="max-w-md">
-            <CalendarDays className="mx-auto h-8 w-8 text-[#1f5f7a]" />
-            <p className="mt-4 text-lg font-semibold text-[#141414]">Booking is not configured yet.</p>
-            <p className="mt-2 text-sm leading-6 text-[#6b6256]">
-              Add `VITE_CALENDLY_URL` to enable the embedded booking calendar.
-            </p>
-          </div>
-        </div>
-      )}
+      <iframe
+        src={jasonAiCalendlyUrl}
+        title="Book a JasonAI business review"
+        className="h-[calc(100%-58px)] w-full"
+        loading="lazy"
+      />
     </ModalFrame>
   );
 }
@@ -536,180 +496,34 @@ function HeroVisual() {
   );
 }
 
-function ReviewForm() {
-  const [formState, setFormState] = useState<ReviewFormState>(initialReviewFormState);
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
-
-  function updateField(field: keyof ReviewFormState, value: string) {
-    setFormState((current) => ({ ...current, [field]: value }));
-  }
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus('submitting');
-    setErrorMessage('');
-
-    const message = [
-      `Trade: ${formState.trade}`,
-      `Team size: ${formState.teamSize}`,
-      `Current job communication tools: ${formState.currentTools}`,
-      `Biggest job communication challenge: ${formState.challenge}`,
-    ].join('\n');
-
-    const result = await submitInternalForm('/api/contact-lead', {
-      name: formState.name.trim(),
-      email: formState.email.trim(),
-      phone: formState.phone.trim(),
-      company: formState.company.trim(),
-      website: '',
-      inquiryType: 'JasonAI business review',
-      normalizedProjectArea: 'Optimization',
-      projectAreas: ['Optimization'],
-      message,
-      websiteUrl: formState.websiteUrl.trim(),
-      ...getSourceMetadata({
-        formType: 'jasonai_business_review',
-        actionType: 'business_review_request',
-      }),
-    });
-
-    if (!result.ok) {
-      setStatus('error');
-      setErrorMessage(result.error ?? 'Unable to submit the request right now.');
-      return;
-    }
-
-    setStatus('success');
-    setFormState(initialReviewFormState);
-  }
-
-  const isSubmitting = status === 'submitting';
-
-  if (status === 'success') {
-    return (
-      <div className="border border-[#b7d4c2] bg-[#f0faf3] p-5">
-        <p className="text-lg font-semibold text-[#12351f]">Review request received.</p>
-        <p className="mt-2 text-sm leading-6 text-[#285034]">
-          We will review what you sent and reply with next steps for a 15-minute business review.
+function BookingPrompt({ onOpenBooking }: { onOpenBooking: () => void }) {
+  return (
+    <div className="flex h-full flex-col justify-between gap-8">
+      <div>
+        <CalendarDays className="h-9 w-9 text-[#1f5f7a]" />
+        <h3 className="mt-5 text-2xl font-semibold leading-tight text-[#141414]">Choose a time on the calendar.</h3>
+        <p className="mt-4 text-sm leading-7 text-[#4f463c]">
+          The calendar opens in a popup on this page, so you can pick an available 30-minute slot without filling out a
+          separate intake form first.
         </p>
       </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="grid gap-4">
-      <input
-        aria-label="Website"
-        autoComplete="off"
-        tabIndex={-1}
-        value={formState.websiteUrl}
-        onChange={(event) => updateField('websiteUrl', event.target.value)}
-        className="hidden"
-      />
-      <div className="grid gap-4 md:grid-cols-2">
-        <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-          Name
-          <input
-            required
-            value={formState.name}
-            onChange={(event) => updateField('name', event.target.value)}
-            className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-          />
-        </label>
-        <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-          Company
-          <input
-            required
-            value={formState.company}
-            onChange={(event) => updateField('company', event.target.value)}
-            className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-          />
-        </label>
-        <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-          Email
-          <input
-            required
-            type="email"
-            value={formState.email}
-            onChange={(event) => updateField('email', event.target.value)}
-            className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-          />
-        </label>
-        <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-          Phone
-          <input
-            required
-            value={formState.phone}
-            onChange={(event) => updateField('phone', event.target.value)}
-            className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-          />
-        </label>
-        <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-          Trade
-          <select
-            required
-            value={formState.trade}
-            onChange={(event) => updateField('trade', event.target.value)}
-            className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-          >
-            <option value="">Select one</option>
-            <option>Plumbing</option>
-            <option>HVAC</option>
-            <option>Remodeling / GC</option>
-            <option>Electrical</option>
-            <option>Other contractor business</option>
-          </select>
-        </label>
-        <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-          Team size
-          <select
-            required
-            value={formState.teamSize}
-            onChange={(event) => updateField('teamSize', event.target.value)}
-            className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-          >
-            <option value="">Select one</option>
-            <option>1-4 people</option>
-            <option>5-10 people</option>
-            <option>11-25 people</option>
-            <option>26-50 people</option>
-            <option>50+ people</option>
-          </select>
-        </label>
+      <div className="grid gap-3 border-t border-[#d9d2c3] pt-5">
+        {['30-minute JasonAI booking', 'Embedded Calendly scheduling', 'No separate lead form'].map((item) => (
+          <div key={item} className="flex items-center gap-2 text-sm font-semibold text-[#2f2a24]">
+            <Check className="h-4 w-4 text-[#1f5f7a]" />
+            {item}
+          </div>
+        ))}
       </div>
-      <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-        Tools currently used to communicate about jobs
-        <input
-          required
-          value={formState.currentTools}
-          onChange={(event) => updateField('currentTools', event.target.value)}
-          placeholder="Text, email, WhatsApp, calls, Jobber, Buildertrend..."
-          className="min-h-12 border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-        />
-      </label>
-      <label className="grid gap-2 text-sm font-semibold text-[#2f2a24]">
-        Biggest job communication challenge right now
-        <textarea
-          required
-          value={formState.challenge}
-          onChange={(event) => updateField('challenge', event.target.value)}
-          rows={5}
-          className="border border-[#cfc6b7] bg-white px-3 py-2 text-base font-normal outline-none focus:border-[#1f5f7a]"
-        />
-      </label>
-      {status === 'error' ? (
-        <p className="border border-[#e3a39a] bg-[#fff3f0] px-3 py-2 text-sm text-[#8a2418]">{errorMessage}</p>
-      ) : null}
       <button
-        type="submit"
-        disabled={isSubmitting}
+        type="button"
+        onClick={onOpenBooking}
         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2f2a24] disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isSubmitting ? 'Sending...' : 'Book Your Free 15-Minute Business Review'}
-        <Send className="h-4 w-4" />
+        Open Booking Calendar
+        <CalendarDays className="h-4 w-4" />
       </button>
-    </form>
+    </div>
   );
 }
 
@@ -1201,12 +1015,12 @@ function UseCasesSection() {
   );
 }
 
-function BusinessReviewSection() {
+function BusinessReviewSection({ onOpenBooking }: { onOpenBooking: () => void }) {
   return (
     <section id="business-review" className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.7fr_1fr]">
         <div>
-          <SectionLabel>Free 15-minute business review</SectionLabel>
+          <SectionLabel>Free 30-minute business review</SectionLabel>
           <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
             <ScrambleText text="We will look at how your job communication works right now." />
           </h2>
@@ -1218,7 +1032,7 @@ function BusinessReviewSection() {
           </Reveal>
         </div>
         <Reveal className="border border-[#d9d2c3] bg-white p-5 md:p-6">
-          <ReviewForm />
+          <BookingPrompt onOpenBooking={onOpenBooking} />
         </Reveal>
       </div>
     </section>
@@ -1335,19 +1149,43 @@ function JasonAILandingLinks() {
   return (
     <section className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
       <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-2">
-        <Link to="/jasonai/how-it-works" className="border border-[#d9d2c3] bg-white p-6 hover:border-[#141414]">
-          <p className="text-xs font-semibold uppercase text-[#9b3d1e]">How it works</p>
-          <h2 className="mt-3 text-3xl font-semibold">Setup, use cases, and review intake.</h2>
+        <Link
+          to="/jasonai/how-it-works"
+          className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-xs font-semibold uppercase text-[#9b3d1e]">How it works</p>
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-[#141414] bg-[#fffaf0] transition-colors group-hover:bg-[#141414] group-hover:text-white">
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </div>
+          <h2 className="mt-4 text-3xl font-semibold">Setup, use cases, and review intake.</h2>
           <p className="mt-4 text-sm leading-7 text-[#4f463c]">
             See how we learn the business, set JasonAI around your process, and review the places details fall through.
           </p>
+          <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#141414]">
+            Open how it works
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </span>
         </Link>
-        <Link to="/jasonai/questions" className="border border-[#d9d2c3] bg-white p-6 hover:border-[#141414]">
-          <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Questions</p>
-          <h2 className="mt-3 text-3xl font-semibold">Objections, FAQs, and waitlist.</h2>
+        <Link
+          to="/jasonai/questions"
+          className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Questions</p>
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-[#141414] bg-[#fffaf0] transition-colors group-hover:bg-[#141414] group-hover:text-white">
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </div>
+          <h2 className="mt-4 text-3xl font-semibold">Objections, FAQs, and waitlist.</h2>
           <p className="mt-4 text-sm leading-7 text-[#4f463c]">
             Clear answers for the things owners usually ask before they book a review.
           </p>
+          <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#141414]">
+            Open questions
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </span>
         </Link>
       </div>
     </section>
@@ -1526,7 +1364,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
               />
               <HowItWorksSection />
               <UseCasesSection />
-              <BusinessReviewSection />
+              <BusinessReviewSection onOpenBooking={() => setIsBookingOpen(true)} />
             </>
           ) : null}
 
@@ -1567,7 +1405,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
               </h2>
               <Reveal>
                 <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#4f463c]">
-                  Book a free 15-minute business review. We will look at how your job communication works right now and
+                  Book a free 30-minute business review. We will look at how your job communication works right now and
                   where things are falling through. No pitch. No demo. Just a real conversation.
                 </p>
               </Reveal>
