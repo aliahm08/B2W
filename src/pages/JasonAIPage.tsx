@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } 
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
+  CalendarDays,
   Check,
   ClipboardList,
   ChevronDown,
@@ -9,10 +10,11 @@ import {
   MessageSquareText,
   Send,
   ShieldAlert,
+  X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../components/Seo';
-import { getSourceMetadata, submitInternalForm } from '../lib/engagement';
+import { getCalendlyUrl, getSourceMetadata, submitInternalForm } from '../lib/engagement';
 
 declare global {
   interface Window {
@@ -47,6 +49,9 @@ const initialReviewFormState: ReviewFormState = {
 };
 
 const scrambleCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const waitlistUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
+const jasonAiCalendlyUrl =
+  'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=0fd5c2';
 
 const problemStatements = [
   {
@@ -237,6 +242,117 @@ function loadTallyEmbeds() {
   script.async = true;
   script.onload = () => window.Tally?.loadEmbeds();
   document.head.appendChild(script);
+}
+
+function ModalFrame({
+  isOpen,
+  onClose,
+  title,
+  subtitle,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  subtitle: string;
+  children: ReactNode;
+}) {
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-[#141414]/45 px-4 py-6 backdrop-blur-sm">
+      <div className="relative h-[min(760px,92vh)] w-full max-w-4xl overflow-hidden border border-[#d9d2c3] bg-white shadow-[0_24px_80px_rgba(20,20,20,0.24)]">
+        <div className="flex items-center justify-between border-b border-[#d9d2c3] px-4 py-3">
+          <div>
+            <p className="text-sm font-semibold text-[#141414]">{title}</p>
+            <p className="text-xs text-[#6b6256]">{subtitle}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={`Close ${title}`}
+            className="grid h-9 w-9 place-items-center border border-[#d9d2c3] text-[#141414] transition hover:bg-[#fffaf0]"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function CalendlyModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const calendlyUrl = getCalendlyUrl() || jasonAiCalendlyUrl;
+
+  return (
+    <ModalFrame
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Book a JasonAI business review"
+      subtitle="Pick a time that works for you."
+    >
+      {calendlyUrl ? (
+        <iframe
+          src={calendlyUrl}
+          title="Book a JasonAI business review"
+          className="h-[calc(100%-58px)] w-full"
+          loading="lazy"
+        />
+      ) : (
+        <div className="grid h-[calc(100%-58px)] place-items-center px-6 text-center">
+          <div className="max-w-md">
+            <CalendarDays className="mx-auto h-8 w-8 text-[#1f5f7a]" />
+            <p className="mt-4 text-lg font-semibold text-[#141414]">Booking is not configured yet.</p>
+            <p className="mt-2 text-sm leading-6 text-[#6b6256]">
+              Add `VITE_CALENDLY_URL` to enable the embedded booking calendar.
+            </p>
+          </div>
+        </div>
+      )}
+    </ModalFrame>
+  );
+}
+
+function WaitlistModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  return (
+    <ModalFrame
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Join the JasonAI waitlist"
+      subtitle="Tell us where JasonAI should fit into your workflow."
+    >
+      <iframe
+        src={waitlistUrl}
+        data-tally-src={waitlistUrl}
+        title="Join the JasonAI waitlist"
+        className="h-[calc(100%-58px)] w-full"
+        loading="lazy"
+      />
+    </ModalFrame>
+  );
 }
 
 function ScrambleText({
@@ -677,12 +793,9 @@ function ObjectionCarousel() {
             exit={shouldReduceMotion ? undefined : { opacity: 0, y: -12, filter: 'blur(14px)' }}
             transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h3 className="text-2xl font-semibold leading-tight text-[#141414] md:text-4xl">
-              Objection {activeIndex + 1}: {activeObjection.question}
-            </h3>
-            <div className="mt-7 border-l-4 border-[#1f5f7a] pl-5">
+            <div className="border-l-4 border-[#1f5f7a] pl-5">
               <p className="text-xs font-semibold uppercase text-[#1f5f7a]">Answer</p>
-              <p aria-live="polite" className="mt-3 min-h-[12rem] text-lg leading-8 text-[#3c362f] md:min-h-[8rem]">
+              <p aria-live="polite" className="mt-4 min-h-[15rem] text-xl leading-9 text-[#3c362f] md:min-h-[12rem]">
                 {typedAnswer}
                 {!shouldReduceMotion && typedAnswer.length < activeObjection.answer.length ? (
                   <motion.span
@@ -1112,15 +1225,19 @@ function BusinessReviewSection() {
   );
 }
 
-function QuestionsSection() {
+function QuestionsHeroSection() {
   return (
-    <section id="questions" className="border-b border-[#d9d2c3] bg-white">
+    <section id="questions" className="border-b border-[#d9d2c3]">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
         <div className="max-w-3xl">
-          <SectionLabel>Objections</SectionLabel>
-          <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-            <ScrambleText text="The questions contractors usually ask first." />
-          </h2>
+          <p className="text-sm font-semibold uppercase text-[#9b3d1e]">Questions</p>
+          <h1 className="mt-4 text-5xl font-semibold leading-[1.02] md:text-7xl">
+            <ScrambleText text="The things contractor owners ask first." />
+          </h1>
+          <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
+            What changes for the crew, what JasonAI connects to, what happens to your data, and how to stay updated if
+            you are not ready for a review.
+          </p>
         </div>
         <ObjectionCarousel />
       </div>
@@ -1156,9 +1273,7 @@ function FaqSection() {
   );
 }
 
-function WaitlistSection() {
-  const tallyUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
-
+function WaitlistSection({ onOpenWaitlist }: { onOpenWaitlist: () => void }) {
   return (
     <section id="waitlist" className="border-b border-[#d9d2c3] bg-[#141414] text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.65fr_1fr]">
@@ -1173,18 +1288,21 @@ function WaitlistSection() {
             </p>
           </Reveal>
         </div>
-        <Reveal className="overflow-hidden border border-white/15 bg-white p-0 text-[#141414]">
-          <iframe
-            src={tallyUrl}
-            data-tally-src={tallyUrl}
-            loading="lazy"
-            width="100%"
-            height="1450"
-            frameBorder="0"
-            marginHeight={0}
-            marginWidth={0}
-            title="Join the JasonAI waitlist"
-          />
+        <Reveal className="flex items-center border border-white/15 bg-white p-6 text-[#141414]">
+          <div>
+            <p className="text-xl font-semibold">Founding access is still limited.</p>
+            <p className="mt-3 text-sm leading-7 text-[#4f463c]">
+              Join the waitlist and we will follow up as we open more contractor accounts.
+            </p>
+            <button
+              type="button"
+              onClick={onOpenWaitlist}
+              className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+            >
+              Join the waitlist
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
         </Reveal>
       </div>
     </section>
@@ -1238,6 +1356,8 @@ function JasonAILandingLinks() {
 
 export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | 'how-it-works' | 'questions' }) {
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
   const seoByPage = {
     landing: {
       title: 'JasonAI for Contractor Businesses',
@@ -1307,14 +1427,15 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                 Questions
               </Link>
             </motion.nav>
-            <a
-              href="/jasonai/how-it-works#business-review"
+            <button
+              type="button"
+              onClick={() => setIsBookingOpen(true)}
               className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
             >
               <span className="hidden sm:inline">Book review</span>
               <span className="sm:hidden">Review</span>
               <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            </a>
+            </button>
           </div>
         </header>
 
@@ -1336,20 +1457,22 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                       </p>
                     </Reveal>
                     <Reveal className="mt-9 flex flex-col gap-3 sm:flex-row" delay={0.28}>
-                      <a
-                        href="/jasonai/how-it-works#business-review"
+                      <button
+                        type="button"
+                        onClick={() => setIsBookingOpen(true)}
                         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                       >
                         Book Your Free 15-Minute Business Review
                         <ArrowRight className="h-4 w-4" />
-                      </a>
-                      <a
-                        href="/jasonai/questions#waitlist"
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsWaitlistOpen(true)}
                         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                       >
                         Not ready? Join the waitlist
                         <ArrowRight className="h-4 w-4" />
-                      </a>
+                      </button>
                     </Reveal>
                     <Reveal className="mt-9 hidden gap-3 text-sm font-semibold text-[#4f463c] sm:grid sm:grid-cols-3" delay={0.36}>
                       {['Texts', 'Email', 'WhatsApp and calls'].map((item) => (
@@ -1409,14 +1532,9 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
 
           {page === 'questions' ? (
             <>
-              <JasonAISubpageIntro
-                label="Questions"
-                title="The things contractor owners ask first."
-                body="What changes for the crew, what JasonAI connects to, what happens to your data, and how to stay updated if you are not ready for a review."
-              />
-              <QuestionsSection />
+              <QuestionsHeroSection />
               <FaqSection />
-              <WaitlistSection />
+              <WaitlistSection onOpenWaitlist={() => setIsWaitlistOpen(true)} />
             </>
           ) : null}
 
@@ -1454,24 +1572,45 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                 </p>
               </Reveal>
               <Reveal className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-                <a
-                  href="/jasonai/how-it-works#business-review"
+                <button
+                  type="button"
+                  onClick={() => setIsBookingOpen(true)}
                   className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                 >
                   Book My Free Business Review
                   <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  href="/jasonai/questions#waitlist"
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsWaitlistOpen(true)}
                   className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                 >
                   Just want updates? Join the waitlist
                   <ArrowRight className="h-4 w-4" />
-                </a>
+                </button>
               </Reveal>
             </div>
           </section>
         </main>
+
+        {hasScrolled ? (
+          <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
+            <div className="flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
+              <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Want to test it early?</span>
+              <button
+                type="button"
+                onClick={() => setIsWaitlistOpen(true)}
+                className="inline-flex min-h-10 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+              >
+                Join the waitlist
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        <CalendlyModal isOpen={isBookingOpen} onClose={() => setIsBookingOpen(false)} />
+        <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
       </div>
     </>
   );

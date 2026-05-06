@@ -56,6 +56,10 @@ const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
+const JasonAI2Page = lazy(() => import('./pages/JasonAI2Page'));
+const JasonAI3Page = lazy(() => import('./pages/JasonAI3Page'));
+const JasonAI3Portal2Page = lazy(() => import('./pages/JasonAI3Portal2Page'));
+const JasonAI3TasksPortalPage = lazy(() => import('./pages/JasonAI3TasksPortalPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -294,6 +298,11 @@ export default function App() {
                 <Route path="/jasonai" element={<JasonAIPage />} />
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
+                <Route path="/jasonai-2" element={<JasonAI2Page />} />
+                <Route path="/jasonai-3" element={<JasonAI3Page />} />
+                <Route path="/jasonai-3/portal" element={<JasonAI3Page page="portal" />} />
+                <Route path="/jasonai-3/portal-2" element={<JasonAI3Portal2Page />} />
+                <Route path="/jasonai-3/portal-2/tasks" element={<JasonAI3TasksPortalPage />} />
                 <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -21,12 +21,18 @@ export default function ClientNavbar({
   navItems,
   theme = 'light',
   hasFieldBoss = false,
+  assistantButtonLabel = 'Summarize',
+  assistantTrayTitle = 'Summarize Proposal',
+  assistantTray,
 }: { 
   clientName?: string;
   clientLink?: string;
   navItems?: ClientNavAction[];
   theme?: 'light' | 'dark';
   hasFieldBoss?: boolean;
+  assistantButtonLabel?: string;
+  assistantTrayTitle?: string;
+  assistantTray?: ReactNode | ((props: { onClose: () => void }) => ReactNode);
 }) {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -175,6 +181,16 @@ export default function ClientNavbar({
       closeDropdownTimeoutRef.current = null;
     }
     setOpenDropdown('client-pages');
+  };
+
+  const renderAssistantTray = () => {
+    const onClose = () => setIsFieldBossOpen(false);
+
+    if (typeof assistantTray === 'function') {
+      return assistantTray({ onClose });
+    }
+
+    return assistantTray ?? <FieldBossChatTray onClose={onClose} />;
   };
 
   const closeClientDropdownWithDelay = () => {
@@ -364,9 +380,9 @@ export default function ClientNavbar({
               }}
               onMouseEnter={() => setIsSummaryHovered(true)}
               onMouseLeave={() => setIsSummaryHovered(false)}
-              aria-label="Summarize"
+              aria-label={assistantButtonLabel}
               aria-expanded={isFieldBossOpen}
-              title="Summarize"
+              title={assistantButtonLabel}
               initial={false}
               animate={
                 hasMountedPulse && !isFieldBossOpen && !isSummaryHovered
@@ -394,7 +410,7 @@ export default function ClientNavbar({
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}
               >
-                Summarize
+                {assistantButtonLabel}
               </span>
             </motion.button>
           ) : null}
@@ -430,9 +446,9 @@ export default function ClientNavbar({
                   : { duration: 0.14 }
               }
               onClick={() => setIsFieldBossOpen((current) => !current)}
-              aria-label="Summarize"
+              aria-label={assistantButtonLabel}
               aria-expanded={isFieldBossOpen}
-              title="Summarize"
+              title={assistantButtonLabel}
               className={`group inline-flex h-10 min-w-[40px] items-center justify-center overflow-hidden rounded-full border px-2.5 transition-all duration-300 ease-in-out active:scale-95 ${
                 isFieldBossOpen
                   ? 'border-cyan-300/30 bg-cyan-300/10 text-cyan-200'
@@ -449,7 +465,7 @@ export default function ClientNavbar({
                     : 'max-w-0 opacity-0 group-hover:ml-2 group-hover:max-w-[100px] group-hover:opacity-100'
                 }`}
               >
-                Summarize
+                {assistantButtonLabel}
               </span>
             </motion.button>
           )}
@@ -481,7 +497,7 @@ export default function ClientNavbar({
               <div className="sticky top-0 z-10 flex items-center justify-between border-b border-white/10 bg-[#08131b]/95 px-4 py-3 backdrop-blur md:hidden">
                 <div className="flex items-center gap-2 text-white">
                   <FieldBossIcon size={16} className="text-cyan-200" />
-                  <span className="text-sm font-medium">Summarize Proposal</span>
+                  <span className="text-sm font-medium">{assistantTrayTitle}</span>
                 </div>
                 <button
                   type="button"
@@ -492,7 +508,7 @@ export default function ClientNavbar({
                   <X className="h-4 w-4" />
                 </button>
               </div>
-              <FieldBossChatTray onClose={() => setIsFieldBossOpen(false)} />
+              {renderAssistantTray()}
             </motion.div>
           </>
         ) : null}
