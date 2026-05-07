@@ -1402,8 +1402,8 @@ function JasonAIPrivacyPolicy() {
 
 function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions' | 'privacy' }) {
   return (
-    <footer className="border-t border-[#d9d2c3] bg-[#141414] text-white">
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-7 md:flex-row md:items-center md:justify-between md:px-8">
+    <footer className="flex min-h-44 items-end border-t border-[#d9d2c3] bg-[#141414] text-white md:min-h-52">
+      <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-5 px-5 pb-8 pt-14 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10 md:pt-16">
         <div>
           <p className="text-sm font-semibold">JasonAI by B2W</p>
           <p className="mt-1 text-sm text-white/62">Fieldwork communication, organized around the way jobs move.</p>
