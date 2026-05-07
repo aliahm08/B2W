@@ -1404,11 +1404,11 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
   return (
     <footer className="flex min-h-44 items-end border-t border-[#d9d2c3] bg-[#141414] text-white md:min-h-52">
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-5 px-5 pb-8 pt-14 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10 md:pt-16">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm font-semibold">JasonAI by B2W</p>
           <p className="mt-1 text-sm text-white/62">Fieldwork communication, organized around the way jobs move.</p>
         </div>
-        <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-white/72">
+        <nav className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-white/72">
           <Link to="/jasonai" className="hover:text-white">
             Home
           </Link>
@@ -1433,8 +1433,10 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
 
 export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | 'how-it-works' | 'questions' | 'privacy' }) {
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [isFooterApproaching, setIsFooterApproaching] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+  const footerRef = useRef<HTMLDivElement | null>(null);
   const seoByPage = {
     landing: {
       title: 'JasonAI for Contractor Businesses',
@@ -1475,6 +1477,28 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
     return () => window.removeEventListener('scroll', updateScrollState);
   }, []);
 
+  useEffect(() => {
+    const footerElement = footerRef.current;
+
+    if (!footerElement) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterApproaching(entry.isIntersecting);
+      },
+      {
+        rootMargin: '0px 0px 96px 0px',
+        threshold: 0,
+      },
+    );
+
+    observer.observe(footerElement);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
       <Seo
@@ -1482,7 +1506,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
         description={seoByPage.description}
         canonicalPath={seoByPage.canonicalPath}
       />
-      <div className="min-h-screen bg-[#fffaf0] text-[#141414]">
+      <div className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[#fffaf0] text-[#141414]">
         <header
           className={`sticky -top-px z-40 bg-[#fffaf0]/95 pt-[env(safe-area-inset-top)] backdrop-blur transition-[border-color,box-shadow] duration-300 ${
             hasScrolled ? 'border-b border-[#d9d2c3] shadow-sm' : 'border-b border-transparent'
@@ -1685,9 +1709,11 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
           ) : null}
         </main>
 
-        <JasonAIFooter page={page} />
+        <div ref={footerRef}>
+          <JasonAIFooter page={page} />
+        </div>
 
-        {hasScrolled && page !== 'privacy' ? (
+        {hasScrolled && !isFooterApproaching && page !== 'privacy' ? (
           <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 flex justify-center px-4 md:bottom-10">
             <div className="pointer-events-auto flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
               <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Want to test it early?</span>
