@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { JasonAIVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
 declare global {
@@ -550,11 +551,7 @@ function JasonAILockup({ showByline = true }: { showByline?: boolean }) {
   return (
     <div className="flex items-center gap-3 text-[#141414]">
       <Link to="/jasonai" aria-label="JasonAI landing page" className="inline-flex items-center gap-2.5">
-        <svg aria-hidden="true" viewBox="0 0 48 48" className="h-8 w-8 shrink-0 sm:h-9 sm:w-9">
-          <rect x="4" y="4" width="40" height="40" fill="#141414" />
-          <path d="M17 14h15v5H23v8.5c0 5.2-3.2 8.5-8.4 8.5H13v-5h1.4c2.4 0 3.6-1.2 3.6-3.6V14Z" fill="#fffaf0" />
-          <path d="M30 25h5l-7 10 1.5-7h-5l7-10L30 25Z" fill="#f1b37b" />
-        </svg>
+        <JasonAIVectorMark title="" className="h-8 w-8 shrink-0 overflow-visible sm:h-9 sm:w-9" strokeWidth={2.8} />
         <span className="text-lg font-semibold tracking-[-0.04em] sm:text-xl md:text-2xl">JasonAI</span>
       </Link>
       <motion.span
@@ -653,6 +650,7 @@ function ObjectionCarousel() {
   const shouldReduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [typedAnswer, setTypedAnswer] = useState(objections[0].answer);
+  const objectionButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const activeObjection = objections[activeIndex];
 
   useEffect(() => {
@@ -687,40 +685,66 @@ function ObjectionCarousel() {
     return () => window.clearInterval(cycleInterval);
   }, [shouldReduceMotion]);
 
+  useEffect(() => {
+    if (window.matchMedia('(min-width: 1024px)').matches) {
+      return;
+    }
+
+    objectionButtonRefs.current[activeIndex]?.scrollIntoView({
+      behavior: shouldReduceMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    });
+  }, [activeIndex, shouldReduceMotion]);
+
   const progressItems = useMemo(() => objections.map((_, index) => index), []);
 
   return (
-    <div className="mt-10 grid gap-5 lg:grid-cols-[0.36fr_0.64fr]">
-      <div className="grid gap-2">
-        {progressItems.map((index) => (
-          <button
-            key={index}
-            type="button"
-            onClick={() => setActiveIndex(index)}
-            aria-label={`Show objection ${index + 1}`}
-            className={`relative overflow-hidden border px-4 py-3 text-left transition-colors ${
-              activeIndex === index
-                ? 'border-[#141414] bg-[#141414] text-white'
-                : 'border-[#d9d2c3] bg-white text-[#4f463c] hover:border-[#141414]'
-            }`}
-          >
-            <span className="block text-[11px] font-semibold uppercase opacity-70">Objection {index + 1}</span>
-            <span className="mt-1 hidden text-sm font-semibold leading-5 sm:block">{objections[index].question}</span>
-            {activeIndex === index && !shouldReduceMotion ? (
-              <motion.span
-                aria-hidden="true"
-                className="absolute inset-x-0 bottom-0 h-0.5 bg-[#f1b37b]"
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 8.2, ease: 'linear' }}
-                style={{ transformOrigin: 'left' }}
-              />
-            ) : null}
-          </button>
-        ))}
+    <div className="mt-10 grid gap-4 lg:grid-cols-[0.36fr_0.64fr] lg:gap-5">
+      <div className="-mx-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-2 [scrollbar-width:none] sm:-mx-8 sm:px-8 lg:mx-0 lg:grid lg:grid-cols-1 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
+        {progressItems.map((index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <button
+              key={index}
+              ref={(node) => {
+                objectionButtonRefs.current[index] = node;
+              }}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Show objection ${index + 1}`}
+              aria-current={isActive ? 'true' : undefined}
+              className={`relative overflow-hidden border text-left transition-colors ${
+                isActive
+                  ? 'min-h-[6.5rem] w-[78vw] shrink-0 snap-center border-[#141414] bg-[#141414] px-4 py-4 text-white shadow-[0_16px_36px_rgba(20,20,20,0.16)] sm:w-[28rem] sm:min-h-[7rem] sm:px-5 sm:py-5 lg:w-auto lg:min-h-[6.25rem]'
+                  : 'min-h-[5.25rem] w-[42vw] shrink-0 snap-center border-[#d9d2c3] bg-white px-3 py-3 text-[#4f463c] hover:border-[#141414] sm:w-[14rem] sm:px-4 lg:min-h-0 lg:w-auto'
+              }`}
+            >
+              <span className="block text-[11px] font-semibold uppercase opacity-70">Objection {index + 1}</span>
+              <span
+                className={`mt-1 font-semibold leading-5 ${
+                  isActive ? 'block text-base sm:text-lg lg:text-base' : 'line-clamp-2 text-sm'
+                }`}
+              >
+                {objections[index].question}
+              </span>
+              {isActive && !shouldReduceMotion ? (
+                <motion.span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 bottom-0 h-0.5 bg-[#f1b37b]"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 8.2, ease: 'linear' }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              ) : null}
+            </button>
+          );
+        })}
       </div>
 
-      <div className="min-h-[27rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 md:min-h-[22rem] md:p-7">
+      <div className="min-h-[20rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 md:min-h-[22rem] md:p-7">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeObjection.question}
@@ -731,7 +755,10 @@ function ObjectionCarousel() {
           >
             <div className="border-l-4 border-[#1f5f7a] pl-5">
               <p className="text-xs font-semibold uppercase text-[#1f5f7a]">Answer</p>
-              <p aria-live="polite" className="mt-4 min-h-[15rem] text-xl leading-9 text-[#3c362f] md:min-h-[12rem]">
+              <p
+                aria-live="polite"
+                className="mt-4 min-h-[11rem] text-lg leading-8 text-[#3c362f] sm:text-xl sm:leading-9 md:min-h-[12rem]"
+              >
                 {typedAnswer}
                 {!shouldReduceMotion && typedAnswer.length < activeObjection.answer.length ? (
                   <motion.span
@@ -1040,8 +1067,9 @@ function TeamChatPhone() {
                     </div>
                     <div className="max-w-[92%] rounded-2xl rounded-tl-sm border border-[#d9d2c3] bg-white p-3">
                       <div className="flex items-center gap-2">
-                        <span className="grid h-6 w-6 place-items-center bg-[#141414] text-[11px] font-semibold text-[#fffaf0]">
-                          J
+                        <span className="grid h-6 w-6 place-items-center overflow-visible text-[#141414]">
+                          <JasonAIVectorMark title="" className="h-full w-full overflow-visible" strokeWidth={2.5} />
+                          <span className="sr-only">JasonAI</span>
                         </span>
                         <p className="text-[11px] font-semibold uppercase text-[#9b3d1e]">JasonAI</p>
                       </div>
@@ -1660,8 +1688,8 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
         <JasonAIFooter page={page} />
 
         {hasScrolled && page !== 'privacy' ? (
-          <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
-            <div className="flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
+          <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 flex justify-center px-4 md:bottom-10">
+            <div className="pointer-events-auto flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
               <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Want to test it early?</span>
               <button
                 type="button"

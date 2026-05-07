@@ -84,9 +84,9 @@ html {
 }
 
 .b2w-logo-layer {
-  opacity: 0;
+  opacity: 0.14;
   animation-name: b2w-logo-layer-sequence;
-  animation-timing-function: linear;
+  animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   animation-fill-mode: both;
   will-change: opacity;
@@ -124,16 +124,15 @@ html {
 
 @keyframes b2w-logo-layer-sequence {
   0%,
-  12% {
-    opacity: 0;
+  100% {
+    opacity: 0.14;
   }
-  22%,
-  72% {
+  5%,
+  12% {
     opacity: 1;
   }
-  84%,
-  100% {
-    opacity: 0;
+  18% {
+    opacity: 0.14;
   }
 }
 

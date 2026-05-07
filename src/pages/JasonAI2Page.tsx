@@ -13,6 +13,7 @@ import {
   Smartphone,
   X,
 } from 'lucide-react';
+import { JasonAIVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 import { getCalendlyUrl } from '../lib/engagement';
 
@@ -147,8 +148,6 @@ const exportAssets = [
 ] as const;
 
 const waitlistUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
-const jasonLogoPath = 'M34 20h24q18 0 18 18v22q0 10-7 3L31 25q-5-5 3-5Z';
-const jasonLogoLayers = [-26, -16, -7, 8, 18] as const;
 const workflowContextImage = '/images/jasonai-2/workflow-context.png';
 
 function Reveal({
@@ -183,22 +182,8 @@ function Reveal({
 function JasonAILogo() {
   return (
     <Link to="/jasonai-2" className="group inline-flex items-center gap-3" aria-label="JasonAI by B2W">
-      <span className="relative grid h-12 w-12 place-items-center overflow-visible rounded-[14px] bg-[#111111] shadow-[0_18px_42px_rgba(17,17,17,0.18)]">
-        <svg viewBox="0 0 96 96" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
-          <path d={jasonLogoPath} fill="#ffffff" fillOpacity="0.16" />
-          {jasonLogoLayers.map((rotation, index) => (
-            <path
-              key={rotation}
-              d={jasonLogoPath}
-              fill={index === 2 ? '#4F6EF7' : '#ffffff'}
-              fillOpacity={index === 2 ? '0.46' : '0.11'}
-              transform={`rotate(${rotation} 48 48)`}
-              className="transition-transform duration-300 group-hover:scale-[1.04]"
-            />
-          ))}
-          <path d="M36 28h23v10H48v17q0 12-12 12h-4V57h3q5 0 5-5V28Z" fill="#ffffff" />
-          <circle cx="63" cy="61" r="5" fill="#4F6EF7" />
-        </svg>
+      <span className="relative grid h-12 w-12 place-items-center overflow-visible text-[#111111] transition-transform duration-300 group-hover:scale-[1.04]">
+        <JasonAIVectorMark title="" className="h-full w-full overflow-visible" strokeWidth={2.9} />
         <span className="sr-only">JasonAI</span>
       </span>
       <span className="leading-none">
@@ -454,12 +439,9 @@ function TypingDots() {
 
 function JasonAIAvatar() {
   return (
-    <span className="relative grid h-7 w-7 place-items-center overflow-hidden rounded-lg bg-[#111111] text-[11px] font-semibold text-white">
-      <svg viewBox="0 0 96 96" className="absolute inset-0 h-full w-full opacity-70" aria-hidden="true">
-        <path d={jasonLogoPath} fill="#4F6EF7" fillOpacity="0.5" transform="rotate(-12 48 48)" />
-        <path d={jasonLogoPath} fill="#ffffff" fillOpacity="0.18" transform="rotate(14 48 48)" />
-      </svg>
-      <span className="relative">J</span>
+    <span className="relative grid h-7 w-7 place-items-center overflow-visible text-[#111111]">
+      <JasonAIVectorMark title="" className="h-full w-full overflow-visible" strokeWidth={2.5} />
+      <span className="sr-only">JasonAI</span>
     </span>
   );
 }

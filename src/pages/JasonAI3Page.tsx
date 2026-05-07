@@ -22,6 +22,7 @@ import {
   Sparkles,
   Workflow,
 } from 'lucide-react';
+import { JasonAIVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
 type RiskStatus = 'critical' | 'watch' | 'clear' | 'agent';
@@ -42,9 +43,6 @@ type StoryNode = {
   timestamp: string;
   confidence: string;
 };
-
-const jasonLogoPath = 'M34 20h24q18 0 18 18v22q0 10-7 3L31 25q-5-5 3-5Z';
-const jasonLogoLayers = [-26, -16, -7, 8, 18] as const;
 
 const storyNodes: StoryNode[] = [
   {
@@ -418,22 +416,8 @@ function useRouteHashScroll() {
 function JasonAILogo() {
   return (
     <Link to="/jasonai-3" className="group inline-flex items-center gap-3" aria-label="JasonAI-3 by B2W">
-      <span className="relative grid h-11 w-11 place-items-center overflow-visible rounded-[14px] border border-white/12 bg-white/10 shadow-[0_18px_42px_rgba(0,0,0,0.2)]">
-        <svg viewBox="0 0 96 96" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
-          <path d={jasonLogoPath} fill="#ffffff" fillOpacity="0.11" />
-          {jasonLogoLayers.map((rotation, index) => (
-            <path
-              key={rotation}
-              d={jasonLogoPath}
-              fill={index === 2 ? '#4F6EF7' : '#ffffff'}
-              fillOpacity={index === 2 ? '0.52' : '0.12'}
-              transform={`rotate(${rotation} 48 48)`}
-              className="transition-transform duration-300 group-hover:scale-[1.04]"
-            />
-          ))}
-          <path d="M36 28h23v10H48v17q0 12-12 12h-4V57h3q5 0 5-5V28Z" fill="#ffffff" />
-          <circle cx="63" cy="61" r="5" fill="#35d6a6" />
-        </svg>
+      <span className="relative grid h-11 w-11 place-items-center overflow-visible text-white transition-transform duration-300 group-hover:scale-[1.04]">
+        <JasonAIVectorMark title="" className="h-full w-full overflow-visible" strokeWidth={2.9} />
         <span className="sr-only">JasonAI</span>
       </span>
       <span className="leading-none">
