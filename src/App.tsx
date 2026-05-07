@@ -298,6 +298,7 @@ export default function App() {
                 <Route path="/jasonai" element={<JasonAIPage />} />
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
+                <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
                 <Route path="/jasonai-2" element={<JasonAI2Page />} />
                 <Route path="/jasonai-3" element={<JasonAI3Page />} />
                 <Route path="/jasonai-3/portal" element={<JasonAI3Page page="portal" />} />

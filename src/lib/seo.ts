@@ -87,6 +87,14 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/jasonai/privacy',
+    {
+      title: 'JasonAI Privacy Policy',
+      description:
+        'Privacy Policy for JasonAI by B2W, covering fieldwork communications, job context, connected tools, AI processing, data sharing, retention, and user controls.',
+    },
+  ],
+  [
     '/jasonai-2',
     {
       title: 'JasonAI Style 2 by B2W',

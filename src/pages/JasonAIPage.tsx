@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type Key, type ReactNode } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
@@ -199,6 +199,127 @@ const faqs = [
   },
 ] as const;
 
+const privacyHighlights = [
+  {
+    title: 'You choose the fieldwork channels JasonAI can review.',
+    body:
+      'JasonAI is configured around the communication sources you approve, such as work texts, email, WhatsApp, call notes, job documents, and connected field operations tools.',
+  },
+  {
+    title: 'Your job communication is used to run JasonAI for your business.',
+    body:
+      'We use approved information to produce summaries, alerts, open-loop reminders, scope-change flags, dispute context, and field support for your team.',
+  },
+  {
+    title: 'We do not sell your fieldwork data.',
+    body:
+      'JasonAI is not an advertising product. We do not sell your business communications, customer records, job details, or crew activity to advertisers or data brokers.',
+  },
+] as const;
+
+const privacySections = [
+  {
+    title: '1. What this policy covers',
+    body: [
+      'This Privacy Policy explains how B2W collects, uses, shares, and protects information for JasonAI, including the JasonAI website, waitlist, business review, onboarding process, and JasonAI service.',
+      'JasonAI is built for fieldwork businesses where work happens across job sites, crews, customers, owners, project managers, subcontractors, and office staff. That means the information JasonAI handles may include operational communication about real jobs in the field.',
+    ],
+  },
+  {
+    title: '2. Information we collect',
+    body: [
+      'Contact and account information, such as your name, email address, phone number, company name, role, team size, service area, and details you provide when joining the waitlist, booking a review, or onboarding JasonAI.',
+      'Fieldwork and job communication you authorize JasonAI to access, such as work texts, email, WhatsApp messages, call notes or transcripts, customer requests, project manager notes, technician updates, job names, job addresses, schedule details, estimates, scope changes, photos, documents, and related metadata.',
+      'Integration information from tools you connect, such as authorization status, connected account identifiers, sync logs, delivery status, and settings needed to send summaries, alerts, or responses back through approved channels.',
+      'Website and service usage information, such as pages visited, form submissions, device and browser information, IP address, timestamps, diagnostics, and security logs.',
+      'Commercial and support information, such as billing contacts, contract records, support requests, implementation notes, and feedback.',
+    ],
+  },
+  {
+    title: '3. How we use information',
+    body: [
+      'We use information to operate JasonAI, configure it around your fieldwork process, summarize approved communications, identify open tasks, flag possible scope changes, prepare job context, support dispute review, and help your team find what was agreed or still needs action.',
+      'We also use information to provide onboarding and support, communicate with you, manage waitlist and business review requests, maintain security, troubleshoot issues, improve reliability, develop new features, and meet legal or contractual obligations.',
+      'We may use aggregated or de-identified information to understand product performance and improve JasonAI. Aggregated or de-identified information does not identify your business, workers, customers, or job sites.',
+    ],
+  },
+  {
+    title: '4. AI processing',
+    body: [
+      'JasonAI uses artificial intelligence systems to classify, summarize, search, and organize approved fieldwork communications and job context.',
+      'Customer content is processed to provide JasonAI to your business. We do not use your business communications, customer records, crew messages, job files, or connected-channel content to train public AI models unless you separately agree in writing.',
+      'AI-generated summaries and alerts can be incomplete or incorrect. You remain responsible for reviewing important job, billing, safety, legal, or customer decisions before acting on them.',
+    ],
+  },
+  {
+    title: '5. How we share information',
+    body: [
+      'We share information with service providers that help us operate JasonAI, such as hosting, database, analytics, email, scheduling, automation, transcription, AI processing, security, and customer support providers. These providers are expected to use information only to provide services to us.',
+      'We share information with integrations and communication channels you authorize, for example when JasonAI posts an alert, sends a summary, or retrieves context from an approved tool.',
+      'We may share information when required by law, to protect rights and safety, to prevent fraud or abuse, in connection with a business transaction, or with your direction or consent.',
+      'We do not sell your fieldwork communications, job data, customer records, or crew activity. We do not use JasonAI customer content for targeted advertising.',
+    ],
+  },
+  {
+    title: '6. Your choices and controls',
+    body: [
+      'You control which channels JasonAI connects to and what information JasonAI is allowed to review. You can ask us to add, remove, pause, or limit connected sources.',
+      'You can request access, correction, deletion, or export of personal information by contacting us. We may need to verify your request and may retain information when required for security, legal, billing, backup, or legitimate business reasons.',
+      'If you are a customer administrator, you are responsible for choosing appropriate access settings for your team and for giving workers, customers, subcontractors, or other participants any notices or choices required for your use of JasonAI.',
+    ],
+  },
+  {
+    title: '7. Retention',
+    body: [
+      'We keep information for as long as needed to provide JasonAI, support your account, comply with our agreements, maintain security, resolve disputes, and meet legal obligations.',
+      'When information is no longer needed, we delete it, de-identify it, or retain it only in limited backup, audit, or security systems for a reasonable period.',
+    ],
+  },
+  {
+    title: '8. Security',
+    body: [
+      'We use reasonable administrative, technical, and organizational safeguards designed to protect information handled by JasonAI. These safeguards may include access controls, secure hosting practices, logging, monitoring, and limiting internal access based on role and need.',
+      'No system is perfectly secure. If you believe information connected to JasonAI has been accessed without authorization, contact us promptly.',
+    ],
+  },
+  {
+    title: '9. Sensitive information',
+    body: [
+      'JasonAI is designed for fieldwork operations, job communication, and business context. Do not intentionally send Social Security numbers, full payment card numbers, protected health information, children\'s information, or other highly sensitive information to JasonAI unless we have expressly agreed to handle that information in writing.',
+      'If sensitive information appears incidentally in approved fieldwork communications, JasonAI may process it as part of providing the service. We may work with you to limit or remove that information where practical.',
+    ],
+  },
+  {
+    title: '10. Children',
+    body: [
+      'JasonAI is not directed to children and is not intended for use by anyone under 16. We do not knowingly collect personal information from children through JasonAI.',
+    ],
+  },
+  {
+    title: '11. U.S. and international use',
+    body: [
+      'B2W operates from the United States. If you access JasonAI from outside the United States, your information may be processed and stored in the United States or other countries where our service providers operate.',
+    ],
+  },
+  {
+    title: '12. State privacy rights',
+    body: [
+      'Depending on where you live, you may have rights to know, access, correct, delete, or receive a copy of certain personal information, and to appeal certain privacy request decisions. You may submit a request using the contact information below.',
+      'We will not discriminate against you for exercising privacy rights that apply to you.',
+    ],
+  },
+  {
+    title: '13. Changes to this policy',
+    body: [
+      'We may update this Privacy Policy as JasonAI changes. If the changes are material, we will take reasonable steps to notify customers or make the updated policy clear on this page.',
+    ],
+  },
+  {
+    title: '14. Contact',
+    body: ['For privacy questions or requests, contact B2W at info@b2w-ai.com.'],
+  },
+] as const;
+
 function loadTallyEmbeds() {
   if (typeof window === 'undefined') {
     return;
@@ -396,6 +517,7 @@ function Reveal({
   children: ReactNode;
   className?: string;
   delay?: number;
+  key?: Key;
 }) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -1192,7 +1314,96 @@ function JasonAILandingLinks() {
   );
 }
 
-export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | 'how-it-works' | 'questions' }) {
+function JasonAIPrivacyPolicy() {
+  return (
+    <>
+      <JasonAISubpageIntro
+        label="Privacy Policy"
+        title="How JasonAI handles fieldwork communication."
+        body="JasonAI is built for businesses where the work happens in the field and the context lives across calls, messages, emails, job notes, and handoffs. This policy explains what we collect, how we use it, and the controls you have."
+      />
+      <section className="border-b border-[#d9d2c3] bg-white">
+        <div className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-16">
+          <div className="grid gap-5 md:grid-cols-3">
+            {privacyHighlights.map((item, index) => (
+              <Reveal key={item.title} delay={index * 0.06} className="border border-[#d9d2c3] bg-[#fffaf0] p-5">
+                <Check className="h-5 w-5 text-[#1f5f7a]" />
+                <h2 className="mt-4 text-2xl font-semibold leading-tight">{item.title}</h2>
+                <p className="mt-4 text-sm leading-7 text-[#4f463c]">{item.body}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="border-b border-[#d9d2c3] bg-[#fffaf0]">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[0.32fr_0.68fr]">
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <SectionLabel>Effective date</SectionLabel>
+            <p className="mt-4 text-3xl font-semibold leading-tight">May 7, 2026</p>
+            <p className="mt-5 text-sm leading-7 text-[#6b6256]">
+              This policy is written for JasonAI by B2W. Customer agreements or onboarding documents may include
+              additional data handling terms for a specific deployment.
+            </p>
+            <a
+              href="mailto:info@b2w-ai.com?subject=JasonAI%20Privacy%20Request"
+              className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+            >
+              Contact privacy
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </aside>
+          <div className="space-y-5">
+            {privacySections.map((section) => (
+              <Reveal key={section.title} className="border border-[#d9d2c3] bg-white p-6 md:p-8">
+                <h2 className="text-2xl font-semibold leading-tight text-[#141414]">{section.title}</h2>
+                <div className="mt-5 space-y-4">
+                  {section.body.map((paragraph) => (
+                    <p key={paragraph} className="text-base leading-8 text-[#4f463c]">
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions' | 'privacy' }) {
+  return (
+    <footer className="border-t border-[#d9d2c3] bg-[#141414] text-white">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-7 md:flex-row md:items-center md:justify-between md:px-8">
+        <div>
+          <p className="text-sm font-semibold">JasonAI by B2W</p>
+          <p className="mt-1 text-sm text-white/62">Fieldwork communication, organized around the way jobs move.</p>
+        </div>
+        <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-white/72">
+          <Link to="/jasonai" className="hover:text-white">
+            Home
+          </Link>
+          <Link to="/jasonai/how-it-works" className="hover:text-white">
+            How it works
+          </Link>
+          <Link to="/jasonai/questions" className="hover:text-white">
+            Questions
+          </Link>
+          <Link
+            to="/jasonai/privacy"
+            aria-current={page === 'privacy' ? 'page' : undefined}
+            className="hover:text-white aria-[current=page]:text-white"
+          >
+            Privacy Policy
+          </Link>
+        </nav>
+      </div>
+    </footer>
+  );
+}
+
+export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | 'how-it-works' | 'questions' | 'privacy' }) {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
@@ -1214,6 +1425,12 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
       description:
         'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
       canonicalPath: '/jasonai/questions',
+    },
+    privacy: {
+      title: 'JasonAI Privacy Policy',
+      description:
+        'Privacy Policy for JasonAI by B2W, covering fieldwork communications, job context, connected tools, AI processing, data sharing, retention, and user controls.',
+      canonicalPath: '/jasonai/privacy',
     },
   }[page];
 
@@ -1263,6 +1480,9 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
               </Link>
               <Link to="/jasonai/questions" className="hover:text-[#141414]">
                 Questions
+              </Link>
+              <Link to="/jasonai/privacy" className="hover:text-[#141414]">
+                Privacy
               </Link>
             </motion.nav>
             <button
@@ -1376,62 +1596,70 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
             </>
           ) : null}
 
-          <section className="border-b border-[#d9d2c3]">
-            <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-              <div className="max-w-3xl">
-                <SectionLabel>Founding contractors</SectionLabel>
-                <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                  <ScrambleText text="We are working with a small group of founding contractor businesses." />
-                </h2>
-              </div>
-              <div className="mt-10 grid gap-4 md:grid-cols-3">
-                {testimonials.map((testimonial, index) => (
-                  <Reveal key={testimonial.source} delay={index * 0.08} className="border border-[#d9d2c3] bg-white p-5">
-                    <figure>
-                    <p className="text-lg leading-8 text-[#2f2a24]">"{testimonial.quote}"</p>
-                    <figcaption className="mt-5 text-sm font-semibold text-[#9b3d1e]">{testimonial.source}</figcaption>
-                    </figure>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </section>
+          {page === 'privacy' ? <JasonAIPrivacyPolicy /> : null}
 
-          <section className="bg-[#fffaf0]">
-            <div className="mx-auto max-w-5xl px-5 py-16 text-center md:px-8 md:py-24">
-              <p className="text-sm font-semibold uppercase text-[#9b3d1e]">A B2W Product</p>
-              <h2 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">
-                <ScrambleText text="Stop losing money on jobs you cannot track." />
-              </h2>
-              <Reveal>
-                <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#4f463c]">
-                  Book a free 30-minute business review. We will look at how your job communication works right now and
-                  where things are falling through. No pitch. No demo. Just a real conversation.
-                </p>
-              </Reveal>
-              <Reveal className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={() => setIsBookingOpen(true)}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
-                >
-                  Book My Free Business Review
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsWaitlistOpen(true)}
-                  className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
-                >
-                  Just want updates? Join the waitlist
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </Reveal>
-            </div>
-          </section>
+          {page !== 'privacy' ? (
+            <>
+              <section className="border-b border-[#d9d2c3]">
+                <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+                  <div className="max-w-3xl">
+                    <SectionLabel>Founding contractors</SectionLabel>
+                    <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
+                      <ScrambleText text="We are working with a small group of founding contractor businesses." />
+                    </h2>
+                  </div>
+                  <div className="mt-10 grid gap-4 md:grid-cols-3">
+                    {testimonials.map((testimonial, index) => (
+                      <Reveal key={testimonial.source} delay={index * 0.08} className="border border-[#d9d2c3] bg-white p-5">
+                        <figure>
+                        <p className="text-lg leading-8 text-[#2f2a24]">"{testimonial.quote}"</p>
+                        <figcaption className="mt-5 text-sm font-semibold text-[#9b3d1e]">{testimonial.source}</figcaption>
+                        </figure>
+                      </Reveal>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              <section className="bg-[#fffaf0]">
+                <div className="mx-auto max-w-5xl px-5 py-16 text-center md:px-8 md:py-24">
+                  <p className="text-sm font-semibold uppercase text-[#9b3d1e]">A B2W Product</p>
+                  <h2 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">
+                    <ScrambleText text="Stop losing money on jobs you cannot track." />
+                  </h2>
+                  <Reveal>
+                    <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#4f463c]">
+                      Book a free 30-minute business review. We will look at how your job communication works right now and
+                      where things are falling through. No pitch. No demo. Just a real conversation.
+                    </p>
+                  </Reveal>
+                  <Reveal className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+                    <button
+                      type="button"
+                      onClick={() => setIsBookingOpen(true)}
+                      className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+                    >
+                      Book My Free Business Review
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsWaitlistOpen(true)}
+                      className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
+                    >
+                      Just want updates? Join the waitlist
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </Reveal>
+                </div>
+              </section>
+            </>
+          ) : null}
         </main>
 
-        {hasScrolled ? (
+        <JasonAIFooter page={page} />
+
+        {hasScrolled && page !== 'privacy' ? (
           <div className="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4">
             <div className="flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
               <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Want to test it early?</span>
