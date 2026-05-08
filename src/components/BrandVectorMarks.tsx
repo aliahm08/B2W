@@ -70,22 +70,11 @@ const b2wTraceOverlayPaths = [
 ] as const;
 
 const jasonAIVectorPaths = [
-  `M 39.0 16.0 C 67.0 12.0, 82.0 32.0, 65.0 47.0 C 48.0 62.0, 35.0 76.0, 25.0 66.0 C 16.0 57.0, 21.0 48.0, 38.0 46.0`,
-  `M 39.7 16.1 C 67.5 12.4, 82.3 32.9, 65.4 47.9 C 48.4 63.1, 34.4 76.7, 25.1 65.6 C 16.5 56.4, 21.7 46.9, 38.4 45.4`,
-  `M 40.4 16.3 C 68.0 12.9, 82.6 33.7, 65.7 48.9 C 48.7 64.1, 33.9 77.4, 25.3 65.1 C 17.0 55.7, 22.4 45.9, 38.9 44.7`,
-  `M 41.1 16.4 C 68.5 13.3, 82.9 34.6, 66.1 49.8 C 49.1 65.2, 33.3 78.1, 25.4 64.7 C 17.5 55.1, 23.1 44.8, 39.3 44.1`,
-  `M 41.9 16.6 C 69.0 13.7, 83.1 35.4, 66.4 50.7 C 49.4 66.3, 32.7 78.9, 25.6 64.3 C 18.0 54.4, 23.9 43.7, 39.7 43.4`,
-  `M 42.6 16.7 C 69.5 14.1, 83.4 36.3, 66.8 51.6 C 49.8 67.4, 32.1 79.6, 25.7 63.9 C 18.5 53.8, 24.6 42.6, 40.1 42.8`,
-  `M 43.3 16.9 C 70.0 14.6, 83.7 37.1, 67.1 52.6 C 50.1 68.4, 31.6 80.3, 25.9 63.4 C 19.0 53.1, 25.3 41.6, 40.6 42.1`,
-  `M 44.0 17.0 C 70.5 15.0, 84.0 38.0, 67.5 53.5 C 50.5 69.5, 31.0 81.0, 26.0 63.0 C 19.5 52.5, 26.0 40.5, 41.0 41.5`,
-  `M 44.7 17.1 C 71.0 15.4, 84.3 38.9, 67.9 54.4 C 50.9 70.6, 30.4 81.7, 26.1 62.6 C 20.0 51.9, 26.7 39.4, 41.4 40.9`,
-  `M 45.4 17.3 C 71.5 15.9, 84.6 39.7, 68.2 55.4 C 51.2 71.6, 29.9 82.4, 26.3 62.1 C 20.5 51.2, 27.4 38.4, 41.9 40.2`,
-  `M 46.1 17.4 C 72.0 16.3, 84.9 40.6, 68.6 56.3 C 51.6 72.7, 29.3 83.1, 26.4 61.7 C 21.0 50.6, 28.1 37.3, 42.3 39.6`,
-  `M 46.9 17.6 C 72.5 16.7, 85.1 41.4, 68.9 57.2 C 51.9 73.8, 28.7 83.9, 26.6 61.3 C 21.5 49.9, 28.9 36.2, 42.7 38.9`,
-  `M 47.6 17.7 C 73.0 17.1, 85.4 42.3, 69.3 58.1 C 52.3 74.9, 28.1 84.6, 26.7 60.9 C 22.0 49.3, 29.6 35.1, 43.1 38.3`,
-  `M 48.3 17.9 C 73.5 17.6, 85.7 43.1, 69.6 59.1 C 52.6 75.9, 27.6 85.3, 26.9 60.4 C 22.5 48.6, 30.3 34.1, 43.6 37.6`,
-  `M 49.0 18.0 C 74.0 18.0, 86.0 44.0, 70.0 60.0 C 53.0 77.0, 27.0 86.0, 27.0 60.0 C 23.0 48.0, 31.0 33.0, 44.0 37.0`,
+  `M 22 58 C 31 28, 55 11, 73 27 C 91 43, 86 72, 61 80 C 40 87, 16 78, 22 58 Z`,
+  `M 31 55 C 39 36, 56 25, 68 35 C 80 45, 75 64, 58 70 C 44 75, 27 68, 31 55 Z`,
+  `M 24 59 C 36 61, 48 55, 58 44`,
 ] as const;
+
 
 type VectorMarkProps = {
   className?: string;
@@ -95,8 +84,8 @@ type VectorMarkProps = {
 };
 
 function animationStyle(index: number, count: number): CSSProperties {
-  const step = count > 40 ? 0.09 : 0.18;
-  const duration = count > 40 ? 7.2 : 5;
+  const step = count > 40 ? 0.06 : 0.28;
+  const duration = count > 40 ? 4.8 : 4.2;
 
   return {
     animationDelay: `${index * step}s`,
@@ -108,9 +97,21 @@ export function B2WVectorMark({ className = '', title = 'B2W image-traced mark',
   return (
     <svg viewBox="0 0 96 88.4925" className={className} role={title ? 'img' : undefined} aria-hidden={title ? undefined : true}>
       {title ? <title>{title}</title> : null}
-      <path d={b2wTracePath} fill="currentColor" fillRule="evenodd" clipRule="evenodd" />
+      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.58" vectorEffect="non-scaling-stroke">
+        {b2wTraceOverlayPaths.map((path) => (
+          <path key={`${path}-line`} d={path} />
+        ))}
+      </g>
       {animated ? (
-        <g fill="currentColor" fillRule="evenodd" clipRule="evenodd" aria-hidden="true">
+        <g
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="0.82"
+          vectorEffect="non-scaling-stroke"
+          aria-hidden="true"
+        >
           {b2wTraceOverlayPaths.map((path, index) => (
             <path key={path} d={path} className="b2w-logo-layer" style={animationStyle(index, b2wTraceOverlayPaths.length)} />
           ))}
@@ -119,6 +120,7 @@ export function B2WVectorMark({ className = '', title = 'B2W image-traced mark',
     </svg>
   );
 }
+
 
 export function JasonAIVectorMark({
   className = '',

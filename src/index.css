@@ -34,6 +34,21 @@ html {
   scroll-behavior: smooth;
 }
 
+.scramble-character {
+  display: inline-grid;
+  vertical-align: baseline;
+}
+
+.scramble-character::before,
+.scramble-character > span {
+  grid-area: 1 / 1;
+}
+
+.scramble-character::before {
+  content: attr(data-final);
+  visibility: hidden;
+}
+
 .mobile-menu-search-shell {
   position: relative;
   overflow: hidden;
@@ -86,7 +101,7 @@ html {
 .b2w-logo-layer {
   opacity: 0;
   animation-name: b2w-logo-layer-sequence;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-fill-mode: both;
   will-change: opacity;
@@ -110,7 +125,7 @@ html {
 .b2w-logo-link:focus-visible .b2w-logo-layer,
 .b2w-logo-link:focus-within .b2w-logo-layer {
   animation-play-state: paused;
-  opacity: 1;
+  opacity: 0.16;
 }
 
 .b2w-logo-link:hover .b2w-logo-wordmark-shell,
@@ -129,7 +144,7 @@ html {
   }
   5%,
   12% {
-    opacity: 0.36;
+    opacity: 0.18;
   }
   18% {
     opacity: 0;

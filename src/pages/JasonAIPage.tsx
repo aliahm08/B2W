@@ -24,6 +24,8 @@ declare global {
 }
 
 const scrambleCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const easeInOutCubic = (value: number) =>
+  value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
 const waitlistUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
 const jasonAiCalendlyUrl =
   'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=00ffc3';
@@ -450,6 +452,7 @@ function ScrambleText({
   const shouldReduceMotion = useReducedMotion();
   const isInView = useInView(ref, { once: true, amount: 0.6 });
   const [displayText, setDisplayText] = useState(text);
+  const textSegments = useMemo(() => text.split(/(\s+)/), [text]);
 
   useEffect(() => {
     if (shouldReduceMotion || !isInView) {
@@ -464,7 +467,8 @@ function ScrambleText({
 
     const run = () => {
       frame += 1;
-      const settledCharacters = Math.floor((frame / totalFrames) * text.length);
+      const progress = easeInOutCubic(Math.min(frame / totalFrames, 1));
+      const settledCharacters = Math.floor(progress * text.length);
 
       setDisplayText(
         text
@@ -503,9 +507,44 @@ function ScrambleText({
     };
   }, [delay, isInView, shouldReduceMotion, text]);
 
+  if (shouldReduceMotion) {
+    return (
+      <span ref={ref} className={className}>
+        {text}
+      </span>
+    );
+  }
+
   return (
     <span ref={ref} className={className} aria-label={text}>
-      <span aria-hidden="true">{displayText}</span>
+      <span aria-hidden="true">
+        {(() => {
+          let cursor = 0;
+
+          return textSegments.map((segment, segmentIndex) => {
+            const start = cursor;
+            cursor += segment.length;
+
+            if (/^\s+$/.test(segment)) {
+              return segment;
+            }
+
+            return (
+              <span key={`${segment}-${segmentIndex}`} className="inline-block whitespace-nowrap">
+                {Array.from(segment).map((character, characterIndex) => {
+                  const displayCharacter = displayText[start + characterIndex] ?? character;
+
+                  return (
+                    <span key={`${character}-${characterIndex}`} className="scramble-character" data-final={character}>
+                      <span>{displayCharacter}</span>
+                    </span>
+                  );
+                })}
+              </span>
+            );
+          });
+        })()}
+      </span>
     </span>
   );
 }
@@ -646,11 +685,12 @@ function BookingPrompt({ onOpenBooking }: { onOpenBooking: () => void }) {
   );
 }
 
-function ObjectionCarousel() {
+function ObjectionCarousel({ initialAnswerDelay = 0 }: { initialAnswerDelay?: number }) {
   const shouldReduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
   const [typedAnswer, setTypedAnswer] = useState(objections[0].answer);
   const objectionButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const hasStartedAnswer = useRef(false);
   const activeObjection = objections[activeIndex];
 
   useEffect(() => {
@@ -660,30 +700,63 @@ function ObjectionCarousel() {
     }
 
     setTypedAnswer('');
-    let characterIndex = 0;
-    const typingInterval = window.setInterval(() => {
-      characterIndex += 2;
-      setTypedAnswer(activeObjection.answer.slice(0, characterIndex));
+    let animationId: number | undefined;
+    let timeoutId: number | undefined;
+    const answerDelay = hasStartedAnswer.current ? 180 : initialAnswerDelay;
+    const duration = Math.max(1150, Math.min(2200, activeObjection.answer.length * 14));
 
-      if (characterIndex >= activeObjection.answer.length) {
-        window.clearInterval(typingInterval);
+    const startTyping = () => {
+      hasStartedAnswer.current = true;
+      const start = performance.now();
+
+      const run = (time: number) => {
+        const progress = easeInOutCubic(Math.min((time - start) / duration, 1));
+        const characterIndex = Math.floor(progress * activeObjection.answer.length);
+        setTypedAnswer(activeObjection.answer.slice(0, characterIndex));
+
+        if (characterIndex < activeObjection.answer.length) {
+          animationId = window.requestAnimationFrame(run);
+        } else {
+          setTypedAnswer(activeObjection.answer);
+        }
+      };
+
+      animationId = window.requestAnimationFrame(run);
+    };
+
+    timeoutId = window.setTimeout(startTyping, answerDelay);
+
+    return () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
       }
-    }, 22);
 
-    return () => window.clearInterval(typingInterval);
-  }, [activeIndex, activeObjection.answer, shouldReduceMotion]);
+      if (animationId) {
+        window.cancelAnimationFrame(animationId);
+      }
+    };
+  }, [activeIndex, activeObjection.answer, initialAnswerDelay, shouldReduceMotion]);
 
   useEffect(() => {
     if (shouldReduceMotion) {
       return;
     }
 
-    const cycleInterval = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % objections.length);
-    }, 8200);
+    let cycleInterval: number | undefined;
+    const cycleTimeout = window.setTimeout(() => {
+      cycleInterval = window.setInterval(() => {
+        setActiveIndex((current) => (current + 1) % objections.length);
+      }, 8200);
+    }, initialAnswerDelay);
 
-    return () => window.clearInterval(cycleInterval);
-  }, [shouldReduceMotion]);
+    return () => {
+      window.clearTimeout(cycleTimeout);
+
+      if (cycleInterval) {
+        window.clearInterval(cycleInterval);
+      }
+    };
+  }, [initialAnswerDelay, shouldReduceMotion]);
 
   useEffect(() => {
     if (window.matchMedia('(min-width: 1024px)').matches) {
@@ -735,7 +808,7 @@ function ObjectionCarousel() {
                   className="absolute inset-x-0 bottom-0 h-0.5 bg-[#f1b37b]"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: 8.2, ease: 'linear' }}
+                  transition={{ duration: 8.2, ease: [0.65, 0, 0.35, 1] }}
                   style={{ transformOrigin: 'left' }}
                 />
               ) : null}
@@ -751,7 +824,7 @@ function ObjectionCarousel() {
             initial={shouldReduceMotion ? false : { opacity: 0, y: 14, filter: 'blur(14px)' }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
             exit={shouldReduceMotion ? undefined : { opacity: 0, y: -12, filter: 'blur(14px)' }}
-            transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.58, ease: [0.65, 0, 0.35, 1] }}
           >
             <div className="border-l-4 border-[#1f5f7a] pl-5">
               <p className="text-xs font-semibold uppercase text-[#1f5f7a]">Answer</p>
@@ -1203,7 +1276,9 @@ function QuestionsHeroSection() {
             you are not ready for a review.
           </p>
         </div>
-        <ObjectionCarousel />
+        <Reveal delay={1.2}>
+          <ObjectionCarousel initialAnswerDelay={1350} />
+        </Reveal>
       </div>
     </section>
   );

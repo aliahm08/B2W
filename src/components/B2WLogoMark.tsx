@@ -18,7 +18,7 @@ export default function B2WLogoMark({
       aria-label={label}
       className={`b2w-logo-link inline-flex items-center overflow-visible text-black ${className}`.trim()}
     >
-      <B2WVectorMark title="" className="h-10 w-12 shrink-0 overflow-visible md:h-12 md:w-14" />
+      <B2WVectorMark title="" className="h-7 w-8 shrink-0 overflow-visible md:h-8 md:w-9" />
       <span aria-hidden="true" className="b2w-logo-wordmark-shell pr-1 md:pr-2">
         <span className="b2w-wordmark inline-block text-xl font-medium tracking-[-0.09em] [transform:scaleY(0.94)] md:text-2xl">
           B2W
