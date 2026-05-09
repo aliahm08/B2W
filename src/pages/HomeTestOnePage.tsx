@@ -27,8 +27,12 @@ const rotatingClients = [
 
 const pathways = [
   {
-    title: 'Consulting Services',
-    href: '/',
+    title: 'Consulting',
+    href: '/services',
+  },
+  {
+    title: 'Clara',
+    href: '/clara',
   },
   {
     title: 'AI Solutions',
@@ -57,9 +61,9 @@ export default function HomeTestOnePage() {
   return (
     <>
       <Seo
-        title="B2W Homepage Prototype"
-        description="Prototype homepage for B2W with rotating SMB positioning, consulting services, AI platform entry, and direct access to the project builder."
-        robots="noindex, nofollow"
+        title="Consulting, Clara, and AI Solutions"
+        description="Explore B2W consulting, Clara, and AI solutions for practical business execution, operations, and applied AI systems."
+        canonicalPath="/"
       />
 
       <main className="min-h-screen overflow-hidden bg-[#f5f0e6] text-black">

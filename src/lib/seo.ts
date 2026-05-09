@@ -49,29 +49,37 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
     {
+      title: 'Consulting, Clara, and AI Solutions',
+      description:
+        'Explore B2W consulting, Clara, and AI solutions for practical business execution, operations, and applied AI systems.',
+    },
+  ],
+  [
+    '/services',
+    {
       title: 'Consulting Services for SMBs',
       description:
         'B2W helps small and midsize businesses improve marketing, operations, and financial performance with practical AI systems, diagnostics, and implementation support.',
     },
   ],
   [
+    '/clara',
+    {
+      title: 'Clara by B2W',
+      description:
+        'Explore Clara, the B2W AI demo for voice-to-plan workflows, estimation, financial modeling, and live AI system intake.',
+    },
+  ],
+  [
     '/solutions',
     {
-      title: 'B2W AI Solutions',
+      title: 'AI Solutions by B2W',
       description:
-        'Explore the AI side of B2W: chatbots, estimations, financial models, and voice-to-plan systems designed to show the product in action.',
+        'AI solutions from B2W, including JasonAI for contractor communication, scope changes, follow-ups, and fieldwork clarity.',
     },
   ],
   [
-    '/jasonai',
-    {
-      title: 'JasonAI for Contractor Businesses',
-      description:
-        'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
-    },
-  ],
-  [
-    '/jasonai/how-it-works',
+    '/solutions/how-it-works',
     {
       title: 'How JasonAI Works for Contractors',
       description:
@@ -79,7 +87,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
-    '/jasonai/questions',
+    '/solutions/questions',
     {
       title: 'JasonAI Questions and Waitlist',
       description:
@@ -87,7 +95,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
-    '/jasonai/privacy',
+    '/solutions/privacy',
     {
       title: 'JasonAI Privacy Policy',
       description:
@@ -361,11 +369,11 @@ function buildKitchenPreviewMetadata(pathname: string) {
 }
 
 function buildSolutionMetadata(pathname: string) {
-  if (!pathname.startsWith('/solutions/')) {
+  if (!pathname.startsWith('/clara/')) {
     return null;
   }
 
-  const slug = pathname.replace('/solutions/', '');
+  const slug = pathname.replace('/clara/', '');
   const solution = getAiSolutionBySlug(slug);
 
   if (!solution) {
@@ -461,7 +469,7 @@ export function listStaticSeoRoutes() {
     ...Object.keys(expertisePages),
     ...Object.keys(explainerContent),
     ...allCapabilities.map((capability) => `/capabilities/${capability.slug}`),
-    ...aiSolutions.map((solution) => `/solutions/${solution.slug}`),
+    ...aiSolutions.map((solution) => `/clara/${solution.slug}`),
   ]);
 
   return Array.from(paths)

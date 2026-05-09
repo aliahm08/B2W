@@ -1,0 +1,22 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - link "Clara" [ref=e6] [cursor=pointer]:
+        - /url: /clara
+        - img [ref=e8]
+        - generic [ref=e11]: Clara
+      - navigation [ref=e12]:
+        - link "Clara" [ref=e13] [cursor=pointer]:
+          - /url: /clara
+        - link "Chatbots" [ref=e14] [cursor=pointer]:
+          - /url: /clara/chatbots
+        - link "Estimations" [ref=e15] [cursor=pointer]:
+          - /url: /clara/estimations
+        - link "Financial Models" [ref=e16] [cursor=pointer]:
+          - /url: /clara/financial-models
+        - link "Voice to Estimate" [ref=e17] [cursor=pointer]:
+          - /url: /clara/voice-to-plan
+      - link "Talk to Clara" [ref=e19] [cursor=pointer]:
+        - /url: https://chat.b2w-ai.com
+        - generic [ref=e20]: Talk to Clara
+  - main [ref=e21]

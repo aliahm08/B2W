@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Mic, Sparkles, MessageSquare, Cpu, Shield, Send, Bot, Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/Seo';
-import AiSolutionsForm from '../../components/forms/AiSolutionsForm';
 import { aiSolutions } from '../../content/aiSolutions';
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -527,7 +526,7 @@ export default function SolutionsLandingPage() {
       <Seo
         title="B2W AI — Voice to Estimate in Seconds"
         description="Record the job on-site. B2W transcribes, scopes, runs the financial model, and exports a single-page estimate. $200M+ in commercial value powering every calculation."
-        canonicalPath="/solutions"
+        canonicalPath="/clara"
       />
 
       <div className="solutions-page text-white">
@@ -578,7 +577,7 @@ export default function SolutionsLandingPage() {
                 className="mt-8 flex flex-wrap justify-center gap-4"
               >
                 <Link
-                  to="/solutions/voice-to-plan"
+                  to="/clara/voice-to-plan"
                   className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
                 >
                   Open voice-to-plan
@@ -592,10 +591,12 @@ export default function SolutionsLandingPage() {
                   <ArrowRight className="h-4 w-4" />
                 </a>
                 <a
-                  href="#ai-intake"
+                  href="https://chat.b2w-ai.com"
+                  target="_blank"
+                  rel="noreferrer"
                   className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
                 >
-                  Talk to B2W AI
+                  Talk to Clara
                 </a>
               </motion.div>
             </div>
@@ -646,10 +647,12 @@ export default function SolutionsLandingPage() {
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <a
-                    href="#ai-intake"
+                    href="https://chat.b2w-ai.com"
+                    target="_blank"
+                    rel="noreferrer"
                     className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
                   >
-                    Talk to B2W AI
+                    Talk to Clara
                     <ArrowRight className="h-4 w-4" />
                   </a>
                   <a
@@ -683,7 +686,7 @@ export default function SolutionsLandingPage() {
               {aiSolutions.map((solution) => (
                 <motion.div key={solution.slug} whileHover={{ y: -6 }} transition={{ duration: 0.18 }}>
                   <Link
-                    to={`/solutions/${solution.slug}`}
+                    to={`/clara/${solution.slug}`}
                     className="group block h-full rounded-[2rem] border border-white/10 bg-[linear-gradient(135deg,#141a24_0%,#10151d_100%)] p-6 transition-colors hover:border-white/24"
                   >
                     <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{solution.navLabel}</p>
@@ -700,21 +703,6 @@ export default function SolutionsLandingPage() {
           </div>
         </section>
 
-        <section id="ai-intake" className="scroll-mt-32 border-t border-white/8 bg-[#080a0f]">
-          <div className="mx-auto max-w-7xl px-6 py-20 md:py-24">
-            <div className="mb-8 max-w-3xl">
-              <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Start Here</p>
-              <h2 className="mt-4 text-[2.4rem] font-medium leading-[1.06] tracking-[-0.04em] text-white md:text-[3.2rem]">
-                Tell B2W what the AI should do.
-              </h2>
-              <p className="mt-4 text-lg leading-8 text-neutral-400">
-                This intake is specific to AI systems. Use it to describe the workflow, the business logic, and the
-                systems the AI needs to touch.
-              </p>
-            </div>
-            <AiSolutionsForm sourceLabel="AI Solutions landing" />
-          </div>
-        </section>
       </div>
     </>
   );

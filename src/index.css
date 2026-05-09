@@ -151,6 +151,101 @@ html {
   }
 }
 
+.clara-logo-mark {
+  position: relative;
+  display: inline-grid;
+  height: 1.75rem;
+  width: 1.75rem;
+  flex-shrink: 0;
+  place-items: center;
+}
+
+.clara-logo-interior {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  opacity: 0;
+  transform: scale(0.58);
+  transform-origin: 52% 56%;
+  transition: opacity 180ms ease;
+  will-change: opacity, transform;
+}
+
+.clara-logo-organic {
+  fill: rgba(186, 230, 253, 0.78);
+  filter: drop-shadow(0 0 8px rgba(186, 230, 253, 0.34));
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.clara-logo-organic-1 {
+  opacity: 0.84;
+}
+
+.clara-logo-organic-2 {
+  fill: rgba(255, 255, 255, 0.78);
+  opacity: 0.54;
+}
+
+.clara-logo-mark.is-breathing .clara-logo-interior {
+  opacity: 1;
+  animation: clara-logo-breathe 2600ms cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+.clara-logo-mark.is-breathing .clara-logo-organic-2 {
+  animation: clara-logo-pulse-core 2600ms cubic-bezier(0.45, 0, 0.2, 1) infinite;
+}
+
+@media (min-width: 768px) {
+  .clara-logo-mark {
+    height: 2rem;
+    width: 2rem;
+  }
+}
+
+@keyframes clara-logo-breathe {
+  0%,
+  100% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes clara-logo-pulse-core {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: scale(0.82);
+  }
+  50% {
+    opacity: 0.66;
+    transform: scale(1.08);
+  }
+}
+
+.clara-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(186, 230, 253, 0), rgba(186, 230, 253, 0.86), rgba(255, 255, 255, 0));
+  opacity: 0;
+  transform: translateX(-76%);
+  transition:
+    opacity 220ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.clara-cta:hover::before,
+.clara-cta:focus-visible::before {
+  opacity: 1;
+  transform: translateX(76%);
+}
+
 [data-section-anchor='true'] {
   scroll-margin-top: 7rem;
 }
@@ -197,6 +292,20 @@ html {
   }
 
   .b2w-logo-wordmark-shell {
+    transition: none;
+  }
+
+  .clara-logo-mark.is-breathing .clara-logo-interior,
+  .clara-logo-mark.is-breathing .clara-logo-organic-2 {
+    animation: none;
+  }
+
+  .clara-logo-mark.is-breathing .clara-logo-interior {
+    opacity: 0.85;
+    transform: scale(0.94);
+  }
+
+  .clara-cta::before {
     transition: none;
   }
 }

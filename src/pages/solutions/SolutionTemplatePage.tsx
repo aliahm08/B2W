@@ -13,10 +13,10 @@ export default function SolutionTemplatePage() {
   if (!solution) {
     return (
       <>
-        <Seo title="AI Solution Not Found" canonicalPath="/solutions" robots="noindex, nofollow" />
+        <Seo title="AI Solution Not Found" canonicalPath="/clara" robots="noindex, nofollow" />
         <article className="min-h-screen bg-[#090b0f] px-6 py-24 text-white">
           <div className="mx-auto max-w-5xl rounded-[32px] border border-white/10 bg-[#11151b] p-8">
-            <Link to="/solutions" className="inline-flex items-center gap-2 text-sm text-neutral-300 hover:text-white">
+            <Link to="/clara" className="inline-flex items-center gap-2 text-sm text-neutral-300 hover:text-white">
               <ArrowLeft className="h-4 w-4" />
               Back to AI solutions
             </Link>
@@ -34,7 +34,7 @@ export default function SolutionTemplatePage() {
       <Seo
         title={solution.seoTitle}
         description={solution.seoDescription}
-        canonicalPath={`/solutions/${solution.slug}`}
+        canonicalPath={`/clara/${solution.slug}`}
       />
 
       <article className="min-h-screen text-white">
@@ -48,7 +48,7 @@ export default function SolutionTemplatePage() {
           <div className="grid gap-12 xl:grid-cols-[minmax(0,0.68fr)_minmax(0,1.32fr)] xl:items-start">
             <div>
               <Link
-                to="/solutions"
+                to="/clara"
                 className="inline-flex items-center gap-2 text-sm text-neutral-300 transition-colors hover:text-white"
               >
                 <ArrowLeft className="h-4 w-4" />
@@ -314,7 +314,7 @@ export default function SolutionTemplatePage() {
               {relatedSolutions.map((item) => (
                 <motion.div key={item.slug} whileHover={{ y: -6 }} transition={{ duration: 0.18 }}>
                   <Link
-                    to={`/solutions/${item.slug}`}
+                    to={`/clara/${item.slug}`}
                     className="group block bg-white/[0.025] p-6 transition-colors hover:bg-white/[0.04]"
                   >
                     <p className="text-xs uppercase tracking-[0.22em] text-neutral-500">{item.navLabel}</p>

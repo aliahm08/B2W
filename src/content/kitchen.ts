@@ -366,7 +366,7 @@ export function buildKitchenSolution(selection: KitchenSelection): KitchenSoluti
     slug,
     name,
     summary: getSolutionSummary(information, integration, production),
-    previewPath: `/solutions/${slug}`,
+    previewPath: `/clara/${slug}`,
     information,
     integration,
     production,

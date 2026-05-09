@@ -221,7 +221,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (location.pathname !== '/') {
+    if (location.pathname !== '/services') {
       setIsLandingHeroVisible(false);
     }
   }, [location.pathname]);
@@ -236,9 +236,10 @@ export default function App() {
 
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
-  const isPrototypeHome = location.pathname === '/home-test-1';
+  const isPrototypeHome = location.pathname === '/' || location.pathname === '/home-test-1';
   const isAppTest = location.pathname === '/app-test-1';
-  const isAiSolutionsLanding = location.pathname.startsWith('/solutions');
+  const isClaraPage = location.pathname.startsWith('/clara');
+  const isAiSolutionsPage = location.pathname.startsWith('/solutions');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
@@ -246,8 +247,8 @@ export default function App() {
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isAiSolutionsLanding || isJasonAIPage;
-  const routeTransitionKey = isAiSolutionsLanding ? '/solutions' : location.pathname;
+    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isAiSolutionsPage || isJasonAIPage;
+  const routeTransitionKey = isClaraPage ? '/clara' : isAiSolutionsPage ? '/solutions' : location.pathname;
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -259,15 +260,15 @@ export default function App() {
       <ScrollToTop />
       {!isIsolatedView && (
         <Navbar
-          showOfferBanner={location.pathname === '/' && !isLandingHeroVisible && !isOfferBannerDismissed}
-          transparentAtTop={location.pathname === '/' && isLandingHeroVisible}
+          showOfferBanner={location.pathname === '/services' && !isLandingHeroVisible && !isOfferBannerDismissed}
+          transparentAtTop={location.pathname === '/services' && isLandingHeroVisible}
           onOfferClick={() => {
             window.location.hash = 'contact';
           }}
           onOfferClose={dismissOfferBanner}
         />
       )}
-      {isAiSolutionsLanding && <SolutionsNavbar />}
+      {isClaraPage && <SolutionsNavbar />}
       <main>
         <Suspense fallback={<RouteLoadingFallback />}>
           <AnimatePresence mode="wait">
@@ -281,6 +282,10 @@ export default function App() {
               <Routes location={location}>
                 <Route
                   path="/"
+                  element={<HomeTestOnePage />}
+                />
+                <Route
+                  path="/services"
                   element={
                     <LandingPage
                       onHeroVisibilityChange={setIsLandingHeroVisible}
@@ -293,8 +298,12 @@ export default function App() {
                     />
                   }
                 />
-                <Route path="/home-test-1" element={<HomeTestOnePage />} />
+                <Route path="/home-test-1" element={<Navigate to="/" replace />} />
                 <Route path="/app-test-1" element={<AppTestOnePage />} />
+                <Route path="/solutions" element={<JasonAIPage />} />
+                <Route path="/solutions/how-it-works" element={<JasonAIPage page="how-it-works" />} />
+                <Route path="/solutions/questions" element={<JasonAIPage page="questions" />} />
+                <Route path="/solutions/privacy" element={<JasonAIPage page="privacy" />} />
                 <Route path="/jasonai" element={<JasonAIPage />} />
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
@@ -308,7 +317,7 @@ export default function App() {
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
                 <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
-                <Route path="/solutions" element={<SolutionsLayout />}>
+                <Route path="/clara" element={<SolutionsLayout />}>
                   <Route index element={<SolutionsLandingPage />} />
                   <Route path=":slug" element={<SolutionTemplatePage />} />
                 </Route>
