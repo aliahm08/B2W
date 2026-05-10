@@ -426,6 +426,8 @@ const sections: Array<{
   },
 ];
 
+const heroProofPoints = ['Voice note in', 'Margin-aware estimate out', '$200M+ model context'];
+
 /* ═══════════════════════════════════════════════════════════════════════════
    SCROLL SECTIONS — cards that stack and blur
    ═══════════════════════════════════════════════════════════════════════ */
@@ -532,6 +534,16 @@ export default function SolutionsLandingPage() {
       <div className="solutions-page text-white">
         {/* ─── HERO — Voice to Estimate (viewport 1) ─── */}
         <section className="relative flex min-h-screen flex-col justify-center overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-[0.16]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
+              backgroundSize: '44px 44px',
+              maskImage: 'linear-gradient(to bottom, black, transparent 78%)',
+            }}
+          />
           {/* Bottom fade */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#080a0f] to-transparent" />
 
@@ -542,7 +554,7 @@ export default function SolutionsLandingPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 rounded-full border border-sky-400/15 bg-sky-400/[0.06] px-4 py-1.5"
+                className="clara-page-dim-on-cta inline-flex items-center gap-2 rounded-full border border-sky-400/15 bg-sky-400/[0.06] px-4 py-1.5"
               >
                 <Mic className="h-3.5 w-3.5 text-sky-300" />
                 <span className="text-[10px] uppercase tracking-[0.28em] text-sky-200/80">Voice To Estimate</span>
@@ -552,7 +564,7 @@ export default function SolutionsLandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.08 }}
-                className="mt-6 text-[3rem] font-medium leading-[1.04] tracking-[-0.05em] md:text-[5rem] md:leading-[0.94]"
+                className="clara-page-dim-on-cta mt-6 text-[3rem] font-medium leading-[1.04] tracking-[-0.05em] md:text-[5rem] md:leading-[0.94]"
               >
                 Record the job.
                 <br />
@@ -565,7 +577,7 @@ export default function SolutionsLandingPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.16 }}
-                className="mx-auto mt-5 max-w-xl text-lg leading-8 text-neutral-400 md:text-xl"
+                className="clara-page-dim-on-cta mx-auto mt-5 max-w-xl text-lg leading-8 text-neutral-400 md:text-xl"
               >
                 Speak into your phone on-site. B2W transcribes, runs the financial model, and hands back a single-page estimate — before you leave.
               </motion.p>
@@ -574,30 +586,36 @@ export default function SolutionsLandingPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.24 }}
-                className="mt-8 flex flex-wrap justify-center gap-4"
+                className="mt-8 flex justify-center"
               >
-                <Link
-                  to="/clara/voice-to-plan"
-                  className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
-                >
-                  Open voice-to-plan
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href="#flow"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
-                >
-                  See the system
-                  <ArrowRight className="h-4 w-4" />
-                </a>
                 <a
                   href="https://chat.b2w-ai.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
+                  data-clara-cta="page"
+                  className="clara-cta relative z-[110] inline-flex overflow-hidden rounded-full bg-white px-6 py-3 text-sm font-medium text-black shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition-[box-shadow,opacity] duration-200 hover:opacity-95 hover:shadow-[0_14px_38px_rgba(255,255,255,0.14)] focus:outline-none focus:ring-2 focus:ring-white/50"
                 >
-                  Talk to Clara
+                  <span className="relative z-10 inline-flex items-center gap-2">
+                    Talk to Clara
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
                 </a>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="clara-page-dim-on-cta mx-auto mt-5 flex max-w-2xl flex-wrap justify-center gap-2"
+              >
+                {heroProofPoints.map((point) => (
+                  <span
+                    key={point}
+                    className="rounded-full border border-white/8 bg-white/[0.035] px-3 py-1.5 text-xs font-medium text-neutral-300"
+                  >
+                    {point}
+                  </span>
+                ))}
               </motion.div>
             </div>
 
@@ -606,7 +624,7 @@ export default function SolutionsLandingPage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.32 }}
-              className="mt-10"
+              className="clara-page-dim-on-cta mt-10"
             >
               <div className="rounded-[2rem] border border-white/6 bg-[rgba(12,16,24,0.65)] p-4 shadow-[0_40px_120px_rgba(0,0,0,0.5)] backdrop-blur-sm md:p-6">
                 <HeroCinematic />
@@ -650,19 +668,13 @@ export default function SolutionsLandingPage() {
                     href="https://chat.b2w-ai.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-black transition-all hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
+                    data-clara-cta="page"
+                    className="clara-cta relative z-[110] inline-flex overflow-hidden rounded-full bg-white px-6 py-3 text-sm font-medium text-black shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition-[box-shadow,opacity] duration-200 hover:opacity-95 hover:shadow-[0_14px_38px_rgba(255,255,255,0.14)] focus:outline-none focus:ring-2 focus:ring-white/50"
                   >
-                    Talk to Clara
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
-                  <a
-                    href="https://chat.b2w-ai.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-sm text-white transition-colors hover:border-white/20 hover:bg-white/[0.03]"
-                  >
-                    Live demo
-                    <ArrowRight className="h-4 w-4" />
+                    <span className="relative z-10 inline-flex items-center gap-2">
+                      Talk to Clara
+                      <ArrowRight className="h-4 w-4" />
+                    </span>
                   </a>
                 </div>
               </div>

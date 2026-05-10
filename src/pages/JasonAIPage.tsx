@@ -12,7 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { B2WVectorMark, JasonAIVectorMark } from '../components/BrandVectorMarks';
+import { B2WSilhouetteMark, JasonAIVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
 declare global {
@@ -590,7 +590,7 @@ function JasonAILockup() {
   return (
     <div className="flex items-center gap-3 text-[#141414]">
       <Link to="/" aria-label="B2W home" className="b2w-logo-link inline-flex items-center overflow-visible">
-        <B2WVectorMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
+        <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
         <span aria-hidden="true" className="b2w-logo-wordmark-shell pr-1">
           <span className="b2w-wordmark inline-block text-lg font-medium tracking-[-0.09em] [transform:scaleY(0.94)] sm:text-xl md:text-2xl">
             B2W

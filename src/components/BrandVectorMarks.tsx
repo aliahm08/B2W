@@ -93,13 +93,45 @@ function animationStyle(index: number, count: number): CSSProperties {
   } as CSSProperties;
 }
 
+const b2wTraceCenter = { x: 48, y: 44.25 };
+
+function getB2WTraceOutwardness(path: string) {
+  const coordinates = path.match(/-?\d+(?:\.\d+)?/g)?.map(Number) ?? [];
+
+  if (coordinates.length < 2) {
+    return 0;
+  }
+
+  let totalDistance = 0;
+  let pointCount = 0;
+
+  for (let index = 0; index < coordinates.length - 1; index += 2) {
+    const x = coordinates[index];
+    const y = coordinates[index + 1];
+    const distance = Math.hypot(x - b2wTraceCenter.x, y - b2wTraceCenter.y);
+
+    totalDistance += distance;
+    pointCount += 1;
+  }
+
+  const averageDistance = totalDistance / pointCount;
+  return Math.min(1, Math.max(0, (averageDistance - 18) / 36));
+}
+
+function getB2WTraceStrokeWidth(path: string, interiorStrokeWidth: number, outerStrokeWidth: number) {
+  const outwardness = getB2WTraceOutwardness(path);
+  const feather = Math.pow(outwardness, 1.15);
+
+  return interiorStrokeWidth - (interiorStrokeWidth - outerStrokeWidth) * feather;
+}
+
 export function B2WVectorMark({ className = '', title = 'B2W image-traced mark', animated = true }: VectorMarkProps) {
   return (
     <svg viewBox="0 0 96 88.4925" className={className} role={title ? 'img' : undefined} aria-hidden={title ? undefined : true}>
       {title ? <title>{title}</title> : null}
-      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="0.58" vectorEffect="non-scaling-stroke">
+      <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke">
         {b2wTraceOverlayPaths.map((path) => (
-          <path key={`${path}-line`} d={path} />
+          <path key={`${path}-line`} d={path} strokeWidth={getB2WTraceStrokeWidth(path, 0.58, 0.3)} />
         ))}
       </g>
       {animated ? (
@@ -108,15 +140,29 @@ export function B2WVectorMark({ className = '', title = 'B2W image-traced mark',
           stroke="currentColor"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeWidth="0.82"
           vectorEffect="non-scaling-stroke"
           aria-hidden="true"
         >
           {b2wTraceOverlayPaths.map((path, index) => (
-            <path key={path} d={path} className="b2w-logo-layer" style={animationStyle(index, b2wTraceOverlayPaths.length)} />
+            <path
+              key={path}
+              d={path}
+              className="b2w-logo-layer"
+              strokeWidth={getB2WTraceStrokeWidth(path, 0.82, 0.42)}
+              style={animationStyle(index, b2wTraceOverlayPaths.length)}
+            />
           ))}
         </g>
       ) : null}
+    </svg>
+  );
+}
+
+export function B2WSilhouetteMark({ className = '', title = 'B2W silhouette mark' }: VectorMarkProps) {
+  return (
+    <svg viewBox="0 0 96 88.4925" className={className} role={title ? 'img' : undefined} aria-hidden={title ? undefined : true}>
+      {title ? <title>{title}</title> : null}
+      <path d={b2wTracePath} fill="currentColor" fillRule="evenodd" clipRule="evenodd" />
     </svg>
   );
 }
