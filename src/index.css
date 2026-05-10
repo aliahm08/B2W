@@ -98,6 +98,22 @@ html {
   position: relative;
 }
 
+.b2w-consulting-logo-image {
+  transition:
+    filter 220ms ease,
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.b2w-logo-link.text-white .b2w-consulting-logo-image {
+  filter: invert(1);
+}
+
+.b2w-logo-link:hover .b2w-consulting-logo-image,
+.b2w-logo-link:focus-visible .b2w-consulting-logo-image,
+.b2w-logo-link:focus-within .b2w-consulting-logo-image {
+  transform: scale(1.04);
+}
+
 .b2w-logo-layer {
   opacity: 0;
   animation-name: b2w-logo-layer-sequence;

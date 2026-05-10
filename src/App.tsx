@@ -239,7 +239,6 @@ export default function App() {
   const isPrototypeHome = location.pathname === '/' || location.pathname === '/home-test-1';
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
-  const isAiSolutionsPage = location.pathname.startsWith('/solutions');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
@@ -247,8 +246,8 @@ export default function App() {
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isAiSolutionsPage || isJasonAIPage;
-  const routeTransitionKey = isClaraPage ? '/clara' : isAiSolutionsPage ? '/solutions' : location.pathname;
+    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isJasonAIPage;
+  const routeTransitionKey = isClaraPage ? '/clara' : isJasonAIPage ? '/jasonai' : location.pathname;
 
   let clientName: string | undefined = undefined;
   if (location.pathname.includes('uyghur-eats')) {
@@ -300,10 +299,10 @@ export default function App() {
                 />
                 <Route path="/home-test-1" element={<Navigate to="/" replace />} />
                 <Route path="/app-test-1" element={<AppTestOnePage />} />
-                <Route path="/solutions" element={<JasonAIPage />} />
-                <Route path="/solutions/how-it-works" element={<JasonAIPage page="how-it-works" />} />
-                <Route path="/solutions/questions" element={<JasonAIPage page="questions" />} />
-                <Route path="/solutions/privacy" element={<JasonAIPage page="privacy" />} />
+                <Route path="/solutions" element={<Navigate to="/jasonai" replace />} />
+                <Route path="/solutions/how-it-works" element={<Navigate to="/jasonai/how-it-works" replace />} />
+                <Route path="/solutions/questions" element={<Navigate to="/jasonai/questions" replace />} />
+                <Route path="/solutions/privacy" element={<Navigate to="/jasonai/privacy" replace />} />
                 <Route path="/jasonai" element={<JasonAIPage />} />
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />

@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import B2WLogoMark from '../components/B2WLogoMark';
-import { B2WVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
 const rotatingClients = [
@@ -37,9 +36,9 @@ const pathways = [
     key: 'clara',
   },
   {
-    title: 'AI Solutions',
-    href: '/solutions',
-    key: 'solutions',
+    title: 'JasonAI',
+    href: '/jasonai',
+    key: 'jasonai',
   },
 ] as const;
 
@@ -63,21 +62,21 @@ const pathwayThemes: Record<PathwayThemeKey, {
   inactiveButton: string;
 }> = {
   consulting: {
-    page: 'bg-[#f8f6ef] text-neutral-950',
-    ambientOne: 'bg-[#158c8c]/10',
-    ambientTwo: 'bg-[#6d95c4]/10',
-    ambientThree: 'bg-[#c9a35c]/12',
+    page: 'bg-white text-neutral-950',
+    ambientOne: 'bg-[#1f9f6f]/12',
+    ambientTwo: 'bg-[#0f172a]/8',
+    ambientThree: 'bg-[#8fb69d]/10',
     logo: 'text-black',
-    eyebrow: 'text-neutral-500',
+    eyebrow: 'text-[#24724f]',
     heading: 'text-neutral-950',
-    connector: 'text-neutral-600',
-    rotatingText: 'text-[#158c8c]',
-    body: 'text-neutral-600',
-    footer: 'border-neutral-900/10 text-neutral-950',
-    footerMuted: 'text-neutral-500',
-    contact: 'text-neutral-600 hover:text-neutral-950',
-    activeButton: 'border-neutral-950 bg-neutral-950 text-white hover:border-neutral-950 hover:bg-white hover:text-neutral-950',
-    inactiveButton: 'border-neutral-950 text-neutral-950 hover:border-b-2 hover:text-[#158c8c]',
+    connector: 'text-[#334155]',
+    rotatingText: 'text-[#24724f]',
+    body: 'text-[#475569]',
+    footer: 'border-[#0f172a]/10 text-neutral-950',
+    footerMuted: 'text-[#64748b]',
+    contact: 'text-[#475569] hover:text-neutral-950',
+    activeButton: 'border-[#0f172a] bg-[#0f172a] text-white hover:border-[#24724f] hover:bg-[#24724f] hover:text-white',
+    inactiveButton: 'border-[#0f172a] text-[#0f172a] hover:border-b-2 hover:text-[#24724f]',
   },
   clara: {
     page: 'bg-[#080a0f] text-white',
@@ -96,22 +95,22 @@ const pathwayThemes: Record<PathwayThemeKey, {
     activeButton: 'border-white bg-white text-black hover:border-sky-100 hover:bg-sky-100 hover:text-black',
     inactiveButton: 'border-white/50 text-white hover:border-b-2 hover:text-sky-200',
   },
-  solutions: {
+  jasonai: {
     page: 'bg-[#fffaf0] text-[#141414]',
-    ambientOne: 'bg-[#f1b37b]/24',
-    ambientTwo: 'bg-[#1f5f7a]/14',
-    ambientThree: 'bg-[#d9d2c3]/34',
+    ambientOne: 'bg-[#c65a2e]/28',
+    ambientTwo: 'bg-[#164e63]/24',
+    ambientThree: 'bg-[#e8cfa7]/38',
     logo: 'text-[#141414]',
-    eyebrow: 'text-[#9b3d1e]',
+    eyebrow: 'text-[#b24a24]',
     heading: 'text-[#141414]',
-    connector: 'text-[#4f463c]',
-    rotatingText: 'text-[#1f5f7a]',
-    body: 'text-[#4f463c]',
-    footer: 'border-[#d9d2c3] text-[#141414]',
-    footerMuted: 'text-[#6b6256]',
-    contact: 'text-[#4f463c] hover:text-[#141414]',
+    connector: 'text-[#5c4636]',
+    rotatingText: 'text-[#164e63]',
+    body: 'text-[#5c4636]',
+    footer: 'border-[#d8b98b] text-[#141414]',
+    footerMuted: 'text-[#7a604b]',
+    contact: 'text-[#5c4636] hover:text-[#141414]',
     activeButton: 'border-[#141414] bg-[#141414] text-white hover:border-[#141414] hover:bg-[#2f2a24] hover:text-white',
-    inactiveButton: 'border-[#141414] text-[#141414] hover:border-b-2 hover:text-[#4f463c]',
+    inactiveButton: 'border-[#141414] text-[#141414] hover:border-b-2 hover:text-[#b24a24]',
   },
 };
 
@@ -120,11 +119,11 @@ function getThemeGradient(themeKey: PathwayThemeKey) {
     return 'radial-gradient(circle_at_18%_16%,rgba(125,211,252,0.16),transparent_25%),radial-gradient(circle_at_84%_18%,rgba(45,212,191,0.12),transparent_26%),radial-gradient(circle_at_52%_74%,rgba(255,255,255,0.06),transparent_38%),linear-gradient(180deg,#080a0f_0%,#0c1218_100%)';
   }
 
-  if (themeKey === 'solutions') {
-    return 'radial-gradient(circle_at_16%_18%,rgba(241,179,123,0.36),transparent_24%),radial-gradient(circle_at_84%_14%,rgba(31,95,122,0.16),transparent_26%),radial-gradient(circle_at_52%_72%,rgba(217,210,195,0.46),transparent_36%),linear-gradient(180deg,#fffaf0_0%,#f8f3e8_100%)';
+  if (themeKey === 'jasonai') {
+    return 'repeating-linear-gradient(90deg,rgba(20,20,20,0.045) 0 1px,transparent 1px 44px),repeating-linear-gradient(180deg,rgba(20,20,20,0.035) 0 1px,transparent 1px 44px),radial-gradient(circle_at_16%_18%,rgba(198,90,46,0.36),transparent_25%),radial-gradient(circle_at_84%_14%,rgba(22,78,99,0.22),transparent_28%),radial-gradient(circle_at_52%_72%,rgba(232,207,167,0.54),transparent_38%),linear-gradient(180deg,#fff6e6_0%,#f6e6cf_100%)';
   }
 
-  return 'radial-gradient(circle_at_16%_10%,rgba(21,140,140,0.1),transparent_22%),radial-gradient(circle_at_84%_16%,rgba(109,149,196,0.1),transparent_20%),radial-gradient(circle_at_52%_76%,rgba(201,163,92,0.1),transparent_24%),linear-gradient(180deg,#ffffff_0%,#f8f6ef_34%,#ffffff_100%)';
+  return 'repeating-linear-gradient(90deg,rgba(15,23,42,0.035) 0 1px,transparent 1px 56px),repeating-linear-gradient(180deg,rgba(15,23,42,0.028) 0 1px,transparent 1px 56px),radial-gradient(circle_at_16%_10%,rgba(31,159,111,0.12),transparent_23%),radial-gradient(circle_at_84%_16%,rgba(15,23,42,0.08),transparent_22%),radial-gradient(circle_at_52%_76%,rgba(143,182,157,0.13),transparent_26%),linear-gradient(180deg,#ffffff_0%,#f5f8f6_42%,#ffffff_100%)';
 }
 
 export default function HomeTestOnePage() {
@@ -144,8 +143,8 @@ export default function HomeTestOnePage() {
   return (
     <>
       <Seo
-        title="Consulting, Clara, and AI Solutions"
-        description="Explore B2W consulting, Clara, and AI solutions for practical business execution, operations, and applied AI systems."
+        title="B2W Business, Clara, and JasonAI"
+        description="Explore B2W business consulting, Clara, and JasonAI for practical execution, operations, and applied AI systems."
         canonicalPath="/"
       />
 
@@ -176,7 +175,10 @@ export default function HomeTestOnePage() {
 
           <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6">
             <header className="flex h-20 items-center justify-between gap-4">
-              <B2WLogoMark className={`shrink-0 transition-colors duration-500 ${activeTheme.logo}`} />
+              <B2WLogoMark
+                variant={activeThemeKey}
+                className={`shrink-0 transition-colors duration-500 ${activeTheme.logo}`}
+              />
             </header>
 
             <div className="flex flex-1 items-center py-8">
@@ -186,17 +188,11 @@ export default function HomeTestOnePage() {
                 transition={{ duration: 0.8, ease: 'easeOut' }}
                 className="w-full max-w-6xl pl-14 pr-14 md:pl-16 md:pr-16 lg:pl-20 lg:pr-20"
               >
-                <p className={`mb-5 text-[11px] font-mono uppercase tracking-[0.28em] transition-colors duration-500 md:mb-6 ${activeTheme.eyebrow}`}>
-                  Now Accepting Clients
-                </p>
-                <h1 className="flex w-full max-w-full items-baseline gap-[0.18em] whitespace-nowrap text-[clamp(1.2rem,4.65vw,4.85rem)] font-medium leading-[0.92] tracking-[-0.058em] [transform:scaleY(0.92)] origin-left">
-                  <span className="inline-flex shrink-0 items-center gap-[0.12em]">
-                    <B2WVectorMark title="" className={`h-[0.66em] w-[0.74em] shrink-0 overflow-visible transition-colors duration-500 ${activeTheme.logo}`} />
-                    <span className={`b2w-wordmark inline-block tracking-[-0.09em] transition-colors duration-500 ${activeTheme.heading}`}>B2W</span>
+                <h1 className="flex w-full max-w-full items-baseline gap-[0.16em] whitespace-nowrap text-[clamp(1.35rem,5.9vw,5.9rem)] font-medium leading-[0.88] tracking-[-0.065em] [transform:scaleY(0.92)] origin-left">
+                  <span className={`b2w-wordmark inline-block shrink-0 tracking-[-0.09em] transition-colors duration-500 ${activeTheme.heading}`}>
+                    B2W
                   </span>
-                  <span className={`shrink-0 font-[family-name:var(--font-serif)] italic tracking-[-0.04em] transition-colors duration-500 ${activeTheme.connector}`}>
-                    now accepting
-                  </span>
+                  <span className={`shrink-0 font-light transition-colors duration-500 ${activeTheme.connector}`}>/</span>
                   <span className={`relative inline-flex min-h-[1.18em] min-w-[23ch] items-center overflow-visible py-[0.08em] transition-colors duration-500 ${activeTheme.rotatingText}`}>
                     <AnimatePresence mode="wait">
                       <motion.span

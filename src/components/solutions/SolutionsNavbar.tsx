@@ -15,7 +15,7 @@ function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean 
   return (
     <Link to="/clara" aria-label="Clara" className="relative z-[110] inline-flex items-center gap-3 overflow-visible text-white">
       <span className={`clara-logo-mark ${isLogoAnimated ? 'is-breathing' : ''}`} aria-hidden="true">
-        <img src="/brand/clara-logo.png" alt="" className="clara-logo-image" />
+        <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
       </span>
       <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
     </Link>

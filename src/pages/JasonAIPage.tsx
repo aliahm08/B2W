@@ -589,13 +589,9 @@ function SectionLabel({ children }: { children: string }) {
 function JasonAILockup() {
   return (
     <div className="flex items-center gap-3 text-[#141414]">
-      <Link to="/" aria-label="B2W home" className="b2w-logo-link inline-flex items-center overflow-visible">
+      <Link to="/jasonai" aria-label="JasonAI home" className="inline-flex items-center gap-2.5 overflow-visible">
         <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
-        <span aria-hidden="true" className="b2w-logo-wordmark-shell pr-1">
-          <span className="b2w-wordmark inline-block text-lg font-medium tracking-[-0.09em] [transform:scaleY(0.94)] sm:text-xl md:text-2xl">
-            B2W
-          </span>
-        </span>
+        <span className="text-lg font-semibold tracking-[-0.03em] sm:text-xl md:text-2xl">JasonAI</span>
       </Link>
       <motion.span
         className="h-6 w-px bg-[#cfc6b7]"
@@ -608,8 +604,8 @@ function JasonAILockup() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <Link to="/solutions" className="text-[#141414] underline-offset-4 hover:underline" aria-label="AI solutions">
-          AI Solutions
+        <Link to="/" className="text-[#141414] underline-offset-4 hover:underline" aria-label="B2W home">
+          by B2W
         </Link>
       </motion.span>
     </div>
@@ -1378,7 +1374,7 @@ function JasonAILandingLinks() {
     <section className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
       <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-2">
         <Link
-          to="/solutions/how-it-works"
+          to="/jasonai/how-it-works"
           className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
         >
           <div className="flex items-center justify-between gap-4">
@@ -1397,7 +1393,7 @@ function JasonAILandingLinks() {
           </span>
         </Link>
         <Link
-          to="/solutions/questions"
+          to="/jasonai/questions"
           className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
         >
           <div className="flex items-center justify-between gap-4">
@@ -1487,17 +1483,17 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
           <p className="mt-1 text-sm text-white/62">Fieldwork communication, organized around the way jobs move.</p>
         </div>
         <nav className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-white/72">
-          <Link to="/solutions" className="hover:text-white">
+          <Link to="/jasonai" className="hover:text-white">
             Home
           </Link>
-          <Link to="/solutions/how-it-works" className="hover:text-white">
+          <Link to="/jasonai/how-it-works" className="hover:text-white">
             How it works
           </Link>
-          <Link to="/solutions/questions" className="hover:text-white">
+          <Link to="/jasonai/questions" className="hover:text-white">
             Questions
           </Link>
           <Link
-            to="/solutions/privacy"
+            to="/jasonai/privacy"
             aria-current={page === 'privacy' ? 'page' : undefined}
             className="hover:text-white aria-[current=page]:text-white"
           >
@@ -1520,25 +1516,25 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
       title: 'JasonAI for Contractor Businesses',
       description:
         'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
-      canonicalPath: '/solutions',
+      canonicalPath: '/jasonai',
     },
     'how-it-works': {
       title: 'How JasonAI Works for Contractors',
       description:
         'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
-      canonicalPath: '/solutions/how-it-works',
+      canonicalPath: '/jasonai/how-it-works',
     },
     questions: {
       title: 'JasonAI Questions and Waitlist',
       description:
         'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
-      canonicalPath: '/solutions/questions',
+      canonicalPath: '/jasonai/questions',
     },
     privacy: {
       title: 'JasonAI Privacy Policy',
       description:
         'Privacy Policy for JasonAI by B2W, covering fieldwork communications, job context, connected tools, AI processing, data sharing, retention, and user controls.',
-      canonicalPath: '/solutions/privacy',
+      canonicalPath: '/jasonai/privacy',
     },
   }[page];
 
@@ -1602,16 +1598,16 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
               animate={{ opacity: hasScrolled ? 1 : 0, y: hasScrolled ? 0 : -8, pointerEvents: hasScrolled ? 'auto' : 'none' }}
               transition={{ duration: 0.25 }}
             >
-              <Link to="/solutions#problem" className="hover:text-[#141414]">
+              <Link to="/jasonai#problem" className="hover:text-[#141414]">
                 The problem
               </Link>
-              <Link to="/solutions/how-it-works" className="hover:text-[#141414]">
+              <Link to="/jasonai/how-it-works" className="hover:text-[#141414]">
                 How it works
               </Link>
-              <Link to="/solutions/questions" className="hover:text-[#141414]">
+              <Link to="/jasonai/questions" className="hover:text-[#141414]">
                 Questions
               </Link>
-              <Link to="/solutions/privacy" className="hover:text-[#141414]">
+              <Link to="/jasonai/privacy" className="hover:text-[#141414]">
                 Privacy
               </Link>
             </motion.nav>
