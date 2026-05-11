@@ -39,6 +39,11 @@ const FALLBACK_SITE_URL = 'https://www.b2w-ai.com';
 const DEFAULT_ROBOTS = 'index, follow';
 const PRIVATE_ROBOTS = 'noindex, nofollow';
 
+const jasonAiImages = {
+  contractorSignals: '/images/jasonai/scattered-communication.jpg',
+  workflowContext: '/images/jasonai-2/workflow-context.png',
+} as const;
+
 const uyghurImages = {
   main: '/images/uyghur-eats/interior.jpg',
   plating: '/images/uyghur-eats/platter.jpg',
@@ -103,11 +108,53 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/jasonai',
+    {
+      title: 'JasonAI for Contractor Businesses',
+      description:
+        'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
+      imagePath: jasonAiImages.contractorSignals,
+      imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
+    },
+  ],
+  [
+    '/jasonai/how-it-works',
+    {
+      title: 'How JasonAI Works for Contractors',
+      description:
+        'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
+      imagePath: jasonAiImages.contractorSignals,
+      imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
+    },
+  ],
+  [
+    '/jasonai/questions',
+    {
+      title: 'JasonAI Questions and Waitlist',
+      description:
+        'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
+      imagePath: jasonAiImages.contractorSignals,
+      imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
+    },
+  ],
+  [
+    '/jasonai/privacy',
+    {
+      title: 'JasonAI Privacy Policy',
+      description:
+        'Privacy Policy for JasonAI by B2W, covering fieldwork communications, job context, connected tools, AI processing, data sharing, retention, and user controls.',
+      imagePath: jasonAiImages.contractorSignals,
+      imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
+    },
+  ],
+  [
     '/jasonai-2',
     {
       title: 'JasonAI Style 2 by B2W',
       description:
         'A calm second test style for JasonAI, the B2W product that turns business conversations into organized job clarity.',
+      imagePath: jasonAiImages.workflowContext,
+      imageAlt: 'JasonAI workflow context interface with job details organized around a conversation.',
     },
   ],
   [
@@ -116,6 +163,8 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'JasonAI-3 Risk Intelligence Platform by B2W',
       description:
         'JasonAI-3 explains the SaaS platform where OpenClaw assistants feed a canvas organized as a story graph, CRM table, and risk tracker powered by Clara, a Gemma agent.',
+      imagePath: jasonAiImages.workflowContext,
+      imageAlt: 'JasonAI-3 platform view showing workflow context organized into an AI operating canvas.',
     },
   ],
   [
@@ -124,6 +173,8 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'JasonAI-3 SaaS Portal by B2W',
       description:
         'The JasonAI-3 SaaS portal organizes OpenClaw assistant inputs into a canvas with Story Graph, CRM table, and Risk Tracker views powered by Clara, a Gemma agent.',
+      imagePath: jasonAiImages.workflowContext,
+      imageAlt: 'JasonAI-3 portal preview with structured workflow context across the operating canvas.',
     },
   ],
   [
@@ -132,6 +183,9 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'JasonAI-3 Platform V2 by B2W',
       description:
         'JasonAI-3 Platform V2 presents the OpenClaw-fed AI platform as a client portal style SaaS canvas with Canvas, Risk Tracker, and Clara customization views.',
+      robots: PRIVATE_ROBOTS,
+      imagePath: jasonAiImages.workflowContext,
+      imageAlt: 'JasonAI-3 Platform V2 interface for canvas, risk tracking, and Clara-led execution.',
     },
   ],
   [
@@ -140,6 +194,9 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'JasonAI-3 Tasks Portal by B2W',
       description:
         'JasonAI-3 Tasks Portal lets the Contract Owner chat with Clara to develop project estimates from selected OpenClaw-backed comms records.',
+      robots: PRIVATE_ROBOTS,
+      imagePath: jasonAiImages.workflowContext,
+      imageAlt: 'JasonAI-3 Tasks Portal used to build project estimates from selected communication records.',
     },
   ],
   [
