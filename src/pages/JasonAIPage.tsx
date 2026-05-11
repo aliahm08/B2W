@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type Key, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type Key, type ReactNode, type RefObject } from 'react';
 import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
@@ -549,6 +549,236 @@ function ScrambleText({
   );
 }
 
+function useJasonAIHoverDescramble(rootRef: RefObject<HTMLElement | null>) {
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const root = rootRef.current;
+
+    if (!root || shouldReduceMotion) {
+      return;
+    }
+
+    const activeAnimations = new WeakMap<Node, number[]>();
+
+    const getTextNodes = (element: Element) => {
+      const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
+        acceptNode: (node) => {
+          const value = node.textContent ?? '';
+          const parent = node.parentElement;
+
+          if (!parent || !value.trim() || parent.closest('svg, script, style, .scramble-character, [data-scramble-skip]')) {
+            return NodeFilter.FILTER_REJECT;
+          }
+
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      });
+      const nodes: Text[] = [];
+      let node = walker.nextNode();
+
+      while (node) {
+        nodes.push(node as Text);
+        node = walker.nextNode();
+      }
+
+      return nodes;
+    };
+
+    const clearNodeTimers = (node: Node) => {
+      const timers = activeAnimations.get(node);
+
+      if (!timers) {
+        return;
+      }
+
+      timers.forEach((timer) => window.clearTimeout(timer));
+      activeAnimations.delete(node);
+    };
+
+    const createStableScrambleFragment = (text: string) => {
+      const fragment = document.createDocumentFragment();
+      const characters: HTMLSpanElement[] = [];
+
+      Array.from(text).forEach((character) => {
+        if (character === ' ') {
+          fragment.append(document.createTextNode(character));
+          return;
+        }
+
+        const characterWrapper = document.createElement('span');
+        const visibleCharacter = document.createElement('span');
+
+        characterWrapper.className = 'scramble-character';
+        characterWrapper.dataset.final = character;
+        visibleCharacter.textContent = character;
+        characterWrapper.append(visibleCharacter);
+        characters.push(visibleCharacter);
+        fragment.append(characterWrapper);
+      });
+
+      return { fragment, characters };
+    };
+
+    const scrambleStableCharacters = (characterWrappers: Element[]) => {
+      if (characterWrappers.length === 0) {
+        return;
+      }
+
+      const animationKey = characterWrappers[0];
+      clearNodeTimers(animationKey);
+
+      const totalFrames = Math.max(5, Math.min(8, Math.ceil(characterWrappers.length * 0.22)));
+      const timers: number[] = [];
+
+      for (let frame = 0; frame <= totalFrames; frame += 1) {
+        const timer = window.setTimeout(() => {
+          const progress = easeInOutCubic(frame / totalFrames);
+          const settledCharacters = Math.floor(progress * characterWrappers.length);
+
+          characterWrappers.forEach((characterWrapper, index) => {
+            const visibleCharacter = characterWrapper.firstElementChild;
+            const finalCharacter = characterWrapper.getAttribute('data-final') ?? '';
+
+            if (!visibleCharacter) {
+              return;
+            }
+
+            visibleCharacter.textContent =
+              !/[A-Za-z0-9]/.test(finalCharacter) || index < settledCharacters
+                ? finalCharacter
+                : scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
+          });
+
+          if (frame === totalFrames) {
+            characterWrappers.forEach((characterWrapper) => {
+              const visibleCharacter = characterWrapper.firstElementChild;
+
+              if (visibleCharacter) {
+                visibleCharacter.textContent = characterWrapper.getAttribute('data-final') ?? '';
+              }
+            });
+            activeAnimations.delete(animationKey);
+          }
+        }, frame * 24);
+
+        timers.push(timer);
+      }
+
+      activeAnimations.set(animationKey, timers);
+    };
+
+    const scrambleNode = (node: Text) => {
+      clearNodeTimers(node);
+
+      const originalText = node.textContent ?? '';
+
+      if (!originalText.trim()) {
+        return;
+      }
+
+      const totalFrames = Math.max(5, Math.min(8, Math.ceil(originalText.length * 0.22)));
+      const timers: number[] = [];
+      const stableScramble = createStableScrambleFragment(originalText);
+      const animatedNode = document.createElement('span');
+
+      animatedNode.setAttribute('aria-hidden', 'true');
+      animatedNode.append(stableScramble.fragment);
+      node.replaceWith(animatedNode);
+
+      for (let frame = 0; frame <= totalFrames; frame += 1) {
+        const timer = window.setTimeout(() => {
+          const progress = easeInOutCubic(frame / totalFrames);
+          const settledCharacters = Math.floor(progress * originalText.length);
+
+          stableScramble.characters.forEach((visibleCharacter, index) => {
+            const finalCharacter = visibleCharacter.parentElement?.dataset.final ?? '';
+
+            visibleCharacter.textContent =
+              !/[A-Za-z0-9]/.test(finalCharacter) || index < settledCharacters
+                ? finalCharacter
+                : scrambleCharacters[Math.floor(Math.random() * scrambleCharacters.length)];
+          });
+
+          if (frame === totalFrames) {
+            const restoredNode = document.createTextNode(originalText);
+            animatedNode.replaceWith(restoredNode);
+            activeAnimations.delete(animatedNode);
+          }
+        }, frame * 24);
+
+        timers.push(timer);
+      }
+
+      activeAnimations.set(animatedNode, timers);
+    };
+
+    const isEligibleHoverTarget = (target: Element) => {
+      if (
+        target.getAttribute('data-descramble-hover') === 'false' &&
+        !target.querySelector('[data-descramble-hover-target]')
+      ) {
+        return false;
+      }
+
+      if (target.getAttribute('data-descramble-hover') === 'true') {
+        return true;
+      }
+
+      if (target.matches('button')) {
+        return false;
+      }
+
+      if (!target.matches('a')) {
+        return false;
+      }
+
+      const href = target.getAttribute('href');
+
+      if (!href || href.startsWith('#') || href.startsWith('mailto:')) {
+        return false;
+      }
+
+      const url = new URL(href, window.location.href);
+      const isFormOrCalendar = /(?:calendly\.com|tally\.so)/i.test(url.hostname);
+
+      return isFormOrCalendar || url.origin !== window.location.origin || url.pathname !== window.location.pathname;
+    };
+
+    const onPointerEnter = (event: PointerEvent) => {
+      const target = event.target instanceof Element ? event.target.closest('a, button') : null;
+
+      if (!target || !root.contains(target) || !isEligibleHoverTarget(target)) {
+        return;
+      }
+
+      if (event.relatedTarget instanceof Node && target.contains(event.relatedTarget)) {
+        return;
+      }
+
+      const scopedTargets = target.querySelectorAll('[data-descramble-hover-target]');
+      const textNodeRoots = scopedTargets.length > 0 ? Array.from(scopedTargets) : [target];
+
+      textNodeRoots.forEach((textNodeRoot) => {
+        const stableCharacters = Array.from(textNodeRoot.querySelectorAll('.scramble-character'));
+
+        if (stableCharacters.length > 0) {
+          scrambleStableCharacters(stableCharacters);
+          return;
+        }
+
+        getTextNodes(textNodeRoot).forEach(scrambleNode);
+      });
+    };
+
+    root.addEventListener('pointerover', onPointerEnter);
+
+    return () => {
+      root.removeEventListener('pointerover', onPointerEnter);
+    };
+  }, [rootRef, shouldReduceMotion]);
+}
+
 function Reveal({
   children,
   className = '',
@@ -674,6 +904,7 @@ function BookingPrompt({ onOpenBooking }: { onOpenBooking: () => void }) {
       </div>
       <button
         type="button"
+        data-descramble-hover="true"
         onClick={onOpenBooking}
         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#2f2a24] disabled:cursor-not-allowed disabled:opacity-70"
       >
@@ -1334,6 +1565,7 @@ function WaitlistSection({ onOpenWaitlist }: { onOpenWaitlist: () => void }) {
             </p>
             <button
               type="button"
+              data-descramble-hover="true"
               onClick={onOpenWaitlist}
               className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
             >
@@ -1375,6 +1607,7 @@ function JasonAILandingLinks() {
       <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-2">
         <Link
           to="/jasonai/how-it-works"
+          data-descramble-hover="false"
           className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
         >
           <div className="flex items-center justify-between gap-4">
@@ -1387,13 +1620,14 @@ function JasonAILandingLinks() {
           <p className="mt-4 text-sm leading-7 text-[#4f463c]">
             See how we learn the business, set JasonAI around your process, and review the places details fall through.
           </p>
-          <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#141414]">
+          <span data-descramble-hover-target className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#141414]">
             Open how it works
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </span>
         </Link>
         <Link
           to="/jasonai/questions"
+          data-descramble-hover="false"
           className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
         >
           <div className="flex items-center justify-between gap-4">
@@ -1406,7 +1640,7 @@ function JasonAILandingLinks() {
           <p className="mt-4 text-sm leading-7 text-[#4f463c]">
             Clear answers for the things owners usually ask before they book a review.
           </p>
-          <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#141414]">
+          <span data-descramble-hover-target className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#141414]">
             Open questions
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </span>
@@ -1479,25 +1713,30 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
     <footer className="flex min-h-44 items-end border-t border-[#d9d2c3] bg-[#141414] text-white md:min-h-52">
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-5 px-5 pb-8 pt-14 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10 md:pt-16">
         <div className="min-w-0">
-          <p className="text-sm font-semibold">JasonAI by B2W</p>
-          <p className="mt-1 text-sm text-white/62">Fieldwork communication, organized around the way jobs move.</p>
+          <p className="text-sm font-semibold">
+            <ScrambleText text="JasonAI by B2W" />
+          </p>
+          <p className="mt-1 text-sm text-white/62">
+            <ScrambleText text="Fieldwork communication, organized around the way jobs move." />
+          </p>
         </div>
         <nav className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-white/72">
-          <Link to="/jasonai" className="hover:text-white">
-            Home
+          <Link to="/jasonai" data-descramble-hover="true" className="hover:text-white">
+            <ScrambleText text="Home" />
           </Link>
-          <Link to="/jasonai/how-it-works" className="hover:text-white">
-            How it works
+          <Link to="/jasonai/how-it-works" data-descramble-hover="true" className="hover:text-white">
+            <ScrambleText text="How it works" />
           </Link>
-          <Link to="/jasonai/questions" className="hover:text-white">
-            Questions
+          <Link to="/jasonai/questions" data-descramble-hover="true" className="hover:text-white">
+            <ScrambleText text="Questions" />
           </Link>
           <Link
             to="/jasonai/privacy"
+            data-descramble-hover="true"
             aria-current={page === 'privacy' ? 'page' : undefined}
             className="hover:text-white aria-[current=page]:text-white"
           >
-            Privacy Policy
+            <ScrambleText text="Privacy Policy" />
           </Link>
         </nav>
       </div>
@@ -1510,6 +1749,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
   const [isFooterApproaching, setIsFooterApproaching] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
+  const pageRootRef = useRef<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
   const seoByPage = {
     landing: {
@@ -1542,6 +1782,8 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
     loadTallyEmbeds();
   }, []);
 
+  useJasonAIHoverDescramble(pageRootRef);
+
   useEffect(() => {
     const updateScrollState = () => setHasScrolled(window.scrollY > 24);
 
@@ -1563,7 +1805,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
         setIsFooterApproaching(entry.isIntersecting);
       },
       {
-        rootMargin: '0px 0px 96px 0px',
+        rootMargin: '0px 0px 240px 0px',
         threshold: 0,
       },
     );
@@ -1580,7 +1822,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
         description={seoByPage.description}
         canonicalPath={seoByPage.canonicalPath}
       />
-      <div className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[#fffaf0] text-[#141414]">
+      <div ref={pageRootRef} className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[#fffaf0] text-[#141414]">
         <header
           className={`sticky -top-px z-40 bg-[#fffaf0]/95 pt-[env(safe-area-inset-top)] backdrop-blur transition-[border-color,box-shadow] duration-300 ${
             hasScrolled ? 'border-b border-[#d9d2c3] shadow-sm' : 'border-b border-transparent'
@@ -1592,27 +1834,9 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
             }`}
           >
             <JasonAILockup />
-            <motion.nav
-              className="hidden items-center gap-6 text-sm font-semibold text-[#4f463c] md:flex"
-              initial={false}
-              animate={{ opacity: hasScrolled ? 1 : 0, y: hasScrolled ? 0 : -8, pointerEvents: hasScrolled ? 'auto' : 'none' }}
-              transition={{ duration: 0.25 }}
-            >
-              <Link to="/jasonai#problem" className="hover:text-[#141414]">
-                The problem
-              </Link>
-              <Link to="/jasonai/how-it-works" className="hover:text-[#141414]">
-                How it works
-              </Link>
-              <Link to="/jasonai/questions" className="hover:text-[#141414]">
-                Questions
-              </Link>
-              <Link to="/jasonai/privacy" className="hover:text-[#141414]">
-                Privacy
-              </Link>
-            </motion.nav>
             <button
               type="button"
+              data-descramble-hover="true"
               onClick={() => setIsBookingOpen(true)}
               className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
             >
@@ -1643,6 +1867,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                     <Reveal className="mt-9 flex flex-col gap-3 sm:flex-row" delay={0.28}>
                       <button
                         type="button"
+                        data-descramble-hover="true"
                         onClick={() => setIsBookingOpen(true)}
                         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                       >
@@ -1651,6 +1876,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                       </button>
                       <button
                         type="button"
+                        data-descramble-hover="true"
                         onClick={() => setIsWaitlistOpen(true)}
                         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                       >
@@ -1762,6 +1988,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                   <Reveal className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
                     <button
                       type="button"
+                      data-descramble-hover="true"
                       onClick={() => setIsBookingOpen(true)}
                       className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                     >
@@ -1770,6 +1997,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                     </button>
                     <button
                       type="button"
+                      data-descramble-hover="true"
                       onClick={() => setIsWaitlistOpen(true)}
                       className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                     >
@@ -1793,6 +2021,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
               <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Want to test it early?</span>
               <button
                 type="button"
+                data-descramble-hover="true"
                 onClick={() => setIsWaitlistOpen(true)}
                 className="inline-flex min-h-10 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
               >

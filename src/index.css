@@ -35,18 +35,19 @@ html {
 }
 
 .scramble-character {
-  display: inline-grid;
+  position: relative;
+  display: inline-block;
   vertical-align: baseline;
-}
-
-.scramble-character::before,
-.scramble-character > span {
-  grid-area: 1 / 1;
 }
 
 .scramble-character::before {
   content: attr(data-final);
   visibility: hidden;
+}
+
+.scramble-character > span {
+  position: absolute;
+  inset: 0;
 }
 
 .mobile-menu-search-shell {
