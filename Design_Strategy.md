@@ -66,3 +66,9 @@ Not allowed:
 - Buttons do not need directional arrow icons just because they redirect. Their button styling already communicates the action.
 - Links are navigational items. Use them for clickable text or link-styled elements that send the user to another page, usually within the same ecosystem.
 - On B2W, the landing site and the client portal are separate ecosystems. Cross-page navigation inside one of those ecosystems should generally be expressed as links, not buttons, unless the element is functioning as an action control.
+
+## 8. Marketability Maintenance
+
+- Major public-facing edits must keep favicon assets, share images, route metadata, and brand copy aligned.
+- Use `npm run marketing:sync` as the default low-cost maintenance pass after those edits.
+- Treat [docs/marketability-source-of-truth.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/marketability-source-of-truth.md) as the rulebook and [docs/seo-route-inventory.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/seo-route-inventory.md) as the generated route inventory.

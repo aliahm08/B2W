@@ -1,42 +1,32 @@
-# B2W Website Content
+# B2W Content Notes
 
-*This document is the master source of truth for the website's text and copy. It is automatically maintained by AI and updated after code changes.*
+Last updated: 2026-05-11
 
-## Hero
-**Headline:** Optimizing growth for small and midsize businesses.
-**Subheadline:** We help SMB owners uncover growth, cut hidden losses, and make data-backed decisions across their marketing, ops, and finances.
-**CTA:** Explore AI-enabled Systems
+This file is a concise strategic reference for Codex. For route-by-route metadata and share-image coverage, use [docs/seo-route-inventory.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/seo-route-inventory.md). For maintenance rules, use [docs/marketability-source-of-truth.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/marketability-source-of-truth.md).
 
-## Capabilities
-- **Section subtitle:** What we build and operate.
-- **Front-of-House (Guest Experience):** Guest Experience Concierge, Post-Visit Review Recovery, and Delivery Demand Router for reservations, reviews, and guest communications.
-- **Back-of-House (The Kitchen):** Autonomous Inventory, The Prep Oracle, Equipment Watchdog, and Waste Auditor for purchasing, prep, maintenance, and food-loss control.
-- **Management & Admin:** Shift Optimizer, Dynamic Pricing, Invoice Reconciler, and Payroll Assistant for scheduling, margin control, reconciliation, and payroll review.
-- **Field Service & Contractor Operations:** 24/7 Autonomous Dispatcher, Vision-Based Rough Estimator, The Persistent Sales Clerk, Field Tech Knowledge Brain, Review and Reputation Management, and Subcontractor and Vendor Coordination (GC Focus).
+## Core Positioning
 
-## Projects
-- **Section subtitle:** Active and proposed client engagements.
-- **Borek-G Restaurant Marketing Profile** (FOOD & BEVERAGE): A source-backed restaurant marketing profile covering reputation strength, public-channel opportunities, and digital growth potential...
-- **Borek-G Marketing Proposal** (FOOD & BEVERAGE): A marketing proposal translating the Borek-G analysis into scope options for channel strategy, content cadence, and growth execution...
-- **Uyghur Eats Restaurant Profile** (FOOD & BEVERAGE): A meticulous restaurant profile assessing location value...
+- `B2W`: consulting and applied AI systems for operators who need clearer execution, tighter delivery, and less process noise.
+- `Clara`: B2W's voice-to-plan and estimation interface.
+- `JasonAI`: contractor communication, follow-through, and risk-intelligence product line.
 
-## Team
-- **Ali Ahmed** (CEO & GTM): Leads B2W's client engagements and builds the tools behind them. Background in mechanical engineering, software architecture, and interface design — shaped at NASA, Autodesk, WSP, and LaunchGood. Owns the technical roadmap, designs the data systems, and writes the code that ships.
-- **Aaron Patron** (M&A): Aaron has built his career at the intersection of engineering, finance, and development. Across roles at American Power Resources, DSD Renewables, GE Solar, and Sol Systems, he has worked on renewable energy projects from technical design and analysis through commercial strategy and execution. His experience includes financial modeling, project evaluation, cross-functional coordination, and helping turn complex opportunities into clear decisions and actionable plans.
-- **Feng Xiang** (R&D): Builds B2W's AI infrastructure. Carnegie Mellon robotics graduate who spent years at Waymo, ISEE, and Forterra making machines navigate the real world. Applies that same systems thinking to the operational AI agents B2W deploys for clients.
+## Approved Messaging
 
-## Contact
-**Headline:** Ready to simplify?
-**Subheadline:** Tell us where you're stuck. We'll tell you what we can do.
-**CTA Target:** Book a consultation
-**Email:** info@b2w-ai.com
+- B2W should sound direct, technical, and operational. Avoid inflated transformation language.
+- Public copy should describe what B2W builds, scopes, or operates in concrete terms: consulting, diagnostics, implementation, estimation, workflow tooling, AI systems.
+- JasonAI copy should stay anchored to contractor communication, scope changes, follow-ups, job context, and risk.
+- Clara copy should stay anchored to voice input, estimation, planning, modeling, and actioning structured context.
 
----
+## Core CTA
+
+- Primary contact email: `info@b2w-ai.com`
+- Default CTA framing: book an intro call, book a review, or contact B2W about fit
+
+## Update Rule
+
+- After major public-facing edits, run `npm run marketing:sync`.
+- Update this file only when the brand positioning or approved messaging actually changes.
 
 ## Revision History
 
-- **2026-03-17:** Updated Expertise category from "Exit" to "M&A". Updated Sabucnu project card title to "Estimation Tool for Luxury Interior Contractor in Virginia." and Uyghur Eats project card and proposal headline to "Exit Strategy for High-End Restaurant in Washington, DC".
-- **2026-03-17:** Content audit — removed AI slop and instructional language from Capabilities, Projects, and CTA subtitles. Rewrote team bios for B2W context. Removed Summary and Academia labels from Team. Simplified project card layout.
-- **2026-03-12:** Reworked Capabilities into a minimal filterable section with dedicated subpages for each capability, aligned to the existing project case-study page structure and dark subpage treatment.
-- **2026-03-11:** Merged Example Capabilities directly into the Hero section and removed the standalone Work page section. Updated Team member profile descriptions to directly map to their exported JSON resumes.
-- **2026-03-11:** Initial creation of CONTENT.md based on current website copy. Separated Case Studies into Example Capabilities and Projects.
+- **2026-05-11:** Reframed this file as a concise marketability reference. Linked it to the generated SEO inventory and the marketability maintenance doc so Codex can update route metadata, favicon assets, and brand copy from one workflow.

@@ -4,6 +4,7 @@ import { explainerContent } from '../content/dataExplainers';
 import { expertisePages } from '../content/expertisePages';
 import { parseKitchenSolutionSlug } from '../content/kitchen';
 import { servicePageContent } from '../content/servicePages';
+import { tierPageContent } from '../content/tierPages';
 
 type TwitterCard = 'summary' | 'summary_large_image';
 type OpenGraphType = 'website' | 'article';
@@ -38,6 +39,12 @@ const SITE_NAME = 'B2W';
 const FALLBACK_SITE_URL = 'https://www.b2w-ai.com';
 const DEFAULT_ROBOTS = 'index, follow';
 const PRIVATE_ROBOTS = 'noindex, nofollow';
+const DEFAULT_PUBLIC_IMAGE_ALT = 'B2W wordmark for consulting and applied AI systems.';
+
+const brandImages = {
+  b2wSocial: '/brand/b2w-social-card.png',
+  claraSocial: '/brand/clara-social-card.png',
+} as const;
 
 const jasonAiImages = {
   contractorSignals: '/images/jasonai/scattered-communication.jpg',
@@ -57,6 +64,7 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'Consulting, Clara, and AI Solutions',
       description:
         'Explore B2W consulting, Clara, and AI solutions for practical business execution, operations, and applied AI systems.',
+      imagePath: brandImages.b2wSocial,
     },
   ],
   [
@@ -65,6 +73,7 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'Consulting Services for SMBs',
       description:
         'B2W helps small and midsize businesses improve marketing, operations, and financial performance with practical AI systems, diagnostics, and implementation support.',
+      imagePath: brandImages.b2wSocial,
     },
   ],
   [
@@ -73,6 +82,8 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'Clara by B2W',
       description:
         'Explore Clara, the B2W AI demo for voice-to-plan workflows, estimation, financial modeling, and live AI system intake.',
+      imagePath: brandImages.claraSocial,
+      imageAlt: 'Clara by B2W mark on a light background.',
     },
   ],
   [
@@ -249,6 +260,22 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/work/coffeeshop-financing/model',
+    {
+      title: 'Coffee Shop Financing Model by B2W',
+      description:
+        'Review B2W\'s financing model for a coffee shop project, including assumptions, cash flow framing, and lender-facing structure.',
+    },
+  ],
+  [
+    '/about',
+    {
+      title: 'About B2W',
+      description: 'Learn how B2W works and who leads strategy, implementation, and technical delivery.',
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
     '/client/uyghur-eats',
     {
       title: 'Uyghur Eats Strategic Exit Proposal',
@@ -351,17 +378,20 @@ function toAbsoluteUrl(pathname: string) {
 
 function buildMetadata(pathname: string, definition: SeoDefinition): SeoMetadata {
   const canonicalPath = normalizePathname(definition.canonicalPath ?? pathname);
-  const imageUrl = definition.imagePath ? toAbsoluteUrl(definition.imagePath) : undefined;
+  const robots = definition.robots ?? DEFAULT_ROBOTS;
+  const isIndexable = !robots.toLowerCase().includes('noindex');
+  const resolvedImagePath = definition.imagePath ?? (isIndexable ? brandImages.b2wSocial : undefined);
+  const imageUrl = resolvedImagePath ? toAbsoluteUrl(resolvedImagePath) : undefined;
 
   return {
     pathname,
     canonicalPath,
     title: withBrand(definition.title),
     description: definition.description,
-    robots: definition.robots ?? DEFAULT_ROBOTS,
+    robots,
     type: definition.type ?? 'website',
     imageUrl,
-    imageAlt: definition.imageAlt,
+    imageAlt: imageUrl ? definition.imageAlt ?? DEFAULT_PUBLIC_IMAGE_ALT : undefined,
     twitterCard: imageUrl ? 'summary_large_image' : 'summary',
   };
 }
@@ -456,6 +486,19 @@ function buildExplainerMetadata(pathname: string) {
   });
 }
 
+function buildTierMetadata(pathname: string) {
+  const content = tierPageContent[pathname];
+
+  if (!content) {
+    return null;
+  }
+
+  return buildMetadata(pathname, {
+    title: content.seoTitle,
+    description: content.description,
+  });
+}
+
 export function resolveSeoMetadata(pathname: string): SeoMetadata {
   const normalizedPathname = normalizePathname(pathname);
   const directDefinition = directRoutes.get(normalizedPathname);
@@ -482,6 +525,11 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
   const solutionMetadata = buildSolutionMetadata(normalizedPathname);
   if (solutionMetadata) {
     return solutionMetadata;
+  }
+
+  const tierMetadata = buildTierMetadata(normalizedPathname);
+  if (tierMetadata) {
+    return tierMetadata;
   }
 
   const explainerMetadata = buildExplainerMetadata(normalizedPathname);
@@ -525,6 +573,7 @@ export function listStaticSeoRoutes() {
     ...Object.keys(servicePageContent),
     ...Object.keys(expertisePages),
     ...Object.keys(explainerContent),
+    ...Object.keys(tierPageContent),
     ...allCapabilities.map((capability) => `/capabilities/${capability.slug}`),
     ...aiSolutions.map((solution) => `/clara/${solution.slug}`),
   ]);

@@ -89,3 +89,9 @@ SHEET_TAB_PROPOSAL_SIGNATURES="Proposal Signatures"
 - Proposal-state card tags and impact must be derived from the underlying proposal/profile materials, with tag tiers expressed in monochrome shades.
 - Route-specific public card overrides and proposal/page tag tiers live in `src/content/projectShowcase.ts`.
 - To add a new project card, update `index-projects.xlsx`, then commit and deploy. The next build will regenerate the card list automatically.
+
+## Marketing Sync
+- Run `npm run marketing:sync` after major public-facing website edits that change brand copy, public routes, SEO metadata, canonical paths, favicons, or share images.
+- `npm run sync:marketing-assets` regenerates the top-level favicon stack, web manifest, and default share cards from the checked-in brand assets.
+- `npm run sync:marketing-docs` regenerates [docs/seo-route-inventory.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/seo-route-inventory.md) from the central SEO map and checks that public app routes are not missing static SEO coverage.
+- The maintenance rules live in [docs/marketability-source-of-truth.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/marketability-source-of-truth.md).

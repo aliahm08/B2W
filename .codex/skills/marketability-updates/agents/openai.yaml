@@ -1,0 +1,4 @@
+interface:
+  display_name: "Marketability Updates"
+  short_description: "Keep SEO, copy, and favicons aligned"
+  default_prompt: "Use $marketability-updates to sync B2W route metadata, favicons, and marketing docs after major website edits."
