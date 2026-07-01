@@ -34,8 +34,8 @@ const heroModes: Record<HeroMode, {
     footerClass: 'text-slate-500',
   },
   jasonai: {
-    label: 'Explore JasonAI',
-    statement: 'JasonAI turns daily messages into follow-up clarity.',
+    label: 'Turn daily messages into follow-up clarity.',
+    statement: 'Turn daily messages into follow-up clarity.',
     description:
       'A WhatsApp-ready assistant for field teams that catches scope changes, missed follow-ups, and job context before details slip.',
     href: '/jasonai',
@@ -48,8 +48,8 @@ const heroModes: Record<HeroMode, {
     footerClass: 'text-[#fff7ed]/62',
   },
   clara: {
-    label: 'Open Clara',
-    statement: 'Clara turns project inputs into organized action.',
+    label: 'Evolve project inputs into organized action.',
+    statement: 'Evolve project inputs into organized action.',
     description:
       'Project tools for turning voice notes, estimates, approvals, and decisions into structured scopes and next actions.',
     href: '/clara',
@@ -63,37 +63,12 @@ const heroModes: Record<HeroMode, {
   },
 };
 
-function HeaderLogo({ mode, textClass }: { mode: HeroMode; textClass: string }) {
+function HeaderLogo() {
   return (
-    <div className={`inline-flex min-h-10 items-center gap-3 ${textClass}`}>
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={mode}
-          className="inline-flex items-center gap-3"
-          initial={{ opacity: 0, y: -8, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          exit={{ opacity: 0, y: 8, filter: 'blur(8px)' }}
-          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {mode === 'jasonai' ? (
-            <>
-              <B2WVectorMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" animated />
-              <span className="text-lg font-semibold tracking-[-0.03em] sm:text-xl md:text-2xl">JasonAI</span>
-            </>
-          ) : mode === 'clara' ? (
-            <>
-              <span className="clara-logo-mark is-breathing" aria-hidden="true">
-                <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
-              </span>
-              <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
-            </>
-          ) : (
-            <>
-              <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
-            </>
-          )}
-        </motion.span>
-      </AnimatePresence>
+    <div className="inline-flex min-h-10 items-center gap-3">
+      <span className="inline-flex items-center gap-3">
+        <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
+      </span>
     </div>
   );
 }
@@ -110,7 +85,7 @@ function ProductFrame({
   const isJasonAI = mode === 'jasonai';
   const frameClass = isJasonAI
     ? 'border-[#f4b28c]/70 bg-[#14110f] text-white shadow-[0_28px_90px_rgba(178,74,36,0.22)]'
-    : 'border-[#0e7490]/35 bg-white/88 text-[#082f3a] shadow-[0_28px_90px_rgba(14,116,144,0.18)] backdrop-blur';
+    : 'border-[#0e7490]/35 bg-white/95 text-[#082f3a] shadow-[0_28px_90px_rgba(14,116,144,0.18)]';
   const eyebrowClass = isJasonAI ? 'text-[#f4b28c]' : 'text-[#0e7490]';
   const buttonClass = isJasonAI
     ? 'border-[#f4b28c] bg-[#f4b28c] text-[#14110f] hover:bg-[#ffd7bd]'
@@ -140,42 +115,36 @@ function ProductFrame({
       <div className="relative z-10 flex h-full min-h-0 flex-col">
         <div className="flex items-center justify-between gap-4">
           <span className={`text-xs font-semibold uppercase tracking-[0.18em] ${eyebrowClass}`}>
-            Product
+            {mode === 'jasonai' ? 'JasonAI' : 'Clara'}
           </span>
           <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
         </div>
         <div className="mt-10 flex flex-1 flex-col justify-end">
-          <h2 className="max-w-[12ch] text-5xl font-semibold leading-[0.9] tracking-[-0.06em] sm:text-6xl">
+          <h2 className="max-w-[20ch] text-4xl font-semibold leading-[1.05] tracking-[-0.04em] sm:text-5xl">
             {hero.label}
           </h2>
-          <p className="mt-5 max-w-xl text-lg font-semibold leading-7">
-            {hero.statement}
-          </p>
-          <p className={`mt-3 max-w-xl text-sm font-medium leading-6 sm:text-base ${eyebrowClass}`}>
-            {hero.description}
-          </p>
-          <Link
-            to={hero.href}
-            className={`mt-7 inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors ${buttonClass}`}
-          >
-            Try {mode === 'jasonai' ? 'JasonAI' : 'Clara'}
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          <div className="grid grid-rows-[1fr] opacity-100 transition-all duration-500 ease-out lg:grid-rows-[0fr] lg:opacity-0 lg:group-hover:grid-rows-[1fr] lg:group-hover:opacity-100 lg:group-focus-within:grid-rows-[1fr] lg:group-focus-within:opacity-100">
+            <div className="overflow-hidden">
+              <div className="pt-3">
+                <p className={`max-w-xl text-sm font-medium leading-6 sm:text-base ${eyebrowClass}`}>
+                  {hero.description}
+                </p>
+                <Link
+                  to={hero.href}
+                  className={`mt-7 inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors ${buttonClass}`}
+                >
+                  {mode === 'jasonai' ? 'Explore JasonAI' : 'Open Clara'}
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </motion.article>
   );
 }
 
-function HeaderButtonClass({ mode }: { mode: HeroMode }) {
-  return (
-    mode === 'jasonai'
-      ? 'border-[#f4b28c]/70 bg-[#14110f]/72 text-[#fff7ed] hover:bg-[#2a1710]'
-      : mode === 'clara'
-        ? 'border-[#0e7490]/40 bg-white/72 text-[#082f3a] hover:bg-white'
-        : 'border-slate-950 bg-slate-950 text-white hover:bg-[#24724f]'
-  );
-}
 
 export default function HomeTestOnePage() {
   const [heroMode, setHeroMode] = useState<HeroMode>('consulting');
@@ -195,32 +164,30 @@ export default function HomeTestOnePage() {
       >
         <motion.div
           aria-hidden="true"
-          className="absolute left-1/2 top-1/2 h-[42rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+          className="fixed left-1/2 top-1/2 -z-10 h-[42rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
           animate={{ backgroundColor: activeHero.glow, scale: heroMode === 'consulting' ? 1 : 1.08 }}
           transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
         />
 
         <motion.header
-          className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10"
+          className="fixed top-0 left-0 right-0 z-50 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10 mix-blend-difference text-white"
           initial={{ opacity: 0, y: -14, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
         >
           <Link to="/" aria-label="B2W home" className="inline-flex items-center">
-            <HeaderLogo mode={heroMode} textClass={activeHero.textClass} />
+            <HeaderLogo />
           </Link>
           <a
             href="mailto:info@b2w-ai.com"
-            onMouseEnter={() => setHeroMode('consulting')}
-            onFocus={() => setHeroMode('consulting')}
-            className={`group inline-flex min-h-10 items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold shadow-sm backdrop-blur transition-all ${HeaderButtonClass({ mode: heroMode })}`}
+            className="group inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-white/30 px-4 text-sm font-semibold shadow-sm transition-all hover:bg-white hover:text-black"
           >
             <span>Contact</span>
             <Mail className="h-4 w-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-focus-visible:-translate-y-0.5" />
           </a>
         </motion.header>
 
-        <section className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-7xl items-center px-5 pb-16 sm:px-8 lg:px-10">
+        <section className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-7xl items-center px-5 pt-20 pb-16 sm:px-8 lg:px-10">
           <motion.div
             layout
             className="mx-auto flex max-w-6xl flex-col items-center text-center"
@@ -243,8 +210,6 @@ export default function HomeTestOnePage() {
             >
               <Link
                 to="/services"
-                onMouseEnter={() => setHeroMode('consulting')}
-                onFocus={() => setHeroMode('consulting')}
                 className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-950 bg-slate-950 px-5 py-3 text-base font-semibold text-white shadow-[0_18px_48px_rgba(15,23,42,0.14)] transition-colors hover:bg-[#24724f]"
               >
                 Explore Consulting
@@ -256,11 +221,7 @@ export default function HomeTestOnePage() {
                   event.preventDefault();
                   document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                onMouseEnter={() => setHeroMode('jasonai')}
-                onMouseLeave={() => setHeroMode('consulting')}
-                onFocus={() => setHeroMode('jasonai')}
-                onBlur={() => setHeroMode('consulting')}
-                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-950/16 bg-white/78 px-5 py-3 text-base font-semibold text-slate-950 shadow-[0_18px_48px_rgba(15,23,42,0.10)] backdrop-blur transition-colors hover:bg-white"
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-950/16 bg-white/95 px-5 py-3 text-base font-semibold text-slate-950 shadow-[0_18px_48px_rgba(15,23,42,0.10)] transition-colors hover:bg-white"
               >
                 See Products
                 <ArrowDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1 group-focus-visible:translate-y-1" />
@@ -271,7 +232,7 @@ export default function HomeTestOnePage() {
 
         <section
           id="products"
-          className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl content-center gap-6 px-5 py-20 sm:px-8 lg:grid-cols-2 lg:px-10"
+          className="relative z-10 mx-auto grid w-full max-w-7xl content-center gap-6 px-5 py-12 sm:px-8 lg:grid-cols-2 lg:px-10 lg:py-16"
         >
           <ProductFrame mode="jasonai" setActiveMode={setHeroMode} />
           <ProductFrame mode="clara" setActiveMode={setHeroMode} />
