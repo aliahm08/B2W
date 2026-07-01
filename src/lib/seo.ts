@@ -61,9 +61,9 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
     {
-      title: 'Consulting, Clara, and AI Solutions',
+      title: 'Consulting, Clara, and JasonAI',
       description:
-        'Explore B2W consulting, Clara, and AI solutions for practical business execution, operations, and applied AI systems.',
+        'B2W helps growing businesses solve problems through consulting, developer and analyst support, Clara project tools, and JasonAI.',
       imagePath: brandImages.b2wSocial,
     },
   ],

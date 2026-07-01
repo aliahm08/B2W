@@ -1,260 +1,291 @@
 import { AnimatePresence, motion } from 'motion/react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import B2WLogoMark from '../components/B2WLogoMark';
+import { ArrowDown, ArrowRight, Mail, MessageCircle, Mic } from 'lucide-react';
+import { B2WSilhouetteMark, B2WVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
-const rotatingClients = [
-  { label: 'restaurants', kind: 'smb', intent: 'hybrid' },
-  { label: 'bus operations', kind: 'organization', intent: 'hybrid' },
-  { label: 'general contractors', kind: 'organization', intent: 'management' },
-  { label: 'cafes', kind: 'smb', intent: 'management' },
-  { label: 'med spas', kind: 'smb', intent: 'hybrid' },
-  { label: 'real estate developers', kind: 'organization', intent: 'hybrid' },
-  { label: 'dentists', kind: 'smb', intent: 'hybrid' },
-  { label: 'plumbers', kind: 'smb', intent: 'management' },
-  { label: 'distribution teams', kind: 'organization', intent: 'platform' },
-  { label: 'law firms', kind: 'smb', intent: 'management' },
-  { label: 'franchises', kind: 'smb', intent: 'hybrid' },
-  { label: 'manufacturing groups', kind: 'organization', intent: 'platform' },
-  { label: 'brokerages', kind: 'smb', intent: 'platform' },
-  { label: 'retailers', kind: 'smb', intent: 'platform' },
-  { label: 'accountants', kind: 'smb', intent: 'platform' },
-  { label: 'supermarkets', kind: 'smb', intent: 'management' },
-  { label: 'wholesalers', kind: 'smb', intent: 'platform' },
-];
+type HeroMode = 'consulting' | 'jasonai' | 'clara';
 
-const pathways = [
-  {
-    title: 'Consulting',
-    href: '/services',
-    key: 'consulting',
-  },
-  {
-    title: 'Clara',
-    href: '/clara',
-    key: 'clara',
-  },
-  {
-    title: 'JasonAI',
-    href: '/jasonai',
-    key: 'jasonai',
-  },
-] as const;
-
-type PathwayThemeKey = (typeof pathways)[number]['key'];
-
-const pathwayThemes: Record<PathwayThemeKey, {
-  page: string;
-  ambientOne: string;
-  ambientTwo: string;
-  ambientThree: string;
-  logo: string;
-  eyebrow: string;
-  heading: string;
-  connector: string;
-  rotatingText: string;
-  body: string;
-  footer: string;
-  footerMuted: string;
-  contact: string;
-  activeButton: string;
-  inactiveButton: string;
+const heroModes: Record<HeroMode, {
+  label: string;
+  statement: string;
+  description: string;
+  href: string;
+  background: string;
+  textClass: string;
+  subtextClass: string;
+  accentClass: string;
+  glow: string;
+  footerClass: string;
 }> = {
   consulting: {
-    page: 'bg-white text-neutral-950',
-    ambientOne: 'bg-[#1f9f6f]/12',
-    ambientTwo: 'bg-[#0f172a]/8',
-    ambientThree: 'bg-[#8fb69d]/10',
-    logo: 'text-black',
-    eyebrow: 'text-[#24724f]',
-    heading: 'text-neutral-950',
-    connector: 'text-[#334155]',
-    rotatingText: 'text-[#24724f]',
-    body: 'text-[#475569]',
-    footer: 'border-[#0f172a]/10 text-neutral-950',
-    footerMuted: 'text-[#64748b]',
-    contact: 'text-[#475569] hover:text-neutral-950',
-    activeButton: 'border-[#0f172a] bg-[#0f172a] text-white hover:border-[#24724f] hover:bg-[#24724f] hover:text-white',
-    inactiveButton: 'border-[#0f172a] text-[#0f172a] hover:border-b-2 hover:text-[#24724f]',
-  },
-  clara: {
-    page: 'bg-[#080a0f] text-white',
-    ambientOne: 'bg-sky-300/16',
-    ambientTwo: 'bg-teal-300/14',
-    ambientThree: 'bg-white/8',
-    logo: 'text-white',
-    eyebrow: 'text-sky-200/70',
-    heading: 'text-white',
-    connector: 'text-sky-100/80',
-    rotatingText: 'text-sky-200',
-    body: 'text-neutral-300',
-    footer: 'border-white/10 text-white',
-    footerMuted: 'text-neutral-500',
-    contact: 'text-neutral-400 hover:text-white',
-    activeButton: 'border-white bg-white text-black hover:border-sky-100 hover:bg-sky-100 hover:text-black',
-    inactiveButton: 'border-white/50 text-white hover:border-b-2 hover:text-sky-200',
+    label: 'Consulting',
+    statement: 'We take businesses to the next stage.',
+    description:
+      'We consult with growing businesses, diagnose the real constraint, and bring developers and analysts to build the right service, system, or workflow.',
+    href: '/services',
+    background:
+      'linear-gradient(180deg,#fbfaf6 0%,#f7f4ed 55%,#fbfaf6 100%)',
+    textClass: 'text-slate-950',
+    subtextClass: 'text-slate-600',
+    accentClass: 'border-slate-950 bg-slate-950 text-white hover:bg-[#24724f]',
+    glow: 'rgba(36,114,79,0.14)',
+    footerClass: 'text-slate-500',
   },
   jasonai: {
-    page: 'bg-[#fffaf0] text-[#141414]',
-    ambientOne: 'bg-[#c65a2e]/28',
-    ambientTwo: 'bg-[#164e63]/24',
-    ambientThree: 'bg-[#e8cfa7]/38',
-    logo: 'text-[#141414]',
-    eyebrow: 'text-[#b24a24]',
-    heading: 'text-[#141414]',
-    connector: 'text-[#5c4636]',
-    rotatingText: 'text-[#164e63]',
-    body: 'text-[#5c4636]',
-    footer: 'border-[#d8b98b] text-[#141414]',
-    footerMuted: 'text-[#7a604b]',
-    contact: 'text-[#5c4636] hover:text-[#141414]',
-    activeButton: 'border-[#141414] bg-[#141414] text-white hover:border-[#141414] hover:bg-[#2f2a24] hover:text-white',
-    inactiveButton: 'border-[#141414] text-[#141414] hover:border-b-2 hover:text-[#b24a24]',
+    label: 'Explore JasonAI',
+    statement: 'JasonAI turns daily messages into follow-up clarity.',
+    description:
+      'A WhatsApp-ready assistant for field teams that catches scope changes, missed follow-ups, and job context before details slip.',
+    href: '/jasonai',
+    background:
+      'radial-gradient(circle at 18% 18%,rgba(178,74,36,0.28),transparent 30%),radial-gradient(circle at 82% 18%,rgba(37,211,102,0.14),transparent 26%),linear-gradient(180deg,#17110f 0%,#2a1710 58%,#fff3e7 100%)',
+    textClass: 'text-[#fff7ed]',
+    subtextClass: 'text-[#f4b28c]',
+    accentClass: 'border-[#f4b28c] bg-[#14110f] text-white hover:bg-[#2a1710]',
+    glow: 'rgba(178,74,36,0.34)',
+    footerClass: 'text-[#fff7ed]/62',
+  },
+  clara: {
+    label: 'Open Clara',
+    statement: 'Clara turns project inputs into organized action.',
+    description:
+      'Project tools for turning voice notes, estimates, approvals, and decisions into structured scopes and next actions.',
+    href: '/clara',
+    background:
+      'radial-gradient(circle at 16% 18%,rgba(14,116,144,0.20),transparent 30%),radial-gradient(circle at 84% 20%,rgba(186,230,253,0.30),transparent 28%),linear-gradient(180deg,#eef8f8 0%,#ffffff 56%,#082f3a 100%)',
+    textClass: 'text-[#082f3a]',
+    subtextClass: 'text-[#0e7490]',
+    accentClass: 'border-[#0e7490] bg-white/86 text-[#082f3a] hover:bg-[#eef8f8]',
+    glow: 'rgba(14,116,144,0.25)',
+    footerClass: 'text-[#082f3a]/70',
   },
 };
 
-function getThemeGradient(themeKey: PathwayThemeKey) {
-  if (themeKey === 'clara') {
-    return 'radial-gradient(circle_at_18%_16%,rgba(125,211,252,0.16),transparent_25%),radial-gradient(circle_at_84%_18%,rgba(45,212,191,0.12),transparent_26%),radial-gradient(circle_at_52%_74%,rgba(255,255,255,0.06),transparent_38%),linear-gradient(180deg,#080a0f_0%,#0c1218_100%)';
-  }
+function HeaderLogo({ mode, textClass }: { mode: HeroMode; textClass: string }) {
+  return (
+    <div className={`inline-flex min-h-10 items-center gap-3 ${textClass}`}>
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={mode}
+          className="inline-flex items-center gap-3"
+          initial={{ opacity: 0, y: -8, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: 8, filter: 'blur(8px)' }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {mode === 'jasonai' ? (
+            <>
+              <B2WVectorMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" animated />
+              <span className="text-lg font-semibold tracking-[-0.03em] sm:text-xl md:text-2xl">JasonAI</span>
+            </>
+          ) : mode === 'clara' ? (
+            <>
+              <span className="clara-logo-mark is-breathing" aria-hidden="true">
+                <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
+              </span>
+              <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
+            </>
+          ) : (
+            <>
+              <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
+            </>
+          )}
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  );
+}
 
-  if (themeKey === 'jasonai') {
-    return 'repeating-linear-gradient(90deg,rgba(20,20,20,0.045) 0 1px,transparent 1px 44px),repeating-linear-gradient(180deg,rgba(20,20,20,0.035) 0 1px,transparent 1px 44px),radial-gradient(circle_at_16%_18%,rgba(198,90,46,0.36),transparent_25%),radial-gradient(circle_at_84%_14%,rgba(22,78,99,0.22),transparent_28%),radial-gradient(circle_at_52%_72%,rgba(232,207,167,0.54),transparent_38%),linear-gradient(180deg,#fff6e6_0%,#f6e6cf_100%)';
-  }
+function ProductFrame({
+  mode,
+  setActiveMode,
+}: {
+  mode: Exclude<HeroMode, 'consulting'>;
+  setActiveMode: (mode: HeroMode) => void;
+}) {
+  const hero = heroModes[mode];
+  const Icon = mode === 'jasonai' ? MessageCircle : Mic;
+  const isJasonAI = mode === 'jasonai';
+  const frameClass = isJasonAI
+    ? 'border-[#f4b28c]/70 bg-[#14110f] text-white shadow-[0_28px_90px_rgba(178,74,36,0.22)]'
+    : 'border-[#0e7490]/35 bg-white/88 text-[#082f3a] shadow-[0_28px_90px_rgba(14,116,144,0.18)] backdrop-blur';
+  const eyebrowClass = isJasonAI ? 'text-[#f4b28c]' : 'text-[#0e7490]';
+  const buttonClass = isJasonAI
+    ? 'border-[#f4b28c] bg-[#f4b28c] text-[#14110f] hover:bg-[#ffd7bd]'
+    : 'border-[#0e7490] bg-[#082f3a] text-white hover:bg-[#0e7490]';
 
-  return 'repeating-linear-gradient(90deg,rgba(15,23,42,0.035) 0 1px,transparent 1px 56px),repeating-linear-gradient(180deg,rgba(15,23,42,0.028) 0 1px,transparent 1px 56px),radial-gradient(circle_at_16%_10%,rgba(31,159,111,0.12),transparent_23%),radial-gradient(circle_at_84%_16%,rgba(15,23,42,0.08),transparent_22%),radial-gradient(circle_at_52%_76%,rgba(143,182,157,0.13),transparent_26%),linear-gradient(180deg,#ffffff_0%,#f5f8f6_42%,#ffffff_100%)';
+  return (
+    <motion.article
+      layout
+      onMouseEnter={() => setActiveMode(mode)}
+      onMouseLeave={() => setActiveMode('consulting')}
+      onFocus={() => setActiveMode(mode)}
+      onBlur={() => setActiveMode('consulting')}
+      className={`group relative flex min-h-[26rem] overflow-hidden rounded-[32px] border p-6 transition-colors sm:p-8 ${frameClass}`}
+      initial={{ opacity: 0, y: 26, filter: 'blur(12px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '-120px' }}
+      transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <motion.div
+        aria-hidden="true"
+        className={`absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl ${
+          isJasonAI ? 'bg-[#b24a24]/34' : 'bg-[#7dd3fc]/35'
+        }`}
+        animate={{ scale: [1, 1.08, 1], opacity: [0.72, 1, 0.72] }}
+        transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="relative z-10 flex h-full min-h-0 flex-col">
+        <div className="flex items-center justify-between gap-4">
+          <span className={`text-xs font-semibold uppercase tracking-[0.18em] ${eyebrowClass}`}>
+            Product
+          </span>
+          <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+        </div>
+        <div className="mt-10 flex flex-1 flex-col justify-end">
+          <h2 className="max-w-[12ch] text-5xl font-semibold leading-[0.9] tracking-[-0.06em] sm:text-6xl">
+            {hero.label}
+          </h2>
+          <p className="mt-5 max-w-xl text-lg font-semibold leading-7">
+            {hero.statement}
+          </p>
+          <p className={`mt-3 max-w-xl text-sm font-medium leading-6 sm:text-base ${eyebrowClass}`}>
+            {hero.description}
+          </p>
+          <Link
+            to={hero.href}
+            className={`mt-7 inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors ${buttonClass}`}
+          >
+            Try {mode === 'jasonai' ? 'JasonAI' : 'Clara'}
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
+function HeaderButtonClass({ mode }: { mode: HeroMode }) {
+  return (
+    mode === 'jasonai'
+      ? 'border-[#f4b28c]/70 bg-[#14110f]/72 text-[#fff7ed] hover:bg-[#2a1710]'
+      : mode === 'clara'
+        ? 'border-[#0e7490]/40 bg-white/72 text-[#082f3a] hover:bg-white'
+        : 'border-slate-950 bg-slate-950 text-white hover:bg-[#24724f]'
+  );
 }
 
 export default function HomeTestOnePage() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [activeThemeKey, setActiveThemeKey] = useState<PathwayThemeKey>('consulting');
-  const activeClient = rotatingClients[activeIndex];
-  const activeTheme = pathwayThemes[activeThemeKey];
-
-  useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % rotatingClients.length);
-    }, 1650);
-
-    return () => window.clearInterval(intervalId);
-  }, []);
+  const [heroMode, setHeroMode] = useState<HeroMode>('consulting');
+  const activeHero = heroModes[heroMode];
 
   return (
     <>
       <Seo
-        title="B2W Business, Clara, and JasonAI"
-        description="Explore B2W business consulting, Clara, and JasonAI for practical execution, operations, and applied AI systems."
+        title="Consulting, Clara, and JasonAI"
+        description="B2W helps growing businesses solve problems through consulting, developer and analyst support, Clara project tools, and JasonAI."
         canonicalPath="/"
       />
+      <motion.main
+        className="relative min-h-screen overflow-hidden text-[#111827]"
+        animate={{ background: activeHero.background }}
+        transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <motion.div
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 h-[42rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+          animate={{ backgroundColor: activeHero.glow, scale: heroMode === 'consulting' ? 1 : 1.08 }}
+          transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+        />
 
-      <main className={`min-h-screen overflow-hidden transition-colors duration-500 ${activeTheme.page}`}>
-        <section className="relative isolate">
-          <div
-            className="absolute inset-0 transition-[background] duration-500"
-            style={{ background: getThemeGradient(activeThemeKey) }}
-          />
-          <motion.div
-            aria-hidden="true"
-            className={`absolute -left-24 top-[18%] h-72 w-72 rounded-full blur-3xl transition-colors duration-500 ${activeTheme.ambientOne}`}
-            animate={{ x: [0, 48, 12, 0], y: [0, -24, 36, 0], scale: [1, 1.08, 0.96, 1] }}
-            transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            aria-hidden="true"
-            className={`absolute right-[-5rem] top-[12%] h-80 w-80 rounded-full blur-3xl transition-colors duration-500 ${activeTheme.ambientTwo}`}
-            animate={{ x: [0, -36, -12, 0], y: [0, 28, -18, 0], scale: [1, 0.94, 1.06, 1] }}
-            transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            aria-hidden="true"
-            className={`absolute bottom-[-7rem] left-[26%] h-96 w-96 rounded-full blur-3xl transition-colors duration-500 ${activeTheme.ambientThree}`}
-            animate={{ x: [0, 22, -18, 0], y: [0, -20, 18, 0], scale: [1, 1.04, 0.98, 1] }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-          />
+        <motion.header
+          className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10"
+          initial={{ opacity: 0, y: -14, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <Link to="/" aria-label="B2W home" className="inline-flex items-center">
+            <HeaderLogo mode={heroMode} textClass={activeHero.textClass} />
+          </Link>
+          <a
+            href="mailto:info@b2w-ai.com"
+            onMouseEnter={() => setHeroMode('consulting')}
+            onFocus={() => setHeroMode('consulting')}
+            className={`group inline-flex min-h-10 items-center justify-center gap-2 rounded-full border px-4 text-sm font-semibold shadow-sm backdrop-blur transition-all ${HeaderButtonClass({ mode: heroMode })}`}
+          >
+            <span>Contact</span>
+            <Mail className="h-4 w-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-focus-visible:-translate-y-0.5" />
+          </a>
+        </motion.header>
 
-          <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col px-6">
-            <header className="flex h-20 items-center justify-between gap-4">
-              <B2WLogoMark
-                variant={activeThemeKey}
-                className={`shrink-0 transition-colors duration-500 ${activeTheme.logo}`}
-              />
-            </header>
+        <section className="relative z-10 mx-auto flex min-h-[calc(100svh-5rem)] w-full max-w-7xl items-center px-5 pb-16 sm:px-8 lg:px-10">
+          <motion.div
+            layout
+            className="mx-auto flex max-w-6xl flex-col items-center text-center"
+            transition={{ layout: { duration: 0.52, ease: [0.22, 1, 0.36, 1] } }}
+          >
+            <motion.h1
+              layout
+              initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              className={`b2w-wordmark mx-auto max-w-[11ch] text-[clamp(3.35rem,12.4vw,11rem)] font-medium leading-[0.82] tracking-[-0.08em] ${activeHero.textClass}`}
+            >
+              {heroModes.consulting.statement}
+            </motion.h1>
 
-            <div className="flex flex-1 items-center py-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-                className="w-full max-w-6xl pl-14 pr-14 md:pl-16 md:pr-16 lg:pl-20 lg:pr-20"
+            <motion.div
+              layout
+              className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"
+              transition={{ layout: { duration: 0.52, ease: [0.22, 1, 0.36, 1] } }}
+            >
+              <Link
+                to="/services"
+                onMouseEnter={() => setHeroMode('consulting')}
+                onFocus={() => setHeroMode('consulting')}
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-950 bg-slate-950 px-5 py-3 text-base font-semibold text-white shadow-[0_18px_48px_rgba(15,23,42,0.14)] transition-colors hover:bg-[#24724f]"
               >
-                <h1 className="flex w-full max-w-full items-baseline gap-[0.16em] whitespace-nowrap text-[clamp(1.35rem,5.9vw,5.9rem)] font-medium leading-[0.88] tracking-[-0.065em] [transform:scaleY(0.92)] origin-left">
-                  <span className={`b2w-wordmark inline-block shrink-0 tracking-[-0.09em] transition-colors duration-500 ${activeTheme.heading}`}>
-                    B2W
-                  </span>
-                  <span className={`shrink-0 font-light transition-colors duration-500 ${activeTheme.connector}`}>/</span>
-                  <span className={`relative inline-flex min-h-[1.18em] min-w-[23ch] items-center overflow-visible py-[0.08em] transition-colors duration-500 ${activeTheme.rotatingText}`}>
-                    <AnimatePresence mode="wait">
-                      <motion.span
-                        key={activeClient.label}
-                        initial={{ opacity: 0, filter: 'blur(8px)' }}
-                        animate={{ opacity: 1, filter: 'blur(0px)' }}
-                        exit={{ opacity: 0, filter: 'blur(8px)' }}
-                        transition={{ duration: 0.36, ease: 'easeOut' }}
-                        className="block font-[family-name:var(--font-serif)] italic tracking-[-0.03em]"
-                      >
-                        {activeClient.label}
-                      </motion.span>
-                    </AnimatePresence>
-                  </span>
-                </h1>
-
-                <p className={`mt-8 max-w-xl text-base leading-7 transition-colors duration-500 md:text-lg ${activeTheme.body}`}>
-                  Improve management execution, deploy practical AI systems, and build the operating structure needed to scale with more control.
-                </p>
-
-                <div className="mt-12 flex flex-wrap gap-x-4 gap-y-2">
-                  {pathways.map((pathway, index) => (
-                    <Link
-                      key={pathway.title}
-                      to={pathway.href}
-                      onMouseEnter={() => setActiveThemeKey(pathway.key)}
-                      onFocus={() => setActiveThemeKey(pathway.key)}
-                      className={
-                        activeThemeKey === pathway.key
-                          ? `inline-flex min-h-12 items-center whitespace-nowrap border px-5 py-3 text-lg font-medium outline-none transition-colors duration-200 focus:outline-none ${activeTheme.activeButton}`
-                          : `inline-flex min-h-12 items-center whitespace-nowrap border-b px-5 py-3 text-lg font-medium transition-[color,border-bottom-width,border-color] duration-200 ${activeTheme.inactiveButton}`
-                      }
-                    >
-                      {pathway.title}
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-
-            <footer className={`border-t py-12 transition-colors duration-500 ${activeTheme.footer}`}>
-              <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
-                <div>
-                  <h3 className={`text-lg font-medium tracking-tight transition-colors duration-500 ${activeTheme.heading}`}>
-                    <span className="b2w-wordmark">B2W LLC</span>
-                  </h3>
-                  <p className={`mt-2 text-sm transition-colors duration-500 ${activeTheme.footerMuted}`}>© {new Date().getFullYear()} All rights reserved.</p>
-                </div>
-
-                <div className={`flex gap-8 text-sm transition-colors duration-500 ${activeTheme.contact}`}>
-                  <a
-                    href="mailto:info@b2w-ai.com?subject=B2W%20Inquiry"
-                    className="transition-colors"
-                  >
-                    Contact
-                  </a>
-                </div>
-              </div>
-            </footer>
-          </div>
+                Explore Consulting
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" />
+              </Link>
+              <a
+                href="#products"
+                onClick={(event) => {
+                  event.preventDefault();
+                  document.getElementById('products')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                onMouseEnter={() => setHeroMode('jasonai')}
+                onMouseLeave={() => setHeroMode('consulting')}
+                onFocus={() => setHeroMode('jasonai')}
+                onBlur={() => setHeroMode('consulting')}
+                className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-slate-950/16 bg-white/78 px-5 py-3 text-base font-semibold text-slate-950 shadow-[0_18px_48px_rgba(15,23,42,0.10)] backdrop-blur transition-colors hover:bg-white"
+              >
+                See Products
+                <ArrowDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-1 group-focus-visible:translate-y-1" />
+              </a>
+            </motion.div>
+          </motion.div>
         </section>
-      </main>
+
+        <section
+          id="products"
+          className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl content-center gap-6 px-5 py-20 sm:px-8 lg:grid-cols-2 lg:px-10"
+        >
+          <ProductFrame mode="jasonai" setActiveMode={setHeroMode} />
+          <ProductFrame mode="clara" setActiveMode={setHeroMode} />
+        </section>
+
+        <motion.footer
+          className={`relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 py-5 text-sm sm:px-8 lg:px-10 ${activeHero.footerClass}`}
+          initial={{ opacity: 0, y: 14, filter: 'blur(8px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          transition={{ duration: 0.56, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span>B2W LLC</span>
+        </motion.footer>
+      </motion.main>
     </>
   );
 }
