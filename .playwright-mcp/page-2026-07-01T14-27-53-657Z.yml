@@ -1,0 +1,102 @@
+- generic [ref=f1e3]:
+  - banner [ref=f1e4]:
+    - generic [ref=f1e5]:
+      - link "Clara" [ref=f1e7] [cursor=pointer]:
+        - /url: /clara
+        - generic [ref=f1e9]: Clara
+      - button "Open navigation menu":
+        - img
+  - main [ref=f1e10]:
+    - generic [ref=f1e16]:
+      - generic [ref=f1e17]:
+        - generic [ref=f1e18]:
+          - img [ref=f1e19]
+          - generic [ref=f1e22]: Voice to estimate
+        - heading "Estimate your project in seconds." [level=1] [ref=f1e23]
+        - paragraph [ref=f1e24]: Record a field note. Clara turns it into an organized scope, then generates a line-item estimate with contingency.
+        - link "Talk to Clara" [ref=f1e26] [cursor=pointer]:
+          - /url: https://chat.b2w-ai.com
+          - generic [ref=f1e27]:
+            - text: Talk to Clara
+            - img [ref=f1e28]
+      - generic [ref=f1e31]:
+        - generic [ref=f1e32]:
+          - img [ref=f1e34]
+          - button "Record voice note" [ref=f1e36]
+          - generic [ref=f1e45]:
+            - generic [ref=f1e46]:
+              - paragraph [ref=f1e49]: Voice note
+              - paragraph [ref=f1e50]: 00:38
+            - paragraph [ref=f1e51]: I am repairing a 1200 square foot living room with 6 windows, 2 archways, and one door to the basement staircase. The ceilings are approximately 13 feet tall, and there are 12 spot lights. We need to replace all window frames, caulk all seals and fix the glass on 3 windows. The carpeting needs to be removed, trashed, and the original wood flooring needs to be sanded, buffed, and polished assuming no damage.
+        - generic [ref=f1e53]:
+          - generic [ref=f1e54]:
+            - generic [ref=f1e55]:
+              - img [ref=f1e56]
+              - paragraph [ref=f1e59]: Organized scope
+            - generic [ref=f1e60]: Ready
+          - generic [ref=f1e61]:
+            - generic [ref=f1e62]:
+              - img [ref=f1e63]
+              - generic [ref=f1e65]: 1,200 sq ft living room repair
+            - generic [ref=f1e66]:
+              - img [ref=f1e67]
+              - generic [ref=f1e69]: 6 windows, 2 archways, 1 basement staircase door
+            - generic [ref=f1e70]:
+              - img [ref=f1e71]
+              - generic [ref=f1e73]: 13 ft ceilings with 12 spot lights
+            - generic [ref=f1e74]:
+              - img [ref=f1e75]
+              - generic [ref=f1e77]: Replace window frames and caulk all seals
+            - generic [ref=f1e78]:
+              - img [ref=f1e79]
+              - generic [ref=f1e81]: Repair glass on 3 windows
+            - generic [ref=f1e82]:
+              - img [ref=f1e83]
+              - generic [ref=f1e85]: Remove and trash carpeting
+            - generic [ref=f1e86]:
+              - img [ref=f1e87]
+              - generic [ref=f1e89]: Sand, buff, and polish original wood flooring
+        - generic [ref=f1e90]:
+          - generic [ref=f1e91]:
+            - generic [ref=f1e92]:
+              - paragraph [ref=f1e93]: Live estimate
+              - paragraph [ref=f1e94]: Web pricing + company material library
+            - button "Generate estimate" [ref=f1e95]:
+              - img [ref=f1e96]
+              - text: Generate estimate
+          - generic [ref=f1e98]:
+            - generic [ref=f1e99]:
+              - generic [ref=f1e100]: Line item
+              - generic [ref=f1e101]: Qty
+              - generic [ref=f1e102]: Cost
+            - generic [ref=f1e103]:
+              - generic [ref=f1e104]: Site prep, protection, and debris handling
+              - generic [ref=f1e105]: 1 lot
+              - generic [ref=f1e106]: $1,280
+            - generic [ref=f1e107]:
+              - generic [ref=f1e108]: Window frame replacement
+              - generic [ref=f1e109]: 6 units
+              - generic [ref=f1e110]: $7,860
+            - generic [ref=f1e111]:
+              - generic [ref=f1e112]: Seal caulking and 3 glass repairs
+              - generic [ref=f1e113]: 1 lot
+              - generic [ref=f1e114]: $2,940
+            - generic [ref=f1e115]:
+              - generic [ref=f1e116]: Carpet removal and disposal
+              - generic [ref=f1e117]: 1,200 sq ft
+              - generic [ref=f1e118]: $2,160
+            - generic [ref=f1e119]:
+              - generic [ref=f1e120]: Wood floor sand, buff, and polish
+              - generic [ref=f1e121]: 1,200 sq ft
+              - generic [ref=f1e122]: $6,720
+            - generic [ref=f1e123]:
+              - generic [ref=f1e124]: High-ceiling labor adjustment
+              - generic [ref=f1e125]: 13 ft
+              - generic [ref=f1e126]: $1,950
+            - generic [ref=f1e127]:
+              - generic [ref=f1e128]: Contingency
+              - generic [ref=f1e129]: 12%
+              - generic [ref=f1e130]: $2,749
+            - generic [ref=f1e131]:
+              - generic [ref=f1e132]: Projected total
+              - generic [ref=f1e133]: $25,659

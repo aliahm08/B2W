@@ -1,0 +1,8 @@
+- generic [ref=f35e3]:
+  - banner [ref=f35e4]:
+    - generic [ref=f35e5]:
+      - generic "Clara" [ref=f35e7]:
+        - generic [ref=f35e9]: Clara
+      - button "Open navigation menu":
+        - img
+  - main [ref=f35e10]

@@ -223,6 +223,7 @@ html {
 
 .clara-cta {
   isolation: isolate;
+  overflow: hidden;
 }
 
 .clara-cta::before {

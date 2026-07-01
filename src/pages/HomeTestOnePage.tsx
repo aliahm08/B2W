@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ArrowRight, Mail, MessageCircle, Mic } from 'lucide-react';
-import { B2WSilhouetteMark, B2WVectorMark } from '../components/BrandVectorMarks';
+import { B2WSilhouetteMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
 type HeroMode = 'consulting' | 'jasonai' | 'clara';
@@ -54,12 +54,12 @@ const heroModes: Record<HeroMode, {
       'Project tools for turning voice notes, estimates, approvals, and decisions into structured scopes and next actions.',
     href: '/clara',
     background:
-      'radial-gradient(circle at 16% 18%,rgba(14,116,144,0.20),transparent 30%),radial-gradient(circle at 84% 20%,rgba(186,230,253,0.30),transparent 28%),linear-gradient(180deg,#eef8f8 0%,#ffffff 56%,#082f3a 100%)',
-    textClass: 'text-[#082f3a]',
-    subtextClass: 'text-[#0e7490]',
-    accentClass: 'border-[#0e7490] bg-white/86 text-[#082f3a] hover:bg-[#eef8f8]',
-    glow: 'rgba(14,116,144,0.25)',
-    footerClass: 'text-[#082f3a]/70',
+      'radial-gradient(circle at 16% 18%,rgba(166,101,137,0.24),transparent 30%),radial-gradient(circle at 84% 20%,rgba(232,203,218,0.42),transparent 28%),linear-gradient(180deg,#fbf5f8 0%,#fffafd 56%,#3d1f33 100%)',
+    textClass: 'text-[#3d1f33]',
+    subtextClass: 'text-[#9a5f7d]',
+    accentClass: 'border-[#9a5f7d] bg-white/86 text-[#3d1f33] hover:bg-[#fbf0f5]',
+    glow: 'rgba(166,101,137,0.28)',
+    footerClass: 'text-[#3d1f33]/70',
   },
 };
 
@@ -85,11 +85,11 @@ function ProductFrame({
   const isJasonAI = mode === 'jasonai';
   const frameClass = isJasonAI
     ? 'border-[#f4b28c]/70 bg-[#14110f] text-white shadow-[0_28px_90px_rgba(178,74,36,0.22)]'
-    : 'border-[#0e7490]/35 bg-white/95 text-[#082f3a] shadow-[0_28px_90px_rgba(14,116,144,0.18)]';
-  const eyebrowClass = isJasonAI ? 'text-[#f4b28c]' : 'text-[#0e7490]';
+    : 'border-[#b889a1]/45 bg-[#fff8fb]/95 text-[#3d1f33] shadow-[0_28px_90px_rgba(126,73,103,0.18)]';
+  const eyebrowClass = isJasonAI ? 'text-[#f4b28c]' : 'text-[#9a5f7d]';
   const buttonClass = isJasonAI
     ? 'border-[#f4b28c] bg-[#f4b28c] text-[#14110f] hover:bg-[#ffd7bd]'
-    : 'border-[#0e7490] bg-[#082f3a] text-white hover:bg-[#0e7490]';
+    : 'border-[#7e4967] bg-[#3d1f33] text-white hover:bg-[#7e4967]';
 
   return (
     <motion.article
@@ -107,7 +107,7 @@ function ProductFrame({
       <motion.div
         aria-hidden="true"
         className={`absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl ${
-          isJasonAI ? 'bg-[#b24a24]/34' : 'bg-[#7dd3fc]/35'
+          isJasonAI ? 'bg-[#b24a24]/34' : 'bg-[#d9a9c2]/42'
         }`}
         animate={{ scale: [1, 1.08, 1], opacity: [0.72, 1, 0.72] }}
         transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}

@@ -1,0 +1,112 @@
+- generic [ref=f19e3]:
+  - banner [ref=f19e4]:
+    - generic [ref=f19e5]:
+      - generic "Clara" [ref=f19e7]:
+        - generic [ref=f19e9]: Clara
+      - link "Talk to Clara" [ref=f19e139] [cursor=pointer]:
+        - /url: https://chat.b2w-ai.com
+        - generic [ref=f19e140]: Talk to Clara
+  - main [ref=f19e10]:
+    - generic [ref=f19e15]:
+      - generic [ref=f19e18]:
+        - generic [ref=f19e19]:
+          - img [ref=f19e20]
+          - generic [ref=f19e23]: Voice to estimate
+        - heading "Estimate your project in seconds." [level=1] [ref=f19e24]
+        - paragraph [ref=f19e25]: Record a field note. Clara turns it into an organized scope, then generates a line-item estimate with contingency.
+        - generic [ref=f19e26]:
+          - link "See How" [active] [ref=f19e27] [cursor=pointer]:
+            - /url: "#see-how"
+            - generic [ref=f19e28]: See How
+          - link "Test Demo" [ref=f19e35] [cursor=pointer]:
+            - /url: https://chat.b2w-ai.com
+            - generic [ref=f19e36]:
+              - text: Test Demo
+              - img [ref=f19e37]
+      - generic [ref=f19e41]:
+        - generic [ref=f19e42]:
+          - generic [ref=f19e43]:
+            - button "Record voice note" [ref=f19e44]
+            - generic [ref=f19e53]:
+              - paragraph [ref=f19e56]: Recording active
+              - paragraph [ref=f19e57]: 7 of 73 words captured
+          - paragraph [ref=f19e58]: 00:38 voice note
+        - generic [ref=f19e59]:
+          - paragraph [ref=f19e60]: Live transcript
+          - paragraph [ref=f19e61]:
+            - generic [ref=f19e62]: I
+            - generic [ref=f19e63]: am
+            - generic [ref=f19e64]: repairing
+            - generic [ref=f19e65]: a
+            - generic [ref=f19e66]: "1200"
+            - generic [ref=f19e67]: square
+            - generic [ref=f19e68]: foot
+            - generic [ref=f19e69]: living
+            - generic [ref=f19e70]: room
+            - generic [ref=f19e71]: with
+            - generic [ref=f19e72]: "6"
+            - generic [ref=f19e73]: windows,
+            - generic [ref=f19e74]: "2"
+            - generic [ref=f19e75]: archways,
+            - generic [ref=f19e76]: and
+            - generic [ref=f19e77]: one
+            - generic [ref=f19e78]: door
+            - generic [ref=f19e79]: to
+            - generic [ref=f19e80]: the
+            - generic [ref=f19e81]: basement
+            - generic [ref=f19e82]: staircase.
+            - generic [ref=f19e83]: The
+            - generic [ref=f19e84]: ceilings
+            - generic [ref=f19e85]: are
+            - generic [ref=f19e86]: approximately
+            - generic [ref=f19e87]: "13"
+            - generic [ref=f19e88]: feet
+            - generic [ref=f19e89]: tall,
+            - generic [ref=f19e90]: and
+            - generic [ref=f19e91]: there
+            - generic [ref=f19e92]: are
+            - generic [ref=f19e93]: "12"
+            - generic [ref=f19e94]: spot
+            - generic [ref=f19e95]: lights.
+            - generic [ref=f19e96]: We
+            - generic [ref=f19e97]: need
+            - generic [ref=f19e98]: to
+            - generic [ref=f19e99]: replace
+            - generic [ref=f19e100]: all
+            - generic [ref=f19e101]: window
+            - generic [ref=f19e102]: frames,
+            - generic [ref=f19e103]: caulk
+            - generic [ref=f19e104]: all
+            - generic [ref=f19e105]: seals
+            - generic [ref=f19e106]: and
+            - generic [ref=f19e107]: fix
+            - generic [ref=f19e108]: the
+            - generic [ref=f19e109]: glass
+            - generic [ref=f19e110]: "on"
+            - generic [ref=f19e111]: "3"
+            - generic [ref=f19e112]: windows.
+            - generic [ref=f19e113]: The
+            - generic [ref=f19e114]: carpeting
+            - generic [ref=f19e115]: needs
+            - generic [ref=f19e116]: to
+            - generic [ref=f19e117]: be
+            - generic [ref=f19e118]: removed,
+            - generic [ref=f19e119]: trashed,
+            - generic [ref=f19e120]: and
+            - generic [ref=f19e121]: the
+            - generic [ref=f19e122]: original
+            - generic [ref=f19e123]: wood
+            - generic [ref=f19e124]: flooring
+            - generic [ref=f19e125]: needs
+            - generic [ref=f19e126]: to
+            - generic [ref=f19e127]: be
+            - generic [ref=f19e128]: sanded,
+            - generic [ref=f19e129]: buffed,
+            - generic [ref=f19e130]: and
+            - generic [ref=f19e131]: polished
+            - generic [ref=f19e132]: assuming
+            - generic [ref=f19e133]: "no"
+            - text: damage.
+        - button "Organize scope" [disabled] [ref=f19e134]:
+          - img [ref=f19e135]
+          - text: Organize scope

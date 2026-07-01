@@ -1,5 +1,4 @@
 import { allCapabilities, getCapabilityBySlug } from '../content/capabilities';
-import { aiSolutions, getAiSolutionBySlug } from '../content/aiSolutions';
 import { explainerContent } from '../content/dataExplainers';
 import { expertisePages } from '../content/expertisePages';
 import { parseKitchenSolutionSlug } from '../content/kitchen';
@@ -81,7 +80,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'Clara by B2W',
       description:
-        'Explore Clara, the B2W AI demo for voice-to-plan workflows, estimation, financial modeling, and live AI system intake.',
+        'Clara turns voice notes into organized project scopes and line-item estimates with contingency, live web pricing signals, and company material library context.',
       imagePath: brandImages.claraSocial,
       imageAlt: 'Clara by B2W mark on a light background.',
     },
@@ -455,24 +454,6 @@ function buildKitchenPreviewMetadata(pathname: string) {
   });
 }
 
-function buildSolutionMetadata(pathname: string) {
-  if (!pathname.startsWith('/clara/')) {
-    return null;
-  }
-
-  const slug = pathname.replace('/clara/', '');
-  const solution = getAiSolutionBySlug(slug);
-
-  if (!solution) {
-    return null;
-  }
-
-  return buildMetadata(pathname, {
-    title: solution.seoTitle,
-    description: solution.seoDescription,
-  });
-}
-
 function buildExplainerMetadata(pathname: string) {
   const content = explainerContent[pathname];
 
@@ -520,11 +501,6 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
   const kitchenPreviewMetadata = buildKitchenPreviewMetadata(normalizedPathname);
   if (kitchenPreviewMetadata) {
     return kitchenPreviewMetadata;
-  }
-
-  const solutionMetadata = buildSolutionMetadata(normalizedPathname);
-  if (solutionMetadata) {
-    return solutionMetadata;
   }
 
   const tierMetadata = buildTierMetadata(normalizedPathname);
@@ -575,7 +551,6 @@ export function listStaticSeoRoutes() {
     ...Object.keys(explainerContent),
     ...Object.keys(tierPageContent),
     ...allCapabilities.map((capability) => `/capabilities/${capability.slug}`),
-    ...aiSolutions.map((solution) => `/clara/${solution.slug}`),
   ]);
 
   return Array.from(paths)

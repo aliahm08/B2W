@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { ArrowUpRight, Menu, X } from 'lucide-react';
-import { aiSolutions } from '../../content/aiSolutions';
+import { useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import MobileMenuDrawer from '../MobileMenuDrawer';
 
 type SolutionsNavbarProps = {
@@ -13,25 +12,13 @@ type ActiveClaraCta = 'header' | 'page' | null;
 
 function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean }) {
   return (
-    <Link to="/clara" aria-label="Clara" className="relative z-[110] inline-flex items-center gap-3 overflow-visible text-white">
+    <div aria-label="Clara" className="relative z-[110] inline-flex items-center gap-3 overflow-visible text-white">
       <span className={`clara-logo-mark ${isLogoAnimated ? 'is-breathing' : ''}`} aria-hidden="true">
         <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
       </span>
       <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
-    </Link>
+    </div>
   );
-}
-
-function desktopNavLinkClasses(isActive: boolean) {
-  return isActive
-    ? 'font-semibold text-white'
-    : 'font-medium text-neutral-400 hover:text-white';
-}
-
-function mobileNavLinkClasses(isActive: boolean) {
-  return isActive
-    ? 'text-white'
-    : 'text-neutral-400 hover:text-white';
 }
 
 export default function SolutionsNavbar({
@@ -43,25 +30,18 @@ export default function SolutionsNavbar({
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
   const isCtaHovered = activeCta !== null;
-  const dimmedHeaderClasses = isCtaHovered ? 'blur-sm opacity-35' : 'blur-0 opacity-100';
   const headerCtaClasses = activeCta === 'page' ? 'blur-sm opacity-35' : 'blur-0 opacity-100';
   const ctaIsExternal = ctaHref.startsWith('http');
 
   useEffect(() => {
-    const revealHeader = () => setIsRevealed(true);
-    const revealTimer = window.setTimeout(revealHeader, 5000);
-
     const handleScroll = () => {
-      if (window.scrollY > 8) {
-        revealHeader();
-      }
+      setIsRevealed(window.scrollY > 8);
     };
 
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
 
     return () => {
-      window.clearTimeout(revealTimer);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -117,12 +97,12 @@ export default function SolutionsNavbar({
     <>
       <div
         aria-hidden="true"
-        className={`pointer-events-none fixed inset-0 z-[90] bg-[#080a0f]/10 backdrop-blur-[6px] transition-opacity duration-200 ${
+        className={`pointer-events-none fixed inset-0 z-[90] bg-[#2b1724]/10 backdrop-blur-[6px] transition-opacity duration-200 ${
           activeCta === 'header' ? 'opacity-100' : 'opacity-0'
         }`}
       />
       <header className="fixed inset-x-0 top-4 z-[100] px-4">
-        <div className="relative mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-4 rounded-full border border-white/10 bg-[#080a0f]/82 px-6 py-3 shadow-[0_18px_70px_rgba(0,0,0,0.26)] backdrop-blur-xl">
+        <div className="relative mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-4 rounded-full border border-[#e8cbd9]/14 bg-[#160f15]/84 px-6 py-3 shadow-[0_18px_70px_rgba(43,23,36,0.32)] backdrop-blur-xl">
           <div
             className={`transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               isRevealed
@@ -132,33 +112,6 @@ export default function SolutionsNavbar({
           >
             <SolutionsLockup isLogoAnimated={isCtaHovered} />
           </div>
-
-          <nav
-            className={`hidden transition-[filter,opacity,transform] duration-500 md:flex md:items-center md:gap-3 md:text-xs lg:gap-5 lg:text-sm ${
-              isRevealed
-                ? `pointer-events-auto translate-y-0 ${dimmedHeaderClasses}`
-                : 'pointer-events-none translate-y-1 opacity-0'
-            }`}
-          >
-            <Link
-              to="/clara"
-              className={`transition-colors ${desktopNavLinkClasses(location.pathname === '/clara')}`}
-            >
-              Clara
-            </Link>
-            {aiSolutions.map((solution) => {
-              const target = `/clara/${solution.slug}`;
-              return (
-                <Link
-                  key={solution.slug}
-                  to={target}
-                  className={`transition-colors ${desktopNavLinkClasses(location.pathname === target)}`}
-                >
-                  {solution.navLabel}
-                </Link>
-              );
-            })}
-          </nav>
 
           <div
             className={`hidden items-center gap-3 transition-[filter,opacity,transform] duration-500 md:flex ${
@@ -172,7 +125,7 @@ export default function SolutionsNavbar({
               target={ctaIsExternal ? '_blank' : undefined}
               rel={ctaIsExternal ? 'noreferrer' : undefined}
               data-clara-cta="header"
-              className="clara-cta relative z-[110] inline-flex overflow-hidden rounded-full bg-white px-4 py-2 text-[13px] font-medium text-black shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition-[box-shadow,opacity] duration-200 hover:opacity-95 hover:shadow-[0_14px_38px_rgba(255,255,255,0.14)] focus:outline-none focus:ring-2 focus:ring-white/50"
+              className="clara-cta relative z-[110] inline-flex overflow-hidden rounded-full bg-[#f5dce8] px-4 py-2 text-[13px] font-medium text-[#2b1724] shadow-[0_0_0_1px_rgba(245,220,232,0.22)] transition-[box-shadow,opacity] duration-200 hover:opacity-95 hover:shadow-[0_14px_38px_rgba(184,137,161,0.22)] focus:outline-none focus:ring-2 focus:ring-[#e8cbd9]/60"
             >
               <span className="relative z-10">{ctaLabel}</span>
             </a>
@@ -195,30 +148,7 @@ export default function SolutionsNavbar({
           isOpen={isMobileMenuOpen}
           theme="dark"
           list={
-            <div className="py-2">
-              <Link
-                to="/clara"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`flex items-center justify-between gap-4 py-4 text-[17px] font-medium ${mobileNavLinkClasses(location.pathname === '/clara')}`}
-              >
-                <span>Clara</span>
-                <ArrowUpRight className="h-4 w-4 shrink-0 text-neutral-500" />
-              </Link>
-              {aiSolutions.map((solution) => {
-                const target = `/clara/${solution.slug}`;
-                return (
-                  <Link
-                    key={solution.slug}
-                    to={target}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center justify-between gap-4 py-4 text-[17px] font-medium ${mobileNavLinkClasses(location.pathname === target)}`}
-                  >
-                    <span>{solution.navLabel}</span>
-                    <ArrowUpRight className="h-4 w-4 shrink-0 text-neutral-500" />
-                  </Link>
-                );
-              })}
-            </div>
+            <div className="py-2" aria-hidden="true" />
           }
           cta={
             <a
@@ -226,7 +156,7 @@ export default function SolutionsNavbar({
               target={ctaIsExternal ? '_blank' : undefined}
               rel={ctaIsExternal ? 'noreferrer' : undefined}
               data-clara-cta="header"
-              className="clara-cta relative inline-flex min-h-12 overflow-hidden rounded-full bg-white px-5 py-3 text-base font-semibold text-black transition-[box-shadow,opacity] duration-200 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+              className="clara-cta relative inline-flex min-h-12 overflow-hidden rounded-full bg-[#f5dce8] px-5 py-3 text-base font-semibold text-[#2b1724] transition-[box-shadow,opacity] duration-200 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[#e8cbd9]/60"
             >
               <span className="relative z-10">{ctaLabel}</span>
             </a>

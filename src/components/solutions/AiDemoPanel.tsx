@@ -30,8 +30,8 @@ function DemoShell({
     <section
       className={`relative overflow-hidden rounded-[30px] p-5 md:p-6 ${
         dark
-          ? 'bg-[linear-gradient(180deg,rgba(18,24,34,0.86)_0%,rgba(11,16,22,0.88)_100%)] text-white'
-          : 'bg-[linear-gradient(180deg,rgba(255,255,255,0.96)_0%,rgba(239,245,255,0.92)_100%)] text-black'
+          ? 'bg-[linear-gradient(180deg,rgba(43,23,36,0.88)_0%,rgba(22,15,21,0.9)_100%)] text-white'
+          : 'bg-[linear-gradient(180deg,rgba(255,250,253,0.97)_0%,rgba(245,220,232,0.92)_100%)] text-[#2b1724]'
       }`}
     >
       <div className="flex items-start justify-between gap-4">
@@ -45,7 +45,7 @@ function DemoShell({
         <span
           className={`text-[10px] uppercase tracking-[0.18em] ${
             dark
-              ? 'text-emerald-300/80'
+              ? 'text-[#d9a9c2]/85'
               : 'text-neutral-500'
           }`}
         >
@@ -96,8 +96,8 @@ function ChatBubble({
       transition={{ delay }}
       className={`max-w-[88%] rounded-[26px] px-4 py-3 text-[13px] leading-6 md:px-5 md:py-4 md:text-sm md:leading-7 ${
         tone === 'dark'
-          ? 'bg-[linear-gradient(135deg,#1a2330_0%,#111821_100%)] text-neutral-200'
-          : 'ml-auto bg-[linear-gradient(135deg,#ffffff_0%,#dfe8ff_100%)] text-black'
+          ? 'bg-[linear-gradient(135deg,#2b1724_0%,#160f15_100%)] text-neutral-200'
+          : 'ml-auto bg-[linear-gradient(135deg,#fffafd_0%,#f5dce8_100%)] text-[#2b1724]'
       }`}
     >
       {children}
@@ -194,7 +194,7 @@ function EstimationsDemo() {
               step={1}
               value={units}
               onChange={(event) => setUnits(Number(event.target.value))}
-              className="mt-4 w-full accent-sky-300"
+              className="mt-4 w-full accent-[#b889a1]"
             />
           </div>
           <div className="rounded-[22px] bg-white/[0.045] p-4">
@@ -209,7 +209,7 @@ function EstimationsDemo() {
               step={2}
               value={hours}
               onChange={(event) => setHours(Number(event.target.value))}
-              className="mt-4 w-full accent-teal-300"
+              className="mt-4 w-full accent-[#9a5f7d]"
             />
           </div>
           <div className="rounded-[22px] bg-white/[0.045] p-4">
@@ -292,7 +292,7 @@ function FinancialModelsDemo() {
                 step={step as number}
                 value={value as number}
                 onChange={(event) => (setter as (value: number) => void)(Number(event.target.value))}
-                className="mt-4 w-full accent-sky-400"
+                className="mt-4 w-full accent-[#b889a1]"
               />
             </div>
           ))}

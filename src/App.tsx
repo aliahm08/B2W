@@ -51,7 +51,6 @@ const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
 const KitchenPreviewPage = lazy(() => import('./pages/kitchen/KitchenPreviewPage'));
 const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitchenDemoPage'));
 const SolutionsLandingPage = lazy(() => import('./pages/solutions/SolutionsLandingPage'));
-const SolutionTemplatePage = lazy(() => import('./pages/solutions/SolutionTemplatePage'));
 const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
@@ -318,8 +317,8 @@ export default function App() {
                 <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
                 <Route path="/clara" element={<SolutionsLayout />}>
                   <Route index element={<SolutionsLandingPage />} />
-                  <Route path=":slug" element={<SolutionTemplatePage />} />
                 </Route>
+                <Route path="/clara/:slug" element={<Navigate to="/clara" replace />} />
                 <Route path="/kitchen" element={<KitchenPage />} />
                 <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
                 <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />

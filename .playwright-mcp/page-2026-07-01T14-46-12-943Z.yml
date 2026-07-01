@@ -1,0 +1,10 @@
+- generic [ref=f30e3]:
+  - banner [ref=f30e4]:
+    - generic [ref=f30e5]:
+      - generic "Clara" [ref=f30e7]:
+        - generic [ref=f30e9]: Clara
+      - generic:
+        - link "Talk to Clara":
+          - /url: https://chat.b2w-ai.com
+          - generic: Talk to Clara
+  - main [ref=f30e10]

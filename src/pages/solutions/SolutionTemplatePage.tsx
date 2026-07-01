@@ -14,8 +14,8 @@ export default function SolutionTemplatePage() {
     return (
       <>
         <Seo title="AI Solution Not Found" canonicalPath="/clara" robots="noindex, nofollow" />
-        <article className="min-h-screen bg-[#090b0f] px-6 py-24 text-white">
-          <div className="mx-auto max-w-5xl rounded-[32px] border border-white/10 bg-[#11151b] p-8">
+        <article className="min-h-screen bg-[#160f15] px-6 py-24 text-white">
+          <div className="mx-auto max-w-5xl rounded-[32px] border border-[#e8cbd9]/12 bg-[#2b1724] p-8">
             <Link to="/clara" className="inline-flex items-center gap-2 text-sm text-neutral-300 hover:text-white">
               <ArrowLeft className="h-4 w-4" />
               Back to AI solutions
@@ -41,7 +41,7 @@ export default function SolutionTemplatePage() {
         <section className="relative mx-auto max-w-7xl px-6 pb-14 pt-10 md:pb-18 md:pt-16">
           <motion.div
             aria-hidden="true"
-            className="pointer-events-none absolute left-0 right-0 top-20 mx-auto h-72 max-w-5xl rounded-full bg-[radial-gradient(circle,rgba(88,120,255,0.16),transparent_65%)] blur-3xl"
+            className="pointer-events-none absolute left-0 right-0 top-20 mx-auto h-72 max-w-5xl rounded-full bg-[radial-gradient(circle,rgba(166,101,137,0.20),transparent_65%)] blur-3xl"
             animate={{ opacity: [0.35, 0.7, 0.35], scale: [0.96, 1.04, 0.96] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
           />
@@ -79,7 +79,7 @@ export default function SolutionTemplatePage() {
             <div className="relative xl:-mr-8">
               <motion.div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_35%,rgba(88,120,255,0.18),transparent_58%)] blur-3xl"
+                className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_50%_35%,rgba(166,101,137,0.22),transparent_58%)] blur-3xl"
                 animate={{ opacity: [0.3, 0.65, 0.3], scale: [0.98, 1.03, 0.98] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
               />
@@ -88,7 +88,7 @@ export default function SolutionTemplatePage() {
           </div>
         </section>
 
-        <section className="border-t border-white/8 bg-[#0d1116]">
+        <section className="border-t border-[#e8cbd9]/10 bg-[#1d121b]">
           <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
             <div className="grid gap-10 lg:grid-cols-2">
               <div className="bg-white/[0.025] p-6 md:p-8">
@@ -99,7 +99,7 @@ export default function SolutionTemplatePage() {
                 <ul className="mt-6 space-y-4">
                   {solution.fitSignals.map((signal) => (
                     <li key={signal} className="flex items-start gap-3 text-sm leading-7 text-neutral-300">
-                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-sky-300" />
+                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#d9a9c2]" />
                       <span>{signal}</span>
                     </li>
                   ))}
@@ -114,7 +114,7 @@ export default function SolutionTemplatePage() {
                 <ul className="mt-6 space-y-4">
                   {solution.successSignals.map((signal) => (
                     <li key={signal} className="flex items-start gap-3 text-sm leading-7 text-neutral-300">
-                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-emerald-300" />
+                      <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[#e8cbd9]" />
                       <span>{signal}</span>
                     </li>
                   ))}
@@ -153,7 +153,7 @@ export default function SolutionTemplatePage() {
           </div>
         </section>
 
-        <section className="border-t border-white/8 bg-[#0d1116]">
+        <section className="border-t border-[#e8cbd9]/10 bg-[#1d121b]">
           <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.04fr)]">
               <div>
@@ -207,7 +207,7 @@ export default function SolutionTemplatePage() {
           </div>
         </section>
 
-        <section className="border-t border-white/8 bg-[#0d1116]">
+        <section className="border-t border-[#e8cbd9]/10 bg-[#1d121b]">
           <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
             <div className="max-w-3xl">
               <p className="text-xs uppercase tracking-[0.28em] text-neutral-500">Example Deployments</p>
@@ -259,7 +259,7 @@ export default function SolutionTemplatePage() {
           </div>
         </section>
 
-        <section className="border-t border-white/8 bg-[#0d1116]">
+        <section className="border-t border-[#e8cbd9]/10 bg-[#1d121b]">
           <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
             <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
               <div>
@@ -300,7 +300,7 @@ export default function SolutionTemplatePage() {
           </div>
         </section>
 
-        <section className="border-t border-white/8 bg-[#0d1116]">
+        <section className="border-t border-[#e8cbd9]/10 bg-[#1d121b]">
           <div className="mx-auto max-w-7xl px-6 py-18 md:py-24">
             <div className="flex items-end justify-between gap-6">
               <div className="max-w-3xl">
