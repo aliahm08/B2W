@@ -9,35 +9,30 @@ const voiceNote =
 const noteRegions = [
   {
     label: 'Room',
-    lineItem: 'Living room repair area',
     detail: '1,200 sq ft base scope',
     startWord: 4,
     endWord: 8,
   },
   {
     label: 'Openings',
-    lineItem: 'Openings and access points',
     detail: '6 windows, 2 archways, 1 basement stair door',
     startWord: 10,
     endWord: 20,
   },
   {
     label: 'Ceiling',
-    lineItem: 'High ceiling and light protection',
     detail: '13 ft ceiling height, 12 spot lights',
     startWord: 25,
     endWord: 33,
   },
   {
     label: 'Windows',
-    lineItem: 'Window frame, seal, and glass work',
     detail: 'Replace frames, caulk seals, repair 3 panes',
     startWord: 37,
     endWord: 50,
   },
   {
     label: 'Flooring',
-    lineItem: 'Floor removal and wood restoration',
     detail: 'Remove carpet, dispose, sand, buff, polish',
     startWord: 52,
     endWord: 69,
@@ -273,9 +268,9 @@ function OrganizedLineItemsSection() {
           transition={{ duration: 0.45 }}
         >
           <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#bae6fd]/70">Organized scope</p>
-          <h2 className="mt-4 max-w-lg text-[2.5rem] font-medium leading-[1.02] text-white md:text-[4rem]">Line items from the note.</h2>
+          <h2 className="mt-4 max-w-lg text-[2.5rem] font-medium leading-[1.02] text-white md:text-[4rem]">Scope from the note.</h2>
           <p className="mt-5 max-w-md text-lg leading-8 text-neutral-400">
-            Clara turns the highlighted phrases into the scope categories needed for an estimate.
+            Clara turns the highlighted phrases into a clean scope structure.
           </p>
         </motion.div>
 
@@ -290,8 +285,7 @@ function OrganizedLineItemsSection() {
               className="rounded-2xl border border-white/8 bg-[#171017] p-4 shadow-[0_24px_70px_rgba(0,0,0,0.22)] md:p-5"
             >
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#bae6fd]">{region.label}</p>
-              <p className="mt-3 text-lg font-semibold text-white">{region.lineItem}</p>
-              <p className="mt-2 text-sm leading-6 text-neutral-400">{region.detail}</p>
+              <p className="mt-3 text-lg font-semibold text-white">{region.detail}</p>
             </motion.div>
           ))}
         </div>
