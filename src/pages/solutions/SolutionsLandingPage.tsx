@@ -106,13 +106,14 @@ function RecordIcon({ isRecording }: { isRecording: boolean }) {
 }
 
 function SectionNavigator({ currentStep, setStep }: { currentStep: number, setStep: (step: number) => void }) {
-  const [portalRoot, setPortalRoot] = useState<HTMLElement | null>(null);
+  const [desktopPortal, setDesktopPortal] = useState<HTMLElement | null>(null);
+  const [mobilePortal, setMobilePortal] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    setPortalRoot(document.getElementById('solutions-navbar-center-portal'));
-  }, []);
+    setDesktopPortal(document.getElementById('solutions-navbar-center-portal'));
+    setMobilePortal(document.getElementById('solutions-navbar-mobile-portal'));
+  }, [currentStep]);
 
-  if (!portalRoot) return null;
   if (currentStep === 0) return null;
 
   const navItems = [
@@ -123,23 +124,52 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
     { label: 'Share', step: 4 }
   ];
 
-  return createPortal(
-    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="pointer-events-auto flex items-center gap-1 rounded-full border border-white/10 bg-black/60 p-1 backdrop-blur-md shadow-2xl">
-      {navItems.map((item) => (
-        <button
-          key={item.step}
-          onClick={() => setStep(item.step)}
-          className={`rounded-full px-4 py-1.5 text-[11px] font-semibold transition ${
-            currentStep === item.step
-              ? 'bg-[#f5dce8] text-black shadow-sm'
-              : 'text-neutral-400 hover:text-white'
-          }`}
-        >
-          {item.label}
-        </button>
-      ))}
-    </motion.div>,
-    portalRoot
+  return (
+    <>
+      {desktopPortal && createPortal(
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="hidden md:flex pointer-events-auto items-center gap-1 rounded-full border border-white/10 bg-black/60 p-1 backdrop-blur-md shadow-2xl">
+          {navItems.map((item) => (
+            <button
+              key={item.step}
+              onClick={() => setStep(item.step)}
+              className={`rounded-full px-4 py-1.5 text-[11px] font-semibold transition ${
+                currentStep === item.step
+                  ? 'bg-[#f5dce8] text-black shadow-sm'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </motion.div>,
+        desktopPortal
+      )}
+
+      {mobilePortal && createPortal(
+        <div className="flex md:hidden flex-col gap-4 py-4 w-full">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500 border-b border-white/10 pb-2">Sections</p>
+          <div className="flex flex-col gap-2">
+            {navItems.map((item) => (
+              <button
+                key={item.step}
+                onClick={() => {
+                  setStep(item.step);
+                  document.dispatchEvent(new CustomEvent('close-solutions-mobile-menu'));
+                }}
+                className={`text-left text-base font-semibold py-2 px-3 rounded-lg transition-colors ${
+                  currentStep === item.step
+                    ? 'bg-[#f5dce8]/15 text-[#f5dce8]'
+                    : 'text-neutral-300 hover:bg-white/5 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>,
+        mobilePortal
+      )}
+    </>
   );
 }
 
@@ -535,7 +565,7 @@ export default function SolutionsLandingPage() {
                 {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
                 <motion.div
                   layoutId="macbook-chassis"
-                  className="relative w-full max-w-[48rem] rounded-3xl border-8 border-neutral-800 bg-neutral-950 p-2 shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col h-fit max-h-[65vh] overflow-hidden"
+                  className="relative w-full max-w-[48rem] rounded-2xl md:rounded-3xl border-2 md:border-8 border-neutral-800 bg-neutral-950 p-1 md:p-2 shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col h-fit max-h-[65vh] overflow-hidden"
                   transition={{ duration: 0.5 }}
                 >
                   {/* Webcam Indicator */}

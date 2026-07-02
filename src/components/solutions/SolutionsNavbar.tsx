@@ -51,6 +51,14 @@ export default function SolutionsNavbar({
   }, [location.pathname]);
 
   useEffect(() => {
+    const handleCloseMenu = () => {
+      setIsMobileMenuOpen(false);
+    };
+    document.addEventListener('close-solutions-mobile-menu', handleCloseMenu);
+    return () => document.removeEventListener('close-solutions-mobile-menu', handleCloseMenu);
+  }, []);
+
+  useEffect(() => {
     const handleEnter = (event: MouseEvent | FocusEvent) => {
       const target = event.target;
       if (target instanceof Element) {
@@ -150,7 +158,7 @@ export default function SolutionsNavbar({
           isOpen={isMobileMenuOpen}
           theme="dark"
           list={
-            <div className="py-2" aria-hidden="true" />
+            <div className="py-2 flex flex-col gap-4 text-left px-2" id="solutions-navbar-mobile-portal" />
           }
           cta={
             <a
