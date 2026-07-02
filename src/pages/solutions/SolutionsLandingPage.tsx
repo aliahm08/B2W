@@ -127,21 +127,31 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
   return (
     <>
       {desktopPortal && createPortal(
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="hidden md:flex pointer-events-auto items-center gap-1 rounded-full border border-white/10 bg-black/60 p-1 backdrop-blur-md shadow-2xl">
-          {navItems.map((item) => (
-            <button
-              key={item.step}
-              onClick={() => setStep(item.step)}
-              className={`rounded-full px-4 py-1.5 text-[11px] font-semibold transition ${
-                currentStep === item.step
-                  ? 'bg-[#f5dce8] text-black shadow-sm'
-                  : 'text-neutral-400 hover:text-white'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </motion.div>,
+        <>
+          {/* Desktop Version: Horizontal Navigation Pill */}
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="hidden md:flex pointer-events-auto items-center gap-1 rounded-full border border-white/10 bg-black/60 p-1 backdrop-blur-md shadow-2xl">
+            {navItems.map((item) => (
+              <button
+                key={item.step}
+                onClick={() => setStep(item.step)}
+                className={`rounded-full px-4 py-1.5 text-[11px] font-semibold transition ${
+                  currentStep === item.step
+                    ? 'bg-[#f5dce8] text-black shadow-sm'
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </motion.div>
+
+          {/* Mobile Version: Clara / [Active Step] centered header label */}
+          <div className="flex md:hidden items-center justify-center text-xs font-semibold text-neutral-400 font-mono tracking-wider pointer-events-none">
+            <span className="text-white">Clara</span>
+            <span className="mx-1 text-neutral-600">/</span>
+            <span className="text-[#f5dce8]">{navItems.find(item => item.step === currentStep)?.label || ''}</span>
+          </div>
+        </>,
         desktopPortal
       )}
 
