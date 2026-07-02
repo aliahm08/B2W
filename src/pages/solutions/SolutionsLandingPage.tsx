@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, FileText, Mic, CheckSquare, Square, Calculator, Share2, MapPin, Home, Layers, Sparkles, Send, Users, Activity, Lock } from 'lucide-react';
+import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Calculator, Share2, MapPin, Home, Layers, Sparkles, Send, Users, Activity, Lock } from 'lucide-react';
 import Seo from '../../components/Seo';
 import B2WLogoMark from '../../components/B2WLogoMark';
 
@@ -122,6 +122,8 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
     { label: 'Estimate', step: 3 }
   ];
 
+  const currentLabel = navItems.find(item => item.step === currentStep)?.label || '';
+
   return (
     <>
       {desktopPortal && createPortal(
@@ -141,6 +143,11 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
                 {item.label}
               </button>
             ))}
+          </motion.div>
+
+          {/* Mobile Version: Same Nav pill containing ONLY the active step */}
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex md:hidden pointer-events-auto items-center rounded-full border border-[#e8cbd9]/20 bg-black/60 px-4 py-1.5 backdrop-blur-md shadow-2xl text-[11px] font-bold text-[#f5dce8]">
+            {currentLabel}
           </motion.div>
         </>,
         desktopPortal
@@ -211,14 +218,14 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     if (transcriptComplete) return;
     const timer = window.setInterval(() => setVisibleWordCount((current) => Math.min(words.length, current + 1)), 60);
-    return () => window.clearInterval(timer);
+    return () => window.setInterval(timer);
   }, [transcriptComplete, words.length]);
 
   return (
     <div className="flex w-full h-full flex-col items-center justify-center px-5 py-4 max-w-5xl">
       <div className="w-full text-center">
         <h2 className="text-3xl font-medium text-white md:text-5xl">Speak your scope.</h2>
-        <p className="mt-2 text-neutral-400">Clara instantly transcribes and tags your voice note.</p>
+        <p className="mt-2 text-neutral-400">Clara transcribes and tags your voice note in real time.</p>
       </div>
 
       <div className="w-full flex-1 flex flex-col justify-center my-3 max-h-[55vh]">
@@ -307,12 +314,20 @@ function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
   );
 }
 
-function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal }: any) {
+function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal, onEditNote, onShare }: any) {
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full relative">
       <div className="border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-4 md:px-5">
-        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
+            {estimateComplete && (
+              <button 
+                onClick={onEditNote}
+                className="flex items-center gap-1 rounded-full border border-[#e8cbd9]/40 bg-white px-2.5 py-1 text-[10px] font-bold text-[#7e5c70] transition hover:bg-[#fcecf3] shadow-sm shrink-0"
+              >
+                <ArrowLeft className="h-3 w-3" /> Edit Note
+              </button>
+            )}
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]">
               <Calculator className="h-4 w-4 text-[#c284a3]" />
             </div>
@@ -321,10 +336,20 @@ function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubIt
               <p className="text-[11px] text-[#5e4252]">Generated from material library.</p>
             </div>
           </div>
-          <div className="rounded-lg border border-[#e8cbd9]/40 bg-[#fdf9fb] p-2 md:text-right hidden sm:block">
-            <div className="flex items-center gap-2 md:justify-end">
-              <MapPin className="h-3 w-3 text-[#c284a3]" />
-              <p className="text-[11px] font-medium text-[#2b1724]">123 Main Street, NY</p>
+          <div className="flex items-center gap-3 self-end md:self-center">
+            {estimateComplete && (
+              <button 
+                onClick={onShare}
+                className="flex items-center gap-1.5 rounded-full bg-[#2b1724] px-3.5 py-1.5 text-[10px] font-bold text-white transition hover:bg-[#3d2133] shadow-sm shrink-0"
+              >
+                <Share2 className="h-3 w-3 text-white" /> Share
+              </button>
+            )}
+            <div className="rounded-lg border border-[#e8cbd9]/40 bg-[#fdf9fb] p-1.5 px-2.5 hidden sm:block">
+              <div className="flex items-center gap-1.5">
+                <MapPin className="h-3 w-3 text-[#c284a3]" />
+                <p className="text-[11px] font-medium text-[#2b1724]">123 Main Street, NY</p>
+              </div>
             </div>
           </div>
         </div>
@@ -535,7 +560,9 @@ export default function SolutionsLandingPage() {
   const grandTotal = subtotal + contingency;
 
   const sharedEstimateProps = {
-    categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal
+    categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal,
+    onEditNote: () => scrollToStep(1),
+    onShare: () => window.open('https://chat.b2w-ai.com', '_blank')
   };
 
   return (
@@ -600,62 +627,62 @@ export default function SolutionsLandingPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto overflow-y-auto"
+                className="absolute inset-0 flex flex-col items-center justify-center px-6 py-4 max-w-7xl mx-auto overflow-y-auto"
               >
                 <div className="w-full text-center shrink-0 mb-3">
                   <h2 className="text-3xl font-medium text-white md:text-4xl">Your estimate.</h2>
                 </div>
 
-                <div className="relative w-full max-w-[48rem] flex flex-col items-center">
+                <div className="relative w-full max-w-[46rem] flex flex-col items-center">
                   
                   {/* Floating Margin Popups (Desktop only) */}
                   
-                  {/* Popup 1: Chat with AI (Left Top) */}
+                  {/* Popup 1: Edit Voice Note (Left Top) -> Points to "Edit Note" button in Top Left */}
                   <motion.div
                     initial={{ opacity: 0, x: -30, scale: 0.9 }}
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     transition={{ duration: 0.4, delay: 0.2 }}
-                    className="hidden lg:flex flex-col gap-1 w-52 absolute -left-60 top-6 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                    className="hidden lg:flex flex-col gap-1 w-52 absolute -left-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
                   >
                     <div className="flex items-center gap-2">
                       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                        <Sparkles className="h-4 w-4 text-[#c284a3]" />
+                        <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
                       </div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Chat with AI</h4>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
                     </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Refine materials, adjust quantities, and clarify scope dynamically with Clara.</p>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
                   </motion.div>
 
-                  {/* Popup 2: Share Instantly (Left Bottom) */}
+                  {/* Popup 2: Share Instantly (Right Top) -> Points to "Share" button in Top Right */}
                   <motion.div
-                    initial={{ opacity: 0, x: -30, scale: 0.9 }}
+                    initial={{ opacity: 0, x: 30, scale: 0.9 }}
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     transition={{ duration: 0.4, delay: 0.4 }}
-                    className="hidden lg:flex flex-col gap-1 w-52 absolute -left-60 bottom-10 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                    className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
                   >
                     <div className="flex items-center gap-2">
                       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
                         <Share2 className="h-4 w-4 text-[#c284a3]" />
                       </div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share Instantly</h4>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
                     </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Send interactive web links directly to clients and subcontractors for fast approvals.</p>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
                   </motion.div>
 
-                  {/* Popup 3: Build Proposals (Right Middle) */}
+                  {/* Popup 3: Refine with Clara (Right Bottom) -> Points to B2W Chat Icon hovering in Bottom Right */}
                   <motion.div
                     initial={{ opacity: 0, x: 30, scale: 0.9 }}
                     animate={{ opacity: 1, x: 0, scale: 1 }}
                     transition={{ duration: 0.4, delay: 0.6 }}
-                    className="hidden lg:flex flex-col gap-1 w-52 absolute -right-60 top-24 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                    className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 bottom-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
                   >
                     <div className="flex items-center gap-2">
                       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                        <FileText className="h-4 w-4 text-[#c284a3]" />
+                        <Sparkles className="h-4 w-4 text-[#c284a3]" />
                       </div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Build Proposals</h4>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
                     </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Export estimate line items into professional, client-ready proposals in one click.</p>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click Clara&rsquo;s chat icon hovering in the bottom-right of the estimate to write proposals or ask questions.</p>
                   </motion.div>
 
                   {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
@@ -668,7 +695,7 @@ export default function SolutionsLandingPage() {
                     <div className="absolute top-2.5 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-neutral-900 z-50" />
 
                     {/* Browser chrome wrapper */}
-                    <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1">
+                    <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1 relative">
                       
                       {/* Browser Address Bar */}
                       <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
@@ -679,12 +706,25 @@ export default function SolutionsLandingPage() {
                         </div>
                         <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
                           <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
-                          <span>b2w-ai.com/estimate</span>
+                          <span>chat.b2w-ai.com</span>
                         </div>
                       </div>
 
                       {/* Viewport Content */}
                       <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
+                        {/* Chat Icon Hovering in Bottom Right */}
+                        <div className="absolute bottom-4 right-4 z-40">
+                          <motion.button
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.8 }}
+                            onClick={() => window.open('https://chat.b2w-ai.com', '_blank')}
+                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2b1724] text-white shadow-lg hover:scale-105 active:scale-95 transition duration-200 border border-[#e8cbd9]/20"
+                          >
+                            <B2WLogoMark className="h-5 w-5 fill-white text-white" />
+                          </motion.button>
+                        </div>
+
                         <motion.div
                           key="estimate-viewport"
                           layoutId="estimate-card-container"
@@ -702,11 +742,11 @@ export default function SolutionsLandingPage() {
                 <div className="flex lg:hidden flex-col gap-2.5 mt-5 w-full max-w-[40rem] mx-auto px-1">
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                      <Sparkles className="h-4 w-4 text-[#c284a3]" />
+                      <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
                     </div>
                     <div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Chat with AI</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Refine materials, adjust quantities, and clarify scope dynamically with Clara.</p>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
                     </div>
                   </motion.div>
 
@@ -715,18 +755,18 @@ export default function SolutionsLandingPage() {
                       <Share2 className="h-4 w-4 text-[#c284a3]" />
                     </div>
                     <div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share Instantly</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Send interactive web links directly to clients and subcontractors for fast approvals.</p>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
                     </div>
                   </motion.div>
 
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                      <FileText className="h-4 w-4 text-[#c284a3]" />
+                      <Sparkles className="h-4 w-4 text-[#c284a3]" />
                     </div>
                     <div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Build Proposals</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Export estimate line items into professional, client-ready proposals in one click.</p>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click Clara&rsquo;s chat icon hovering in the bottom-right of the estimate to write proposals or ask questions.</p>
                     </div>
                   </motion.div>
                 </div>
