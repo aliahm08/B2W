@@ -186,26 +186,23 @@ export default function SolutionsNavbar({
           isOpen={isMobileMenuOpen}
           theme="dark"
           list={
-            <div className="py-2 flex flex-col gap-4 text-left px-2 w-full">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500 border-b border-white/10 pb-2">Sections</p>
-              <div className="flex flex-col gap-2">
-                {navItems.map((item) => (
-                  <button
-                    key={item.step}
-                    onClick={() => {
-                      document.dispatchEvent(new CustomEvent('solutions-navigate-to-step', { detail: item.step }));
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={`text-left text-base font-semibold py-2 px-3 rounded-lg transition-colors ${
-                      activeStep === item.label
-                        ? 'bg-[#f5dce8]/15 text-[#f5dce8]'
-                        : 'text-neutral-300 hover:bg-white/5 hover:text-white'
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
+            <div className="py-3 flex flex-col gap-1 px-2 w-full">
+              {navItems.map((item) => (
+                <button
+                  key={item.step}
+                  onClick={() => {
+                    document.dispatchEvent(new CustomEvent('solutions-navigate-to-step', { detail: item.step }));
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`text-left text-base font-semibold py-2.5 px-3 rounded-lg transition-colors ${
+                    activeStep === item.label
+                      ? 'bg-[#f5dce8]/15 text-[#f5dce8]'
+                      : 'text-neutral-300 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
           }
           cta={
@@ -219,7 +216,7 @@ export default function SolutionsNavbar({
               >
                 <span className="relative z-10">{ctaLabel}</span>
               </a>
-              <div className="flex flex-col items-start gap-2 mt-1 w-full">
+              <div className="flex flex-col items-center gap-2 mt-1 w-full text-center">
                 <Link 
                   to="/"
                   onClick={() => setIsMobileMenuOpen(false)}
