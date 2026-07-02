@@ -116,11 +116,9 @@ export default function SolutionsNavbar({
   }, []);
 
   const navItems = [
-    { label: 'Start', step: 0 },
     { label: 'Capture', step: 1 },
     { label: 'Scope', step: 2 },
-    { label: 'Estimate', step: 3 },
-    { label: 'Share', step: 4 }
+    { label: 'Estimate', step: 3 }
   ];
 
   return (

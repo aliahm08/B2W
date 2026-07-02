@@ -117,11 +117,9 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
   if (currentStep === 0) return null;
 
   const navItems = [
-    { label: 'Start', step: 0 },
     { label: 'Capture', step: 1 },
     { label: 'Scope', step: 2 },
-    { label: 'Estimate', step: 3 },
-    { label: 'Share', step: 4 }
+    { label: 'Estimate', step: 3 }
   ];
 
   return (
@@ -409,7 +407,7 @@ export default function SolutionsLandingPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Estimate document state shared across Step 3 and 4
+  // Estimate document state shared across Step 3
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [contingencyPct, setContingencyPct] = useState<number | string>(15);
   const [animatingCatIndex, setAnimatingCatIndex] = useState(-1);
@@ -417,8 +415,10 @@ export default function SolutionsLandingPage() {
   const [estimateComplete, setEstimateComplete] = useState(false);
 
   useEffect(() => {
-    const stepNames = ['Start', 'Capture', 'Scope', 'Estimate', 'Share'];
-    document.dispatchEvent(new CustomEvent('solutions-active-step-change', { detail: stepNames[currentStep] }));
+    const stepNames = ['Start', 'Capture', 'Scope', 'Estimate'];
+    document.dispatchEvent(new CustomEvent('solutions-active-step-change', {
+      detail: stepNames[currentStep] || ''
+    }));
   }, [currentStep]);
 
   useEffect(() => {
@@ -437,14 +437,12 @@ export default function SolutionsLandingPage() {
       const currentScroll = window.scrollY - containerTop;
       const pct = Math.max(0, Math.min(1, currentScroll / totalScrollable));
 
-      if (pct <= 0.25) {
+      if (pct <= 0.33) {
         setCurrentStep(1);
-      } else if (pct <= 0.5) {
+      } else if (pct <= 0.67) {
         setCurrentStep(2);
-      } else if (pct <= 0.75) {
-        setCurrentStep(3);
       } else {
-        setCurrentStep(4);
+        setCurrentStep(3);
       }
     };
 
@@ -462,7 +460,7 @@ export default function SolutionsLandingPage() {
     if (step === 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      const pct = (step - 1) * 0.25 + 0.125;
+      const pct = (step - 1) * 0.33 + 0.16;
       window.scrollTo({
         top: containerTop + pct * totalScrollable,
         behavior: 'smooth'
@@ -552,8 +550,8 @@ export default function SolutionsLandingPage() {
         <Section0Hero onNext={() => scrollToStep(1)} />
       </div>
 
-      {/* Second Section Frame: Interactive container (Steps 1 to 4) */}
-      <div ref={containerRef} className="relative w-full" style={{ height: '350vh' }}>
+      {/* Second Section Frame: Interactive container (Steps 1 to 3) */}
+      <div ref={containerRef} className="relative w-full" style={{ height: '240vh' }}>
         <div className="sticky top-20 left-0 right-0 h-[calc(100vh-80px)] overflow-hidden bg-[#0a0608] flex items-center justify-center">
           <div className="relative w-full h-full flex items-center justify-center">
             <AnimatePresence mode="wait">
@@ -595,147 +593,166 @@ export default function SolutionsLandingPage() {
               </motion.div>
             )}
 
-            {/* Step 3 (Loaded Stage with MacBook frame chassis) & Step 4 (Chat view) */}
-            {((currentStep === 3 && estimateComplete) || currentStep === 4) && (
+            {/* Step 3 (Loaded Stage with MacBook frame chassis & float popups) */}
+            {currentStep === 3 && estimateComplete && (
               <motion.div
-                key="step3-loaded-step4"
+                key="step3-loaded"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto"
+                className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto overflow-y-auto"
               >
                 <div className="w-full text-center shrink-0 mb-3">
-                  <h2 className="text-3xl font-medium text-white md:text-4xl">
-                    {currentStep === 3 ? "Your estimate." : "Plan, Propose, Share."}
-                  </h2>
+                  <h2 className="text-3xl font-medium text-white md:text-4xl">Your estimate.</h2>
                 </div>
 
-                {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
-                <motion.div
-                  layoutId="macbook-chassis"
-                  className="relative w-full max-w-[48rem] rounded-2xl md:rounded-3xl border-2 md:border-8 border-neutral-800 bg-neutral-950 p-1 md:p-2 shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col h-fit max-h-[65vh] overflow-hidden"
-                  transition={{ duration: 0.5 }}
-                >
-                  {/* Webcam Indicator */}
-                  <div className="absolute top-2.5 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-neutral-900 z-50" />
-
-                  {/* Browser chrome wrapper */}
-                  <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1">
-                    
-                    {/* Browser Address Bar */}
-                    <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
-                      <div className="flex gap-1.5">
-                        <div className="h-2 w-2 rounded-full bg-red-400" />
-                        <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                        <div className="h-2 w-2 rounded-full bg-green-400" />
+                <div className="relative w-full max-w-[48rem] flex flex-col items-center">
+                  
+                  {/* Floating Margin Popups (Desktop only) */}
+                  
+                  {/* Popup 1: Chat with AI (Left Top) */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -30, scale: 0.9 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    className="hidden lg:flex flex-col gap-1 w-52 absolute -left-60 top-6 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                        <Sparkles className="h-4 w-4 text-[#c284a3]" />
                       </div>
-                      <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
-                        <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
-                        <span>{currentStep === 3 ? "b2w-ai.com/estimate" : "chat.b2w-ai.com"}</span>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Chat with AI</h4>
+                    </div>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Refine materials, adjust quantities, and clarify scope dynamically with Clara.</p>
+                  </motion.div>
+
+                  {/* Popup 2: Share Instantly (Left Bottom) */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -30, scale: 0.9 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.4 }}
+                    className="hidden lg:flex flex-col gap-1 w-52 absolute -left-60 bottom-10 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                        <Share2 className="h-4 w-4 text-[#c284a3]" />
+                      </div>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share Instantly</h4>
+                    </div>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Send interactive web links directly to clients and subcontractors for fast approvals.</p>
+                  </motion.div>
+
+                  {/* Popup 3: Build Proposals (Right Middle) */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 30, scale: 0.9 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.6 }}
+                    className="hidden lg:flex flex-col gap-1 w-52 absolute -right-60 top-24 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                        <FileText className="h-4 w-4 text-[#c284a3]" />
+                      </div>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Build Proposals</h4>
+                    </div>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Export estimate line items into professional, client-ready proposals in one click.</p>
+                  </motion.div>
+
+                  {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
+                  <motion.div
+                    layoutId="macbook-chassis"
+                    className="relative w-full rounded-2xl md:rounded-3xl border-2 md:border-8 border-neutral-800 bg-neutral-950 p-1 md:p-2 shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col h-fit max-h-[55vh] overflow-hidden"
+                    transition={{ duration: 0.5 }}
+                  >
+                    {/* Webcam Indicator */}
+                    <div className="absolute top-2.5 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-neutral-900 z-50" />
+
+                    {/* Browser chrome wrapper */}
+                    <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1">
+                      
+                      {/* Browser Address Bar */}
+                      <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
+                        <div className="flex gap-1.5">
+                          <div className="h-2 w-2 rounded-full bg-red-400" />
+                          <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                          <div className="h-2 w-2 rounded-full bg-green-400" />
+                        </div>
+                        <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
+                          <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
+                          <span>b2w-ai.com/estimate</span>
+                        </div>
+                      </div>
+
+                      {/* Viewport Content */}
+                      <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
+                        <motion.div
+                          key="estimate-viewport"
+                          layoutId="estimate-card-container"
+                          initial={{ opacity: 1 }}
+                          transition={{ duration: 0.4 }}
+                        >
+                          <EstimateDocumentContent {...sharedEstimateProps} />
+                        </motion.div>
                       </div>
                     </div>
+                  </motion.div>
+                </div>
 
-                    {/* Viewport Content */}
-                    <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
-                      <AnimatePresence mode="wait">
-                        {currentStep === 3 ? (
-                          <motion.div
-                            key="estimate-viewport"
-                            layoutId="estimate-card-container"
-                            initial={{ opacity: 1 }}
-                            exit={{ opacity: 0, x: -100 }}
-                            transition={{ duration: 0.4 }}
-                          >
-                            <EstimateDocumentContent {...sharedEstimateProps} />
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key="chat-viewport"
-                            initial={{ opacity: 0, x: 100 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.4, delay: 0.1 }}
-                            className="flex flex-col h-full max-w-2xl mx-auto py-2"
-                          >
-                            <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-                              {/* Message 1 (User Request) */}
-                              <div className="flex items-start gap-3 justify-end">
-                                <div className="rounded-2xl rounded-tr-sm bg-neutral-800 px-4 py-3 text-sm text-neutral-200 max-w-[80%]">
-                                  Can you convert this estimate into a client-facing proposal and share it with John?
-                                </div>
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-800">
-                                  <Users className="h-4 w-4 text-neutral-400" />
-                                </div>
-                              </div>
-                              
-                              {/* Message 2 (Clara Reply) */}
-                              <div className="flex items-start gap-3">
-                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-black border border-[#e8cbd9]/20 shadow-sm">
-                                  <B2WLogoMark className="h-4 w-4" />
-                                </div>
-                                <div className="rounded-2xl rounded-tl-sm border border-[#e8cbd9]/30 bg-white px-4 py-3 text-sm text-[#2b1724] max-w-[80%] shadow-sm">
-                                  <p>Absolutely! I've drafted the proposal and emailed the link to John.</p>
-                                  <div className="mt-4 flex items-center justify-between rounded-lg border border-[#e8cbd9]/40 bg-[#fdf9fb] p-3 shadow-sm">
-                                    <div className="flex items-center gap-3">
-                                      <div className="flex h-8 w-8 items-center justify-center rounded bg-sky-50">
-                                        <FileText className="h-4 w-4 text-sky-500" />
-                                      </div>
-                                      <div className="text-left">
-                                        <p className="font-semibold text-[13px] text-[#2b1724]">Living Room Renovation.pdf</p>
-                                        <p className="text-[11px] text-[#5e4252]">Sent to john@example.com</p>
-                                      </div>
-                                    </div>
-                                    <button className="rounded-full bg-sky-500 p-2 text-white shadow-sm hover:bg-sky-600 transition">
-                                      <Share2 className="h-4 w-4" />
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            
-                            {/* Chat input footer */}
-                            <div className="relative pt-4">
-                              <input type="text" placeholder="Ask Clara anything..." disabled className="w-full rounded-full border border-[#e8cbd9]/40 bg-white py-2.5 pl-4 pr-12 text-sm text-[#2b1724] placeholder-neutral-400 outline-none shadow-sm" />
-                              <div className="absolute right-1.5 top-5.5 flex h-7 w-7 items-center justify-center rounded-full bg-[#f5dce8] text-[#2b1724]"><Send className="h-3 w-3" /></div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                {/* Stacked Margin Popups (Mobile only) */}
+                <div className="flex lg:hidden flex-col gap-2.5 mt-5 w-full max-w-[40rem] mx-auto px-1">
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                      <Sparkles className="h-4 w-4 text-[#c284a3]" />
                     </div>
+                    <div>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Chat with AI</h4>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Refine materials, adjust quantities, and clarify scope dynamically with Clara.</p>
+                    </div>
+                  </motion.div>
 
-                  </div>
-                </motion.div>
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                      <Share2 className="h-4 w-4 text-[#c284a3]" />
+                    </div>
+                    <div>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share Instantly</h4>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Send interactive web links directly to clients and subcontractors for fast approvals.</p>
+                    </div>
+                  </motion.div>
+
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                      <FileText className="h-4 w-4 text-[#c284a3]" />
+                    </div>
+                    <div>
+                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Build Proposals</h4>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Export estimate line items into professional, client-ready proposals in one click.</p>
+                    </div>
+                  </motion.div>
+                </div>
 
                 {/* Bottom CTA Overlay */}
-                <div className="shrink-0 mt-6 z-50 flex justify-center w-full pb-2">
-                  <AnimatePresence mode="wait">
-                    {currentStep === 3 && estimateComplete && (
-                      <motion.button
-                        key="share-btn"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => scrollToStep(4)}
-                        className="clara-cta relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-3 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition hover:opacity-95"
-                      >
-                        <Share2 className="h-4 w-4" /> Share & Chat
-                      </motion.button>
-                    )}
-
-                    {currentStep === 4 && (
-                      <motion.a
-                        key="try-btn"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        href="https://chat.b2w-ai.com"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-cyan-400 px-8 py-3 text-sm font-bold text-black shadow-[0_0_0_1px_rgba(34,211,238,0.24)] transition hover:opacity-95 hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]"
-                      >
-                        Try it out <ArrowRight className="h-4 w-4" />
-                      </motion.a>
-                    )}
-                  </AnimatePresence>
+                <div className="shrink-0 mt-6 z-50 flex flex-wrap justify-center items-center gap-4 w-full pb-2">
+                  <motion.a
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    href="https://chat.b2w-ai.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="clara-cta relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-3 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition hover:opacity-95"
+                  >
+                    See Clara Live <ArrowRight className="h-4 w-4" />
+                  </motion.a>
+                  <motion.a
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                    href="/services?project-builder=open"
+                    className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white/10 px-8 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition hover:bg-white/15"
+                  >
+                    Get in Touch
+                  </motion.a>
                 </div>
 
               </motion.div>
