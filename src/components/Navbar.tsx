@@ -404,6 +404,8 @@ export default function Navbar({
           </AnimatePresence>
         </div>
 
+        <div id="navbar-center-portal" className="absolute left-1/2 -translate-x-1/2 pointer-events-none" />
+
         <div className={`hidden items-center gap-6 text-sm md:flex ${isSearchOpen ? 'text-neutral-300' : 'text-neutral-600'}`}>
           <motion.button
             type="button"
@@ -440,7 +442,7 @@ export default function Navbar({
             onClick={handleNavigation(`${basePath}#contact`)}
             className="rounded-full border border-black bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-neutral-800"
           >
-            Start
+            Start using Clara
           </Link>
         </div>
 

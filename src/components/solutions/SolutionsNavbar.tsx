@@ -113,6 +113,8 @@ export default function SolutionsNavbar({
             <SolutionsLockup isLogoAnimated={isCtaHovered} />
           </div>
 
+          <div id="solutions-navbar-center-portal" className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-[120]" />
+
           <div
             className={`hidden items-center gap-3 transition-[filter,opacity,transform] duration-500 md:flex ${
               isRevealed
