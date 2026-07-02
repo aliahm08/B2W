@@ -553,9 +553,40 @@ export default function SolutionsLandingPage() {
               )}
             </AnimatePresence>
 
-            {/* Step 3 and 4 render the Mac frame with shared layout transition */}
-            {(currentStep === 3 || currentStep === 4) && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto">
+            {/* Step 3 (First Stage - Loading Estimate document ONLY without any frame) */}
+            {currentStep === 3 && !estimateComplete && (
+              <motion.div
+                key="step3-loading"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto"
+              >
+                <div className="w-full text-center shrink-0 mb-4">
+                  <h2 className="text-3xl font-medium text-white md:text-4xl">Your estimate.</h2>
+                </div>
+
+                <motion.div
+                  layoutId="estimate-card-container"
+                  className="w-full max-w-[40rem] mx-auto overflow-hidden rounded-[1.25rem] bg-[#fdf9fb] border border-[#e8cbd9]/40 shadow-[0_24px_80px_rgba(0,0,0,0.15)] flex flex-col h-fit max-h-[70vh]"
+                >
+                  <div className="overflow-y-auto overflow-x-hidden">
+                    <EstimateDocumentContent {...sharedEstimateProps} />
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+
+            {/* Step 3 (Loaded Stage with MacBook frame chassis) & Step 4 (Chat view) */}
+            {((currentStep === 3 && estimateComplete) || currentStep === 4) && (
+              <motion.div
+                key="step3-loaded-step4"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto"
+              >
                 <div className="w-full text-center shrink-0 mb-3">
                   <h2 className="text-3xl font-medium text-white md:text-4xl">
                     {currentStep === 3 ? "Your estimate." : "Plan, Propose, Share."}
@@ -593,6 +624,7 @@ export default function SolutionsLandingPage() {
                         {currentStep === 3 ? (
                           <motion.div
                             key="estimate-viewport"
+                            layoutId="estimate-card-container"
                             initial={{ opacity: 1 }}
                             exit={{ opacity: 0, x: -100 }}
                             transition={{ duration: 0.4 }}
@@ -689,7 +721,7 @@ export default function SolutionsLandingPage() {
                   </AnimatePresence>
                 </div>
 
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
