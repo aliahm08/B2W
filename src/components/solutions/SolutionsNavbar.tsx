@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import MobileMenuDrawer from '../MobileMenuDrawer';
 
@@ -12,11 +12,17 @@ type ActiveClaraCta = 'header' | 'page' | null;
 
 function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean }) {
   return (
-    <div aria-label="Clara" className="relative z-[110] inline-flex items-center gap-3 overflow-visible text-white">
-      <span className={`clara-logo-mark ${isLogoAnimated ? 'is-breathing' : ''}`} aria-hidden="true">
-        <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
-      </span>
-      <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
+    <div aria-label="Clara" className="relative z-[110] inline-flex items-center gap-2 overflow-visible text-white">
+      <div className="inline-flex items-center gap-3">
+        <span className={`clara-logo-mark ${isLogoAnimated ? 'is-breathing' : ''}`} aria-hidden="true">
+          <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
+        </span>
+        <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
+      </div>
+      <span className="text-xs text-neutral-600 font-mono select-none">/</span>
+      <Link to="/" className="text-[10px] font-bold tracking-wider text-neutral-400 hover:text-white transition-colors bg-white/5 border border-white/10 rounded px-1.5 py-0.5">
+        B2W
+      </Link>
     </div>
   );
 }
@@ -197,6 +203,18 @@ export default function SolutionsNavbar({
                     {item.label}
                   </button>
                 ))}
+              </div>
+
+              {/* B2W Back Link */}
+              <div className="mt-2 border-t border-white/10 pt-4 flex flex-col gap-2">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">Back</p>
+                <Link 
+                  to="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-left text-base font-semibold py-2 px-3 rounded-lg text-neutral-400 hover:bg-white/5 hover:text-white transition-colors"
+                >
+                  B2W Homepage
+                </Link>
               </div>
             </div>
           }
