@@ -795,7 +795,7 @@ export default function SolutionsLandingPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8 }}
-                    href="/services?project-builder=open"
+                    href="mailto:info@b2w-ai.com?subject=B2W%20Clara%20Inquiry"
                     className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white/10 px-8 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition hover:bg-white/15"
                   >
                     Get in Touch
