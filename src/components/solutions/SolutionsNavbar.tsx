@@ -115,6 +115,14 @@ export default function SolutionsNavbar({
     };
   }, []);
 
+  const navItems = [
+    { label: 'Start', step: 0 },
+    { label: 'Capture', step: 1 },
+    { label: 'Scope', step: 2 },
+    { label: 'Estimate', step: 3 },
+    { label: 'Share', step: 4 }
+  ];
+
   return (
     <>
       <div
@@ -172,7 +180,27 @@ export default function SolutionsNavbar({
           isOpen={isMobileMenuOpen}
           theme="dark"
           list={
-            <div className="py-2 flex flex-col gap-4 text-left px-2" id="solutions-navbar-mobile-portal" />
+            <div className="py-2 flex flex-col gap-4 text-left px-2 w-full">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500 border-b border-white/10 pb-2">Sections</p>
+              <div className="flex flex-col gap-2">
+                {navItems.map((item) => (
+                  <button
+                    key={item.step}
+                    onClick={() => {
+                      document.dispatchEvent(new CustomEvent('solutions-navigate-to-step', { detail: item.step }));
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`text-left text-base font-semibold py-2 px-3 rounded-lg transition-colors ${
+                      activeStep === item.label
+                        ? 'bg-[#f5dce8]/15 text-[#f5dce8]'
+                        : 'text-neutral-300 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           }
           cta={
             <a

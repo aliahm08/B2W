@@ -470,6 +470,15 @@ export default function SolutionsLandingPage() {
     }
   };
 
+  useEffect(() => {
+    const handleNavigate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      scrollToStep(customEvent.detail);
+    };
+    document.addEventListener('solutions-navigate-to-step', handleNavigate);
+    return () => document.removeEventListener('solutions-navigate-to-step', handleNavigate);
+  }, []);
+
   // Shared Document Animation Driver
   useEffect(() => {
     if (currentStep < 3) return; // Only start building when we reach step 3
