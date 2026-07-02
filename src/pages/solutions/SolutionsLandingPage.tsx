@@ -317,38 +317,42 @@ function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
 function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal, onEditNote, onShare }: any) {
   return (
     <div className="w-full h-full relative">
-      <div className="border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-4 md:px-5">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
+      <div className="border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-3 py-3 md:px-5">
+        <div className="flex flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
             {estimateComplete && (
               <button 
                 onClick={onEditNote}
-                className="flex items-center gap-1 rounded-full border border-[#e8cbd9]/40 bg-white px-2.5 py-1 text-[10px] font-bold text-[#7e5c70] transition hover:bg-[#fcecf3] shadow-sm shrink-0"
+                className="flex items-center justify-center rounded-full border border-[#e8cbd9]/40 bg-white p-1.5 text-[#7e5c70] transition hover:bg-[#fcecf3] shadow-sm shrink-0"
+                aria-label="Edit Note"
               >
-                <ArrowLeft className="h-3 w-3" /> Edit Note
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline ml-1 text-[10px] font-bold">Edit Note</span>
               </button>
             )}
-            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]">
+            <div className="flex h-8.5 w-8.5 flex-shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]">
               <Calculator className="h-4 w-4 text-[#c284a3]" />
             </div>
-            <div>
-              <h3 className="text-base font-semibold text-[#2b1724]">Project Estimate</h3>
-              <p className="text-[11px] text-[#5e4252] font-semibold tracking-tight">1,200 sq ft &bull; 13 ft ceilings &bull; 6 windows &bull; 2 archways &bull; 1 basement door</p>
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-semibold text-[#2b1724] truncate">Project Estimate</h3>
+              <p className="text-[9px] sm:text-[11px] text-[#5e4252] font-semibold tracking-tight truncate">1,200 sq ft &bull; 13 ft ceilings &bull; 6 windows &bull; 2 archways</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 self-end md:self-center">
+          <div className="flex items-center gap-2 shrink-0">
             {estimateComplete && (
               <button 
                 onClick={onShare}
-                className="flex items-center gap-1.5 rounded-full bg-[#2b1724] px-3.5 py-1.5 text-[10px] font-bold text-white transition hover:bg-[#3d2133] shadow-sm shrink-0"
+                className="flex items-center justify-center rounded-full bg-[#2b1724] p-1.5 text-white transition hover:bg-[#3d2133] shadow-sm shrink-0"
+                aria-label="Share"
               >
-                <Share2 className="h-3 w-3 text-white" /> Share
+                <Share2 className="h-3.5 w-3.5 text-white" />
+                <span className="hidden sm:inline ml-1.5 text-[10px] font-bold">Share</span>
               </button>
             )}
-            <div className="rounded-lg border border-[#e8cbd9]/40 bg-[#fdf9fb] p-1.5 px-2.5 hidden sm:block">
-              <div className="flex items-center gap-1.5">
+            <div className="rounded-lg border border-[#e8cbd9]/40 bg-[#fdf9fb] p-1.5 px-2 hidden md:block">
+              <div className="flex items-center gap-1">
                 <MapPin className="h-3 w-3 text-[#c284a3]" />
-                <p className="text-[11px] font-medium text-[#2b1724]">123 Main Street, NY</p>
+                <p className="text-[10px] font-medium text-[#2b1724]">123 Main Street, NY</p>
               </div>
             </div>
           </div>
@@ -629,9 +633,11 @@ export default function SolutionsLandingPage() {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 flex flex-col items-center justify-center px-6 py-4 max-w-7xl mx-auto overflow-y-auto"
               >
-                <div className="w-full text-center shrink-0 mb-4">
+                <div className="w-full text-center shrink-0 mb-4 px-4">
                   <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
-                  <p className="mt-2 text-neutral-400 text-sm md:text-base">Generated from material library.</p>
+                  <p className="mt-2 text-neutral-400 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
+                    Generated from your pricing library and based on leading online suppliers. Line items can be toggled on/off and quantities can be edited.
+                  </p>
                 </div>
 
                 <div className="relative w-full max-w-[46rem] flex flex-col items-center">
