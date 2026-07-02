@@ -442,6 +442,15 @@ export default function SolutionsLandingPage() {
   const [animatingCatIndex, setAnimatingCatIndex] = useState(-1);
   const [animatingSubItemCount, setAnimatingSubItemCount] = useState(0);
   const [estimateComplete, setEstimateComplete] = useState(false);
+  const [mobileFinalViewActive, setMobileFinalViewActive] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const stepNames = ['Start', 'Capture', 'Scope', 'Estimate'];
@@ -626,183 +635,221 @@ export default function SolutionsLandingPage() {
 
             {/* Step 3 (Loaded Stage with MacBook frame chassis & float popups) */}
             {currentStep === 3 && estimateComplete && (
-              <motion.div
-                key="step3-loaded"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center px-6 py-4 max-w-7xl mx-auto overflow-y-auto"
-              >
-                <div className="w-full text-center shrink-0 mb-4 px-4">
-                  <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
-                  <p className="mt-2 text-neutral-400 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
-                    Generated from your pricing library and based on leading online suppliers. Line items can be toggled on/off and quantities can be edited.
-                  </p>
-                </div>
-
-                <div className="relative w-full max-w-[46rem] flex flex-col items-center">
-                  
-                  {/* Floating Margin Popups (Desktop only) */}
-                  
-                  {/* Popup 1: Edit Voice Note (Left Top) -> Points to "Edit Note" button in Top Left */}
+              <AnimatePresence mode="wait">
+                {isMobile && !mobileFinalViewActive ? (
                   <motion.div
-                    initial={{ opacity: 0, x: -30, scale: 0.9 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 0.2 }}
-                    className="hidden lg:flex flex-col gap-1 w-52 absolute -left-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                        <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
-                      </div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
-                    </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
-                  </motion.div>
-
-                  {/* Popup 2: Share Instantly (Right Top) -> Points to "Share" button in Top Right */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 30, scale: 0.9 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 0.4 }}
-                    className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                        <Share2 className="h-4 w-4 text-[#c284a3]" />
-                      </div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
-                    </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
-                  </motion.div>
-
-                  {/* Popup 3: Refine with Clara (Right Bottom) -> Points to Chat Icon hovering in Bottom Right */}
-                  <motion.div
-                    initial={{ opacity: 0, x: 30, scale: 0.9 }}
-                    animate={{ opacity: 1, x: 0, scale: 1 }}
-                    transition={{ duration: 0.4, delay: 0.6 }}
-                    className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 bottom-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                        <MessageSquare className="h-4 w-4 text-[#c284a3]" />
-                      </div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
-                    </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
-                  </motion.div>
-
-                  {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
-                  <motion.div
-                    layoutId="macbook-chassis"
-                    className="relative w-full rounded-2xl md:rounded-3xl border-2 md:border-8 border-neutral-800 bg-neutral-950 p-1 md:p-2 shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col h-fit max-h-[55vh] overflow-hidden"
+                    key="step3-completed-card"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.5 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto"
                   >
-                    {/* Webcam Indicator */}
-                    <div className="absolute top-2.5 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-neutral-900 z-50" />
+                    <div className="w-full text-center shrink-0 mb-4 px-4">
+                      <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
+                      <p className="mt-2 text-neutral-400 text-xs max-w-2xl mx-auto leading-relaxed">
+                        Generated from your pricing library and based on leading online suppliers. Line items can be toggled on/off and quantities can be edited.
+                      </p>
+                    </div>
 
-                    {/* Browser chrome wrapper */}
-                    <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1 relative">
+                    <motion.div
+                      layoutId="estimate-card-container"
+                      className="w-full max-w-[40rem] mx-auto overflow-hidden rounded-[1.25rem] bg-[#fdf9fb] border border-[#e8cbd9]/40 shadow-[0_24px_80px_rgba(0,0,0,0.15)] flex flex-col h-fit max-h-[62vh]"
+                    >
+                      <div className="overflow-y-auto overflow-x-hidden">
+                        <EstimateDocumentContent {...sharedEstimateProps} />
+                      </div>
+                    </motion.div>
+
+                    <div className="shrink-0 mt-4 z-50 flex justify-center w-full">
+                      <button
+                        onClick={() => setMobileFinalViewActive(true)}
+                        className="clara-cta relative inline-flex min-h-11 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-2.5 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition hover:opacity-95"
+                      >
+                        Review next steps <ArrowRight className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="step3-loaded"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center px-6 py-4 max-w-7xl mx-auto overflow-y-auto"
+                  >
+                    <div className="w-full text-center shrink-0 mb-4 px-4">
+                      <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
+                      <p className="mt-2 text-neutral-400 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
+                        Generated from your pricing library and based on leading online suppliers. Line items can be toggled on/off and quantities can be edited.
+                      </p>
+                    </div>
+
+                    <div className="relative w-full max-w-[46rem] flex flex-col items-center">
                       
-                      {/* Browser Address Bar */}
-                      <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
-                        <div className="flex gap-1.5">
-                          <div className="h-2 w-2 rounded-full bg-red-400" />
-                          <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                          <div className="h-2 w-2 rounded-full bg-green-400" />
+                      {/* Floating Margin Popups (Desktop only) */}
+                      
+                      {/* Popup 1: Edit Voice Note (Left Top) -> Points to "Edit Note" button in Top Left */}
+                      <motion.div
+                        initial={{ opacity: 0, x: -30, scale: 0.9 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ duration: 0.4, delay: 0.2 }}
+                        className="hidden lg:flex flex-col gap-1 w-52 absolute -left-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                            <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
+                          </div>
+                          <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
                         </div>
-                        <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
-                          <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
-                          <span>chat.b2w-ai.com</span>
+                        <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
+                      </motion.div>
+
+                      {/* Popup 2: Share Instantly (Right Top) -> Points to "Share" button in Top Right */}
+                      <motion.div
+                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ duration: 0.4, delay: 0.4 }}
+                        className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                            <Share2 className="h-4 w-4 text-[#c284a3]" />
+                          </div>
+                          <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
                         </div>
-                      </div>
+                        <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
+                      </motion.div>
 
-                      {/* Viewport Content */}
-                      <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
-                        {/* Chat Icon Hovering in Bottom Right */}
-                        <div className="absolute bottom-4 right-4 z-40">
-                          <motion.button
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.8 }}
-                            onClick={() => window.open('https://chat.b2w-ai.com', '_blank')}
-                            className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2b1724] text-white shadow-lg hover:scale-105 active:scale-95 transition duration-200 border border-[#e8cbd9]/20"
-                          >
-                            <MessageSquare className="h-5 w-5 text-white" />
-                          </motion.button>
+                      {/* Popup 3: Refine with Clara (Right Bottom) -> Points to Chat Icon hovering in Bottom Right */}
+                      <motion.div
+                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{ duration: 0.4, delay: 0.6 }}
+                        className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 bottom-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                            <MessageSquare className="h-4 w-4 text-[#c284a3]" />
+                          </div>
+                          <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
                         </div>
+                        <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
+                      </motion.div>
 
-                        <motion.div
-                          key="estimate-viewport"
-                          layoutId="estimate-card-container"
-                          initial={{ opacity: 1 }}
-                          transition={{ duration: 0.4 }}
-                        >
-                          <EstimateDocumentContent {...sharedEstimateProps} />
-                        </motion.div>
-                      </div>
+                      {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
+                      <motion.div
+                        layoutId="macbook-chassis"
+                        className="relative w-full rounded-2xl md:rounded-3xl border-2 md:border-8 border-neutral-800 bg-neutral-950 p-1 md:p-2 shadow-[0_24px_80px_rgba(0,0,0,0.5)] flex flex-col h-fit max-h-[55vh] overflow-hidden"
+                        transition={{ duration: 0.5 }}
+                      >
+                        {/* Webcam Indicator */}
+                        <div className="absolute top-2.5 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-neutral-900 z-50" />
+
+                        {/* Browser chrome wrapper */}
+                        <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1 relative">
+                          
+                          {/* Browser Address Bar */}
+                          <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
+                            <div className="flex gap-1.5">
+                              <div className="h-2 w-2 rounded-full bg-red-400" />
+                              <div className="h-2 w-2 rounded-full bg-yellow-400" />
+                              <div className="h-2 w-2 rounded-full bg-green-400" />
+                            </div>
+                            <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
+                              <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
+                              <span>chat.b2w-ai.com</span>
+                            </div>
+                          </div>
+
+                          {/* Viewport Content */}
+                          <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
+                            {/* Chat Icon Hovering in Bottom Right */}
+                            <div className="absolute bottom-4 right-4 z-40">
+                              <motion.button
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.8 }}
+                                onClick={() => window.open('https://chat.b2w-ai.com', '_blank')}
+                                className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2b1724] text-white shadow-lg hover:scale-105 active:scale-95 transition duration-200 border border-[#e8cbd9]/20"
+                              >
+                                <MessageSquare className="h-5 w-5 text-white" />
+                              </motion.button>
+                            </div>
+
+                            <motion.div
+                              key="estimate-viewport"
+                              layoutId="estimate-card-container"
+                              initial={{ opacity: 1 }}
+                              transition={{ duration: 0.4 }}
+                            >
+                              <EstimateDocumentContent {...sharedEstimateProps} />
+                            </motion.div>
+                          </div>
+                        </div>
+                      </motion.div>
                     </div>
+
+                    {/* Stacked Margin Popups (Mobile only) */}
+                    <div className="flex lg:hidden flex-col gap-2.5 mt-5 w-full max-w-[40rem] mx-auto px-1">
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                          <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
+                          <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
+                        </div>
+                      </motion.div>
+
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                          <Share2 className="h-4 w-4 text-[#c284a3]" />
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
+                          <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
+                        </div>
+                      </motion.div>
+
+                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
+                          <MessageSquare className="h-4 w-4 text-[#c284a3]" />
+                        </div>
+                        <div>
+                          <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
+                          <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
+                        </div>
+                      </motion.div>
+                    </div>
+
+                    {/* Bottom CTA Overlay */}
+                    <div className="shrink-0 mt-6 z-50 flex flex-wrap justify-center items-center gap-4 w-full pb-2">
+                      <motion.a
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 }}
+                        href="https://chat.b2w-ai.com"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="clara-cta relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-3 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition hover:opacity-95"
+                      >
+                        See Clara Live <ArrowRight className="h-4 w-4" />
+                      </motion.a>
+                      <motion.a
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8 }}
+                        href="mailto:info@b2w-ai.com?subject=B2W%20Clara%20Inquiry"
+                        className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white/10 px-8 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition hover:bg-white/15"
+                      >
+                        Get in Touch
+                      </motion.a>
+                    </div>
+
                   </motion.div>
-                </div>
-
-                {/* Stacked Margin Popups (Mobile only) */}
-                <div className="flex lg:hidden flex-col gap-2.5 mt-5 w-full max-w-[40rem] mx-auto px-1">
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                      <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
-                    </div>
-                    <div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                      <Share2 className="h-4 w-4 text-[#c284a3]" />
-                    </div>
-                    <div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
-                    </div>
-                  </motion.div>
-
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                      <MessageSquare className="h-4 w-4 text-[#c284a3]" />
-                    </div>
-                    <div>
-                      <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Bottom CTA Overlay */}
-                <div className="shrink-0 mt-6 z-50 flex flex-wrap justify-center items-center gap-4 w-full pb-2">
-                  <motion.a
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7 }}
-                    href="https://chat.b2w-ai.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="clara-cta relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-3 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition hover:opacity-95"
-                  >
-                    See Clara Live <ArrowRight className="h-4 w-4" />
-                  </motion.a>
-                  <motion.a
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
-                    href="mailto:info@b2w-ai.com?subject=B2W%20Clara%20Inquiry"
-                    className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white/10 px-8 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition hover:bg-white/15"
-                  >
-                    Get in Touch
-                  </motion.a>
-                </div>
-
-              </motion.div>
+                )}
+              </AnimatePresence>
             )}
           </div>
         </div>
