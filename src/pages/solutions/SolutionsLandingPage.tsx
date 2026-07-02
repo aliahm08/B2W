@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Calculator, Share2, MapPin, Home, Layers, Sparkles, Send, Users, Activity, Lock } from 'lucide-react';
+import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Calculator, Share2, MapPin, Home, Layers, Sparkles, Send, Users, Activity, Lock, MessageSquare } from 'lucide-react';
 import Seo from '../../components/Seo';
 import B2WLogoMark from '../../components/B2WLogoMark';
 
@@ -218,7 +218,7 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     if (transcriptComplete) return;
     const timer = window.setInterval(() => setVisibleWordCount((current) => Math.min(words.length, current + 1)), 60);
-    return () => window.setInterval(timer);
+    return () => window.clearInterval(timer);
   }, [transcriptComplete, words.length]);
 
   return (
@@ -333,7 +333,7 @@ function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubIt
             </div>
             <div>
               <h3 className="text-base font-semibold text-[#2b1724]">Project Estimate</h3>
-              <p className="text-[11px] text-[#5e4252]">Generated from material library.</p>
+              <p className="text-[11px] text-[#5e4252] font-semibold tracking-tight">1,200 sq ft &bull; 13 ft ceilings &bull; 6 windows &bull; 2 archways &bull; 1 basement door</p>
             </div>
           </div>
           <div className="flex items-center gap-3 self-end md:self-center">
@@ -629,8 +629,9 @@ export default function SolutionsLandingPage() {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 flex flex-col items-center justify-center px-6 py-4 max-w-7xl mx-auto overflow-y-auto"
               >
-                <div className="w-full text-center shrink-0 mb-3">
-                  <h2 className="text-3xl font-medium text-white md:text-4xl">Your estimate.</h2>
+                <div className="w-full text-center shrink-0 mb-4">
+                  <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
+                  <p className="mt-2 text-neutral-400 text-sm md:text-base">Generated from material library.</p>
                 </div>
 
                 <div className="relative w-full max-w-[46rem] flex flex-col items-center">
@@ -669,7 +670,7 @@ export default function SolutionsLandingPage() {
                     <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
                   </motion.div>
 
-                  {/* Popup 3: Refine with Clara (Right Bottom) -> Points to B2W Chat Icon hovering in Bottom Right */}
+                  {/* Popup 3: Refine with Clara (Right Bottom) -> Points to Chat Icon hovering in Bottom Right */}
                   <motion.div
                     initial={{ opacity: 0, x: 30, scale: 0.9 }}
                     animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -678,11 +679,11 @@ export default function SolutionsLandingPage() {
                   >
                     <div className="flex items-center gap-2">
                       <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                        <Sparkles className="h-4 w-4 text-[#c284a3]" />
+                        <MessageSquare className="h-4 w-4 text-[#c284a3]" />
                       </div>
                       <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
                     </div>
-                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click Clara&rsquo;s chat icon hovering in the bottom-right of the estimate to write proposals or ask questions.</p>
+                    <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
                   </motion.div>
 
                   {/* MAC LAPTOP MOCKUP CHASSIS (Shared Layout element) */}
@@ -721,7 +722,7 @@ export default function SolutionsLandingPage() {
                             onClick={() => window.open('https://chat.b2w-ai.com', '_blank')}
                             className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2b1724] text-white shadow-lg hover:scale-105 active:scale-95 transition duration-200 border border-[#e8cbd9]/20"
                           >
-                            <B2WLogoMark className="h-5 w-5 fill-white text-white" />
+                            <MessageSquare className="h-5 w-5 text-white" />
                           </motion.button>
                         </div>
 
@@ -762,11 +763,11 @@ export default function SolutionsLandingPage() {
 
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
                     <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                      <Sparkles className="h-4 w-4 text-[#c284a3]" />
+                      <MessageSquare className="h-4 w-4 text-[#c284a3]" />
                     </div>
                     <div>
                       <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
-                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click Clara&rsquo;s chat icon hovering in the bottom-right of the estimate to write proposals or ask questions.</p>
+                      <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
                     </div>
                   </motion.div>
                 </div>
