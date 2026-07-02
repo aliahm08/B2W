@@ -807,6 +807,26 @@ export default function SolutionsLandingPage() {
           </div>
         </div>
       </div>
+
+      {/* Footer Block */}
+      <footer className="w-full border-t border-[#e8cbd9]/10 bg-[#0a0608] text-white py-12 relative z-[60] px-6">
+        <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-6 sm:flex-row">
+          <div>
+            <h3 className="text-base font-semibold tracking-tight text-white">
+              <span className="b2w-wordmark">B2W LLC</span>
+            </h3>
+            <p className="text-xs text-neutral-500 mt-2">&copy; {new Date().getFullYear()} All rights reserved.</p>
+          </div>
+          <div className="flex items-center gap-6 text-xs text-neutral-400">
+            <a href="mailto:info@b2w-ai.com?subject=Clara%20Inquiry" className="hover:text-[#f5dce8] transition-colors">
+              Contact Support
+            </a>
+            <a href="https://chat.b2w-ai.com" target="_blank" rel="noreferrer" className="hover:text-[#f5dce8] transition-colors">
+              Try Clara App
+            </a>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
