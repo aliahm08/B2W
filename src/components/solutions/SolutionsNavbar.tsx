@@ -12,7 +12,7 @@ type ActiveClaraCta = 'header' | 'page' | null;
 
 function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean }) {
   return (
-    <div aria-label="Clara" className="relative z-[110] inline-flex items-center gap-2 overflow-visible text-white">
+    <div aria-label="Clara" className="relative z-[110] inline-flex items-baseline gap-2 overflow-visible text-white">
       <button 
         onClick={() => document.dispatchEvent(new CustomEvent('solutions-navigate-to-step', { detail: 0 }))}
         className="inline-flex items-center gap-3 hover:opacity-85 transition-opacity focus:outline-none"
@@ -22,9 +22,8 @@ function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean 
         </span>
         <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
       </button>
-      <span className="text-xs text-neutral-600 font-mono select-none">/</span>
-      <Link to="/" className="text-[10px] font-bold tracking-wider text-neutral-400 hover:text-white transition-colors bg-white/5 border border-white/10 rounded px-1.5 py-0.5">
-        B2W
+      <Link to="/" className="text-[10px] font-medium tracking-wider text-neutral-400 hover:text-white transition-colors">
+        by B2W
       </Link>
     </div>
   );
