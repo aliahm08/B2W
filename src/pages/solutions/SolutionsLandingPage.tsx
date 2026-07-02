@@ -144,13 +144,6 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
               </button>
             ))}
           </motion.div>
-
-          {/* Mobile Version: Clara / [Active Step] centered header label */}
-          <div className="flex md:hidden items-center justify-center text-xs font-semibold text-neutral-400 font-mono tracking-wider pointer-events-none">
-            <span className="text-white">Clara</span>
-            <span className="mx-1 text-neutral-600">/</span>
-            <span className="text-[#f5dce8]">{navItems.find(item => item.step === currentStep)?.label || ''}</span>
-          </div>
         </>,
         desktopPortal
       )}
@@ -422,6 +415,11 @@ export default function SolutionsLandingPage() {
   const [animatingCatIndex, setAnimatingCatIndex] = useState(-1);
   const [animatingSubItemCount, setAnimatingSubItemCount] = useState(0);
   const [estimateComplete, setEstimateComplete] = useState(false);
+
+  useEffect(() => {
+    const stepNames = ['Start', 'Capture', 'Scope', 'Estimate', 'Share'];
+    document.dispatchEvent(new CustomEvent('solutions-active-step-change', { detail: stepNames[currentStep] }));
+  }, [currentStep]);
 
   useEffect(() => {
     const handleScroll = () => {

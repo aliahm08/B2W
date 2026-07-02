@@ -10,13 +10,18 @@ type SolutionsNavbarProps = {
 
 type ActiveClaraCta = 'header' | 'page' | null;
 
-function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean }) {
+function SolutionsLockup({ isLogoAnimated = false, activeStep }: { isLogoAnimated?: boolean; activeStep?: string }) {
   return (
-    <div aria-label="Clara" className="relative z-[110] inline-flex items-center gap-3 overflow-visible text-white">
+    <div aria-label="Clara" className="relative z-[110] inline-flex items-center gap-2 overflow-visible text-white">
       <span className={`clara-logo-mark ${isLogoAnimated ? 'is-breathing' : ''}`} aria-hidden="true">
         <img src="/brand/clara-logo-solid.png" alt="" className="clara-logo-image" />
       </span>
       <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
+      {activeStep && activeStep !== 'Start' && (
+        <span className="text-sm font-semibold text-neutral-500 font-mono ml-1.5 flex items-center">
+          <span className="mr-1.5 text-neutral-600 font-normal">/</span> {activeStep}
+        </span>
+      )}
     </div>
   );
 }
@@ -29,6 +34,7 @@ export default function SolutionsNavbar({
   const [activeCta, setActiveCta] = useState<ActiveClaraCta>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
+  const [activeStep, setActiveStep] = useState<string>('');
   const isCtaHovered = activeCta !== null;
   const headerCtaClasses = activeCta === 'page' ? 'blur-sm opacity-35' : 'blur-0 opacity-100';
   const ctaIsExternal = ctaHref.startsWith('http');
@@ -54,8 +60,16 @@ export default function SolutionsNavbar({
     const handleCloseMenu = () => {
       setIsMobileMenuOpen(false);
     };
+    const handleStepChange = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setActiveStep(customEvent.detail || '');
+    };
     document.addEventListener('close-solutions-mobile-menu', handleCloseMenu);
-    return () => document.removeEventListener('close-solutions-mobile-menu', handleCloseMenu);
+    document.addEventListener('solutions-active-step-change', handleStepChange);
+    return () => {
+      document.removeEventListener('close-solutions-mobile-menu', handleCloseMenu);
+      document.removeEventListener('solutions-active-step-change', handleStepChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -118,7 +132,7 @@ export default function SolutionsNavbar({
                 : 'pointer-events-auto absolute left-1/2 -translate-x-1/2'
             }`}
           >
-            <SolutionsLockup isLogoAnimated={isCtaHovered} />
+            <SolutionsLockup isLogoAnimated={isCtaHovered} activeStep={activeStep} />
           </div>
 
           <div id="solutions-navbar-center-portal" className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-[120]" />
