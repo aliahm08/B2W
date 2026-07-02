@@ -22,7 +22,7 @@ function SolutionsLockup({ isLogoAnimated = false }: { isLogoAnimated?: boolean 
         </span>
         <span className="text-lg font-medium tracking-[-0.03em] md:text-xl">Clara</span>
       </button>
-      <Link to="/" className="text-[10px] font-medium tracking-wider text-neutral-400 hover:text-white transition-colors">
+      <Link to="/" className="hidden md:inline text-[10px] font-medium tracking-wider text-neutral-400 hover:text-white transition-colors">
         by B2W
       </Link>
     </div>
@@ -219,7 +219,7 @@ export default function SolutionsNavbar({
               >
                 <span className="relative z-10">{ctaLabel}</span>
               </a>
-              <div className="flex flex-col items-center gap-2 mt-1 w-full text-center">
+              <div className="flex flex-col items-start gap-2 mt-1 w-full">
                 <Link 
                   to="/"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -231,7 +231,7 @@ export default function SolutionsNavbar({
                   href="mailto:info@b2w-ai.com?subject=Clara%20Inquiry"
                   className="text-xs font-semibold text-neutral-500 hover:text-white transition-colors"
                 >
-                  Contact B2W
+                  Contact
                 </a>
               </div>
             </div>
