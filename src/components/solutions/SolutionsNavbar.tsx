@@ -206,30 +206,35 @@ export default function SolutionsNavbar({
                   </button>
                 ))}
               </div>
-
-              {/* B2W Back Link */}
-              <div className="mt-2 border-t border-white/10 pt-4 flex flex-col gap-2">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">Back</p>
-                <Link 
-                  to="/"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-left text-base font-semibold py-2 px-3 rounded-lg text-neutral-400 hover:bg-white/5 hover:text-white transition-colors"
-                >
-                  B2W Homepage
-                </Link>
-              </div>
             </div>
           }
           cta={
-            <a
-              href={ctaHref}
-              target={ctaIsExternal ? '_blank' : undefined}
-              rel={ctaIsExternal ? 'noreferrer' : undefined}
-              data-clara-cta="header"
-              className="clara-cta relative inline-flex min-h-12 overflow-hidden rounded-full bg-[#f5dce8] px-5 py-3 text-base font-semibold text-[#2b1724] transition-[box-shadow,opacity] duration-200 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[#e8cbd9]/60"
-            >
-              <span className="relative z-10">{ctaLabel}</span>
-            </a>
+            <div className="flex flex-col gap-3.5 w-full">
+              <a
+                href={ctaHref}
+                target={ctaIsExternal ? '_blank' : undefined}
+                rel={ctaIsExternal ? 'noreferrer' : undefined}
+                data-clara-cta="header"
+                className="clara-cta relative inline-flex min-h-12 w-full items-center justify-center overflow-hidden rounded-full bg-[#f5dce8] px-5 py-3 text-base font-semibold text-[#2b1724] transition-[box-shadow,opacity] duration-200 hover:opacity-95 focus:outline-none focus:ring-2 focus:ring-[#e8cbd9]/60"
+              >
+                <span className="relative z-10">{ctaLabel}</span>
+              </a>
+              <div className="flex flex-col items-center gap-2 mt-1 w-full text-center">
+                <Link 
+                  to="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="text-sm font-semibold text-neutral-400 hover:text-white transition-colors"
+                >
+                  B2W
+                </Link>
+                <a 
+                  href="mailto:info@b2w-ai.com?subject=Clara%20Inquiry"
+                  className="text-xs font-semibold text-neutral-500 hover:text-white transition-colors"
+                >
+                  Contact B2W
+                </a>
+              </div>
+            </div>
           }
         />
       </header>
