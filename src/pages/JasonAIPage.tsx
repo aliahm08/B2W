@@ -834,7 +834,12 @@ function JasonAILockup() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <Link to="/" className="text-[#141414] underline-offset-4 hover:underline" aria-label="B2W home">
+        <Link
+          to="/"
+          data-scramble-skip
+          className="rounded-full px-2 py-1 text-[#5d554b] underline-offset-4 transition-[background-color,color,text-decoration-color] duration-200 hover:bg-[#efe5d3] hover:text-[#141414] hover:underline"
+          aria-label="B2W home"
+        >
           by B2W
         </Link>
       </motion.span>
@@ -1714,7 +1719,15 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-5 px-5 pb-8 pt-14 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10 md:pt-16">
         <div className="min-w-0">
           <p className="text-sm font-semibold">
-            <ScrambleText text="JasonAI by B2W" />
+            <ScrambleText text="JasonAI by " />
+            <Link
+              to="/"
+              data-descramble-hover="true"
+              className="inline-flex text-white underline-offset-4 hover:underline"
+              aria-label="B2W home"
+            >
+              <ScrambleText text="B2W" />
+            </Link>
           </p>
           <p className="mt-1 text-sm text-white/62">
             <ScrambleText text="Fieldwork communication, organized around the way jobs move." />

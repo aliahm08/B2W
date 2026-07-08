@@ -571,7 +571,13 @@ export default function ClientNavbar({
         footer={
           <div className="text-sm text-white/70">
             <p className="text-base font-medium text-white">
-              <span className="b2w-wordmark">B2W LLC</span>
+              <Link
+                to="/"
+                className="b2w-wordmark underline-offset-4 transition-colors hover:text-white hover:underline"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                B2W LLC
+              </Link>
             </p>
             <p className="mt-2 text-sm text-white/50">© {new Date().getFullYear()} All rights reserved.</p>
             <a

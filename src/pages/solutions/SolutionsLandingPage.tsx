@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Calculator, Share2, MapPin, Home, Layers, Sparkles, Send, Users, Activity, Lock, MessageSquare } from 'lucide-react';
+import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Share2, Home, Layers, Sparkles, Send, Users, Activity, Lock, MessageSquare, CircleCheck, ExternalLink } from 'lucide-react';
 import Seo from '../../components/Seo';
 import B2WLogoMark from '../../components/B2WLogoMark';
 
@@ -46,6 +47,8 @@ type Category = {
   label: string;
   subItems: SubItem[];
 };
+
+type EstimateCalloutTarget = 'edit' | 'share' | 'chat';
 
 const initialCategories: Category[] = [
   { label: 'Demolition & Prep', subItems: [
@@ -264,7 +267,7 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
       </div>
 
       <div className="w-full text-center shrink-0">
-        <button onClick={onComplete} disabled={!canProceed} className={`inline-flex min-h-12 items-center gap-2 rounded-full px-8 py-3 text-sm font-bold transition ${canProceed ? 'clara-cta bg-[#f5dce8] text-[#2b1724] shadow-[0_12px_34px_rgba(184,137,161,0.2)] hover:opacity-95' : 'cursor-not-allowed border border-white/10 bg-white/[0.04] text-neutral-500'}`}>
+        <button onClick={onComplete} disabled={!canProceed} data-clara-cta={canProceed ? 'estimate' : undefined} className={`inline-flex min-h-12 items-center gap-2 rounded-full px-8 py-3 text-sm font-bold transition-[background-color,box-shadow,opacity] ${canProceed ? 'clara-cta bg-[#f5dce8] text-[#2b1724] shadow-[0_12px_34px_rgba(184,137,161,0.2)] hover:opacity-95' : 'cursor-not-allowed border border-white/10 bg-white/[0.04] text-neutral-500'}`}>
           <span className="relative z-10 inline-flex items-center gap-2"><Layers className="h-4 w-4" /> Get an estimate</span>
         </button>
       </div>
@@ -273,10 +276,13 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
 }
 
 function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
+  const [documentReady, setDocumentReady] = useState(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => { onComplete(); }, 3000);
+    setDocumentReady(false);
+    const timer = setTimeout(() => { setDocumentReady(true); }, 3000);
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
 
   return (
     <div className="flex w-full flex-col items-center justify-center px-5 py-2 max-w-5xl">
@@ -305,56 +311,87 @@ function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
         </div>
       </div>
       <div className="w-full text-center shrink-0">
-         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="flex items-center justify-center gap-2 text-xs text-[#d9a9c2]">
-           <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="h-3 w-3 rounded-full border-[1.5px] border-[#e8cbd9] border-t-[#c284a3]" />
-           Preparing document...
-         </motion.div>
+        <AnimatePresence mode="wait">
+          {documentReady ? (
+            <motion.div
+              key="estimate-ready"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="flex flex-col items-center justify-center gap-3"
+            >
+              <div className="flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#d9a9c2]">
+                <CircleCheck className="h-4 w-4 text-[#f5dce8]" />
+                Estimate ready
+              </div>
+              <button
+                onClick={onComplete}
+                className="clara-cta relative inline-flex min-h-11 items-center gap-2 rounded-full bg-[#f5dce8] px-7 py-2.5 text-sm font-bold text-[#2b1724] shadow-[0_12px_34px_rgba(184,137,161,0.2)] transition-[background-color,box-shadow,opacity] hover:opacity-95"
+                data-clara-cta="main"
+              >
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  See completed estimate <ArrowRight className="h-4 w-4" />
+                </span>
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="preparing-document"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, y: -6, transition: { duration: 0.18 } }}
+              transition={{ delay: 1 }}
+              className="flex items-center justify-center gap-2 text-xs text-[#d9a9c2]"
+            >
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="h-3 w-3 rounded-full border-[1.5px] border-[#e8cbd9] border-t-[#c284a3]" />
+              Preparing document...
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
 }
 
-function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal, onEditNote, onShare }: any) {
+function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal, onEditNote, onShare, activeCallout, setActiveCallout }: any) {
   return (
     <div className="w-full h-full relative">
       <div className="border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-3 py-3 md:px-5">
-        <div className="flex flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 min-w-0">
+        <div className="flex flex-row items-start justify-between gap-3">
+          <div className="flex min-w-0 items-start gap-2.5">
             {estimateComplete && (
-              <button 
-                onClick={onEditNote}
-                className="flex items-center justify-center rounded-full border border-[#e8cbd9]/40 bg-white p-1.5 text-[#7e5c70] transition hover:bg-[#fcecf3] shadow-sm shrink-0"
-                aria-label="Edit Note"
-              >
+	              <button 
+	                onClick={onEditNote}
+	                onMouseEnter={() => setActiveCallout?.('edit')}
+	                onMouseLeave={() => setActiveCallout?.(null)}
+	                onFocus={() => setActiveCallout?.('edit')}
+	                onBlur={() => setActiveCallout?.(null)}
+	                className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition shadow-sm ${activeCallout === 'edit' ? 'border-sky-400/70 bg-sky-100 text-sky-700 shadow-[0_0_0_3px_rgba(56,189,248,0.18)]' : 'border-[#e8cbd9]/40 bg-white text-[#7e5c70] hover:bg-[#fcecf3]'}`}
+	                aria-label="Edit Note"
+	              >
                 <ArrowLeft className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline ml-1 text-[10px] font-bold">Edit Note</span>
               </button>
             )}
-            <div className="flex h-8.5 w-8.5 flex-shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]">
-              <Calculator className="h-4 w-4 text-[#c284a3]" />
-            </div>
             <div className="min-w-0">
-              <h3 className="text-sm sm:text-base font-semibold text-[#2b1724] truncate">Project Estimate</h3>
+              <h3 className="text-sm sm:text-base font-semibold text-[#2b1724] truncate">123 Main Street, NY</h3>
               <p className="text-[9px] sm:text-[11px] text-[#5e4252] font-semibold tracking-tight truncate">1,200 sq ft &bull; 13 ft ceilings &bull; 6 windows &bull; 2 archways</p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {estimateComplete && (
-              <button 
-                onClick={onShare}
-                className="flex items-center justify-center rounded-full bg-[#2b1724] p-1.5 text-white transition hover:bg-[#3d2133] shadow-sm shrink-0"
-                aria-label="Share"
-              >
-                <Share2 className="h-3.5 w-3.5 text-white" />
-                <span className="hidden sm:inline ml-1.5 text-[10px] font-bold">Share</span>
-              </button>
+	              <button 
+	                onClick={onShare}
+	                onMouseEnter={() => setActiveCallout?.('share')}
+	                onMouseLeave={() => setActiveCallout?.(null)}
+	                onFocus={() => setActiveCallout?.('share')}
+	                onBlur={() => setActiveCallout?.(null)}
+	                className={`flex items-center justify-center rounded-full p-1.5 text-white transition shadow-sm shrink-0 ${activeCallout === 'share' ? 'bg-sky-500 shadow-[0_0_0_3px_rgba(56,189,248,0.2)]' : 'bg-[#2b1724] hover:bg-[#3d2133]'}`}
+		                aria-label="Share"
+		              >
+	                <Share2 className="h-3.5 w-3.5 text-white" />
+	              </button>
             )}
-            <div className="rounded-lg border border-[#e8cbd9]/40 bg-[#fdf9fb] p-1.5 px-2 hidden md:block">
-              <div className="flex items-center gap-1">
-                <MapPin className="h-3 w-3 text-[#c284a3]" />
-                <p className="text-[10px] font-medium text-[#2b1724]">123 Main Street, NY</p>
-              </div>
-            </div>
           </div>
         </div>
         {!estimateComplete && (
@@ -381,14 +418,29 @@ function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubIt
                     const qtyNum = typeof sub.qty === 'string' ? parseFloat(sub.qty) || 0 : sub.qty;
                     const lineTotal = qtyNum * sub.unitPrice;
 
-                    return (
-                      <motion.div key={sub.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className={`flex items-center justify-between rounded-md px-1.5 py-1 transition-all ${!isChecked && estimateComplete ? 'opacity-40 grayscale' : 'hover:bg-[#f8f1f4]'}`}>
-                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                          <AnimatePresence>
-                            {estimateComplete ? (
-                              <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} onClick={() => toggleCheck(catIdx, sub.id)} className="flex-shrink-0 text-sky-500 hover:text-sky-600">
-                                {isChecked ? <CheckSquare className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5 text-[#e8cbd9]" />}
-                              </motion.button>
+	                    return (
+	                      <motion.div
+	                        key={sub.id}
+	                        initial={{ opacity: 0 }}
+	                        animate={{ opacity: 1 }}
+	                        role={estimateComplete ? 'button' : undefined}
+	                        tabIndex={estimateComplete ? 0 : undefined}
+	                        aria-pressed={estimateComplete ? isChecked : undefined}
+	                        onClick={estimateComplete ? () => toggleCheck(catIdx, sub.id) : undefined}
+	                        onKeyDown={estimateComplete ? (event) => {
+	                          if (event.key === 'Enter' || event.key === ' ') {
+	                            event.preventDefault();
+	                            toggleCheck(catIdx, sub.id);
+	                          }
+	                        } : undefined}
+	                        className={`flex items-center justify-between rounded-md px-1.5 py-1 transition-all ${estimateComplete ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#d9a9c2]/70' : ''} ${!isChecked && estimateComplete ? 'opacity-40 grayscale hover:opacity-55' : 'hover:bg-[#f8f1f4]'}`}
+	                      >
+	                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+	                          <AnimatePresence>
+	                            {estimateComplete ? (
+	                              <motion.button initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} onClick={(event) => { event.stopPropagation(); toggleCheck(catIdx, sub.id); }} className="flex-shrink-0 text-sky-500 hover:text-sky-600">
+	                                {isChecked ? <CheckSquare className="h-3.5 w-3.5" /> : <Square className="h-3.5 w-3.5 text-[#e8cbd9]" />}
+	                              </motion.button>
                             ) : <div className="h-3.5 w-3.5" />}
                           </AnimatePresence>
                           <p className={`text-[11px] font-medium truncate ${sub.essential ? 'text-[#2b1724]' : 'text-[#7e5c70]'}`}>{sub.desc}</p>
@@ -397,7 +449,7 @@ function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubIt
                           <div className="flex items-center gap-1 border-r border-[#e8cbd9]/40 pr-2">
                             <span className="text-[10px] text-[#7e5c70]">x</span>
                             {estimateComplete ? (
-                              <input type="number" value={sub.qty} onChange={(e) => updateQty(catIdx, sub.id, e.target.value)} disabled={!isChecked} className="w-8 rounded bg-transparent px-1 py-0 text-center font-mono text-[11px] font-medium text-[#2b1724] outline-none transition hover:bg-[#fcecf3] focus:bg-[#fcecf3] focus:ring-1 focus:ring-[#d9a9c2]/70 disabled:cursor-not-allowed" />
+	                              <input type="number" value={sub.qty} onClick={(event) => event.stopPropagation()} onKeyDown={(event) => event.stopPropagation()} onChange={(e) => updateQty(catIdx, sub.id, e.target.value)} disabled={!isChecked} className="w-8 rounded bg-transparent px-1 py-0 text-center font-mono text-[11px] font-medium text-[#2b1724] outline-none transition hover:bg-[#fcecf3] focus:bg-[#fcecf3] focus:ring-1 focus:ring-[#d9a9c2]/70 disabled:cursor-not-allowed" />
                             ) : <span className="inline-block w-8 text-center font-mono text-[11px] font-medium text-[#7e5c70]">{sub.qty}</span>}
                           </div>
                           <div className={`w-12 text-right font-mono text-[11px] ${sub.essential ? 'text-[#2b1724] font-semibold' : 'text-[#7e5c70]'}`}>${lineTotal.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0})}</div>
@@ -435,6 +487,9 @@ function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubIt
 export default function SolutionsLandingPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const heroToCaptureOverlapVh = 38;
+  const heroToCaptureOverlap = `${heroToCaptureOverlapVh}vh`;
+  const [heroExitProgress, setHeroExitProgress] = useState(0);
 
   // Estimate document state shared across Step 3
   const [categories, setCategories] = useState<Category[]>(initialCategories);
@@ -443,6 +498,7 @@ export default function SolutionsLandingPage() {
   const [animatingSubItemCount, setAnimatingSubItemCount] = useState(0);
   const [estimateComplete, setEstimateComplete] = useState(false);
   const [mobileFinalViewActive, setMobileFinalViewActive] = useState(false);
+  const [hoveredEstimateCallout, setHoveredEstimateCallout] = useState<EstimateCalloutTarget | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -465,9 +521,15 @@ export default function SolutionsLandingPage() {
       const rect = containerRef.current.getBoundingClientRect();
       const containerTop = rect.top + window.scrollY;
       const totalScrollable = rect.height - window.innerHeight;
+      const activationOffset = window.innerHeight * 0.16;
+      const heroPushStart = Math.max(0, containerTop - window.innerHeight * 0.42);
+      const heroPushEnd = containerTop - activationOffset;
+      const heroPushRange = Math.max(1, heroPushEnd - heroPushStart);
+      const nextHeroExitProgress = Math.max(0, Math.min(1, (window.scrollY - heroPushStart) / heroPushRange));
+      setHeroExitProgress(nextHeroExitProgress);
 
       // When above the interactive container
-      if (window.scrollY < containerTop - 100) {
+      if (window.scrollY < containerTop - activationOffset) {
         setCurrentStep(0);
         return;
       }
@@ -498,7 +560,7 @@ export default function SolutionsLandingPage() {
     if (step === 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      const pct = (step - 1) * 0.33 + 0.16;
+      const pct = (step - 1) * 0.33 + 0.08;
       window.scrollTo({
         top: containerTop + pct * totalScrollable,
         behavior: 'smooth'
@@ -574,9 +636,22 @@ export default function SolutionsLandingPage() {
 
   const sharedEstimateProps = {
     categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal,
+    activeCallout: hoveredEstimateCallout,
+    setActiveCallout: setHoveredEstimateCallout,
     onEditNote: () => scrollToStep(1),
     onShare: () => window.open('https://chat.b2w-ai.com', '_blank')
   };
+
+  const calloutClass = (target: EstimateCalloutTarget) =>
+    `${hoveredEstimateCallout === target ? 'border-sky-400/55 bg-[#172536]/88 shadow-[0_24px_70px_rgba(56,189,248,0.18)]' : 'border-sky-300/10 bg-[#160f15]/58 shadow-2xl'} transition-[background-color,border-color,box-shadow,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/40`;
+
+  const calloutIconClass = (target: EstimateCalloutTarget) =>
+    `flex h-7 w-7 items-center justify-center rounded-lg text-sky-300 transition-colors ${hoveredEstimateCallout === target ? 'bg-sky-400/20' : 'bg-sky-400/10'}`;
+
+  const calloutMotion = (target: EstimateCalloutTarget) => ({
+    opacity: hoveredEstimateCallout === target ? 1 : 0.58,
+    scale: hoveredEstimateCallout === target ? 1.02 : 1,
+  });
 
   return (
     <>
@@ -586,17 +661,23 @@ export default function SolutionsLandingPage() {
       <SectionNavigator currentStep={currentStep} setStep={scrollToStep} />
 
       {/* Hero (Section 0) sits natively at the top of the page flow */}
-      <div className="w-full min-h-[90vh] flex items-center justify-center bg-[#0a0608] text-white pt-10">
+      <div
+        className={`relative w-full min-h-[88vh] flex items-center justify-center bg-[#0a0608] text-white pt-10 ${currentStep === 0 ? 'z-10' : 'z-0'}`}
+        style={{
+          transform: `translate3d(0, -${heroExitProgress * heroToCaptureOverlapVh}vh, 0)`,
+          willChange: 'transform',
+        }}
+      >
         <Section0Hero onNext={() => scrollToStep(1)} />
       </div>
 
       {/* Second Section Frame: Interactive container (Steps 1 to 3) */}
-      <div ref={containerRef} className="relative w-full" style={{ height: '240vh' }}>
-        <div className="sticky top-20 left-0 right-0 h-[calc(100vh-80px)] overflow-hidden bg-[#0a0608] flex items-center justify-center">
+      <div ref={containerRef} className={`relative w-full ${currentStep === 0 ? 'z-0' : 'z-20'}`} style={{ height: '240vh', marginTop: `-${heroToCaptureOverlap}` }}>
+        <div className={`sticky top-20 left-0 right-0 h-[calc(100vh-80px)] overflow-hidden flex items-center justify-center ${currentStep === 0 ? 'pointer-events-none bg-transparent' : 'bg-[#0a0608]'}`}>
           <div className="relative w-full h-full flex items-center justify-center">
             <AnimatePresence mode="wait">
               {currentStep === 1 && (
-                <motion.div key="step1" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} transition={{ duration: 0.5 }} className="absolute inset-0 flex items-center justify-center pb-8">
+                <motion.div key="step1" initial={false} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 1, y: 0 }} transition={{ duration: 0 }} className="absolute inset-0 flex items-center justify-center pb-8">
                   <Section1VoiceCapture onComplete={() => scrollToStep(2)} />
                 </motion.div>
               )}
@@ -690,48 +771,63 @@ export default function SolutionsLandingPage() {
                       {/* Floating Margin Popups (Desktop only) */}
                       
                       {/* Popup 1: Edit Voice Note (Left Top) -> Points to "Edit Note" button in Top Left */}
-                      <motion.div
-                        initial={{ opacity: 0, x: -30, scale: 0.9 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        transition={{ duration: 0.4, delay: 0.2 }}
-                        className="hidden lg:flex flex-col gap-1 w-52 absolute -left-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                            <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
-                          </div>
+	                      <motion.div
+	                        initial={{ opacity: 0, x: -30, scale: 0.9 }}
+	                        animate={{ ...calloutMotion('edit'), x: 0 }}
+	                        transition={{ opacity: { duration: 0.18 }, scale: { duration: 0.18 }, x: { duration: 0.4, delay: 0.2 } }}
+	                        onMouseEnter={() => setHoveredEstimateCallout('edit')}
+	                        onMouseLeave={() => setHoveredEstimateCallout(null)}
+	                        onFocus={() => setHoveredEstimateCallout('edit')}
+	                        onBlur={() => setHoveredEstimateCallout(null)}
+	                        tabIndex={0}
+	                        className={`hidden lg:flex flex-col gap-1 w-52 absolute -left-56 top-4 border rounded-2xl p-3.5 backdrop-blur-md text-left z-40 ${calloutClass('edit')}`}
+	                      >
+	                        <div className="flex items-center gap-2">
+	                          <div className={calloutIconClass('edit')}>
+	                            <ArrowLeft className="h-4 w-4" />
+	                          </div>
                           <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
                         </div>
                         <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
                       </motion.div>
 
                       {/* Popup 2: Share Instantly (Right Top) -> Points to "Share" button in Top Right */}
-                      <motion.div
-                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        transition={{ duration: 0.4, delay: 0.4 }}
-                        className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 top-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                            <Share2 className="h-4 w-4 text-[#c284a3]" />
-                          </div>
+	                      <motion.div
+	                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
+	                        animate={{ ...calloutMotion('share'), x: 0 }}
+	                        transition={{ opacity: { duration: 0.18 }, scale: { duration: 0.18 }, x: { duration: 0.4, delay: 0.4 } }}
+	                        onMouseEnter={() => setHoveredEstimateCallout('share')}
+	                        onMouseLeave={() => setHoveredEstimateCallout(null)}
+	                        onFocus={() => setHoveredEstimateCallout('share')}
+	                        onBlur={() => setHoveredEstimateCallout(null)}
+	                        tabIndex={0}
+	                        className={`hidden lg:flex flex-col gap-1 w-52 absolute -right-56 top-4 border rounded-2xl p-3.5 backdrop-blur-md text-left z-40 ${calloutClass('share')}`}
+	                      >
+	                        <div className="flex items-center gap-2">
+	                          <div className={calloutIconClass('share')}>
+	                            <Share2 className="h-4 w-4" />
+	                          </div>
                           <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
                         </div>
                         <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
                       </motion.div>
 
                       {/* Popup 3: Refine with Clara (Right Bottom) -> Points to Chat Icon hovering in Bottom Right */}
-                      <motion.div
-                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        transition={{ duration: 0.4, delay: 0.6 }}
-                        className="hidden lg:flex flex-col gap-1 w-52 absolute -right-56 bottom-4 bg-[#160f15]/88 border border-[#e8cbd9]/12 rounded-2xl p-3.5 shadow-2xl backdrop-blur-md text-left z-40"
-                      >
-                        <div className="flex items-center gap-2">
-                          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                            <MessageSquare className="h-4 w-4 text-[#c284a3]" />
-                          </div>
+	                      <motion.div
+	                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
+	                        animate={{ ...calloutMotion('chat'), x: 0 }}
+	                        transition={{ opacity: { duration: 0.18 }, scale: { duration: 0.18 }, x: { duration: 0.4, delay: 0.6 } }}
+	                        onMouseEnter={() => setHoveredEstimateCallout('chat')}
+	                        onMouseLeave={() => setHoveredEstimateCallout(null)}
+	                        onFocus={() => setHoveredEstimateCallout('chat')}
+	                        onBlur={() => setHoveredEstimateCallout(null)}
+	                        tabIndex={0}
+	                        className={`hidden lg:flex flex-col gap-1 w-52 absolute -right-56 bottom-4 border rounded-2xl p-3.5 backdrop-blur-md text-left z-40 ${calloutClass('chat')}`}
+	                      >
+	                        <div className="flex items-center gap-2">
+	                          <div className={calloutIconClass('chat')}>
+	                            <MessageSquare className="h-4 w-4" />
+	                          </div>
                           <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
                         </div>
                         <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
@@ -750,72 +846,76 @@ export default function SolutionsLandingPage() {
                         <div className="w-full rounded-xl overflow-hidden bg-[#fdf9fb] border border-[#e8cbd9]/30 flex flex-col min-h-0 flex-1 relative">
                           
                           {/* Browser Address Bar */}
-                          <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
-                            <div className="flex gap-1.5">
-                              <div className="h-2 w-2 rounded-full bg-red-400" />
-                              <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                              <div className="h-2 w-2 rounded-full bg-green-400" />
-                            </div>
-                            <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
-                              <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
-                              <span>chat.b2w-ai.com</span>
-                            </div>
-                          </div>
+	                          <div className="flex items-center gap-2 border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-4 py-2 shrink-0">
+	                            <div className="flex gap-1.5">
+	                              <div className="h-2 w-2 rounded-full bg-red-400" />
+	                              <div className="h-2 w-2 rounded-full bg-yellow-400" />
+	                              <div className="h-2 w-2 rounded-full bg-green-400" />
+	                            </div>
+	                            <div className="mx-auto flex items-center gap-2 rounded-md bg-[#fdf9fb] border border-[#e8cbd9]/30 px-4 py-1 text-[10px] text-[#7e5c70] font-mono w-60 justify-center">
+	                              <Lock className="h-2.5 w-2.5 text-[#c284a3]" />
+	                              <span>chat.b2w-ai.com</span>
+	                            </div>
+	                          </div>
 
-                          {/* Viewport Content */}
-                          <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
-                            {/* Chat Icon Hovering in Bottom Right */}
-                            <div className="absolute bottom-4 right-4 z-40">
-                              <motion.button
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.8 }}
-                                onClick={() => window.open('https://chat.b2w-ai.com', '_blank')}
-                                className="flex h-11 w-11 items-center justify-center rounded-full bg-[#2b1724] text-white shadow-lg hover:scale-105 active:scale-95 transition duration-200 border border-[#e8cbd9]/20"
-                              >
-                                <MessageSquare className="h-5 w-5 text-white" />
-                              </motion.button>
-                            </div>
-
-                            <motion.div
-                              key="estimate-viewport"
-                              layoutId="estimate-card-container"
+	                          {/* Viewport Content */}
+	                          <div className="flex-1 overflow-y-auto bg-[#fdf9fb] p-4 relative min-h-0">
+	                            <motion.div
+	                              key="estimate-viewport"
+	                              layoutId="estimate-card-container"
                               initial={{ opacity: 1 }}
                               transition={{ duration: 0.4 }}
-                            >
-                              <EstimateDocumentContent {...sharedEstimateProps} />
-                            </motion.div>
-                          </div>
+	                            >
+	                              <EstimateDocumentContent {...sharedEstimateProps} />
+	                            </motion.div>
+	                            {/* Chat Icon Hovering in Bottom Right */}
+	                            <div className="absolute bottom-20 right-4 z-40">
+	                              <motion.button
+	                                initial={{ scale: 0 }}
+	                                animate={{ scale: 1 }}
+	                                transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.8 }}
+	                                onClick={() => window.open('https://chat.b2w-ai.com', '_blank')}
+	                                onMouseEnter={() => setHoveredEstimateCallout('chat')}
+	                                onMouseLeave={() => setHoveredEstimateCallout(null)}
+	                                onFocus={() => setHoveredEstimateCallout('chat')}
+	                                onBlur={() => setHoveredEstimateCallout(null)}
+	                                className={`flex h-11 w-11 items-center justify-center rounded-full text-white shadow-lg backdrop-blur transition duration-200 hover:scale-105 active:scale-95 border ${hoveredEstimateCallout === 'chat' ? 'border-sky-300/80 bg-sky-500/95 shadow-[0_0_0_4px_rgba(56,189,248,0.2)]' : 'border-[#e8cbd9]/25 bg-[#2b1724]/78 opacity-[0.82] hover:opacity-100'}`}
+	                                aria-label="Open Clara chat"
+	                              >
+	                                <MessageSquare className="h-5 w-5 text-white" />
+	                              </motion.button>
+	                            </div>
+	                          </div>
                         </div>
                       </motion.div>
                     </div>
 
-                    {/* Stacked Margin Popups (Mobile only) */}
-                    <div className="flex lg:hidden flex-col gap-2.5 mt-5 w-full max-w-[40rem] mx-auto px-1">
-                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                          <ArrowLeft className="h-4 w-4 text-[#c284a3]" />
-                        </div>
+	                    {/* Stacked Margin Popups (Mobile only) */}
+	                    <div className="flex lg:hidden flex-col gap-2.5 mt-5 w-full max-w-[40rem] mx-auto px-1">
+	                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ ...calloutMotion('edit'), y: 0 }} transition={{ opacity: { duration: 0.18 }, scale: { duration: 0.18 }, y: { duration: 0.25, delay: 0.2 } }} onMouseEnter={() => setHoveredEstimateCallout('edit')} onMouseLeave={() => setHoveredEstimateCallout(null)} onFocus={() => setHoveredEstimateCallout('edit')} onBlur={() => setHoveredEstimateCallout(null)} tabIndex={0} className={`flex items-start gap-3 rounded-xl border p-3 text-left ${calloutClass('edit')}`}>
+	                        <div className={`${calloutIconClass('edit')} shrink-0`}>
+	                          <ArrowLeft className="h-4 w-4" />
+	                        </div>
                         <div>
                           <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Edit voice note</h4>
                           <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Click the &ldquo;Edit Note&rdquo; arrow in the top-left of the document to refine your voice scope at any time.</p>
                         </div>
                       </motion.div>
 
-                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                          <Share2 className="h-4 w-4 text-[#c284a3]" />
-                        </div>
+	                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ ...calloutMotion('share'), y: 0 }} transition={{ opacity: { duration: 0.18 }, scale: { duration: 0.18 }, y: { duration: 0.25, delay: 0.3 } }} onMouseEnter={() => setHoveredEstimateCallout('share')} onMouseLeave={() => setHoveredEstimateCallout(null)} onFocus={() => setHoveredEstimateCallout('share')} onBlur={() => setHoveredEstimateCallout(null)} tabIndex={0} className={`flex items-start gap-3 rounded-xl border p-3 text-left ${calloutClass('share')}`}>
+	                        <div className={`${calloutIconClass('share')} shrink-0`}>
+	                          <Share2 className="h-4 w-4" />
+	                        </div>
                         <div>
                           <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Share instantly</h4>
                           <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Use the &ldquo;Share&rdquo; button in the top-right of the document to send secure estimate links directly to clients.</p>
                         </div>
                       </motion.div>
 
-                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex items-start gap-3 rounded-xl border border-[#e8cbd9]/10 bg-[#160f15]/60 p-3 shadow text-left">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#fcecf3]/10">
-                          <MessageSquare className="h-4 w-4 text-[#c284a3]" />
-                        </div>
+	                      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ ...calloutMotion('chat'), y: 0 }} transition={{ opacity: { duration: 0.18 }, scale: { duration: 0.18 }, y: { duration: 0.25, delay: 0.4 } }} onMouseEnter={() => setHoveredEstimateCallout('chat')} onMouseLeave={() => setHoveredEstimateCallout(null)} onFocus={() => setHoveredEstimateCallout('chat')} onBlur={() => setHoveredEstimateCallout(null)} tabIndex={0} className={`flex items-start gap-3 rounded-xl border p-3 text-left ${calloutClass('chat')}`}>
+	                        <div className={`${calloutIconClass('chat')} shrink-0`}>
+	                          <MessageSquare className="h-4 w-4" />
+	                        </div>
                         <div>
                           <h4 className="text-[12px] font-bold text-white uppercase tracking-wider">Refine with Clara</h4>
                           <p className="text-[11px] text-neutral-400 mt-1 leading-relaxed">Chat to plan your project, refine the estimate with images and additional information, and produce proposals for upcoming projects.</p>
@@ -832,9 +932,12 @@ export default function SolutionsLandingPage() {
                         href="https://chat.b2w-ai.com"
                         target="_blank"
                         rel="noreferrer"
-                        className="clara-cta relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-3 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition hover:opacity-95"
+                        data-clara-cta="main"
+                        className="clara-cta relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-[#f5dce8] px-8 py-3 text-sm font-bold text-[#2b1724] shadow-[0_12px_40px_rgba(245,220,232,0.3)] transition-[background-color,box-shadow,opacity] hover:opacity-95"
                       >
-                        See Clara Live <ArrowRight className="h-4 w-4" />
+                        <span className="relative z-10 inline-flex items-center gap-2">
+                          See Clara Live <ArrowRight className="h-4 w-4" />
+                        </span>
                       </motion.a>
                       <motion.a
                         initial={{ opacity: 0, y: 10 }}
@@ -860,7 +963,9 @@ export default function SolutionsLandingPage() {
         <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-6 sm:flex-row">
           <div>
             <h3 className="text-base font-semibold tracking-tight text-white">
-              <span className="b2w-wordmark">B2W LLC</span>
+              <Link to="/" className="b2w-wordmark underline-offset-4 transition-colors hover:text-[#f5dce8] hover:underline">
+                B2W LLC
+              </Link>
             </h3>
             <p className="text-xs text-neutral-500 mt-2">&copy; {new Date().getFullYear()} All rights reserved.</p>
           </div>
@@ -871,6 +976,9 @@ export default function SolutionsLandingPage() {
             <a href="https://chat.b2w-ai.com" target="_blank" rel="noreferrer" className="hover:text-[#f5dce8] transition-colors">
               Try Clara App
             </a>
+            <Link to="/jasonai" className="inline-flex items-center gap-1.5 text-[11px] text-neutral-500 hover:text-[#f5dce8] transition-colors">
+              Get JasonAI <ExternalLink className="h-3 w-3" />
+            </Link>
           </div>
         </div>
       </footer>
