@@ -52,6 +52,7 @@ const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
+const InternalProjectIndexPage = lazy(() => import('./pages/internal/InternalProjectIndexPage'));
 const JasonAIOverviewPage = lazy(() => import('./pages/internal/jason-ai/JasonAIOverviewPage'));
 const JasonAIPerformanceGoalsPage = lazy(() => import('./pages/internal/jason-ai/JasonAIPerformanceGoalsPage'));
 const JasonAIKPITrackerPage = lazy(() => import('./pages/internal/jason-ai/JasonAIKPITrackerPage'));
@@ -238,7 +239,10 @@ export default function App() {
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
-  const isInternalPortal = location.pathname.startsWith('/internal/') || location.pathname.startsWith('/portal/');
+  const isInternalPortal =
+    location.pathname === '/internal' ||
+    location.pathname.startsWith('/internal/') ||
+    location.pathname.startsWith('/portal/');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
@@ -306,6 +310,7 @@ export default function App() {
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
+                <Route path="/internal" element={<InternalProjectIndexPage />} />
                 <Route path="/internal/jason-ai" element={<JasonAIOverviewPage />} />
                 <Route path="/internal/jason-ai/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
                 <Route path="/internal/jason-ai/kpi-tracker" element={<JasonAIKPITrackerPage />} />

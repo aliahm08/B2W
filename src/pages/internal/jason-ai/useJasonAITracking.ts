@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   getDefaultTaskReport,
   getKpiId,
@@ -12,12 +12,24 @@ import {
   type KpiType,
   type TaskReport,
 } from './JasonAIInternalPortal';
+import {
+  fetchProgressState,
+  syncProgressChange,
+  type ExecutiveAnalysis,
+  type ProgressChange,
+  type ProgressVersion,
+  type TimelineAssessment,
+} from './jasonAIProgressApi';
 
 type StoredTracking = {
   taskReports?: Record<string, TaskReport>;
   kpiReports?: Record<string, KpiReport>;
   metricsVersion?: number;
 };
+
+export type ProgressSyncStatus = 'local' | 'loading' | 'saved' | 'saving' | 'error';
+
+const actorStorageKey = 'jasonai-executive-actor-role-v1';
 
 export type GoalReportConfig = {
   label: string;
@@ -216,12 +228,54 @@ export function useJasonAITracking() {
   const [taskReports, setTaskReports] = useState<Record<string, TaskReport>>({});
   const [kpiReports, setKpiReports] = useState<Record<string, KpiReport>>({});
   const [ready, setReady] = useState(false);
+  const [actorRole, setActorRoleState] = useState<ExecutiveRole>(() => {
+    if (typeof window === 'undefined') return 'CEO';
+    const stored = window.localStorage.getItem(actorStorageKey);
+    return stored === 'COO' || stored === 'CTO' ? stored : 'CEO';
+  });
+  const [syncStatus, setSyncStatus] = useState<ProgressSyncStatus>('loading');
+  const [backendConfigured, setBackendConfigured] = useState(false);
+  const [modelConfigured, setModelConfigured] = useState(false);
+  const [version, setVersion] = useState<number | null>(null);
+  const [analysis, setAnalysis] = useState<ExecutiveAnalysis | null>(null);
+  const [timeline, setTimeline] = useState<TimelineAssessment | null>(null);
+  const [history, setHistory] = useState<ProgressVersion[]>([]);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const pendingChangeRef = useRef<ProgressChange | null>(null);
+  const syncTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 
   useEffect(() => {
     const stored = readTracking();
     setTaskReports(stored.taskReports);
     setKpiReports(stored.kpiReports);
     setReady(true);
+
+    void fetchProgressState()
+      .then((response) => {
+        setBackendConfigured(Boolean(response.configured));
+        setModelConfigured(Boolean(response.modelConfigured));
+        if (!response.configured) {
+          setSyncStatus('local');
+          return;
+        }
+
+        const latest = response.latest ?? null;
+        if (latest?.snapshot) {
+          setTaskReports(normalizeTaskReports(latest.snapshot.taskReports ?? {}));
+          setKpiReports(latest.snapshot.kpiReports ?? {});
+        }
+        setVersion(latest?.id ?? null);
+        setAnalysis(latest?.analysis ?? null);
+        setTimeline(latest?.timeline ?? null);
+        setHistory(response.history ?? []);
+        setLastSyncedAt(latest?.created_at ?? null);
+        setSyncStatus('saved');
+      })
+      .catch(() => {
+        setBackendConfigured(false);
+        setSyncStatus('local');
+      });
   }, []);
 
   useEffect(() => {
@@ -230,7 +284,67 @@ export function useJasonAITracking() {
       trackingStorageKey,
       JSON.stringify({ taskReports, kpiReports, metricsVersion: trackingMetricsVersion }),
     );
-  }, [kpiReports, ready, taskReports]);
+
+    const pendingChange = pendingChangeRef.current;
+    if (!pendingChange) return;
+    if (syncTimerRef.current) window.clearTimeout(syncTimerRef.current);
+    setSyncStatus('saving');
+    setSyncError(null);
+
+    syncTimerRef.current = window.setTimeout(() => {
+      const change = pendingChangeRef.current;
+      if (!change) return;
+      pendingChangeRef.current = null;
+
+      void syncProgressChange({
+        actorRole,
+        snapshot: { taskReports, kpiReports, metricsVersion: trackingMetricsVersion },
+        change,
+      })
+        .then((response) => {
+          const latest = response.latest ?? null;
+          setBackendConfigured(Boolean(response.configured));
+          setModelConfigured(Boolean(response.modelConfigured) || latest?.analysis?.source === 'model' || modelConfigured);
+          setVersion(latest?.id ?? null);
+          setAnalysis(latest?.analysis ?? null);
+          setTimeline(latest?.timeline ?? null);
+          setHistory(response.history ?? []);
+          setLastSyncedAt(latest?.created_at ?? new Date().toISOString());
+          setSyncStatus('saved');
+          setSyncError(response.modelError ?? null);
+        })
+        .catch((error) => {
+          setSyncStatus('error');
+          setSyncError(error instanceof Error ? error.message : 'Unable to sync progress.');
+        });
+    }, 900);
+
+    return () => {
+      if (syncTimerRef.current) window.clearTimeout(syncTimerRef.current);
+    };
+  }, [actorRole, kpiReports, modelConfigured, ready, taskReports]);
+
+  const queueProgressChange = useCallback((nextChange: ProgressChange) => {
+    const pending = pendingChangeRef.current;
+    if (
+      pending &&
+      pending.scope === nextChange.scope &&
+      pending.entityId === nextChange.entityId
+    ) {
+      pendingChangeRef.current = {
+        ...nextChange,
+        patch: { ...pending.patch, ...nextChange.patch },
+        before: { ...nextChange.before, ...pending.before },
+      };
+      return;
+    }
+    pendingChangeRef.current = nextChange;
+  }, []);
+
+  const setActorRole = useCallback((role: ExecutiveRole) => {
+    setActorRoleState(role);
+    window.localStorage.setItem(actorStorageKey, role);
+  }, []);
 
   const getKpiProgress = useCallback(
     (phaseId: string, kpiId: KpiType) => {
@@ -255,12 +369,23 @@ export function useJasonAITracking() {
     [getKpiProgress],
   );
 
-  const updateKpiResult = useCallback((phaseId: string, kpiId: KpiType, currentResult: string) => {
-    setKpiReports((current) => ({
-      ...current,
-      [getKpiId(phaseId, kpiId)]: { currentResult },
-    }));
-  }, []);
+  const updateKpiResult = useCallback(
+    (phaseId: string, kpiId: KpiType, currentResult: string) => {
+      const entityId = getKpiId(phaseId, kpiId);
+      queueProgressChange({
+        scope: 'kpi',
+        entityId,
+        before: { currentResult: kpiReports[entityId]?.currentResult ?? '' },
+        patch: { currentResult },
+        interaction: 'goal result edited',
+      });
+      setKpiReports((current) => ({
+        ...current,
+        [entityId]: { currentResult },
+      }));
+    },
+    [kpiReports, queueProgressChange],
+  );
 
   const updateTaskReport = useCallback(
     (
@@ -274,6 +399,15 @@ export function useJasonAITracking() {
       const task = kpi?.tasks[taskIndex];
       if (!kpi || !task) return;
       const taskId = getTaskId(phaseId, kpiId, taskIndex);
+      const currentReport =
+        taskReports[taskId] ?? getDefaultTaskReport(task, kpi.owner, kpi.id);
+      queueProgressChange({
+        scope: 'task',
+        entityId: taskId,
+        before: Object.fromEntries(Object.keys(patch).map((field) => [field, currentReport[field as keyof TaskReport]])),
+        patch,
+        interaction: patch.completed !== undefined ? 'assignment completion toggled' : 'assignment report edited',
+      });
       setTaskReports((current) => ({
         ...current,
         [taskId]: {
@@ -283,7 +417,7 @@ export function useJasonAITracking() {
         },
       }));
     },
-    [],
+    [queueProgressChange, taskReports],
   );
 
   const summary = useMemo(() => {
@@ -311,9 +445,20 @@ export function useJasonAITracking() {
 
   return {
     ready,
+    actorRole,
+    setActorRole,
     taskReports,
     kpiReports,
     summary,
+    syncStatus,
+    syncError,
+    backendConfigured,
+    modelConfigured,
+    version,
+    analysis,
+    timeline,
+    history,
+    lastSyncedAt,
     getKpiProgress,
     getPhaseProgress,
     updateKpiResult,

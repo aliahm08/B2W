@@ -10,6 +10,7 @@ import {
   getTaskId,
   kpiIconMap,
   phases,
+  type ExecutiveRole,
   type KpiType,
 } from './JasonAIInternalPortal';
 import { JasonAIInternalNavbar, jasonAIInternalRoutes } from './shared';
@@ -44,6 +45,10 @@ export default function JasonAIKPITrackerPage() {
     getPhaseProgress,
     updateKpiResult,
     updateTaskReport,
+    actorRole,
+    setActorRole,
+    syncStatus,
+    version,
   } = useJasonAITracking();
 
   const activePhase = useMemo(
@@ -97,13 +102,38 @@ export default function JasonAIKPITrackerPage() {
                 Each executive owns one goal per phase. Report the goal in its native unit, complete the work behind it, and maintain the evidence and metrics used at weekly reviews.
               </p>
             </div>
-            <Link
-              to={`${jasonAIInternalRoutes.performanceGoals}?phase=${activePhase.id}`}
-              className="inline-flex min-h-11 items-center justify-between gap-5 rounded-full border border-neutral-300 px-5 text-xs font-semibold text-black transition hover:border-black"
-            >
-              View performance dashboard
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              <label>
+                <span className="block text-[8px] uppercase tracking-[0.16em] text-neutral-400">Operating as</span>
+                <select
+                  value={actorRole}
+                  onChange={(event) => setActorRole(event.target.value as ExecutiveRole)}
+                  className="mt-2 min-h-11 min-w-28 border border-neutral-300 bg-white px-3 text-xs font-semibold text-black outline-none focus:border-black"
+                >
+                  <option value="CEO">CEO</option>
+                  <option value="COO">COO</option>
+                  <option value="CTO">CTO</option>
+                </select>
+              </label>
+              <div>
+                <p className="mb-2 text-[8px] uppercase tracking-[0.16em] text-neutral-400">
+                  {syncStatus === 'saving'
+                    ? 'Saving version…'
+                    : syncStatus === 'saved'
+                      ? `Version ${version ?? '—'} saved`
+                      : syncStatus === 'error'
+                        ? 'Local changes saved'
+                        : 'Local tracking'}
+                </p>
+                <Link
+                  to={`${jasonAIInternalRoutes.performanceGoals}?phase=${activePhase.id}`}
+                  className="inline-flex min-h-11 items-center justify-between gap-5 rounded-full border border-neutral-300 px-5 text-xs font-semibold text-black transition hover:border-black"
+                >
+                  View performance dashboard
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
           </div>
         </header>
 

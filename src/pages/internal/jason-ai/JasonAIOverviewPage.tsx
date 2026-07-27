@@ -7,7 +7,7 @@ import Seo from '../../../components/Seo';
 import { projectPageHeaderClassName, projectPageShellClassName } from '../../../components/projectPageLayout';
 import { InteractiveJCurve, phases } from './JasonAIInternalPortal';
 import { JasonAIInternalNavbar, jasonAIInternalRoutes } from './shared';
-import { useJasonAITracking } from './useJasonAITracking';
+import { getGoalPerformance, useJasonAITracking } from './useJasonAITracking';
 
 const overviewCards = [
   {
@@ -38,8 +38,50 @@ const overviewCards = [
 
 export default function JasonAIOverviewPage() {
   const [activePhaseId, setActivePhaseId] = useState(phases[0].id);
-  const { summary, getPhaseProgress } = useJasonAITracking();
+  const {
+    summary,
+    kpiReports,
+    getPhaseProgress,
+    analysis,
+    timeline,
+    history,
+    syncStatus,
+    version,
+    modelConfigured,
+    lastSyncedAt,
+  } = useJasonAITracking();
   const activePhase = phases.find((phase) => phase.id === activePhaseId) ?? phases[0];
+  const phaseDashboard = phases.map((phase) => {
+    const reportedGoals = phase.kpis.filter(
+      (kpi) => kpiReports[`${phase.id}:${kpi.id}`]?.currentResult?.trim(),
+    ).length;
+    const performanceValues = phase.kpis.map((kpi) =>
+      getGoalPerformance(kpi.label, kpiReports[`${phase.id}:${kpi.id}`]?.currentResult ?? ''),
+    );
+    return {
+      ...phase,
+      execution: getPhaseProgress(phase.id),
+      performance: Math.round(
+        performanceValues.reduce((total, performance) => total + performance, 0) / performanceValues.length,
+      ),
+      reportedGoals,
+    };
+  });
+  const strategyStart = new Date('2026-08-01T00:00:00');
+  const daysUntilStart = Math.max(0, Math.ceil((strategyStart.getTime() - Date.now()) / 86_400_000));
+  const operatingPosition =
+    daysUntilStart > 0
+      ? `Pre-start · ${daysUntilStart} ${daysUntilStart === 1 ? 'day' : 'days'} to Foundation`
+      : 'Foundation · active operating phase';
+  const chronologicalHistory = [...history].reverse().slice(-12);
+  const todayLabel = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date());
+  const overviewTitle =
+    analysis?.overviewTitle ?? 'Executive performance across the five-phase strategy.';
+  const overviewSubtitle = analysis?.overviewSubtitle ?? operatingPosition;
 
   return (
     <article className={projectPageShellClassName}>
@@ -52,66 +94,224 @@ export default function JasonAIOverviewPage() {
 
       <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <header className={projectPageHeaderClassName}>
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,.92fr)]">
-            <div className="grid content-start gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <p className="mb-3 text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">
-                  JasonAI Executive Strategy
-                </p>
-                <h1 className="max-w-[12ch] text-[2.65rem] font-medium leading-[.96] tracking-[-0.045em] text-black sm:text-6xl">
-                  The AI Assistant
-                  <span className="mt-2 block text-neutral-400">for Business Owners</span>
-                </h1>
-                <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-600 sm:text-lg">
-                  JasonAI helps owners of SMB general contractors turn everyday WhatsApp communication into useful summaries, visible follow-ups, and measurable time and business value.
-                </p>
-              </div>
-
-              {[
-                ['Target Customer', 'SMB General Contractors'],
-                ['Primary User', 'Project Group Chats'],
-                ['Product', 'WhatsApp AI Assistant'],
-                ['Strategy Horizon', 'Aug 2026 – Jul 2028'],
-              ].map(([label, value]) => (
-                <div key={label} className="border border-neutral-200 bg-white p-4 text-sm leading-6">
-                  <span className="block text-[10px] uppercase tracking-[0.22em] text-neutral-500">{label}</span>
-                  <span className="mt-2 block font-medium text-black">{value}</span>
-                </div>
-              ))}
-            </div>
-
-            <aside className="flex flex-col border border-neutral-900 bg-neutral-950 p-6 text-white sm:p-7">
-              <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-400">Project pulse</p>
-              <h2 className="mt-4 text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
-                One overview. Three connected working areas.
-              </h2>
-              <p className="mt-5 text-sm leading-6 text-neutral-300">
-                This homepage stays read-only. Goal measurements and completed assignments flow back here automatically from the working pages.
+          <div className="flex flex-col gap-5 border-b border-neutral-100 pb-7 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-[11px] font-mono uppercase tracking-[0.28em] text-neutral-500">
+                JasonAI Executive Strategy · Today {todayLabel}
               </p>
+              <h1 className="mt-4 max-w-4xl text-[2.65rem] font-medium leading-[.96] tracking-[-0.045em] text-black sm:text-6xl">
+                {overviewTitle}
+              </h1>
+              <p className="mt-5 max-w-3xl text-sm leading-6 text-neutral-600">{overviewSubtitle}</p>
+            </div>
+            <Link
+              to={jasonAIInternalRoutes.performanceGoals}
+              className="group inline-flex min-h-12 items-center justify-between gap-8 rounded-full bg-neutral-950 px-5 text-sm font-semibold text-white transition hover:bg-neutral-800"
+            >
+              Open Performance Goals
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
 
-              <div className="my-6 grid grid-cols-3 border-y border-white/10 py-5">
-                <div>
-                  <p className="font-mono text-xl text-white">{summary.execution}%</p>
-                  <p className="mt-1 text-[9px] uppercase tracking-[0.16em] text-neutral-500">Execution</p>
+          <div className="mt-6 grid grid-cols-2 border border-neutral-200 bg-white sm:grid-cols-4">
+            {[
+              ['Overall execution', `${summary.execution}%`],
+              ['Assignments complete', `${summary.completedTasks} / ${summary.totalTasks}`],
+              ['Goals reported', `${summary.reportedGoals} / ${summary.totalGoals}`],
+              ['Phases reporting', `${phaseDashboard.filter((phase) => phase.reportedGoals > 0).length} / 5`],
+            ].map(([label, value], index) => (
+              <div
+                key={label}
+                className={`p-4 sm:p-5 ${
+                  index % 2 ? 'border-l border-neutral-200' : ''
+                } ${index > 1 ? 'border-t border-neutral-200 sm:border-t-0' : ''} ${
+                  index > 0 ? 'sm:border-l sm:border-neutral-200' : ''
+                }`}
+              >
+                <p className="font-mono text-2xl text-black">{value}</p>
+                <p className="mt-2 text-[8px] uppercase tracking-[0.16em] text-neutral-400">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {phaseDashboard.map((phase) => (
+              <Link
+                key={phase.id}
+                to={`${jasonAIInternalRoutes.performanceGoals}?phase=${phase.id}`}
+                className="group border border-neutral-200 bg-white p-4 transition hover:border-neutral-500"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-mono text-[9px] text-neutral-400">{phase.number} · {phase.period}</p>
+                    <h2 className="mt-2 text-base font-medium text-black">{phase.label}</h2>
+                  </div>
+                  <ArrowRight className="h-3.5 w-3.5 text-neutral-300 transition group-hover:translate-x-1 group-hover:text-black" />
                 </div>
-                <div>
-                  <p className="font-mono text-xl text-white">{summary.completedTasks}/{summary.totalTasks}</p>
-                  <p className="mt-1 text-[9px] uppercase tracking-[0.16em] text-neutral-500">Tasks</p>
+                <div className="mt-5">
+                  <div className="flex justify-between text-[8px] uppercase tracking-[0.14em] text-neutral-400">
+                    <span>Performance</span>
+                    <span>{phase.performance}%</span>
+                  </div>
+                  <div className="mt-2 h-1 overflow-hidden rounded-full bg-neutral-100">
+                    <div className="h-full bg-neutral-900" style={{ width: `${phase.performance}%` }} />
+                  </div>
                 </div>
-                <div>
-                  <p className="font-mono text-xl text-white">{summary.reportedGoals}/{summary.totalGoals}</p>
-                  <p className="mt-1 text-[9px] uppercase tracking-[0.16em] text-neutral-500">Goals reported</p>
+                <div className="mt-4">
+                  <div className="flex justify-between text-[8px] uppercase tracking-[0.14em] text-neutral-400">
+                    <span>Execution</span>
+                    <span>{phase.execution}%</span>
+                  </div>
+                  <div className="mt-2 h-1 overflow-hidden rounded-full bg-neutral-100">
+                    <div className="h-full bg-neutral-400" style={{ width: `${phase.execution}%` }} />
+                  </div>
                 </div>
+                <p className="mt-4 font-mono text-[8px] uppercase tracking-[0.14em] text-neutral-400">
+                  {phase.reportedGoals} / 3 goals reported
+                </p>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-4 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,.92fr)]">
+            <section className="flex flex-col bg-neutral-950 p-5 text-white sm:p-7">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5">
+                <div>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">
+                    Executive project-manager review
+                  </p>
+                  <p className="mt-2 text-[9px] uppercase tracking-[0.16em] text-neutral-500">
+                    {modelConfigured ? 'OSS thinking model connected' : 'Deterministic review until model is connected'}
+                  </p>
+                </div>
+                <span className="rounded-full border border-white/15 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-neutral-300">
+                  {analysis?.status ?? (syncStatus === 'local' ? 'Local only' : 'Awaiting version')}
+                </span>
               </div>
 
-              <Link
-                to={jasonAIInternalRoutes.performanceGoals}
-                className="group mt-auto inline-flex min-h-12 items-center justify-between rounded-full border border-white bg-white px-5 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
-              >
-                Open Performance Goals
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </aside>
+              {analysis ? (
+                <>
+                  <h2 className="mt-6 text-2xl font-medium leading-tight tracking-tight">{analysis.headline}</h2>
+                  <p className="mt-4 text-sm leading-6 text-neutral-300">{analysis.executiveSummary}</p>
+                  <p className="mt-4 border-l border-white/20 pl-4 text-xs leading-5 text-neutral-400">
+                    {analysis.timelineAssessment}
+                  </p>
+                  {analysis.decisions.length ? (
+                    <div className="mt-6 border-t border-white/10 pt-5">
+                      <p className="text-[9px] font-mono uppercase tracking-[0.18em] text-neutral-500">Decisions to make</p>
+                      <div className="mt-3 space-y-3">
+                        {analysis.decisions.slice(0, 3).map((decision, index) => (
+                          <div key={decision} className="flex gap-3 text-xs leading-5 text-neutral-200">
+                            <span className="font-mono text-[9px] text-neutral-500">{String(index + 1).padStart(2, '0')}</span>
+                            <span>{decision}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                  {analysis.accountability.length ? (
+                    <div className="mt-6 grid gap-2 border-t border-white/10 pt-5 sm:grid-cols-3">
+                      {analysis.accountability.map((item) => (
+                        <div key={item.owner} className="border border-white/10 p-3">
+                          <p className="font-mono text-[9px] text-neutral-500">{item.owner}</p>
+                          <p className="mt-2 text-[10px] leading-4 text-neutral-300">{item.commitment}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <div className="flex flex-1 flex-col justify-center py-10">
+                  <h2 className="text-2xl font-medium tracking-tight">Create the first accountable version.</h2>
+                  <p className="mt-4 max-w-xl text-sm leading-6 text-neutral-400">
+                    Update a goal or assignment in KPI Tracker. The backend will record who changed what, compare the resulting snapshot with the ideal timeline, and return an executive review here.
+                  </p>
+                  <Link
+                    to={jasonAIInternalRoutes.kpiTracker}
+                    className="group mt-7 inline-flex w-fit items-center gap-4 text-sm font-semibold text-white"
+                  >
+                    Open KPI Tracker
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              )}
+
+              <p className="mt-auto border-t border-white/10 pt-5 font-mono text-[8px] uppercase tracking-[0.14em] text-neutral-600">
+                {version ? `Version ${version}` : 'No backend version yet'}
+                {lastSyncedAt ? ` · ${new Date(lastSyncedAt).toLocaleString()}` : ''}
+              </p>
+            </section>
+
+            <section className="border border-neutral-200 bg-white p-5 sm:p-7">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-400">Actual vs ideal timeline</p>
+                  <h2 className="mt-3 text-xl font-medium tracking-tight text-black">
+                    {timeline ? `${timeline.actualExecution}% actual · ${timeline.idealExecution}% ideal` : 'Waiting for the first saved version'}
+                  </h2>
+                </div>
+                {timeline ? (
+                  <span className="font-mono text-sm text-neutral-500">
+                    {timeline.portfolioVariance > 0 ? '+' : ''}{timeline.portfolioVariance} pts
+                  </span>
+                ) : null}
+              </div>
+
+              {timeline ? (
+                <div className="mt-6 space-y-4">
+                  {timeline.phases.map((phase) => (
+                    <div key={phase.id}>
+                      <div className="flex items-center justify-between gap-4 text-[9px] uppercase tracking-[0.14em]">
+                        <span className="font-medium text-neutral-600">{phase.label}</span>
+                        <span className="font-mono text-neutral-400">
+                          {phase.execution}% / {phase.expected}% ideal
+                        </span>
+                      </div>
+                      <div className="relative mt-2 h-2 bg-neutral-100">
+                        <div className="absolute inset-y-0 left-0 bg-neutral-900" style={{ width: `${phase.execution}%` }} />
+                        <div
+                          className="absolute -top-1 h-4 w-px bg-neutral-400"
+                          style={{ left: `${phase.expected}%` }}
+                          title={`${phase.expected}% ideal`}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-6 border border-dashed border-neutral-200 p-5 text-xs leading-5 text-neutral-500">
+                  Version history begins with the first server-synced progress change. The tracker continues working locally until Supabase and the model endpoint are configured.
+                </div>
+              )}
+
+              <div className="mt-7 border-t border-neutral-100 pt-5">
+                <div className="flex items-center justify-between">
+                  <p className="text-[9px] font-mono uppercase tracking-[0.18em] text-neutral-400">Version trajectory</p>
+                  <p className="text-[8px] uppercase tracking-[0.14em] text-neutral-400">Bar = actual · line = ideal</p>
+                </div>
+                {chronologicalHistory.length ? (
+                  <div className="mt-4 flex h-24 items-end gap-2">
+                    {chronologicalHistory.map((item) => (
+                      <div key={item.id} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+                        <div className="relative h-16 w-full max-w-8 bg-neutral-100">
+                          <div
+                            className="absolute inset-x-0 bottom-0 bg-neutral-900"
+                            style={{ height: `${Math.max(2, item.timeline.actualExecution)}%` }}
+                          />
+                          <div
+                            className="absolute inset-x-0 h-px bg-neutral-400"
+                            style={{ bottom: `${item.timeline.idealExecution}%` }}
+                          />
+                        </div>
+                        <span className="font-mono text-[7px] text-neutral-400">v{item.id}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-4 text-xs text-neutral-400">No versions recorded yet.</p>
+                )}
+              </div>
+            </section>
           </div>
         </header>
 
