@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Check,
@@ -21,10 +22,10 @@ import {
 } from '../../../components/projectPageLayout';
 import { JasonAIInternalNavbar } from './shared';
 
-type ExecutiveRole = 'CEO' | 'COO' | 'CTO';
-type KpiType = 'pricing' | 'product' | 'success';
+export type ExecutiveRole = 'CEO' | 'COO' | 'CTO';
+export type KpiType = 'pricing' | 'product' | 'success';
 
-type Kpi = {
+export type Kpi = {
   id: KpiType;
   label: string;
   owner: ExecutiveRole;
@@ -33,7 +34,7 @@ type Kpi = {
   tasks: string[];
 };
 
-type Phase = {
+export type Phase = {
   id: string;
   number: string;
   label: string;
@@ -46,7 +47,7 @@ type Phase = {
   kpis: Kpi[];
 };
 
-type TaskReport = {
+export type TaskReport = {
   completed: boolean;
   quantity: string;
   unit: string;
@@ -54,7 +55,7 @@ type TaskReport = {
   plan: string;
 };
 
-type KpiReport = {
+export type KpiReport = {
   currentResult: string;
 };
 
@@ -64,9 +65,9 @@ type SelectedTask = {
   taskIndex: number;
 };
 
-const trackingStorageKey = 'jasonai-executive-strategy-tracking-v1';
+export const trackingStorageKey = 'jasonai-executive-strategy-tracking-v1';
 
-const phases: Phase[] = [
+export const phases: Phase[] = [
   {
     id: 'foundation',
     number: '01',
@@ -329,22 +330,22 @@ const phases: Phase[] = [
   },
 ];
 
-const kpiIconMap = {
+export const kpiIconMap = {
   pricing: CircleDollarSign,
   product: PackageCheck,
   success: TrendingUp,
 } satisfies Record<KpiType, typeof Target>;
 
-const kpiToneMap = {
+export const kpiToneMap = {
   pricing: 'border-amber-300 bg-amber-50 text-amber-800',
   product: 'border-sky-300 bg-sky-50 text-sky-800',
   success: 'border-emerald-300 bg-emerald-50 text-emerald-800',
 } satisfies Record<KpiType, string>;
 
-const getTaskId = (phaseId: string, kpiId: KpiType, taskIndex: number) =>
+export const getTaskId = (phaseId: string, kpiId: KpiType, taskIndex: number) =>
   `${phaseId}:${kpiId}:${taskIndex}`;
 
-const getKpiId = (phaseId: string, kpiId: KpiType) => `${phaseId}:${kpiId}`;
+export const getKpiId = (phaseId: string, kpiId: KpiType) => `${phaseId}:${kpiId}`;
 
 const createSuggestedPlan = (task: string, owner: ExecutiveRole) =>
   [
@@ -354,7 +355,7 @@ const createSuggestedPlan = (task: string, owner: ExecutiveRole) =>
     '4. Review progress at the next weekly strategy check-in.',
   ].join('\n');
 
-const getDefaultTaskReport = (task: string, owner: ExecutiveRole): TaskReport => ({
+export const getDefaultTaskReport = (task: string, owner: ExecutiveRole): TaskReport => ({
   completed: false,
   quantity: '',
   unit: '',
@@ -367,7 +368,7 @@ const strategyCurvePath =
 const strategyStartTimestamp = Date.UTC(2026, 7, 1);
 const strategyEndTimestamp = Date.UTC(2028, 7, 1);
 
-function InteractiveJCurve({
+export function InteractiveJCurve({
   activePhase,
   onSelect,
   getPhaseProgress,
@@ -528,7 +529,11 @@ export default function JasonAIInternalPortal() {
 
   useEffect(() => {
     if (!trackingReady) return;
-    window.localStorage.setItem(trackingStorageKey, JSON.stringify({ taskReports, kpiReports }));
+    try {
+      window.localStorage.setItem(trackingStorageKey, JSON.stringify({ taskReports, kpiReports }));
+    } catch {
+      // Keep the tracker usable even if browser storage is unavailable.
+    }
   }, [kpiReports, taskReports, trackingReady]);
 
   useEffect(() => {
@@ -663,14 +668,23 @@ export default function JasonAIInternalPortal() {
                 ))}
               </div>
 
-              <button
-                type="button"
-                onClick={scrollToStrategy}
-                className="group mt-auto inline-flex min-h-12 items-center justify-between rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold transition hover:border-white/30 hover:bg-white/10"
-              >
-                Explore Goals &amp; KPIs
-                <ArrowRight className="h-4 w-4 rotate-90 transition-transform group-hover:translate-y-1" />
-              </button>
+              <div className="mt-auto grid gap-3">
+                <button
+                  type="button"
+                  onClick={scrollToStrategy}
+                  className="group inline-flex min-h-12 items-center justify-between rounded-full border border-white/15 bg-white/5 px-5 text-sm font-semibold transition hover:border-white/30 hover:bg-white/10"
+                >
+                  Explore Goals &amp; KPIs
+                  <ArrowRight className="h-4 w-4 rotate-90 transition-transform group-hover:translate-y-1" />
+                </button>
+                <Link
+                  to="/internal/jason-ai/executive-strategy"
+                  className="group inline-flex min-h-12 items-center justify-between rounded-full border border-white bg-white px-5 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
+                >
+                  Open Executive Strategy
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
             </aside>
           </div>
         </header>
@@ -679,7 +693,7 @@ export default function JasonAIInternalPortal() {
           <section id="j-curve" ref={strategyRef} className="scroll-mt-24">
             <div className="mb-7 flex flex-col gap-4 border-b border-neutral-100 pb-7 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-neutral-400">Static Strategy Dashboard</p>
+                <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-neutral-400">Strategy Overview</p>
                 <h2 className="mt-3 text-3xl font-medium tracking-tight text-black md:text-4xl">The JasonAI J-curve.</h2>
                 <p className="mt-3 max-w-3xl text-sm leading-6 text-neutral-600">
                   Select a point or phase card to inspect its pricing, product, and customer-success gates.
@@ -781,7 +795,7 @@ export default function JasonAIInternalPortal() {
             </div>
           </section>
 
-          <section className="mt-12 border-t border-neutral-100 pt-10 md:mt-16 md:pt-12">
+          <section id="kpi-tracker" className="mt-12 scroll-mt-24 border-t border-neutral-100 pt-10 md:mt-16 md:pt-12">
             <div className="mb-7 flex items-center gap-3">
               <div className="border border-neutral-200 p-2">
                 <Target className="h-5 w-5" />
@@ -920,14 +934,63 @@ export default function JasonAIInternalPortal() {
                   </div>
 
                   <div className="border-t border-neutral-100 bg-neutral-950 p-5 text-white sm:p-7">
-                    <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-neutral-500">Key tasks</p>
-                    <div className="mt-5 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-                      {selectedKpi.tasks.map((task) => (
-                        <div key={task} className="flex items-start gap-2.5 text-xs leading-5 text-neutral-300">
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-300" />
-                          <span>{task}</span>
-                        </div>
-                      ))}
+                    <div className="flex flex-wrap items-end justify-between gap-3">
+                      <div>
+                        <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-neutral-500">Reportable tasks</p>
+                        <p className="mt-2 text-xs text-neutral-400">Check off execution or open a task to qualify the result and edit its plan.</p>
+                      </div>
+                      <span className="font-mono text-[10px] text-emerald-300">{selectedKpiCompletedTasks}/{selectedKpi.tasks.length} complete</span>
+                    </div>
+                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                      {selectedKpi.tasks.map((task, taskIndex) => {
+                        const taskId = getTaskId(activePhase.id, selectedKpi.id, taskIndex);
+                        const report = taskReports[taskId] ?? getDefaultTaskReport(task, selectedKpi.owner);
+                        return (
+                          <div
+                            key={task}
+                            className={`flex items-stretch border transition ${
+                              report.completed ? 'border-emerald-400/40 bg-emerald-400/10' : 'border-white/10 bg-white/5'
+                            }`}
+                          >
+                            <button
+                              type="button"
+                              aria-label={`${report.completed ? 'Mark incomplete' : 'Mark complete'}: ${task}`}
+                              aria-pressed={report.completed}
+                              onClick={() => updateTaskReport(taskId, task, selectedKpi.owner, { completed: !report.completed })}
+                              className="flex w-11 shrink-0 items-center justify-center border-r border-white/10"
+                            >
+                              <span
+                                className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                                  report.completed
+                                    ? 'border-emerald-300 bg-emerald-300 text-neutral-950'
+                                    : 'border-neutral-600 text-transparent'
+                                }`}
+                              >
+                                <Check className="h-3 w-3" />
+                              </span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => openTaskReport(activePhase.id, selectedKpi, taskIndex)}
+                              className="group flex min-h-20 flex-1 items-start justify-between gap-3 p-4 text-left"
+                            >
+                              <span>
+                                <span className={`block text-xs leading-5 ${report.completed ? 'text-neutral-300 line-through' : 'text-neutral-200'}`}>
+                                  {task}
+                                </span>
+                                {report.quantity || report.result ? (
+                                  <span className="mt-2 block text-[9px] uppercase tracking-[0.14em] text-emerald-300">
+                                    {report.quantity ? `${report.quantity}${report.unit ? ` ${report.unit}` : ''}` : 'Result reported'}
+                                  </span>
+                                ) : (
+                                  <span className="mt-2 block text-[9px] uppercase tracking-[0.14em] text-neutral-600">Add report</span>
+                                )}
+                              </span>
+                              <Pencil className="mt-0.5 h-3.5 w-3.5 shrink-0 text-neutral-600 transition group-hover:text-emerald-300" />
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </motion.article>
@@ -936,6 +999,152 @@ export default function JasonAIInternalPortal() {
           </section>
         </main>
       </motion.div>
+
+      <AnimatePresence>
+        {selectedTask && selectedTaskPhase && selectedTaskKpi && selectedTaskText && selectedTaskId && selectedTaskReport ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/55 p-4"
+            onClick={() => setSelectedTask(null)}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="task-report-title"
+              initial={{ opacity: 0, y: 16, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.98 }}
+              transition={{ duration: 0.18 }}
+              className="max-h-[88vh] w-full max-w-2xl overflow-y-auto border border-neutral-200 bg-white shadow-2xl"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-6 border-b border-neutral-100 p-5 sm:p-7">
+                <div>
+                  <p className="text-[9px] font-mono uppercase tracking-[0.2em] text-neutral-400">
+                    Phase {selectedTaskPhase.number} · {selectedTaskKpi.id} task report
+                  </p>
+                  <h2 id="task-report-title" className="mt-3 text-xl font-medium leading-7 tracking-tight text-black sm:text-2xl">
+                    {selectedTaskText}
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Close task report"
+                  onClick={() => setSelectedTask(null)}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 text-neutral-500 transition hover:border-neutral-400 hover:text-black"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="space-y-6 p-5 sm:p-7">
+                <button
+                  type="button"
+                  aria-pressed={selectedTaskReport.completed}
+                  onClick={() =>
+                    updateTaskReport(selectedTaskId, selectedTaskText, selectedTaskKpi.owner, {
+                      completed: !selectedTaskReport.completed,
+                    })
+                  }
+                  className={`flex w-full items-center gap-3 border p-4 text-left transition ${
+                    selectedTaskReport.completed
+                      ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
+                      : 'border-neutral-200 bg-neutral-50 text-neutral-700'
+                  }`}
+                >
+                  <span
+                    className={`flex h-6 w-6 items-center justify-center rounded-full border ${
+                      selectedTaskReport.completed
+                        ? 'border-emerald-400 bg-emerald-400 text-white'
+                        : 'border-neutral-300 text-transparent'
+                    }`}
+                  >
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="text-sm font-medium">
+                    {selectedTaskReport.completed ? 'Task completed' : 'Mark task complete'}
+                  </span>
+                </button>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label>
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Reported quantity</span>
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      value={selectedTaskReport.quantity}
+                      onChange={(event) =>
+                        updateTaskReport(selectedTaskId, selectedTaskText, selectedTaskKpi.owner, {
+                          quantity: event.target.value,
+                        })
+                      }
+                      placeholder="e.g. 5"
+                      className="mt-2 min-h-11 w-full border border-neutral-200 px-3 text-sm text-neutral-900 outline-none transition focus:border-neutral-500"
+                    />
+                  </label>
+                  <label>
+                    <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Unit or measure</span>
+                    <input
+                      type="text"
+                      value={selectedTaskReport.unit}
+                      onChange={(event) =>
+                        updateTaskReport(selectedTaskId, selectedTaskText, selectedTaskKpi.owner, {
+                          unit: event.target.value,
+                        })
+                      }
+                      placeholder="e.g. pilots recruited"
+                      className="mt-2 min-h-11 w-full border border-neutral-200 px-3 text-sm text-neutral-900 outline-none transition focus:border-neutral-500"
+                    />
+                  </label>
+                </div>
+
+                <label className="block">
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Reportable result</span>
+                  <textarea
+                    value={selectedTaskReport.result}
+                    onChange={(event) =>
+                      updateTaskReport(selectedTaskId, selectedTaskText, selectedTaskKpi.owner, {
+                        result: event.target.value,
+                      })
+                    }
+                    placeholder="Record what happened, the evidence, and any decision made."
+                    rows={4}
+                    className="mt-2 w-full resize-y border border-neutral-200 p-3 text-sm leading-6 text-neutral-900 outline-none transition focus:border-neutral-500"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Suggested plan · editable</span>
+                  <textarea
+                    value={selectedTaskReport.plan}
+                    onChange={(event) =>
+                      updateTaskReport(selectedTaskId, selectedTaskText, selectedTaskKpi.owner, {
+                        plan: event.target.value,
+                      })
+                    }
+                    rows={6}
+                    className="mt-2 w-full resize-y border border-neutral-200 bg-neutral-50 p-3 text-sm leading-6 text-neutral-900 outline-none transition focus:border-neutral-500"
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-neutral-100 bg-neutral-50 px-5 py-4 sm:px-7">
+                <p className="text-[10px] text-neutral-500">Changes auto-save in this browser and update all progress trackers.</p>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTask(null)}
+                  className="inline-flex min-h-10 items-center rounded-full bg-neutral-950 px-5 text-xs font-semibold text-white transition hover:bg-neutral-800"
+                >
+                  Done
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+
       <Footer />
     </article>
   );

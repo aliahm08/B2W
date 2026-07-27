@@ -11,6 +11,9 @@ export type ClientNavAction = {
   label: string;
   onClick?: () => void;
   to?: string;
+  href?: string;
+  download?: string | boolean;
+  target?: '_blank' | '_self';
   type?: 'link' | 'button' | 'cta';
   items?: ClientNavAction[]; // For dropdowns
 };
@@ -78,6 +81,7 @@ export default function ClientNavbar({
       '/client/foster-partners/governance': 'Governance',
       '/client/foster-partners/terms': 'Terms',
       '/internal/jason-ai/profile': 'Executive Strategy',
+      '/internal/jason-ai/executive-strategy': 'Executive Strategy',
       '/internal/jason-ai/valuation': 'Valuation',
       '/internal/jason-ai/documentation': 'Documentation',
     };
@@ -92,6 +96,7 @@ export default function ClientNavbar({
 
   const currentPageMeta = getCurrentPageMeta();
   const clientSubpages = navItems?.filter((item) => item.type !== 'cta') ?? [];
+  const primaryCta = navItems?.find((item) => item.type === 'cta');
   const nestedDeliverableLabels = new Set(['Profile', 'Valuation', 'Documentation']);
   const isDarkTheme = theme === 'dark' || isFieldBossOpen || isMobileMenuOpen;
 
@@ -208,6 +213,21 @@ export default function ClientNavbar({
   };
 
   const renderNavItem = (item: ClientNavAction) => {
+    if (item.type === 'cta' && item.href) {
+      return (
+        <a
+          key={item.label}
+          href={item.href}
+          download={item.download}
+          target={item.target}
+          rel={item.target === '_blank' ? 'noreferrer' : undefined}
+          className={ctaClassName}
+        >
+          {item.label}
+        </a>
+      );
+    }
+
     if (item.type === 'link' && item.to) {
       return (
         <Link key={item.label} to={item.to} className={desktopLinkClassName}>
@@ -556,20 +576,47 @@ export default function ClientNavbar({
           ) : null
         }
         cta={
-          navItems?.find((item) => item.type === 'cta') ? (
-            <motion.button
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.14 }}
-              type="button"
-              onClick={() => {
-                navItems.find((item) => item.type === 'cta')?.onClick?.();
-                setIsMobileMenuOpen(false);
-              }}
-              className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
-            >
-              <span>{navItems.find((item) => item.type === 'cta')?.label}</span>
-              <ArrowRight className="h-4 w-4 shrink-0" />
-            </motion.button>
+          primaryCta ? (
+            primaryCta.href ? (
+              <motion.a
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.14 }}
+                href={primaryCta.href}
+                download={primaryCta.download}
+                target={primaryCta.target}
+                rel={primaryCta.target === '_blank' ? 'noreferrer' : undefined}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
+              >
+                <span>{primaryCta.label}</span>
+                <ArrowRight className="h-4 w-4 shrink-0" />
+              </motion.a>
+            ) : primaryCta.to ? (
+              <motion.div whileTap={{ scale: 0.97 }} transition={{ duration: 0.14 }}>
+                <Link
+                  to={primaryCta.to}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
+                >
+                  <span>{primaryCta.label}</span>
+                  <ArrowRight className="h-4 w-4 shrink-0" />
+                </Link>
+              </motion.div>
+            ) : (
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.14 }}
+                type="button"
+                onClick={() => {
+                  primaryCta.onClick?.();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="inline-flex min-h-12 items-center gap-2 self-start rounded-full bg-white px-5 py-3 text-left text-base font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
+              >
+                <span>{primaryCta.label}</span>
+                <ArrowRight className="h-4 w-4 shrink-0" />
+              </motion.button>
+            )
           ) : null
         }
         footer={

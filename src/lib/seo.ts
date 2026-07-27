@@ -168,6 +168,15 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Executive Strategy',
       description: 'JasonAI 24-month J-curve strategy with five phases, executive ownership, KPI gates, goals, and execution tasks.',
+      canonicalPath: '/internal/jason-ai/executive-strategy',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/jason-ai/executive-strategy',
+    {
+      title: 'JasonAI Interactive Executive Strategy',
+      description: 'Interactive JasonAI operating document with five phases, KPI gates, measurable goals, accountable owners, and reportable execution tasks.',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -192,7 +201,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Executive Strategy',
       description: 'Legacy route for the JasonAI 24-month executive strategy.',
-      canonicalPath: '/internal/jason-ai/profile',
+      canonicalPath: '/internal/jason-ai/executive-strategy',
       robots: PRIVATE_ROBOTS,
     },
   ],
