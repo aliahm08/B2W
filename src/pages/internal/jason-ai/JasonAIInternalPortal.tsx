@@ -493,9 +493,43 @@ export default function JasonAIInternalPortal() {
   const strategyRef = useRef<HTMLElement>(null);
   const [activePhaseId, setActivePhaseId] = useState(phases[0].id);
   const [selectedKpiId, setSelectedKpiId] = useState<KpiType>('pricing');
+  const [taskReports, setTaskReports] = useState<Record<string, TaskReport>>({});
+  const [kpiReports, setKpiReports] = useState<Record<string, KpiReport>>({});
+  const [trackingReady, setTrackingReady] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<SelectedTask | null>(null);
   const activePhase = phases.find((phase) => phase.id === activePhaseId) ?? phases[0];
   const selectedKpi = activePhase.kpis.find((kpi) => kpi.id === selectedKpiId) ?? activePhase.kpis[0];
   const SelectedKpiIcon = kpiIconMap[selectedKpi.id];
+  const selectedTaskPhase = selectedTask ? phases.find((phase) => phase.id === selectedTask.phaseId) : null;
+  const selectedTaskKpi = selectedTaskPhase?.kpis.find((kpi) => kpi.id === selectedTask?.kpiId);
+  const selectedTaskText = selectedTaskKpi && selectedTask ? selectedTaskKpi.tasks[selectedTask.taskIndex] : null;
+  const selectedTaskId = selectedTask ? getTaskId(selectedTask.phaseId, selectedTask.kpiId, selectedTask.taskIndex) : null;
+  const selectedTaskReport =
+    selectedTaskText && selectedTaskKpi && selectedTaskId
+      ? taskReports[selectedTaskId] ?? getDefaultTaskReport(selectedTaskText, selectedTaskKpi.owner)
+      : null;
+
+  useEffect(() => {
+    try {
+      const storedTracking = window.localStorage.getItem(trackingStorageKey);
+      if (storedTracking) {
+        const parsedTracking = JSON.parse(storedTracking) as {
+          taskReports?: Record<string, TaskReport>;
+          kpiReports?: Record<string, KpiReport>;
+        };
+        setTaskReports(parsedTracking.taskReports ?? {});
+        setKpiReports(parsedTracking.kpiReports ?? {});
+      }
+    } catch {
+      // Ignore malformed local tracking data and start with a clean dashboard.
+    }
+    setTrackingReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!trackingReady) return;
+    window.localStorage.setItem(trackingStorageKey, JSON.stringify({ taskReports, kpiReports }));
+  }, [kpiReports, taskReports, trackingReady]);
 
   useEffect(() => {
     if (window.location.hash === '#j-curve') {
@@ -508,6 +542,59 @@ export default function JasonAIInternalPortal() {
   const selectPhase = (phaseId: string) => {
     setActivePhaseId(phaseId);
   };
+
+  const getKpiProgress = (phaseId: string, kpiId: KpiType) => {
+    const phase = phases.find((item) => item.id === phaseId);
+    const kpi = phase?.kpis.find((item) => item.id === kpiId);
+    if (!kpi) return 0;
+    const completedTasks = kpi.tasks.filter(
+      (_, taskIndex) => taskReports[getTaskId(phaseId, kpiId, taskIndex)]?.completed,
+    ).length;
+    return Math.round((completedTasks / kpi.tasks.length) * 100);
+  };
+
+  const getPhaseProgress = (phaseId: string) => {
+    const phase = phases.find((item) => item.id === phaseId);
+    if (!phase) return 0;
+    const taskCount = phase.kpis.reduce((total, kpi) => total + kpi.tasks.length, 0);
+    const completedTasks = phase.kpis.reduce(
+      (total, kpi) =>
+        total +
+        kpi.tasks.filter(
+          (_, taskIndex) => taskReports[getTaskId(phaseId, kpi.id, taskIndex)]?.completed,
+        ).length,
+      0,
+    );
+    return Math.round((completedTasks / taskCount) * 100);
+  };
+
+  const updateTaskReport = (taskId: string, task: string, owner: ExecutiveRole, patch: Partial<TaskReport>) => {
+    setTaskReports((current) => ({
+      ...current,
+      [taskId]: {
+        ...getDefaultTaskReport(task, owner),
+        ...current[taskId],
+        ...patch,
+      },
+    }));
+  };
+
+  const openTaskReport = (phaseId: string, kpi: Kpi, taskIndex: number) => {
+    const taskId = getTaskId(phaseId, kpi.id, taskIndex);
+    const task = kpi.tasks[taskIndex];
+    if (!taskReports[taskId]) {
+      setTaskReports((current) => ({
+        ...current,
+        [taskId]: getDefaultTaskReport(task, kpi.owner),
+      }));
+    }
+    setSelectedTask({ phaseId, kpiId: kpi.id, taskIndex });
+  };
+
+  const selectedKpiProgress = getKpiProgress(activePhase.id, selectedKpi.id);
+  const selectedKpiCompletedTasks = selectedKpi.tasks.filter(
+    (_, taskIndex) => taskReports[getTaskId(activePhase.id, selectedKpi.id, taskIndex)]?.completed,
+  ).length;
 
   const scrollToStrategy = () => {
     strategyRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -608,7 +695,11 @@ export default function JasonAIInternalPortal() {
               <div className="border border-neutral-900 bg-neutral-950 p-5 text-white sm:p-7">
                 <p className="text-[10px] font-mono uppercase tracking-[0.22em] text-neutral-500">Interactive operating path</p>
                 <div className="mt-5">
-                  <InteractiveJCurve activePhase={activePhase} onSelect={selectPhase} />
+                  <InteractiveJCurve
+                    activePhase={activePhase}
+                    onSelect={selectPhase}
+                    getPhaseProgress={getPhaseProgress}
+                  />
                 </div>
               </div>
 
@@ -626,6 +717,18 @@ export default function JasonAIInternalPortal() {
                   </p>
                   <h3 className="mt-3 text-2xl font-medium tracking-tight text-black">{activePhase.label}</h3>
                   <p className="mt-3 text-sm leading-6 text-neutral-600">{activePhase.objective}</p>
+                  <div className="mt-5 border-t border-neutral-100 pt-5">
+                    <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.18em] text-neutral-400">
+                      <span>Phase execution</span>
+                      <span>{getPhaseProgress(activePhase.id)}%</span>
+                    </div>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                      <div
+                        className="h-full rounded-full bg-emerald-400 transition-[width]"
+                        style={{ width: `${getPhaseProgress(activePhase.id)}%` }}
+                      />
+                    </div>
+                  </div>
                   <div className="mt-6 space-y-4 border-t border-neutral-100 pt-5">
                     <div>
                       <p className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Minimum pricing gate</p>
@@ -643,6 +746,7 @@ export default function JasonAIInternalPortal() {
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
               {phases.map((phase) => {
                 const active = phase.id === activePhase.id;
+                const phaseProgress = getPhaseProgress(phase.id);
                 return (
                   <button
                     key={phase.id}
@@ -659,6 +763,18 @@ export default function JasonAIInternalPortal() {
                     </div>
                     <h3 className="mt-4 text-base font-medium">{phase.label}</h3>
                     <p className={`mt-2 text-xs leading-5 ${active ? 'text-neutral-400' : 'text-neutral-500'}`}>{phase.objective}</p>
+                    <div className="mt-4">
+                      <div className={`flex items-center justify-between text-[8px] uppercase tracking-[0.14em] ${active ? 'text-neutral-400' : 'text-neutral-400'}`}>
+                        <span>Execution</span>
+                        <span>{phaseProgress}%</span>
+                      </div>
+                      <div className={`mt-2 h-1 overflow-hidden rounded-full ${active ? 'bg-white/10' : 'bg-neutral-100'}`}>
+                        <div
+                          className="h-full rounded-full bg-emerald-400 transition-[width]"
+                          style={{ width: `${phaseProgress}%` }}
+                        />
+                      </div>
+                    </div>
                   </button>
                 );
               })}
@@ -683,6 +799,7 @@ export default function JasonAIInternalPortal() {
                 {activePhase.kpis.map((kpi) => {
                   const Icon = kpiIconMap[kpi.id];
                   const selected = selectedKpi.id === kpi.id;
+                  const kpiProgress = getKpiProgress(activePhase.id, kpi.id);
                   return (
                     <button
                       key={kpi.id}
@@ -703,13 +820,22 @@ export default function JasonAIInternalPortal() {
                       >
                         <Icon className="h-5 w-5" />
                       </span>
-                      <span className="min-w-0">
+                      <span className="min-w-0 flex-1">
                         <span className={`block text-[10px] font-mono uppercase tracking-[0.22em] ${selected ? 'text-neutral-400' : 'text-neutral-400'}`}>
                           {kpi.id}
                         </span>
                         <span className="mt-1 block text-sm font-medium leading-5">{kpi.label}</span>
+                        <span className={`mt-3 block h-1 overflow-hidden rounded-full ${selected ? 'bg-white/10' : 'bg-neutral-100'}`}>
+                          <span
+                            className="block h-full rounded-full bg-emerald-400 transition-[width]"
+                            style={{ width: `${kpiProgress}%` }}
+                          />
+                        </span>
                       </span>
-                      <ArrowRight className={`ml-auto h-4 w-4 shrink-0 ${selected ? 'text-emerald-300' : 'text-neutral-300'}`} />
+                      <span className="ml-auto flex shrink-0 flex-col items-end gap-2">
+                        <span className={`font-mono text-[9px] ${selected ? 'text-emerald-300' : 'text-neutral-400'}`}>{kpiProgress}%</span>
+                        <ArrowRight className={`h-4 w-4 ${selected ? 'text-emerald-300' : 'text-neutral-300'}`} />
+                      </span>
                     </button>
                   );
                 })}
@@ -740,6 +866,42 @@ export default function JasonAIInternalPortal() {
                         {selectedKpi.owner}
                       </span>
                     </div>
+                  </div>
+
+                  <div className="border-t border-neutral-100 bg-neutral-50 p-5 sm:p-7">
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                      <div>
+                        <p className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">KPI tracking</p>
+                        <p className="mt-2 text-sm font-medium text-neutral-800">
+                          {selectedKpiCompletedTasks} of {selectedKpi.tasks.length} tasks complete
+                        </p>
+                      </div>
+                      <p className="font-mono text-xl font-medium text-neutral-900">{selectedKpiProgress}%</p>
+                    </div>
+                    <div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-200">
+                      <div
+                        className="h-full rounded-full bg-emerald-400 transition-[width]"
+                        style={{ width: `${selectedKpiProgress}%` }}
+                      />
+                    </div>
+                    <label className="mt-5 block">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Current reported result</span>
+                      <input
+                        type="text"
+                        value={kpiReports[getKpiId(activePhase.id, selectedKpi.id)]?.currentResult ?? ''}
+                        onChange={(event) =>
+                          setKpiReports((current) => ({
+                            ...current,
+                            [getKpiId(activePhase.id, selectedKpi.id)]: {
+                              currentResult: event.target.value,
+                            },
+                          }))
+                        }
+                        placeholder="Enter the latest measured KPI result"
+                        className="mt-2 min-h-11 w-full border border-neutral-200 bg-white px-3 text-sm text-neutral-900 outline-none transition focus:border-neutral-500"
+                      />
+                    </label>
+                    <p className="mt-2 text-[9px] text-neutral-400">Auto-saved in this browser.</p>
                   </div>
 
                   <div className="grid border-t border-neutral-100 sm:grid-cols-2">
