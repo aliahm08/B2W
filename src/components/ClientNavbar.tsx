@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, ArrowRight, Menu, X } from 'lucide-react';
+import { ChevronDown, ArrowRight, Download, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import MobileMenuDrawer from './MobileMenuDrawer';
 import B2WLogoMark from './B2WLogoMark';
@@ -213,6 +213,84 @@ export default function ClientNavbar({
   };
 
   const renderNavItem = (item: ClientNavAction) => {
+    if (item.type === 'cta' && item.items) {
+      return (
+        <div key={item.label} className="relative">
+          <button
+            type="button"
+            onClick={() => setOpenDropdown(openDropdown === item.label ? null : item.label)}
+            aria-expanded={openDropdown === item.label}
+            className={`${ctaClassName} inline-flex items-center gap-1.5`}
+          >
+            {item.label}
+            <ChevronDown className={`h-3.5 w-3.5 transition-transform ${openDropdown === item.label ? 'rotate-180' : ''}`} />
+          </button>
+
+          {openDropdown === item.label ? (
+            <div
+              className={`absolute right-0 top-full mt-2 w-56 border py-2 shadow-xl ${
+                isDarkTheme
+                  ? 'border-white/10 bg-[#08131b]'
+                  : 'border-neutral-200 bg-white'
+              }`}
+            >
+              {item.items.map((subItem) =>
+                subItem.href ? (
+                  <a
+                    key={subItem.label}
+                    href={subItem.href}
+                    download={subItem.download}
+                    target={subItem.target}
+                    rel={subItem.target === '_blank' ? 'noreferrer' : undefined}
+                    onClick={() => setOpenDropdown(null)}
+                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors ${
+                      isDarkTheme
+                        ? 'text-neutral-300 hover:bg-white/5 hover:text-white'
+                        : 'text-neutral-600 hover:bg-neutral-50 hover:text-black'
+                    }`}
+                  >
+                    <span>{subItem.label}</span>
+                    <Download className="h-3.5 w-3.5" />
+                  </a>
+                ) : subItem.to ? (
+                  <Link
+                    key={subItem.label}
+                    to={subItem.to}
+                    onClick={() => setOpenDropdown(null)}
+                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors ${
+                      isDarkTheme
+                        ? 'text-neutral-300 hover:bg-white/5 hover:text-white'
+                        : 'text-neutral-600 hover:bg-neutral-50 hover:text-black'
+                    }`}
+                  >
+                    <span>{subItem.label}</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                ) : (
+                  <button
+                    key={subItem.label}
+                    type="button"
+                    onClick={() => {
+                      subItem.onClick?.();
+                      setOpenDropdown(null);
+                    }}
+                    className={`flex w-full items-center justify-between px-4 py-3 text-left text-sm transition-colors ${
+                      isDarkTheme
+                        ? 'text-neutral-300 hover:bg-white/5 hover:text-white'
+                        : 'text-neutral-600 hover:bg-neutral-50 hover:text-black'
+                    }`}
+                  >
+                    <span>{subItem.label}</span>
+                    <Download className="h-3.5 w-3.5" />
+                  </button>
+                ),
+              )}
+            </div>
+          ) : null}
+        </div>
+      );
+    }
+
     if (item.type === 'cta' && item.href) {
       return (
         <a
@@ -577,7 +655,44 @@ export default function ClientNavbar({
         }
         cta={
           primaryCta ? (
-            primaryCta.href ? (
+            primaryCta.items ? (
+              <div className="grid gap-2">
+                <p className="mb-1 text-[10px] font-mono uppercase tracking-[0.2em] text-white/40">{primaryCta.label}</p>
+                {primaryCta.items.map((subItem) =>
+                  subItem.href ? (
+                    <motion.a
+                      key={subItem.label}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ duration: 0.14 }}
+                      href={subItem.href}
+                      download={subItem.download}
+                      target={subItem.target}
+                      rel={subItem.target === '_blank' ? 'noreferrer' : undefined}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="inline-flex min-h-12 items-center justify-between gap-3 rounded-full bg-white px-5 py-3 text-left text-sm font-semibold uppercase tracking-[0.08em] text-black transition-colors hover:bg-neutral-200"
+                    >
+                      <span>{subItem.label}</span>
+                      <Download className="h-4 w-4 shrink-0" />
+                    </motion.a>
+                  ) : (
+                    <motion.button
+                      key={subItem.label}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ duration: 0.14 }}
+                      type="button"
+                      onClick={() => {
+                        subItem.onClick?.();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="inline-flex min-h-12 items-center justify-between gap-3 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-left text-sm font-semibold uppercase tracking-[0.08em] text-white transition-colors hover:bg-white/10"
+                    >
+                      <span>{subItem.label}</span>
+                      <Download className="h-4 w-4 shrink-0" />
+                    </motion.button>
+                  ),
+                )}
+              </div>
+            ) : primaryCta.href ? (
               <motion.a
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.14 }}

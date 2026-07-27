@@ -66,6 +66,7 @@ type SelectedTask = {
 };
 
 export const trackingStorageKey = 'jasonai-executive-strategy-tracking-v1';
+export const trackingMetricsVersion = 1;
 
 export const phases: Phase[] = [
   {
@@ -337,9 +338,21 @@ export const kpiIconMap = {
 } satisfies Record<KpiType, typeof Target>;
 
 export const kpiToneMap = {
-  pricing: 'border-amber-300 bg-amber-50 text-amber-800',
-  product: 'border-sky-300 bg-sky-50 text-sky-800',
-  success: 'border-emerald-300 bg-emerald-50 text-emerald-800',
+  pricing: 'border-[#CDBFAE] bg-[#F0ECE6] text-[#5B4938]',
+  product: 'border-[#C1CBD1] bg-[#E9EDF0] text-[#465761]',
+  success: 'border-[#C3CEC6] bg-[#E9EEE9] text-[#46574D]',
+} satisfies Record<KpiType, string>;
+
+export const kpiHeaderToneMap = {
+  pricing: 'border-[#6B5744] bg-[#F8F6F2]',
+  product: 'border-[#4E5D67] bg-[#F5F7F8]',
+  success: 'border-[#526157] bg-[#F5F7F5]',
+} satisfies Record<KpiType, string>;
+
+export const kpiProgressToneMap = {
+  pricing: 'bg-[#6B5744]',
+  product: 'bg-[#4E5D67]',
+  success: 'bg-[#526157]',
 } satisfies Record<KpiType, string>;
 
 export const getTaskId = (phaseId: string, kpiId: KpiType, taskIndex: number) =>
@@ -347,7 +360,7 @@ export const getTaskId = (phaseId: string, kpiId: KpiType, taskIndex: number) =>
 
 export const getKpiId = (phaseId: string, kpiId: KpiType) => `${phaseId}:${kpiId}`;
 
-const createSuggestedPlan = (task: string, owner: ExecutiveRole) =>
+const createLegacySuggestedPlan = (task: string, owner: ExecutiveRole) =>
   [
     `1. ${owner} confirms the owner, deadline, and evidence required.`,
     `2. Execute: ${task}`,
@@ -355,13 +368,194 @@ const createSuggestedPlan = (task: string, owner: ExecutiveRole) =>
     '4. Review progress at the next weekly strategy check-in.',
   ].join('\n');
 
-export const getDefaultTaskReport = (task: string, owner: ExecutiveRole): TaskReport => ({
+const createTrackedMetrics = (task: string, kpiId: KpiType = 'product') => {
+  const normalizedTask = task.toLowerCase();
+
+  if (normalizedTask.includes('recruit') || normalizedTask.includes('pilot teams')) {
+    return [
+      'Qualified pilots recruited (#)',
+      'Pilot acceptance rate (%)',
+      'Median days from outreach to onboarding',
+      'Active qualified pilot pipeline (#)',
+    ].join('\n');
+  }
+
+  if (normalizedTask.includes('interview') || normalizedTask.includes('objection')) {
+    return [
+      'Customer interviews completed (#)',
+      'Willingness-to-pay range ($)',
+      'Payment commitment rate (%)',
+      'Top objections by frequency (# and %)',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('pricing') ||
+    normalizedTask.includes('payment') ||
+    normalizedTask.includes('revenue') ||
+    normalizedTask.includes('discount') ||
+    normalizedTask.includes('purchase')
+  ) {
+    return [
+      'Committed monthly recurring revenue ($)',
+      'Pilot-to-paid conversion rate (%)',
+      'Average revenue per team ($)',
+      'Discount rate and realized price (%)',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('onboarding') ||
+    normalizedTask.includes('setup') ||
+    normalizedTask.includes('first-session')
+  ) {
+    return [
+      'Median time to first value (minutes)',
+      'Onboarding completion rate (%)',
+      'Setup steps completed without assistance (%)',
+      'First-session success rate (%)',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('retention') ||
+    normalizedTask.includes('cohort') ||
+    normalizedTask.includes('active') ||
+    normalizedTask.includes('repeat usage')
+  ) {
+    return [
+      'Weekly active team rate (%)',
+      'Four- and eight-week retention (%)',
+      'Meaningful workflows completed per team (#)',
+      'Inactive or at-risk teams (#)',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('quality') ||
+    normalizedTask.includes('correction') ||
+    normalizedTask.includes('failure') ||
+    normalizedTask.includes('reliability') ||
+    normalizedTask.includes('context') ||
+    normalizedTask.includes('privacy') ||
+    normalizedTask.includes('audit')
+  ) {
+    return [
+      'Useful-output rate (%)',
+      'Outputs requiring correction (%)',
+      'Critical failure rate (%)',
+      'Median processing time and uptime',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('roi') ||
+    normalizedTask.includes('value') ||
+    normalizedTask.includes('hours') ||
+    normalizedTask.includes('baseline') ||
+    normalizedTask.includes('case studies')
+  ) {
+    return [
+      'Verified hours saved per team per week',
+      'Customers confirming positive ROI (%)',
+      'Estimated monthly value delivered ($)',
+      'ROI evidence confirmed by the owner (#)',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('churn') ||
+    normalizedTask.includes('cancel') ||
+    normalizedTask.includes('health') ||
+    normalizedTask.includes('risk')
+  ) {
+    return [
+      'Monthly logo churn (%)',
+      'At-risk accounts identified (#)',
+      'Risk interventions completed on time (%)',
+      'Accounts retained after intervention (%)',
+    ].join('\n');
+  }
+
+  if (
+    normalizedTask.includes('expansion') ||
+    normalizedTask.includes('integration') ||
+    normalizedTask.includes('workflow') ||
+    normalizedTask.includes('adoption') ||
+    normalizedTask.includes('partner')
+  ) {
+    return [
+      'Customers using two or more workflows (%)',
+      'Workflow adoption by account (%)',
+      'Expansion monthly recurring revenue ($)',
+      'Net revenue retention (%)',
+    ].join('\n');
+  }
+
+  const metricDefaults: Record<KpiType, string[]> = {
+    pricing: [
+      'Qualified commercial opportunities (#)',
+      'Conversion rate (%)',
+      'Revenue committed or realized ($)',
+      'Average sales-cycle duration (days)',
+    ],
+    product: [
+      'Completion rate (%)',
+      'Useful-output rate (%)',
+      'Correction or failure rate (%)',
+      'Median delivery time',
+    ],
+    success: [
+      'Customer-confirmed value rate (%)',
+      'Time to value',
+      'Verified hours saved',
+      'Accounts meeting the success gate (# and %)',
+    ],
+  };
+
+  return metricDefaults[kpiId].join('\n');
+};
+
+export const getDefaultTaskReport = (
+  task: string,
+  _owner: ExecutiveRole,
+  kpiId: KpiType = 'product',
+): TaskReport => ({
   completed: false,
   quantity: '',
   unit: '',
   result: '',
-  plan: createSuggestedPlan(task, owner),
+  plan: createTrackedMetrics(task, kpiId),
 });
+
+export const normalizeTaskReports = (
+  reports: Record<string, TaskReport>,
+  replacePlansWithMetrics = false,
+) =>
+  Object.fromEntries(
+    Object.entries(reports).map(([taskId, report]) => {
+      const [phaseId, rawKpiId, rawTaskIndex] = taskId.split(':');
+      const kpiId = rawKpiId as KpiType;
+      const phase = phases.find((item) => item.id === phaseId);
+      const kpi = phase?.kpis.find((item) => item.id === kpiId);
+      const task = kpi?.tasks[Number(rawTaskIndex)];
+      if (!task || !kpi) return [taskId, report];
+
+      const defaults = getDefaultTaskReport(task, kpi.owner, kpi.id);
+      const legacyPlan = createLegacySuggestedPlan(task, kpi.owner);
+      return [
+        taskId,
+        {
+          ...defaults,
+          ...report,
+          plan:
+            replacePlansWithMetrics || !report.plan || report.plan === legacyPlan
+              ? defaults.plan
+              : report.plan,
+        },
+      ];
+    }),
+  );
 
 const strategyCurvePath =
   'M38 48 C76 62 92 132 135 132 C190 132 201 109 236 92 C277 72 294 60 326 50 C359 39 385 27 410 20';
@@ -507,7 +701,7 @@ export default function JasonAIInternalPortal() {
   const selectedTaskId = selectedTask ? getTaskId(selectedTask.phaseId, selectedTask.kpiId, selectedTask.taskIndex) : null;
   const selectedTaskReport =
     selectedTaskText && selectedTaskKpi && selectedTaskId
-      ? taskReports[selectedTaskId] ?? getDefaultTaskReport(selectedTaskText, selectedTaskKpi.owner)
+      ? taskReports[selectedTaskId] ?? getDefaultTaskReport(selectedTaskText, selectedTaskKpi.owner, selectedTaskKpi.id)
       : null;
 
   useEffect(() => {
@@ -517,8 +711,14 @@ export default function JasonAIInternalPortal() {
         const parsedTracking = JSON.parse(storedTracking) as {
           taskReports?: Record<string, TaskReport>;
           kpiReports?: Record<string, KpiReport>;
+          metricsVersion?: number;
         };
-        setTaskReports(parsedTracking.taskReports ?? {});
+        setTaskReports(
+          normalizeTaskReports(
+            parsedTracking.taskReports ?? {},
+            parsedTracking.metricsVersion !== trackingMetricsVersion,
+          ),
+        );
         setKpiReports(parsedTracking.kpiReports ?? {});
       }
     } catch {
@@ -530,7 +730,10 @@ export default function JasonAIInternalPortal() {
   useEffect(() => {
     if (!trackingReady) return;
     try {
-      window.localStorage.setItem(trackingStorageKey, JSON.stringify({ taskReports, kpiReports }));
+      window.localStorage.setItem(
+        trackingStorageKey,
+        JSON.stringify({ taskReports, kpiReports, metricsVersion: trackingMetricsVersion }),
+      );
     } catch {
       // Keep the tracker usable even if browser storage is unavailable.
     }
@@ -577,7 +780,7 @@ export default function JasonAIInternalPortal() {
     setTaskReports((current) => ({
       ...current,
       [taskId]: {
-        ...getDefaultTaskReport(task, owner),
+        ...getDefaultTaskReport(task, owner, taskId.split(':')[1] as KpiType),
         ...current[taskId],
         ...patch,
       },
@@ -590,7 +793,7 @@ export default function JasonAIInternalPortal() {
     if (!taskReports[taskId]) {
       setTaskReports((current) => ({
         ...current,
-        [taskId]: getDefaultTaskReport(task, kpi.owner),
+        [taskId]: getDefaultTaskReport(task, kpi.owner, kpi.id),
       }));
     }
     setSelectedTask({ phaseId, kpiId: kpi.id, taskIndex });
@@ -823,13 +1026,13 @@ export default function JasonAIInternalPortal() {
                       aria-controls="selected-kpi-details"
                       className={`flex w-full items-center gap-4 border p-4 text-left transition sm:p-5 ${
                         selected
-                          ? 'border-neutral-950 bg-neutral-950 text-white'
+                          ? `${kpiHeaderToneMap[kpi.id]} text-black`
                           : 'border-neutral-200 bg-white text-black hover:border-neutral-400'
                       }`}
                     >
                       <span
                         className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border ${
-                          selected ? 'border-white/20 bg-white/10 text-emerald-300' : kpiToneMap[kpi.id]
+                          kpiToneMap[kpi.id]
                         }`}
                       >
                         <Icon className="h-5 w-5" />
@@ -839,16 +1042,16 @@ export default function JasonAIInternalPortal() {
                           {kpi.id}
                         </span>
                         <span className="mt-1 block text-sm font-medium leading-5">{kpi.label}</span>
-                        <span className={`mt-3 block h-1 overflow-hidden rounded-full ${selected ? 'bg-white/10' : 'bg-neutral-100'}`}>
+                        <span className="mt-3 block h-1 overflow-hidden rounded-full bg-neutral-200">
                           <span
-                            className="block h-full rounded-full bg-emerald-400 transition-[width]"
+                            className={`block h-full rounded-full transition-[width] ${kpiProgressToneMap[kpi.id]}`}
                             style={{ width: `${kpiProgress}%` }}
                           />
                         </span>
                       </span>
                       <span className="ml-auto flex shrink-0 flex-col items-end gap-2">
-                        <span className={`font-mono text-[9px] ${selected ? 'text-emerald-300' : 'text-neutral-400'}`}>{kpiProgress}%</span>
-                        <ArrowRight className={`h-4 w-4 ${selected ? 'text-emerald-300' : 'text-neutral-300'}`} />
+                        <span className="font-mono text-[9px] text-neutral-500">{kpiProgress}%</span>
+                        <ArrowRight className="h-4 w-4 text-neutral-400" />
                       </span>
                     </button>
                   );
@@ -865,7 +1068,7 @@ export default function JasonAIInternalPortal() {
                   transition={{ duration: 0.18 }}
                   className="border border-neutral-200 bg-white"
                 >
-                  <div className="flex flex-col gap-5 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-7">
+                  <div className={`flex flex-col gap-5 border-l-4 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-7 ${kpiHeaderToneMap[selectedKpi.id]}`}>
                     <div>
                       <div className={`inline-flex h-11 w-11 items-center justify-center rounded-full border ${kpiToneMap[selectedKpi.id]}`}>
                         <SelectedKpiIcon className="h-5 w-5" />
@@ -894,7 +1097,7 @@ export default function JasonAIInternalPortal() {
                     </div>
                     <div className="mt-3 h-2 overflow-hidden rounded-full bg-neutral-200">
                       <div
-                        className="h-full rounded-full bg-emerald-400 transition-[width]"
+                        className={`h-full rounded-full transition-[width] ${kpiProgressToneMap[selectedKpi.id]}`}
                         style={{ width: `${selectedKpiProgress}%` }}
                       />
                     </div>
@@ -926,7 +1129,7 @@ export default function JasonAIInternalPortal() {
                       </div>
                     </div>
                     <div className="p-5 sm:p-7">
-                      <div className="border-l-2 border-emerald-400 pl-4">
+                      <div className={`border-l-2 pl-4 ${kpiHeaderToneMap[selectedKpi.id]}`}>
                         <p className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Target</p>
                         <p className="mt-3 text-sm font-medium leading-6 text-neutral-800">{selectedKpi.target}</p>
                       </div>
@@ -944,7 +1147,7 @@ export default function JasonAIInternalPortal() {
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                       {selectedKpi.tasks.map((task, taskIndex) => {
                         const taskId = getTaskId(activePhase.id, selectedKpi.id, taskIndex);
-                        const report = taskReports[taskId] ?? getDefaultTaskReport(task, selectedKpi.owner);
+                        const report = taskReports[taskId] ?? getDefaultTaskReport(task, selectedKpi.owner, selectedKpi.id);
                         return (
                           <div
                             key={task}
@@ -1116,7 +1319,7 @@ export default function JasonAIInternalPortal() {
                 </label>
 
                 <label className="block">
-                  <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Suggested plan · editable</span>
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-neutral-400">Tracked metrics · editable</span>
                   <textarea
                     value={selectedTaskReport.plan}
                     onChange={(event) =>

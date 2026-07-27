@@ -12,6 +12,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## Canonical Marketing Files
 
+- The filled `B2WSilhouetteMark` used in the live homepage header is the canonical B2W marketing mark. The favicon generator reads that exact vector path from `src/components/BrandVectorMarks.tsx`; do not substitute the older traced-line logo.
 - Route-level SEO, canonicals, robots, and share images live in [src/lib/seo.ts](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/src/lib/seo.ts).
 - Runtime head-tag updates live in [src/components/Seo.tsx](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/src/components/Seo.tsx).
 - Static SEO HTML generation lives in [scripts/generate-static-seo.ts](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/scripts/generate-static-seo.ts).

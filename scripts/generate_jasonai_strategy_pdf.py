@@ -3,12 +3,15 @@ from textwrap import wrap
 
 from reportlab.lib.colors import Color, HexColor
 from reportlab.lib.pagesizes import landscape, letter
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "output" / "pdf" / "jasonai-executive-strategy.pdf"
 PUBLIC_OUTPUT = ROOT / "public" / "documents" / "jasonai-executive-strategy.pdf"
+COVER_IMAGE = ROOT / "public" / "images" / "jasonai" / "pdf" / "executive-strategy-cover-background.jpg"
+SECTION_IMAGE = ROOT / "public" / "images" / "jasonai" / "pdf" / "executive-strategy-section-background.jpg"
 
 PAGE = landscape(letter)
 W, H = PAGE
@@ -18,8 +21,14 @@ GRAY = HexColor("#666666")
 LIGHT = HexColor("#E7E7E7")
 PALE = HexColor("#F5F5F3")
 WHITE = HexColor("#FFFFFF")
-EMERALD = HexColor("#63E6BE")
-EMERALD_DARK = HexColor("#006B4D")
+EMERALD = HexColor("#8FAE9F")
+EMERALD_DARK = HexColor("#516B5F")
+PRICING_TINT = HexColor("#F0ECE6")
+PRICING_ACCENT = HexColor("#6B5744")
+PRODUCT_TINT = HexColor("#E9EDF0")
+PRODUCT_ACCENT = HexColor("#4E5D67")
+SUCCESS_TINT = HexColor("#E9EEE9")
+SUCCESS_ACCENT = HexColor("#526157")
 
 PHASES = [
     {
@@ -264,9 +273,203 @@ PHASES = [
     },
 ]
 
+MEETINGS = [
+    {
+        "day": "MONDAY",
+        "duration": "60 MINUTES",
+        "name": "Executive Operating Review",
+        "lead": "CEO",
+        "purpose": "Set the company priority, inspect the active phase gate, and resolve cross-functional decisions.",
+        "flow": [
+            "00-05  Restate the phase objective and weekly outcome.",
+            "05-20  Review KPI movement, gate risk, and exceptions.",
+            "20-40  Decide the two or three issues blocking progress.",
+            "40-55  Assign commitments with owner, metric, and date.",
+            "55-60  Read back decisions and deprioritized work.",
+        ],
+        "outputs": ["One weekly priority", "Decision log", "Named commitments", "Recorded escalations"],
+    },
+    {
+        "day": "WEDNESDAY",
+        "duration": "45 MINUTES",
+        "name": "Product + Customer Checkpoint",
+        "lead": "CTO",
+        "purpose": "Turn live customer evidence into product decisions before quality, privacy, or delivery risks compound.",
+        "flow": [
+            "00-10  Review incidents, quality, and delivery confidence.",
+            "10-20  Review the highest-value customer signal.",
+            "20-35  Decide fixes, experiments, and scope changes.",
+            "35-45  Confirm owners, measures, and communication.",
+        ],
+        "outputs": ["Ranked interventions", "Acceptance criteria", "Customer communication", "Escalation list"],
+    },
+    {
+        "day": "FRIDAY",
+        "duration": "45 MINUTES",
+        "name": "KPI + Commitments Review",
+        "lead": "COO",
+        "purpose": "Close the week with verified results, completed task reports, captured learning, and a clean Monday agenda.",
+        "flow": [
+            "00-15  Score commitments complete, incomplete, or invalid.",
+            "15-25  Compare active KPIs with gate and goal.",
+            "25-35  Capture evidence and changed assumptions.",
+            "35-45  Accept carryovers and draft Monday decisions.",
+        ],
+        "outputs": ["Current dashboard", "Evidenced work", "Accepted carryovers", "Monday decision agenda"],
+    },
+]
+
+RESPONSIBILITIES = [
+    ("CEO", "Monday operating review", "Pricing, market selection, revenue, partnerships, capital, and final phase-priority decisions."),
+    ("CTO", "Wednesday product checkpoint", "Product quality, architecture, delivery, reliability, and safety and privacy risk."),
+    ("COO", "Friday KPI review", "Scorecard, customer success, onboarding, action tracking, and meeting follow-through."),
+]
+
+MEETING_PROTOCOL = [
+    (
+        "BEFORE",
+        "24 HOURS BEFORE",
+        "COO coordinates; every KPI owner contributes.",
+        [
+            "Update KPI results, task reports, quantities, evidence, and tracked metrics.",
+            "Submit only topics requiring a decision, tradeoff, or escalation.",
+            "State the desired decision for every agenda item.",
+        ],
+    ),
+    (
+        "DURING",
+        "TIMEBOXED",
+        "Meeting lead facilitates; CEO resolves company tradeoffs.",
+        [
+            "Start with the scorecard and exceptions; do not read status updates aloud.",
+            "Separate facts, assumptions, options, and the requested decision.",
+            "End every topic with one owner, success measure, and due date.",
+        ],
+    ),
+    (
+        "AFTER",
+        "WITHIN 2 HOURS",
+        "COO maintains the operating record.",
+        [
+            "Publish decisions and actions with owners, dates, and measures.",
+            "Update any changed result, task, phase gate, or priority.",
+            "Escalate any unresolved blocker older than 48 hours to the CEO.",
+        ],
+    ),
+]
+
+OPERATING_RULES = [
+    "One directly responsible individual for every action.",
+    "No commitment without an owner, metric, and deadline.",
+    "Record every decision, rationale, and revisit condition.",
+    "Below-minimum metrics take priority over new scope.",
+    "Keep routine updates asynchronous.",
+]
+
 
 def lines(text, width):
     return wrap(text, width=width, break_long_words=False, break_on_hyphens=False)
+
+
+def tracked_metrics(kpi):
+    name = kpi["name"].lower()
+    if "customers willing" in name:
+        return [
+            "Qualified pilots recruited (#)",
+            "Payment commitment rate (%)",
+            "Willingness-to-pay range ($)",
+            "Committed monthly recurring revenue ($)",
+        ]
+    if "pilot-to-paid" in name:
+        return [
+            "Completed pilots (#)",
+            "Paid conversions (# and %)",
+            "Average initial contract value ($)",
+            "Median conversion cycle (days)",
+        ]
+    if "average revenue" in name:
+        return [
+            "Average monthly revenue per team ($)",
+            "Expansion revenue per team ($)",
+            "Discount rate (%)",
+            "Realized price by package ($)",
+        ]
+    if "ltv:cac" in name:
+        return [
+            "Customer acquisition cost by channel ($)",
+            "Estimated customer lifetime value ($)",
+            "LTV:CAC ratio",
+            "CAC payback period (months)",
+        ]
+    if "net revenue" in name:
+        return [
+            "Net revenue retention (%)",
+            "Expansion monthly recurring revenue ($)",
+            "Contraction revenue ($)",
+            "Customer revenue churn (%)",
+        ]
+    if "useful-output" in name:
+        return [
+            "Outputs reviewed (#)",
+            "Useful-output rate (%)",
+            "Outputs requiring correction (%)",
+            "Critical failure rate (%)",
+        ]
+    if "retention" in name:
+        return [
+            "Activated teams by cohort (#)",
+            "Four- or eight-week retention (%)",
+            "Weekly active team rate (%)",
+            "Meaningful workflows per team (#)",
+        ]
+    if "weekly active" in name:
+        return [
+            "Paying teams (#)",
+            "Weekly active teams (# and %)",
+            "Meaningful workflows per team (#)",
+            "Inactive or at-risk teams (#)",
+        ]
+    if "multi-workflow" in name:
+        return [
+            "Teams using two or more workflows (%)",
+            "Workflow adoption by account (%)",
+            "Active workflows per team (#)",
+            "Integration-driven activity (%)",
+        ]
+    if "time to first" in name:
+        return [
+            "Median time to first value (minutes)",
+            "Onboarding completion rate (%)",
+            "First-session success rate (%)",
+            "Setups requiring assistance (%)",
+        ]
+    if "hours saved" in name:
+        return [
+            "Verified hours saved per team per week",
+            "Customers validating time saved (%)",
+            "Baseline workflow time (minutes)",
+            "Post-JasonAI workflow time (minutes)",
+        ]
+    if "churn" in name:
+        return [
+            "Monthly logo churn (%)",
+            "At-risk accounts identified (#)",
+            "Retention interventions completed (%)",
+            "Accounts saved after intervention (%)",
+        ]
+    if "roi" in name:
+        return [
+            "Customers confirming positive ROI (%)",
+            "Average customer ROI score",
+            "Estimated monthly value delivered ($)",
+            "ROI reviews completed on time (%)",
+        ]
+    return [
+        "Current measured result",
+        "Minimum-gate attainment (%)",
+        "Target attainment (%)",
+        "Week-over-week performance change (%)",
+    ]
 
 
 def draw_wrapped(c, text, x, y, width, font="Helvetica", size=9, leading=12, color=INK, max_lines=None):
@@ -281,20 +484,53 @@ def draw_wrapped(c, text, x, y, width, font="Helvetica", size=9, leading=12, col
     return y
 
 
+def draw_image_cover(c, image_path, x, y, width, height, vertical_alignment="center"):
+    image = ImageReader(str(image_path))
+    image_width, image_height = image.getSize()
+    scale = max(width / image_width, height / image_height)
+    rendered_width = image_width * scale
+    rendered_height = image_height * scale
+    rendered_y = y + (height - rendered_height) / 2
+    if vertical_alignment == "bottom":
+        rendered_y = y
+    elif vertical_alignment == "top":
+        rendered_y = y + height - rendered_height
+    c.saveState()
+    clip = c.beginPath()
+    clip.rect(x, y, width, height)
+    c.clipPath(clip, stroke=0, fill=0)
+    c.drawImage(
+        image,
+        x + (width - rendered_width) / 2,
+        rendered_y,
+        rendered_width,
+        rendered_height,
+        mask="auto",
+    )
+    c.restoreState()
+
+
+def draw_b2w_brand(c, x, y, logo_height, label):
+    c.setFillColor(WHITE)
+    c.setFont("Helvetica-Bold", 10)
+    c.drawString(x, y + logo_height * 0.32, "B2W")
+    divider_x = x + 28
+    c.setStrokeColor(Color(1, 1, 1, alpha=0.28))
+    c.line(divider_x, y + 1, divider_x, y + logo_height - 1)
+    c.setFillColor(WHITE)
+    c.setFont("Courier", 7.5)
+    c.drawString(divider_x + 10, y + 4, label)
+
+
 def header(c, title, eyebrow):
     c.setFillColor(WHITE)
     c.rect(0, 0, W, H, fill=1, stroke=0)
-    c.setFillColor(BLACK)
-    c.rect(0, H - 46, W, 46, fill=1, stroke=0)
-    c.setFillColor(EMERALD)
-    c.circle(27, H - 23, 7, fill=1, stroke=0)
-    c.setFillColor(WHITE)
-    c.setFont("Helvetica-Bold", 9)
-    c.drawString(44, H - 27, "JASONAI")
+    draw_image_cover(c, SECTION_IMAGE, 0, H - 126, W, 126)
+    draw_b2w_brand(c, 27, H - 35, 24, "JASONAI")
     c.setFillColor(Color(1, 1, 1, alpha=0.55))
     c.setFont("Courier", 7)
     c.drawRightString(W - 28, H - 27, eyebrow)
-    c.setFillColor(INK)
+    c.setFillColor(WHITE)
     c.setFont("Helvetica-Bold", 24)
     c.drawString(28, H - 83, title)
 
@@ -309,22 +545,15 @@ def footer(c, page_number):
 
 
 def cover(c):
-    c.setFillColor(WHITE)
-    c.rect(0, 0, W, H, fill=1, stroke=0)
-    c.setFillColor(BLACK)
-    c.rect(W * 0.55, 0, W * 0.45, H, fill=1, stroke=0)
-    c.setFillColor(EMERALD)
-    c.circle(40, H - 38, 9, fill=1, stroke=0)
-    c.setFillColor(INK)
-    c.setFont("Courier", 8)
-    c.drawString(58, H - 41, "JASONAI EXECUTIVE STRATEGY")
+    draw_image_cover(c, COVER_IMAGE, 0, 0, W, H)
+    draw_b2w_brand(c, 40, H - 53, 28, "JASONAI EXECUTIVE STRATEGY")
     c.setFont("Helvetica-Bold", 37)
     c.drawString(40, H - 130, "The AI Assistant")
-    c.setFillColor(HexColor("#A0A0A0"))
+    c.setFillColor(HexColor("#C8C8C8"))
     c.setFont("Helvetica-Bold", 31)
     c.drawString(40, H - 170, "for Project Group")
     c.drawString(40, H - 205, "Chats")
-    c.setFillColor(GRAY)
+    c.setFillColor(Color(1, 1, 1, alpha=0.76))
     c.setFont("Helvetica", 13)
     c.drawString(40, H - 246, "A 24-month operating strategy for the owners")
     c.drawString(40, H - 264, "of SMB general contractors.")
@@ -335,12 +564,12 @@ def cover(c):
     ]
     y = H - 316
     for label, value in meta:
-        c.setStrokeColor(LIGHT)
+        c.setStrokeColor(Color(1, 1, 1, alpha=0.24))
         c.line(40, y + 18, W * 0.49, y + 18)
-        c.setFillColor(GRAY)
+        c.setFillColor(Color(1, 1, 1, alpha=0.58))
         c.setFont("Courier", 7)
         c.drawString(40, y, label)
-        c.setFillColor(INK)
+        c.setFillColor(WHITE)
         c.setFont("Helvetica-Bold", 10)
         c.drawString(150, y, value)
         y -= 39
@@ -380,7 +609,7 @@ def cover(c):
 
 def overview(c, page_number):
     header(c, "Strategy Overview", "THE JASONAI J-CURVE")
-    c.setFillColor(GRAY)
+    c.setFillColor(Color(1, 1, 1, alpha=0.72))
     c.setFont("Helvetica", 9)
     c.drawString(28, H - 105, "Build evidence in sequence: payment, retention, ROI, efficient scale, then expansion.")
 
@@ -445,10 +674,10 @@ def overview(c, page_number):
 
 def phase_page(c, phase, page_number):
     header(c, f"{phase['number']}  {phase['label']}", f"{phase['period']}  |  {phase['curve']}")
-    c.setFillColor(GRAY)
+    c.setFillColor(Color(1, 1, 1, alpha=0.72))
     c.setFont("Helvetica", 10)
     c.drawString(28, H - 106, phase["objective"])
-    c.setFillColor(EMERALD_DARK)
+    c.setFillColor(EMERALD)
     c.setFont("Courier-Bold", 7)
     c.drawRightString(W - 28, H - 105, "PRICING  +  PRODUCT  +  SUCCESS")
 
@@ -457,20 +686,28 @@ def phase_page(c, phase, page_number):
     card_w = (W - margin * 2 - gap * 2) / 3
     card_y = 48
     card_h = H - 176
+    kpi_palettes = [
+        (PRICING_TINT, PRICING_ACCENT),
+        (PRODUCT_TINT, PRODUCT_ACCENT),
+        (SUCCESS_TINT, SUCCESS_ACCENT),
+    ]
     for index, kpi in enumerate(phase["kpis"]):
+        banner_color, accent_color = kpi_palettes[index]
         x = margin + index * (card_w + gap)
         c.setFillColor(WHITE)
         c.setStrokeColor(LIGHT)
         c.setLineWidth(1)
         c.rect(x, card_y, card_w, card_h, fill=1, stroke=1)
-        c.setFillColor(BLACK if index == 0 else PALE)
+        c.setFillColor(banner_color)
         c.rect(x, card_y + card_h - 70, card_w, 70, fill=1, stroke=0)
-        c.setFillColor(EMERALD if index == 0 else EMERALD_DARK)
+        c.setFillColor(accent_color)
+        c.rect(x, card_y + card_h - 70, 4, 70, fill=1, stroke=0)
+        c.setFillColor(accent_color)
         c.setFont("Courier-Bold", 7)
         c.drawString(x + 16, card_y + card_h - 21, kpi["type"])
-        c.setFillColor(WHITE if index == 0 else INK)
+        c.setFillColor(INK)
         c.setFont("Helvetica-Bold", 13)
-        draw_wrapped(c, kpi["name"], x + 16, card_y + card_h - 43, 27, "Helvetica-Bold", 13, 15, WHITE if index == 0 else INK, 2)
+        draw_wrapped(c, kpi["name"], x + 16, card_y + card_h - 43, 27, "Helvetica-Bold", 13, 15, INK, 2)
         c.setFillColor(GRAY)
         c.setFont("Courier", 6.5)
         c.drawString(x + 16, card_y + card_h - 92, "OWNER")
@@ -482,22 +719,202 @@ def phase_page(c, phase, page_number):
         c.setFont("Courier", 6.5)
         c.drawString(x + 16, y, "MINIMUM GATE")
         y = draw_wrapped(c, kpi["minimum"], x + 16, y - 15, 38, "Helvetica", 8, 11, INK) - 10
-        c.setFillColor(EMERALD_DARK)
+        c.setFillColor(accent_color)
         c.setFont("Courier-Bold", 6.5)
         c.drawString(x + 16, y, "TARGET")
-        y = draw_wrapped(c, kpi["target"], x + 16, y - 15, 38, "Helvetica-Bold", 8, 11, EMERALD_DARK) - 13
+        y = draw_wrapped(c, kpi["target"], x + 16, y - 15, 38, "Helvetica-Bold", 8, 11, accent_color) - 13
         c.setStrokeColor(LIGHT)
         c.line(x + 16, y, x + card_w - 16, y)
         y -= 20
         c.setFillColor(GRAY)
         c.setFont("Courier", 6.5)
-        c.drawString(x + 16, y, "SUGGESTED PLAN")
+        c.drawString(x + 16, y, "TRACKED METRICS")
         y -= 18
-        for task_index, task in enumerate(kpi["tasks"], 1):
-            c.setFillColor(EMERALD_DARK)
+        for task_index, task in enumerate(tracked_metrics(kpi), 1):
+            c.setFillColor(accent_color)
             c.setFont("Courier-Bold", 6.5)
             c.drawString(x + 16, y, f"{task_index:02d}")
             y = draw_wrapped(c, task, x + 39, y, 32, "Helvetica", 7.5, 10, INK) - 8
+
+    footer(c, page_number)
+    c.showPage()
+
+
+def meeting_cadence_page(c, page_number):
+    header(c, "Executive Meeting Cadence", "GOVERNANCE  |  2H 30M PER WEEK")
+    c.setFillColor(Color(1, 1, 1, alpha=0.72))
+    c.setFont("Helvetica", 9)
+    c.drawString(28, H - 106, "Three focused meetings connect phase priorities, customer evidence, and accountable execution.")
+
+    row_colors = [HexColor("#242424"), HexColor("#343434"), HexColor("#464646")]
+    row_height = 118
+    row_gap = 10
+    left_width = 184
+    row_y = H - 126 - row_height - 13
+    for index, meeting in enumerate(MEETINGS):
+        c.setFillColor(WHITE)
+        c.setStrokeColor(LIGHT)
+        c.rect(28, row_y, W - 56, row_height, fill=1, stroke=1)
+        c.setFillColor(row_colors[index])
+        c.rect(28, row_y, left_width, row_height, fill=1, stroke=0)
+        c.setFillColor(EMERALD)
+        c.setFont("Courier-Bold", 7)
+        c.drawString(44, row_y + row_height - 22, meeting["day"])
+        c.setFillColor(Color(1, 1, 1, alpha=0.65))
+        c.drawRightString(28 + left_width - 16, row_y + row_height - 22, meeting["duration"])
+        c.setFillColor(WHITE)
+        draw_wrapped(
+            c,
+            meeting["name"],
+            44,
+            row_y + row_height - 48,
+            23,
+            "Helvetica-Bold",
+            14,
+            16,
+            WHITE,
+            2,
+        )
+        c.setFillColor(Color(1, 1, 1, alpha=0.58))
+        c.setFont("Courier", 6.5)
+        c.drawString(44, row_y + 18, "LEAD")
+        c.setFillColor(WHITE)
+        c.setFont("Helvetica-Bold", 10)
+        c.drawRightString(28 + left_width - 16, row_y + 18, meeting["lead"])
+
+        content_x = 28 + left_width + 18
+        c.setFillColor(GRAY)
+        c.setFont("Courier", 6.2)
+        c.drawString(content_x, row_y + row_height - 19, "PURPOSE")
+        draw_wrapped(
+            c,
+            meeting["purpose"],
+            content_x,
+            row_y + row_height - 35,
+            50,
+            "Helvetica",
+            7.4,
+            9,
+            INK,
+            2,
+        )
+
+        agenda_x = content_x + 278
+        c.setFillColor(GRAY)
+        c.setFont("Courier", 6.2)
+        c.drawString(agenda_x, row_y + row_height - 19, "TIMEBOXED FLOW")
+        agenda_y = row_y + row_height - 35
+        for item in meeting["flow"]:
+            agenda_y = draw_wrapped(
+                c,
+                item,
+                agenda_x,
+                agenda_y,
+                35,
+                "Helvetica",
+                5.8,
+                7,
+                INK,
+                2,
+            ) - 4
+
+        outputs_x = W - 140
+        c.setFillColor(GRAY)
+        c.setFont("Courier", 6.2)
+        c.drawString(outputs_x, row_y + row_height - 19, "REQUIRED OUTPUTS")
+        output_y = row_y + row_height - 35
+        for output in meeting["outputs"]:
+            c.setFillColor(EMERALD_DARK)
+            c.setFont("Courier-Bold", 6.2)
+            c.drawString(outputs_x, output_y, "+")
+            c.setFillColor(INK)
+            output_y = draw_wrapped(
+                c,
+                output,
+                outputs_x + 12,
+                output_y,
+                18,
+                "Helvetica",
+                6.2,
+                7.5,
+                INK,
+                2,
+            ) - 6
+        row_y -= row_height + row_gap
+
+    footer(c, page_number)
+    c.showPage()
+
+
+def meeting_protocol_page(c, page_number):
+    header(c, "How We Conduct the Meetings", "PREPARE  |  DECIDE  |  FOLLOW THROUGH")
+    c.setFillColor(Color(1, 1, 1, alpha=0.72))
+    c.setFont("Helvetica", 9)
+    c.drawString(28, H - 106, "Every meeting starts with current evidence and ends with a recorded decision or commitment.")
+
+    gap = 10
+    card_width = (W - 56 - gap * 2) / 3
+    ownership_y = 354
+    ownership_h = 102
+    for index, (role, leads, owns) in enumerate(RESPONSIBILITIES):
+        x = 28 + index * (card_width + gap)
+        c.setFillColor([HexColor("#242424"), HexColor("#343434"), HexColor("#464646")][index])
+        c.rect(x, ownership_y, card_width, ownership_h, fill=1, stroke=0)
+        c.setFillColor(EMERALD)
+        c.setFont("Courier-Bold", 7)
+        c.drawString(x + 16, ownership_y + ownership_h - 20, role)
+        c.setFillColor(WHITE)
+        c.setFont("Helvetica-Bold", 10)
+        c.drawString(x + 16, ownership_y + ownership_h - 42, leads)
+        draw_wrapped(
+            c,
+            owns,
+            x + 16,
+            ownership_y + ownership_h - 61,
+            43,
+            "Helvetica",
+            7,
+            9,
+            Color(1, 1, 1, alpha=0.72),
+            3,
+        )
+
+    protocol_y = 141
+    protocol_h = 198
+    for index, (stage, timing, owner, steps) in enumerate(MEETING_PROTOCOL):
+        x = 28 + index * (card_width + gap)
+        c.setFillColor(PALE)
+        c.setStrokeColor(LIGHT)
+        c.rect(x, protocol_y, card_width, protocol_h, fill=1, stroke=1)
+        c.setFillColor(EMERALD_DARK)
+        c.setFont("Courier-Bold", 7)
+        c.drawString(x + 16, protocol_y + protocol_h - 22, f"{index + 1:02d}  {stage}")
+        c.setFillColor(GRAY)
+        c.setFont("Courier", 6.2)
+        c.drawRightString(x + card_width - 16, protocol_y + protocol_h - 22, timing)
+        c.setFillColor(INK)
+        c.setFont("Helvetica-Bold", 8)
+        y = draw_wrapped(c, owner, x + 16, protocol_y + protocol_h - 47, 44, "Helvetica-Bold", 8, 10, INK, 2) - 9
+        for step_index, step in enumerate(steps, 1):
+            c.setFillColor(EMERALD_DARK)
+            c.setFont("Courier-Bold", 6.5)
+            c.drawString(x + 16, y, f"{step_index:02d}")
+            y = draw_wrapped(c, step, x + 39, y, 38, "Helvetica", 7, 9, GRAY, 3) - 9
+
+    rules_y = 48
+    rules_h = 78
+    c.setFillColor(BLACK)
+    c.rect(28, rules_y, W - 56, rules_h, fill=1, stroke=0)
+    c.setFillColor(EMERALD)
+    c.setFont("Courier-Bold", 7)
+    c.drawString(44, rules_y + rules_h - 20, "OPERATING RULES")
+    rule_width = (W - 88) / len(OPERATING_RULES)
+    for index, rule in enumerate(OPERATING_RULES):
+        x = 44 + index * rule_width
+        c.setFillColor(EMERALD)
+        c.setFont("Courier-Bold", 6.5)
+        c.drawString(x, rules_y + 35, f"{index + 1:02d}")
+        draw_wrapped(c, rule, x + 20, rules_y + 35, 24, "Helvetica", 6.6, 8, Color(1, 1, 1, alpha=0.72), 3)
 
     footer(c, page_number)
     c.showPage()
@@ -514,6 +931,8 @@ def generate():
     overview(c, 2)
     for page_number, phase in enumerate(PHASES, 3):
         phase_page(c, phase, page_number)
+    meeting_cadence_page(c, 8)
+    meeting_protocol_page(c, 9)
     c.save()
     PUBLIC_OUTPUT.write_bytes(OUTPUT.read_bytes())
     print(OUTPUT)

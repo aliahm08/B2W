@@ -10,16 +10,31 @@ export const jasonAIInternalRoutes = {
   documentation: `${jasonAIInternalBasePath}/documentation`,
 } as const;
 
+export const jasonAIExecutiveStrategyDownloadItem: ClientNavAction = {
+  label: 'Download',
+  type: 'cta',
+  items: [
+    {
+      label: 'Download Original',
+      href: '/documents/jasonai-executive-strategy.pdf',
+      download: 'JasonAI-Executive-Strategy-Original.pdf',
+    },
+    {
+      label: 'Download Current',
+      onClick: () => {
+        void import('./downloadCurrentExecutiveStrategy').then(({ downloadCurrentExecutiveStrategy }) =>
+          downloadCurrentExecutiveStrategy(),
+        );
+      },
+    },
+  ],
+};
+
 export const jasonAIInternalNavItems: ClientNavAction[] = [
   { label: 'Strategy Overview', to: `${jasonAIInternalRoutes.proposal}#j-curve` },
   { label: 'KPI Tracker', to: `${jasonAIInternalRoutes.proposal}#kpi-tracker` },
   { label: 'Executive Strategy', to: jasonAIInternalRoutes.executiveStrategy },
-  {
-    label: 'Download PDF',
-    type: 'cta',
-    href: '/documents/jasonai-executive-strategy.pdf',
-    download: 'JasonAI-Executive-Strategy.pdf',
-  },
+  jasonAIExecutiveStrategyDownloadItem,
 ];
 
 export function JasonAIInternalNavbar({ navItems = jasonAIInternalNavItems }: { navItems?: ClientNavAction[] }) {
