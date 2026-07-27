@@ -52,7 +52,9 @@ const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
-const JasonAIInternalPortal = lazy(() => import('./pages/internal/jason-ai/JasonAIInternalPortal'));
+const JasonAIOverviewPage = lazy(() => import('./pages/internal/jason-ai/JasonAIOverviewPage'));
+const JasonAIPerformanceGoalsPage = lazy(() => import('./pages/internal/jason-ai/JasonAIPerformanceGoalsPage'));
+const JasonAIKPITrackerPage = lazy(() => import('./pages/internal/jason-ai/JasonAIKPITrackerPage'));
 const JasonAIExecutiveStrategyDocumentPage = lazy(() => import('./pages/internal/jason-ai/JasonAIExecutiveStrategyDocumentPage'));
 const JasonAIValuationModelPage = lazy(() => import('./pages/internal/jason-ai/JasonAIValuationModelPage'));
 const JasonAIDocumentationPage = lazy(() => import('./pages/internal/jason-ai/JasonAIDocumentationPage'));
@@ -304,7 +306,9 @@ export default function App() {
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
-                <Route path="/internal/jason-ai" element={<JasonAIInternalPortal />} />
+                <Route path="/internal/jason-ai" element={<JasonAIOverviewPage />} />
+                <Route path="/internal/jason-ai/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
+                <Route path="/internal/jason-ai/kpi-tracker" element={<JasonAIKPITrackerPage />} />
                 <Route path="/internal/jason-ai/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
                 <Route path="/internal/jason-ai/profile" element={<Navigate to="/internal/jason-ai/executive-strategy" replace />} />
                 <Route path="/internal/jason-ai/valuation" element={<JasonAIValuationModelPage />} />

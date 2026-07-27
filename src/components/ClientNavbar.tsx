@@ -81,6 +81,8 @@ export default function ClientNavbar({
       '/client/foster-partners/governance': 'Governance',
       '/client/foster-partners/terms': 'Terms',
       '/internal/jason-ai/profile': 'Executive Strategy',
+      '/internal/jason-ai/performance-goals': 'Performance Goals',
+      '/internal/jason-ai/kpi-tracker': 'KPI Tracker',
       '/internal/jason-ai/executive-strategy': 'Executive Strategy',
       '/internal/jason-ai/valuation': 'Valuation',
       '/internal/jason-ai/documentation': 'Documentation',
