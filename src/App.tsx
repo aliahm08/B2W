@@ -42,23 +42,19 @@ const FosterPartnersTermsPage = lazy(() => import('./pages/client/FosterPartners
 const UyghurEatsValuationModelPage = lazy(() => import('./pages/projects/uyghur-eats/ValuationModelPage'));
 const UyghurEatsDataRoomPage = lazy(() => import('./pages/projects/uyghur-eats/previews/DataRoomPage'));
 const CapabilityPage = lazy(() => import('./pages/capabilities/CapabilityPage'));
-const KitchenPage = lazy(() => import('./pages/capabilities/KitchenPage'));
 const DataExplainerPage = lazy(() => import('./pages/capabilities/DataExplainerPage'));
 const ServiceProjectPage = lazy(() => import('./pages/ServiceProjectPage'));
 const SabucnuProfilePage = lazy(() => import('./pages/projects/sabucnu/ProfilePage'));
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ExpertisePage = lazy(() => import('./pages/ExpertisePage'));
-const KitchenPreviewPage = lazy(() => import('./pages/kitchen/KitchenPreviewPage'));
-const OriginalKitchenDemoPage = lazy(() => import('./pages/kitchen/OriginalKitchenDemoPage'));
 const SolutionsLandingPage = lazy(() => import('./pages/solutions/SolutionsLandingPage'));
 const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
-const JasonAI2Page = lazy(() => import('./pages/JasonAI2Page'));
-const JasonAI3Page = lazy(() => import('./pages/JasonAI3Page'));
-const JasonAI3Portal2Page = lazy(() => import('./pages/JasonAI3Portal2Page'));
-const JasonAI3TasksPortalPage = lazy(() => import('./pages/JasonAI3TasksPortalPage'));
+const JasonAIInternalPortal = lazy(() => import('./pages/internal/jason-ai/JasonAIInternalPortal'));
+const JasonAIValuationModelPage = lazy(() => import('./pages/internal/jason-ai/JasonAIValuationModelPage'));
+const JasonAIDocumentationPage = lazy(() => import('./pages/internal/jason-ai/JasonAIDocumentationPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -239,13 +235,14 @@ export default function App() {
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
+  const isInternalPortal = location.pathname.startsWith('/internal/') || location.pathname.startsWith('/portal/');
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isJasonAIPage;
+    isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isJasonAIPage;
   const routeTransitionKey = isClaraPage ? '/clara' : isJasonAIPage ? '/jasonai' : location.pathname;
 
   let clientName: string | undefined = undefined;
@@ -306,22 +303,24 @@ export default function App() {
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
-                <Route path="/jasonai-2" element={<JasonAI2Page />} />
-                <Route path="/jasonai-3" element={<JasonAI3Page />} />
-                <Route path="/jasonai-3/portal" element={<JasonAI3Page page="portal" />} />
-                <Route path="/jasonai-3/portal-2" element={<JasonAI3Portal2Page />} />
-                <Route path="/jasonai-3/portal-2/tasks" element={<JasonAI3TasksPortalPage />} />
+                <Route path="/internal/jason-ai" element={<JasonAIInternalPortal />} />
+                <Route path="/internal/jason-ai/profile" element={<Navigate to="/internal/jason-ai#j-curve" replace />} />
+                <Route path="/internal/jason-ai/valuation" element={<JasonAIValuationModelPage />} />
+                <Route path="/internal/jason-ai/documentation" element={<JasonAIDocumentationPage />} />
+                <Route path="/portal/JasonAI-Executive-Strategy" element={<Navigate to="/internal/jason-ai/profile" replace />} />
+                <Route path="/jasonai-2" element={<Navigate to="/jasonai" replace />} />
+                <Route path="/jasonai-3" element={<Navigate to="/jasonai" replace />} />
+                <Route path="/jasonai-3/*" element={<Navigate to="/jasonai" replace />} />
                 <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-                <Route path="/capabilities" element={<Navigate to="/kitchen" replace />} />
+                <Route path="/capabilities" element={<Navigate to="/growth" replace />} />
                 <Route path="/clara" element={<SolutionsLayout />}>
                   <Route index element={<SolutionsLandingPage />} />
                 </Route>
                 <Route path="/clara/:slug" element={<Navigate to="/clara" replace />} />
-                <Route path="/kitchen" element={<KitchenPage />} />
-                <Route path="/kitchen/demo/original" element={<OriginalKitchenDemoPage />} />
-                <Route path="/kitchen/preview/:slug" element={<KitchenPreviewPage />} />
+                <Route path="/kitchen" element={<Navigate to="/growth" replace />} />
+                <Route path="/kitchen/*" element={<Navigate to="/growth" replace />} />
                 <Route path="/tiers/basic-advisory" element={<TierPage />} />
                 <Route path="/tiers/consulting" element={<TierPage />} />
                 <Route path="/tiers/implementation" element={<TierPage />} />

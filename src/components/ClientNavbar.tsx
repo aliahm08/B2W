@@ -51,7 +51,8 @@ export default function ClientNavbar({
     if (
       pathname === '/client/uyghur-eats' ||
       pathname === '/portal/uyghur-eats' ||
-      pathname === '/client/foster-partners'
+      pathname === '/client/foster-partners' ||
+      pathname === '/internal/jason-ai'
     ) {
       return null;
     }
@@ -76,6 +77,9 @@ export default function ClientNavbar({
       '/client/foster-partners/operating-model': 'Operating Model',
       '/client/foster-partners/governance': 'Governance',
       '/client/foster-partners/terms': 'Terms',
+      '/internal/jason-ai/profile': 'Executive Strategy',
+      '/internal/jason-ai/valuation': 'Valuation',
+      '/internal/jason-ai/documentation': 'Documentation',
     };
 
     const label = routeMap[pathWithHash] ?? routeMap[pathname];

@@ -1,12 +1,9 @@
-import { useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowLeft, ArrowUpRight, Check, LineChart, Target, Wallet } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import Seo from '../components/Seo';
-import SolutionPreviewGate from '../components/SolutionPreviewGate';
 import LeadForm, { type PublicProjectArea } from '../components/forms/LeadForm';
 import { getExpertisePageBySlug } from '../content/expertisePages';
-import { buildKitchenSolutionFromPreset } from '../content/kitchen';
 
 function getIconForSlug(slug: string) {
   if (slug === 'growth') {
@@ -24,15 +21,9 @@ function formatProjectAreas(areas: PublicProjectArea[]) {
   return areas.join(' + ');
 }
 
-function formatKitchenTitles(values: { title: string }[]) {
-  return values.map((item) => item.title).join(', ');
-}
-
 export default function ExpertisePage() {
   const { slug } = useParams();
   const page = slug ? getExpertisePageBySlug(slug) : undefined;
-  const presetSolution = slug ? buildKitchenSolutionFromPreset(slug) : null;
-  const [previewOpen, setPreviewOpen] = useState(false);
 
   if (!page) {
     return (
@@ -86,33 +77,6 @@ export default function ExpertisePage() {
                 <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Primary Intake Routing</p>
                 <p className="mt-2 text-sm leading-6 text-neutral-300">{formatProjectAreas(page.preselectedProjectAreas)}</p>
               </div>
-              {presetSolution ? (
-                <div className="mt-6 border-t border-white/10 pt-5">
-                  <p className="text-[11px] font-mono uppercase tracking-[0.22em] text-neutral-500">Kitchen by B2W Preset</p>
-                  <p className="mt-2 text-sm leading-6 text-neutral-200">{presetSolution.name}</p>
-                  <div className="mt-4 space-y-2 text-xs leading-5 text-neutral-400">
-                    <p>Information: {formatKitchenTitles(presetSolution.information)}</p>
-                    <p>Integration: {formatKitchenTitles(presetSolution.integration)}</p>
-                    <p>Production: {formatKitchenTitles(presetSolution.production)}</p>
-                  </div>
-                  <div className="mt-5 flex flex-col gap-3">
-                    <button
-                      type="button"
-                      onClick={() => setPreviewOpen(true)}
-                      className="inline-flex items-center justify-center gap-2 border border-white bg-white px-4 py-3 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
-                    >
-                      Preview proposal
-                      <ArrowUpRight className="h-4 w-4" />
-                    </button>
-                    <Link
-                      to="/kitchen"
-                      className="inline-flex items-center justify-center gap-2 border border-white/15 px-4 py-3 text-sm font-medium text-white transition-colors hover:border-white/40"
-                    >
-                      Open Kitchen by B2W
-                    </Link>
-                  </div>
-                </div>
-              ) : null}
             </motion.aside>
           </div>
         </div>
@@ -258,17 +222,6 @@ export default function ExpertisePage() {
           </motion.aside>
         </div>
       </section>
-
-      {presetSolution ? (
-        <SolutionPreviewGate
-          isOpen={previewOpen}
-          onClose={() => setPreviewOpen(false)}
-          solutionName={presetSolution.name}
-          previewPath={presetSolution.previewPath}
-          projectAreas={presetSolution.projectAreas}
-          inquiryType={presetSolution.inquiryType}
-        />
-      ) : null}
     </>
   );
 }
