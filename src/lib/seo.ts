@@ -88,7 +88,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'AI Solutions by B2W',
       description:
-        'AI solutions from B2W, including JasonAI for contractor communication, scope changes, follow-ups, and fieldwork clarity.',
+        'AI solutions from B2W, including JasonAI for searching approved contractor communication and creating clear job summaries through WhatsApp.',
     },
   ],
   [
@@ -96,7 +96,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'How JasonAI Works for Contractors',
       description:
-        'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
+        'See how JasonAI searches approved contractor communication, creates summaries, and expands carefully as the core workflow earns trust.',
     },
   ],
   [
@@ -104,7 +104,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Questions and Waitlist',
       description:
-        'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
+        'Answers to common JasonAI questions about search, summaries, privacy, setup, pricing, and pre-launch access for contractor businesses.',
     },
   ],
   [
@@ -120,7 +120,17 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI for Contractor Businesses',
       description:
-        'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
+        'JasonAI gives contractor teams a faster way to search approved job communication and turn long threads into clear summaries through WhatsApp.',
+      imagePath: jasonAiImages.contractorSignals,
+      imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
+    },
+  ],
+  [
+    '/jasonai/pricing',
+    {
+      title: 'General Contractor AI ROI Calculator | JasonAI',
+      description:
+        'Calculate the four-year time-saving ROI of JasonAI for contractors and see the pre-launch offer: $25 per month for year one with no setup fee.',
       imagePath: jasonAiImages.contractorSignals,
       imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
     },
@@ -130,7 +140,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'How JasonAI Works for Contractors',
       description:
-        'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
+        'See how JasonAI searches approved contractor communication, creates summaries, and expands carefully as the core workflow earns trust.',
       imagePath: jasonAiImages.contractorSignals,
       imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
     },
@@ -140,7 +150,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Questions and Waitlist',
       description:
-        'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
+        'Answers to common JasonAI questions about search, summaries, privacy, setup, pricing, and pre-launch access for contractor businesses.',
       imagePath: jasonAiImages.contractorSignals,
       imageAlt: 'Contractor job communication scattered across phones, notes, and work channels.',
     },
@@ -156,10 +166,42 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/internal',
+    {
+      title: 'B2W Internal Projects',
+      description: 'Private B2W project index.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/executive-strategy',
+    {
+      title: 'B2W Executive Strategy System',
+      description: 'Private B2W product, business, financial, and execution strategy system.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
     '/internal/jason-ai',
     {
       title: 'JasonAI Executive Strategy',
       description: 'JasonAI 24-month J-curve strategy for helping SMB general-contractor owners create measurable value from business communication.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/jason-ai/performance-goals',
+    {
+      title: 'JasonAI Performance Goals',
+      description: 'Private JasonAI performance goals and execution scorecard.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/jason-ai/kpi-tracker',
+    {
+      title: 'JasonAI KPI Tracker',
+      description: 'Private JasonAI KPI tracker for product and commercial performance.',
       robots: PRIVATE_ROBOTS,
     },
   ],

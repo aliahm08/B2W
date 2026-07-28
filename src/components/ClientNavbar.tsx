@@ -22,6 +22,9 @@ export default function ClientNavbar({
   clientName, 
   clientLink,
   navItems,
+  brandTo = '/',
+  brandLabel = 'B2W home',
+  brandWordmark = 'B2W',
   theme = 'light',
   hasFieldBoss = false,
   assistantButtonLabel = 'Summarize',
@@ -31,6 +34,9 @@ export default function ClientNavbar({
   clientName?: string;
   clientLink?: string;
   navItems?: ClientNavAction[];
+  brandTo?: string;
+  brandLabel?: string;
+  brandWordmark?: string;
   theme?: 'light' | 'dark';
   hasFieldBoss?: boolean;
   assistantButtonLabel?: string;
@@ -386,7 +392,12 @@ export default function ClientNavbar({
     <nav className={navClassName}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-20 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <B2WLogoMark className={`shrink-0 ${isDarkTheme ? 'text-white' : isMobileMenuOpen ? 'text-white md:text-black' : 'text-black'}`} />
+          <B2WLogoMark
+            to={brandTo}
+            label={brandLabel}
+            wordmark={brandWordmark}
+            className={`shrink-0 ${isDarkTheme ? 'text-white' : isMobileMenuOpen ? 'text-white md:text-black' : 'text-black'}`}
+          />
           {clientName && (
             <>
               <span className={isDarkTheme ? 'text-white/20' : isMobileMenuOpen ? 'text-white/30 md:text-neutral-300' : 'text-neutral-300'}>/</span>

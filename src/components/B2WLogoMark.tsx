@@ -7,6 +7,7 @@ type B2WLogoMarkProps = {
   className?: string;
   label?: string;
   variant?: 'consulting' | 'clara' | 'jasonai';
+  wordmark?: string;
 };
 
 export default function B2WLogoMark({
@@ -14,6 +15,7 @@ export default function B2WLogoMark({
   className = '',
   label = 'B2W home',
   variant = 'consulting',
+  wordmark = 'B2W',
 }: B2WLogoMarkProps) {
   return (
     <Link
@@ -45,7 +47,7 @@ export default function B2WLogoMark({
       </span>
       <span aria-hidden="true" className="b2w-logo-wordmark-shell pr-1 md:pr-2">
         <span className="b2w-wordmark inline-block text-xl font-medium tracking-[-0.09em] [transform:scaleY(0.94)] md:text-2xl">
-          B2W
+          {wordmark}
         </span>
       </span>
     </Link>

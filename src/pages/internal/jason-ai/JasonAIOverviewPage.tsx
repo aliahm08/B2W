@@ -82,6 +82,14 @@ export default function JasonAIOverviewPage() {
   const overviewTitle =
     analysis?.overviewTitle ?? 'Executive performance across the five-phase strategy.';
   const overviewSubtitle = analysis?.overviewSubtitle ?? operatingPosition;
+  const overviewStatus =
+    analysis?.status ?? (syncStatus === 'local' ? 'Local only' : 'Awaiting version');
+  const overviewStatusColor =
+    overviewStatus === 'ahead' || overviewStatus === 'on-track'
+      ? { backgroundColor: '#4F7F52', color: '#FFFFFF' }
+      : overviewStatus === 'at-risk' || overviewStatus === 'behind'
+        ? { backgroundColor: '#C63D2F', color: '#FFFFFF' }
+        : { backgroundColor: '#D8B536', color: '#171717' };
 
   return (
     <article className={projectPageShellClassName}>
@@ -184,8 +192,11 @@ export default function JasonAIOverviewPage() {
                     {modelConfigured ? 'OSS thinking model connected' : 'Deterministic review until model is connected'}
                   </p>
                 </div>
-                <span className="rounded-full border border-white/15 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-neutral-300">
-                  {analysis?.status ?? (syncStatus === 'local' ? 'Local only' : 'Awaiting version')}
+                <span
+                  className="rounded-full px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
+                  style={overviewStatusColor}
+                >
+                  {overviewStatus}
                 </span>
               </div>
 

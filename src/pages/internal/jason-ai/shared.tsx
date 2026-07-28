@@ -49,6 +49,9 @@ export function JasonAIInternalNavbar({ navItems = jasonAIInternalNavItems }: { 
         clientName="JasonAI"
         clientLink={jasonAIInternalRoutes.proposal}
         navItems={navItems}
+        brandTo="/internal"
+        brandLabel="Gurge projects"
+        brandWordmark="Gurge"
       />
       <nav
         aria-label="JasonAI mobile app"

@@ -8,13 +8,14 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 - `B2W`: consulting and applied AI systems for operators who need clearer execution, tighter delivery, and less process noise.
 - `Clara`: B2W's voice-to-plan and estimation interface.
-- `JasonAI`: contractor communication, follow-through, and risk-intelligence product line.
+- `JasonAI`: a WhatsApp AI Assistant for searching approved contractor communication and creating job summaries.
 
 ## Approved Messaging
 
 - B2W should sound direct, technical, and operational. Avoid inflated transformation language.
 - Public copy should describe what B2W builds, scopes, or operates in concrete terms: consulting, diagnostics, implementation, estimation, workflow tooling, AI systems.
-- JasonAI copy should stay anchored to contractor communication, scope changes, follow-ups, job context, and risk.
+- JasonAI copy must distinguish product stages: search and summaries are available now; action-item extraction, status reporting, and source-linked answers are in development; financial or contractual automation is future-only after the core workflow is trusted.
+- JasonAI standard pricing is `$99/month` plus a one-time `$2,000` setup fee. Pre-launch subscribers receive `$25/month` for the first year with the setup fee removed.
 - Clara copy should stay anchored to voice input, estimation, planning, modeling, and actioning structured context.
 
 ## Core CTA

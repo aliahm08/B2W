@@ -59,6 +59,7 @@ const JasonAIKPITrackerPage = lazy(() => import('./pages/internal/jason-ai/Jason
 const JasonAIExecutiveStrategyDocumentPage = lazy(() => import('./pages/internal/jason-ai/JasonAIExecutiveStrategyDocumentPage'));
 const JasonAIValuationModelPage = lazy(() => import('./pages/internal/jason-ai/JasonAIValuationModelPage'));
 const JasonAIDocumentationPage = lazy(() => import('./pages/internal/jason-ai/JasonAIDocumentationPage'));
+const B2WExecutiveStrategyPage = lazy(() => import('./pages/B2WExecutiveStrategyPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -242,7 +243,8 @@ export default function App() {
   const isInternalPortal =
     location.pathname === '/internal' ||
     location.pathname.startsWith('/internal/') ||
-    location.pathname.startsWith('/portal/');
+    location.pathname.startsWith('/portal/') ||
+    location.pathname === '/executive-strategy';
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
@@ -307,9 +309,11 @@ export default function App() {
                 <Route path="/solutions/questions" element={<Navigate to="/jasonai/questions" replace />} />
                 <Route path="/solutions/privacy" element={<Navigate to="/jasonai/privacy" replace />} />
                 <Route path="/jasonai" element={<JasonAIPage />} />
+                <Route path="/jasonai/pricing" element={<JasonAIPage page="pricing" />} />
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
+                <Route path="/executive-strategy" element={<B2WExecutiveStrategyPage />} />
                 <Route path="/internal" element={<InternalProjectIndexPage />} />
                 <Route path="/internal/jason-ai" element={<JasonAIOverviewPage />} />
                 <Route path="/internal/jason-ai/performance-goals" element={<JasonAIPerformanceGoalsPage />} />

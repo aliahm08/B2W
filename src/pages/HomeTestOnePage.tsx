@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowDown, ArrowRight, Mail, MessageCircle, Mic } from 'lucide-react';
+import { ArrowDown, ArrowRight, LockKeyhole, Mail, MessageCircle, Mic } from 'lucide-react';
 import { B2WSilhouetteMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
 
@@ -239,12 +239,19 @@ export default function HomeTestOnePage() {
         </section>
 
         <motion.footer
-          className={`relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 py-5 text-sm sm:px-8 lg:px-10 ${activeHero.footerClass}`}
+          className={`relative z-10 mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 text-sm sm:px-8 lg:px-10 ${activeHero.footerClass}`}
           initial={{ opacity: 0, y: 14, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.56, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
           <span>B2W LLC</span>
+          <Link
+            to="/executive-strategy"
+            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-current/15 px-4 text-xs font-semibold transition hover:bg-white/15"
+          >
+            <LockKeyhole className="h-3.5 w-3.5" />
+            Executive Strategy
+          </Link>
         </motion.footer>
       </motion.main>
     </>

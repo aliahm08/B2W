@@ -8,7 +8,16 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 - `B2W`: consulting, diligence, implementation, and applied AI systems for operators.
 - `Clara`: the B2W voice-to-plan and estimation interface.
-- `JasonAI`: the contractor communication and risk-intelligence product family.
+- `JasonAI`: a WhatsApp AI Assistant for searching approved contractor communication and creating job summaries.
+
+## JasonAI Product And Offer Rules
+
+- Available now: communication search and summaries.
+- In development: action-item extraction, status reporting, and source-linked answers.
+- Future only: financial or contractual automation, added after the core workflow is trusted.
+- Standard price: `$99/month` plus a one-time `$2,000` setup fee.
+- Pre-launch subscriber offer: `$25/month` for the first year with the setup fee removed.
+- Never present roadmap capabilities as current or include future financial or contractual automation in current ROI calculations.
 
 ## Canonical Marketing Files
 

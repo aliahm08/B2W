@@ -122,10 +122,10 @@ const sections: DocumentationSection[] = [
 ];
 
 const statusStyles: Record<DocumentItem['status'], string> = {
-  Draft: 'bg-amber-50 text-amber-800',
-  Planned: 'bg-neutral-100 text-neutral-600',
-  Living: 'bg-emerald-50 text-emerald-800',
-  Required: 'bg-sky-50 text-sky-800',
+  Draft: 'bg-[#D8B536] text-neutral-950',
+  Planned: 'bg-[#D8B536] text-neutral-950',
+  Living: 'bg-[#4F7F52] text-white',
+  Required: 'bg-[#C63D2F] text-white',
 };
 
 function DocumentRow({ item }: { item: DocumentItem }) {

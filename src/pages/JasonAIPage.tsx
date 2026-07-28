@@ -8,12 +8,12 @@ import {
   ChevronDown,
   FolderSearch,
   MessageSquareText,
-  ShieldAlert,
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { B2WSilhouetteMark, JasonAIVectorMark } from '../components/BrandVectorMarks';
 import Seo from '../components/Seo';
+import JasonAIPricingCalculator from './JasonAIPricingCalculator';
 
 declare global {
   interface Window {
@@ -77,35 +77,46 @@ const howItWorks = [
   {
     title: 'Your team keeps working the same way.',
     body:
-      'JasonAI runs in the background and is available whenever anyone needs it. Everyone gets help that is relevant to their role. You get visibility across all of it.',
+      'JasonAI is available in WhatsApp whenever someone needs to search approved communication or turn a long thread into a clean summary.',
   },
 ] as const;
 
 const useCases = [
   {
-    title: 'Scope change protection',
+    stage: 'Available now',
+    title: 'Communication search',
     body:
-      'A homeowner asks for additional work while your tech is on-site. JasonAI flags it as an undocumented scope change so you can issue a change order before the job closes.',
+      'Ask JasonAI to find a prior discussion, customer request, crew update, or job detail across the communication you approve.',
   },
   {
-    title: 'Dispute defense',
+    stage: 'Available now',
+    title: 'Job summaries',
     body:
-      'A customer claims you never mentioned an extra cost. JasonAI pulls the message thread where they approved it - timestamped and organized.',
+      'Turn long message threads and approved job communication into a concise recap without rereading every message.',
   },
   {
-    title: 'Missed follow-up',
+    stage: 'In development',
+    title: 'Action-item extraction',
     body:
-      'Your PM promised to call back about permit status. JasonAI flags it before it becomes a problem.',
+      'JasonAI will identify tasks, owners, and follow-ups inside approved communication. This is not part of the current release.',
   },
   {
-    title: 'Weekly job clarity',
+    stage: 'In development',
+    title: 'Status reporting',
     body:
-      'Every Friday, you get a clean summary of every active job - what happened, what was agreed, what is open, what still needs action. Five minutes. No logins.',
+      'Structured status reports across active jobs are being developed after the search and summary workflow.',
   },
   {
-    title: 'Field support',
+    stage: 'In development',
+    title: 'Source-linked answers',
     body:
-      'Your tech needs to know what was agreed on a job last week. JasonAI pulls it up instantly in the tool they are already using.',
+      'Answers that link directly back to supporting messages and documents are next on the product roadmap.',
+  },
+  {
+    stage: 'Future',
+    title: 'Trusted automation',
+    body:
+      'Financial or contractual automation will only be added after the core search, summary, and reporting workflow is trusted.',
   },
 ] as const;
 
@@ -117,7 +128,7 @@ const testimonials = [
   },
   {
     quote:
-      'We lost $14,000 last year on extras we did not document. This is the first thing I have seen that would actually catch it.',
+      'We lose hours every week looking for the message where a decision was made. Getting the summary in one place changes that.',
     source: 'Remodeling GC',
   },
   {
@@ -130,7 +141,7 @@ const objections = [
   {
     question: 'Is this just another app my team has to use?',
     answer:
-      'No. JasonAI does not have an app for your team to open. It works inside the tools they already use - text, email, WhatsApp. They keep communicating exactly how they communicate now. JasonAI keeps track of what happens.',
+      'No. JasonAI is designed to work through WhatsApp and approved communication sources. Your team can search prior communication and request summaries without learning another dashboard.',
   },
   {
     question: 'Will my crew have to learn anything?',
@@ -140,17 +151,17 @@ const objections = [
   {
     question: 'I already use Jobber, ServiceTitan, or Buildertrend.',
     answer:
-      'JasonAI does not replace those. They handle scheduling, invoicing, and job management. What they do not capture is the unstructured communication - the texts, the WhatsApp messages, the calls - where scope changes, missed follow-ups, and undocumented extras actually happen. JasonAI covers that gap.',
+      'JasonAI does not replace those systems. It helps your team search and summarize the unstructured communication that usually sits around the formal project record.',
   },
   {
     question: 'I do not want AI reading my job communications.',
     answer:
-      'We understand. You control which channels JasonAI connects to. Your data is only used to generate your summaries and alerts - never shared, never sold. During the founding beta, you work directly with our team, so you always know exactly what is being reviewed and how.',
+      'We understand. You control which channels JasonAI connects to. Approved data is used to support search and generate summaries for your business—never sold. During pre-launch, you work directly with our team so you know what is being reviewed and how.',
   },
   {
     question: 'We have a PM who handles this.',
     answer:
-      'Good - JasonAI makes your PM better, not redundant. Your PM is probably spending significant time rereading conversations to stay on top of jobs. JasonAI does that automatically so your PM can focus on managing jobs instead of managing information.',
+      'Good—JasonAI gives your PM a faster way to search prior communication and prepare summaries, reducing time spent rereading threads.',
   },
 ] as const;
 
@@ -158,27 +169,27 @@ const faqs = [
   {
     question: 'What tools does JasonAI connect to?',
     answer:
-      'During the founding beta, we start with the channels you choose: email threads, text flows, WhatsApp groups, call notes, or forwarded job communication. We only connect what you approve.',
+      'During pre-launch, we start with the communication sources you choose, including approved WhatsApp groups, email threads, text flows, call notes, or forwarded job communication.',
   },
   {
     question: 'How does the weekly summary work?',
     answer:
-      'You receive a clean weekly recap of active jobs: what happened, what was agreed to, what is still open, and what needs action. It is delivered to you, not hidden behind a login.',
+      'JasonAI can summarize the approved communication for a job or time period. Automated action-item extraction and structured status reporting are still in development.',
   },
   {
     question: 'How long does setup take?',
     answer:
-      'The first review is 15 minutes. Setup depends on how your business communicates today, but the founding beta is intentionally hands-on so we can do the heavy lifting with you.',
+      'The first review is 30 minutes. Setup depends on how your business communicates today, and pre-launch onboarding is intentionally hands-on so we can do the heavy lifting with you.',
   },
   {
     question: 'What does it cost?',
     answer:
-      'Founding beta pricing is being offered to a small group of contractor businesses after the business review. The review itself is free.',
+      'Standard pricing is $99 per month with a one-time $2,000 setup fee. Pre-launch subscribers pay $25 per month for the first year and the setup fee is removed.',
   },
   {
     question: 'Is my data private?',
     answer:
-      'You choose what JasonAI can review. Your business communication is used for your summaries and alerts. It is never sold or shared.',
+      'You choose what JasonAI can review. Approved business communication is used for search and summaries. It is never sold.',
   },
   {
     question: 'What if I already use project management tools?',
@@ -198,7 +209,7 @@ const faqs = [
   {
     question: 'Can I cancel?',
     answer:
-      'Yes. Founding beta access is designed to prove value quickly. If it does not help your operation, you are not locked in.',
+      'Yes. Pre-launch access is designed to prove value quickly. If it does not help your operation, you are not locked in.',
   },
 ] as const;
 
@@ -211,7 +222,7 @@ const privacyHighlights = [
   {
     title: 'Your job communication is used to run JasonAI for your business.',
     body:
-      'We use approved information to produce summaries, alerts, open-loop reminders, scope-change flags, dispute context, and field support for your team.',
+      'We use approved information to support search and produce summaries. New capabilities are added only when they are clearly enabled for your deployment.',
   },
   {
     title: 'We do not sell your fieldwork data.',
@@ -233,7 +244,7 @@ const privacySections = [
     body: [
       'Contact and account information, such as your name, email address, phone number, company name, role, team size, service area, and details you provide when joining the waitlist, booking a review, or onboarding JasonAI.',
       'Fieldwork and job communication you authorize JasonAI to access, such as work texts, email, WhatsApp messages, call notes or transcripts, customer requests, project manager notes, technician updates, job names, job addresses, schedule details, estimates, scope changes, photos, documents, and related metadata.',
-      'Integration information from tools you connect, such as authorization status, connected account identifiers, sync logs, delivery status, and settings needed to send summaries, alerts, or responses back through approved channels.',
+      'Integration information from tools you connect, such as authorization status, connected account identifiers, sync logs, delivery status, and settings needed to send summaries or responses back through approved channels.',
       'Website and service usage information, such as pages visited, form submissions, device and browser information, IP address, timestamps, diagnostics, and security logs.',
       'Commercial and support information, such as billing contacts, contract records, support requests, implementation notes, and feedback.',
     ],
@@ -241,7 +252,7 @@ const privacySections = [
   {
     title: '3. How we use information',
     body: [
-      'We use information to operate JasonAI, configure it around your fieldwork process, summarize approved communications, identify open tasks, flag possible scope changes, prepare job context, support dispute review, and help your team find what was agreed or still needs action.',
+      'We use information to operate JasonAI, configure it around your fieldwork process, search approved communications, produce summaries, and help your team find relevant job context.',
       'We also use information to provide onboarding and support, communicate with you, manage waitlist and business review requests, maintain security, troubleshoot issues, improve reliability, develop new features, and meet legal or contractual obligations.',
       'We may use aggregated or de-identified information to understand product performance and improve JasonAI. Aggregated or de-identified information does not identify your business, workers, customers, or job sites.',
     ],
@@ -251,14 +262,14 @@ const privacySections = [
     body: [
       'JasonAI uses artificial intelligence systems to classify, summarize, search, and organize approved fieldwork communications and job context.',
       'Customer content is processed to provide JasonAI to your business. We do not use your business communications, customer records, crew messages, job files, or connected-channel content to train public AI models unless you separately agree in writing.',
-      'AI-generated summaries and alerts can be incomplete or incorrect. You remain responsible for reviewing important job, billing, safety, legal, or customer decisions before acting on them.',
+      'AI-generated search results and summaries can be incomplete or incorrect. You remain responsible for reviewing important job, billing, safety, legal, or customer decisions before acting on them.',
     ],
   },
   {
     title: '5. How we share information',
     body: [
       'We share information with service providers that help us operate JasonAI, such as hosting, database, analytics, email, scheduling, automation, transcription, AI processing, security, and customer support providers. These providers are expected to use information only to provide services to us.',
-      'We share information with integrations and communication channels you authorize, for example when JasonAI posts an alert, sends a summary, or retrieves context from an approved tool.',
+      'We share information with integrations and communication channels you authorize, for example when JasonAI sends a summary or retrieves context from an approved tool.',
       'We may share information when required by law, to protect rights and safety, to prevent fraud or abuse, in connection with a business transaction, or with your direction or consent.',
       'We do not sell your fieldwork communications, job data, customer records, or crew activity. We do not use JasonAI customer content for targeted advertising.',
     ],
@@ -355,6 +366,8 @@ function ModalFrame({
   subtitle: string;
   children: ReactNode;
 }) {
+  const titleId = `jasonai-modal-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+
   useEffect(() => {
     if (!isOpen) {
       return;
@@ -381,10 +394,15 @@ function ModalFrame({
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-[#141414]/45 px-4 py-6 backdrop-blur-sm">
-      <div className="relative h-[min(760px,92vh)] w-full max-w-4xl overflow-hidden border border-[#d9d2c3] bg-white shadow-[0_24px_80px_rgba(20,20,20,0.24)]">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="relative h-[min(760px,92vh)] w-full max-w-4xl overflow-hidden border border-[#d9d2c3] bg-white shadow-[0_24px_80px_rgba(20,20,20,0.24)]"
+      >
         <div className="flex items-center justify-between border-b border-[#d9d2c3] px-4 py-3">
           <div>
-            <p className="text-sm font-semibold text-[#141414]">{title}</p>
+            <p id={titleId} className="text-sm font-semibold text-[#141414]">{title}</p>
             <p className="text-xs text-[#6b6256]">{subtitle}</p>
           </div>
           <button
@@ -425,13 +443,13 @@ function WaitlistModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
     <ModalFrame
       isOpen={isOpen}
       onClose={onClose}
-      title="Join the JasonAI waitlist"
-      subtitle="Tell us where JasonAI should fit into your workflow."
+      title="Get JasonAI pre-launch access"
+      subtitle="Tell us where search and summaries should fit into your workflow."
     >
       <iframe
         src={waitlistUrl}
         data-tally-src={waitlistUrl}
-        title="Join the JasonAI waitlist"
+        title="Get JasonAI pre-launch access"
         className="h-[calc(100%-58px)] w-full"
         loading="lazy"
       />
@@ -874,9 +892,9 @@ function HeroVisual() {
       </div>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {[
-          ['Scope change', 'Price laundry sink rough-in.'],
-          ['Follow-up', 'Reply on permit status.'],
-          ['Money risk', 'Extra not billed yet.'],
+          ['Request mentioned', 'Laundry sink rough-in discussed.'],
+          ['Open question', 'Permit status appears in the thread.'],
+          ['Extra work', 'Additional work was discussed on-site.'],
         ].map(([label, note]) => (
           <div key={label} className="border border-[#141414] bg-[#fffaf0] p-3">
             <p className="text-xs font-semibold uppercase text-[#9b3d1e]">{label}</p>
@@ -1173,42 +1191,42 @@ function ProblemCostsSection() {
 
 const chatScenarios = [
   {
-    mode: 'Project management',
-    prompt: 'JasonAI, what is still open on Maple Ave?',
+    mode: 'Job summary',
+    prompt: 'JasonAI, summarize Maple Ave from this week.',
     response:
-      'Open: permit status reply, laundry sink price, and Friday customer recap. PM owns permit. Owner approval needed on extra work.',
-    detail: 'Turns scattered messages into a working job list.',
+      'I found 14 approved messages and two call notes. The crew confirmed Thursday’s arrival, the homeowner asked about a laundry sink, and permit timing was discussed.',
+    detail: 'Turns approved communication into a clear recap.',
   },
   {
-    mode: 'Risk tracking',
-    prompt: 'Anything risky before this job closes?',
+    mode: 'Communication search',
+    prompt: 'What did the homeowner say about the laundry sink?',
     response:
-      'Risk flagged: homeowner asked for added rough-in on-site. No written approval found yet. Send change order before closeout.',
-    detail: 'Catches scope, follow-up, and dispute risk inside the chat.',
+      'I found the discussion in this week’s approved messages: the homeowner asked whether the rough-in could be added while the wall was open.',
+    detail: 'Finds job context without rereading the thread.',
   },
   {
-    mode: 'Documentation lookup',
-    prompt: 'Pull what was agreed last Tuesday.',
+    mode: 'Date search',
+    prompt: 'What was discussed last Tuesday?',
     response:
-      'Found it: Tuesday 3:42 PM text thread. Customer approved added rough-in after price confirmation. I can draft the recap.',
-    detail: 'Finds the paper trail without making anyone search old threads.',
+      'Tuesday’s approved communication covered the sink request, permit timing, and the crew’s Thursday arrival window.',
+    detail: 'Searches approved communication by job and time.',
   },
 ] as const;
 
-const chatModeIcons = [ClipboardList, ShieldAlert, FolderSearch] as const;
+const chatModeIcons = [ClipboardList, MessageSquareText, FolderSearch] as const;
 
 const jasonAiBodyCopy = [
-  'JasonAI works inside the communication tools your team already uses - texts, email, WhatsApp, and calls. It learns how your business operates and keeps track of what matters across every role.',
-  'For your techs in the field: relevant job information and reminders, right where they already communicate. No new app to open.',
-  'For your admin and PM: organized records, flagged scope changes, and open follow-ups across every active job. Automatically.',
-  'For you as the owner: weekly clarity on every job. Every commitment made. Every extra that needs to be billed. Every follow-up still open. Delivered to you.',
+  'JasonAI works through WhatsApp and searches the communication sources you approve. No separate dashboard is required for the core workflow.',
+  'For your field team: ask for relevant job context without scrolling through old message threads.',
+  'For your admin and PM: turn approved communication into clear job or time-period summaries.',
+  'For you as the owner: search across the operating record and get a concise recap before a call, meeting, or site visit.',
 ] as const;
 
 const jasonAiCallouts = [
   { label: 'Works where they already talk', body: jasonAiBodyCopy[0], Icon: MessageSquareText, side: 'left' },
-  { label: 'Field support', body: jasonAiBodyCopy[1], Icon: ClipboardList, side: 'right' },
-  { label: 'Admin and PM clarity', body: jasonAiBodyCopy[2], Icon: ShieldAlert, side: 'left' },
-  { label: 'Owner visibility', body: jasonAiBodyCopy[3], Icon: FolderSearch, side: 'right' },
+  { label: 'Communication search', body: jasonAiBodyCopy[1], Icon: FolderSearch, side: 'right' },
+  { label: 'Job summaries', body: jasonAiBodyCopy[2], Icon: ClipboardList, side: 'left' },
+  { label: 'Owner context', body: jasonAiBodyCopy[3], Icon: MessageSquareText, side: 'right' },
 ] as const;
 
 function TeamChatPhone() {
@@ -1395,9 +1413,9 @@ function TeamChatPhone() {
               </div>
 
               <div className="mt-5 rounded-2xl border border-[#d9d2c3] bg-white p-3">
-                <p className="text-[11px] font-semibold uppercase text-[#6b6256]">Pipeline connected</p>
+                <p className="text-[11px] font-semibold uppercase text-[#6b6256]">Current capabilities</p>
                 <div className="mt-3 grid grid-cols-3 gap-2">
-                  {['Jobs', 'Risks', 'Docs'].map((item) => (
+                  {['Search', 'Summaries', 'WhatsApp'].map((item) => (
                     <div key={item} className="border border-[#d9d2c3] bg-[#fffaf0] px-2 py-2 text-center text-xs font-semibold text-[#4f463c]">
                       {item}
                     </div>
@@ -1455,15 +1473,24 @@ function UseCasesSection() {
     <section className="border-b border-[#d9d2c3] bg-white">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
         <div className="max-w-3xl">
-          <SectionLabel>Use cases</SectionLabel>
+          <SectionLabel>Product roadmap</SectionLabel>
           <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-            <ScrambleText text="The places where money and trust usually slip." />
+            <ScrambleText text="Useful now. More capable only as trust grows." />
           </h2>
+          <p className="mt-5 text-base leading-8 text-[#4f463c] md:text-lg">
+            Search and summaries are available today. The next capabilities are in development, and higher-stakes
+            automation comes only after the core workflow is trusted.
+          </p>
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {useCases.map((useCase, index) => (
             <Reveal key={useCase.title} delay={index * 0.06} className="border border-[#d9d2c3] bg-[#fffaf0] p-5">
-              <h3 className="text-xl font-semibold">{useCase.title}</h3>
+              <p className={`text-xs font-semibold uppercase ${
+                useCase.stage === 'Available now' ? 'text-[#1f5f7a]' : useCase.stage === 'Future' ? 'text-[#6b6256]' : 'text-[#9b3d1e]'
+              }`}>
+                {useCase.stage}
+              </p>
+              <h3 className="mt-3 text-xl font-semibold">{useCase.title}</h3>
               <p className="mt-4 text-sm leading-7 text-[#4f463c]">{useCase.body}</p>
             </Reveal>
           ))}
@@ -1508,7 +1535,7 @@ function QuestionsHeroSection() {
           </h1>
           <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
             What changes for the crew, what JasonAI connects to, what happens to your data, and how to stay updated if
-            you are not ready for a review.
+            you want the pre-launch price before you are ready for a review.
           </p>
         </div>
         <Reveal delay={1.2}>
@@ -1552,21 +1579,21 @@ function WaitlistSection({ onOpenWaitlist }: { onOpenWaitlist: () => void }) {
     <section id="waitlist" className="border-b border-[#d9d2c3] bg-[#141414] text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.65fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-[#f1b37b]">Waitlist</p>
+          <p className="text-xs font-semibold uppercase text-[#f1b37b]">Pre-launch access</p>
           <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
             <ScrambleText text="Not ready for a review yet?" />
           </h2>
           <Reveal>
             <p className="mt-6 text-lg leading-8 text-[#f8f3e8]">
-              Join the JasonAI waitlist and get updates as founding access opens for more contractor businesses.
+              Subscribe before launch for $25 per month in your first year, with the standard $2,000 setup fee removed.
             </p>
           </Reveal>
         </div>
         <Reveal className="flex items-center border border-white/15 bg-white p-6 text-[#141414]">
           <div>
-            <p className="text-xl font-semibold">Founding access is still limited.</p>
+            <p className="text-xl font-semibold">Pre-launch onboarding is still limited.</p>
             <p className="mt-3 text-sm leading-7 text-[#4f463c]">
-              Join the waitlist and we will follow up as we open more contractor accounts.
+              Tell us about your workflow and we will follow up as we open more contractor accounts.
             </p>
             <button
               type="button"
@@ -1574,7 +1601,7 @@ function WaitlistSection({ onOpenWaitlist }: { onOpenWaitlist: () => void }) {
               onClick={onOpenWaitlist}
               className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
             >
-              Join the waitlist
+              Get pre-launch access
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -1609,7 +1636,27 @@ function JasonAISubpageIntro({
 function JasonAILandingLinks() {
   return (
     <section className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
-      <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-2">
+      <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-3">
+        <Link
+          to="/jasonai/pricing"
+          data-descramble-hover="false"
+          className="group border border-[#141414] bg-[#141414] p-6 text-white transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0_#1f5f7a]"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-xs font-semibold uppercase text-[#f1b37b]">ROI &amp; Pricing</p>
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-white/45 bg-white text-[#141414] transition-colors group-hover:bg-[#f8f3e8]">
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </div>
+          <h2 className="mt-4 text-3xl font-semibold">Run your four-year value scenario.</h2>
+          <p className="mt-4 text-sm leading-7 text-white/68">
+            Model current search and summary value using the $25 pre-launch first-year offer.
+          </p>
+          <span data-descramble-hover-target className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white">
+            Calculate my ROI
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </span>
+        </Link>
         <Link
           to="/jasonai/how-it-works"
           data-descramble-hover="false"
@@ -1641,7 +1688,7 @@ function JasonAILandingLinks() {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </span>
           </div>
-          <h2 className="mt-4 text-3xl font-semibold">Objections, FAQs, and waitlist.</h2>
+          <h2 className="mt-4 text-3xl font-semibold">Offer details, roadmap, and FAQs.</h2>
           <p className="mt-4 text-sm leading-7 text-[#4f463c]">
             Clear answers for the things owners usually ask before they book a review.
           </p>
@@ -1713,7 +1760,7 @@ function JasonAIPrivacyPolicy() {
   );
 }
 
-function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions' | 'privacy' }) {
+function JasonAIFooter({ page }: { page: 'landing' | 'pricing' | 'how-it-works' | 'questions' | 'privacy' }) {
   return (
     <footer className="flex min-h-44 items-end border-t border-[#d9d2c3] bg-[#141414] text-white md:min-h-52">
       <div className="mx-auto flex w-full max-w-7xl flex-col items-start gap-5 px-5 pb-8 pt-14 md:flex-row md:items-end md:justify-between md:px-8 md:pb-10 md:pt-16">
@@ -1740,6 +1787,14 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
           <Link to="/jasonai/how-it-works" data-descramble-hover="true" className="hover:text-white">
             <ScrambleText text="How it works" />
           </Link>
+          <Link
+            to="/jasonai/pricing"
+            data-descramble-hover="true"
+            aria-current={page === 'pricing' ? 'page' : undefined}
+            className="hover:text-white aria-[current=page]:text-white"
+          >
+            <ScrambleText text="ROI & Pricing" />
+          </Link>
           <Link to="/jasonai/questions" data-descramble-hover="true" className="hover:text-white">
             <ScrambleText text="Questions" />
           </Link>
@@ -1757,7 +1812,11 @@ function JasonAIFooter({ page }: { page: 'landing' | 'how-it-works' | 'questions
   );
 }
 
-export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | 'how-it-works' | 'questions' | 'privacy' }) {
+export default function JasonAIPage({
+  page = 'landing',
+}: {
+  page?: 'landing' | 'pricing' | 'how-it-works' | 'questions' | 'privacy';
+}) {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [isFooterApproaching, setIsFooterApproaching] = useState(false);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -1768,19 +1827,25 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
     landing: {
       title: 'JasonAI for Contractor Businesses',
       description:
-        'JasonAI works inside the tools contractor teams already use and keeps track of scope changes, missed follow-ups, and unbilled extras.',
+        'JasonAI gives contractor teams a faster way to search approved job communication and turn long threads into clear summaries through WhatsApp.',
       canonicalPath: '/jasonai',
+    },
+    pricing: {
+      title: 'General Contractor AI ROI Calculator | JasonAI',
+      description:
+        'Calculate the four-year time-saving ROI of JasonAI for contractors and see the pre-launch offer: $25 per month for year one with no setup fee.',
+      canonicalPath: '/jasonai/pricing',
     },
     'how-it-works': {
       title: 'How JasonAI Works for Contractors',
       description:
-        'See how JasonAI is set up around contractor job communication, where it catches scope changes and follow-ups, and how to book a business review.',
+        'See how JasonAI searches approved contractor communication, creates summaries, and expands carefully as the core workflow earns trust.',
       canonicalPath: '/jasonai/how-it-works',
     },
     questions: {
       title: 'JasonAI Questions and Waitlist',
       description:
-        'Answers to common JasonAI questions about crew adoption, privacy, existing tools, setup, and founding access for contractor businesses.',
+        'Answers to common JasonAI questions about search, summaries, privacy, setup, pricing, and pre-launch access for contractor businesses.',
       canonicalPath: '/jasonai/questions',
     },
     privacy: {
@@ -1841,22 +1906,44 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
             hasScrolled ? 'border-b border-[#d9d2c3] shadow-sm' : 'border-b border-transparent'
           }`}
         >
+          <Link
+            to="/jasonai/pricing"
+            className="block border-b border-[#141414] bg-[#1f5f7a] px-4 py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-[#174b61] sm:text-sm"
+          >
+            <span className="text-[#dff5ff]">Pre-launch offer:</span>{' '}
+            <del className="text-white/55">$99</del> <ins className="no-underline">$25/month</ins> for the first year
+            <span className="hidden sm:inline"> · </span>
+            <span className="block text-white/72 sm:inline">
+              <del>$2,000</del> <ins className="no-underline">$0 setup</ins>
+            </span>
+          </Link>
           <div
             className={`mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[padding] duration-300 sm:px-5 md:px-8 ${
               hasScrolled ? 'py-2.5' : 'py-3.5 md:py-5'
             }`}
           >
             <JasonAILockup />
-            <button
-              type="button"
-              data-descramble-hover="true"
-              onClick={() => setIsBookingOpen(true)}
-              className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
-            >
-              <span className="hidden sm:inline">Book review</span>
-              <span className="sm:hidden">Review</span>
-              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            </button>
+            <div className="flex items-center gap-2">
+              {page !== 'pricing' ? (
+                <Link
+                  to="/jasonai/pricing"
+                  data-descramble-hover="true"
+                  className="hidden min-h-9 items-center justify-center px-3 py-2 text-xs font-semibold text-[#4f463c] underline-offset-4 hover:text-[#141414] hover:underline sm:inline-flex sm:min-h-10 sm:px-4 sm:text-sm"
+                >
+                  ROI &amp; Pricing
+                </Link>
+              ) : null}
+              <button
+                type="button"
+                data-descramble-hover="true"
+                onClick={() => setIsBookingOpen(true)}
+                className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
+              >
+                <span className="hidden sm:inline">Book review</span>
+                <span className="sm:hidden">Review</span>
+                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              </button>
+            </div>
           </div>
         </header>
 
@@ -1872,9 +1959,9 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                     </h1>
                     <Reveal delay={0.18}>
                       <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
-                        JasonAI works inside the tools your team already uses - text, email, WhatsApp, and calls - and
-                        keeps track of everything that matters. No new app. No new process. Built around the way you
-                        already work.
+                        JasonAI works through WhatsApp to search the business communication you approve and turn long
+                        job threads into useful summaries. No new dashboard. Action extraction and status reporting
+                        remain clearly labeled as in development.
                       </p>
                     </Reveal>
                     <Reveal className="mt-9 flex flex-col gap-3 sm:flex-row" delay={0.28}>
@@ -1884,7 +1971,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                         onClick={() => setIsBookingOpen(true)}
                         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                       >
-                        Book Your Free 15-Minute Business Review
+                        Book Your Free 30-Minute Business Review
                         <ArrowRight className="h-4 w-4" />
                       </button>
                       <button
@@ -1893,7 +1980,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                         onClick={() => setIsWaitlistOpen(true)}
                         className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                       >
-                        Not ready? Join the waitlist
+                        Get the pre-launch offer
                         <ArrowRight className="h-4 w-4" />
                       </button>
                     </Reveal>
@@ -1919,7 +2006,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                   <div className="mx-auto max-w-3xl text-center">
                     <SectionLabel>What JasonAI does</SectionLabel>
                     <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                      <ScrambleText text="It keeps track of what matters across every role." />
+                      <ScrambleText text="Search the record. Summarize the job." />
                     </h2>
                   </div>
 
@@ -1936,8 +2023,14 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                 </div>
               </section>
 
+              <UseCasesSection />
+
               <JasonAILandingLinks />
             </>
+          ) : null}
+
+          {page === 'pricing' ? (
+            <JasonAIPricingCalculator onBookReview={() => setIsBookingOpen(true)} />
           ) : null}
 
           {page === 'how-it-works' ? (
@@ -1945,7 +2038,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
               <JasonAISubpageIntro
                 label="How it works"
                 title="Built around the way your jobs already move."
-                body="This is the deeper look at setup, the day-to-day use cases, and the business review intake. No new habits for the crew."
+                body="This is the deeper look at setup, what search and summaries do today, and what comes next. No new habits for the crew."
               />
               <HowItWorksSection />
               <UseCasesSection />
@@ -1963,14 +2056,14 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
 
           {page === 'privacy' ? <JasonAIPrivacyPolicy /> : null}
 
-          {page !== 'privacy' ? (
+          {page !== 'privacy' && page !== 'pricing' ? (
             <>
               <section className="border-b border-[#d9d2c3]">
                 <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
                   <div className="max-w-3xl">
-                    <SectionLabel>Founding contractors</SectionLabel>
+                    <SectionLabel>Pre-launch contractors</SectionLabel>
                     <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                      <ScrambleText text="We are working with a small group of founding contractor businesses." />
+                      <ScrambleText text="We are onboarding a small group of contractor businesses before launch." />
                     </h2>
                   </div>
                   <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -1990,7 +2083,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                 <div className="mx-auto max-w-5xl px-5 py-16 text-center md:px-8 md:py-24">
                   <p className="text-sm font-semibold uppercase text-[#9b3d1e]">A B2W Product</p>
                   <h2 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">
-                    <ScrambleText text="Stop losing money on jobs you cannot track." />
+                    <ScrambleText text="Stop rereading weeks of job communication." />
                   </h2>
                   <Reveal>
                     <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#4f463c]">
@@ -2014,7 +2107,7 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
                       onClick={() => setIsWaitlistOpen(true)}
                       className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                     >
-                      Just want updates? Join the waitlist
+                      Get the pre-launch offer
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </Reveal>
@@ -2028,17 +2121,19 @@ export default function JasonAIPage({ page = 'landing' }: { page?: 'landing' | '
           <JasonAIFooter page={page} />
         </div>
 
-        {hasScrolled && !isFooterApproaching && page !== 'privacy' ? (
+        {hasScrolled && !isFooterApproaching && page !== 'privacy' && page !== 'pricing' ? (
           <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 flex justify-center px-4 md:bottom-10">
             <div className="pointer-events-auto flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
-              <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Want to test it early?</span>
+              <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">
+                <del className="mr-1">$99</del> <ins className="no-underline">$25/month</ins> for your first year
+              </span>
               <button
                 type="button"
                 data-descramble-hover="true"
                 onClick={() => setIsWaitlistOpen(true)}
                 className="inline-flex min-h-10 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
               >
-                Join the waitlist
+                Get pre-launch access
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
