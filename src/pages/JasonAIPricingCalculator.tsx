@@ -786,6 +786,107 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
           </button>
         </div>
       </section>
+
+      {isShareOpen ? (
+        <div
+          className="fixed inset-0 z-[80] grid place-items-center overflow-y-auto bg-[#141414]/55 px-4 py-6 backdrop-blur-sm"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              closeShareDialog();
+            }
+          }}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="roi-report-title"
+            aria-describedby="roi-report-description"
+            className="w-full max-w-xl border border-[#141414] bg-white shadow-[10px_10px_0_#1f5f7a]"
+          >
+            <div className="flex items-start justify-between gap-6 border-b border-[#d9d2c3] bg-[#fffaf0] p-5 md:p-6">
+              <div>
+                <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Share your result</p>
+                <h2 id="roi-report-title" className="mt-2 text-2xl font-semibold">
+                  Email this ROI report.
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={closeShareDialog}
+                disabled={shareStatus === 'sending'}
+                aria-label="Close ROI report email form"
+                className="grid h-10 w-10 shrink-0 place-items-center border border-[#141414] bg-white transition-colors hover:bg-[#f8f3e8] disabled:cursor-not-allowed disabled:opacity-45"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <form onSubmit={sendRoiReport} className="p-5 md:p-6">
+              <p id="roi-report-description" className="text-sm leading-6 text-[#6b6256]">
+                We will send a dated JasonAI by B2W report with your inputs, {percent.format(model.roi)} ROI,
+                {' '}{currency.format(model.netReturn)} estimated return, a four-year graph, and the full table.
+              </p>
+
+              <label htmlFor="roi-report-email" className="mt-6 block text-sm font-semibold text-[#141414]">
+                Email address
+              </label>
+              <input
+                id="roi-report-email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                autoFocus
+                required
+                maxLength={320}
+                value={recipientEmail}
+                onChange={(event) => {
+                  setRecipientEmail(event.target.value);
+                  if (shareStatus !== 'idle') {
+                    setShareStatus('idle');
+                    setShareMessage('');
+                  }
+                }}
+                placeholder="you@company.com"
+                className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+              />
+
+              <div
+                aria-live="polite"
+                className={`mt-4 min-h-6 text-sm leading-6 ${
+                  shareStatus === 'error'
+                    ? 'text-[#9b3d1e]'
+                    : shareStatus === 'success'
+                      ? 'font-semibold text-[#1f5f7a]'
+                      : 'text-[#6b6256]'
+                }`}
+              >
+                {shareMessage || 'The email is generated and sent securely from info@b2w-ai.com.'}
+              </div>
+
+              <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button
+                  type="button"
+                  onClick={closeShareDialog}
+                  disabled={shareStatus === 'sending'}
+                  className="min-h-11 border border-[#141414] bg-white px-5 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#f8f3e8] disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  {shareStatus === 'success' ? 'Done' : 'Cancel'}
+                </button>
+                {shareStatus !== 'success' ? (
+                  <button
+                    type="submit"
+                    disabled={shareStatus === 'sending'}
+                    className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1f5f7a] disabled:cursor-wait disabled:opacity-65"
+                  >
+                    <Send className="h-4 w-4" />
+                    {shareStatus === 'sending' ? 'Sending report…' : 'Send ROI report'}
+                  </button>
+                ) : null}
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
