@@ -49,6 +49,7 @@ export default async function handler(req: any, res: any) {
     const model = calculateJasonAiRoi(scenario);
     const report = buildJasonAiRoiReportEmail(submission, model);
     const sent = await sendEmail({
+      from: 'JasonAI by B2W <info@b2w-ai.com>',
       to: submission.recipientEmail,
       subject: report.subject,
       text: report.text,

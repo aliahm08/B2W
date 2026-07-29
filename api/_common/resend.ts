@@ -2,6 +2,7 @@ import './env.js';
 import { Resend } from 'resend';
 
 export type EmailMessage = {
+  from?: string;
   to: string | string[];
   subject: string;
   text: string;
@@ -29,12 +30,12 @@ export async function sendEmail(message: EmailMessage) {
 
   const resend = new Resend(config.apiKey);
   const response = await resend.emails.send({
-      from: config.from,
-      to: Array.isArray(message.to) ? message.to : [message.to],
-      subject: message.subject,
-      text: message.text,
-      html: message.html,
-      replyTo: message.replyTo,
+    from: message.from || config.from,
+    to: Array.isArray(message.to) ? message.to : [message.to],
+    subject: message.subject,
+    text: message.text,
+    html: message.html,
+    replyTo: message.replyTo,
   });
 
   if (response.error) {
