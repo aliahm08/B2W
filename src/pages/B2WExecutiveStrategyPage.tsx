@@ -1050,35 +1050,230 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
                   </div>
                 ))}
               </div>
-              <div className="mt-8 rounded-3xl border border-[#223C33]/12 bg-white/50 p-6 sm:p-8">
-                <div className="grid gap-8 lg:grid-cols-[180px_1fr] lg:items-end">
+              <div className="mt-8 overflow-hidden rounded-3xl border border-[#223C33]/12 bg-white/50">
+                <div className="grid gap-6 border-b border-[#223C33]/10 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
                   <div>
                     <Gauge className="h-6 w-6 text-[#997022]" />
                     <p className="mt-6 text-xl font-medium tracking-[-0.025em]">Economic progression</p>
+                    <p className="mt-2 max-w-xl text-xs leading-5 text-[#223C33]/48">
+                      One relative view of how the four economic drivers should change as the business moves through each stage.
+                    </p>
                   </div>
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    {[
-                      ['Recurring revenue', [24, 42, 66, 88], 'bg-[#315746]'],
-                      ['Product capability', [28, 48, 72, 94], 'bg-[#B68124]'],
-                      ['Gross margin', [18, 36, 62, 84], 'bg-[#527764]'],
-                      ['Service effort', [92, 70, 44, 22], 'bg-[#9B6953]'],
-                    ].map(([label, values, color]) => (
-                      <div key={String(label)}>
-                        <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.14em] text-[#223C33]/45">
-                          <span>{String(label)}</span><span>Time →</span>
-                        </div>
-                        <div className="mt-3 flex h-16 items-end gap-2">
-                          {(values as number[]).map((value, index) => (
-                            <div
-                              key={index}
-                              className={`flex-1 rounded-t-lg ${String(color)}`}
-                              style={{ height: `${value}%`, opacity: 0.55 + index * 0.14 }}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                  <div className="flex flex-wrap gap-x-5 gap-y-3 text-[9px] font-semibold uppercase tracking-[0.13em] text-[#223C33]/55">
+                    <span className="flex items-center gap-2">
+                      <span className="h-2.5 w-2.5 rounded-sm bg-[#315746]" />
+                      Recurring revenue
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="h-2.5 w-2.5 rounded-sm border border-[#B68124]/30 bg-[#D8B56A]/45" />
+                      Gross margin
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="h-0.5 w-4 bg-[#9B6953]" />
+                      Service effort
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <span className="h-2.5 w-2.5 rotate-45 border border-[#997022] bg-white" />
+                      Product capability
+                    </span>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <svg
+                    viewBox="0 0 960 520"
+                    role="img"
+                    aria-label="Unified three-stage economic progression graph. Recurring revenue bars and the gross margin area rise from prove value through platform scale, product capability expands at each stage, and the service effort line declines."
+                    className="min-w-[760px]"
+                  >
+                    <defs>
+                      <linearGradient id="grossMarginArea" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#D8B56A" stopOpacity="0.52" />
+                        <stop offset="100%" stopColor="#D8B56A" stopOpacity="0.08" />
+                      </linearGradient>
+                      <linearGradient id="recurringRevenueBars" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stopColor="#223C33" />
+                        <stop offset="100%" stopColor="#527764" />
+                      </linearGradient>
+                    </defs>
+
+                    <rect width="960" height="520" fill="#FFFEFA" fillOpacity="0.38" />
+
+                    {[118, 202, 286, 370].map((y) => (
+                      <line
+                        key={y}
+                        x1="82"
+                        y1={y}
+                        x2="920"
+                        y2={y}
+                        stroke="#223C33"
+                        strokeOpacity="0.08"
+                        strokeDasharray="3 7"
+                      />
                     ))}
-                  </div>
+                    {[210, 490, 770].map((x) => (
+                      <line
+                        key={x}
+                        x1={x}
+                        y1="92"
+                        x2={x}
+                        y2="390"
+                        stroke="#223C33"
+                        strokeOpacity="0.07"
+                      />
+                    ))}
+
+                    <text x="30" y="112" fill="#223C33" fillOpacity="0.35" fontSize="9" fontWeight="700" letterSpacing="1.4">
+                      HIGHER
+                    </text>
+                    <text x="30" y="374" fill="#223C33" fillOpacity="0.35" fontSize="9" fontWeight="700" letterSpacing="1.4">
+                      LOWER
+                    </text>
+
+                    <path
+                      d="M 82,350 C 180,342 304,306 420,270 C 555,228 690,155 920,110 L 920,370 L 82,370 Z"
+                      fill="url(#grossMarginArea)"
+                    />
+                    <path
+                      d="M 82,350 C 180,342 304,306 420,270 C 555,228 690,155 920,110"
+                      fill="none"
+                      stroke="#B68124"
+                      strokeOpacity="0.7"
+                      strokeWidth="1.5"
+                    />
+                    <text x="846" y="98" fill="#8A631D" fontSize="9" fontWeight="700" letterSpacing="1.2">
+                      GROSS MARGIN
+                    </text>
+
+                    {[
+                      [210, 300, 70],
+                      [490, 238, 132],
+                      [770, 142, 228],
+                    ].map(([x, y, height], index) => (
+                      <g key={x}>
+                        <rect
+                          x={x - 42}
+                          y={y}
+                          width="84"
+                          height={height}
+                          rx="10"
+                          fill="url(#recurringRevenueBars)"
+                          opacity={0.72 + index * 0.12}
+                        />
+                        <text
+                          x={x}
+                          y={y - 12}
+                          textAnchor="middle"
+                          fill="#315746"
+                          fontSize="9"
+                          fontWeight="700"
+                          letterSpacing="1.1"
+                        >
+                          RECURRING REVENUE
+                        </text>
+                      </g>
+                    ))}
+
+                    <path
+                      d="M 210,136 C 305,158 397,191 490,214 C 588,238 680,286 770,324"
+                      fill="none"
+                      stroke="#9B6953"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                    />
+                    {[
+                      [210, 136],
+                      [490, 214],
+                      [770, 324],
+                    ].map(([x, y]) => (
+                      <circle key={x} cx={x} cy={y} r="5" fill="#9B6953" stroke="#FFFEFA" strokeWidth="3" />
+                    ))}
+                    <text x="116" y="126" fill="#875946" fontSize="9" fontWeight="700" letterSpacing="1.1">
+                      SERVICE EFFORT
+                    </text>
+
+                    {[
+                      {
+                        x: 210,
+                        y: 136,
+                        title: 'Useful tools + demos',
+                        body: 'Founder-guided value',
+                      },
+                      {
+                        x: 490,
+                        y: 214,
+                        title: 'Paid recurring product',
+                        body: 'Standardized delivery',
+                      },
+                      {
+                        x: 770,
+                        y: 324,
+                        title: 'Configurable platform',
+                        body: 'Integrations + controls',
+                      },
+                    ].map(({ x, y, title, body }, index) => {
+                      const boxY = index === 0 ? 24 : index === 1 ? 72 : 178;
+                      return (
+                        <g key={title}>
+                          <line
+                            x1={x}
+                            y1={boxY + 58}
+                            x2={x}
+                            y2={y - 13}
+                            stroke="#997022"
+                            strokeOpacity="0.48"
+                            strokeDasharray="3 5"
+                          />
+                          <rect
+                            x={x - 102}
+                            y={boxY}
+                            width="204"
+                            height="58"
+                            rx="12"
+                            fill="#FFFEFA"
+                            stroke="#B68124"
+                            strokeOpacity="0.52"
+                          />
+                          <rect
+                            x={x - 5}
+                            y={boxY + 53}
+                            width="10"
+                            height="10"
+                            rx="1.5"
+                            transform={`rotate(45 ${x} ${boxY + 58})`}
+                            fill="#FFFEFA"
+                            stroke="#B68124"
+                            strokeOpacity="0.52"
+                          />
+                          <text x={x} y={boxY + 25} textAnchor="middle" fill="#223C33" fontSize="11" fontWeight="700">
+                            {title}
+                          </text>
+                          <text x={x} y={boxY + 43} textAnchor="middle" fill="#223C33" fillOpacity="0.5" fontSize="9">
+                            {body}
+                          </text>
+                        </g>
+                      );
+                    })}
+
+                    <line x1="82" y1="390" x2="920" y2="390" stroke="#223C33" strokeOpacity="0.18" />
+                    {[
+                      ['01', 'PROVE VALUE', 210],
+                      ['02', 'PROVE REPEATABILITY', 490],
+                      ['03', 'SCALE THE PLATFORM', 770],
+                    ].map(([number, label, x]) => (
+                      <g key={String(number)}>
+                        <text x={Number(x)} y="428" textAnchor="middle" fill="#997022" fontSize="10" fontFamily="monospace">
+                          {number}
+                        </text>
+                        <text x={Number(x)} y="452" textAnchor="middle" fill="#223C33" fontSize="10" fontWeight="700" letterSpacing="1.2">
+                          {label}
+                        </text>
+                      </g>
+                    ))}
+                    <text x="920" y="492" textAnchor="end" fill="#223C33" fillOpacity="0.34" fontSize="8.5" fontWeight="700" letterSpacing="1.2">
+                      RELATIVE PROGRESSION · NOT A FORECAST
+                    </text>
+                  </svg>
                 </div>
               </div>
             </section>
