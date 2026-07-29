@@ -1793,7 +1793,7 @@ function JasonAIFooter({ page }: { page: 'landing' | 'pricing' | 'how-it-works' 
             aria-current={page === 'pricing' ? 'page' : undefined}
             className="hover:text-white aria-[current=page]:text-white"
           >
-            <ScrambleText text="ROI & Pricing" />
+            <ScrambleText text="Determine Your ROI" />
           </Link>
           <Link to="/jasonai/questions" data-descramble-hover="true" className="hover:text-white">
             <ScrambleText text="Questions" />
@@ -1924,15 +1924,16 @@ export default function JasonAIPage({
           >
             <JasonAILockup />
             <div className="flex items-center gap-2">
-              {page !== 'pricing' ? (
-                <Link
-                  to="/jasonai/pricing"
-                  data-descramble-hover="true"
-                  className="hidden min-h-9 items-center justify-center px-3 py-2 text-xs font-semibold text-[#4f463c] underline-offset-4 hover:text-[#141414] hover:underline sm:inline-flex sm:min-h-10 sm:px-4 sm:text-sm"
-                >
-                  ROI &amp; Pricing
-                </Link>
-              ) : null}
+              <Link
+                to="/jasonai/pricing"
+                data-descramble-hover="true"
+                aria-current={page === 'pricing' ? 'page' : undefined}
+                className={`hidden min-h-9 items-center justify-center px-3 py-2 text-xs font-semibold underline-offset-4 hover:text-[#141414] hover:underline sm:inline-flex sm:min-h-10 sm:px-4 sm:text-sm ${
+                  page === 'pricing' ? 'text-[#141414] underline' : 'text-[#4f463c]'
+                }`}
+              >
+                Determine Your ROI
+              </Link>
               <button
                 type="button"
                 data-descramble-hover="true"

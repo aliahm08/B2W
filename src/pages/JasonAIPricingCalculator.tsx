@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
@@ -8,76 +8,29 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Clock3,
+  Mail,
   MessageCircle,
-  TrendingUp,
+  Send,
   Users,
+  X,
 } from 'lucide-react';
-
-type BusinessType = 'contractor' | 'firm';
-
-type Scenario = {
-  type: BusinessType;
-  businesses: number;
-  teamMembers: number;
-  weeklyBusinessHours: number;
-  hourlyCost: number;
-  annualGrowth: number;
-};
-
-type BusinessProfile = {
-  employees: number;
-  activeProjects: number;
-  averageProjectWeeks: number;
-};
+import {
+  buildJasonAiScenario,
+  calculateJasonAiRoi,
+  jasonAiProfileDefaults,
+  type JasonAiBusinessProfile as BusinessProfile,
+  type JasonAiBusinessType as BusinessType,
+  type JasonAiScenario as Scenario,
+} from '../lib/jasonAiRoi';
 
 type PricingCalculatorProps = {
   onBookReview: () => void;
-};
-
-const defaults: Record<BusinessType, Scenario> = {
-  contractor: {
-    type: 'contractor',
-    businesses: 1,
-    teamMembers: 4,
-    weeklyBusinessHours: 45,
-    hourlyCost: 65,
-    annualGrowth: 5,
-  },
-  firm: {
-    type: 'firm',
-    businesses: 5,
-    teamMembers: 20,
-    weeklyBusinessHours: 45,
-    hourlyCost: 85,
-    annualGrowth: 7,
-  },
-};
-
-const profileDefaults: Record<BusinessType, BusinessProfile> = {
-  contractor: {
-    employees: 12,
-    activeProjects: 6,
-    averageProjectWeeks: 16,
-  },
-  firm: {
-    employees: 50,
-    activeProjects: 20,
-    averageProjectWeeks: 20,
-  },
 };
 
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   maximumFractionDigits: 0,
-});
-
-const compactCurrency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  notation: 'compact',
-  maximumFractionDigits: 1,
 });
 
 const percent = new Intl.NumberFormat('en-US', {
@@ -87,32 +40,6 @@ const percent = new Intl.NumberFormat('en-US', {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
-}
-
-function buildScenarioFromProfile(type: BusinessType, profile: BusinessProfile): Scenario {
-  const businesses = type === 'firm' ? clamp(Math.round(profile.activeProjects / 4), 2, 12) : 1;
-  const coordinationShare = type === 'firm' ? 0.25 : 0.35;
-  const projectLoad = profile.activeProjects / Math.max(1, profile.employees);
-
-  return {
-    ...defaults[type],
-    businesses,
-    teamMembers: clamp(
-      Math.round(profile.employees * coordinationShare + Math.min(4, profile.activeProjects / 10)),
-      1,
-      100,
-    ),
-    weeklyBusinessHours: clamp(
-      Math.round((38 + Math.min(20, projectLoad * 30)) / 5) * 5,
-      35,
-      60,
-    ),
-    annualGrowth: clamp(
-      Math.round(4 + Math.min(8, projectLoad * 5 + 26 / profile.averageProjectWeeks)),
-      0,
-      20,
-    ),
-  };
 }
 
 function ProfileControl({
@@ -493,85 +420,94 @@ function JasonAIWhatsAppCarousel() {
 }
 
 export default function JasonAIPricingCalculator({ onBookReview }: PricingCalculatorProps) {
-  const [profile, setProfile] = useState<BusinessProfile>(profileDefaults.contractor);
+  const [profile, setProfile] = useState<BusinessProfile>(jasonAiProfileDefaults.contractor);
   const [scenario, setScenario] = useState<Scenario>(() =>
-    buildScenarioFromProfile('contractor', profileDefaults.contractor),
+    buildJasonAiScenario('contractor', jasonAiProfileDefaults.contractor),
   );
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [shareStatus, setShareStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [shareMessage, setShareMessage] = useState('');
 
-  const model = useMemo(() => {
-    const communicationShare = 0.15;
-    const timeRecoveryRate = 0.3;
-    const portfolioMultiplier =
-      scenario.type === 'firm' ? 1 + Math.min(0.45, Math.max(0, scenario.businesses - 1) * 0.07) : 1;
-    const standardMonthlyInvestment = 99;
-    const preLaunchMonthlyInvestment = 25;
-    const standardSetupInvestment = 2_000;
-    const preLaunchSetupInvestment = 0;
-    const firstYearTimeRecovered =
-      scenario.teamMembers *
-      scenario.weeklyBusinessHours *
-      communicationShare *
-      52 *
-      scenario.hourlyCost *
-      timeRecoveryRate *
-      portfolioMultiplier;
+  const model = useMemo(() => calculateJasonAiRoi(scenario), [scenario]);
 
-    const years = Array.from({ length: 4 }, (_, index) => {
-      const growthFactor = Math.pow(1 + scenario.annualGrowth / 100, index);
-      const value = firstYearTimeRecovered * growthFactor;
-      const standardInvestment =
-        index === 0
-          ? standardMonthlyInvestment * 12 + standardSetupInvestment
-          : standardMonthlyInvestment * 12;
-      const investment =
-        index === 0
-          ? preLaunchMonthlyInvestment * 12 + preLaunchSetupInvestment
-          : standardMonthlyInvestment * 12;
+  useEffect(() => {
+    if (!isShareOpen) {
+      return;
+    }
 
-      return {
-        year: index + 1,
-        value,
-        standardInvestment,
-        investment,
-        net: value - investment,
-      };
-    });
-
-    const totalValue = years.reduce((sum, year) => sum + year.value, 0);
-    const totalStandardInvestment = years.reduce((sum, year) => sum + year.standardInvestment, 0);
-    const totalInvestment = years.reduce((sum, year) => sum + year.investment, 0);
-    const netReturn = totalValue - totalInvestment;
-    const roi = totalInvestment > 0 ? netReturn / totalInvestment : 0;
-    const paybackMonths =
-      firstYearTimeRecovered > 0 ? years[0].investment / (firstYearTimeRecovered / 12) : 0;
-    const standardFirstYearInvestment = standardMonthlyInvestment * 12 + standardSetupInvestment;
-    const preLaunchFirstYearInvestment = years[0].investment;
-
-    return {
-      preLaunchFirstYearSavings: standardFirstYearInvestment - preLaunchFirstYearInvestment,
-      years,
-      totalValue,
-      totalStandardInvestment,
-      totalInvestment,
-      netReturn,
-      roi,
-      paybackMonths,
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && shareStatus !== 'sending') {
+        setIsShareOpen(false);
+      }
     };
-  }, [scenario]);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isShareOpen, shareStatus]);
 
   const setType = (type: BusinessType) => {
-    const nextProfile = profileDefaults[type];
+    const nextProfile = jasonAiProfileDefaults[type];
     setProfile(nextProfile);
-    setScenario(buildScenarioFromProfile(type, nextProfile));
+    setScenario(buildJasonAiScenario(type, nextProfile));
   };
 
   const updateProfile = <Key extends keyof BusinessProfile>(key: Key, value: BusinessProfile[Key]) => {
     const nextProfile = { ...profile, [key]: value };
     setProfile(nextProfile);
-    setScenario(buildScenarioFromProfile(scenario.type, nextProfile));
+    setScenario(buildJasonAiScenario(scenario.type, nextProfile));
   };
 
-  const chartMax = Math.max(...model.years.map((year) => Math.max(year.value, year.investment)));
+  const openShareDialog = () => {
+    setShareStatus('idle');
+    setShareMessage('');
+    setIsShareOpen(true);
+  };
+
+  const closeShareDialog = () => {
+    if (shareStatus !== 'sending') {
+      setIsShareOpen(false);
+    }
+  };
+
+  const sendRoiReport = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setShareStatus('sending');
+    setShareMessage('');
+
+    try {
+      const response = await fetch('/api/jasonai-roi-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipientEmail,
+          businessType: scenario.type,
+          employees: profile.employees,
+          activeProjects: profile.activeProjects,
+          averageProjectWeeks: profile.averageProjectWeeks,
+          websiteUrl: '',
+          submittedAt: new Date().toISOString(),
+        }),
+      });
+      const result = (await response.json().catch(() => ({}))) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Unable to email this report right now.');
+      }
+
+      setShareStatus('success');
+      setShareMessage(`Report sent to ${recipientEmail} from info@b2w-ai.com.`);
+    } catch (error) {
+      setShareStatus('error');
+      setShareMessage(error instanceof Error ? error.message : 'Unable to email this report right now.');
+    }
+  };
 
   return (
     <>
@@ -610,13 +546,23 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 Calculate your four-year ROI.
               </h2>
             </div>
-            <p className="max-w-sm text-sm leading-7 text-[#6b6256]">
-              Answer three operating questions. Your result updates immediately.
-            </p>
+            <div className="max-w-sm">
+              <p className="text-sm leading-7 text-[#6b6256]">
+                Answer three operating questions. Your result updates immediately.
+              </p>
+              <button
+                type="button"
+                onClick={openShareDialog}
+                className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-white px-4 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#fffaf0]"
+              >
+                <Mail className="h-4 w-4" />
+                Email this ROI report
+              </button>
+            </div>
           </div>
 
-          <div className="grid items-start gap-6 xl:grid-cols-[minmax(19rem,0.72fr)_minmax(0,1.28fr)]">
-            <div className="border border-[#d9d2c3] bg-white p-5 md:p-6">
+          <div className="grid items-start gap-6 xl:grid-cols-[minmax(19rem,0.72fr)_minmax(0,1.28fr)] xl:items-stretch">
+            <div className="border border-[#d9d2c3] bg-white p-5 md:p-6 xl:h-full">
               <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Your business</p>
               <h3 className="mt-2 text-2xl font-semibold leading-tight">Tell us what you are running.</h3>
 
@@ -702,144 +648,70 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
               </div>
             </div>
 
-            <div className="min-w-0">
-              <div className="border border-[#141414] bg-[#141414] p-5 text-white md:p-7">
-                <div className="flex flex-col gap-6 border-b border-white/15 pb-7 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase text-[#f1b37b]">
-                      {scenario.type === 'firm' ? 'Contracting Firm' : 'General Contractor'} · Estimated four-year net
-                      return
-                    </p>
-                    <p className="mt-3 text-5xl font-semibold tracking-[-0.04em] md:text-6xl">
-                      {compactCurrency.format(model.netReturn)}
-                    </p>
-                    <p className="mt-2 text-sm text-white/60">
-                      {currency.format(model.totalValue)} in modeled value less{' '}
-                      <del className="mr-1 decoration-white/55">
-                        {currency.format(model.totalStandardInvestment)}
-                      </del>{' '}
-                      <ins className="font-semibold text-white/85 no-underline">
-                        {currency.format(model.totalInvestment)}
-                      </ins>{' '}
-                      in
-                      pre-launch investment.
-                    </p>
-                  </div>
-                  <div className="border border-white/15 bg-white/5 px-5 py-4">
-                    <p className="text-xs font-semibold uppercase text-white/55">Four-year ROI</p>
-                    <p className="mt-2 text-3xl font-semibold text-[#7ee2ad]">{percent.format(model.roi)}</p>
-                  </div>
-                </div>
-
-                <div className="grid gap-3 pt-6 sm:grid-cols-3">
-                  <div className="border border-white/15 p-4">
-                    <TrendingUp className="h-5 w-5 text-[#7ee2ad]" />
-                    <p className="mt-3 text-2xl font-semibold">
-                      {(model.totalValue / model.totalInvestment).toFixed(1)}×
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-white/55">Value for every dollar invested</p>
-                  </div>
-                  <div className="border border-white/15 p-4">
-                    <Clock3 className="h-5 w-5 text-[#f1b37b]" />
-                    <p className="mt-3 text-2xl font-semibold">
-                      {model.paybackMonths < 1 ? '<1' : Math.ceil(model.paybackMonths)} mo.
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-white/55">Modeled payback period</p>
-                  </div>
-                  <div className="border border-white/15 p-4">
-                    <BriefcaseBusiness className="h-5 w-5 text-[#9bc5d8]" />
-                    <p className="mt-3 text-2xl font-semibold">4 yr.</p>
-                    <p className="mt-1 text-xs leading-5 text-white/55">Projection window</p>
-                  </div>
-                </div>
+            <div className="min-w-0 xl:flex xl:h-full xl:flex-col">
+              <div className="border border-[#141414] bg-[#141414] p-6 text-white md:p-8">
+                <p className="text-xs font-semibold uppercase tracking-wide text-[#f1b37b]">
+                  Estimated four-year ROI
+                </p>
+                <p className="mt-3 text-6xl font-semibold tracking-[-0.05em] text-[#7ee2ad] md:text-7xl">
+                  {percent.format(model.roi)}
+                </p>
               </div>
 
-              <div className="border-x border-b border-[#d9d2c3] bg-white p-5 md:p-7">
-                <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-                  <div>
-                    <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Year-by-year view</p>
-                    <h3 className="mt-2 text-2xl font-semibold">Value created versus investment</h3>
-                  </div>
-                  <div className="flex gap-4 text-xs font-semibold text-[#6b6256]">
-                    <span className="inline-flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 bg-[#1f5f7a]" /> Value
-                    </span>
-                    <span className="inline-flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 bg-[#d8b07b]" /> Investment
-                    </span>
-                  </div>
+              <div className="border-x border-b border-[#d9d2c3] bg-white p-5 md:p-7 xl:flex-1">
+                <div>
+                  <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Year-by-year estimate</p>
+                  <h3 className="mt-2 text-2xl font-semibold">Value, investment, and net return</h3>
                 </div>
 
-                <div className="mt-7 space-y-5" aria-label="Four-year value and investment chart">
-                  {model.years.map((year) => (
-                    <div key={year.year} className="grid gap-2 sm:grid-cols-[4rem_1fr_6rem] sm:items-center">
-                      <p className="text-sm font-semibold">Year {year.year}</p>
-                      <div className="space-y-1.5">
-                        <div
-                          className="h-3 bg-[#1f5f7a]"
-                          style={{ width: `${Math.max(3, (year.value / chartMax) * 100)}%` }}
-                          title={`Value: ${currency.format(year.value)}`}
-                        />
-                        <div
-                          className="h-3 bg-[#d8b07b]"
-                          style={{ width: `${Math.max(3, (year.investment / chartMax) * 100)}%` }}
-                          title={
-                            year.standardInvestment > year.investment
-                              ? `Investment: ${currency.format(year.standardInvestment)} reduced to ${currency.format(year.investment)}`
-                              : `Investment: ${currency.format(year.investment)}`
-                          }
-                        />
-                        {year.standardInvestment > year.investment ? (
-                          <p className="pt-1 text-[0.7rem] font-medium text-[#6b6256]">
-                            Year 1 investment:{' '}
-                            <del className="decoration-[#9b3d1e]">
-                              {currency.format(year.standardInvestment)}
-                            </del>{' '}
-                            <ins className="font-semibold text-[#141414] no-underline">
-                              {currency.format(year.investment)}
-                            </ins>
-                          </p>
-                        ) : null}
-                      </div>
-                      <p className="text-right text-sm font-semibold text-[#1f5f7a]">
-                        {year.net >= 0 ? '+' : ''}
-                        {compactCurrency.format(year.net)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-8 overflow-x-auto border border-[#d9d2c3]">
-                  <table className="w-full min-w-[34rem] border-collapse text-sm">
-                    <thead className="bg-[#f8f3e8] text-left text-xs uppercase text-[#6b6256]">
+                <div className="mt-6 border border-[#d9d2c3]">
+                  <table className="w-full table-fixed border-collapse text-xs sm:text-sm">
+                    <thead className="bg-[#f8f3e8] text-left text-[0.6rem] uppercase text-[#6b6256] sm:text-xs">
                       <tr>
-                        <th className="px-4 py-3 font-semibold">Period</th>
-                        <th className="px-4 py-3 text-right font-semibold">Modeled value</th>
-                        <th className="px-4 py-3 text-right font-semibold">Investment</th>
-                        <th className="px-4 py-3 text-right font-semibold">Net return</th>
+                        <th className="w-[24%] px-2 py-3 font-semibold sm:px-4">Period</th>
+                        <th className="w-[25%] px-2 py-3 text-right font-semibold sm:px-4">Modeled value</th>
+                        <th className="w-[27%] px-2 py-3 text-right font-semibold sm:px-4">Investment</th>
+                        <th className="w-[24%] px-2 py-3 text-right font-semibold sm:px-4">Net return</th>
                       </tr>
                     </thead>
                     <tbody>
                       {model.years.map((year) => (
                         <tr key={year.year} className="border-t border-[#d9d2c3]">
-                          <th className="px-4 py-3 text-left font-semibold">Year {year.year}</th>
-                          <td className="px-4 py-3 text-right">{currency.format(year.value)}</td>
-                          <td className="px-4 py-3 text-right">
+                          <th className="px-2 py-3 text-left font-semibold sm:px-4">Year {year.year}</th>
+                          <td className="px-2 py-3 text-right sm:px-4">{currency.format(year.value)}</td>
+                          <td className="px-2 py-3 text-right sm:px-4">
                             {year.standardInvestment > year.investment ? (
-                              <>
-                                <del className="mr-2 text-[#8a8176] decoration-[#9b3d1e]">
+                              <span className="inline-flex flex-col items-end sm:block">
+                                <del className="text-[#8a8176] decoration-[#9b3d1e] sm:mr-2">
                                   {currency.format(year.standardInvestment)}
                                 </del>
                                 <ins className="font-semibold no-underline">{currency.format(year.investment)}</ins>
-                              </>
+                              </span>
                             ) : (
                               currency.format(year.investment)
                             )}
                           </td>
-                          <td className="px-4 py-3 text-right font-semibold">{currency.format(year.net)}</td>
+                          <td className="px-2 py-3 text-right font-semibold sm:px-4">{currency.format(year.net)}</td>
                         </tr>
                       ))}
                     </tbody>
+                    <tfoot>
+                      <tr className="border-t-2 border-[#141414] bg-[#f8f3e8]">
+                        <th className="px-2 py-4 text-left font-semibold sm:px-4">Estimated 4-year return</th>
+                        <td className="px-2 py-4 text-right font-semibold sm:px-4">{currency.format(model.totalValue)}</td>
+                        <td className="px-2 py-4 text-right sm:px-4">
+                          <span className="inline-flex flex-col items-end sm:block">
+                            <del className="text-[#8a8176] decoration-[#9b3d1e] sm:mr-2">
+                              {currency.format(model.totalStandardInvestment)}
+                            </del>
+                            <ins className="font-semibold no-underline">{currency.format(model.totalInvestment)}</ins>
+                          </span>
+                        </td>
+                        <td className="px-2 py-4 text-right text-sm font-semibold text-[#1f5f7a] sm:px-4 sm:text-base">
+                          {currency.format(model.netReturn)}
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>

@@ -65,6 +65,15 @@ export type ProposalSignatureSubmission = {
   submittedAt: string;
 };
 
+export type JasonAiRoiReportSubmission = {
+  recipientEmail: string;
+  businessType: 'contractor' | 'firm';
+  employees: number;
+  activeProjects: number;
+  averageProjectWeeks: number;
+  submittedAt: string;
+};
+
 function sanitizeText(value: unknown, options: CleanStringOptions = {}): string {
   const normalized = String(value ?? '')
     .replace(/\u0000/g, '')
@@ -120,6 +129,21 @@ function requireBoolean(label: string, value: unknown): ValidationResult<boolean
   }
 
   return { ok: false, status: 400, error: `${label} is required.` };
+}
+
+function requireBoundedInteger(
+  label: string,
+  value: unknown,
+  min: number,
+  max: number,
+): ValidationResult<number> {
+  const number = typeof value === 'number' ? value : Number(value);
+
+  if (!Number.isInteger(number) || number < min || number > max) {
+    return { ok: false, status: 400, error: `${label} must be a whole number from ${min} to ${max}.` };
+  }
+
+  return { ok: true, value: number };
 }
 
 function requireProjectAreas(value: unknown): ValidationResult<string[]> {
@@ -214,6 +238,44 @@ export function validateClientCommunicationSubmission(
       sourcePath: optionalText(payload.sourcePath, 200),
       sourceUrl: optionalText(payload.sourceUrl, 500),
       referrer: optionalText(payload.referrer, 500),
+      submittedAt: optionalText(payload.submittedAt, 80) || new Date().toISOString(),
+    },
+  };
+}
+
+export function validateJasonAiRoiReportSubmission(
+  payload: Record<string, unknown>,
+): ValidationResult<JasonAiRoiReportSubmission> {
+  const recipientEmail = requireEmail(payload.recipientEmail ?? payload.email, 'Recipient email');
+  if (recipientEmail.ok === false) {
+    return { ok: false, status: recipientEmail.status, error: recipientEmail.error };
+  }
+
+  const businessType = payload.businessType;
+  if (businessType !== 'contractor' && businessType !== 'firm') {
+    return { ok: false, status: 400, error: 'Business type must be General Contractor or Contracting Firm.' };
+  }
+
+  const employees = requireBoundedInteger('Employees', payload.employees, 1, 500);
+  if (employees.ok === false) return employees;
+  const activeProjects = requireBoundedInteger('Active projects', payload.activeProjects, 1, 250);
+  if (activeProjects.ok === false) return activeProjects;
+  const averageProjectWeeks = requireBoundedInteger(
+    'Average project duration',
+    payload.averageProjectWeeks,
+    1,
+    104,
+  );
+  if (averageProjectWeeks.ok === false) return averageProjectWeeks;
+
+  return {
+    ok: true,
+    value: {
+      recipientEmail: recipientEmail.value,
+      businessType,
+      employees: employees.value,
+      activeProjects: activeProjects.value,
+      averageProjectWeeks: averageProjectWeeks.value,
       submittedAt: optionalText(payload.submittedAt, 80) || new Date().toISOString(),
     },
   };
