@@ -182,6 +182,22 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/strategy-v1/executive-strategy',
+    {
+      title: 'B2W Executive Strategy System V1',
+      description: 'Private B2W product, business, financial, and execution strategy system.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/brand/logo-verification',
+    {
+      title: 'B2W Logo Verification',
+      description: 'Private visual verification page for the canonical B2W silhouette logo.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
     '/internal/jason-ai',
     {
       title: 'JasonAI Executive Strategy',

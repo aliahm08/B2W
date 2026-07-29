@@ -16,9 +16,9 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DIR = ROOT / "public"
 BRAND_DIR = PUBLIC_DIR / "brand"
-BRAND_VECTOR_SOURCE = ROOT / "src" / "components" / "BrandVectorMarks.tsx"
+BRAND_VECTOR_SOURCE = BRAND_DIR / "b2w-icon.svg"
 
-ICON_SOURCE = BRAND_DIR / "b2w-icon.png"
+ICON_SOURCE = BRAND_DIR / "verification" / "b2w-icon.png"
 WORDMARK_SOURCE = BRAND_DIR / "b2w-full-logo.png"
 CLARA_SOURCE = BRAND_DIR / "clara-logo-solid.png"
 
@@ -56,8 +56,16 @@ def open_rgba(path: Path) -> Image.Image:
     return Image.open(path).convert("RGBA")
 
 
-def resize_square(image: Image.Image, size: int) -> Image.Image:
-    return image.resize((size, size), Image.Resampling.LANCZOS)
+def contain_square(image: Image.Image, size: int) -> Image.Image:
+    scale = min(size / image.width, size / image.height)
+    contained_width = max(1, round(image.width * scale))
+    contained_height = max(1, round(image.height * scale))
+    contained = image.resize((contained_width, contained_height), Image.Resampling.LANCZOS)
+    canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    x = (size - contained.width) // 2
+    y = (size - contained.height) // 2
+    canvas.alpha_composite(contained, (x, y))
+    return canvas
 
 
 def save_png(image: Image.Image, path: Path) -> None:
@@ -65,21 +73,23 @@ def save_png(image: Image.Image, path: Path) -> None:
 
 
 def save_ico(image: Image.Image, path: Path) -> None:
-    icon = image.resize((256, 256), Image.Resampling.LANCZOS)
+    icon = contain_square(image, 256)
     icon.save(path, format="ICO", sizes=[(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)])
 
 
 def write_vector_favicon(path: Path) -> None:
     source = BRAND_VECTOR_SOURCE.read_text(encoding="utf-8")
-    match = re.search(r"const b2wTracePath = `([^`]+)`;", source)
-    if not match:
-        raise RuntimeError(f"Could not find b2wTracePath in {BRAND_VECTOR_SOURCE}")
+    view_box_match = re.search(r'viewBox="([^"]+)"', source)
+    path_match = re.search(r'<path\b[^>]*\bd="([^"]+)"', source)
+    if not view_box_match or not path_match:
+        raise RuntimeError(f"Could not read canonical SVG geometry from {BRAND_VECTOR_SOURCE}")
 
-    vector_path = match.group(1)
+    view_box = view_box_match.group(1)
+    vector_path = path_match.group(1)
     path.write_text(
         "\n".join(
             [
-                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 88.4925">',
+                f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{view_box}">',
                 "  <title>B2W marketing mark</title>",
                 "  <style>",
                 "    .mark { fill: #111111; }",
@@ -123,11 +133,19 @@ def main() -> None:
     write_vector_favicon(PUBLIC_DIR / "favicon.svg")
 
     for filename, size in FAVICON_OUTPUTS.items():
-        save_png(resize_square(icon, size), PUBLIC_DIR / filename)
+        save_png(contain_square(icon, size), PUBLIC_DIR / filename)
 
     save_ico(icon, PUBLIC_DIR / "favicon.ico")
-    compose_social_card(WORDMARK_SOURCE, BRAND_DIR / "b2w-social-card.png", (760, 280), "#f7f3ec")
-    compose_social_card(CLARA_SOURCE, BRAND_DIR / "clara-social-card.png", (320, 320), "#f5f6fb")
+    if WORDMARK_SOURCE.exists():
+        compose_social_card(WORDMARK_SOURCE, BRAND_DIR / "b2w-social-card.png", (760, 280), "#f7f3ec")
+    else:
+        print(f"Skipped B2W social card; source is not active: {WORDMARK_SOURCE.relative_to(ROOT)}")
+
+    if CLARA_SOURCE.exists():
+        compose_social_card(CLARA_SOURCE, BRAND_DIR / "clara-social-card.png", (320, 320), "#f5f6fb")
+    else:
+        print(f"Skipped Clara social card; source is not active: {CLARA_SOURCE.relative_to(ROOT)}")
+
     write_manifest(PUBLIC_DIR / "site.webmanifest")
 
     print("Synced marketing assets:")
@@ -136,8 +154,10 @@ def main() -> None:
         print(f" - public/{filename}")
     print(" - public/favicon.ico")
     print(" - public/site.webmanifest")
-    print(" - public/brand/b2w-social-card.png")
-    print(" - public/brand/clara-social-card.png")
+    if WORDMARK_SOURCE.exists():
+        print(" - public/brand/b2w-social-card.png")
+    if CLARA_SOURCE.exists():
+        print(" - public/brand/clara-social-card.png")
 
 
 if __name__ == "__main__":

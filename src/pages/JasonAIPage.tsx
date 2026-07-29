@@ -11,7 +11,8 @@ import {
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { B2WSilhouetteMark, JasonAIVectorMark } from '../components/BrandVectorMarks';
+import { JasonAIVectorMark } from '../components/BrandVectorMarks';
+import B2WIcon from '../components/logo/B2WIcon';
 import Seo from '../components/Seo';
 import JasonAIPricingCalculator from './JasonAIPricingCalculator';
 
@@ -837,8 +838,7 @@ function SectionLabel({ children }: { children: string }) {
 function JasonAILockup() {
   return (
     <div className="flex items-center gap-3 text-[#141414]">
-      <Link to="/jasonai" aria-label="JasonAI home" className="inline-flex items-center gap-2.5 overflow-visible">
-        <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
+      <Link to="/jasonai" aria-label="JasonAI home" className="inline-flex items-center overflow-visible">
         <span className="text-lg font-semibold tracking-[-0.03em] sm:text-xl md:text-2xl">JasonAI</span>
       </Link>
       <motion.span
@@ -855,10 +855,17 @@ function JasonAILockup() {
         <Link
           to="/"
           data-scramble-skip
-          className="rounded-full px-2 py-1 text-[#5d554b] underline-offset-4 transition-[background-color,color,text-decoration-color] duration-200 hover:bg-[#efe5d3] hover:text-[#141414] hover:underline"
+          className="group inline-flex items-center rounded-full px-2 py-1 text-[#5d554b] underline-offset-4 transition-[background-color,color,text-decoration-color] duration-200 hover:bg-[#efe5d3] hover:text-[#141414] hover:underline focus-visible:bg-[#efe5d3] focus-visible:text-[#141414] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9b3d1e]/35"
           aria-label="B2W home"
         >
-          by B2W
+          <span>by</span>
+          <B2WIcon title="" className="ml-1.5 h-4 w-[18px] shrink-0 overflow-visible" />
+          <span
+            aria-hidden="true"
+            className="ml-0 max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,margin,opacity] duration-200 group-hover:ml-1.5 group-hover:max-w-[3rem] group-hover:opacity-100 group-focus-visible:ml-1.5 group-focus-visible:max-w-[3rem] group-focus-visible:opacity-100"
+          >
+            B2W
+          </span>
         </Link>
       </motion.span>
     </div>

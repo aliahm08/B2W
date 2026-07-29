@@ -60,6 +60,7 @@ const JasonAIExecutiveStrategyDocumentPage = lazy(() => import('./pages/internal
 const JasonAIValuationModelPage = lazy(() => import('./pages/internal/jason-ai/JasonAIValuationModelPage'));
 const JasonAIDocumentationPage = lazy(() => import('./pages/internal/jason-ai/JasonAIDocumentationPage'));
 const B2WExecutiveStrategyPage = lazy(() => import('./pages/B2WExecutiveStrategyPage'));
+const B2WExecutiveStrategyV0Page = lazy(() => import('./pages/B2WExecutiveStrategyV0Page'));
 const LogoVerificationPage = lazy(() => import('./pages/LogoVerificationPage'));
 
 function ScrollToTop() {
@@ -318,7 +319,7 @@ export default function App() {
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
-                <Route path="/executive-strategy" element={<B2WExecutiveStrategyPage />} />
+                <Route path="/executive-strategy" element={<B2WExecutiveStrategyV0Page />} />
                 <Route path="/strategy-v1/executive-strategy" element={<B2WExecutiveStrategyPage />} />
                 <Route path="/internal" element={<InternalProjectIndexPage />} />
                 <Route path="/internal/jason-ai" element={<JasonAIOverviewPage />} />

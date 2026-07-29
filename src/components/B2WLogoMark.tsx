@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { B2WSilhouetteMark } from './BrandVectorMarks';
+import B2WIcon from './logo/B2WIcon';
 
 type B2WLogoMarkProps = {
   to?: string;
@@ -34,7 +34,7 @@ export default function B2WLogoMark({
             transition={{ duration: 0.28, ease: 'easeOut' }}
           >
             {variant === 'jasonai' ? (
-              <B2WSilhouetteMark title="" className="h-full w-full overflow-visible" />
+              <B2WIcon title="" className="h-full w-full overflow-visible" />
             ) : (
               <img
                 src={variant === 'clara' ? '/brand/clara-logo-solid.png' : '/brand/clara-logo.png'}

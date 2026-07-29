@@ -303,7 +303,18 @@ function WhatsAppScenarioCard({
 function JasonAIWhatsAppCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 639px)');
+    const updateMobileState = () => setIsMobile(mediaQuery.matches);
+
+    updateMobileState();
+    mediaQuery.addEventListener('change', updateMobileState);
+
+    return () => mediaQuery.removeEventListener('change', updateMobileState);
+  }, []);
 
   useEffect(() => {
     if (shouldReduceMotion || isPaused) {
@@ -312,7 +323,7 @@ function JasonAIWhatsAppCarousel() {
 
     const interval = window.setInterval(() => {
       setActiveIndex((current) => (current + 1) % whatsAppScenarios.length);
-    }, 6200);
+    }, 5500);
 
     return () => window.clearInterval(interval);
   }, [isPaused, shouldReduceMotion]);
@@ -347,15 +358,21 @@ function JasonAIWhatsAppCarousel() {
         }
       }}
     >
-      <div className="relative mb-7 mr-5 grid" aria-live="off">
+      <div className="relative mb-7 mr-3 grid sm:mr-5" aria-live="off">
         {whatsAppScenarios.map((scenario, index) => {
           const stackPosition = (index - activeIndex + whatsAppScenarios.length) % whatsAppScenarios.length;
           const isActive = stackPosition === 0;
-          const stackStyles = [
-            { x: 0, y: 0, scale: 1, rotate: 0, opacity: 1 },
-            { x: 10, y: 10, scale: 0.985, rotate: 0.45, opacity: 0.88 },
-            { x: 20, y: 20, scale: 0.97, rotate: 0.9, opacity: 0.72 },
-          ][stackPosition];
+          const stackStyles = (isMobile
+            ? [
+                { x: 0, y: 0, scale: 1, rotate: 0, opacity: 1 },
+                { x: 6, y: 8, scale: 0.99, rotate: 0.25, opacity: 0.86 },
+                { x: 12, y: 16, scale: 0.98, rotate: 0.5, opacity: 0.68 },
+              ]
+            : [
+                { x: 0, y: 0, scale: 1, rotate: 0, opacity: 1 },
+                { x: 10, y: 10, scale: 0.985, rotate: 0.45, opacity: 0.88 },
+                { x: 20, y: 20, scale: 0.97, rotate: 0.9, opacity: 0.72 },
+              ])[stackPosition];
 
           return (
             <motion.div
@@ -369,7 +386,9 @@ function JasonAIWhatsAppCarousel() {
               transition={
                 shouldReduceMotion
                   ? { duration: 0.12 }
-                  : { type: 'spring', stiffness: 225, damping: 27, mass: 0.82 }
+                  : isMobile
+                    ? { type: 'spring', stiffness: 250, damping: 30, mass: 0.68 }
+                    : { type: 'spring', stiffness: 225, damping: 27, mass: 0.82 }
               }
               aria-hidden={!isActive}
               className="[grid-area:1/1]"
@@ -377,6 +396,7 @@ function JasonAIWhatsAppCarousel() {
                 zIndex: 30 - stackPosition * 10,
                 pointerEvents: isActive ? 'auto' : 'none',
                 transformOrigin: '50% 100%',
+                willChange: 'transform, opacity',
               }}
             >
               <WhatsAppScenarioCard

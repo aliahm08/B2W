@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ArrowRight, LockKeyhole, Mail, MessageCircle, Mic } from 'lucide-react';
-import { B2WSilhouetteMark } from '../components/BrandVectorMarks';
+import B2WIcon from '../components/logo/B2WIcon';
 import Seo from '../components/Seo';
 
 type HeroMode = 'consulting' | 'jasonai' | 'clara';
@@ -67,7 +67,7 @@ function HeaderLogo() {
   return (
     <div className="inline-flex min-h-10 items-center gap-3">
       <span className="inline-flex items-center gap-3">
-        <B2WSilhouetteMark title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
+        <B2WIcon title="" className="h-8 w-9 shrink-0 overflow-visible sm:h-9 sm:w-10" />
       </span>
     </div>
   );
