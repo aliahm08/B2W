@@ -285,15 +285,8 @@ export default function App() {
       {isClaraPage && <SolutionsNavbar />}
       <main>
         <Suspense fallback={<RouteLoadingFallback />}>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={routeTransitionKey}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <Routes location={location}>
+          <div key={routeTransitionKey}>
+            <Routes location={location}>
                 <Route
                   path="/"
                   element={<HomeTestOnePage />}
@@ -441,9 +434,8 @@ export default function App() {
                 <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
                 <Route path="/work/coffeeshop-financing/model" element={<CoffeeShopFinancingModelPage />} />
                 <Route path="*" element={<NotFound />} />
-              </Routes>
-            </motion.div>
-          </AnimatePresence>
+            </Routes>
+          </div>
         </Suspense>
       </main>
       {!isIsolatedView && <Footer />}
