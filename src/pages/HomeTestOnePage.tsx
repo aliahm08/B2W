@@ -246,11 +246,11 @@ export default function HomeTestOnePage() {
         >
           <span>B2W LLC</span>
           <Link
-            to="/executive-strategy"
+            to="/internal"
             className="inline-flex min-h-10 items-center gap-2 rounded-full border border-current/15 px-4 text-xs font-semibold transition hover:bg-white/15"
           >
             <LockKeyhole className="h-3.5 w-3.5" />
-            Executive Strategy
+            Internal
           </Link>
         </motion.footer>
       </motion.main>

@@ -74,6 +74,15 @@ const directRoutes = new Map<string, SeoDefinition>([
     },
   ],
   [
+    '/services/archive/2026-07-29',
+    {
+      title: 'Archived B2W Services Page — July 29, 2026',
+      description: 'Archived snapshot of the former B2W consulting services page.',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
     '/clara',
     {
       title: 'Clara by B2W',
@@ -168,25 +177,100 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/internal',
     {
-      title: 'B2W Internal Projects',
-      description: 'Private B2W project index.',
+      title: 'B2W Internal Workspace',
+      description: 'Private B2W operating map, executive-strategy tracking tool, and business-plan workspace.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/services',
+    {
+      title: 'B2W Operating Map',
+      description: 'Private B2W operating map covering the growth map, optimization model, diligence, ownership, and execution tracking.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal',
+    {
+      title: 'B2W Tracking Tool',
+      description: 'Private B2W executive-strategy tracking tool built on the Gurge project-management concept.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product',
+    {
+      title: 'JasonAI Executive Strategy',
+      description: 'JasonAI 24-month J-curve strategy for helping SMB general-contractor owners create measurable value from business communication.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product/performance-goals',
+    {
+      title: 'JasonAI Performance Goals',
+      description: 'Private JasonAI performance goals and execution scorecard.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product/kpi-tracker',
+    {
+      title: 'JasonAI KPI Tracker',
+      description: 'Private JasonAI KPI tracker for product and commercial performance.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product/profile',
+    {
+      title: 'JasonAI Executive Strategy',
+      description: 'JasonAI 24-month J-curve strategy with five phases, executive ownership, KPI gates, goals, and execution tasks.',
+      canonicalPath: '/internal/portal/product/executive-strategy',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product/executive-strategy',
+    {
+      title: 'JasonAI Interactive Executive Strategy',
+      description: 'Interactive JasonAI operating document with five phases, KPI gates, measurable goals, accountable owners, and reportable execution tasks.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product/valuation',
+    {
+      title: 'JasonAI Product Valuation Model',
+      description: 'Private scenario model for JasonAI recurring revenue, product value, and valuation drivers.',
+      robots: PRIVATE_ROBOTS,
+    },
+  ],
+  [
+    '/internal/portal/product/documentation',
+    {
+      title: 'JasonAI Product Documentation',
+      description: 'Private JasonAI documentation structure for product, skills, architecture, safety, privacy, and operations.',
       robots: PRIVATE_ROBOTS,
     },
   ],
   [
     '/executive-strategy',
     {
-      title: 'B2W Executive Strategy System',
-      description: 'Private B2W product, business, financial, and execution strategy system.',
+      title: 'B2W Internal Workspace',
+      description: 'Private B2W strategy and business-planning workspace.',
       robots: PRIVATE_ROBOTS,
+      canonicalPath: '/internal',
     },
   ],
   [
     '/strategy-v1/executive-strategy',
     {
-      title: 'B2W Executive Strategy System V1',
-      description: 'Private B2W product, business, financial, and execution strategy system.',
+      title: 'B2W Internal Workspace',
+      description: 'Private B2W strategy and business-planning workspace.',
       robots: PRIVATE_ROBOTS,
+      canonicalPath: '/internal',
     },
   ],
   [
@@ -202,6 +286,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Executive Strategy',
       description: 'JasonAI 24-month J-curve strategy for helping SMB general-contractor owners create measurable value from business communication.',
+      canonicalPath: '/internal/portal/product',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -210,6 +295,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Performance Goals',
       description: 'Private JasonAI performance goals and execution scorecard.',
+      canonicalPath: '/internal/portal/product/performance-goals',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -218,6 +304,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI KPI Tracker',
       description: 'Private JasonAI KPI tracker for product and commercial performance.',
+      canonicalPath: '/internal/portal/product/kpi-tracker',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -226,7 +313,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Executive Strategy',
       description: 'JasonAI 24-month J-curve strategy with five phases, executive ownership, KPI gates, goals, and execution tasks.',
-      canonicalPath: '/internal/jason-ai/executive-strategy',
+      canonicalPath: '/internal/portal/product/executive-strategy',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -235,6 +322,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Interactive Executive Strategy',
       description: 'Interactive JasonAI operating document with five phases, KPI gates, measurable goals, accountable owners, and reportable execution tasks.',
+      canonicalPath: '/internal/portal/product/executive-strategy',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -243,6 +331,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Product Valuation Model',
       description: 'Private scenario model for JasonAI recurring revenue, product value, and valuation drivers.',
+      canonicalPath: '/internal/portal/product/valuation',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -251,6 +340,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Product Documentation',
       description: 'Private JasonAI documentation structure for product, skills, architecture, safety, privacy, and operations.',
+      canonicalPath: '/internal/portal/product/documentation',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -259,7 +349,7 @@ const directRoutes = new Map<string, SeoDefinition>([
     {
       title: 'JasonAI Executive Strategy',
       description: 'Legacy route for the JasonAI 24-month executive strategy.',
-      canonicalPath: '/internal/jason-ai/executive-strategy',
+      canonicalPath: '/internal/portal/product/executive-strategy',
       robots: PRIVATE_ROBOTS,
     },
   ],
@@ -539,12 +629,16 @@ export function mergeSeoMetadata(pathname: string, override?: SeoOverride): SeoM
     return base;
   }
 
+  const definedOverride = Object.fromEntries(
+    Object.entries(override).filter(([, value]) => value !== undefined),
+  ) as SeoOverride;
+
   return {
     ...base,
-    ...override,
-    canonicalPath: normalizePathname(override.canonicalPath ?? base.canonicalPath),
-    title: withBrand(override.title ?? base.title),
-    twitterCard: override.twitterCard ?? (override.imageUrl ?? base.imageUrl ? 'summary_large_image' : 'summary'),
+    ...definedOverride,
+    canonicalPath: normalizePathname(definedOverride.canonicalPath ?? base.canonicalPath),
+    title: withBrand(definedOverride.title ?? base.title),
+    twitterCard: definedOverride.twitterCard ?? (definedOverride.imageUrl ?? base.imageUrl ? 'summary_large_image' : 'summary'),
   };
 }
 

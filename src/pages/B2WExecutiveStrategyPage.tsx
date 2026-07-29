@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
 import {
   ArrowDown,
   ArrowLeft,
@@ -77,26 +77,38 @@ type TrackerUpdate = {
 
 const trackerStorageKey = 'b2w-executive-strategy-tracker-v1';
 
-const sectionLinks: Array<{ id: SectionId; number: string; label: string }> = [
-  { id: 'map', number: '00', label: 'Strategy map' },
-  { id: 'company', number: '01', label: 'Company in one view' },
-  { id: 'problem', number: '02', label: 'Customer problem' },
-  { id: 'architecture', number: '03', label: 'Product architecture' },
-  { id: 'today', number: '04', label: 'What exists today' },
-  { id: 'revenue', number: '05', label: 'Revenue development model' },
-  { id: 'stages', number: '06', label: 'Five-stage model' },
-  { id: 'gates', number: '07', label: 'Commercial gates' },
-  { id: 'next', number: '08', label: 'What to build next' },
-  { id: 'ownership', number: '09', label: 'Ownership model' },
-  { id: 'financials', number: '10', label: 'Financial progression' },
-  { id: 'ninety-days', number: '11', label: '90-day plan' },
-  { id: 'tracker', number: '12', label: 'Execution tracker' },
+type NavigationGroupId = 'map' | 'optimization' | 'diligence';
+
+const sectionLinks: Array<{ id: SectionId; number: string; label: string; parent?: NavigationGroupId }> = [
+  { id: 'company', number: '01', label: 'Company in one view', parent: 'map' },
+  { id: 'problem', number: '02', label: 'Customer problem', parent: 'map' },
+  { id: 'architecture', number: '03', label: 'Product architecture', parent: 'map' },
+  { id: 'today', number: '04', label: 'What exists today', parent: 'map' },
+  { id: 'revenue', number: '05', label: 'Revenue development model', parent: 'optimization' },
+  { id: 'stages', number: '06', label: 'Five-stage model', parent: 'optimization' },
+  { id: 'gates', number: '07', label: 'Commercial gates', parent: 'optimization' },
+  { id: 'next', number: '08', label: 'What to build next', parent: 'optimization' },
+  { id: 'ownership', number: '09', label: 'Ownership model', parent: 'diligence' },
+  { id: 'financials', number: '10', label: 'Financial progression', parent: 'diligence' },
+  { id: 'ninety-days', number: '11', label: 'Five-phase diligence plan', parent: 'diligence' },
+  { id: 'tracker', number: '12', label: 'Execution tracker', parent: 'diligence' },
 ];
+
+type NavigationGroupDefinition = {
+  label: string;
+  subtitle?: string;
+};
+
+const navigationGroupStarts: Partial<Record<SectionId, NavigationGroupDefinition>> = {
+  company: { label: 'Growth Map' },
+  revenue: { label: 'Optimization' },
+  ownership: { label: 'Diligence', subtitle: 'Accountability + tracking' },
+};
 
 const trackerItems: TrackerItem[] = [
   {
     id: 'segment',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Market',
     objective: 'Choose a focused market',
     task: 'Focus the first customer segment on contracting businesses and document their shared operating pain.',
@@ -109,7 +121,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'offer',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Revenue',
     objective: 'Define the paid offer',
     task: 'Define the five revenue stages from the $99/month trade-expert offer through SME verification, midsize workflows, project-system integrations, and enterprise agentic contracts.',
@@ -122,7 +134,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'pricing',
-    phase: 'Phase 2 · Prove repeatability',
+    phase: 'Phase 02 · Validation',
     category: 'Revenue',
     objective: 'Validate willingness to pay',
     task: 'Run pricing conversations and record objections, accepted ranges, and value drivers.',
@@ -135,7 +147,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'workflow',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Product',
     objective: 'Complete one end-to-end workflow',
     task: 'Generate a weekly owner update from WhatsApp and project context, then request approval and save it.',
@@ -148,7 +160,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'context',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Product',
     objective: 'Define minimum business context',
     task: 'Model customers, projects, contracts, dates, owners, status, actions, and linked documents.',
@@ -161,7 +173,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'approvals',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Product',
     objective: 'Control action execution',
     task: 'Define review, approval, audit, and permission rules for generated outputs and actions.',
@@ -174,7 +186,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'onboarding',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Customer Success',
     objective: 'Onboard initial customers',
     task: 'Create the onboarding checklist, baseline survey, workflow configuration, and training sequence.',
@@ -187,7 +199,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'adoption',
-    phase: 'Phase 1 · Prove value',
+    phase: 'Phase 01 · Foundation',
     category: 'Customer Success',
     objective: 'Prove recurring use',
     task: 'Track weekly usage, completed outputs, time saved, missed actions recovered, and feedback.',
@@ -200,7 +212,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'repeatability',
-    phase: 'Phase 2 · Prove repeatability',
+    phase: 'Phase 02 · Validation',
     category: 'Scale',
     objective: 'Reduce custom delivery',
     task: 'Turn the proven workflow into reusable configuration, templates, and integration steps.',
@@ -213,7 +225,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'case-study',
-    phase: 'Phase 2 · Prove repeatability',
+    phase: 'Phase 02 · Validation',
     category: 'Customer Success',
     objective: 'Make value credible',
     task: 'Publish a quantified case study with baseline, outcome, evidence, and customer approval.',
@@ -226,7 +238,7 @@ const trackerItems: TrackerItem[] = [
   },
   {
     id: 'acquisition',
-    phase: 'Phase 2 · Prove repeatability',
+    phase: 'Phase 02 · Validation',
     category: 'Market',
     objective: 'Learn which acquisition channels work',
     task: 'Record where every paying customer originated, then compare conversion, sales cycle, customer acquisition cost, and payback by source.',
@@ -580,8 +592,32 @@ function FlowArrow({ label }: { label?: string }) {
   );
 }
 
-function StrategyWorkspace({ onLock }: { onLock: () => void }) {
-  const [activeSection, setActiveSection] = useState<SectionId>('map');
+function NavigationGroupLabel({ group }: { group: NavigationGroupDefinition }) {
+  return (
+    <div className="flex items-center gap-2 px-4 pb-1 pt-4 text-[9px] font-semibold uppercase tracking-[0.18em] text-[#997022]">
+      <span className="h-1.5 w-1.5 rounded-full bg-[#B68124]" />
+      <span>
+        <span className="block">{group.label}</span>
+        {group.subtitle ? (
+          <span className="mt-0.5 block text-[7px] font-medium tracking-[0.1em] text-[#223C33]/38">
+            {group.subtitle}
+          </span>
+        ) : null}
+      </span>
+      <span className="h-px flex-1 bg-[#223C33]/10" />
+    </div>
+  );
+}
+
+function StrategyWorkspace({
+  onLock,
+  mode = 'strategy',
+}: {
+  onLock?: () => void;
+  mode?: 'strategy' | 'services';
+}) {
+  const isServices = mode === 'services';
+  const [activeSection, setActiveSection] = useState<SectionId | null>(null);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [trackerUpdates, setTrackerUpdates] = useState<Record<string, TrackerUpdate>>({});
 
@@ -653,10 +689,14 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
   return (
     <main className="min-h-screen bg-[#F7F4EC] text-[#17221E]">
       <Seo
-        title="B2W Executive Strategy System"
-        description="Private B2W product, business, financial, and execution strategy system."
+        title={isServices ? 'B2W Operating Map' : 'B2W Executive Strategy System'}
+        description={
+          isServices
+            ? 'Private B2W operating map covering the growth map, optimization model, diligence, ownership, and execution tracking.'
+            : 'Private B2W product, business, financial, and execution strategy system.'
+        }
         robots="noindex, nofollow"
-        canonicalPath="/executive-strategy"
+        canonicalPath={isServices ? '/internal/services' : '/executive-strategy'}
       />
 
       <header className="sticky top-0 z-50 border-b border-[#223C33]/12 bg-[#F7F4EC]/92 backdrop-blur-xl">
@@ -673,47 +713,58 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
             <div className="min-w-0">
               <p className="b2w-wordmark truncate text-xs font-semibold tracking-[0.16em]">B2W</p>
               <p className="truncate text-[8px] uppercase tracking-[0.18em] text-[#223C33]/42">
-                Executive strategy system
+                {isServices ? 'Operating map' : 'Executive strategy system'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <nav
-              className="flex shrink-0 items-center rounded-full border border-[#223C33]/12 bg-white/55 p-1"
-              aria-label="Executive strategy version"
-            >
-              <a
-                href="https://www.b2w-ai.com/executive-strategy"
-                className="rounded-full px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-[#223C33]/55 transition hover:bg-white hover:text-[#223C33]"
-                aria-label="Open live version 0"
-                title="Open live V0"
+            {isServices ? (
+              <Link
+                to="/about"
+                className="hidden min-h-9 items-center rounded-full border border-[#223C33]/12 bg-white/55 px-4 text-[9px] font-semibold uppercase tracking-[0.15em] text-[#223C33]/65 transition hover:bg-white hover:text-[#223C33] sm:inline-flex"
               >
-                V0
-                <span className="hidden xl:inline"> · Live</span>
-              </a>
-              <span
-                className="rounded-full bg-[#223C33] px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-white shadow-sm"
-                aria-current="page"
-                aria-label="Current draft version 1"
-                title="Current unstaged V1"
-              >
-                V1
-                <span className="hidden xl:inline"> · Draft</span>
-              </span>
-            </nav>
-            <span className="hidden items-center gap-2 rounded-full border border-[#223C33]/12 bg-white/55 px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.15em] text-[#223C33]/55 sm:flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-              Temporary access
-            </span>
-            <button
-              type="button"
-              onClick={onLock}
-              className="grid h-9 w-9 place-items-center rounded-full border border-[#223C33]/12 bg-white/55 text-[#223C33]/60 transition hover:bg-white hover:text-[#223C33]"
-              aria-label="Lock strategy"
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
+                About B2W
+              </Link>
+            ) : (
+              <>
+                <nav
+                  className="flex shrink-0 items-center rounded-full border border-[#223C33]/12 bg-white/55 p-1"
+                  aria-label="Executive strategy version"
+                >
+                  <a
+                    href="https://www.b2w-ai.com/executive-strategy"
+                    className="rounded-full px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-[#223C33]/55 transition hover:bg-white hover:text-[#223C33]"
+                    aria-label="Open live version 0"
+                    title="Open live V0"
+                  >
+                    V0
+                    <span className="hidden xl:inline"> · Live</span>
+                  </a>
+                  <span
+                    className="rounded-full bg-[#223C33] px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-white shadow-sm"
+                    aria-current="page"
+                    aria-label="Current draft version 1"
+                    title="Current unstaged V1"
+                  >
+                    V1
+                    <span className="hidden xl:inline"> · Draft</span>
+                  </span>
+                </nav>
+                <span className="hidden items-center gap-2 rounded-full border border-[#223C33]/12 bg-white/55 px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.15em] text-[#223C33]/55 sm:flex">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                  Temporary access
+                </span>
+                <button
+                  type="button"
+                  onClick={onLock}
+                  className="grid h-9 w-9 place-items-center rounded-full border border-[#223C33]/12 bg-white/55 text-[#223C33]/60 transition hover:bg-white hover:text-[#223C33]"
+                  aria-label="Lock strategy"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </>
+            )}
             <button
               type="button"
               onClick={() => setMobileNavOpen((open) => !open)}
@@ -729,19 +780,26 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
 
       {mobileNavOpen ? (
         <nav className="fixed inset-x-4 top-20 z-40 max-h-[calc(100vh-6rem)] overflow-auto rounded-2xl border border-[#223C33]/12 bg-[#F7F4EC] p-3 shadow-2xl lg:hidden">
-          {sectionLinks.map((section) => (
-            <button
-              key={section.id}
-              type="button"
-              onClick={() => goToSection(section.id)}
-              className={`flex w-full items-center gap-4 rounded-xl px-4 py-3 text-left text-sm ${
-                activeSection === section.id ? 'bg-[#223C33] text-white' : 'text-[#223C33]/65 hover:bg-white'
-              }`}
-            >
-              <span className="font-mono text-[9px] opacity-50">{section.number}</span>
-              {section.label}
-            </button>
-          ))}
+          {sectionLinks.map((section) => {
+            const groupLabel = navigationGroupStarts[section.id];
+            return (
+              <Fragment key={section.id}>
+                {groupLabel ? <NavigationGroupLabel group={groupLabel} /> : null}
+                <button
+                  type="button"
+                  onClick={() => goToSection(section.id)}
+                  className={`flex w-full items-center gap-4 rounded-xl py-3 pr-4 text-left text-sm ${
+                    section.parent ? 'ml-4 w-[calc(100%-1rem)] border-l border-[#223C33]/15 pl-5' : 'px-4'
+                  } ${
+                    activeSection === section.id ? 'bg-[#223C33] text-white' : 'text-[#223C33]/65 hover:bg-white'
+                  }`}
+                >
+                  <span className="font-mono text-[9px] opacity-50">{section.number}</span>
+                  {section.label}
+                </button>
+              </Fragment>
+            );
+          })}
         </nav>
       ) : null}
 
@@ -752,26 +810,35 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               Document sections
             </p>
             <div className="mt-4 space-y-0.5">
-              {sectionLinks.map((section) => (
-                <button
-                  key={section.id}
-                  type="button"
-                  onClick={() => goToSection(section.id)}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[11px] transition ${
-                    activeSection === section.id
-                      ? 'bg-[#223C33] font-semibold text-white'
-                      : 'text-[#223C33]/55 hover:bg-white hover:text-[#223C33]'
-                  }`}
-                >
-                  <span className="font-mono text-[8px] opacity-50">{section.number}</span>
-                  <span className="flex-1">{section.label}</span>
-                  {activeSection === section.id ? <ChevronDown className="h-3 w-3 -rotate-90" /> : null}
-                </button>
-              ))}
+              {sectionLinks.map((section) => {
+                const groupLabel = navigationGroupStarts[section.id];
+                return (
+                  <Fragment key={section.id}>
+                    {groupLabel ? <NavigationGroupLabel group={groupLabel} /> : null}
+                    <button
+                      type="button"
+                      onClick={() => goToSection(section.id)}
+                      className={`relative flex w-full items-center gap-3 rounded-xl py-2.5 pr-3 text-left text-[11px] transition ${
+                        section.parent
+                          ? 'ml-4 w-[calc(100%-1rem)] border-l border-[#223C33]/15 pl-5'
+                          : 'px-3'
+                      } ${
+                        activeSection === section.id
+                          ? 'bg-[#223C33] font-semibold text-white'
+                          : 'text-[#223C33]/55 hover:bg-white hover:text-[#223C33]'
+                      }`}
+                    >
+                      <span className="font-mono text-[8px] opacity-50">{section.number}</span>
+                      <span className="flex-1">{section.label}</span>
+                      {activeSection === section.id ? <ChevronDown className="h-3 w-3 -rotate-90" /> : null}
+                    </button>
+                  </Fragment>
+                );
+              })}
             </div>
 
             <div className="mt-8 rounded-2xl border border-[#223C33]/12 bg-white/50 p-4">
-              <p className="text-[8px] uppercase tracking-[0.18em] text-[#223C33]/38">Execution</p>
+              <p className="text-[8px] uppercase tracking-[0.18em] text-[#223C33]/38">Diligence progress</p>
               <div className="mt-3 flex items-end justify-between">
                 <p className="text-2xl font-medium">{trackerSummary.percentage}%</p>
                 <p className="font-mono text-[9px] text-[#223C33]/45">
@@ -792,33 +859,46 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
           <section className="relative overflow-hidden border-b border-[#223C33]/12 bg-[#223C33] px-5 py-20 text-white sm:px-8 sm:py-28 lg:px-14">
             <div aria-hidden="true" className="absolute -right-40 -top-56 h-[40rem] w-[40rem] rounded-full bg-[#D8B56A]/16 blur-3xl" />
             <div className="relative mx-auto max-w-6xl">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#D8B56A]">
-                B2W Product + Business Strategy
+            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#D8B56A]">
+                {isServices ? 'B2W Operating Map' : 'B2W Product + Business Strategy'}
               </p>
               <h1 className="mt-7 max-w-5xl text-5xl font-medium leading-[0.96] tracking-[-0.055em] sm:text-7xl lg:text-8xl">
-                The operating layer for project-based businesses.
+                The operating layer for contracting businesses.
               </h1>
               <p className="mt-8 max-w-3xl text-base leading-8 text-white/62 sm:text-lg">
                 B2W connects communication, business context, document creation, and approved actions—turning fragmented information into completed work.
               </p>
-              <a
-                href="#map"
-                className="mt-10 inline-flex min-h-12 items-center gap-2 rounded-full bg-[#D8B56A] px-5 text-sm font-semibold text-[#223C33] transition hover:bg-[#E5C77F]"
-              >
-                Read the strategy
-                <ArrowDown className="h-4 w-4" />
-              </a>
+              <div className="mt-10 flex flex-wrap gap-3">
+                <a
+                  href="#company"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#D8B56A] px-5 text-sm font-semibold text-[#223C33] transition hover:bg-[#E5C77F]"
+                >
+                  {isServices ? 'Explore Operating Map' : 'Read the strategy'}
+                  <ArrowDown className="h-4 w-4" />
+                </a>
+                {isServices ? (
+                  <a
+                    href="#tracker"
+                    className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/24 bg-white/8 px-5 text-sm font-semibold text-white transition hover:bg-white/14"
+                  >
+                    View our Progress
+                    <TrendingUp className="h-4 w-4" />
+                  </a>
+                ) : null}
+              </div>
             </div>
           </section>
 
           <article className="mx-auto max-w-6xl px-5 pb-28 sm:px-8 lg:px-14">
             <section id="map" className="scroll-mt-24 py-20 sm:py-28">
-              <SectionHeader
-                number="00"
-                eyebrow="One-page strategy map"
-                title="One system. Five connected capabilities."
-                description="The assistant, document maker, and management system are components of one product—not separate bets."
-              />
+              <header className="border-b border-[#223C33]/15 pb-8">
+                <h2 className="max-w-4xl text-4xl font-medium leading-[1.02] tracking-[-0.045em] text-[#17221E] sm:text-5xl">
+                  One system. Five connected capabilities.
+                </h2>
+                <p className="mt-5 max-w-3xl text-sm leading-7 text-[#223C33]/62 sm:text-base">
+                  The assistant, document maker, and management system are components of one product—not separate bets.
+                </p>
+              </header>
               <div className="mt-10 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] md:items-stretch">
                 {[
                   ['WhatsApp', 'Assistant', MessageCircle],
@@ -1426,14 +1506,20 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
                 <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-[#D8B56A]">Reference workflow</p>
                 <p className="mt-4 text-2xl font-medium tracking-[-0.03em]">“Create this week’s project update for the owner.”</p>
                 <div className="mt-9 grid gap-3 md:grid-cols-[repeat(4,1fr)]">
+                  <div className="rounded-2xl border border-[#D8B56A]/35 bg-[#DCE6E0] p-5 text-[#223C33]">
+                    <div className="grid h-8 w-8 place-items-center rounded-full bg-[#223C33] text-[#D8B56A]">
+                      <MessageCircle className="h-4 w-4" />
+                    </div>
+                    <p className="mt-5 text-sm font-semibold">Ask</p>
+                    <p className="mt-2 text-[11px] leading-5 text-[#223C33]/58">User requests through WhatsApp</p>
+                  </div>
                   {[
-                    ['01', 'Ask', 'User requests through WhatsApp'],
-                    ['02', 'Understand', 'Assistant identifies intent'],
-                    ['03', 'Retrieve', 'Project + contract context'],
-                    ['04', 'Select', 'Correct document skill'],
-                    ['05', 'Draft', 'Structured update generated'],
-                    ['06', 'Approve', 'User reviews or approves'],
-                    ['07', 'Act', 'Save, share, or trigger next action'],
+                    ['01', 'Understand', 'Assistant identifies intent'],
+                    ['02', 'Retrieve', 'Project + contract context'],
+                    ['03', 'Select', 'Correct document skill'],
+                    ['04', 'Draft', 'Structured update generated'],
+                    ['05', 'Approve', 'User reviews or approves'],
+                    ['06', 'Act', 'Save, share, or trigger next action'],
                   ].map(([number, title, body]) => (
                     <div key={number} className="rounded-2xl border border-white/10 bg-white/[0.035] p-5">
                       <p className="font-mono text-[9px] text-[#D8B56A]">{number}</p>
@@ -1553,34 +1639,93 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
             <section id="ninety-days" className="scroll-mt-24 border-t border-[#223C33]/12 py-20 sm:py-28">
               <SectionHeader
                 number="11"
-                eyebrow="Immediate 90-day plan"
-                title="Narrow the market. Complete the workflow. Prove repeatable value."
-                description="The next 90 days are for learning what customers will repeatedly pay for—not for building a complete CRM, project-management suite, or broad AI platform."
+                eyebrow="Five-phase diligence plan"
+                title="Invest. Validate. Prove. Scale. Expand."
+                description="B2W follows the JasonAI J-curve. Each phase advances only when pricing, product, and customer-success evidence supports the next level of investment."
               />
-              <div className="mt-10 grid gap-4 md:grid-cols-3">
+              <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 {[
-                  ['Days 1–30', 'Focus', ['Select one customer segment', 'Define the first paid offer', 'Specify the first workflow']],
-                  ['Days 31–60', 'Build + onboard', ['Validate assistant-to-document flow', 'Onboard initial customers', 'Measure time-to-first-value']],
-                  ['Days 61–90', 'Prove + standardize', ['Document recurring use', 'Validate pricing and outcomes', 'Capture what is repeatable']],
-                ].map(([range, label, items], index) => (
-                  <div key={String(range)} className={`rounded-3xl border p-7 ${
-                    index === 0 ? 'border-[#223C33] bg-[#223C33] text-white' : 'border-[#223C33]/12 bg-white/55'
+                  {
+                    number: '01',
+                    curve: 'Invest',
+                    label: 'Foundation',
+                    period: 'Aug–Oct 2026',
+                    objective: 'Deliver useful output fast enough to earn payment.',
+                    checks: ['Prove willingness to pay', 'Reach useful output quickly'],
+                  },
+                  {
+                    number: '02',
+                    curve: 'Validate',
+                    label: 'Validation',
+                    period: 'Nov 2026–Jan 2027',
+                    objective: 'Retain active teams and prove measurable value.',
+                    checks: ['Convert pilots to paid', 'Verify retention and time saved'],
+                  },
+                  {
+                    number: '03',
+                    curve: 'Prove',
+                    label: 'Inflection',
+                    period: 'Feb–Jul 2027',
+                    objective: 'Use customer-confirmed ROI to support pricing and retention.',
+                    checks: ['Confirm eight-week retention', 'Package evidence for sales'],
+                  },
+                  {
+                    number: '04',
+                    curve: 'Scale',
+                    label: 'Scale',
+                    period: 'Aug 2027–Jan 2028',
+                    objective: 'Repeat acquisition, onboarding, and retention efficiently.',
+                    checks: ['Protect acquisition economics', 'Standardize reliable delivery'],
+                  },
+                  {
+                    number: '05',
+                    curve: 'Expand',
+                    label: 'Platform',
+                    period: 'Feb–Jul 2028',
+                    objective: 'Expand customer usage and spend across trusted workflows.',
+                    checks: ['Grow multi-workflow adoption', 'Increase retained revenue'],
+                  },
+                ].map((phase, index) => {
+                  const isDark = index === 0 || index === 4;
+                  return (
+                  <div key={phase.number} className={`rounded-3xl border p-6 ${
+                    isDark
+                      ? 'border-[#223C33] bg-[#223C33] text-white'
+                      : index === 2
+                        ? 'border-[#B68124]/25 bg-[#D8B56A]/14'
+                        : index === 3
+                          ? 'border-[#527764]/22 bg-[#DCE6E0]'
+                          : 'border-[#223C33]/12 bg-white/55'
                   }`}>
                     <div className="flex items-center justify-between">
-                      <Clock3 className={`h-5 w-5 ${index === 0 ? 'text-[#D8B56A]' : 'text-[#997022]'}`} />
-                      <span className="font-mono text-[9px] opacity-40">{range}</span>
+                      <span className={`font-mono text-[9px] ${isDark ? 'text-[#D8B56A]' : 'text-[#997022]'}`}>
+                        Phase {phase.number}
+                      </span>
+                      <Clock3 className={`h-4 w-4 ${isDark ? 'text-[#D8B56A]' : 'text-[#997022]'}`} />
                     </div>
-                    <h3 className="mt-9 text-2xl font-medium tracking-[-0.03em]">{label}</h3>
-                    <div className={`mt-6 space-y-3 border-t pt-5 ${index === 0 ? 'border-white/12' : 'border-[#223C33]/10'}`}>
-                      {(items as string[]).map((item) => (
-                        <p key={item} className={`flex gap-2 text-xs leading-5 ${index === 0 ? 'text-white/60' : 'text-[#223C33]/55'}`}>
-                          <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${index === 0 ? 'text-[#D8B56A]' : 'text-[#527764]'}`} />
+                    <p className={`mt-8 text-[9px] font-semibold uppercase tracking-[0.18em] ${
+                      isDark ? 'text-[#D8B56A]' : 'text-[#997022]'
+                    }`}>
+                      {phase.curve}
+                    </p>
+                    <h3 className="mt-2 text-xl font-medium tracking-[-0.03em]">{phase.label}</h3>
+                    <p className={`mt-2 font-mono text-[8px] ${isDark ? 'text-white/35' : 'text-[#223C33]/38'}`}>
+                      {phase.period}
+                    </p>
+                    <p className={`mt-5 text-xs leading-5 ${isDark ? 'text-white/58' : 'text-[#223C33]/58'}`}>
+                      {phase.objective}
+                    </p>
+                    <div className={`mt-6 space-y-3 border-t pt-5 ${isDark ? 'border-white/12' : 'border-[#223C33]/10'}`}>
+                      {phase.checks.map((item) => (
+                        <p key={item} className={`flex gap-2 text-[11px] leading-5 ${isDark ? 'text-white/55' : 'text-[#223C33]/55'}`}>
+                          <Check className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${isDark ? 'text-[#D8B56A]' : 'text-[#527764]'}`} />
                           {item}
                         </p>
                       ))}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
               <blockquote className="mt-10 rounded-3xl bg-[#D8B56A]/18 p-7 text-2xl font-medium leading-9 tracking-[-0.03em] text-[#223C33] sm:p-9 sm:text-3xl sm:leading-10">
                 “Does this help B2W deliver a valuable customer outcome more reliably, repeatedly, or profitably?”
@@ -1591,7 +1736,7 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               <SectionHeader
                 number="12"
                 eyebrow="Supporting execution tracker"
-                title="Turn the strategy into owned, measurable work."
+                title={isServices ? 'Turn the operating map into owned, measurable work.' : 'Turn the strategy into owned, measurable work.'}
                 description="Update status and evidence weekly. Progress is stored in this browser and uses the same phases, owners, metrics, and language as the strategy."
               />
 
@@ -1694,16 +1839,28 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
             <div className="mx-auto flex max-w-6xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="b2w-wordmark text-sm font-semibold">B2W LLC</p>
-                <p className="mt-1 text-[10px] text-[#223C33]/42">Private executive strategy system</p>
+                <p className="mt-1 text-[10px] text-[#223C33]/42">
+                  {isServices ? 'Private operating map · direction, ownership, and execution' : 'Private executive strategy system'}
+                </p>
               </div>
-              <button
-                type="button"
-                onClick={onLock}
-                className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-[#223C33]/15 bg-white/55 px-4 text-xs font-semibold text-[#223C33] transition hover:bg-white"
-              >
-                <LockKeyhole className="h-3.5 w-3.5" />
-                Lock strategy
-              </button>
+              {isServices ? (
+                <Link
+                  to="/internal"
+                  className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-[#223C33]/15 bg-white/55 px-4 text-xs font-semibold text-[#223C33] transition hover:bg-white"
+                >
+                  Return to internal
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onLock}
+                  className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-[#223C33]/15 bg-white/55 px-4 text-xs font-semibold text-[#223C33] transition hover:bg-white"
+                >
+                  <LockKeyhole className="h-3.5 w-3.5" />
+                  Lock strategy
+                </button>
+              )}
             </div>
           </footer>
         </div>
@@ -1712,10 +1869,19 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
   );
 }
 
-export default function B2WExecutiveStrategyPage() {
+export default function B2WExecutiveStrategyPage({
+  mode = 'strategy',
+}: {
+  mode?: 'strategy' | 'services';
+}) {
   const [authState, setAuthState] = useState<'checking' | 'locked' | 'authenticated'>('checking');
+  const isServices = mode === 'services';
 
   useEffect(() => {
+    if (isServices) {
+      return;
+    }
+
     let active = true;
 
     const verifySession = async () => {
@@ -1740,7 +1906,11 @@ export default function B2WExecutiveStrategyPage() {
       active = false;
       window.removeEventListener('pageshow', revalidateRestoredPage);
     };
-  }, []);
+  }, [isServices]);
+
+  if (isServices) {
+    return <StrategyWorkspace mode="services" />;
+  }
 
   if (authState === 'checking') {
     return (
@@ -1759,6 +1929,7 @@ export default function B2WExecutiveStrategyPage() {
 
   return (
     <StrategyWorkspace
+      mode="strategy"
       onLock={() => {
         void fetch('/api/b2w-executive-strategy?action=logout', {
           method: 'POST',

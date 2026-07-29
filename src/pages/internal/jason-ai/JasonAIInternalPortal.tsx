@@ -881,7 +881,7 @@ export default function JasonAIInternalPortal() {
                   <ArrowRight className="h-4 w-4 rotate-90 transition-transform group-hover:translate-y-1" />
                 </button>
                 <Link
-                  to="/internal/jason-ai/executive-strategy"
+                  to="/internal/portal/product/executive-strategy"
                   className="group inline-flex min-h-12 items-center justify-between rounded-full border border-white bg-white px-5 text-sm font-semibold text-neutral-950 transition hover:bg-neutral-100"
                 >
                   Open Executive Strategy

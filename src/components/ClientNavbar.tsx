@@ -61,7 +61,7 @@ export default function ClientNavbar({
       pathname === '/client/uyghur-eats' ||
       pathname === '/portal/uyghur-eats' ||
       pathname === '/client/foster-partners' ||
-      pathname === '/internal/jason-ai'
+      pathname === '/internal/portal/product'
     ) {
       return null;
     }
@@ -86,12 +86,12 @@ export default function ClientNavbar({
       '/client/foster-partners/operating-model': 'Operating Model',
       '/client/foster-partners/governance': 'Governance',
       '/client/foster-partners/terms': 'Terms',
-      '/internal/jason-ai/profile': 'Executive Strategy',
-      '/internal/jason-ai/performance-goals': 'Performance Goals',
-      '/internal/jason-ai/kpi-tracker': 'KPI Tracker',
-      '/internal/jason-ai/executive-strategy': 'Executive Strategy',
-      '/internal/jason-ai/valuation': 'Valuation',
-      '/internal/jason-ai/documentation': 'Documentation',
+      '/internal/portal/product/profile': 'Executive Strategy',
+      '/internal/portal/product/performance-goals': 'Performance Goals',
+      '/internal/portal/product/kpi-tracker': 'KPI Tracker',
+      '/internal/portal/product/executive-strategy': 'Executive Strategy',
+      '/internal/portal/product/valuation': 'Valuation',
+      '/internal/portal/product/documentation': 'Documentation',
     };
 
     const label = routeMap[pathWithHash] ?? routeMap[pathname];

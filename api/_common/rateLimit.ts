@@ -9,6 +9,11 @@ const buckets = new Map<string, Bucket>();
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS = 10;
 
+type RateLimitOptions = {
+  windowMs?: number;
+  maxRequests?: number;
+};
+
 export function getClientIp(req: any): string {
   const forwarded = String(req.headers['x-forwarded-for'] ?? '').split(',')[0]?.trim();
   const realIp = String(req.headers['x-real-ip'] ?? '').trim();
@@ -20,8 +25,13 @@ function hasKvConfigured() {
   return Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 }
 
-export async function checkRateLimit(key: string): Promise<{ ok: true } | { ok: false; retryAfterSeconds: number }> {
+export async function checkRateLimit(
+  key: string,
+  options: RateLimitOptions = {},
+): Promise<{ ok: true } | { ok: false; retryAfterSeconds: number }> {
   const now = Date.now();
+  const windowMs = options.windowMs ?? WINDOW_MS;
+  const maxRequests = options.maxRequests ?? MAX_REQUESTS;
 
   if (hasKvConfigured()) {
     try {
@@ -29,17 +39,17 @@ export async function checkRateLimit(key: string): Promise<{ ok: true } | { ok: 
       const count = await kv.incr(kvKey);
       
       if (count === 1) {
-        await kv.pexpire(kvKey, WINDOW_MS);
+        await kv.pexpire(kvKey, windowMs);
       } else {
         const ttl = await kv.pttl(kvKey);
         if (ttl === -1) {
-          await kv.pexpire(kvKey, WINDOW_MS);
+          await kv.pexpire(kvKey, windowMs);
         }
       }
 
-      if (count > MAX_REQUESTS) {
+      if (count > maxRequests) {
         const ttl = await kv.pttl(kvKey);
-        const retryAfterSeconds = Math.max(1, Math.ceil((ttl > 0 ? ttl : WINDOW_MS) / 1000));
+        const retryAfterSeconds = Math.max(1, Math.ceil((ttl > 0 ? ttl : windowMs) / 1000));
         return { ok: false, retryAfterSeconds };
       }
 
@@ -54,11 +64,11 @@ export async function checkRateLimit(key: string): Promise<{ ok: true } | { ok: 
   const existing = buckets.get(key);
 
   if (!existing || existing.resetAt <= now) {
-    buckets.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    buckets.set(key, { count: 1, resetAt: now + windowMs });
     return { ok: true };
   }
 
-  if (existing.count >= MAX_REQUESTS) {
+  if (existing.count >= maxRequests) {
     return {
       ok: false,
       retryAfterSeconds: Math.max(1, Math.ceil((existing.resetAt - now) / 1000)),

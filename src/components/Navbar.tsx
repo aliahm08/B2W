@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, Menu, Search, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import MobileMenuDrawer from './MobileMenuDrawer';
@@ -21,6 +21,95 @@ type SearchEntry = {
   group: string;
   to: string;
 };
+
+const descrambleCharacters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+function JasonAIDescrambleLink({
+  className,
+  onClick,
+}: {
+  className: string;
+  onClick?: () => void;
+}) {
+  const text = 'Get JasonAI';
+  const [displayText, setDisplayText] = useState(text);
+  const animationTimerRef = useRef<number | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    return () => {
+      if (animationTimerRef.current !== null) {
+        window.clearTimeout(animationTimerRef.current);
+      }
+    };
+  }, []);
+
+  const runDescramble = () => {
+    if (shouldReduceMotion) {
+      setDisplayText(text);
+      return;
+    }
+
+    if (animationTimerRef.current !== null) {
+      window.clearTimeout(animationTimerRef.current);
+    }
+
+    let frame = 0;
+    const totalFrames = 18;
+
+    const tick = () => {
+      frame += 1;
+      const settledCharacters = Math.floor((frame / totalFrames) * text.length);
+
+      setDisplayText(
+        text
+          .split('')
+          .map((character, index) => {
+            if (character === ' ' || index < settledCharacters) {
+              return character;
+            }
+
+            return descrambleCharacters[Math.floor(Math.random() * descrambleCharacters.length)];
+          })
+          .join(''),
+      );
+
+      if (frame < totalFrames) {
+        animationTimerRef.current = window.setTimeout(tick, 24);
+      } else {
+        setDisplayText(text);
+        animationTimerRef.current = null;
+      }
+    };
+
+    tick();
+  };
+
+  return (
+    <Link
+      to="/jasonai"
+      onClick={onClick}
+      onMouseEnter={runDescramble}
+      onFocus={runDescramble}
+      className={className}
+      aria-label={text}
+    >
+      <span aria-hidden="true">
+        {Array.from(text).map((character, index) => {
+          if (character === ' ') {
+            return ' ';
+          }
+
+          return (
+            <span key={`${character}-${index}`} className="scramble-character" data-final={character}>
+              <span>{displayText[index] ?? character}</span>
+            </span>
+          );
+        })}
+      </span>
+    </Link>
+  );
+}
 
 function buildNavItems(basePath: string): NavItem[] {
   return [
@@ -430,13 +519,9 @@ export default function Navbar({
               {aboutNavItem.label}
             </Link>
           ) : null}
-          <Link
-            to={`${basePath}#contact`}
-            onClick={handleNavigation(`${basePath}#contact`)}
+          <JasonAIDescrambleLink
             className={`font-medium transition-colors ${isSearchOpen ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'}`}
-          >
-            Contact
-          </Link>
+          />
           <Link
             to={`${basePath}#contact`}
             onClick={handleNavigation(`${basePath}#contact`)}
@@ -574,15 +659,15 @@ export default function Navbar({
           </div>
         }
         cta={
-          <motion.a
+          <motion.div
             whileTap={{ scale: 0.97 }}
             transition={{ duration: 0.14 }}
-            href="mailto:info@b2w-ai.com?subject=B2W%20Intro%20Call"
-            onClick={() => setIsOpen(false)}
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/10 bg-white px-5 py-3 text-base font-medium text-black transition-colors hover:bg-neutral-200"
           >
-            Contact
-          </motion.a>
+            <JasonAIDescrambleLink
+              onClick={() => setIsOpen(false)}
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-full border border-white/10 bg-white px-5 py-3 text-base font-medium text-black transition-colors hover:bg-neutral-200"
+            />
+          </motion.div>
         }
       />
     </nav>

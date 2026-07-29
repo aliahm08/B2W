@@ -1,17 +1,29 @@
 # Marketability Source Of Truth
 
-Last updated: 2026-05-11
+Last updated: 2026-07-29
 
 This document is the stable reference for public marketing upkeep on the B2W website. Use it with the generated [docs/seo-route-inventory.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/seo-route-inventory.md) file.
 
 ## Current Brand Stack
 
-- `B2W`: consulting, diligence, implementation, and applied AI systems for operators.
+- `B2W`: an operating layer for contracting businesses that connects communication, business context, document creation, and approved actions.
 - `Clara`: the B2W voice-to-plan and estimation interface.
 - `JasonAI`: a WhatsApp AI Assistant for searching approved contractor communication and creating job summaries.
 
+## Services Route Structure
+
+- `/services`: the live consulting-led services page covering marketing, operations, financial performance, diagnostics, implementation, and practical AI systems.
+- `/internal/services`: the private Operating Map organized into Growth Map, Optimization, and Diligence.
+- `/internal`: the password-protected entry point for internal work.
+- `/internal/portal`: the protected Gurge overview for today’s business activity, clients, metrics, and product direction.
+- `/internal/portal/product`: the JasonAI product roadmap and progress workspace, formerly located at `/internal/jason-ai`.
+- `Gurge`: a B2W-built project-management concept under consideration as the Executive Strategy tracker. Its next state should be editable and AI-driven.
+- `Business Plan`: a separate source document linked from the internal hub in Google Drive.
+- `/services/archive/2026-07-29`: the preserved dated snapshot of the consulting-led services page.
+
 ## JasonAI Product And Offer Rules
 
+- The global public navigation links directly to `/jasonai` as `Get JasonAI` and uses the JasonAI descramble interaction on hover.
 - Available now: communication search and summaries.
 - In development: action-item extraction, status reporting, and source-linked answers.
 - Future only: financial or contractual automation, added after the core workflow is trusted.
@@ -50,3 +62,11 @@ Then:
 - Give public indexable routes a share image. Product pages should use product-specific visuals when available; otherwise use the default B2W share card.
 - Keep internal, prototype, client, and portal pages on `noindex, nofollow` unless there is a deliberate reason to expose them.
 - Treat `content.md` as a concise strategic reference, not a dumping ground for page-by-page copy.
+
+## Revision History
+
+- **2026-07-29:** Separated the internal Operating Map, Executive Strategy tracking tool, and Business Plan; recorded Gurge’s editable, AI-driven product direction.
+- **2026-07-29:** Moved the JasonAI product roadmap from `/internal/jason-ai` to `/internal/portal/product` and retained the former route as a redirect.
+- **2026-07-29:** Replaced the global `Contact` navigation item with a descrambling `Get JasonAI` product link.
+- **2026-07-29:** Restored the consulting-led services page at `/services` and moved the operating strategy workspace to private `/internal/services`.
+- **2026-07-29:** Reframed `/services` around B2W's contracting-business operating layer and preserved the former consulting-led services page at `/services/archive/2026-07-29`.

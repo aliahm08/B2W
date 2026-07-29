@@ -370,18 +370,24 @@ function AccessScreen({ onAuthenticated }: { onAuthenticated: () => void }) {
         <div className="grid w-full overflow-hidden rounded-[2rem] border border-[#223C33]/15 bg-[#F8F5EE]/90 shadow-[0_45px_120px_rgba(34,60,51,0.18)] backdrop-blur lg:grid-cols-[minmax(0,1.2fr)_430px]">
           <section className="relative hidden min-h-[680px] overflow-hidden border-r border-[#223C33]/12 p-12 lg:flex lg:flex-col lg:justify-between">
             <div>
-              <div className="flex items-center gap-3">
+              <div
+                className="group inline-flex items-center gap-3"
+                aria-label="B2W"
+                title="B2W"
+              >
                 <B2WIcon title="" className="h-10 w-11 text-[#223C33]" />
-                <div>
-                  <p className="b2w-wordmark text-sm font-semibold tracking-[0.18em]">B2W</p>
-                  <p className="text-[9px] uppercase tracking-[0.22em] text-[#223C33]/50">Executive strategy system</p>
-                </div>
+                <span className="b2w-wordmark max-w-0 -translate-x-1 overflow-hidden whitespace-nowrap text-sm font-semibold tracking-[0.18em] opacity-0 transition-all duration-200 group-hover:max-w-16 group-hover:translate-x-0 group-hover:opacity-100">
+                  B2W
+                </span>
               </div>
-              <p className="mt-28 max-w-2xl text-5xl font-medium leading-[1.02] tracking-[-0.05em] xl:text-6xl">
-                One operating view for the company we are building.
+              <p
+                className="mt-28 max-w-2xl text-4xl font-medium leading-[1.02] tracking-[-0.05em] xl:text-5xl 2xl:text-6xl"
+                style={{ textWrap: "balance" }}
+              >
+                Our mission is to improve communication and optimize actionable insights.
               </p>
               <p className="mt-6 max-w-xl text-base leading-7 text-[#223C33]/62">
-                Product architecture, commercial progression, phase gates, executive ownership, and weekly execution—connected in one private workspace.
+                We help small and midsize business owners by providing a WhatsApp-based AI assistant that can summarize, search, and act.
               </p>
             </div>
 
@@ -409,9 +415,11 @@ function AccessScreen({ onAuthenticated }: { onAuthenticated: () => void }) {
             <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#997022]">
               Restricted workspace
             </p>
-            <h1 className="mt-3 text-3xl font-medium tracking-[-0.04em]">Executive access</h1>
+            <h1 className="mt-3 text-3xl font-medium tracking-[-0.04em]">
+              Building JasonAI for general contractors &amp; contracting firms.
+            </h1>
             <p className="mt-4 text-sm leading-6 text-[#223C33]/58">
-              Enter the strategy password once per secure browser session. Access expires automatically and can be locked manually at any time.
+              This portal helps layout our business plan and keep track of progress.
             </p>
 
             <form className="mt-9" onSubmit={handleSubmit}>

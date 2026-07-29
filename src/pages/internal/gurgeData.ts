@@ -186,7 +186,7 @@ export const gurgeBusinesses: GurgeBusiness[] = [
         metricLabel: 'Strategy horizon',
         metricValue: '24 months',
         update: 'JasonAI is preparing for Foundation, the first phase of its five-phase strategy.',
-        href: '/internal/jason-ai',
+        href: '/internal/portal/product',
       },
     ],
   },

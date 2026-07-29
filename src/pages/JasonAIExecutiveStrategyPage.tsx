@@ -206,7 +206,7 @@ export function JasonAIExecutiveAccessScreen({
         robots="noindex, nofollow"
       />
       <Link
-        to="/internal/jason-ai"
+        to="/internal/portal/product"
         className="absolute left-5 top-5 z-20 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-4 py-2 text-xs font-medium text-white/55 backdrop-blur transition hover:border-white/20 hover:text-white md:left-8 md:top-8"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
@@ -372,7 +372,7 @@ function Dashboard({
         <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between px-4 sm:px-6">
           <div className="flex min-w-0 items-center gap-3">
             <Link
-              to="/internal/jason-ai"
+              to="/internal/portal/product"
               className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/8 bg-white/[0.03] text-white/45 transition hover:border-white/20 hover:text-white"
               aria-label="Return to JasonAI internal portal"
             >

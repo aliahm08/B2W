@@ -60,7 +60,7 @@ const JasonAIExecutiveStrategyDocumentPage = lazy(() => import('./pages/internal
 const JasonAIValuationModelPage = lazy(() => import('./pages/internal/jason-ai/JasonAIValuationModelPage'));
 const JasonAIDocumentationPage = lazy(() => import('./pages/internal/jason-ai/JasonAIDocumentationPage'));
 const B2WExecutiveStrategyPage = lazy(() => import('./pages/B2WExecutiveStrategyPage'));
-const B2WExecutiveStrategyV0Page = lazy(() => import('./pages/B2WExecutiveStrategyV0Page'));
+const InternalAccessGate = lazy(() => import('./pages/internal/InternalAccessGate'));
 const LogoVerificationPage = lazy(() => import('./pages/LogoVerificationPage'));
 
 function ScrollToTop() {
@@ -223,7 +223,10 @@ export default function App() {
   });
 
   useEffect(() => {
-    if (location.pathname !== '/services') {
+    if (
+      location.pathname !== '/services'
+      && location.pathname !== '/services/archive/2026-07-29'
+    ) {
       setIsLandingHeroVisible(false);
     }
   }, [location.pathname]);
@@ -243,13 +246,15 @@ export default function App() {
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
   const isLogoVerification = location.pathname === '/brand/logo-verification';
-  const isExecutiveStrategy = location.pathname === '/executive-strategy'
-    || location.pathname === '/strategy-v1/executive-strategy';
+  const isLiveServices = location.pathname === '/services';
+  const isArchivedServices = location.pathname === '/services/archive/2026-07-29';
+  const isServicesLanding = isLiveServices || isArchivedServices;
   const isInternalPortal =
     location.pathname === '/internal' ||
     location.pathname.startsWith('/internal/') ||
     location.pathname.startsWith('/portal/') ||
-    isExecutiveStrategy;
+    location.pathname === '/executive-strategy' ||
+    location.pathname === '/strategy-v1/executive-strategy';
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
@@ -269,8 +274,8 @@ export default function App() {
       <ScrollToTop />
       {!isIsolatedView && (
         <Navbar
-          showOfferBanner={location.pathname === '/services' && !isLandingHeroVisible && !isOfferBannerDismissed}
-          transparentAtTop={location.pathname === '/services' && isLandingHeroVisible}
+          showOfferBanner={isServicesLanding && !isLandingHeroVisible && !isOfferBannerDismissed}
+          transparentAtTop={isServicesLanding && isLandingHeroVisible}
           onOfferClick={() => {
             window.location.hash = 'contact';
           }}
@@ -308,6 +313,20 @@ export default function App() {
                     />
                   }
                 />
+                <Route
+                  path="/services/archive/2026-07-29"
+                  element={
+                    <LandingPage
+                      onHeroVisibilityChange={setIsLandingHeroVisible}
+                      onOfferClick={() => {
+                        const contact = document.getElementById('contact');
+                        contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }}
+                      onOfferClose={dismissOfferBanner}
+                      openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
+                    />
+                  }
+                />
                 <Route path="/home-test-1" element={<Navigate to="/" replace />} />
                 <Route path="/app-test-1" element={<AppTestOnePage />} />
                 <Route path="/solutions" element={<Navigate to="/jasonai" replace />} />
@@ -319,17 +338,40 @@ export default function App() {
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
-                <Route path="/executive-strategy" element={<B2WExecutiveStrategyV0Page />} />
-                <Route path="/strategy-v1/executive-strategy" element={<B2WExecutiveStrategyPage />} />
-                <Route path="/internal" element={<InternalProjectIndexPage />} />
-                <Route path="/internal/jason-ai" element={<JasonAIOverviewPage />} />
-                <Route path="/internal/jason-ai/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
-                <Route path="/internal/jason-ai/kpi-tracker" element={<JasonAIKPITrackerPage />} />
-                <Route path="/internal/jason-ai/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
-                <Route path="/internal/jason-ai/profile" element={<Navigate to="/internal/jason-ai/executive-strategy" replace />} />
-                <Route path="/internal/jason-ai/valuation" element={<JasonAIValuationModelPage />} />
-                <Route path="/internal/jason-ai/documentation" element={<JasonAIDocumentationPage />} />
-                <Route path="/portal/JasonAI-Executive-Strategy" element={<Navigate to="/internal/jason-ai/profile" replace />} />
+                <Route path="/executive-strategy" element={<Navigate to="/internal" replace />} />
+                <Route path="/strategy-v1/executive-strategy" element={<Navigate to="/internal" replace />} />
+                <Route path="/internal" element={<InternalAccessGate />} />
+                <Route
+                  path="/internal/services"
+                  element={
+                    <InternalAccessGate>
+                      <B2WExecutiveStrategyPage mode="services" />
+                    </InternalAccessGate>
+                  }
+                />
+                <Route
+                  path="/internal/portal"
+                  element={
+                    <InternalAccessGate>
+                      <InternalProjectIndexPage />
+                    </InternalAccessGate>
+                  }
+                />
+                <Route path="/internal/portal/product" element={<JasonAIOverviewPage />} />
+                <Route path="/internal/portal/product/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
+                <Route path="/internal/portal/product/kpi-tracker" element={<JasonAIKPITrackerPage />} />
+                <Route path="/internal/portal/product/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
+                <Route path="/internal/portal/product/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+                <Route path="/internal/portal/product/valuation" element={<JasonAIValuationModelPage />} />
+                <Route path="/internal/portal/product/documentation" element={<JasonAIDocumentationPage />} />
+                <Route path="/internal/jason-ai" element={<Navigate to="/internal/portal/product" replace />} />
+                <Route path="/internal/jason-ai/performance-goals" element={<Navigate to="/internal/portal/product/performance-goals" replace />} />
+                <Route path="/internal/jason-ai/kpi-tracker" element={<Navigate to="/internal/portal/product/kpi-tracker" replace />} />
+                <Route path="/internal/jason-ai/executive-strategy" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+                <Route path="/internal/jason-ai/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+                <Route path="/internal/jason-ai/valuation" element={<Navigate to="/internal/portal/product/valuation" replace />} />
+                <Route path="/internal/jason-ai/documentation" element={<Navigate to="/internal/portal/product/documentation" replace />} />
+                <Route path="/portal/JasonAI-Executive-Strategy" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
                 <Route path="/jasonai-2" element={<Navigate to="/jasonai" replace />} />
                 <Route path="/jasonai-3" element={<Navigate to="/jasonai" replace />} />
                 <Route path="/jasonai-3/*" element={<Navigate to="/jasonai" replace />} />

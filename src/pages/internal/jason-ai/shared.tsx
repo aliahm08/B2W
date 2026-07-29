@@ -2,7 +2,7 @@ import ClientNavbar, { type ClientNavAction } from '../../../components/ClientNa
 import { BarChart3, ClipboardCheck, FileText, Home } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-export const jasonAIInternalBasePath = '/internal/jason-ai';
+export const jasonAIInternalBasePath = '/internal/portal/product';
 
 export const jasonAIInternalRoutes = {
   proposal: jasonAIInternalBasePath,
