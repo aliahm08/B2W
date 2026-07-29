@@ -1,4 +1,5 @@
 import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
+import { insertJasonAiRoiFormSubmission } from './_common/formSubmissions.js';
 import { buildJasonAiRoiReportEmail } from './_common/jasonAiRoiReport.js';
 import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
 import { sendEmail } from './_common/resend.js';
@@ -40,17 +41,25 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
-    const submission = validated.value;
+    const submission = {
+      ...validated.value,
+      submittedAt: new Date().toISOString(),
+    };
     const scenario = buildJasonAiScenario(submission.businessType, {
       employees: submission.employees,
       activeProjects: submission.activeProjects,
       averageProjectWeeks: submission.averageProjectWeeks,
     });
     const model = calculateJasonAiRoi(scenario);
+    const submissionId = await insertJasonAiRoiFormSubmission(
+      submission,
+      model,
+      String(process.env.INTERNAL_NOTIFICATION_EMAIL ?? 'info@b2w-ai.com').trim() || 'info@b2w-ai.com',
+    );
     const report = buildJasonAiRoiReportEmail(submission, model);
     const sent = await sendEmail({
       from: 'JasonAI by B2W <info@b2w-ai.com>',
-      to: submission.recipientEmail,
+      to: submission.businessEmail,
       subject: report.subject,
       text: report.text,
       html: report.html,
@@ -59,7 +68,8 @@ export default async function handler(req: any, res: any) {
 
     sendJson(res, 200, {
       ok: true,
-      recipientEmail: submission.recipientEmail,
+      recipientEmail: submission.businessEmail,
+      submissionId,
       messageId: sent?.id ?? null,
     });
   } catch (error) {

@@ -2,7 +2,13 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, type Plugin } from 'vite';
-import { isB2WExecutiveStrategyPasswordValid } from './server/b2wExecutiveStrategyAccess';
+import {
+  B2W_EXECUTIVE_STRATEGY_COOKIE,
+  createB2WExecutiveStrategySessionToken,
+  isB2WExecutiveStrategyPasswordValid,
+  isB2WExecutiveStrategySessionValid,
+  readB2WExecutiveStrategySessionCookie,
+} from './server/b2wExecutiveStrategyAccess';
 
 function b2wExecutiveStrategyDevAccess(): Plugin {
   return {
@@ -13,10 +19,42 @@ function b2wExecutiveStrategyDevAccess(): Plugin {
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         res.setHeader('X-Robots-Tag', 'noindex, nofollow, noarchive');
 
-        if (req.method !== 'POST') {
+        if (req.method !== 'GET' && req.method !== 'POST') {
           res.statusCode = 405;
-          res.setHeader('Allow', 'POST');
+          res.setHeader('Allow', 'GET, POST');
           res.end(JSON.stringify({ ok: false, error: `Method ${req.method} not allowed.` }));
+          return;
+        }
+
+        const url = new URL(req.url ?? '/', 'http://localhost');
+        const action = String(url.searchParams.get('action') ?? (req.method === 'GET' ? 'status' : 'login'))
+          .trim()
+          .toLowerCase();
+
+        if (action === 'status') {
+          const token = readB2WExecutiveStrategySessionCookie(String(req.headers.cookie ?? ''));
+          res.statusCode = 200;
+          res.end(JSON.stringify({
+            ok: true,
+            authenticated: isB2WExecutiveStrategySessionValid(token),
+            configured: true,
+          }));
+          return;
+        }
+
+        if (action === 'logout') {
+          res.setHeader(
+            'Set-Cookie',
+            `${B2W_EXECUTIVE_STRATEGY_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`,
+          );
+          res.statusCode = 200;
+          res.end(JSON.stringify({ ok: true, authenticated: false }));
+          return;
+        }
+
+        if (action !== 'login') {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ ok: false, authenticated: false, error: 'Unsupported action.' }));
           return;
         }
 
@@ -51,6 +89,10 @@ function b2wExecutiveStrategyDevAccess(): Plugin {
               return;
             }
 
+            res.setHeader(
+              'Set-Cookie',
+              `${B2W_EXECUTIVE_STRATEGY_COOKIE}=${encodeURIComponent(createB2WExecutiveStrategySessionToken())}; Path=/; HttpOnly; SameSite=Strict`,
+            );
             res.statusCode = 200;
             res.end(JSON.stringify({ ok: true, authenticated: true }));
           } catch {

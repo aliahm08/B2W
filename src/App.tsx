@@ -60,6 +60,7 @@ const JasonAIExecutiveStrategyDocumentPage = lazy(() => import('./pages/internal
 const JasonAIValuationModelPage = lazy(() => import('./pages/internal/jason-ai/JasonAIValuationModelPage'));
 const JasonAIDocumentationPage = lazy(() => import('./pages/internal/jason-ai/JasonAIDocumentationPage'));
 const B2WExecutiveStrategyPage = lazy(() => import('./pages/B2WExecutiveStrategyPage'));
+const LogoVerificationPage = lazy(() => import('./pages/LogoVerificationPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -240,18 +241,21 @@ export default function App() {
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
+  const isLogoVerification = location.pathname === '/brand/logo-verification';
+  const isExecutiveStrategy = location.pathname === '/executive-strategy'
+    || location.pathname === '/strategy-v1/executive-strategy';
   const isInternalPortal =
     location.pathname === '/internal' ||
     location.pathname.startsWith('/internal/') ||
     location.pathname.startsWith('/portal/') ||
-    location.pathname === '/executive-strategy';
+    isExecutiveStrategy;
   const isProjectPage = location.pathname.includes('-operations') || 
                         location.pathname.includes('-social-media-management') ||
                         location.pathname.includes('-valuation-model') ||
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isJasonAIPage;
+    isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isJasonAIPage || isLogoVerification;
   const routeTransitionKey = isClaraPage ? '/clara' : isJasonAIPage ? '/jasonai' : location.pathname;
 
   let clientName: string | undefined = undefined;
@@ -288,6 +292,7 @@ export default function App() {
                   path="/"
                   element={<HomeTestOnePage />}
                 />
+                <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />
                 <Route
                   path="/services"
                   element={
@@ -314,6 +319,7 @@ export default function App() {
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
                 <Route path="/executive-strategy" element={<B2WExecutiveStrategyPage />} />
+                <Route path="/strategy-v1/executive-strategy" element={<B2WExecutiveStrategyPage />} />
                 <Route path="/internal" element={<InternalProjectIndexPage />} />
                 <Route path="/internal/jason-ai" element={<JasonAIOverviewPage />} />
                 <Route path="/internal/jason-ai/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
@@ -390,7 +396,7 @@ export default function App() {
         </Suspense>
       </main>
       {!isIsolatedView && <Footer />}
-      <AssistantWidget />
+      {!isLogoVerification && <AssistantWidget />}
     </div>
   );
 }

@@ -21,6 +21,20 @@ function businessTypeLabel(type: JasonAiRoiReportSubmission['businessType']) {
   return type === 'firm' ? 'Contracting Firm' : 'General Contractor';
 }
 
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => {
+    const entities: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;',
+    };
+
+    return entities[character];
+  });
+}
+
 function buildChartRows(model: JasonAiRoiModel) {
   const maxNet = Math.max(...model.years.map((year) => year.net), 1);
 
@@ -84,6 +98,13 @@ export function buildJasonAiRoiReportEmail(
   const subject = `Your JasonAI four-year ROI estimate — ${percentage.format(model.roi)}`;
   const standardInvestment = currency.format(model.totalStandardInvestment);
   const preLaunchInvestment = currency.format(model.totalInvestment);
+  const fullName = escapeHtml(`${submission.firstName} ${submission.lastName}`.trim());
+  const businessEmail = escapeHtml(submission.businessEmail);
+  const companyName = escapeHtml(submission.companyName);
+  const companyLocation = escapeHtml(submission.companyLocation || 'Not provided');
+  const marketingPreference = submission.marketingOptIn ? 'Opted in' : 'Not opted in';
+  const marketingConsentText =
+    'Yes, I would like to receive marketing communications regarding B2W products, services, and events. I can unsubscribe at any time.';
 
   const html = `<!doctype html>
 <html lang="en">
@@ -123,7 +144,34 @@ export function buildJasonAiRoiReportEmail(
             </tr>
             <tr>
               <td style="padding:28px;">
-                <p style="margin:0 0 12px;color:#9b3d1e;font-size:12px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;">Your inputs</p>
+                <p style="margin:0 0 12px;color:#9b3d1e;font-size:12px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;">Report details</p>
+                <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #d9d2c3;border-collapse:collapse;">
+                  <tr>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;color:#6b6256;font-size:12px;text-transform:uppercase;">Name</td>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;text-align:right;font-size:13px;font-weight:700;">${fullName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;color:#6b6256;font-size:12px;text-transform:uppercase;">Business email</td>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;text-align:right;font-size:13px;font-weight:700;">${businessEmail}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;color:#6b6256;font-size:12px;text-transform:uppercase;">Company</td>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;text-align:right;font-size:13px;font-weight:700;">${companyName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;color:#6b6256;font-size:12px;text-transform:uppercase;">Company location</td>
+                    <td style="padding:12px;border-bottom:1px solid #d9d2c3;text-align:right;font-size:13px;font-weight:700;">${companyLocation}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:12px;color:#6b6256;font-size:12px;text-transform:uppercase;">Marketing communications</td>
+                    <td style="padding:12px;text-align:right;font-size:13px;font-weight:700;">${marketingPreference}</td>
+                  </tr>
+                </table>
+                <p style="margin:10px 0 0;color:#6b6256;font-size:11px;line-height:1.5;">
+                  Marketing preference recorded: ${submission.marketingOptIn ? marketingConsentText : 'No marketing opt-in was provided.'}
+                </p>
+
+                <p style="margin:28px 0 12px;color:#9b3d1e;font-size:12px;font-weight:700;letter-spacing:0.4px;text-transform:uppercase;">Your inputs</p>
                 <table width="100%" cellspacing="0" cellpadding="0" border="0" style="border:1px solid #d9d2c3;border-collapse:collapse;">
                   <tr>
                     <td style="padding:12px;border-bottom:1px solid #d9d2c3;color:#6b6256;font-size:12px;text-transform:uppercase;">Business type</td>
@@ -203,6 +251,14 @@ Generated ${generatedDate}
 
 Estimated four-year ROI: ${percentage.format(model.roi)}
 Estimated four-year net return: ${currency.format(model.netReturn)}
+
+REPORT DETAILS
+Name: ${submission.firstName} ${submission.lastName}
+Business email: ${submission.businessEmail}
+Company: ${submission.companyName}
+Company location: ${submission.companyLocation || 'Not provided'}
+Marketing communications: ${marketingPreference}
+Marketing preference recorded: ${submission.marketingOptIn ? marketingConsentText : 'No marketing opt-in was provided.'}
 
 YOUR INPUTS
 Business type: ${typeLabel}

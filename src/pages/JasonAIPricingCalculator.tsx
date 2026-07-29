@@ -27,6 +27,15 @@ type PricingCalculatorProps = {
   onBookReview: () => void;
 };
 
+type RoiReportContact = {
+  firstName: string;
+  lastName: string;
+  businessEmail: string;
+  companyName: string;
+  companyLocation: string;
+  marketingOptIn: boolean;
+};
+
 const currency = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -425,7 +434,14 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
     buildJasonAiScenario('contractor', jasonAiProfileDefaults.contractor),
   );
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [recipientEmail, setRecipientEmail] = useState('');
+  const [reportContact, setReportContact] = useState<RoiReportContact>({
+    firstName: '',
+    lastName: '',
+    businessEmail: '',
+    companyName: '',
+    companyLocation: '',
+    marketingOptIn: false,
+  });
   const [shareStatus, setShareStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [shareMessage, setShareMessage] = useState('');
 
@@ -476,6 +492,14 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
     }
   };
 
+  const updateReportContact = <Key extends keyof RoiReportContact>(key: Key, value: RoiReportContact[Key]) => {
+    setReportContact((current) => ({ ...current, [key]: value }));
+    if (shareStatus !== 'idle') {
+      setShareStatus('idle');
+      setShareMessage('');
+    }
+  };
+
   const sendRoiReport = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setShareStatus('sending');
@@ -486,12 +510,16 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          recipientEmail,
+          ...reportContact,
           businessType: scenario.type,
           employees: profile.employees,
           activeProjects: profile.activeProjects,
           averageProjectWeeks: profile.averageProjectWeeks,
           websiteUrl: '',
+          sourcePage: document.title,
+          sourcePath: window.location.pathname,
+          sourceUrl: window.location.href,
+          referrer: document.referrer,
           submittedAt: new Date().toISOString(),
         }),
       });
@@ -502,7 +530,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
       }
 
       setShareStatus('success');
-      setShareMessage(`Report sent to ${recipientEmail} from info@b2w-ai.com.`);
+      setShareMessage(`Report sent to ${reportContact.businessEmail} from info@b2w-ai.com.`);
     } catch (error) {
       setShareStatus('error');
       setShareMessage(error instanceof Error ? error.message : 'Unable to email this report right now.');
@@ -546,17 +574,22 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 Calculate your four-year ROI.
               </h2>
             </div>
-            <div className="max-w-sm">
-              <p className="text-sm leading-7 text-[#6b6256]">
-                Answer three operating questions. Your result updates immediately.
-              </p>
+            <div className="flex max-w-sm flex-wrap gap-3 md:self-end">
               <button
                 type="button"
                 onClick={openShareDialog}
-                className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-white px-4 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#fffaf0]"
+                className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-white px-4 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#fffaf0]"
               >
                 <Mail className="h-4 w-4" />
                 Email this ROI report
+              </button>
+              <button
+                type="button"
+                onClick={onBookReview}
+                className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1f5f7a]"
+              >
+                Book review
+                <ArrowRight className="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -789,7 +822,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
 
       {isShareOpen ? (
         <div
-          className="fixed inset-0 z-[80] grid place-items-center overflow-y-auto bg-[#141414]/55 px-4 py-6 backdrop-blur-sm"
+          className="fixed inset-0 z-[80] flex items-start justify-center overflow-y-auto bg-[#141414]/55 px-4 py-6 backdrop-blur-sm"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               closeShareDialog();
@@ -801,7 +834,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
             aria-modal="true"
             aria-labelledby="roi-report-title"
             aria-describedby="roi-report-description"
-            className="w-full max-w-xl border border-[#141414] bg-white shadow-[10px_10px_0_#1f5f7a]"
+            className="my-auto w-full max-w-2xl border border-[#141414] bg-white shadow-[10px_10px_0_#1f5f7a]"
           >
             <div className="flex items-start justify-between gap-6 border-b border-[#d9d2c3] bg-[#fffaf0] p-5 md:p-6">
               <div>
@@ -827,28 +860,99 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 {' '}{currency.format(model.netReturn)} estimated return, a four-year graph, and the full table.
               </p>
 
-              <label htmlFor="roi-report-email" className="mt-6 block text-sm font-semibold text-[#141414]">
-                Email address
-              </label>
-              <input
-                id="roi-report-email"
-                type="email"
-                inputMode="email"
-                autoComplete="email"
-                autoFocus
-                required
-                maxLength={320}
-                value={recipientEmail}
-                onChange={(event) => {
-                  setRecipientEmail(event.target.value);
-                  if (shareStatus !== 'idle') {
-                    setShareStatus('idle');
-                    setShareMessage('');
-                  }
-                }}
-                placeholder="you@company.com"
-                className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
-              />
+              <p className="mt-5 text-xs font-semibold uppercase text-[#6b6256]">Required fields are marked *</p>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <label className="block text-sm font-semibold text-[#141414]">
+                  First name *
+                  <input
+                    type="text"
+                    autoComplete="given-name"
+                    autoFocus
+                    required
+                    maxLength={80}
+                    value={reportContact.firstName}
+                    onChange={(event) => updateReportContact('firstName', event.target.value)}
+                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                  />
+                </label>
+                <label className="block text-sm font-semibold text-[#141414]">
+                  Last name *
+                  <input
+                    type="text"
+                    autoComplete="family-name"
+                    required
+                    maxLength={80}
+                    value={reportContact.lastName}
+                    onChange={(event) => updateReportContact('lastName', event.target.value)}
+                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                  />
+                </label>
+                <label className="block text-sm font-semibold text-[#141414]">
+                  Business email address *
+                  <input
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    required
+                    maxLength={320}
+                    value={reportContact.businessEmail}
+                    onChange={(event) => updateReportContact('businessEmail', event.target.value)}
+                    placeholder="you@company.com"
+                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                  />
+                </label>
+                <label className="block text-sm font-semibold text-[#141414]">
+                  Company name *
+                  <input
+                    type="text"
+                    autoComplete="organization"
+                    required
+                    maxLength={200}
+                    value={reportContact.companyName}
+                    onChange={(event) => updateReportContact('companyName', event.target.value)}
+                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                  />
+                </label>
+                <label className="block text-sm font-semibold text-[#141414] sm:col-span-2">
+                  Company location
+                  <input
+                    type="text"
+                    autoComplete="address-level2"
+                    maxLength={200}
+                    value={reportContact.companyLocation}
+                    onChange={(event) => updateReportContact('companyLocation', event.target.value)}
+                    placeholder="City, State / Province"
+                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                  />
+                </label>
+              </div>
+
+              <div className="mt-5 border border-[#d9d2c3] bg-[#fffaf0] p-4">
+                <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-[#4f463c]">
+                  <input
+                    type="checkbox"
+                    checked={reportContact.marketingOptIn}
+                    onChange={(event) => updateReportContact('marketingOptIn', event.target.checked)}
+                    className="mt-1 h-5 w-5 shrink-0 accent-[#1f5f7a]"
+                  />
+                  <span>
+                    Yes, I would like to receive marketing communications regarding B2W products, services, and
+                    events. I can unsubscribe at any time.
+                  </span>
+                </label>
+                <p className="mt-3 text-xs leading-5 text-[#6b6256]">
+                  For details about how we collect, use, and protect your information, please see our{' '}
+                  <a
+                    href="/jasonai/privacy"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-semibold text-[#141414] underline underline-offset-2"
+                  >
+                    Privacy Policy
+                  </a>
+                  .
+                </p>
+              </div>
 
               <div
                 aria-live="polite"

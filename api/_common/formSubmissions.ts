@@ -1,6 +1,11 @@
 import './env.js';
 import { createClient } from '@supabase/supabase-js';
-import type { ClientCommunicationSubmission, LeadSubmission } from './validation.js';
+import type { JasonAiRoiModel } from '../../src/lib/jasonAiRoi.js';
+import type {
+  ClientCommunicationSubmission,
+  JasonAiRoiReportSubmission,
+  LeadSubmission,
+} from './validation.js';
 
 type FormAudience = 'landing' | 'client';
 
@@ -159,6 +164,54 @@ export async function insertClientFormSubmission(submission: ClientCommunication
     metadata: {
       messageCategory: submission.messageCategory,
       projectName: submission.projectName,
+    },
+  });
+}
+
+export async function insertJasonAiRoiFormSubmission(
+  submission: JasonAiRoiReportSubmission,
+  model: JasonAiRoiModel,
+  notificationEmail: string,
+) {
+  const businessType = submission.businessType === 'firm' ? 'Contracting Firm' : 'General Contractor';
+  const fullName = `${submission.firstName} ${submission.lastName}`.trim();
+  const marketingConsentText =
+    'Yes, I would like to receive marketing communications regarding B2W products, services, and events. I can unsubscribe at any time.';
+
+  return insertFormSubmission({
+    audience: 'landing',
+    submission_type: 'jasonai_roi_report',
+    template_key: 'jasonai_roi_report',
+    notification_email: notificationEmail,
+    contact_name: fullName,
+    contact_email: submission.businessEmail,
+    company: submission.companyName,
+    subject: `${businessType} AI ROI report`,
+    message: `Requested a JasonAI ROI report with an estimated four-year ROI of ${Math.round(model.roi * 100)}% and a net return of $${Math.round(model.netReturn).toLocaleString('en-US')}.`,
+    source_page: submission.sourcePage,
+    source_path: submission.sourcePath,
+    source_url: submission.sourceUrl,
+    referrer: submission.referrer,
+    submitted_at: submission.submittedAt,
+    metadata: {
+      firstName: submission.firstName,
+      lastName: submission.lastName,
+      companyLocation: submission.companyLocation,
+      marketingOptIn: submission.marketingOptIn,
+      marketingConsentText,
+      marketingConsentCapturedAt: submission.submittedAt,
+      marketingConsentVersion: '2026-07-28',
+      businessType: submission.businessType,
+      employees: submission.employees,
+      activeProjects: submission.activeProjects,
+      averageProjectWeeks: submission.averageProjectWeeks,
+      estimatedRoi: model.roi,
+      estimatedRoiPercent: Math.round(model.roi * 100),
+      estimatedNetReturn: model.netReturn,
+      modeledValue: model.totalValue,
+      preLaunchInvestment: model.totalInvestment,
+      standardInvestment: model.totalStandardInvestment,
+      years: model.years,
     },
   });
 }

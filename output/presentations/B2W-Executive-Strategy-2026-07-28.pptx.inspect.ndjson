@@ -1,0 +1,446 @@
+{"kind":"deck","id":"pr/se5xc6","name":"Deck"}
+{"kind":"layout","layoutId":"d37ab6bd-c8fd-4c1b-b6e0-b352527da960","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"222b7ca9-9dd3-4070-87fc-455617205b7b","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/he74bf","slide":1,"title":"B2W","textShapes":8}
+{"kind":"shape","id":"sh/qdg3y907","slide":1,"bbox":[0,0,1280,720]}
+{"kind":"shape","id":"sh/dg7mtojy","slide":1,"bbox":[0,0,30,720]}
+{"kind":"textbox","id":"sh/cfyl0jid","slide":1,"text":"B2W","textPreview":"B2W","textChars":3,"textLines":1,"bbox":[72,54,130,30]}
+{"kind":"textbox","id":"sh/3a54ne1w","slide":1,"text":"PRIVATE / EXECUTIVE USE","textPreview":"PRIVATE / EXECUTIVE USE","textChars":23,"textLines":1,"bbox":[890,58,310,20]}
+{"kind":"textbox","id":"sh/i9w3u90b","slide":1,"text":"Executive\nStrategy System","textPreview":"Executive | Strategy System","textChars":25,"textLines":2,"bbox":[72,156,870,176]}
+{"kind":"textbox","id":"sh/pc7mpoj2","slide":1,"text":"A staged path from founder-led validation to a scalable AI operating layer for project-based businesses.","textPreview":"A staged path from founder-led validation to a scalable AI operating layer for project-based businesses.","textChars":104,"textLines":1,"bbox":[76,372,770,76]}
+{"kind":"shape","id":"sh/4bylwjih","slide":1,"bbox":[900,150,300,360]}
+{"kind":"textbox","id":"sh/n694zy10","slide":1,"text":"STRATEGIC\nTHESIS","textPreview":"STRATEGIC | THESIS","textChars":16,"textLines":2,"bbox":[932,182,220,40]}
+{"kind":"shape","id":"sh/m50n6t0f","slide":1,"bbox":[932,246,235,1]}
+{"kind":"textbox","id":"sh/4fy9c3yp","slide":1,"text":"Connect\ncommunication,\ncontext,\ndocuments,\nand approved action.","textPreview":"Connect | communication, | context, | documents, | and approved action.","textChars":63,"textLines":5,"bbox":[932,278,228,190]}
+{"kind":"textbox","id":"sh/5g7a58fa","slide":1,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[76,626,250,24]}
+{"kind":"textbox","id":"sh/idgradgz","slide":1,"text":"B2W-AI.COM","textPreview":"B2W-AI.COM","textChars":10,"textLines":1,"bbox":[1002,626,198,24]}
+{"kind":"notes","id":"nt/he74bf","slide":1,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/bshmos","slide":2,"title":"02","textShapes":16}
+{"kind":"shape","id":"sh/8n6pkzmt","slide":2,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/7mxobul8","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/6lo7i94n","slide":2,"text":"COMPANY IN ONE VIEW","textPreview":"COMPANY IN ONE VIEW","textChars":19,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/lkf69432","slide":2,"text":"Build the operating layer contractors already need.","textPreview":"Build the operating layer contractors already need.","textChars":51,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/kz6pgzmh","slide":2,"text":"Begin with useful communication workflows, prove recurring value, then expand into documents and project control.","textPreview":"Begin with useful communication workflows, prove recurring value, then expand into documents and project control.","textChars":113,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/jyxo7ulw","slide":2,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/yx47ep4r","slide":2,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/xwv65kn6","slide":2,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/wvmpcfml","slide":2,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/uh4j29kj","slide":2,"bbox":[54,248,340,385]}
+{"kind":"shape","id":"sh/vidkvul4","slide":2,"bbox":[78,272,86,28]}
+{"kind":"textbox","id":"sh/gjml4z2p","slide":2,"text":"NOW","textPreview":"NOW","textChars":3,"textLines":1,"bbox":[78,278,86,16]}
+{"kind":"textbox","id":"sh/hkv2x43a","slide":2,"text":"Prove demand","textPreview":"Prove demand","textChars":12,"textLines":1,"bbox":[78,326,292,48]}
+{"kind":"textbox","id":"sh/6dkjyp4n","slide":2,"text":"Free estimate, SOP, and proposal tools.\n\nFree product demos.\n\nGrowth consultations for contracting businesses.","textPreview":"Free estimate, SOP, and proposal tools. |  | Free product demos. |  | Growth consultations for contracting businesses.","textChars":110,"textLines":5,"bbox":[78,392,292,190]}
+{"kind":"shape","id":"sh/7edkrul8","slide":2,"bbox":[446,248,340,385]}
+{"kind":"shape","id":"sh/8fm10z2t","slide":2,"bbox":[470,272,86,28]}
+{"kind":"textbox","id":"sh/tgv2t43e","slide":2,"text":"NEXT","textPreview":"NEXT","textChars":4,"textLines":1,"bbox":[470,278,86,16]}
+{"kind":"textbox","id":"sh/ypkjup4r","slide":2,"text":"Prove payment","textPreview":"Prove payment","textChars":13,"textLines":1,"bbox":[470,326,292,48]}
+{"kind":"textbox","id":"sh/jatknalw","slide":2,"text":"Convert demand into paying customers.\n\nTrack plan choice, retention, and acquisition source.\n\nStandardize onboarding.","textPreview":"Convert demand into paying customers. |  | Track plan choice, retention, and acquisition source. |  | Standardize onboarding.","textChars":117,"textLines":5,"bbox":[470,392,292,190]}
+{"kind":"shape","id":"sh/nupgvq1o","slide":2,"bbox":[838,248,340,385]}
+{"kind":"shape","id":"sh/mtgz2lkj","slide":2,"bbox":[862,272,86,28]}
+{"kind":"textbox","id":"sh/9grixgju","slide":2,"text":"FUTURE","textPreview":"FUTURE","textChars":6,"textLines":1,"bbox":[862,278,86,16]}
+{"kind":"textbox","id":"sh/ovih4b29","slide":2,"text":"Scale the platform","textPreview":"Scale the platform","textChars":18,"textLines":1,"bbox":[862,326,292,48]}
+{"kind":"textbox","id":"sh/bi90zq10","slide":2,"text":"Configurable integrations, templates, approvals, and project systems.\n\nRecurring revenue grows faster than delivery cost.","textPreview":"Configurable integrations, templates, approvals, and project systems. |  | Recurring revenue grows faster than delivery cost.","textChars":121,"textLines":3,"bbox":[862,392,292,190]}
+{"kind":"notes","id":"nt/bshmos","slide":2,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/puv1gc","slide":3,"title":"03","textShapes":16}
+{"kind":"shape","id":"sh/y54vitsz","slide":3,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/l8fudorq","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/07mdk3a5","slide":3,"text":"CUSTOMER PROBLEM","textPreview":"CUSTOMER PROBLEM","textChars":16,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/naxcfy9w","slide":3,"text":"The owner is the integration layer.","textPreview":"The owner is the integration layer.","textChars":35,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/m9ovmtsb","slide":3,"text":"Business-critical context is fragmented across tools, so decisions and follow-up depend on manual coordination.","textPreview":"Business-critical context is fragmented across tools, so decisions and follow-up depend on manual coordination.","textChars":111,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/9cfeh8rm","slide":3,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/8b6do3a1","slide":3,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/3etc3e9c","slide":3,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/2dkba9sr","slide":3,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/kfi9sfad","slide":3,"bbox":[72,278,200,66]}
+{"kind":"textbox","id":"sh/5gralkby","slide":3,"text":"WhatsApp","textPreview":"WhatsApp","textChars":8,"textLines":1,"bbox":[72,299,200,26]}
+{"kind":"shape","id":"sh/itgrq5s7","slide":3,"bbox":[72,388,200,66]}
+{"kind":"textbox","id":"sh/ju9sjats","slide":3,"text":"Google Drive","textPreview":"Google Drive","textChars":12,"textLines":1,"bbox":[72,409,200,26]}
+{"kind":"shape","id":"sh/sji9wfap","slide":3,"bbox":[72,498,200,66]}
+{"kind":"textbox","id":"sh/tkrapkbu","slide":3,"text":"PDFs","textPreview":"PDFs","textChars":4,"textLines":1,"bbox":[72,519,200,26]}
+{"kind":"shape","id":"sh/6h0ru5sj","slide":3,"bbox":[1010,278,200,66]}
+{"kind":"textbox","id":"sh/7i9snat4","slide":3,"text":"Spreadsheets","textPreview":"Spreadsheets","textChars":12,"textLines":1,"bbox":[1010,299,200,26]}
+{"kind":"shape","id":"sh/8ny9kvu5","slide":3,"bbox":[1010,388,200,66]}
+{"kind":"textbox","id":"sh/9o7qd0bq","slide":3,"text":"CRM","textPreview":"CRM","textChars":3,"textLines":1,"bbox":[1010,409,200,26]}
+{"kind":"shape","id":"sh/p8fy1szi","slide":3,"bbox":[1010,498,200,66]}
+{"kind":"textbox","id":"sh/o76hsnix","slide":3,"text":"Accounting","textPreview":"Accounting","textChars":10,"textLines":1,"bbox":[1010,519,200,26]}
+{"kind":"shape","id":"sh/36xgzihc","slide":3,"bbox":[294,298,88,26]}
+{"kind":"shape","id":"sh/25ofqd0r","slide":3,"bbox":[294,408,88,26]}
+{"kind":"shape","id":"sh/dczy5sze","slide":3,"bbox":[294,518,88,26]}
+{"kind":"shape","id":"sh/cb6hwnit","slide":3,"bbox":[898,298,88,26]}
+{"kind":"shape","id":"sh/baxg32h8","slide":3,"bbox":[898,408,88,26]}
+{"kind":"shape","id":"sh/q9ozux0n","slide":3,"bbox":[898,518,88,26]}
+{"kind":"shape","id":"sh/l0zy9czq","slide":3,"bbox":[400,266,480,326]}
+{"kind":"textbox","id":"sh/0zqh07i5","slide":3,"text":"OWNER","textPreview":"OWNER","textChars":5,"textLines":1,"bbox":[432,296,416,25]}
+{"kind":"textbox","id":"sh/il0vu9gn","slide":3,"text":"Searches.\nInterprets.\nRe-enters.\nChases.\nApproves.","textPreview":"Searches. | Interprets. | Re-enters. | Chases. | Approves.","textChars":50,"textLines":5,"bbox":[432,342,416,190]}
+{"kind":"textbox","id":"sh/jmtw3exs","slide":3,"text":"Slow decisions  •  Lost context  •  Inconsistent execution","textPreview":"Slow decisions  •  Lost context  •  Inconsistent execution","textChars":58,"textLines":1,"bbox":[316,622,648,22]}
+{"kind":"notes","id":"nt/puv1gc","slide":3,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/p0wuel","slide":4,"title":"04","textShapes":31}
+{"kind":"shape","id":"sh/907m9s72","slide":4,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/mxwned8b","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/7yp47ipw","slide":4,"text":"PRODUCT ARCHITECTURE","textPreview":"PRODUCT ARCHITECTURE","textChars":20,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/kve5c3q5","slide":4,"text":"Six layers move a request into secure execution.","textPreview":"Six layers move a request into secure execution.","textChars":48,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/lwnm587q","slide":4,"text":"WhatsApp Assistant → Reasoning → Document Maker → SME Verification → Project Portal → SOC 2 and security development.","textPreview":"WhatsApp Assistant → Reasoning → Document Maker → SME Verification → Project Portal → SOC 2 and security development.","textChars":117,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/y9wnat8z","slide":4,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/zu543ypk","slide":4,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/c7e583q9","slide":4,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/x8nm187u","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/dwne10jm","slide":4,"bbox":[401,334,38,26]}
+{"kind":"shape","id":"sh/cvux8vi1","slide":4,"bbox":[794,334,38,26]}
+{"kind":"shape","id":"sh/rulwzq1g","slide":4,"bbox":[994,426,26,38]}
+{"kind":"shape","id":"sh/qtcf6l0v","slide":4,"bbox":[794,536,38,26]}
+{"kind":"shape","id":"sh/ps3exgja","slide":4,"bbox":[401,536,38,26]}
+{"kind":"shape","id":"sh/4rux4bip","slide":4,"bbox":[54,270,340,154]}
+{"kind":"textbox","id":"sh/3qlwv61k","slide":4,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[76,288,32,16]}
+{"kind":"textbox","id":"sh/2pcf210z","slide":4,"text":"INTERFACE","textPreview":"INTERFACE","textChars":9,"textLines":1,"bbox":[116,289,250,15]}
+{"kind":"textbox","id":"sh/hojetgje","slide":4,"text":"WhatsApp Assistant","textPreview":"WhatsApp Assistant","textChars":18,"textLines":1,"bbox":[76,320,296,50]}
+{"kind":"textbox","id":"sh/gnax0bit","slide":4,"text":"The contractor asks, reviews, and follows through.","textPreview":"The contractor asks, reviews, and follows through.","textChars":50,"textLines":1,"bbox":[76,374,296,40]}
+{"kind":"shape","id":"sh/sjy5wvu1","slide":4,"bbox":[447,270,340,154]}
+{"kind":"textbox","id":"sh/tk7650vm","slide":4,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[469,288,32,16]}
+{"kind":"textbox","id":"sh/6hgnu5wv","slide":4,"text":"REASONING","textPreview":"REASONING","textChars":9,"textLines":1,"bbox":[509,289,250,15]}
+{"kind":"textbox","id":"sh/7ipo3adg","slide":4,"text":"Reasoning","textPreview":"Reasoning","textChars":9,"textLines":1,"bbox":[469,320,296,50]}
+{"kind":"textbox","id":"sh/kfe5svep","slide":4,"text":"Interprets intent, retrieves context, and selects the workflow.","textPreview":"Interprets intent, retrieves context, and selects the workflow.","textChars":63,"textLines":1,"bbox":[469,374,296,40]}
+{"kind":"shape","id":"sh/5g7610va","slide":4,"bbox":[840,270,340,154]}
+{"kind":"textbox","id":"sh/idwnqlwj","slide":4,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[862,288,32,16]}
+{"kind":"textbox","id":"sh/je5ozqd4","slide":4,"text":"CREATION","textPreview":"CREATION","textChars":8,"textLines":1,"bbox":[902,289,250,15]}
+{"kind":"textbox","id":"sh/4bip4fu9","slide":4,"text":"Document Maker","textPreview":"Document Maker","textChars":14,"textLines":1,"bbox":[862,320,296,50]}
+{"kind":"textbox","id":"sh/pcr6dkve","slide":4,"text":"Creates estimates, SOPs, proposals, and reports.","textPreview":"Creates estimates, SOPs, proposals, and reports.","textChars":48,"textLines":1,"bbox":[862,374,296,40]}
+{"kind":"shape","id":"sh/z6t83exw","slide":4,"bbox":[840,472,340,154]}
+{"kind":"textbox","id":"sh/e5krutwb","slide":4,"text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[862,490,32,16]}
+{"kind":"textbox","id":"sh/18va5ofm","slide":4,"text":"VERIFICATION","textPreview":"VERIFICATION","textChars":12,"textLines":1,"bbox":[902,491,250,15]}
+{"kind":"textbox","id":"sh/07m9wjeh","slide":4,"text":"SME Verification","textPreview":"SME Verification","textChars":16,"textLines":1,"bbox":[862,522,296,50]}
+{"kind":"textbox","id":"sh/nads7yxs","slide":4,"text":"An expert verifies accuracy, trade logic, and business fit.","textPreview":"An expert verifies accuracy, trade logic, and business fit.","textChars":59,"textLines":1,"bbox":[862,576,296,40]}
+{"kind":"shape","id":"sh/m94rytw7","slide":4,"bbox":[447,472,340,154]}
+{"kind":"textbox","id":"sh/9cva98fy","slide":4,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[469,490,32,16]}
+{"kind":"textbox","id":"sh/8bm903ed","slide":4,"text":"OPERATIONS","textPreview":"OPERATIONS","textChars":10,"textLines":1,"bbox":[509,491,250,15]}
+{"kind":"textbox","id":"sh/3e98vuxo","slide":4,"text":"Project Portal","textPreview":"Project Portal","textChars":14,"textLines":1,"bbox":[469,522,296,50]}
+{"kind":"textbox","id":"sh/2d0rm9g3","slide":4,"text":"Records the approved result with its project and owners.","textPreview":"Records the approved result with its project and owners.","textChars":56,"textLines":1,"bbox":[469,576,296,40]}
+{"kind":"shape","id":"sh/ux4r29oz","slide":4,"bbox":[54,472,340,154]}
+{"kind":"textbox","id":"sh/vidsbe5k","slide":4,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[76,490,32,16]}
+{"kind":"textbox","id":"sh/gjm94z65","slide":4,"text":"SECURITY","textPreview":"SECURITY","textChars":8,"textLines":1,"bbox":[116,491,250,15]}
+{"kind":"textbox","id":"sh/hkfad4na","slide":4,"text":"SOC 2 + Security Development","textPreview":"SOC 2 + Security Development","textChars":28,"textLines":1,"bbox":[76,522,296,50]}
+{"kind":"textbox","id":"sh/ilor69ov","slide":4,"text":"Builds controls, access, logging, protection, and audit readiness.","textPreview":"Builds controls, access, logging, protection, and audit readiness.","textChars":66,"textLines":1,"bbox":[76,576,296,40]}
+{"kind":"notes","id":"nt/p0wuel","slide":4,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/07hfnb","slide":5,"title":"05","textShapes":20}
+{"kind":"shape","id":"sh/jqhs3u1o","slide":5,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/kratcfi9","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/5sja5kju","slide":5,"text":"CURRENT REALITY","textPreview":"CURRENT REALITY","textChars":15,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/6tsbep0f","slide":5,"text":"Three products create one expandable system.","textPreview":"Three products create one expandable system.","textChars":44,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/7u1s7u10","slide":5,"text":"Each product has a clear job today and a direct commercial role.","textPreview":"Each product has a clear job today and a direct commercial role.","textChars":64,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/svatgzil","slide":5,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/twja94jq","slide":5,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/mxor250v","slide":5,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/nyxsvq1g","slide":5,"text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/natovmdc","slide":5,"bbox":[54,244,1172,50]}
+{"kind":"textbox","id":"sh/m9k72hcr","slide":5,"text":"PRODUCT","textPreview":"PRODUCT","textChars":7,"textLines":1,"bbox":[82,262,226,18]}
+{"kind":"textbox","id":"sh/9wb6xwv2","slide":5,"text":"WHAT EXISTS TODAY","textPreview":"WHAT EXISTS TODAY","textChars":17,"textLines":1,"bbox":[332,262,431,18]}
+{"kind":"textbox","id":"sh/8v2p4rux","slide":5,"text":"COMMERCIAL ROLE","textPreview":"COMMERCIAL ROLE","textChars":15,"textLines":1,"bbox":[787,262,381,18]}
+{"kind":"shape","id":"sh/z69or2d0","slide":5,"bbox":[54,294,1172,112]}
+{"kind":"textbox","id":"sh/y50nyxcf","slide":5,"text":"WhatsApp Assistant","textPreview":"WhatsApp Assistant","textChars":18,"textLines":1,"bbox":[82,325,220,40]}
+{"kind":"textbox","id":"sh/l8r6tcv6","slide":5,"text":"Reads business communication, summarizes conversations, and identifies actions and follow-ups.","textPreview":"Reads business communication, summarizes conversations, and identifies actions and follow-ups.","textChars":94,"textLines":1,"bbox":[338,319,408,60]}
+{"kind":"textbox","id":"sh/07i507ul","slide":5,"text":"Core is the minimum B2W product: $2,000 setup + $99/month.","textPreview":"Core is the minimum B2W product: $2,000 setup + $99/month.","textChars":58,"textLines":1,"bbox":[793,319,395,65]}
+{"kind":"shape","id":"sh/b29on2d4","slide":5,"bbox":[54,406,1172,112]}
+{"kind":"textbox","id":"sh/q1gnuxcj","slide":5,"text":"Document Maker","textPreview":"Document Maker","textChars":14,"textLines":1,"bbox":[82,437,220,40]}
+{"kind":"textbox","id":"sh/edg76xgb","slide":5,"text":"Creates SOPs, estimates, reports, proposals, and repeatable document workflows.","textPreview":"Creates SOPs, estimates, reports, proposals, and repeatable document workflows.","textChars":79,"textLines":1,"bbox":[338,431,408,60]}
+{"kind":"textbox","id":"sh/fypof2xw","slide":5,"text":"Premium adds document capability through a higher monthly plan—without another setup fee.","textPreview":"Premium adds document capability through a higher monthly plan—without another setup fee.","textChars":89,"textLines":1,"bbox":[793,431,395,65]}
+{"kind":"shape","id":"sh/gzyp8nyh","slide":5,"bbox":[54,518,1172,112]}
+{"kind":"textbox","id":"sh/107qhsf2","slide":5,"text":"Project Portal","textPreview":"Project Portal","textChars":14,"textLines":1,"bbox":[82,549,220,40]}
+{"kind":"textbox","id":"sh/21g7axgn","slide":5,"text":"Organizes projects, contracts, dates, owners, status, actions, and linked documents.","textPreview":"Organizes projects, contracts, dates, owners, status, actions, and linked documents.","textChars":84,"textLines":1,"bbox":[338,543,408,60]}
+{"kind":"textbox","id":"sh/3298j2xs","slide":5,"text":"Maximum adds the Project Portal for customers that need a shared project-control layer.","textPreview":"Maximum adds the Project Portal for customers that need a shared project-control layer.","textChars":87,"textLines":1,"bbox":[793,543,395,65]}
+{"kind":"textbox","id":"sh/o3ipc7ed","slide":5,"text":"Product names remain descriptive until market proof supports stronger branding.","textPreview":"Product names remain descriptive until market proof supports stronger branding.","textChars":79,"textLines":1,"bbox":[82,644,1040,20]}
+{"kind":"notes","id":"nt/07hfnb","slide":5,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/qxyjve","slide":6,"title":"06","textShapes":21}
+{"kind":"shape","id":"sh/fydwnel8","slide":6,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/gzmdgj2t","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/10vep43y","slide":6,"text":"REVENUE MODEL NOW","textPreview":"REVENUE MODEL NOW","textChars":17,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/214vi9kj","slide":6,"text":"Start simple. Expand with demonstrated need.","textPreview":"Start simple. Expand with demonstrated need.","textChars":44,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/32xwrel4","slide":6,"text":"The setup fee is paid once. Higher plans add capability through monthly pricing.","textPreview":"The setup fee is paid once. Higher plans add capability through monthly pricing.","textChars":80,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/o36xkj2p","slide":6,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/pofeto3a","slide":6,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/qpofmtkv","slide":6,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/bqxwvylg","slide":6,"text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/jehg329s","slide":6,"bbox":[54,252,340,302]}
+{"kind":"textbox","id":"sh/id8zuxs7","slide":6,"text":"CORE","textPreview":"CORE","textChars":4,"textLines":1,"bbox":[78,277,292,18]}
+{"kind":"textbox","id":"sh/50zy5cri","slide":6,"text":"WhatsApp Assistant","textPreview":"WhatsApp Assistant","textChars":18,"textLines":1,"bbox":[78,316,292,48]}
+{"kind":"textbox","id":"sh/kzqhw7ax","slide":6,"text":"$2,000 setup\n+ $99/month","textPreview":"$2,000 setup | + $99/month","textChars":24,"textLines":2,"bbox":[78,382,292,62]}
+{"kind":"textbox","id":"sh/vaxgzi9g","slide":6,"text":"Required starting point.\nCommunication summaries, actions, and follow-up clarity.","textPreview":"Required starting point. | Communication summaries, actions, and follow-up clarity.","textChars":81,"textLines":2,"bbox":[78,463,290,72]}
+{"kind":"shape","id":"sh/a9ozqdsv","slide":6,"bbox":[446,252,340,302]}
+{"kind":"textbox","id":"sh/xczy1srm","slide":6,"text":"PREMIUM","textPreview":"PREMIUM","textChars":7,"textLines":1,"bbox":[470,277,292,18]}
+{"kind":"textbox","id":"sh/wbqhsna1","slide":6,"text":"+ Document Maker","textPreview":"+ Document Maker","textChars":16,"textLines":1,"bbox":[470,316,292,48]}
+{"kind":"textbox","id":"sh/f610bm9k","slide":6,"text":"Higher monthly plan","textPreview":"Higher monthly plan","textChars":19,"textLines":1,"bbox":[470,382,292,62]}
+{"kind":"textbox","id":"sh/u5sz2h8f","slide":6,"text":"No additional setup fee.\nBuild SOPs, estimates, proposals, and repeatable documents.","textPreview":"No additional setup fee. | Build SOPs, estimates, proposals, and repeatable documents.","textChars":84,"textLines":2,"bbox":[470,463,290,72]}
+{"kind":"shape","id":"sh/adwbq5gj","slide":6,"bbox":[838,252,340,302]}
+{"kind":"textbox","id":"sh/be5sjax4","slide":6,"text":"MAXIMUM","textPreview":"MAXIMUM","textChars":7,"textLines":1,"bbox":[862,277,292,18]}
+{"kind":"textbox","id":"sh/cfytsfep","slide":6,"text":"+ Project Portal","textPreview":"+ Project Portal","textChars":16,"textLines":1,"bbox":[862,316,292,48]}
+{"kind":"textbox","id":"sh/x07alkfa","slide":6,"text":"Highest monthly plan","textPreview":"Highest monthly plan","textChars":20,"textLines":1,"bbox":[862,382,292,62]}
+{"kind":"textbox","id":"sh/y1gbupwv","slide":6,"text":"No additional setup fee.\nAdd shared project control, visibility, linked records, and risk alerts.","textPreview":"No additional setup fee. | Add shared project control, visibility, linked records, and risk alerts.","textChars":97,"textLines":2,"bbox":[862,463,290,72]}
+{"kind":"shape","id":"sh/z2psnuxg","slide":6,"bbox":[54,576,1172,66]}
+{"kind":"textbox","id":"sh/k3ytwzel","slide":6,"text":"OPTIONAL DOCUMENT LEARNING","textPreview":"OPTIONAL DOCUMENT LEARNING","textChars":26,"textLines":1,"bbox":[78,592,250,15]}
+{"kind":"textbox","id":"sh/l47ap4f6","slide":6,"text":"One-time fee to learn up to 50 existing SOPs, estimating tools, templates, or process documents. Price to validate.","textPreview":"One-time fee to learn up to 50 existing SOPs, estimating tools, templates, or process documents. Price to validate.","textChars":115,"textLines":1,"bbox":[337,588,850,34]}
+{"kind":"notes","id":"nt/qxyjve","slide":6,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/4ksa18","slide":7,"title":"07","textShapes":22}
+{"kind":"shape","id":"sh/q18ruhoz","slide":7,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/dojq5w7a","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/sna9wr6p","slide":7,"text":"THREE-STAGE BUSINESS MODEL","textPreview":"THREE-STAGE BUSINESS MODEL","textChars":26,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/fq187mpg","slide":7,"text":"Product maturity changes the economics.","textPreview":"Product maturity changes the economics.","textChars":39,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/epsryhov","slide":7,"text":"Service effort declines as demand, payment, recurring use, and repeatability are proven.","textPreview":"Service effort declines as demand, payment, recurring use, and repeatability are proven.","textChars":88,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/1sjq9w7m","slide":7,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/0ra90r61","slide":7,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/nu18b6pc","slide":7,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/2tsr21or","slide":7,"text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/4rq5g7mt","slide":7,"bbox":[54,248,340,386]}
+{"kind":"textbox","id":"sh/5szm9cne","slide":7,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[78,274,35,20]}
+{"kind":"shape","id":"sh/ip8nex43","slide":7,"bbox":[230,266,140,28]}
+{"kind":"textbox","id":"sh/jqh47258","slide":7,"text":"FOUNDER-LED","textPreview":"FOUNDER-LED","textChars":11,"textLines":1,"bbox":[230,272,140,16]}
+{"kind":"textbox","id":"sh/svq5k7m5","slide":7,"text":"Prove value","textPreview":"Prove value","textChars":11,"textLines":1,"bbox":[78,328,292,44]}
+{"kind":"textbox","id":"sh/tgjmdcnq","slide":7,"text":"Free tools, demos + consultations","textPreview":"Free tools, demos + consultations","textChars":33,"textLines":1,"bbox":[78,390,292,48]}
+{"kind":"shape","id":"sh/6t8nih4z","slide":7,"bbox":[78,460,292,1]}
+{"kind":"textbox","id":"sh/ruh4bm5k","slide":7,"text":"Attract contractors with free estimate, SOP, and proposal tools. Convert interest through product demos and growth consultations.","textPreview":"Attract contractors with free estimate, SOP, and proposal tools. Convert interest through product demos and growth consultations.","textChars":129,"textLines":1,"bbox":[78,483,292,120]}
+{"kind":"shape","id":"sh/gja5orm1","slide":7,"bbox":[446,248,340,386]}
+{"kind":"textbox","id":"sh/1kj6hwnm","slide":7,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[470,274,35,20]}
+{"kind":"shape","id":"sh/pgfm1wfq","slide":7,"bbox":[622,266,140,28]}
+{"kind":"textbox","id":"sh/of65sre5","slide":7,"text":"STANDARDIZED","textPreview":"STANDARDIZED","textChars":12,"textLines":1,"bbox":[622,272,140,16]}
+{"kind":"textbox","id":"sh/nex4zmxk","slide":7,"text":"Prove repeatability","textPreview":"Prove repeatability","textChars":19,"textLines":1,"bbox":[470,328,292,44]}
+{"kind":"textbox","id":"sh/2donqhwf","slide":7,"text":"Paying customers + source data","textPreview":"Paying customers + source data","textChars":30,"textLines":1,"bbox":[470,390,292,48]}
+{"kind":"shape","id":"sh/x4zm5wf2","slide":7,"bbox":[470,460,292,1]}
+{"kind":"textbox","id":"sh/c3q5wreh","slide":7,"text":"Use customer count, plan selection, retention, and acquisition source to learn which offers and channels are working.","textPreview":"Use customer count, plan selection, retention, and acquisition source to learn which offers and channels are working.","textChars":117,"textLines":1,"bbox":[470,483,292,120]}
+{"kind":"shape","id":"sh/b2h43mxw","slide":7,"bbox":[838,248,340,386]}
+{"kind":"textbox","id":"sh/a1onu1wb","slide":7,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[862,274,35,20]}
+{"kind":"shape","id":"sh/d8vmtcfi","slide":7,"bbox":[1014,266,140,28]}
+{"kind":"textbox","id":"sh/s7ml07ex","slide":7,"text":"LOW-TOUCH","textPreview":"LOW-TOUCH","textChars":9,"textLines":1,"bbox":[1014,272,140,16]}
+{"kind":"textbox","id":"sh/idkjudcv","slide":7,"text":"Scale the platform","textPreview":"Scale the platform","textChars":18,"textLines":1,"bbox":[862,328,292,44]}
+{"kind":"textbox","id":"sh/3etk3ydg","slide":7,"text":"Integrations, templates + approvals","textPreview":"Integrations, templates + approvals","textChars":35,"textLines":1,"bbox":[862,390,292,48]}
+{"kind":"shape","id":"sh/4f21w3u1","slide":7,"bbox":[862,460,292,1]}
+{"kind":"textbox","id":"sh/5gb258vm","slide":7,"text":"Grow recurring revenue faster than delivery cost as acquisition, onboarding, and fulfillment become repeatable.","textPreview":"Grow recurring revenue faster than delivery cost as acquisition, onboarding, and fulfillment become repeatable.","textChars":111,"textLines":1,"bbox":[862,483,292,120]}
+{"kind":"notes","id":"nt/4ksa18","slide":7,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/bzn3u5","slide":8,"title":"08","textShapes":34}
+{"kind":"shape","id":"sh/9k3mtc7u","slide":8,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/mxsnixo3","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/ny14r2po","slide":8,"text":"PHASE GATES","textPreview":"PHASE GATES","textChars":11,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/0va5gn6d","slide":8,"text":"Advance when evidence changes—not when the calendar does.","textPreview":"Advance when evidence changes—not when the calendar does.","textChars":57,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/lwjmps7i","slide":8,"text":"Each phase must produce a specific proof across demand, product, revenue, delivery, and economics.","textPreview":"Each phase must produce a specific proof across demand, product, revenue, delivery, and economics.","textChars":98,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/ytsnedo7","slide":8,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/zu14nips","slide":8,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/kre5sr6h","slide":8,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/5sn61w72","slide":8,"text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/5w76dorq","slide":8,"bbox":[54,244,196,44]}
+{"kind":"textbox","id":"sh/4vy5kja5","slide":8,"text":"EVIDENCE","textPreview":"EVIDENCE","textChars":8,"textLines":1,"bbox":[68,258,168,16]}
+{"kind":"shape","id":"sh/ju5obe90","slide":8,"bbox":[250,244,300,44]}
+{"kind":"textbox","id":"sh/itwni9sf","slide":8,"text":"PHASE 1  /  VALUE","textPreview":"PHASE 1  /  VALUE","textChars":17,"textLines":1,"bbox":[264,258,272,16]}
+{"kind":"shape","id":"sh/hsnm94ru","slide":8,"bbox":[550,244,340,44]}
+{"kind":"textbox","id":"sh/wre5gza9","slide":8,"text":"PHASE 2  /  REPEATABILITY","textPreview":"PHASE 2  /  REPEATABILITY","textChars":25,"textLines":1,"bbox":[564,258,312,16]}
+{"kind":"shape","id":"sh/vq547u9o","slide":8,"bbox":[890,244,336,44]}
+{"kind":"textbox","id":"sh/upwne9s3","slide":8,"text":"SCALE","textPreview":"SCALE","textChars":5,"textLines":1,"bbox":[904,258,308,16]}
+{"kind":"shape","id":"sh/1or6l8ry","slide":8,"bbox":[54,288,196,61]}
+{"kind":"textbox","id":"sh/gni5s3qd","slide":8,"text":"Customers","textPreview":"Customers","textChars":9,"textLines":1,"bbox":[68,303,168,38]}
+{"kind":"shape","id":"sh/0rqpo7yp","slide":8,"bbox":[250,288,300,61]}
+{"kind":"textbox","id":"sh/lszqhcza","slide":8,"text":"Qualified demos + consultations","textPreview":"Qualified demos + consultations","textChars":31,"textLines":1,"bbox":[264,303,272,38]}
+{"kind":"shape","id":"sh/y5o7mxgj","slide":8,"bbox":[550,288,340,61]}
+{"kind":"textbox","id":"sh/z6h8f2h4","slide":8,"text":"Paying customers + source data","textPreview":"Paying customers + source data","textChars":30,"textLines":1,"bbox":[564,303,312,38]}
+{"kind":"shape","id":"sh/c36pk7yt","slide":8,"bbox":[890,288,336,61]}
+{"kind":"textbox","id":"sh/d4fqdszy","slide":8,"text":"Repeatable acquisition","textPreview":"Repeatable acquisition","textChars":22,"textLines":1,"bbox":[904,303,308,38]}
+{"kind":"shape","id":"sh/q1o7ixgn","slide":8,"bbox":[54,349,196,61]}
+{"kind":"textbox","id":"sh/b2x8b2h8","slide":8,"text":"Product","textPreview":"Product","textChars":7,"textLines":1,"bbox":[68,364,168,38]}
+{"kind":"shape","id":"sh/oz6pgnyh","slide":8,"bbox":[250,349,300,61]}
+{"kind":"textbox","id":"sh/p0fq9sz2","slide":8,"text":"Useful free tools + demo proven","textPreview":"Useful free tools + demo proven","textChars":31,"textLines":1,"bbox":[264,364,272,38]}
+{"kind":"shape","id":"sh/7ud8ji1o","slide":8,"bbox":[550,349,340,61]}
+{"kind":"textbox","id":"sh/694rqdkj","slide":8,"text":"Paid product in recurring use","textPreview":"Paid product in recurring use","textChars":29,"textLines":1,"bbox":[564,364,312,38]}
+{"kind":"shape","id":"sh/twvqlsju","slide":8,"bbox":[890,349,336,61]}
+{"kind":"textbox","id":"sh/svm9sn29","slide":8,"text":"Configurable platform","textPreview":"Configurable platform","textChars":21,"textLines":1,"bbox":[904,364,308,38]}
+{"kind":"shape","id":"sh/fyd8n210","slide":8,"bbox":[54,410,196,61]}
+{"kind":"textbox","id":"sh/ux4ruxkf","slide":8,"text":"Revenue","textPreview":"Revenue","textChars":7,"textLines":1,"bbox":[68,425,168,38]}
+{"kind":"shape","id":"sh/10fqpsj6","slide":8,"bbox":[250,410,300,61]}
+{"kind":"textbox","id":"sh/gz69wn2l","slide":8,"text":"Offer interest validated","textPreview":"Offer interest validated","textChars":24,"textLines":1,"bbox":[264,425,272,38]}
+{"kind":"shape","id":"sh/32x8r21w","slide":8,"bbox":[550,410,340,61]}
+{"kind":"textbox","id":"sh/21oryxkb","slide":8,"text":"Initial recurring revenue + retention","textPreview":"Initial recurring revenue + retention","textChars":37,"textLines":1,"bbox":[564,425,312,38]}
+{"kind":"shape","id":"sh/mhgja5cz","slide":8,"bbox":[890,410,336,61]}
+{"kind":"textbox","id":"sh/nipkjadk","slide":8,"text":"Predictable growth","textPreview":"Predictable growth","textChars":18,"textLines":1,"bbox":[904,425,308,38]}
+{"kind":"shape","id":"sh/8jy1cfu5","slide":8,"bbox":[54,471,196,61]}
+{"kind":"textbox","id":"sh/9k72lkva","slide":8,"text":"Delivery","textPreview":"Delivery","textChars":8,"textLines":1,"bbox":[68,486,168,38]}
+{"kind":"shape","id":"sh/algjepcv","slide":8,"bbox":[250,471,300,61]}
+{"kind":"textbox","id":"sh/vmpknadg","slide":8,"text":"Founder-led demos + consultations","textPreview":"Founder-led demos + consultations","textChars":33,"textLines":1,"bbox":[264,486,272,38]}
+{"kind":"shape","id":"sh/wnylgfu1","slide":8,"bbox":[550,471,340,61]}
+{"kind":"textbox","id":"sh/x8r2pkvm","slide":8,"text":"Standardized onboarding","textPreview":"Standardized onboarding","textChars":23,"textLines":1,"bbox":[564,486,312,38]}
+{"kind":"shape","id":"sh/qpwj2lcr","slide":8,"bbox":[890,471,336,61]}
+{"kind":"textbox","id":"sh/bq5kbqdc","slide":8,"text":"Low-touch deployment","textPreview":"Low-touch deployment","textChars":20,"textLines":1,"bbox":[904,486,308,38]}
+{"kind":"shape","id":"sh/t4bmhofu","slide":8,"bbox":[54,532,196,61]}
+{"kind":"textbox","id":"sh/s325oje9","slide":8,"text":"Economics","textPreview":"Economics","textChars":9,"textLines":1,"bbox":[68,547,168,38]}
+{"kind":"shape","id":"sh/72t4fexo","slide":8,"bbox":[250,532,300,61]}
+{"kind":"textbox","id":"sh/6hknm9w3","slide":8,"text":"Demand signal validated","textPreview":"Demand signal validated","textChars":23,"textLines":1,"bbox":[264,547,272,38]}
+{"kind":"shape","id":"sh/h8vml8fq","slide":8,"bbox":[550,532,340,61]}
+{"kind":"textbox","id":"sh/g7m5s3el","slide":8,"text":"Positive contribution margin","textPreview":"Positive contribution margin","textChars":28,"textLines":1,"bbox":[564,547,312,38]}
+{"kind":"shape","id":"sh/f6t4jyx0","slide":8,"bbox":[890,532,336,61]}
+{"kind":"textbox","id":"sh/u5knqtwf","slide":8,"text":"Strong gross margin","textPreview":"Strong gross margin","textChars":19,"textLines":1,"bbox":[904,547,308,38]}
+{"kind":"textbox","id":"sh/xcrm94fm","slide":8,"text":"Phase 1 → consistent demand signals","textPreview":"Phase 1 → consistent demand signals","textChars":35,"textLines":1,"bbox":[54,622,350,18]}
+{"kind":"textbox","id":"sh/wbilgze1","slide":8,"text":"Phase 2 → payment, use, retention, source data","textPreview":"Phase 2 → payment, use, retention, source data","textChars":46,"textLines":1,"bbox":[444,622,430,18]}
+{"kind":"textbox","id":"sh/ovm5wzmx","slide":8,"text":"Scale → predictable system","textPreview":"Scale → predictable system","textChars":26,"textLines":1,"bbox":[940,622,286,18]}
+{"kind":"notes","id":"nt/bzn3u5","slide":8,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/6mxu6d","slide":9,"title":"09","textShapes":27}
+{"kind":"shape","id":"sh/65gvmtcj","slide":9,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/t87uhobu","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/s7ydoju9","slide":9,"text":"WHAT TO BUILD NEXT","textPreview":"WHAT TO BUILD NEXT","textChars":18,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/j25cbets","slide":9,"text":"Prove one complete workflow before expanding.","textPreview":"Prove one complete workflow before expanding.","textChars":45,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/y1wvi9c7","slide":9,"text":"The winning product is the reliable passage from a business request to an approved, recorded outcome.","textPreview":"The winning product is the reliable passage from a business request to an approved, recorded outcome.","textChars":101,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/l4nudoby","slide":9,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/k3edkjud","slide":9,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/be5c7utw","slide":9,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/adcbepcb","slide":9,"text":"09","textPreview":"09","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/gb2d0fax","slide":9,"bbox":[216,352,40,26]}
+{"kind":"shape","id":"sh/hcbu9kri","slide":9,"bbox":[58,276,160,190]}
+{"kind":"textbox","id":"sh/u90vy5sr","slide":9,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[76,294,30,20]}
+{"kind":"textbox","id":"sh/vatc7a9c","slide":9,"text":"Ask","textPreview":"Ask","textChars":3,"textLines":1,"bbox":[66,338,144,34]}
+{"kind":"textbox","id":"sh/87idwval","slide":9,"text":"WhatsApp","textPreview":"WhatsApp","textChars":8,"textLines":1,"bbox":[76,386,124,42]}
+{"kind":"shape","id":"sh/t8ru50r6","slide":9,"bbox":[416,352,40,26]}
+{"kind":"shape","id":"sh/650va5sv","slide":9,"bbox":[258,276,160,190]}
+{"kind":"textbox","id":"sh/769c3a90","slide":9,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[276,294,30,20]}
+{"kind":"textbox","id":"sh/s3md8zq5","slide":9,"text":"Understand","textPreview":"Understand","textChars":10,"textLines":1,"bbox":[266,338,144,34]}
+{"kind":"textbox","id":"sh/d4veh4ra","slide":9,"text":"Intent","textPreview":"Intent","textChars":6,"textLines":1,"bbox":[276,386,124,42]}
+{"kind":"shape","id":"sh/1o7m50fi","slide":9,"bbox":[616,352,40,26]}
+{"kind":"shape","id":"sh/0nylcvex","slide":9,"bbox":[458,276,160,190]}
+{"kind":"textbox","id":"sh/fmp43qxc","slide":9,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[476,294,30,20]}
+{"kind":"textbox","id":"sh/elg3alwr","slide":9,"text":"Retrieve","textPreview":"Retrieve","textChars":8,"textLines":1,"bbox":[466,338,144,34]}
+{"kind":"textbox","id":"sh/dk7m10f6","slide":9,"text":"Project + contract","textPreview":"Project + contract","textChars":18,"textLines":1,"bbox":[476,386,124,42]}
+{"kind":"shape","id":"sh/sjyl8ve1","slide":9,"bbox":[816,352,40,26]}
+{"kind":"shape","id":"sh/ri54zqxg","slide":9,"bbox":[658,276,160,190]}
+{"kind":"textbox","id":"sh/qhw36lwv","slide":9,"text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[676,294,30,20]}
+{"kind":"textbox","id":"sh/5gnmxgfa","slide":9,"text":"Create","textPreview":"Create","textChars":6,"textLines":1,"bbox":[666,338,144,34]}
+{"kind":"textbox","id":"sh/4fel4bep","slide":9,"text":"Document skill","textPreview":"Document skill","textChars":14,"textLines":1,"bbox":[676,386,124,42]}
+{"kind":"shape","id":"sh/ulcjehcn","slide":9,"bbox":[1016,352,40,26]}
+{"kind":"shape","id":"sh/vml07md8","slide":9,"bbox":[858,276,160,190]}
+{"kind":"textbox","id":"sh/gnu1grut","slide":9,"text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[876,294,30,20]}
+{"kind":"textbox","id":"sh/ho329wvy","slide":9,"text":"Approve","textPreview":"Approve","textChars":7,"textLines":1,"bbox":[866,338,144,34]}
+{"kind":"textbox","id":"sh/mxsjahcb","slide":9,"text":"Human control","textPreview":"Human control","textChars":13,"textLines":1,"bbox":[876,386,124,42]}
+{"kind":"shape","id":"sh/7y1032dw","slide":9,"bbox":[1058,276,160,190]}
+{"kind":"textbox","id":"sh/8ju1c7uh","slide":9,"text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[1076,294,30,20]}
+{"kind":"textbox","id":"sh/9k3i5cv2","slide":9,"text":"Record","textPreview":"Record","textChars":6,"textLines":1,"bbox":[1066,338,144,34]}
+{"kind":"textbox","id":"sh/ytsj6xwf","slide":9,"text":"Save + action","textPreview":"Save + action","textChars":13,"textLines":1,"bbox":[1076,386,124,42]}
+{"kind":"shape","id":"sh/zu10z2d0","slide":9,"bbox":[58,512,1160,102]}
+{"kind":"textbox","id":"sh/b6lgbyhg","slide":9,"text":"FIRST WORKFLOW TEST","textPreview":"FIRST WORKFLOW TEST","textChars":19,"textLines":1,"bbox":[82,532,220,16]}
+{"kind":"textbox","id":"sh/qlcfitgb","slide":9,"text":"A contractor asks for an estimate or proposal → B2W retrieves context → drafts the document → requests approval → saves, shares, and records the result.","textPreview":"A contractor asks for an estimate or proposal → B2W retrieves context → drafts the document → requests approval → saves, shares, and reco...","textChars":152,"textLines":1,"bbox":[82,560,1088,40]}
+{"kind":"notes","id":"nt/6mxu6d","slide":9,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/floyjk","slide":10,"title":"10","textShapes":17}
+{"kind":"shape","id":"sh/x8n6tkbi","slide":10,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/alwni5s7","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/bm5orats","slide":10,"text":"OWNERSHIP MODEL","textPreview":"OWNERSHIP MODEL","textChars":15,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/oju5gfa1","slide":10,"text":"Three leaders. One evidence loop.","textPreview":"Three leaders. One evidence loop.","textChars":33,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/pkn6pkbm","slide":10,"text":"Clear ownership keeps market learning, operating discipline, and product architecture synchronized.","textPreview":"Clear ownership keeps market learning, operating discipline, and product architecture synchronized.","textChars":99,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/2hcne5sv","slide":10,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/nilonatg","slide":10,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/8fypsza5","slide":10,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/tg7614bq","slide":10,"text":"10","textPreview":"10","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/50nmtgvu","slide":10,"bbox":[54,254,340,318]}
+{"kind":"textbox","id":"sh/4zelkbep","slide":10,"text":"CEO","textPreview":"CEO","textChars":3,"textLines":1,"bbox":[78,278,80,22]}
+{"kind":"textbox","id":"sh/jy54r6d4","slide":10,"text":"Market","textPreview":"Market","textChars":6,"textLines":1,"bbox":[78,326,290,40]}
+{"kind":"textbox","id":"sh/ixw3i1wj","slide":10,"text":"Positioning\nPricing\nPartnerships\nRevenue","textPreview":"Positioning | Pricing | Partnerships | Revenue","textChars":40,"textLines":4,"bbox":[78,390,290,135]}
+{"kind":"shape","id":"sh/hcnmpwvy","slide":10,"bbox":[446,254,340,318]}
+{"kind":"textbox","id":"sh/wbelgbed","slide":10,"text":"COO","textPreview":"COO","textChars":3,"textLines":1,"bbox":[470,278,80,22]}
+{"kind":"textbox","id":"sh/va54n6ds","slide":10,"text":"Execution","textPreview":"Execution","textChars":9,"textLines":1,"bbox":[470,326,290,40]}
+{"kind":"textbox","id":"sh/u9c3e1w7","slide":10,"text":"Priorities\nOnboarding\nDelivery\nCustomer success","textPreview":"Priorities | Onboarding | Delivery | Customer success","textChars":47,"textLines":4,"bbox":[470,390,290,135]}
+{"kind":"shape","id":"sh/187m10v2","slide":10,"bbox":[838,254,340,318]}
+{"kind":"textbox","id":"sh/g7y5sveh","slide":10,"text":"CTO","textPreview":"CTO","textChars":3,"textLines":1,"bbox":[862,278,80,22]}
+{"kind":"textbox","id":"sh/knqxk365","slide":10,"text":"Platform","textPreview":"Platform","textChars":8,"textLines":1,"bbox":[862,326,290,40]}
+{"kind":"textbox","id":"sh/lozed87q","slide":10,"text":"Architecture\nIntegrations\nSecurity\nReliability","textPreview":"Architecture | Integrations | Security | Reliability","textChars":46,"textLines":4,"bbox":[862,390,290,135]}
+{"kind":"shape","id":"sh/yl8fitoz","slide":10,"bbox":[152,596,976,46]}
+{"kind":"textbox","id":"sh/zmhwbypk","slide":10,"text":"Weekly loop: market signal  →  product priority  →  delivery evidence  →  pricing and positioning","textPreview":"Weekly loop: market signal  →  product priority  →  delivery evidence  →  pricing and positioning","textChars":97,"textLines":1,"bbox":[172,610,936,20]}
+{"kind":"notes","id":"nt/floyjk","slide":10,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/wqjyzp","slide":11,"title":"11","textShapes":25}
+{"kind":"shape","id":"sh/n650rex0","slide":11,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/o7e10jyl","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/p8n2tof6","slide":11,"text":"FINANCIAL PROGRESSION","textPreview":"FINANCIAL PROGRESSION","textChars":21,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/e1cju9gj","slide":11,"text":"Use scenarios to expose the operating requirements.","textPreview":"Use scenarios to expose the operating requirements.","textChars":51,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/f2l0nux4","slide":11,"text":"These are planning cases—not forecasts. Each step requires stronger acquisition, retention, automation, and gross margin.","textPreview":"These are planning cases—not forecasts. Each step requires stronger acquisition, retention, automation, and gross margin.","textChars":121,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/03u1wzy9","slide":11,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/14nip4fu","slide":11,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/yxgj6tgn","slide":11,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/zypkzyx8","slide":11,"text":"11","textPreview":"11","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/fqp8zq9s","slide":11,"bbox":[96,534,220,70]}
+{"kind":"textbox","id":"sh/e5g76lsn","slide":11,"text":"$120K","textPreview":"$120K","textChars":5,"textLines":1,"bbox":[96,552,220,42]}
+{"kind":"textbox","id":"sh/1srq1gry","slide":11,"text":"ARR","textPreview":"ARR","textChars":3,"textLines":1,"bbox":[96,592,220,16]}
+{"kind":"textbox","id":"sh/0ryp8vad","slide":11,"text":"INITIAL VALIDATION","textPreview":"INITIAL VALIDATION","textChars":18,"textLines":1,"bbox":[96,618,220,20]}
+{"kind":"textbox","id":"sh/nu983q94","slide":11,"text":"10 customers  •  $1K/mo avg","textPreview":"10 customers  •  $1K/mo avg","textChars":27,"textLines":1,"bbox":[96,646,220,18]}
+{"kind":"shape","id":"sh/2t07alsj","slide":11,"bbox":[386,474,220,130]}
+{"kind":"textbox","id":"sh/pwrq50ra","slide":11,"text":"$900K","textPreview":"$900K","textChars":5,"textLines":1,"bbox":[386,492,220,42]}
+{"kind":"textbox","id":"sh/ovipcvap","slide":11,"text":"ARR","textPreview":"ARR","textChars":3,"textLines":1,"bbox":[386,532,220,16]}
+{"kind":"textbox","id":"sh/by987a90","slide":11,"text":"INTEGRATED PRODUCT","textPreview":"INTEGRATED PRODUCT","textChars":18,"textLines":1,"bbox":[386,618,220,20]}
+{"kind":"textbox","id":"sh/ax07e5sv","slide":11,"text":"50 customers  •  $1.5K/mo avg","textPreview":"50 customers  •  $1.5K/mo avg","textChars":29,"textLines":1,"bbox":[386,646,220,18]}
+{"kind":"shape","id":"sh/mt4b69c3","slide":11,"bbox":[676,394,220,210]}
+{"kind":"textbox","id":"sh/7udsfet8","slide":11,"text":"$6M","textPreview":"$6M","textChars":3,"textLines":1,"bbox":[676,412,220,42]}
+{"kind":"textbox","id":"sh/8fmt8zut","slide":11,"text":"ARR","textPreview":"ARR","textChars":3,"textLines":1,"bbox":[676,452,220,16]}
+{"kind":"textbox","id":"sh/9gvah4be","slide":11,"text":"EARLY SCALE","textPreview":"EARLY SCALE","textChars":11,"textLines":1,"bbox":[676,618,220,20]}
+{"kind":"textbox","id":"sh/ypkr2pcr","slide":11,"text":"250 customers  •  $2K/mo avg","textPreview":"250 customers  •  $2K/mo avg","textChars":28,"textLines":1,"bbox":[676,646,220,18]}
+{"kind":"shape","id":"sh/zqtsbutc","slide":11,"bbox":[966,304,220,300]}
+{"kind":"textbox","id":"sh/krmt4zux","slide":11,"text":"$30M","textPreview":"$30M","textChars":4,"textLines":1,"bbox":[966,322,220,42]}
+{"kind":"textbox","id":"sh/lsvad4bi","slide":11,"text":"ARR","textPreview":"ARR","textChars":3,"textLines":1,"bbox":[966,362,220,16]}
+{"kind":"textbox","id":"sh/ilobetcv","slide":11,"text":"PLATFORM SCALE","textPreview":"PLATFORM SCALE","textChars":14,"textLines":1,"bbox":[966,618,220,20]}
+{"kind":"textbox","id":"sh/jmxsnytg","slide":11,"text":"1,000 customers  •  $2.5K/mo avg","textPreview":"1,000 customers  •  $2.5K/mo avg","textChars":32,"textLines":1,"bbox":[966,646,220,18]}
+{"kind":"textbox","id":"sh/tgzedsvy","slide":11,"text":"SCENARIO","textPreview":"SCENARIO","textChars":8,"textLines":1,"bbox":[54,245,86,16]}
+{"kind":"textbox","id":"sh/sfqd4ned","slide":11,"text":"ARR grows only when the operating system behind it becomes repeatable.","textPreview":"ARR grows only when the operating system behind it becomes repeatable.","textChars":70,"textLines":1,"bbox":[152,241,850,28]}
+{"kind":"notes","id":"nt/wqjyzp","slide":11,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/721qes","slide":12,"title":"12","textShapes":31}
+{"kind":"shape","id":"sh/j2x0bq50","slide":12,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/k36hkv65","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/5ofid0nq","slide":12,"text":"90-DAY PLAN","textPreview":"90-DAY PLAN","textChars":11,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/6pozm5ob","slide":12,"text":"Learn fast enough to make the next decision obvious.","textPreview":"Learn fast enough to make the next decision obvious.","textChars":52,"textLines":1,"bbox":[104,78,1080,90]}
+{"kind":"textbox","id":"sh/rqx0fa5w","slide":12,"text":"The near-term objective is not feature volume. It is evidence of demand, payment, use, and repeatability.","textPreview":"The near-term objective is not feature volume. It is evidence of demand, payment, use, and repeatability.","textChars":105,"textLines":1,"bbox":[106,174,1060,34]}
+{"kind":"shape","id":"sh/sr6hof6h","slide":12,"bbox":[54,220,1172,1]}
+{"kind":"textbox","id":"sh/tszih0n2","slide":12,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,688,330,14]}
+{"kind":"textbox","id":"sh/et8zq5on","slide":12,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1055,688,130,14]}
+{"kind":"textbox","id":"sh/fuh0ja5s","slide":12,"text":"12","textPreview":"12","textChars":2,"textLines":1,"bbox":[1195,688,30,14]}
+{"kind":"shape","id":"sh/zedkv2hg","slide":12,"bbox":[54,252,340,370]}
+{"kind":"textbox","id":"sh/yd432x0v","slide":12,"text":"DAYS 1–30","textPreview":"DAYS 1–30","textChars":9,"textLines":1,"bbox":[78,278,292,18]}
+{"kind":"textbox","id":"sh/l0v2xsz6","slide":12,"text":"Focus","textPreview":"Focus","textChars":5,"textLines":1,"bbox":[78,325,292,42]}
+{"kind":"shape","id":"sh/0zml4nil","slide":12,"bbox":[78,403,20,20]}
+{"kind":"textbox","id":"sh/batkrih4","slide":12,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[78,406,20,14]}
+{"kind":"textbox","id":"sh/q9k3yd0j","slide":12,"text":"Select contracting segment","textPreview":"Select contracting segment","textChars":26,"textLines":1,"bbox":[112,400,248,42]}
+{"kind":"shape","id":"sh/dcv2tsza","slide":12,"bbox":[78,465,20,20]}
+{"kind":"textbox","id":"sh/cbml0nip","slide":12,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[78,468,20,14]}
+{"kind":"textbox","id":"sh/v6x43mho","slide":12,"text":"Define the paid offer","textPreview":"Define the paid offer","textChars":21,"textLines":1,"bbox":[112,462,248,42]}
+{"kind":"shape","id":"sh/a5o3ah03","slide":12,"bbox":[78,527,20,20]}
+{"kind":"textbox","id":"sh/618n2lkb","slide":12,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[78,530,20,14]}
+{"kind":"textbox","id":"sh/r21ovq1w","slide":12,"text":"Specify the first workflow","textPreview":"Specify the first workflow","textChars":26,"textLines":1,"bbox":[112,524,248,42]}
+{"kind":"shape","id":"sh/s3a54b21","slide":12,"bbox":[446,252,340,370]}
+{"kind":"textbox","id":"sh/t4j6xgjm","slide":12,"text":"DAYS 31–60","textPreview":"DAYS 31–60","textChars":10,"textLines":1,"bbox":[470,278,292,18]}
+{"kind":"textbox","id":"sh/epsn6lk7","slide":12,"text":"Build + onboard","textPreview":"Build + onboard","textChars":15,"textLines":1,"bbox":[470,325,292,42]}
+{"kind":"shape","id":"sh/fq1ozq1s","slide":12,"bbox":[470,403,20,20]}
+{"kind":"textbox","id":"sh/grap8v2d","slide":12,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[470,406,20,14]}
+{"kind":"textbox","id":"sh/1sj610jy","slide":12,"text":"Validate assistant-to-document flow","textPreview":"Validate assistant-to-document flow","textChars":35,"textLines":1,"bbox":[504,400,248,42]}
+{"kind":"shape","id":"sh/atonu1k3","slide":12,"bbox":[470,465,20,20]}
+{"kind":"textbox","id":"sh/vuxonm1o","slide":12,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[470,468,20,14]}
+{"kind":"textbox","id":"sh/donqt436","slide":12,"text":"Onboard initial customers","textPreview":"Onboard initial customers","textChars":25,"textLines":1,"bbox":[504,462,248,42]}
+{"kind":"shape","id":"sh/cne90zml","slide":12,"bbox":[470,527,20,20]}
+{"kind":"textbox","id":"sh/bm58rul0","slide":12,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[470,530,20,14]}
+{"kind":"textbox","id":"sh/qlwryp4f","slide":12,"text":"Measure time-to-first-value","textPreview":"Measure time-to-first-value","textChars":27,"textLines":1,"bbox":[504,524,248,42]}
+{"kind":"shape","id":"sh/lsnqx432","slide":12,"bbox":[838,252,340,370]}
+{"kind":"textbox","id":"sh/0re94zmh","slide":12,"text":"DAYS 61–90","textPreview":"DAYS 61–90","textChars":10,"textLines":1,"bbox":[862,278,292,18]}
+{"kind":"textbox","id":"sh/zq58vulw","slide":12,"text":"Prove + standardize","textPreview":"Prove + standardize","textChars":19,"textLines":1,"bbox":[862,325,292,42]}
+{"kind":"shape","id":"sh/ypwr294r","slide":12,"bbox":[862,403,20,20]}
+{"kind":"textbox","id":"sh/1w3qlk3y","slide":12,"text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[862,406,20,14]}
+{"kind":"textbox","id":"sh/gvu9sfmd","slide":12,"text":"Document recurring use","textPreview":"Document recurring use","textChars":22,"textLines":1,"bbox":[896,400,248,42]}
+{"kind":"shape","id":"sh/kbit0n61","slide":12,"bbox":[862,465,20,20]}
+{"kind":"textbox","id":"sh/5cbutsnm","slide":12,"text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[862,468,20,14]}
+{"kind":"textbox","id":"sh/i90bydov","slide":12,"text":"Validate pricing + outcomes","textPreview":"Validate pricing + outcomes","textChars":27,"textLines":1,"bbox":[896,462,248,42]}
+{"kind":"shape","id":"sh/ja9cri5g","slide":12,"bbox":[862,527,20,20]}
+{"kind":"textbox","id":"sh/wnitw36p","slide":12,"text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[862,530,20,14]}
+{"kind":"textbox","id":"sh/x8rup8na","slide":12,"text":"Capture a repeatable playbook","textPreview":"Capture a repeatable playbook","textChars":29,"textLines":1,"bbox":[896,524,248,42]}
+{"kind":"notes","id":"nt/721qes","slide":12,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}
+{"kind":"slide","id":"sl/60sc1g","slide":13,"title":"13","textShapes":17}
+{"kind":"shape","id":"sh/q9wr29wn","slide":13,"bbox":[0,0,1280,720]}
+{"kind":"textbox","id":"sh/dwnaxove","slide":13,"text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[54,44,40,24]}
+{"kind":"textbox","id":"sh/cbe94jet","slide":13,"text":"EXECUTION TRACKER","textPreview":"EXECUTION TRACKER","textChars":17,"textLines":1,"bbox":[104,45,310,20]}
+{"kind":"textbox","id":"sh/zy5szyd4","slide":13,"text":"The next proof is a paying customer.","textPreview":"The next proof is a paying customer.","textChars":36,"textLines":1,"bbox":[104,102,1040,65]}
+{"kind":"textbox","id":"sh/yxwr6twz","slide":13,"text":"Everything below should sharpen that outcome.","textPreview":"Everything below should sharpen that outcome.","textChars":45,"textLines":1,"bbox":[106,176,980,34]}
+{"kind":"shape","id":"sh/l07a18va","slide":13,"bbox":[54,231,1172,1]}
+{"kind":"textbox","id":"sh/0zy983ep","slide":13,"text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[54,277,35,18]}
+{"kind":"textbox","id":"sh/n2ps3ydg","slide":13,"text":"Demand","textPreview":"Demand","textChars":6,"textLines":1,"bbox":[54,318,340,40]}
+{"kind":"textbox","id":"sh/m1gratwv","slide":13,"text":"Publish useful free tools.\nBook qualified demos.\nRun growth consultations.","textPreview":"Publish useful free tools. | Book qualified demos. | Run growth consultations.","textChars":74,"textLines":3,"bbox":[54,380,330,130]}
+{"kind":"textbox","id":"sh/wna9kr6d","slide":13,"text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[446,277,35,18]}
+{"kind":"textbox","id":"sh/hojqdc7y","slide":13,"text":"Conversion","textPreview":"Conversion","textChars":10,"textLines":1,"bbox":[446,318,340,40]}
+{"kind":"textbox","id":"sh/ulsrihon","slide":13,"text":"Present the Core offer.\nTrack source and objections.\nClose first paying customers.","textPreview":"Present the Core offer. | Track source and objections. | Close first paying customers.","textChars":82,"textLines":3,"bbox":[446,380,330,130]}
+{"kind":"textbox","id":"sh/vm18bmps","slide":13,"text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[838,277,35,18]}
+{"kind":"textbox","id":"sh/4bu9or6p","slide":13,"text":"Learning","textPreview":"Learning","textChars":8,"textLines":1,"bbox":[838,318,340,40]}
+{"kind":"textbox","id":"sh/5c3qhw7a","slide":13,"text":"Measure activation and use.\nValidate pricing and outcomes.\nStandardize what works.","textPreview":"Measure activation and use. | Validate pricing and outcomes. | Standardize what works.","textChars":82,"textLines":3,"bbox":[838,380,330,130]}
+{"kind":"shape","id":"sh/ipsrmhoj","slide":13,"bbox":[54,568,1172,62]}
+{"kind":"textbox","id":"sh/ja18fmp4","slide":13,"text":"DECISION RULE","textPreview":"DECISION RULE","textChars":13,"textLines":1,"bbox":[80,588,160,18]}
+{"kind":"textbox","id":"sh/sfu9sb6l","slide":13,"text":"Keep what produces payment and recurring use. Change what does not.","textPreview":"Keep what produces payment and recurring use. Change what does not.","textChars":67,"textLines":1,"bbox":[260,582,920,30]}
+{"kind":"textbox","id":"sh/tg3alg76","slide":13,"text":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textPreview":"B2W  /  EXECUTIVE STRATEGY SYSTEM","textChars":33,"textLines":1,"bbox":[54,682,330,14]}
+{"kind":"textbox","id":"sh/1wzq5wza","slide":13,"text":"JULY 28, 2026","textPreview":"JULY 28, 2026","textChars":13,"textLines":1,"bbox":[1070,682,155,14]}
+{"kind":"notes","id":"nt/60sc1g","slide":13,"text":"[Sources]\n- B2W Executive Strategy System, internal strategy content supplied by B2W, accessed 2026-07-28.\n[/Sources]"}

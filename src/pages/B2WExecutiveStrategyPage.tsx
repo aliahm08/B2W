@@ -59,7 +59,7 @@ type TrackerStatus = 'Not started' | 'In progress' | 'Blocked' | 'Complete';
 type TrackerItem = {
   id: string;
   phase: string;
-  category: 'Pricing' | 'Product' | 'Success';
+  category: 'Market' | 'Revenue' | 'Product' | 'Customer Success' | 'Scale';
   objective: string;
   task: string;
   owner: 'CEO' | 'COO' | 'CTO';
@@ -83,9 +83,9 @@ const sectionLinks: Array<{ id: SectionId; number: string; label: string }> = [
   { id: 'problem', number: '02', label: 'Customer problem' },
   { id: 'architecture', number: '03', label: 'Product architecture' },
   { id: 'today', number: '04', label: 'What exists today' },
-  { id: 'revenue', number: '05', label: 'Revenue model now' },
-  { id: 'stages', number: '06', label: 'Three-stage model' },
-  { id: 'gates', number: '07', label: 'Phase gates' },
+  { id: 'revenue', number: '05', label: 'Revenue development model' },
+  { id: 'stages', number: '06', label: 'Five-stage model' },
+  { id: 'gates', number: '07', label: 'Commercial gates' },
   { id: 'next', number: '08', label: 'What to build next' },
   { id: 'ownership', number: '09', label: 'Ownership model' },
   { id: 'financials', number: '10', label: 'Financial progression' },
@@ -97,7 +97,7 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'segment',
     phase: 'Phase 1 · Prove value',
-    category: 'Pricing',
+    category: 'Market',
     objective: 'Choose a focused market',
     task: 'Focus the first customer segment on contracting businesses and document their shared operating pain.',
     owner: 'CEO',
@@ -110,20 +110,20 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'offer',
     phase: 'Phase 1 · Prove value',
-    category: 'Pricing',
+    category: 'Revenue',
     objective: 'Define the paid offer',
-    task: 'Package Core, Premium, and Maximum plans around the WhatsApp Assistant, Document Maker, and Project Portal.',
+    task: 'Define the five revenue stages from the $99/month trade-expert offer through SME verification, midsize workflows, project-system integrations, and enterprise agentic contracts.',
     owner: 'CEO',
     contributors: 'COO, CTO',
     deadline: 'Day 21',
     dependency: 'Segment selection',
-    measure: 'The three-tier product ladder is used consistently in live sales conversations.',
+    measure: 'Every sales conversation identifies the customer’s current stage, evidence exchange, revenue gate, and next expansion path.',
     defaultStatus: 'Not started',
   },
   {
     id: 'pricing',
     phase: 'Phase 2 · Prove repeatability',
-    category: 'Pricing',
+    category: 'Revenue',
     objective: 'Validate willingness to pay',
     task: 'Run pricing conversations and record objections, accepted ranges, and value drivers.',
     owner: 'CEO',
@@ -175,7 +175,7 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'onboarding',
     phase: 'Phase 1 · Prove value',
-    category: 'Success',
+    category: 'Customer Success',
     objective: 'Onboard initial customers',
     task: 'Create the onboarding checklist, baseline survey, workflow configuration, and training sequence.',
     owner: 'COO',
@@ -188,7 +188,7 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'adoption',
     phase: 'Phase 1 · Prove value',
-    category: 'Success',
+    category: 'Customer Success',
     objective: 'Prove recurring use',
     task: 'Track weekly usage, completed outputs, time saved, missed actions recovered, and feedback.',
     owner: 'COO',
@@ -201,10 +201,10 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'repeatability',
     phase: 'Phase 2 · Prove repeatability',
-    category: 'Product',
+    category: 'Scale',
     objective: 'Reduce custom delivery',
     task: 'Turn the proven workflow into reusable configuration, templates, and integration steps.',
-    owner: 'CTO',
+    owner: 'COO',
     contributors: 'COO',
     deadline: 'After Phase 1 gate',
     dependency: 'Validated recurring workflows',
@@ -214,7 +214,7 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'case-study',
     phase: 'Phase 2 · Prove repeatability',
-    category: 'Success',
+    category: 'Customer Success',
     objective: 'Make value credible',
     task: 'Publish a quantified case study with baseline, outcome, evidence, and customer approval.',
     owner: 'COO',
@@ -227,7 +227,7 @@ const trackerItems: TrackerItem[] = [
   {
     id: 'acquisition',
     phase: 'Phase 2 · Prove repeatability',
-    category: 'Pricing',
+    category: 'Market',
     objective: 'Learn which acquisition channels work',
     task: 'Record where every paying customer originated, then compare conversion, sales cycle, customer acquisition cost, and payback by source.',
     owner: 'CEO',
@@ -240,9 +240,11 @@ const trackerItems: TrackerItem[] = [
 ];
 
 const categoryStyles = {
-  Pricing: 'border-amber-200 bg-amber-50 text-amber-900',
+  Market: 'border-amber-200 bg-amber-50 text-amber-900',
+  Revenue: 'border-violet-200 bg-violet-50 text-violet-900',
   Product: 'border-sky-200 bg-sky-50 text-sky-900',
-  Success: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+  'Customer Success': 'border-emerald-200 bg-emerald-50 text-emerald-900',
+  Scale: 'border-stone-300 bg-stone-100 text-stone-800',
 } satisfies Record<TrackerItem['category'], string>;
 
 const statusStyles = {
@@ -252,34 +254,96 @@ const statusStyles = {
   Complete: 'bg-emerald-100 text-emerald-800',
 } satisfies Record<TrackerStatus, string>;
 
+const pchipSegments = (xValues: number[], yValues: number[]) => {
+  const intervals = xValues.slice(0, -1).map((x, index) => xValues[index + 1] - x);
+  const slopes = intervals.map((interval, index) => (yValues[index + 1] - yValues[index]) / interval);
+  const derivatives = new Array<number>(xValues.length).fill(0);
+
+  const endpointDerivative = (firstInterval: number, secondInterval: number, firstSlope: number, secondSlope: number) => {
+    let derivative = ((2 * firstInterval + secondInterval) * firstSlope - firstInterval * secondSlope)
+      / (firstInterval + secondInterval);
+    if (Math.sign(derivative) !== Math.sign(firstSlope)) derivative = 0;
+    else if (Math.sign(firstSlope) !== Math.sign(secondSlope) && Math.abs(derivative) > Math.abs(3 * firstSlope)) {
+      derivative = 3 * firstSlope;
+    }
+    return derivative;
+  };
+
+  derivatives[0] = endpointDerivative(intervals[0], intervals[1], slopes[0], slopes[1]);
+  derivatives[derivatives.length - 1] = endpointDerivative(
+    intervals[intervals.length - 1],
+    intervals[intervals.length - 2],
+    slopes[slopes.length - 1],
+    slopes[slopes.length - 2],
+  );
+
+  for (let index = 1; index < derivatives.length - 1; index += 1) {
+    if (slopes[index - 1] * slopes[index] <= 0) {
+      derivatives[index] = 0;
+    } else {
+      const previousInterval = intervals[index - 1];
+      const nextInterval = intervals[index];
+      const previousWeight = 2 * nextInterval + previousInterval;
+      const nextWeight = nextInterval + 2 * previousInterval;
+      derivatives[index] = (previousWeight + nextWeight)
+        / (previousWeight / slopes[index - 1] + nextWeight / slopes[index]);
+    }
+  }
+
+  return xValues.slice(0, -1).map((x, index) => {
+    const interval = intervals[index];
+    const nextX = xValues[index + 1];
+    const nextY = yValues[index + 1];
+    const controlOneX = x + interval / 3;
+    const controlOneY = yValues[index] + derivatives[index] * interval / 3;
+    const controlTwoX = nextX - interval / 3;
+    const controlTwoY = nextY - derivatives[index + 1] * interval / 3;
+    return `M ${x},${yValues[index]} C ${controlOneX},${controlOneY} ${controlTwoX},${controlTwoY} ${nextX},${nextY}`;
+  });
+};
+
 const systemLayers = [
   {
     label: 'Interface',
     title: 'WhatsApp Assistant',
-    description: 'The WhatsApp assistant where the team asks, reviews, and follows through.',
+    description: 'The front door where a contractor asks for help, reviews the response, and follows through.',
     icon: MessageCircle,
     tone: 'bg-[#223C33] text-white',
   },
   {
-    label: 'Intelligence',
-    title: 'Reasoning and orchestration',
-    description: 'OpenClaw, AI models, memory, permissions, and workflow control.',
+    label: 'Reasoning',
+    title: 'Reasoning',
+    description: 'Interprets the request, retrieves context, and selects the correct workflow, model, memory, and permissions.',
     icon: Sparkles,
     tone: 'bg-[#D8B56A] text-[#1E2A25]',
   },
   {
-    label: 'Skills',
+    label: 'Creation',
     title: 'Document Maker',
-    description: 'Reusable SOP, estimating, proposal, contract, reporting, and task capabilities.',
+    description: 'Turns the reasoned request into an estimate, SOP, proposal, contract, report, or other repeatable document.',
     icon: Workflow,
     tone: 'bg-[#DDE8E1] text-[#223C33]',
   },
   {
-    label: 'Context',
-    title: 'Project Portal',
-    description: 'Projects, contracts, dates, owners, status, actions, documents, and connected systems.',
-    icon: Network,
+    label: 'Verification',
+    title: 'Expert Verification',
+    description: 'A subject-matter expert verifies accuracy, trade logic, business fit, and required approvals before release.',
+    icon: UserRoundCheck,
     tone: 'bg-[#F2EEE5] text-[#332F27]',
+  },
+  {
+    label: 'Operations',
+    title: 'Project Portal',
+    description: 'Stores the approved result with the project, contract, dates, owners, status, actions, and linked documents.',
+    icon: Network,
+    tone: 'bg-slate-700 text-white',
+  },
+  {
+    label: 'Security',
+    title: 'SOC 2 & Security Development',
+    description: 'Develops the controls, access management, audit logging, data protection, and operating evidence required for SOC 2 readiness.',
+    icon: ShieldCheck,
+    tone: 'bg-black text-white',
   },
 ];
 
@@ -316,7 +380,7 @@ function AccessScreen({ onAuthenticated }: { onAuthenticated: () => void }) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/b2w-executive-strategy', {
+      const response = await fetch('/api/b2w-executive-strategy?action=login', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -411,7 +475,7 @@ function AccessScreen({ onAuthenticated }: { onAuthenticated: () => void }) {
             </p>
             <h1 className="mt-3 text-3xl font-medium tracking-[-0.04em]">Executive access</h1>
             <p className="mt-4 text-sm leading-6 text-[#223C33]/58">
-              Enter the strategy password. Access is intentionally temporary, so this page locks again whenever it is reopened or refreshed.
+              Enter the strategy password once per secure browser session. Access expires automatically and can be locked manually at any time.
             </p>
 
             <form className="mt-9" onSubmit={handleSubmit}>
@@ -615,6 +679,29 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
           </div>
 
           <div className="flex items-center gap-2">
+            <nav
+              className="flex shrink-0 items-center rounded-full border border-[#223C33]/12 bg-white/55 p-1"
+              aria-label="Executive strategy version"
+            >
+              <a
+                href="https://www.b2w-ai.com/executive-strategy"
+                className="rounded-full px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-[#223C33]/55 transition hover:bg-white hover:text-[#223C33]"
+                aria-label="Open live version 0"
+                title="Open live V0"
+              >
+                V0
+                <span className="hidden xl:inline"> · Live</span>
+              </a>
+              <span
+                className="rounded-full bg-[#223C33] px-2.5 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em] text-white shadow-sm"
+                aria-current="page"
+                aria-label="Current draft version 1"
+                title="Current unstaged V1"
+              >
+                V1
+                <span className="hidden xl:inline"> · Draft</span>
+              </span>
+            </nav>
             <span className="hidden items-center gap-2 rounded-full border border-[#223C33]/12 bg-white/55 px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.15em] text-[#223C33]/55 sm:flex">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
               Temporary access
@@ -764,22 +851,22 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
                 number="01"
                 eyebrow="The company in one view"
                 title="A shared mental model from first value to platform scale."
-                description="What B2W sells now, what becomes connected next, and what the complete platform eventually becomes."
+                description="What exists today, what must be proven next, and what the complete platform could eventually become."
               />
               <div className="mt-10 grid gap-px overflow-hidden rounded-3xl border border-[#223C33]/12 bg-[#223C33]/12 lg:grid-cols-3">
                 {[
                   {
                     horizon: 'Now',
-                    product: 'WhatsApp assistant + document capabilities',
-                    model: 'High-touch paid implementation',
-                    proof: 'Prove customer value',
+                    product: 'JasonAI prototype with one pre-launch client',
+                    model: 'Founder-led testing; Clara remains a concept',
+                    proof: 'Prove usage, reliability + launch readiness',
                     tone: 'bg-white',
                   },
                   {
                     horizon: 'Next',
-                    product: 'Connected assistant, context + document workflows',
-                    model: 'Repeatable integrated product',
-                    proof: 'Prove product repeatability',
+                    product: 'Reasoning, Clara + SME verification',
+                    model: 'Build the first verified document workflow',
+                    proof: 'Prove repeatable, industry-valid output',
                     tone: 'bg-[#F2EEE5]',
                   },
                   {
@@ -862,8 +949,8 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               <SectionHeader
                 number="03"
                 eyebrow="Product architecture"
-                title="Four layers, with information moving both ways."
-                description="B2W reads context, produces outputs, takes approved actions, and records the result in the systems the business already trusts."
+                title="Six layers move a request from conversation to secure execution."
+                description="The WhatsApp Assistant starts the request. Reasoning guides the work, the Document Maker creates it, an SME verifies it, the Project Portal records it, and security development strengthens the system toward SOC 2 readiness."
               />
               <div className="mt-10 space-y-3">
                 {systemLayers.map((layer, index) => {
@@ -886,10 +973,9 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
                         </div>
                       </div>
                       {index < systemLayers.length - 1 ? (
-                        <div className="flex h-10 items-center justify-center gap-8 text-[#997022]">
+                        <div className="flex h-10 items-center justify-center gap-4 text-[#997022]">
                           <ArrowDown className="h-4 w-4" />
-                          <span className="text-[8px] uppercase tracking-[0.18em]">two-way information flow</span>
-                          <ArrowDown className="h-4 w-4 rotate-180" />
+                          <span className="text-[8px] uppercase tracking-[0.18em]">moves to the next control layer</span>
                         </div>
                       ) : null}
                     </div>
@@ -902,39 +988,58 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               <SectionHeader
                 number="04"
                 eyebrow="Current reality"
-                title="Three products create one expandable operating system."
-                description="The WhatsApp Assistant is the required starting point. The Document Maker adds the document layer when a customer needs it. The Project Portal adds project control for the most complete operating model."
+                title="The product vision is ahead of the product today."
+                description="JasonAI is a prototype with one pre-launch client. Clara is a concept. Reasoning, SME verification, project systems, integrations, enterprise security, and SOC 2 remain research and development."
               />
               <div className="mt-10 overflow-hidden rounded-3xl border border-[#223C33]/12 bg-white/60">
-                <div className="hidden grid-cols-[1fr_1.35fr_1.55fr] bg-[#223C33] px-6 py-4 text-[9px] uppercase tracking-[0.18em] text-white/55 md:grid">
-                  <span>Product</span><span>What exists today</span><span>Commercial role</span>
+                <div className="hidden grid-cols-[1fr_.7fr_1.35fr_1.45fr] bg-[#223C33] px-6 py-4 text-[9px] uppercase tracking-[0.18em] text-white/55 md:grid">
+                  <span>Capability</span><span>Maturity</span><span>Evidence today</span><span>Next proof</span>
                 </div>
                 {[
                   [
-                    'WhatsApp Assistant',
-                    'Reads business communication, summarizes conversations, and identifies actions and follow-ups.',
-                    'Core is the minimum B2W product: $2,000 setup + $99/month.',
+                    'JasonAI · WhatsApp Assistant',
+                    'Prototype',
+                    'One client is using the product in pre-launch. It is not yet launched, repeatable, or commercially proven.',
+                    'Validate recurring use, reliability, willingness to pay, and readiness for a broader launch.',
                   ],
                   [
-                    'Document Maker',
-                    'Creates the SOPs, estimates, reports, and repeatable document workflows the assistant can use.',
-                    'Premium adds document capability through a higher monthly plan—without another setup fee.',
+                    'Clara · Document Maker',
+                    'Concept',
+                    'The product and workflow are defined conceptually, but there is no customer-ready prototype today.',
+                    'Build one usable document workflow and test it with selected subject-matter experts.',
                   ],
                   [
-                    'Project Portal',
-                    'Organizes projects, contracts, dates, owners, status, actions, and linked documents in one portal.',
-                    'Maximum adds the Project Portal to Premium for customers that need a shared project-control layer.',
+                    'Reasoning + SME verification',
+                    'R&D',
+                    'The reasoning, orchestration, and expert-verification loop have not been validated as a repeatable system.',
+                    'Prove reasoning quality and a regular expert-review process before introducing the next agent price.',
                   ],
-                ].map(([component, capability, role]) => (
-                  <div key={component} className="grid gap-4 border-t border-[#223C33]/10 p-6 first:border-t-0 md:grid-cols-[1fr_1.35fr_1.55fr]">
+                  [
+                    'Project systems + enterprise security',
+                    'R&D',
+                    'The Project Portal, external integrations, custom management system, enterprise controls, and SOC 2 program are future work.',
+                    'Learn from midsize project-system integrations before building; fund compliance and security after revenue.',
+                  ],
+                ].map(([component, maturity, evidence, proof]) => (
+                  <div key={component} className="grid gap-4 border-t border-[#223C33]/10 p-6 first:border-t-0 md:grid-cols-[1fr_.7fr_1.35fr_1.45fr]">
                     <p className="font-semibold">{component}</p>
                     <div>
-                      <p className="text-[8px] uppercase tracking-[0.16em] text-[#223C33]/35 md:hidden">What exists today</p>
-                      <p className="mt-1 text-sm leading-6 text-[#223C33]/62 md:mt-0">{capability}</p>
+                      <p className="text-[8px] uppercase tracking-[0.16em] text-[#223C33]/35 md:hidden">Maturity</p>
+                      <span className={`mt-1 inline-flex rounded-full border px-3 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] md:mt-0 ${
+                        maturity === 'Prototype'
+                          ? 'border-amber-300 bg-amber-50 text-amber-800'
+                          : maturity === 'Concept'
+                            ? 'border-sky-200 bg-sky-50 text-sky-800'
+                            : 'border-neutral-200 bg-neutral-100 text-neutral-600'
+                      }`}>{maturity}</span>
                     </div>
                     <div>
-                      <p className="text-[8px] uppercase tracking-[0.16em] text-[#223C33]/35 md:hidden">Commercial role</p>
-                      <p className="mt-1 text-sm font-medium leading-6 text-[#8A5B16] md:mt-0">{role}</p>
+                      <p className="text-[8px] uppercase tracking-[0.16em] text-[#223C33]/35 md:hidden">Evidence today</p>
+                      <p className="mt-1 text-sm leading-6 text-[#223C33]/62 md:mt-0">{evidence}</p>
+                    </div>
+                    <div>
+                      <p className="text-[8px] uppercase tracking-[0.16em] text-[#223C33]/35 md:hidden">Next proof</p>
+                      <p className="mt-1 text-sm font-medium leading-6 text-[#8A5B16] md:mt-0">{proof}</p>
                     </div>
                   </div>
                 ))}
@@ -945,335 +1050,326 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
             <section id="revenue" className="scroll-mt-24 border-t border-[#223C33]/12 py-20 sm:py-28">
               <SectionHeader
                 number="05"
-                eyebrow="Revenue model now"
-                title="Start with the WhatsApp Assistant. Expand through documents and project control."
-                description="Every customer begins with Core. Premium adds the Document Maker. Maximum adds the Project Portal. The ladder increases recurring revenue without repeating the original setup fee."
+                eyebrow="Revenue development model"
+                title="Each customer segment teaches the product what the next segment will pay for."
+                description="B2W starts with trade experts, exchanges free access for verified industry knowledge, moves into midsize workflow systems, and uses enterprise revenue to fund the security and compliance required for scale."
               />
-              <div className="mt-10 grid gap-5 lg:grid-cols-2">
-                <div className="rounded-3xl border border-[#223C33]/12 bg-white/60 p-7">
-                  <CircleDollarSign className="h-6 w-6 text-[#997022]" />
-                  <p className="mt-8 text-[9px] uppercase tracking-[0.18em] text-[#223C33]/38">One-time revenue</p>
-                  <p className="mt-3 text-2xl font-medium tracking-[-0.03em]">$2,000 Core setup.</p>
-                  <p className="mt-4 text-sm leading-6 text-[#223C33]/58">
-                    Configure the WhatsApp Assistant, permissions, onboarding, and the first workflow. If a customer has existing SOPs or estimating tools, a separate one-time document-learning fee covers up to 50 documents.
-                  </p>
-                </div>
-                <div className="rounded-3xl border border-[#223C33]/12 bg-[#DDE8E1] p-7">
-                  <RefreshCw className="h-6 w-6 text-[#315746]" />
-                  <p className="mt-8 text-[9px] uppercase tracking-[0.18em] text-[#223C33]/38">Recurring revenue</p>
-                  <p className="mt-3 text-2xl font-medium tracking-[-0.03em]">Move customers up the product ladder.</p>
-                  <p className="mt-4 text-sm leading-6 text-[#223C33]/58">
-                    Core begins at $99/month. Premium increases the monthly plan for document capability. Maximum increases it again for the Project Portal. Neither upgrade repeats the setup fee.
+              <div className="mt-10 rounded-3xl bg-[#223C33] p-7 text-white sm:p-9">
+                <div className="grid gap-8 lg:grid-cols-[220px_1fr] lg:items-center">
+                  <div>
+                    <RefreshCw className="h-6 w-6 text-[#D8B56A]" />
+                    <p className="mt-6 text-[9px] font-semibold uppercase tracking-[0.2em] text-[#D8B56A]">Revenue flywheel</p>
+                  </div>
+                  <p className="text-2xl font-medium leading-9 tracking-[-0.03em] sm:text-3xl">
+                    Give valuable access before charging more—then convert the resulting expertise, project structure, and workflow knowledge into a defensible agent.
                   </p>
                 </div>
               </div>
-              <div className="mt-5 grid gap-3 lg:grid-cols-3">
+              <div className="mt-5 space-y-4">
                 {[
-                  [
-                    'Core',
-                    'WhatsApp Assistant',
-                    'WhatsApp assistant for summaries, actions, and follow-up clarity.',
-                    '$2,000 setup',
-                    '$99 / month',
-                  ],
-                  [
-                    'Premium',
-                    'WhatsApp Assistant + Document Maker',
-                    'Use existing process documents or develop the missing SOPs, estimates, reports, and templates.',
-                    'No additional setup',
-                    'Higher monthly plan',
-                  ],
-                  [
-                    'Maximum',
-                    'WhatsApp Assistant + Document Maker + Project Portal',
-                    'Add the project portal for shared project context, status, decisions, actions, and risk visibility.',
-                    'No additional setup',
-                    'Highest monthly plan',
-                  ],
-                ].map(([offer, products, description, setup, recurring], index) => (
-                  <div key={offer} className={`rounded-3xl border p-6 ${
-                    index === 0 ? 'border-[#223C33] bg-[#223C33] text-white' : 'border-[#223C33]/12 bg-white/50'
+                  {
+                    stage: '01',
+                    market: 'Trade experts',
+                    title: 'Turn the JasonAI prototype into a launchable product.',
+                    product: 'WhatsApp Assistant + verified reasoning and orchestration',
+                    exchange: 'Use the one pre-launch client to validate recurring use, reliability, and the core workflow. Once ready, market directly to general contractors and expert owner-operators—plumbers, barbers, and other trade specialists—and use stickiness to identify future SME partners.',
+                    revenue: 'Pre-launch target: $2,000 setup + $99/month. Validate before treating it as a proven offer.',
+                  },
+                  {
+                    stage: '02',
+                    market: 'SME partners',
+                    title: 'Trade free Clara access for continuous verification.',
+                    product: 'JasonAI + Clara + SME feedback loop',
+                    exchange: 'Give the stickiest experts free, unlimited access to Clara. They can produce through JasonAI or Clara directly. In exchange, collect regular feedback, codify the documents, create B2W-style industry baselines verified by practitioners, and reserve those verified deliverables for JasonAI.',
+                    revenue: 'When the verified baseline is strong, end open free usage and introduce the next agent price.',
+                  },
+                  {
+                    stage: '03',
+                    market: 'Midsize specialist firms',
+                    title: 'Sell a productive workflow system—not a document tool.',
+                    product: 'JasonAI + Clara, configured together',
+                    exchange: 'Target architecture firms, engineering consultancies, real estate developers, and businesses that contract trade specialists. Configure repeatable processes and full workflows while building a network between specialist firms and trade experts.',
+                    revenue: 'Setup fee + higher recurring price for the configured duo.',
+                  },
+                  {
+                    stage: '04',
+                    market: 'Project-system customers',
+                    title: 'Use one free integration to learn the operating structure.',
+                    product: 'Project Portal or integration into the customer’s existing system',
+                    exchange: 'Provide one free integration setup into Google Workspace, a CRM, Salesforce, or the relevant construction platform. Use that access to understand project structure, identify CRM gaps, and build a custom management layer where needed.',
+                    revenue: 'The first integration is free; additional integrations, management systems, and workflow expansion become paid.',
+                  },
+                  {
+                    stage: '05',
+                    market: 'Enterprise',
+                    title: 'Lock in an agentic platform with workflows it can act on.',
+                    product: 'JasonAI + custom workflows + connected systems + action permissions',
+                    exchange: 'Teach JasonAI to read and update the customer’s tools. Package the resulting custom workflows and integrations into a fully agentic platform, then use the earnings to hire developers for security, reliability, and SOC 2 compliance.',
+                    revenue: 'Enterprise contract, implementation, integrations, and recurring platform revenue.',
+                  },
+                ].map(({ stage, market, title, product, exchange, revenue }, index) => (
+                  <div key={stage} className={`grid gap-6 rounded-3xl border p-6 lg:grid-cols-[150px_1fr_255px] lg:items-start lg:p-8 ${
+                    index === 4 ? 'border-[#223C33] bg-[#223C33] text-white' : 'border-[#223C33]/12 bg-white/55'
                   }`}>
-                    <p className={`text-[9px] font-semibold uppercase tracking-[0.2em] ${index === 0 ? 'text-[#D8B56A]' : 'text-[#997022]'}`}>{offer}</p>
-                    <p className="mt-5 text-lg font-semibold leading-6">{products}</p>
-                    <p className={`mt-3 min-h-20 text-xs leading-5 ${index === 0 ? 'text-white/52' : 'text-[#223C33]/52'}`}>{description}</p>
-                    <div className={`mt-6 border-t pt-5 ${index === 0 ? 'border-white/12' : 'border-[#223C33]/10'}`}>
-                      <p className="text-xl font-medium">{setup}</p>
-                      <p className={`mt-1 text-[10px] ${index === 0 ? 'text-white/45' : 'text-[#223C33]/42'}`}>one-time</p>
-                      <p className="mt-5 text-sm font-semibold">{recurring}</p>
+                    <div>
+                      <p className={`font-mono text-xs ${index === 4 ? 'text-[#D8B56A]' : 'text-[#997022]'}`}>{stage}</p>
+                      <p className={`mt-5 text-[9px] font-semibold uppercase tracking-[0.18em] ${index === 4 ? 'text-white/45' : 'text-[#223C33]/42'}`}>{market}</p>
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-medium tracking-[-0.03em]">{title}</h3>
+                      <p className={`mt-3 text-sm font-semibold leading-6 ${index === 4 ? 'text-white/78' : 'text-[#315746]'}`}>{product}</p>
+                      <p className={`mt-4 text-sm leading-6 ${index === 4 ? 'text-white/52' : 'text-[#223C33]/58'}`}>{exchange}</p>
+                    </div>
+                    <div className={`border-t pt-5 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0 ${index === 4 ? 'border-white/12' : 'border-[#223C33]/10'}`}>
+                      <CircleDollarSign className={`h-5 w-5 ${index === 4 ? 'text-[#D8B56A]' : 'text-[#997022]'}`} />
+                      <p className={`mt-5 text-[9px] font-semibold uppercase tracking-[0.18em] ${index === 4 ? 'text-white/42' : 'text-[#223C33]/38'}`}>Revenue gate</p>
+                      <p className="mt-3 text-sm font-semibold leading-6">{revenue}</p>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="mt-4 text-[10px] leading-5 text-[#223C33]/42">
-                Premium and Maximum monthly prices, plus the one-time document-learning fee, remain to be validated. The document-learning fee is distinct from setup and covers up to 50 existing documents.
-              </p>
             </section>
 
             <section id="stages" className="scroll-mt-24 border-t border-[#223C33]/12 py-20 sm:py-28">
               <SectionHeader
                 number="06"
-                eyebrow="Three-stage business model"
-                title="Product maturity changes the economics."
-                description="Service effort declines as the product becomes repeatable; recurring revenue, capability, and gross margin should rise."
+                eyebrow="Five-stage commercial model"
+                title="Each product tier funds the next stage of capability."
+                description="Core establishes recurring revenue. Premium grows through verified expert knowledge. Maximum temporarily raises service effort before productization, security, and full-price platform revenue improve the economics."
               />
-              <div className="mt-10 grid gap-4 lg:grid-cols-3">
-                {[
-                  [
-                    '01',
-                    'Prove value',
-                    'Free tools, demos + consultations',
-                    'Attract contractors with free estimate, SOP, and proposal tools; convert interest through product demos and growth consultations.',
-                    'Founder-led',
-                  ],
-                  [
-                    '02',
-                    'Prove repeatability',
-                    'Paying customers + source data',
-                    'Use customer count, plan selection, retention, and acquisition source to learn which offers and channels are working.',
-                    'Standardized',
-                  ],
-                  ['03', 'Scale the platform', 'Integrations, templates + approval controls', 'Grow recurring revenue faster than delivery cost.', 'Low-touch'],
-                ].map(([number, title, product, goal, delivery], index) => (
-                  <div key={number} className={`rounded-3xl border p-7 ${
-                    index === 2 ? 'border-[#223C33] bg-[#223C33] text-white' : 'border-[#223C33]/12 bg-white/55'
-                  }`}>
-                    <div className="flex items-center justify-between">
-                      <span className={`font-mono text-xs ${index === 2 ? 'text-[#D8B56A]' : 'text-[#997022]'}`}>{number}</span>
-                      <span className={`rounded-full border px-3 py-1 text-[8px] uppercase tracking-[0.14em] ${
-                        index === 2 ? 'border-white/12 text-white/45' : 'border-[#223C33]/12 text-[#223C33]/45'
-                      }`}>{delivery}</span>
-                    </div>
-                    <h3 className="mt-10 text-3xl font-medium tracking-[-0.04em]">{title}</h3>
-                    <p className={`mt-4 text-sm font-semibold leading-6 ${index === 2 ? 'text-white/75' : ''}`}>{product}</p>
-                    <p className={`mt-5 text-sm leading-6 ${index === 2 ? 'text-white/45' : 'text-[#223C33]/52'}`}>{goal}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-8 overflow-hidden rounded-3xl border border-[#223C33]/12 bg-white/50">
-                <div className="grid gap-6 border-b border-[#223C33]/10 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
-                  <div>
+              <div className="mt-10 overflow-hidden rounded-3xl border border-[#223C33]/12 bg-white/55">
+                <div className="border-b border-[#223C33]/10 p-6 sm:p-8">
+                  <div className="max-w-2xl">
                     <Gauge className="h-6 w-6 text-[#997022]" />
-                    <p className="mt-6 text-xl font-medium tracking-[-0.025em]">Economic progression</p>
-                    <p className="mt-2 max-w-xl text-xs leading-5 text-[#223C33]/48">
-                      One relative view of how the four economic drivers should change as the business moves through each stage.
+                    <h3 className="mt-5 text-2xl font-medium tracking-[-0.03em]">Commercial and economic progression</h3>
+                    <p className="mt-2 text-sm leading-6 text-[#223C33]/55">
+                      One stage-aligned view of recurring revenue, added capability, verified knowledge, security milestones, and service effort—not a financial forecast.
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-x-5 gap-y-3 text-[9px] font-semibold uppercase tracking-[0.13em] text-[#223C33]/55">
-                    <span className="flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 rounded-sm bg-[#315746]" />
+                  <div className="mt-6 flex flex-wrap gap-x-6 gap-y-3 border-t border-[#223C33]/8 pt-5">
+                    <div className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.11em] text-[#223C33]/58">
+                      <svg viewBox="0 0 28 14" className="h-3.5 w-7" aria-hidden="true">
+                        <path d="M1 12 L1 10 C7 10 10 8 14 7 C19 5 22 3 27 1 L27 12 Z" fill="#1F4B3C" fillOpacity="0.7" />
+                      </svg>
                       Recurring revenue
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 rounded-sm border border-[#B68124]/30 bg-[#D8B56A]/45" />
-                      Gross margin
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className="h-0.5 w-4 bg-[#9B6953]" />
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[0.11em] text-[#223C33]/58">
+                      <span className="flex items-end gap-0.5">
+                        {['#A8A8A8', '#737373', '#404040', '#111111'].map((tone, index) => (
+                          <span key={tone} className="h-1.5 w-1.5 rounded-[1px]" style={{ backgroundColor: tone, transform: `translateY(${-index}px)` }} />
+                        ))}
+                      </span>
+                      Verified knowledge
+                    </div>
+                    <div className="flex items-center gap-2 text-[9px] font-semibold uppercase tracking-[0.11em] text-[#223C33]/58">
+                      <span className="h-0.5 w-7 rounded-full bg-[#C24D3A]" />
                       Service effort
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className="h-2.5 w-2.5 rotate-45 border border-[#997022] bg-white" />
-                      Product capability
-                    </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <svg
-                    viewBox="0 0 960 520"
-                    role="img"
-                    aria-label="Unified three-stage economic progression graph. Recurring revenue bars and the gross margin area rise from prove value through platform scale, product capability expands at each stage, and the service effort line declines."
-                    className="min-w-[760px]"
-                  >
-                    <defs>
-                      <linearGradient id="grossMarginArea" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#D8B56A" stopOpacity="0.52" />
-                        <stop offset="100%" stopColor="#D8B56A" stopOpacity="0.08" />
-                      </linearGradient>
-                      <linearGradient id="recurringRevenueBars" x1="0" y1="1" x2="0" y2="0">
-                        <stop offset="0%" stopColor="#223C33" />
-                        <stop offset="100%" stopColor="#527764" />
-                      </linearGradient>
-                    </defs>
-
-                    <rect width="960" height="520" fill="#FFFEFA" fillOpacity="0.38" />
-
-                    {[118, 202, 286, 370].map((y) => (
-                      <line
-                        key={y}
-                        x1="82"
-                        y1={y}
-                        x2="920"
-                        y2={y}
-                        stroke="#223C33"
-                        strokeOpacity="0.08"
-                        strokeDasharray="3 7"
-                      />
-                    ))}
-                    {[210, 490, 770].map((x) => (
-                      <line
-                        key={x}
-                        x1={x}
-                        y1="92"
-                        x2={x}
-                        y2="390"
-                        stroke="#223C33"
-                        strokeOpacity="0.07"
-                      />
-                    ))}
-
-                    <text x="30" y="112" fill="#223C33" fillOpacity="0.35" fontSize="9" fontWeight="700" letterSpacing="1.4">
-                      HIGHER
-                    </text>
-                    <text x="30" y="374" fill="#223C33" fillOpacity="0.35" fontSize="9" fontWeight="700" letterSpacing="1.4">
-                      LOWER
-                    </text>
-
-                    <path
-                      d="M 82,350 C 180,342 304,306 420,270 C 555,228 690,155 920,110 L 920,370 L 82,370 Z"
-                      fill="url(#grossMarginArea)"
-                    />
-                    <path
-                      d="M 82,350 C 180,342 304,306 420,270 C 555,228 690,155 920,110"
-                      fill="none"
-                      stroke="#B68124"
-                      strokeOpacity="0.7"
-                      strokeWidth="1.5"
-                    />
-                    <text x="846" y="98" fill="#8A631D" fontSize="9" fontWeight="700" letterSpacing="1.2">
-                      GROSS MARGIN
-                    </text>
-
-                    {[
-                      [210, 300, 70],
-                      [490, 238, 132],
-                      [770, 142, 228],
-                    ].map(([x, y, height], index) => (
-                      <g key={x}>
-                        <rect
-                          x={x - 42}
-                          y={y}
-                          width="84"
-                          height={height}
-                          rx="10"
-                          fill="url(#recurringRevenueBars)"
-                          opacity={0.72 + index * 0.12}
-                        />
-                        <text
-                          x={x}
-                          y={y - 12}
-                          textAnchor="middle"
-                          fill="#315746"
-                          fontSize="9"
-                          fontWeight="700"
-                          letterSpacing="1.1"
-                        >
-                          RECURRING REVENUE
-                        </text>
-                      </g>
-                    ))}
-
-                    <path
-                      d="M 210,136 C 305,158 397,191 490,214 C 588,238 680,286 770,324"
-                      fill="none"
-                      stroke="#9B6953"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                    />
-                    {[
-                      [210, 136],
-                      [490, 214],
-                      [770, 324],
-                    ].map(([x, y]) => (
-                      <circle key={x} cx={x} cy={y} r="5" fill="#9B6953" stroke="#FFFEFA" strokeWidth="3" />
-                    ))}
-                    <text x="116" y="126" fill="#875946" fontSize="9" fontWeight="700" letterSpacing="1.1">
-                      SERVICE EFFORT
-                    </text>
-
-                    {[
-                      {
-                        x: 210,
-                        y: 136,
-                        title: 'Useful tools + demos',
-                        body: 'Founder-guided value',
-                      },
-                      {
-                        x: 490,
-                        y: 214,
-                        title: 'Paid recurring product',
-                        body: 'Standardized delivery',
-                      },
-                      {
-                        x: 770,
-                        y: 324,
-                        title: 'Configurable platform',
-                        body: 'Integrations + controls',
-                      },
-                    ].map(({ x, y, title, body }, index) => {
-                      const boxY = index === 0 ? 24 : index === 1 ? 72 : 178;
-                      return (
-                        <g key={title}>
-                          <line
-                            x1={x}
-                            y1={boxY + 58}
-                            x2={x}
-                            y2={y - 13}
-                            stroke="#997022"
-                            strokeOpacity="0.48"
-                            strokeDasharray="3 5"
-                          />
+                <div className="overflow-x-auto px-4 pb-6 pt-6 sm:px-7">
+                  <div className="min-w-[840px]">
+                    <svg
+                      viewBox="0 0 1000 520"
+                      className="w-full"
+                      role="img"
+                      aria-label="Unified five-stage graph showing recurring revenue columns, product capability callouts, verified knowledge blocks, security milestones, and a service effort curve"
+                    >
+                      {[100, 300, 500, 700, 900].map((x, index) => (
+                        <g key={x}>
                           <rect
-                            x={x - 102}
-                            y={boxY}
-                            width="204"
-                            height="58"
-                            rx="12"
-                            fill="#FFFEFA"
-                            stroke="#B68124"
-                            strokeOpacity="0.52"
+                            x={x - 90}
+                            y="14"
+                            width="180"
+                            height="488"
+                            rx="18"
+                            fill={index === 3 ? '#F5EDE7' : index === 4 ? '#223C33' : '#F7F4EC'}
+                            opacity={index === 4 ? 0.08 : 0.74}
                           />
-                          <rect
-                            x={x - 5}
-                            y={boxY + 53}
-                            width="10"
-                            height="10"
-                            rx="1.5"
-                            transform={`rotate(45 ${x} ${boxY + 58})`}
-                            fill="#FFFEFA"
-                            stroke="#B68124"
-                            strokeOpacity="0.52"
-                          />
-                          <text x={x} y={boxY + 25} textAnchor="middle" fill="#223C33" fontSize="11" fontWeight="700">
-                            {title}
-                          </text>
-                          <text x={x} y={boxY + 43} textAnchor="middle" fill="#223C33" fillOpacity="0.5" fontSize="9">
-                            {body}
-                          </text>
+                          {index === 4 ? <rect x={x - 90} y="14" width="180" height="88" rx="18" fill="#223C33" /> : null}
+                          <line x1={x} y1="108" x2={x} y2="430" stroke="#223C33" strokeOpacity="0.08" />
                         </g>
-                      );
-                    })}
+                      ))}
 
-                    <line x1="82" y1="390" x2="920" y2="390" stroke="#223C33" strokeOpacity="0.18" />
-                    {[
-                      ['01', 'PROVE VALUE', 210],
-                      ['02', 'PROVE REPEATABILITY', 490],
-                      ['03', 'SCALE THE PLATFORM', 770],
-                    ].map(([number, label, x]) => (
-                      <g key={String(number)}>
-                        <text x={Number(x)} y="428" textAnchor="middle" fill="#997022" fontSize="10" fontFamily="monospace">
-                          {number}
-                        </text>
-                        <text x={Number(x)} y="452" textAnchor="middle" fill="#223C33" fontSize="10" fontWeight="700" letterSpacing="1.2">
-                          {label}
-                        </text>
-                      </g>
-                    ))}
-                    <text x="920" y="492" textAnchor="end" fill="#223C33" fillOpacity="0.34" fontSize="8.5" fontWeight="700" letterSpacing="1.2">
-                      RELATIVE PROGRESSION · NOT A FORECAST
-                    </text>
-                  </svg>
+                      {[205, 270, 335, 390].map((y) => (
+                        <line key={y} x1="18" y1={y} x2="982" y2={y} stroke="#223C33" strokeOpacity="0.07" strokeDasharray="4 8" />
+                      ))}
+
+                      {[
+                        ['01', 'CORE LAUNCH', '$99/mo + $2,000 setup'],
+                        ['02', 'PREMIUM TRIALS', '$149/mo · setup waived early'],
+                        ['03', 'VERIFIED WORKFLOWS', 'Core + Premium subscriptions rise'],
+                        ['04', 'MAXIMUM TRIALS', 'Free trials · tokens + hiring spike'],
+                        ['05', 'FULL PLATFORM', '$399/mo + larger setup fee'],
+                      ].map(([number, title, pricing], index) => {
+                        const x = [100, 300, 500, 700, 900][index];
+                        const inverse = index === 4;
+                        return (
+                          <g key={number}>
+                            <text x={x} y="39" textAnchor="middle" fill={inverse ? '#D8B56A' : '#997022'} fontSize="10" fontFamily="monospace">
+                              {number}
+                            </text>
+                            <text x={x} y="62" textAnchor="middle" fill={inverse ? '#FFFFFF' : '#223C33'} fontSize="11" fontWeight="700" letterSpacing="1.1">
+                              {title}
+                            </text>
+                            <foreignObject x={x - 72} y="70" width="144" height="34">
+                              <div className={`text-center text-[9px] leading-4 ${inverse ? 'text-white/55' : 'text-[#223C33]/48'}`}>{pricing}</div>
+                            </foreignObject>
+                          </g>
+                        );
+                      })}
+
+                      {[
+                        ['BASE', 'WhatsApp assistant'],
+                        ['+ 01', 'Document maker'],
+                        ['+ 02', 'Verified workflows'],
+                        ['+ 03', 'Project systems'],
+                        ['+ 04', 'Agentic platform'],
+                      ].map(([step, capability], index) => {
+                        const x = [100, 300, 500, 700, 900][index];
+                        const revenueY = [410, 370, 335, 290, 220][index];
+                        return (
+                          <g key={capability}>
+                            <path
+                              d={`M ${x},178 L ${x},${revenueY - 7}`}
+                              fill="none"
+                              stroke="#B68124"
+                              strokeOpacity="0.32"
+                              strokeWidth="1.2"
+                              strokeDasharray="3 4"
+                            />
+                            <circle cx={x} cy={revenueY} r="3.5" fill="#D8B56A" stroke="#FFFEFA" strokeWidth="1.5" />
+                            <rect x={x - 72} y="132" width="144" height="46" rx="12" fill="#F7F0DE" stroke="#B68124" strokeOpacity="0.28" />
+                            <text x={x - 60} y="149" fill="#997022" fontSize="8.5" fontFamily="monospace">{step}</text>
+                            <text x={x - 60} y="165" fill="#43351D" fontSize="10" fontWeight="700">{capability}</text>
+                          </g>
+                        );
+                      })}
+
+                      <line x1="45" y1="390" x2="955" y2="390" stroke="#1F4B3C" strokeOpacity="0.22" strokeDasharray="5 6" />
+                      <text x="35" y="393" textAnchor="end" fill="#1F4B3C" fillOpacity="0.55" fontSize="8.5" fontWeight="700">0</text>
+                      <path
+                        d="M 100,410 C 170,408 230,380 300,370 C 370,360 430,345 500,335 C 570,325 630,302 700,290 C 770,278 830,238 900,220 L 900,390 L 100,390 Z"
+                        fill="#1F4B3C"
+                        fillOpacity="0.18"
+                      />
+                      <path
+                        d="M 100,410 C 170,408 230,380 300,370 C 370,360 430,345 500,335 C 570,325 630,302 700,290 C 770,278 830,238 900,220"
+                        fill="none"
+                        stroke="#1F4B3C"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                      {[
+                        [100, 410, '-20'],
+                        [300, 370, '+15'],
+                        [500, 335, '+35'],
+                        [700, 290, '+58'],
+                        [900, 220, '+92'],
+                      ].map(([x, y, value]) => (
+                        <g key={String(x)}>
+                          <circle cx={Number(x)} cy={Number(y)} r="3.5" fill="#1F4B3C" stroke="#FFFEFA" strokeWidth="1.5" />
+                          <text x={Number(x)} y={Number(y) - 10} textAnchor="middle" fill="#1F4B3C" fontSize="9" fontWeight="700">{value}</text>
+                        </g>
+                      ))}
+
+                      {pchipSegments([100, 300, 500, 700, 900], [388, 354, 321, 292, 269]).map((segment, index) => (
+                        <path
+                          key={segment}
+                          d={segment}
+                          fill="none"
+                          stroke={['#A8A8A8', '#737373', '#404040', '#111111'][index]}
+                          strokeWidth="4"
+                          strokeDasharray="5 6"
+                          strokeLinecap="butt"
+                        />
+                      ))}
+                      {[
+                        [100, 388, '1×', 377, '#B8B8B8'],
+                        [300, 354, '3×', 343, '#8A8A8A'],
+                        [500, 321, '5×', 310, '#595959'],
+                        [700, 292, '7×', 310, '#303030'],
+                        [900, 269, '9×', 258, '#111111'],
+                      ].map(([x, y, value, labelY, tone]) => (
+                        <g key={String(x)}>
+                          <rect x={Number(x) - 4.5} y={Number(y) - 4.5} width="9" height="9" rx="1.5" fill={String(tone)} stroke="#FFFEFA" strokeWidth="2" />
+                          <text x={Number(x)} y={Number(labelY)} textAnchor="middle" fill={String(tone)} fontSize="9" fontWeight="700">{value}</text>
+                        </g>
+                      ))}
+
+                      <path
+                        d="M 100,208 C 170,208 230,232 300,239 C 370,246 430,275 500,278 C 570,281 630,254 700,255 C 770,256 830,292 900,301"
+                        fill="none"
+                        stroke="#C24D3A"
+                        strokeWidth="2.25"
+                        strokeLinecap="round"
+                      />
+                      {[
+                        [100, 208, '85%'],
+                        [300, 239, '65%'],
+                        [500, 278, '40%'],
+                        [700, 255, '55%'],
+                        [900, 301, '25%'],
+                      ].map(([x, y, value]) => (
+                        <g key={String(x)}>
+                          <circle cx={Number(x)} cy={Number(y)} r="3.5" fill="#C24D3A" stroke="#FFFEFA" strokeWidth="2" />
+                          <text x={Number(x)} y={Number(y) - 10} textAnchor="middle" fill="#A43F30" fontSize="9" fontWeight="700">{value}</text>
+                        </g>
+                      ))}
+
+                      <text x="20" y="432" fill="#7C4C55" fontSize="8.5" fontWeight="700" letterSpacing="1.2">
+                        SECURITY MATURITY MILESTONES
+                      </text>
+                      <line x1="100" y1="450" x2="900" y2="450" stroke="#8D5A63" strokeOpacity="0.28" strokeWidth="2" />
+                      {[
+                        'Prototype',
+                        'Permissions',
+                        'Audit trail',
+                        'Controls',
+                        'SOC 2 readiness',
+                      ].map((milestone, index) => {
+                        const x = [100, 300, 500, 700, 900][index];
+                        return (
+                          <g key={milestone}>
+                            <circle cx={x} cy="450" r={8 + index * 1.2} fill="#8D5A63" opacity={0.4 + index * 0.13} />
+                            <text x={x} y="453.5" textAnchor="middle" fill="#FFFFFF" fontSize="8" fontFamily="monospace">0{index + 1}</text>
+                            <foreignObject x={x - 65} y="467" width="130" height="30">
+                              <div className="text-center text-[9px] font-semibold leading-4 text-[#68424A]">{milestone}</div>
+                            </foreignObject>
+                          </g>
+                        );
+                      })}
+
+                      <text x="20" y="510" fill="#223C33" fillOpacity="0.36" fontSize="8" fontWeight="700" letterSpacing="1.2">
+                        RELATIVE ECONOMIC PROGRESSION
+                      </text>
+                      <text x="980" y="510" textAnchor="end" fill="#223C33" fillOpacity="0.36" fontSize="8" fontWeight="700" letterSpacing="1.2">
+                        TIME →
+                      </text>
+                    </svg>
+                  </div>
+                </div>
+
+                <div className="grid border-t border-[#223C33]/10 sm:grid-cols-5">
+                  {[
+                    ['01', 'Launch Core', 'Prove $99/month recurring use while the $2,000 setup funds high-touch onboarding.'],
+                    ['02', 'Open Premium', 'Increase monthly price 50%. Introduce a setup fee, but waive it for early trade-expert trials and feedback.'],
+                    ['03', 'Codify value', 'Keep Core and Premium subscriptions growing while expert verification creates defensible deliverables.'],
+                    ['04', 'Trial Maximum', 'Project-management trials raise token usage and service effort; developer hiring creates a temporary cost spike.'],
+                    ['05', 'Sell full price', 'Productize Maximum at $399/month plus larger setup fees while Core and Premium continue compounding.'],
+                  ].map(([number, title, description], index) => (
+                    <div
+                      key={number}
+                      className={`border-[#223C33]/10 p-5 sm:border-r sm:last:border-r-0 ${
+                        index === 4 ? 'bg-[#223C33] text-white' : 'border-b last:border-b-0 sm:border-b-0'
+                      }`}
+                    >
+                      <p className={`font-mono text-[10px] ${index === 4 ? 'text-[#D8B56A]' : 'text-[#997022]'}`}>{number}</p>
+                      <p className="mt-4 text-sm font-semibold">{title}</p>
+                      <p className={`mt-2 text-xs leading-5 ${index === 4 ? 'text-white/55' : 'text-[#223C33]/52'}`}>{description}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </section>
@@ -1281,21 +1377,21 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
             <section id="gates" className="scroll-mt-24 border-t border-[#223C33]/12 py-20 sm:py-28">
               <SectionHeader
                 number="07"
-                eyebrow="Phase gates"
-                title="Progress when evidence is ready—not when the calendar changes."
-                description="Each phase has measurable exit criteria across customers, product, revenue, delivery, and economics."
+                eyebrow="Commercial gates"
+                title="Move upmarket only when the prior market has taught us enough."
+                description="The trade-expert, midsize, and enterprise gates require evidence across customers, product capability, revenue, delivery, and economics."
               />
               <div className="mt-10 overflow-x-auto rounded-3xl border border-[#223C33]/12 bg-white/60">
                 <div className="min-w-[780px]">
                   <div className="grid grid-cols-[150px_repeat(3,1fr)] bg-[#223C33] px-6 py-4 text-[9px] uppercase tracking-[0.15em] text-white/55">
-                    <span>Category</span><span>Phase 1 gate</span><span>Phase 2 gate</span><span>Scale gate</span>
+                    <span>Category</span><span>Trade-expert gate</span><span>Midsize workflow gate</span><span>Enterprise gate</span>
                   </div>
                   {[
-                    ['Customers', 'Qualified demos + consultations', 'Paying customers + source data', 'Repeatable acquisition'],
-                    ['Product', 'Useful free tools + demo proven', 'Paid product in recurring use', 'Configurable platform'],
-                    ['Revenue', 'Offer interest validated', 'Initial recurring revenue + retention', 'Predictable growth'],
-                    ['Delivery', 'Founder-led demos + consultations', 'Standardized onboarding', 'Low-touch deployment'],
-                    ['Economics', 'Demand signal validated', 'Positive contribution margin', 'Strong gross margin'],
+                    ['Customers', 'Sticky trade users + committed SME partners', 'Midsize firms using repeatable workflows', 'Enterprise buyers with action-ready use cases'],
+                    ['Product', 'Reasoning works + verified document baseline', 'JasonAI + Clara + project-system integration', 'Agentic workflows + security controls'],
+                    ['Revenue', '$99 base validated + next agent tier priced', 'Setup + recurring duo + paid expansion', 'Enterprise contracts + implementation'],
+                    ['Delivery', 'Founder-led onboarding + regular SME feedback', 'Standardized setup + one free integration', 'Controlled enterprise implementation'],
+                    ['Economics', 'Willingness to pay + recurring use', 'Positive margin + valuable integration learning', 'Earnings fund developers, SOC 2, and security'],
                   ].map((row) => (
                     <div key={row[0]} className="grid grid-cols-[150px_repeat(3,1fr)] border-t border-[#223C33]/10 px-6 py-5 text-sm">
                       <span className="font-semibold">{row[0]}</span>
@@ -1306,9 +1402,9 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               </div>
               <div className="mt-6 grid gap-3 md:grid-cols-3">
                 {[
-                  ['Phase 1 complete', 'Free-tool use, qualified demos, and consultation demand consistently reveal contractor pain and offer interest.'],
-                  ['Phase 2 complete', 'Paying customers, recurring use, retention, and acquisition-source data reveal which offers and channels work.'],
-                  ['Phase 3 begins', 'Acquisition, onboarding, delivery, support, and infrastructure can scale predictably.'],
+                  ['Trade gate complete', 'JasonAI has sticky paying users, trusted SME partners, a verified document baseline, and evidence for the next agent price.'],
+                  ['Midsize gate complete', 'JasonAI and Clara support repeatable workflows, one integration reveals project structure, and customers pay for expansion.'],
+                  ['Enterprise begins', 'JasonAI can safely read and update connected systems through custom workflows, with revenue available to fund security and SOC 2.'],
                 ].map(([title, body], index) => (
                   <div key={title} className="rounded-2xl border border-[#223C33]/12 bg-white/45 p-5">
                     <CheckCircle2 className={`h-5 w-5 ${index === 2 ? 'text-[#997022]' : 'text-[#527764]'}`} />
@@ -1364,17 +1460,24 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               <div className="mt-10 grid gap-4 lg:grid-cols-3">
                 {ownership.map((item, index) => {
                   const Icon = item.icon;
+                  const isCeo = index === 0;
                   return (
                     <div key={item.role} className={`rounded-3xl border p-7 ${
-                      index === 1 ? 'border-[#B68124]/35 bg-[#D8B56A]/14' : 'border-[#223C33]/12 bg-white/55'
+                      isCeo
+                        ? 'border-black bg-black text-white'
+                        : index === 1
+                          ? 'border-[#B68124]/35 bg-[#D8B56A]/14'
+                          : 'border-[#223C33]/12 bg-white/55'
                     }`}>
                       <div className="flex items-center justify-between">
-                        <Icon className="h-5 w-5 text-[#997022]" />
-                        <span className="font-mono text-xs text-[#223C33]/38">0{index + 1}</span>
+                        <Icon className={`h-5 w-5 ${isCeo ? 'text-[#D8B56A]' : 'text-[#997022]'}`} />
+                        <span className={`font-mono text-xs ${isCeo ? 'text-white/40' : 'text-[#223C33]/38'}`}>0{index + 1}</span>
                       </div>
                       <h3 className="mt-10 text-3xl font-medium tracking-[-0.04em]">{item.role}</h3>
                       <p className="mt-4 text-sm font-semibold leading-6">{item.owns}</p>
-                      <p className="mt-5 border-t border-[#223C33]/10 pt-5 text-sm leading-6 text-[#223C33]/55">{item.action}</p>
+                      <p className={`mt-5 border-t pt-5 text-sm leading-6 ${
+                        isCeo ? 'border-white/15 text-white/60' : 'border-[#223C33]/10 text-[#223C33]/55'
+                      }`}>{item.action}</p>
                     </div>
                   );
                 })}
@@ -1610,19 +1713,58 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
 }
 
 export default function B2WExecutiveStrategyPage() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authState, setAuthState] = useState<'checking' | 'locked' | 'authenticated'>('checking');
 
   useEffect(() => {
-    const relockRestoredPage = (event: PageTransitionEvent) => {
-      if (event.persisted) setAuthenticated(false);
+    let active = true;
+
+    const verifySession = async () => {
+      try {
+        const response = await fetch('/api/b2w-executive-strategy?action=status', {
+          method: 'GET',
+          credentials: 'same-origin',
+          headers: { Accept: 'application/json' },
+        });
+        const result = await response.json() as { authenticated?: boolean };
+        if (active) setAuthState(result.authenticated ? 'authenticated' : 'locked');
+      } catch {
+        if (active) setAuthState('locked');
+      }
     };
-    window.addEventListener('pageshow', relockRestoredPage);
-    return () => window.removeEventListener('pageshow', relockRestoredPage);
+
+    void verifySession();
+    const revalidateRestoredPage = () => void verifySession();
+    window.addEventListener('pageshow', revalidateRestoredPage);
+
+    return () => {
+      active = false;
+      window.removeEventListener('pageshow', revalidateRestoredPage);
+    };
   }, []);
 
-  if (!authenticated) {
-    return <AccessScreen onAuthenticated={() => setAuthenticated(true)} />;
+  if (authState === 'checking') {
+    return (
+      <main className="grid min-h-screen place-items-center bg-[#EEE9DE] text-[#223C33]">
+        <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#223C33]/55">
+          <RefreshCw className="h-4 w-4 animate-spin text-[#B68124]" />
+          Checking secure session
+        </div>
+      </main>
+    );
   }
 
-  return <StrategyWorkspace onLock={() => setAuthenticated(false)} />;
+  if (authState === 'locked') {
+    return <AccessScreen onAuthenticated={() => setAuthState('authenticated')} />;
+  }
+
+  return (
+    <StrategyWorkspace
+      onLock={() => {
+        void fetch('/api/b2w-executive-strategy?action=logout', {
+          method: 'POST',
+          credentials: 'same-origin',
+        }).finally(() => setAuthState('locked'));
+      }}
+    />
+  );
 }

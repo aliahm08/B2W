@@ -66,11 +66,20 @@ export type ProposalSignatureSubmission = {
 };
 
 export type JasonAiRoiReportSubmission = {
-  recipientEmail: string;
+  firstName: string;
+  lastName: string;
+  businessEmail: string;
+  companyName: string;
+  companyLocation: string;
+  marketingOptIn: boolean;
   businessType: 'contractor' | 'firm';
   employees: number;
   activeProjects: number;
   averageProjectWeeks: number;
+  sourcePage: string;
+  sourcePath: string;
+  sourceUrl: string;
+  referrer: string;
   submittedAt: string;
 };
 
@@ -246,10 +255,19 @@ export function validateClientCommunicationSubmission(
 export function validateJasonAiRoiReportSubmission(
   payload: Record<string, unknown>,
 ): ValidationResult<JasonAiRoiReportSubmission> {
-  const recipientEmail = requireEmail(payload.recipientEmail ?? payload.email, 'Recipient email');
-  if (recipientEmail.ok === false) {
-    return { ok: false, status: recipientEmail.status, error: recipientEmail.error };
-  }
+  const firstName = requireText('First name', payload.firstName, { maxLength: 80 });
+  if (firstName.ok === false) return firstName;
+  const lastName = requireText('Last name', payload.lastName, { maxLength: 80 });
+  if (lastName.ok === false) return lastName;
+  const businessEmail = requireEmail(
+    payload.businessEmail ?? payload.recipientEmail ?? payload.email,
+    'Business email address',
+  );
+  if (businessEmail.ok === false) return businessEmail;
+  const companyName = requireText('Company name', payload.companyName ?? payload.company, { maxLength: 200 });
+  if (companyName.ok === false) return companyName;
+  const marketingOptIn = requireBoolean('Marketing preference', payload.marketingOptIn ?? false);
+  if (marketingOptIn.ok === false) return marketingOptIn;
 
   const businessType = payload.businessType;
   if (businessType !== 'contractor' && businessType !== 'firm') {
@@ -271,11 +289,20 @@ export function validateJasonAiRoiReportSubmission(
   return {
     ok: true,
     value: {
-      recipientEmail: recipientEmail.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      businessEmail: businessEmail.value,
+      companyName: companyName.value,
+      companyLocation: optionalText(payload.companyLocation, 200),
+      marketingOptIn: marketingOptIn.value,
       businessType,
       employees: employees.value,
       activeProjects: activeProjects.value,
       averageProjectWeeks: averageProjectWeeks.value,
+      sourcePage: optionalText(payload.sourcePage, 200),
+      sourcePath: optionalText(payload.sourcePath, 200),
+      sourceUrl: optionalText(payload.sourceUrl, 500),
+      referrer: optionalText(payload.referrer, 500),
       submittedAt: optionalText(payload.submittedAt, 80) || new Date().toISOString(),
     },
   };
