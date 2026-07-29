@@ -1,6 +1,6 @@
-import './_common/env.js';
-import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
-import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
+import '../_common/env.js';
+import { checkRateLimit, getClientIp } from '../_common/rateLimit.js';
+import { allowMethods, readJsonBody, sendJson } from './http.js';
 import {
   B2W_EXECUTIVE_STRATEGY_COOKIE,
   createB2WExecutiveStrategySessionToken,
@@ -8,7 +8,7 @@ import {
   isB2WExecutiveStrategySessionConfigured,
   isB2WExecutiveStrategySessionValid,
   readB2WExecutiveStrategySessionCookie,
-} from '../server/b2wExecutiveStrategyAccess.js';
+} from '../../server/b2wExecutiveStrategyAccess.js';
 
 function isSecureRequest(req: any) {
   return process.env.NODE_ENV === 'production'

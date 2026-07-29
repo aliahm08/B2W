@@ -1,8 +1,8 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
-import './_common/env.js';
-import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
-import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
+import '../_common/env.js';
+import { checkRateLimit, getClientIp } from '../_common/rateLimit.js';
+import { allowMethods, readJsonBody, sendJson } from './http.js';
 
 const COOKIE_NAME = 'b2w_jasonai_executive';
 const SESSION_TTL_SECONDS = 60 * 60 * 12;

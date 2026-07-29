@@ -1,4 +1,11 @@
-import { FormEvent, ReactNode, useEffect, useState } from 'react';
+import {
+  Component,
+  type ErrorInfo,
+  type FormEvent,
+  type ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -19,6 +26,63 @@ import Seo from '../../components/Seo';
 
 type AuthState = 'checking' | 'locked' | 'authenticated';
 
+class InternalWorkspaceErrorBoundary extends Component<
+  { children: ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error('Internal workspace failed to render.', error, info);
+  }
+
+  render() {
+    if (!this.state.hasError) return this.props.children;
+
+    return (
+      <main className="grid min-h-screen place-items-center bg-[#F5F1E8] px-5 text-[#223C33]">
+        <Seo
+          title="B2W Internal Workspace"
+          description="Private B2W internal workspace."
+          robots="noindex, nofollow"
+          canonicalPath="/internal"
+        />
+        <section className="w-full max-w-xl rounded-[2rem] border border-[#223C33]/15 bg-white/70 p-8 shadow-[0_30px_90px_rgba(34,60,51,0.14)] backdrop-blur sm:p-10">
+          <B2WIcon title="" className="h-11 w-12 text-[#223C33]" />
+          <p className="mt-8 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#997022]">
+            Workspace recovery
+          </p>
+          <h1 className="mt-3 text-3xl font-medium tracking-[-0.04em]">
+            This workspace could not finish loading.
+          </h1>
+          <p className="mt-4 text-sm leading-7 text-[#223C33]/60">
+            Reload the current workspace to fetch the latest application files.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="min-h-11 rounded-full bg-[#223C33] px-5 text-sm font-semibold text-white"
+            >
+              Reload workspace
+            </button>
+            <Link
+              to="/internal"
+              className="inline-flex min-h-11 items-center rounded-full border border-[#223C33]/15 px-5 text-sm font-semibold"
+            >
+              Return to internal home
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
+}
+
 function InternalAccessScreen({ onAuthenticated }: { onAuthenticated: () => void }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -31,7 +95,7 @@ function InternalAccessScreen({ onAuthenticated }: { onAuthenticated: () => void
     setError('');
 
     try {
-      const response = await fetch('/api/b2w-executive-strategy?action=login', {
+      const response = await fetch('/api/executive-strategy?scope=b2w&action=login', {
         method: 'POST',
         credentials: 'same-origin',
         headers: {
@@ -241,7 +305,7 @@ function InternalHub({ onLock }: { onLock: () => void }) {
       </header>
 
       <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#997022]">Executive Summary</p>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#997022]">Executive Strategy</p>
         <h1 className="mt-5 max-w-4xl text-5xl font-medium leading-[0.98] tracking-[-0.05em] sm:text-7xl">
           Our mission is to improve communication and optimize actionable insights.
         </h1>
@@ -297,7 +361,7 @@ export default function InternalAccessGate({ children }: { children?: ReactNode 
 
     const verifySession = async () => {
       try {
-        const response = await fetch('/api/b2w-executive-strategy?action=status', {
+        const response = await fetch('/api/executive-strategy?scope=b2w&action=status', {
           method: 'GET',
           credentials: 'same-origin',
           headers: { Accept: 'application/json' },
@@ -320,7 +384,7 @@ export default function InternalAccessGate({ children }: { children?: ReactNode 
 
   const handleLock = async () => {
     try {
-      await fetch('/api/b2w-executive-strategy?action=logout', {
+      await fetch('/api/executive-strategy?scope=b2w&action=logout', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { Accept: 'application/json' },
@@ -351,5 +415,9 @@ export default function InternalAccessGate({ children }: { children?: ReactNode 
     return <InternalAccessScreen onAuthenticated={() => setAuthState('authenticated')} />;
   }
 
-  return children ?? <InternalHub onLock={() => void handleLock()} />;
+  return (
+    <InternalWorkspaceErrorBoundary>
+      {children ?? <InternalHub onLock={() => void handleLock()} />}
+    </InternalWorkspaceErrorBoundary>
+  );
 }

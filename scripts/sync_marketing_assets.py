@@ -21,6 +21,7 @@ BRAND_VECTOR_SOURCE = BRAND_DIR / "b2w-icon.svg"
 ICON_SOURCE = BRAND_DIR / "verification" / "b2w-icon.png"
 WORDMARK_SOURCE = BRAND_DIR / "b2w-full-logo.png"
 CLARA_SOURCE = BRAND_DIR / "clara-logo-solid.png"
+MARKETING_ASSET_VERSION = "20260729.2"
 
 FAVICON_OUTPUTS = {
     "favicon.png": 32,
@@ -39,12 +40,12 @@ SITE_MANIFEST = {
     "display": "standalone",
     "icons": [
         {
-            "src": "/web-app-manifest-192x192.png",
+            "src": f"/web-app-manifest-192x192.png?v={MARKETING_ASSET_VERSION}",
             "sizes": "192x192",
             "type": "image/png",
         },
         {
-            "src": "/web-app-manifest-512x512.png",
+            "src": f"/web-app-manifest-512x512.png?v={MARKETING_ASSET_VERSION}",
             "sizes": "512x512",
             "type": "image/png",
         },

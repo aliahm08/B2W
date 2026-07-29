@@ -316,7 +316,7 @@ function AccessScreen({ onAuthenticated }: { onAuthenticated: () => void }) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/b2w-executive-strategy?action=login', {
+      const response = await fetch('/api/executive-strategy?scope=b2w&action=login', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -1453,7 +1453,7 @@ export default function B2WExecutiveStrategyV0Page() {
 
     const verifySession = async () => {
       try {
-        const response = await fetch('/api/b2w-executive-strategy?action=status', {
+        const response = await fetch('/api/executive-strategy?scope=b2w&action=status', {
           method: 'GET',
           credentials: 'same-origin',
           headers: { Accept: 'application/json' },
@@ -1493,7 +1493,7 @@ export default function B2WExecutiveStrategyV0Page() {
   return (
     <StrategyWorkspace
       onLock={() => {
-        void fetch('/api/b2w-executive-strategy?action=logout', {
+        void fetch('/api/executive-strategy?scope=b2w&action=logout', {
           method: 'POST',
           credentials: 'same-origin',
         }).finally(() => setAuthState('locked'));

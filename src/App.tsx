@@ -357,13 +357,21 @@ export default function App() {
                     </InternalAccessGate>
                   }
                 />
-                <Route path="/internal/portal/product" element={<JasonAIOverviewPage />} />
-                <Route path="/internal/portal/product/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
-                <Route path="/internal/portal/product/kpi-tracker" element={<JasonAIKPITrackerPage />} />
-                <Route path="/internal/portal/product/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
-                <Route path="/internal/portal/product/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
-                <Route path="/internal/portal/product/valuation" element={<JasonAIValuationModelPage />} />
-                <Route path="/internal/portal/product/documentation" element={<JasonAIDocumentationPage />} />
+                <Route
+                  element={
+                    <InternalAccessGate>
+                      <Outlet />
+                    </InternalAccessGate>
+                  }
+                >
+                  <Route path="/internal/portal/product" element={<JasonAIOverviewPage />} />
+                  <Route path="/internal/portal/product/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
+                  <Route path="/internal/portal/product/kpi-tracker" element={<JasonAIKPITrackerPage />} />
+                  <Route path="/internal/portal/product/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
+                  <Route path="/internal/portal/product/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+                  <Route path="/internal/portal/product/valuation" element={<JasonAIValuationModelPage />} />
+                  <Route path="/internal/portal/product/documentation" element={<JasonAIDocumentationPage />} />
+                </Route>
                 <Route path="/internal/jason-ai" element={<Navigate to="/internal/portal/product" replace />} />
                 <Route path="/internal/jason-ai/performance-goals" element={<Navigate to="/internal/portal/product/performance-goals" replace />} />
                 <Route path="/internal/jason-ai/kpi-tracker" element={<Navigate to="/internal/portal/product/kpi-tracker" replace />} />

@@ -178,7 +178,7 @@ export function JasonAIExecutiveAccessScreen({
     setError('');
 
     try {
-      const response = await fetch('/api/jasonai-executive-strategy?action=login', {
+      const response = await fetch('/api/executive-strategy?scope=jasonai&action=login', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
@@ -928,7 +928,7 @@ export default function JasonAIExecutiveStrategyPage() {
     setLoadError('');
 
     try {
-      const response = await fetch('/api/jasonai-executive-strategy?action=data', {
+      const response = await fetch('/api/executive-strategy?scope=jasonai&action=data', {
         credentials: 'same-origin',
         cache: 'no-store',
       });
@@ -950,7 +950,7 @@ export default function JasonAIExecutiveStrategyPage() {
 
   useEffect(() => {
     let active = true;
-    void fetch('/api/jasonai-executive-strategy?action=status', {
+    void fetch('/api/executive-strategy?scope=jasonai&action=status', {
       credentials: 'same-origin',
       cache: 'no-store',
     })
@@ -980,7 +980,7 @@ export default function JasonAIExecutiveStrategyPage() {
   }, [authState, data, fetchData]);
 
   const logout = async () => {
-    await fetch('/api/jasonai-executive-strategy?action=logout', {
+    await fetch('/api/executive-strategy?scope=jasonai&action=logout', {
       method: 'POST',
       credentials: 'same-origin',
     }).catch(() => undefined);

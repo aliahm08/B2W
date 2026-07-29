@@ -38,10 +38,11 @@ const FALLBACK_SITE_URL = 'https://www.b2w-ai.com';
 const DEFAULT_ROBOTS = 'index, follow';
 const PRIVATE_ROBOTS = 'noindex, nofollow';
 const DEFAULT_PUBLIC_IMAGE_ALT = 'B2W wordmark for consulting and applied AI systems.';
+const MARKETING_ASSET_VERSION = '20260729.2';
 
 const brandImages = {
-  b2wSocial: '/brand/b2w-social-card.png',
-  claraSocial: '/brand/clara-social-card.png',
+  b2wSocial: `/brand/b2w-social-card.png?v=${MARKETING_ASSET_VERSION}`,
+  claraSocial: `/brand/clara-social-card.png?v=${MARKETING_ASSET_VERSION}`,
 } as const;
 
 const jasonAiImages = {
