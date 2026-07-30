@@ -1,10 +1,9 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode, type CSSProperties } from 'react';
 import { ArrowRight, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import B2WLogoMark from '../B2WLogoMark';
 import { unifiedPrototype } from '../../content/unifiedPrototype';
 import { workspaceCssVariables } from '../../content/workspaceBrandSystem';
-import type { CSSProperties } from 'react';
 
 type UnifiedSiteShellProps = {
   children: ReactNode;
@@ -91,7 +90,11 @@ function UnifiedHeader({ theme }: { theme: 'light' | 'dark' }) {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`px-3 py-3 text-base font-medium ${location.pathname === item.to ? 'bg-current/5' : ''}`}
+                className={`px-3 py-3 text-base font-medium ${
+                  location.pathname === item.to
+                    ? dark ? 'bg-white/10 text-white' : 'bg-neutral-100 text-black'
+                    : dark ? 'text-neutral-300' : 'text-neutral-700'
+                }`}
               >
                 {item.label}
               </Link>
@@ -160,9 +163,20 @@ export function PrototypeButton({ children, to, tone = 'primary' }: { children: 
     jason: 'border-[#B24A24] bg-[#B24A24] text-white hover:bg-[#913B1D]',
     clara: 'border-[#A66589] bg-[#3D1F33] text-white hover:bg-[#5A2F49]',
   } as const;
+  const className = `inline-flex min-h-12 items-center justify-center gap-2 border px-5 text-sm font-semibold transition ${tones[tone]}`;
+  const isExternalAction = to.startsWith('mailto:') || to.startsWith('https://') || to.startsWith('http://');
+
+  if (isExternalAction) {
+    return (
+      <a href={to} className={className}>
+        {children}
+        <ArrowRight className="h-4 w-4" />
+      </a>
+    );
+  }
 
   return (
-    <Link to={to} className={`inline-flex min-h-12 items-center justify-center gap-2 border px-5 text-sm font-semibold transition ${tones[tone]}`}>
+    <Link to={to} className={className}>
       {children}
       <ArrowRight className="h-4 w-4" />
     </Link>
