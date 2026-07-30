@@ -52,6 +52,7 @@ const TierPage = lazy(() => import('./pages/TierPage'));
 const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
+const WorkspaceGuidePage = lazy(() => import('./pages/WorkspaceGuidePage'));
 const InternalProjectIndexPage = lazy(() => import('./pages/internal/InternalProjectIndexPage'));
 const JasonAIOverviewPage = lazy(() => import('./pages/internal/jason-ai/JasonAIOverviewPage'));
 const JasonAIPerformanceGoalsPage = lazy(() => import('./pages/internal/jason-ai/JasonAIPerformanceGoalsPage'));
@@ -67,21 +68,13 @@ function ScrollToTop() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
-    if (pathname.startsWith('/client/uyghur-eats/valuation') && hash) {
-      return;
-    }
+    if (pathname.startsWith('/client/uyghur-eats/valuation') && hash) return;
 
     if (hash) {
       const attemptScroll = () => {
-        if (scrollToHashTarget(hash)) {
-          return;
-        }
-
-        window.setTimeout(() => {
-          scrollToHashTarget(hash);
-        }, 180);
+        if (scrollToHashTarget(hash)) return;
+        window.setTimeout(() => scrollToHashTarget(hash), 180);
       };
-
       window.requestAnimationFrame(attemptScroll);
     } else {
       window.scrollTo(0, 0);
@@ -106,31 +99,23 @@ function LandingPage({
   const [isProjectDrawerOpen, setIsProjectDrawerOpen] = useState(false);
 
   const scrollToContact = () => {
-    const contact = document.getElementById('contact');
-    contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   useEffect(() => {
-    if (openBuilderOnLoad) {
-      setIsProjectDrawerOpen(true);
-    }
+    if (openBuilderOnLoad) setIsProjectDrawerOpen(true);
   }, [openBuilderOnLoad]);
 
   useEffect(() => {
     const heroElement = document.getElementById('landing-hero');
-
-    if (!heroElement) {
-      return;
-    }
+    if (!heroElement) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setShowProjectButton(!entry.isIntersecting);
         onHeroVisibilityChange(entry.isIntersecting);
       },
-      {
-        threshold: 0.12,
-      },
+      { threshold: 0.12 },
     );
 
     observer.observe(heroElement);
@@ -143,17 +128,9 @@ function LandingPage({
   return (
     <>
       <Seo />
-      <Hero
-        showOfferBanner
-        onOfferClick={onOfferClick}
-        onOfferClose={onOfferClose}
-      />
-      <section id="expertise">
-        <Expertise />
-      </section>
-      <section id="contact">
-        <CTA />
-      </section>
+      <Hero showOfferBanner onOfferClick={onOfferClick} onOfferClose={onOfferClose} />
+      <section id="expertise"><Expertise /></section>
+      <section id="contact"><CTA /></section>
       <AnimatePresence>
         {showProjectButton ? (
           <motion.div
@@ -166,7 +143,7 @@ function LandingPage({
               type="button"
               onClick={scrollToContact}
               aria-label="Begin Your Project"
-              className="pointer-events-auto inline-flex items-center justify-center rounded-full bg-black text-white shadow-[0_20px_50px_rgba(0,0,0,0.22)] transition-colors hover:bg-neutral-800 h-12 w-12 md:h-auto md:w-auto md:px-8 md:py-4 md:text-base md:font-semibold"
+              className="pointer-events-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-black text-white shadow-[0_20px_50px_rgba(0,0,0,0.22)] transition-colors hover:bg-neutral-800 md:h-auto md:w-auto md:px-8 md:py-4 md:text-base md:font-semibold"
             >
               <ArrowUpRight className="h-5 w-5 md:hidden" />
               <span className="hidden md:inline">Begin Your Project</span>
@@ -203,9 +180,7 @@ function SolutionsLayout() {
             'radial-gradient(ellipse 60% 45% at 20% 15%, rgba(56,189,248,0.08), transparent 60%), radial-gradient(ellipse 55% 45% at 82% 22%, rgba(45,212,191,0.05), transparent 62%), radial-gradient(ellipse 58% 50% at 50% 100%, rgba(168,85,247,0.05), transparent 70%)',
         }}
       />
-      <div className="relative z-10 pt-28 md:pt-32 xl:pt-24">
-        <Outlet />
-      </div>
+      <div className="relative z-10 pt-28 md:pt-32 xl:pt-24"><Outlet /></div>
     </div>
   );
 }
@@ -215,28 +190,19 @@ export default function App() {
   const [searchParams] = useSearchParams();
   const [isLandingHeroVisible, setIsLandingHeroVisible] = useState(false);
   const [isOfferBannerDismissed, setIsOfferBannerDismissed] = useState<boolean>(() => {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-
+    if (typeof window === 'undefined') return false;
     return window.localStorage.getItem(OFFER_BANNER_STORAGE_KEY) === 'true';
   });
 
   useEffect(() => {
-    if (
-      location.pathname !== '/services'
-      && location.pathname !== '/services/archive/2026-07-29'
-    ) {
+    if (location.pathname !== '/services' && location.pathname !== '/services/archive/2026-07-29') {
       setIsLandingHeroVisible(false);
     }
   }, [location.pathname]);
 
   const dismissOfferBanner = () => {
     setIsOfferBannerDismissed(true);
-
-    if (typeof window !== 'undefined') {
-      window.localStorage.setItem(OFFER_BANNER_STORAGE_KEY, 'true');
-    }
+    if (typeof window !== 'undefined') window.localStorage.setItem(OFFER_BANNER_STORAGE_KEY, 'true');
   };
 
   const isClientPortal = location.pathname.startsWith('/client/');
@@ -245,6 +211,7 @@ export default function App() {
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
+  const isWorkspacePage = location.pathname === '/workspace';
   const isLogoVerification = location.pathname === '/brand/logo-verification';
   const isLiveServices = location.pathname === '/services';
   const isArchivedServices = location.pathname === '/services/archive/2026-07-29';
@@ -255,30 +222,34 @@ export default function App() {
     location.pathname.startsWith('/portal/') ||
     location.pathname === '/executive-strategy' ||
     location.pathname === '/strategy-v1/executive-strategy';
-  const isProjectPage = location.pathname.includes('-operations') || 
-                        location.pathname.includes('-social-media-management') ||
-                        location.pathname.includes('-valuation-model') ||
-                        location.pathname === '/work/coffeeshop-financing/model';
+  const isProjectPage =
+    location.pathname.includes('-operations') ||
+    location.pathname.includes('-social-media-management') ||
+    location.pathname.includes('-valuation-model') ||
+    location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isPrototypeHome || isAppTest || isClaraPage || isJasonAIPage || isLogoVerification;
+    isClientPortal ||
+    isInternalPortal ||
+    isDataRoom ||
+    isProjectPage ||
+    hasReturnParam ||
+    isPrototypeHome ||
+    isAppTest ||
+    isClaraPage ||
+    isJasonAIPage ||
+    isWorkspacePage ||
+    isLogoVerification;
   const routeTransitionKey = isClaraPage ? '/clara' : isJasonAIPage ? '/jasonai' : location.pathname;
 
-  let clientName: string | undefined = undefined;
-  if (location.pathname.includes('uyghur-eats')) {
-    clientName = "Uyghur Eats";
-  }
-
   return (
-    <div className="bg-white text-black min-h-screen font-sans selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-white font-sans text-black selection:bg-black selection:text-white">
       <ScrollToTop />
       {!isIsolatedView && (
         <Navbar
           showOfferBanner={isServicesLanding && !isLandingHeroVisible && !isOfferBannerDismissed}
           transparentAtTop={isServicesLanding && isLandingHeroVisible}
-          onOfferClick={() => {
-            window.location.hash = 'contact';
-          }}
+          onOfferClick={() => { window.location.hash = 'contact'; }}
           onOfferClose={dismissOfferBanner}
         />
       )}
@@ -287,159 +258,133 @@ export default function App() {
         <Suspense fallback={<RouteLoadingFallback />}>
           <div key={routeTransitionKey}>
             <Routes location={location}>
-                <Route
-                  path="/"
-                  element={<HomeTestOnePage />}
-                />
-                <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />
-                <Route
-                  path="/services"
-                  element={
-                    <LandingPage
-                      onHeroVisibilityChange={setIsLandingHeroVisible}
-                      onOfferClick={() => {
-                        const contact = document.getElementById('contact');
-                        contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }}
-                      onOfferClose={dismissOfferBanner}
-                      openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
-                    />
-                  }
-                />
-                <Route
-                  path="/services/archive/2026-07-29"
-                  element={
-                    <LandingPage
-                      onHeroVisibilityChange={setIsLandingHeroVisible}
-                      onOfferClick={() => {
-                        const contact = document.getElementById('contact');
-                        contact?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                      }}
-                      onOfferClose={dismissOfferBanner}
-                      openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
-                    />
-                  }
-                />
-                <Route path="/home-test-1" element={<Navigate to="/" replace />} />
-                <Route path="/app-test-1" element={<AppTestOnePage />} />
-                <Route path="/solutions" element={<Navigate to="/jasonai" replace />} />
-                <Route path="/solutions/how-it-works" element={<Navigate to="/jasonai/how-it-works" replace />} />
-                <Route path="/solutions/questions" element={<Navigate to="/jasonai/questions" replace />} />
-                <Route path="/solutions/privacy" element={<Navigate to="/jasonai/privacy" replace />} />
-                <Route path="/jasonai" element={<JasonAIPage />} />
-                <Route path="/jasonai/pricing" element={<JasonAIPage page="pricing" />} />
-                <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
-                <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
-                <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
-                <Route path="/executive-strategy" element={<Navigate to="/internal" replace />} />
-                <Route path="/strategy-v1/executive-strategy" element={<Navigate to="/internal" replace />} />
-                <Route path="/internal" element={<InternalAccessGate />} />
-                <Route
-                  path="/internal/services"
-                  element={
-                    <InternalAccessGate>
-                      <B2WExecutiveStrategyPage mode="services" />
-                    </InternalAccessGate>
-                  }
-                />
-                <Route
-                  path="/internal/portal"
-                  element={
-                    <InternalAccessGate>
-                      <InternalProjectIndexPage />
-                    </InternalAccessGate>
-                  }
-                />
-                <Route
-                  element={
-                    <InternalAccessGate>
-                      <Outlet />
-                    </InternalAccessGate>
-                  }
-                >
-                  <Route path="/internal/portal/product" element={<JasonAIOverviewPage />} />
-                  <Route path="/internal/portal/product/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
-                  <Route path="/internal/portal/product/kpi-tracker" element={<JasonAIKPITrackerPage />} />
-                  <Route path="/internal/portal/product/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
-                  <Route path="/internal/portal/product/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
-                  <Route path="/internal/portal/product/valuation" element={<JasonAIValuationModelPage />} />
-                  <Route path="/internal/portal/product/documentation" element={<JasonAIDocumentationPage />} />
-                </Route>
-                <Route path="/internal/jason-ai" element={<Navigate to="/internal/portal/product" replace />} />
-                <Route path="/internal/jason-ai/performance-goals" element={<Navigate to="/internal/portal/product/performance-goals" replace />} />
-                <Route path="/internal/jason-ai/kpi-tracker" element={<Navigate to="/internal/portal/product/kpi-tracker" replace />} />
-                <Route path="/internal/jason-ai/executive-strategy" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
-                <Route path="/internal/jason-ai/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
-                <Route path="/internal/jason-ai/valuation" element={<Navigate to="/internal/portal/product/valuation" replace />} />
-                <Route path="/internal/jason-ai/documentation" element={<Navigate to="/internal/portal/product/documentation" replace />} />
-                <Route path="/portal/JasonAI-Executive-Strategy" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
-                <Route path="/jasonai-2" element={<Navigate to="/jasonai" replace />} />
-                <Route path="/jasonai-3" element={<Navigate to="/jasonai" replace />} />
-                <Route path="/jasonai-3/*" element={<Navigate to="/jasonai" replace />} />
-                <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
-                <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
-                <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
-                <Route path="/capabilities" element={<Navigate to="/growth" replace />} />
-                <Route path="/clara" element={<SolutionsLayout />}>
-                  <Route index element={<SolutionsLandingPage />} />
-                </Route>
-                <Route path="/clara/:slug" element={<Navigate to="/clara" replace />} />
-                <Route path="/kitchen" element={<Navigate to="/growth" replace />} />
-                <Route path="/kitchen/*" element={<Navigate to="/growth" replace />} />
-                <Route path="/tiers/basic-advisory" element={<TierPage />} />
-                <Route path="/tiers/consulting" element={<TierPage />} />
-                <Route path="/tiers/implementation" element={<TierPage />} />
-                <Route path="/tiers/custom-tool" element={<TierPage />} />
-                <Route path="/growth" element={<DataExplainerPage />} />
-                <Route path="/capabilities/marketing-data" element={<Navigate to="/growth" replace />} />
-                <Route path="/capabilities/financials" element={<DataExplainerPage />} />
-                <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
-                <Route path="/capabilities/:slug" element={<CapabilityPage />} />
-                <Route path="/expertise/:slug" element={<ExpertisePage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/about/process" element={<Navigate to="/about#process" replace />} />
-                <Route path="/about/team" element={<Navigate to="/about#team" replace />} />
-                <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
-                {/* Legacy Uyghur Eats client variants remain on disk but are intentionally archived.
-                    Reactivate them by restoring imports/routes documented in docs/legacy-client-archives.md. */}
-                <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
-                <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
-                <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
-                <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
-                <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
-                <Route path="/client/uyghur-eats/fieldboss-chatbot" element={<UyghurEatsFieldBossChatbotPage />} />
-                <Route path="/client/uyghur-eats/fieldboss-agent-manager" element={<UyghurEatsFieldBossAgentManagerPage />} />
-                <Route path="/client/uyghur-eats/fieldboss-dashboard" element={<UyghurEatsFieldBossDashboardPage />} />
-                <Route path="/client/foster-partners" element={<FosterPartnersOverviewPage />} />
-                <Route path="/client/foster-partners/development-dashboard" element={<FosterPartnersDevelopmentDashboardPage />} />
-                <Route path="/client/foster-partners/development-dashboard/design" element={<FosterPartnersDesignLifecyclePage />} />
-                <Route path="/client/foster-partners/development-dashboard/build" element={<FosterPartnersBuildLifecyclePage />} />
-                <Route path="/client/foster-partners/development-dashboard/development" element={<FosterPartnersDevelopmentLifecyclePage />} />
-                <Route path="/client/foster-partners/scope" element={<FosterPartnersScopePage />} />
-                <Route path="/client/foster-partners/operating-model" element={<FosterPartnersOperatingModelPage />} />
-                <Route path="/client/foster-partners/governance" element={<FosterPartnersGovernancePage />} />
-                <Route path="/client/foster-partners/terms" element={<FosterPartnersTermsPage />} />
-                <Route path="/client/narinder-sagoo" element={<Navigate to="/client/foster-partners" replace />} />
-
-                {/* Redirects for legacy routes */}
-                <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats" replace />} />
-                <Route path="/uyghur-eats-profile" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
-                <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
-                <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
-                <Route path="/uyghur-eats-acquisition" element={<Navigate to="/client/uyghur-eats" replace />} />
-                <Route path="/uyghur-eats-valuation" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
-                <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
-                <Route path="/services/financial-review" element={<ServiceProjectPage />} />
-                <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
-                <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
-                <Route path="/work/coffeeshop-financing/model" element={<CoffeeShopFinancingModelPage />} />
-                <Route path="*" element={<NotFound />} />
+              <Route path="/" element={<HomeTestOnePage />} />
+              <Route path="/workspace" element={<WorkspaceGuidePage />} />
+              <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />
+              <Route
+                path="/services"
+                element={
+                  <LandingPage
+                    onHeroVisibilityChange={setIsLandingHeroVisible}
+                    onOfferClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    onOfferClose={dismissOfferBanner}
+                    openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
+                  />
+                }
+              />
+              <Route
+                path="/services/archive/2026-07-29"
+                element={
+                  <LandingPage
+                    onHeroVisibilityChange={setIsLandingHeroVisible}
+                    onOfferClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    onOfferClose={dismissOfferBanner}
+                    openBuilderOnLoad={searchParams.get('project-builder') === 'open'}
+                  />
+                }
+              />
+              <Route path="/home-test-1" element={<Navigate to="/" replace />} />
+              <Route path="/app-test-1" element={<AppTestOnePage />} />
+              <Route path="/solutions" element={<Navigate to="/jasonai" replace />} />
+              <Route path="/solutions/how-it-works" element={<Navigate to="/jasonai/how-it-works" replace />} />
+              <Route path="/solutions/questions" element={<Navigate to="/jasonai/questions" replace />} />
+              <Route path="/solutions/privacy" element={<Navigate to="/jasonai/privacy" replace />} />
+              <Route path="/jasonai" element={<JasonAIPage />} />
+              <Route path="/jasonai/pricing" element={<JasonAIPage page="pricing" />} />
+              <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
+              <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
+              <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
+              <Route path="/executive-strategy" element={<Navigate to="/internal" replace />} />
+              <Route path="/strategy-v1/executive-strategy" element={<Navigate to="/internal" replace />} />
+              <Route path="/internal" element={<InternalAccessGate />} />
+              <Route
+                path="/internal/services"
+                element={<InternalAccessGate><B2WExecutiveStrategyPage mode="services" /></InternalAccessGate>}
+              />
+              <Route
+                path="/internal/portal"
+                element={<InternalAccessGate><InternalProjectIndexPage /></InternalAccessGate>}
+              />
+              <Route element={<InternalAccessGate><Outlet /></InternalAccessGate>}>
+                <Route path="/internal/portal/product" element={<JasonAIOverviewPage />} />
+                <Route path="/internal/portal/product/performance-goals" element={<JasonAIPerformanceGoalsPage />} />
+                <Route path="/internal/portal/product/kpi-tracker" element={<JasonAIKPITrackerPage />} />
+                <Route path="/internal/portal/product/executive-strategy" element={<JasonAIExecutiveStrategyDocumentPage />} />
+                <Route path="/internal/portal/product/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+                <Route path="/internal/portal/product/valuation" element={<JasonAIValuationModelPage />} />
+                <Route path="/internal/portal/product/documentation" element={<JasonAIDocumentationPage />} />
+              </Route>
+              <Route path="/internal/jason-ai" element={<Navigate to="/internal/portal/product" replace />} />
+              <Route path="/internal/jason-ai/performance-goals" element={<Navigate to="/internal/portal/product/performance-goals" replace />} />
+              <Route path="/internal/jason-ai/kpi-tracker" element={<Navigate to="/internal/portal/product/kpi-tracker" replace />} />
+              <Route path="/internal/jason-ai/executive-strategy" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+              <Route path="/internal/jason-ai/profile" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+              <Route path="/internal/jason-ai/valuation" element={<Navigate to="/internal/portal/product/valuation" replace />} />
+              <Route path="/internal/jason-ai/documentation" element={<Navigate to="/internal/portal/product/documentation" replace />} />
+              <Route path="/portal/JasonAI-Executive-Strategy" element={<Navigate to="/internal/portal/product/executive-strategy" replace />} />
+              <Route path="/jasonai-2" element={<Navigate to="/jasonai" replace />} />
+              <Route path="/jasonai-3" element={<Navigate to="/jasonai" replace />} />
+              <Route path="/jasonai-3/*" element={<Navigate to="/jasonai" replace />} />
+              <Route path="/borek-g-social-media-management" element={<BorekGProfilePage />} />
+              <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
+              <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
+              <Route path="/capabilities" element={<Navigate to="/growth" replace />} />
+              <Route path="/clara" element={<SolutionsLayout />}>
+                <Route index element={<SolutionsLandingPage />} />
+              </Route>
+              <Route path="/clara/:slug" element={<Navigate to="/clara" replace />} />
+              <Route path="/kitchen" element={<Navigate to="/growth" replace />} />
+              <Route path="/kitchen/*" element={<Navigate to="/growth" replace />} />
+              <Route path="/tiers/basic-advisory" element={<TierPage />} />
+              <Route path="/tiers/consulting" element={<TierPage />} />
+              <Route path="/tiers/implementation" element={<TierPage />} />
+              <Route path="/tiers/custom-tool" element={<TierPage />} />
+              <Route path="/growth" element={<DataExplainerPage />} />
+              <Route path="/capabilities/marketing-data" element={<Navigate to="/growth" replace />} />
+              <Route path="/capabilities/financials" element={<DataExplainerPage />} />
+              <Route path="/capabilities/operational-performance" element={<DataExplainerPage />} />
+              <Route path="/capabilities/:slug" element={<CapabilityPage />} />
+              <Route path="/expertise/:slug" element={<ExpertisePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/about/process" element={<Navigate to="/about#process" replace />} />
+              <Route path="/about/team" element={<Navigate to="/about#team" replace />} />
+              <Route path="/sabucnu-operations" element={<SabucnuProfilePage />} />
+              <Route path="/client/uyghur-eats" element={<UyghurEatsClientPortal />} />
+              <Route path="/client/uyghur-eats/terms" element={<UyghurEatsTermsPage />} />
+              <Route path="/client/uyghur-eats/profile" element={<UyghurEatsProfilePage />} />
+              <Route path="/client/uyghur-eats/valuation" element={<UyghurEatsValuationModelPage />} />
+              <Route path="/client/uyghur-eats/data-room" element={<UyghurEatsDataRoomPage />} />
+              <Route path="/client/uyghur-eats/fieldboss-chatbot" element={<UyghurEatsFieldBossChatbotPage />} />
+              <Route path="/client/uyghur-eats/fieldboss-agent-manager" element={<UyghurEatsFieldBossAgentManagerPage />} />
+              <Route path="/client/uyghur-eats/fieldboss-dashboard" element={<UyghurEatsFieldBossDashboardPage />} />
+              <Route path="/client/foster-partners" element={<FosterPartnersOverviewPage />} />
+              <Route path="/client/foster-partners/development-dashboard" element={<FosterPartnersDevelopmentDashboardPage />} />
+              <Route path="/client/foster-partners/development-dashboard/design" element={<FosterPartnersDesignLifecyclePage />} />
+              <Route path="/client/foster-partners/development-dashboard/build" element={<FosterPartnersBuildLifecyclePage />} />
+              <Route path="/client/foster-partners/development-dashboard/development" element={<FosterPartnersDevelopmentLifecyclePage />} />
+              <Route path="/client/foster-partners/scope" element={<FosterPartnersScopePage />} />
+              <Route path="/client/foster-partners/operating-model" element={<FosterPartnersOperatingModelPage />} />
+              <Route path="/client/foster-partners/governance" element={<FosterPartnersGovernancePage />} />
+              <Route path="/client/foster-partners/terms" element={<FosterPartnersTermsPage />} />
+              <Route path="/client/narinder-sagoo" element={<Navigate to="/client/foster-partners" replace />} />
+              <Route path="/uyghur-eats" element={<Navigate to="/client/uyghur-eats" replace />} />
+              <Route path="/uyghur-eats-profile" element={<Navigate to="/client/uyghur-eats/profile" replace />} />
+              <Route path="/uyghur-eats-valuation-model" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
+              <Route path="/uyghur-eats-data-room" element={<Navigate to="/client/uyghur-eats/data-room" replace />} />
+              <Route path="/uyghur-eats-acquisition" element={<Navigate to="/client/uyghur-eats" replace />} />
+              <Route path="/uyghur-eats-valuation" element={<Navigate to="/client/uyghur-eats/valuation" replace />} />
+              <Route path="/services/marketing-advisory" element={<ServiceProjectPage />} />
+              <Route path="/services/financial-review" element={<ServiceProjectPage />} />
+              <Route path="/services/operations-implementation" element={<ServiceProjectPage />} />
+              <Route path="/services/business-revamp" element={<ServiceProjectPage />} />
+              <Route path="/work/coffeeshop-financing/model" element={<CoffeeShopFinancingModelPage />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </Suspense>
       </main>
       {!isIsolatedView && <Footer />}
-      {!isLogoVerification && <AssistantWidget />}
+      {!isLogoVerification && !isWorkspacePage && <AssistantWidget />}
     </div>
   );
 }
