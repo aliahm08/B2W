@@ -53,6 +53,7 @@ const AppTestOnePage = lazy(() => import('./pages/AppTestOnePage'));
 const CoffeeShopFinancingModelPage = lazy(() => import('./pages/work/CoffeeShopFinancingModelPage'));
 const JasonAIPage = lazy(() => import('./pages/JasonAIPage'));
 const WorkspaceGuidePage = lazy(() => import('./pages/WorkspaceGuidePage'));
+const UnifiedPrototypeRouterPage = lazy(() => import('./pages/prototype/UnifiedPrototypeRouterPage'));
 const InternalProjectIndexPage = lazy(() => import('./pages/internal/InternalProjectIndexPage'));
 const JasonAIOverviewPage = lazy(() => import('./pages/internal/jason-ai/JasonAIOverviewPage'));
 const JasonAIPerformanceGoalsPage = lazy(() => import('./pages/internal/jason-ai/JasonAIPerformanceGoalsPage'));
@@ -208,6 +209,7 @@ export default function App() {
   const isClientPortal = location.pathname.startsWith('/client/');
   const isDataRoom = location.pathname.includes('-data-room');
   const isPrototypeHome = location.pathname === '/' || location.pathname === '/home-test-1';
+  const isUnifiedPrototype = location.pathname === '/prototype' || location.pathname.startsWith('/prototype/');
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
@@ -235,6 +237,7 @@ export default function App() {
     isProjectPage ||
     hasReturnParam ||
     isPrototypeHome ||
+    isUnifiedPrototype ||
     isAppTest ||
     isClaraPage ||
     isJasonAIPage ||
@@ -260,6 +263,7 @@ export default function App() {
             <Routes location={location}>
               <Route path="/" element={<HomeTestOnePage />} />
               <Route path="/workspace" element={<WorkspaceGuidePage />} />
+              <Route path="/prototype/*" element={<UnifiedPrototypeRouterPage />} />
               <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />
               <Route
                 path="/services"
@@ -384,7 +388,7 @@ export default function App() {
         </Suspense>
       </main>
       {!isIsolatedView && <Footer />}
-      {!isLogoVerification && !isWorkspacePage && <AssistantWidget />}
+      {!isLogoVerification && !isWorkspacePage && !isUnifiedPrototype && <AssistantWidget />}
     </div>
   );
 }
