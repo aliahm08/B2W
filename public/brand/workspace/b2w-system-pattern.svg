@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">B2W operating system pattern</title>
+  <desc id="desc">A reusable geometric visual showing signals moving through a structured B2W operating grid.</desc>
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#FFFFFF" stroke-opacity="0.08"/>
+    </pattern>
+    <radialGradient id="glowGreen" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(248 198) rotate(42) scale(420)">
+      <stop stop-color="#4F7F52" stop-opacity="0.58"/>
+      <stop offset="1" stop-color="#4F7F52" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowRust" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(930 236) rotate(132) scale(380)">
+      <stop stop-color="#B24A24" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#B24A24" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowPlum" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(822 690) rotate(-112) scale(380)">
+      <stop stop-color="#A66589" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#A66589" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="800" fill="#111111"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <rect width="1200" height="800" fill="url(#glowGreen)"/>
+  <rect width="1200" height="800" fill="url(#glowRust)"/>
+  <rect width="1200" height="800" fill="url(#glowPlum)"/>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M116 612C276 612 296 484 438 484H602C744 484 770 356 922 356H1084" stroke="#FFFFFF" stroke-opacity="0.34" stroke-width="2"/>
+    <path d="M116 260H304C436 260 466 388 594 388H776C914 388 938 516 1084 516" stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="2"/>
+    <path d="M240 132V668" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    <path d="M600 132V668" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+    <path d="M960 132V668" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1"/>
+  </g>
+
+  <g>
+    <circle cx="116" cy="612" r="10" fill="#4F7F52"/>
+    <circle cx="438" cy="484" r="10" fill="#D8B536"/>
+    <circle cx="602" cy="484" r="10" fill="#FFFFFF"/>
+    <circle cx="922" cy="356" r="10" fill="#B24A24"/>
+    <circle cx="1084" cy="356" r="10" fill="#A66589"/>
+    <circle cx="116" cy="260" r="7" fill="#FFFFFF" fill-opacity="0.7"/>
+    <circle cx="594" cy="388" r="7" fill="#FFFFFF" fill-opacity="0.7"/>
+    <circle cx="1084" cy="516" r="7" fill="#FFFFFF" fill-opacity="0.7"/>
+  </g>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <text x="72" y="86" fill="#FFFFFF" font-size="24" font-weight="600">B2W</text>
+    <text x="1128" y="86" fill="#A3A3A3" font-size="12" text-anchor="end" letter-spacing="2">SIGNAL → CONTEXT → ACTION</text>
+    <text x="72" y="718" fill="#FFFFFF" font-size="48" font-weight="500" letter-spacing="-2">Clear enough to act on.</text>
+    <text x="72" y="754" fill="#A3A3A3" font-size="15">A reusable visual for strategy, systems, products, and resources.</text>
+  </g>
+</svg>
