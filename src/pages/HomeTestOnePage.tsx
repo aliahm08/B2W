@@ -341,11 +341,6 @@ export default function HomeTestOnePage() {
             </a>
           </div>
 
-          <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-32 text-center text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>
-            Some of the businesses we help.
-          </motion.h2>
-          <ContractorHeroCarousel />
-
           <div className="mt-32 flex flex-col items-center text-center">
             <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`b2w-wordmark whitespace-nowrap text-[clamp(1.2rem,4.6vw,4.75rem)] font-medium leading-[0.9] tracking-[-0.075em] ${activeHero.textClass}`}>
               Take your work to the next stage.
@@ -354,31 +349,36 @@ export default function HomeTestOnePage() {
               <ProductFrame mode="jasonai" setActiveMode={setHeroMode} />
               <ProductFrame mode="clara" setActiveMode={setHeroMode} />
             </div>
-
-            <div className="mt-20 w-full max-w-5xl text-left">
-              <p className="text-sm font-semibold text-slate-500">Questions about getting started</p>
-              <h3 className={`mt-3 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>What teams usually ask first.</h3>
-              <ul className="mt-8 overflow-hidden rounded-[28px] border border-slate-950/12 bg-white/72 shadow-[0_22px_65px_rgba(15,23,42,0.08)] backdrop-blur-sm">
-                {homepageQuestions.map((item, index) => {
-                  const isOpen = activeQuestion === index;
-                  const panelId = `homepage-question-${index}`;
-                  return (
-                    <li key={item.question} className="border-b border-slate-950/10 last:border-b-0">
-                      <button type="button" aria-expanded={isOpen} aria-controls={panelId} onClick={() => setActiveQuestion(index)} className="flex w-full items-center justify-between gap-6 px-5 py-5 text-left sm:px-7">
-                        <span className="text-base font-semibold text-slate-950 sm:text-lg">{item.question}</span>
-                        <ChevronDown className={`h-5 w-5 shrink-0 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      <div id={panelId} role="region" className={`grid transition-[grid-template-rows,opacity] duration-300 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
-                        <div className="overflow-hidden">
-                          <p className="max-w-3xl px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-7 sm:text-base">{item.answer}</p>
-                        </div>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
           </div>
+
+          <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-32 text-center text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>
+            Optimizing growth for SMBs.
+          </motion.h2>
+          <ContractorHeroCarousel />
+
+          <section className="mx-auto mt-32 w-full max-w-5xl text-left" aria-labelledby="homepage-questions-heading">
+            <p className="text-sm font-semibold text-slate-500">Questions about getting started</p>
+            <h2 id="homepage-questions-heading" className={`mt-3 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>What teams usually ask first.</h2>
+            <ul className="mt-8 overflow-hidden rounded-[28px] border border-slate-950/12 bg-white/72 shadow-[0_22px_65px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+              {homepageQuestions.map((item, index) => {
+                const isOpen = activeQuestion === index;
+                const panelId = `homepage-question-${index}`;
+                return (
+                  <li key={item.question} className="border-b border-slate-950/10 last:border-b-0">
+                    <button type="button" aria-expanded={isOpen} aria-controls={panelId} onClick={() => setActiveQuestion(index)} className="flex w-full items-center justify-between gap-6 px-5 py-5 text-left sm:px-7">
+                      <span className="text-base font-semibold text-slate-950 sm:text-lg">{item.question}</span>
+                      <ChevronDown className={`h-5 w-5 shrink-0 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div id={panelId} role="region" className={`grid transition-[grid-template-rows,opacity] duration-300 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                      <div className="overflow-hidden">
+                        <p className="max-w-3xl px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-7 sm:text-base">{item.answer}</p>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
 
           <div className="mt-32 rounded-[32px] bg-[#10271c] px-6 py-12 text-center text-white shadow-[0_28px_90px_rgba(15,39,28,0.2)] sm:px-10 sm:py-16">
             <p className="text-sm font-semibold text-[#a9c7a8]">Choose your next step</p>
