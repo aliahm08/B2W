@@ -13,7 +13,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## Public Route Structure
 
-- `/`: the live, indexable B2W homepage. Its original-style hero leads with “We help contractors move projects *forward.*” and See how it works / Talk to our team actions. “Take your work to the next stage.” introduces the image-led JasonAI and Clara cards, followed by a single-open getting-started FAQ. “Optimizing growth for SMBs.” then introduces the expanding contractor carousel. A final decision panel contains Find a solution and Calculate ROI. Its shared footer mirrors Products, Solutions, JasonAI support, Resources, and Company using the header's B2W mark.
+- `/`: the live, indexable B2W homepage. Its original-style hero leads with “We help contractors move projects *forward.*” and See how it works / Talk to our team actions. “Take your work to the next stage.” introduces the image-led JasonAI and Clara cards. “Optimizing growth for SMBs.” then introduces the expanding contractor carousel, followed by a single-open getting-started FAQ. A final decision panel contains Find a solution and Calculate ROI. Its shared footer mirrors Products, Solutions, JasonAI support, Resources, and Company using the header's B2W mark.
 - `/v1`: noindex archive of the full product-company website concept, including its versioned sitemap routes.
 - `/v2`: noindex archive of the two-product project-team concept for JasonAI, Clara, contractor solutions, engineering solutions, and its own pricing page.
 - `/v3`: noindex archive of the focused contractor website with JasonAI, Workflows, and Pricing navigation.
@@ -125,6 +125,7 @@ Then:
 
 - **2026-08-10:** Changed the hero CTAs to JasonAI exploration and email contact, normalized homepage headings to sentence case, added a single-open getting-started FAQ, and moved Find a solution / Calculate ROI into a final decision section.
 - **2026-08-10:** Moved the product-and-FAQ section ahead of the contractor carousel and reframed the carousel as “Optimizing growth for SMBs.”
+- **2026-08-10:** Split the homepage into distinct product, business, questions, and next-step sections, placing the FAQ after the business carousel.
 
 - **2026-08-10:** Reframed the three homepage sections around moving contractor projects forward, the businesses B2W helps, and taking work to the next stage; restored the original oversized hero treatment and a smaller secondary-section header.
 
