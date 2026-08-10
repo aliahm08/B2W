@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
   BriefcaseBusiness,
@@ -22,9 +22,12 @@ import {
   type JasonAiBusinessType as BusinessType,
   type JasonAiScenario as Scenario,
 } from '../lib/jasonAiRoi';
+import DescrambleText from '../components/DescrambleText';
 
 type PricingCalculatorProps = {
   onBookReview: () => void;
+  variant?: 'full' | 'embedded';
+  context?: 'jasonai' | 'cross-industry' | 'project-teams';
 };
 
 type RoiReportContact = {
@@ -42,9 +45,9 @@ const currency = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 0,
 });
 
-const percent = new Intl.NumberFormat('en-US', {
-  style: 'percent',
-  maximumFractionDigits: 0,
+const multiple = new Intl.NumberFormat('en-US', {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
 });
 
 function clamp(value: number, min: number, max: number) {
@@ -89,7 +92,7 @@ function ProfileControl({
             {help}
           </p>
         </div>
-        <div className="flex min-w-24 items-center border border-[#bfb6a8] bg-white px-3 focus-within:border-[#141414]">
+        <div className="flex min-w-24 items-center rounded-xl border border-[#bfb6a8] bg-white px-3 focus-within:border-[#141414]">
           <input
             id={id}
             type="number"
@@ -171,7 +174,7 @@ function WhatsAppScenarioCard({
   const scenario = whatsAppScenarios[index];
 
   return (
-    <div className="flex h-full min-h-[27rem] flex-col border border-[#141414] bg-[#141414] p-5 text-white md:p-7">
+    <div className="flex h-full min-h-[27rem] flex-col rounded-[2rem] border border-[#141414] bg-[#141414] p-5 text-white shadow-[0_24px_70px_rgba(20,20,20,.16)] md:p-7">
       {index === 0 ? (
         <>
           <div className="flex items-center justify-between border-b border-white/15 pb-4">
@@ -414,7 +417,7 @@ function JasonAIWhatsAppCarousel() {
           type="button"
           onClick={showPrevious}
           aria-label="Show previous WhatsApp example"
-          className="grid h-10 w-10 shrink-0 place-items-center border border-[#141414] bg-white text-[#141414] transition-colors hover:bg-[#f8f3e8]"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#141414] bg-white text-[#141414] transition-colors hover:bg-[#f8f3e8]"
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
@@ -436,7 +439,7 @@ function JasonAIWhatsAppCarousel() {
           type="button"
           onClick={showNext}
           aria-label="Show next WhatsApp example"
-          className="grid h-10 w-10 shrink-0 place-items-center border border-[#141414] bg-white text-[#141414] transition-colors hover:bg-[#f8f3e8]"
+          className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#141414] bg-white text-[#141414] transition-colors hover:bg-[#f8f3e8]"
         >
           <ChevronRight className="h-4 w-4" />
         </button>
@@ -448,7 +451,11 @@ function JasonAIWhatsAppCarousel() {
   );
 }
 
-export default function JasonAIPricingCalculator({ onBookReview }: PricingCalculatorProps) {
+export default function JasonAIPricingCalculator({
+  onBookReview,
+  variant = 'full',
+  context = 'jasonai',
+}: PricingCalculatorProps) {
   const [profile, setProfile] = useState<BusinessProfile>(jasonAiProfileDefaults.contractor);
   const [scenario, setScenario] = useState<Scenario>(() =>
     buildJasonAiScenario('contractor', jasonAiProfileDefaults.contractor),
@@ -466,6 +473,9 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
   const [shareMessage, setShareMessage] = useState('');
 
   const model = useMemo(() => calculateJasonAiRoi(scenario), [scenario]);
+  const shouldReduceMotion = useReducedMotion();
+  const isCrossIndustry = context !== 'jasonai';
+  const isProjectTeams = context === 'project-teams';
 
   useEffect(() => {
     if (!isShareOpen) {
@@ -559,7 +569,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
 
   return (
     <>
-      <section className="border-b border-[#d9d2c3] bg-[#fffaf0]">
+      {variant === 'full' ? <section className="border-b border-[#d9d2c3] bg-[#fffaf0]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:px-8 md:py-24 lg:grid-cols-[minmax(0,0.92fr)_minmax(22rem,0.68fr)] lg:items-center">
           <div>
             <h1 className="max-w-4xl text-5xl font-semibold leading-[1.02] text-[#141414] md:text-7xl">
@@ -580,44 +590,55 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
           </div>
           <JasonAIWhatsAppCarousel />
         </div>
-      </section>
+      </section> : null}
 
-      <section className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
+      <section id="roi-calculator" className={`scroll-mt-24 border-b ${isCrossIndustry ? 'border-[#172019]/15 bg-[#e8e2d6]' : 'border-[#d9d2c3] bg-[#f8f3e8]'}`}>
         <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
-          <div className="mb-10 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-            <div className="max-w-3xl">
-              <div className="flex items-center gap-2 text-xs font-semibold uppercase text-[#9b3d1e]">
+          <div className={`mb-10 grid gap-6 ${isCrossIndustry ? 'lg:grid-cols-[1fr_.62fr] lg:items-end' : 'md:grid-cols-[1fr_auto] md:items-end'}`}>
+            <div className="max-w-4xl">
+              <div className={`flex items-center gap-2 text-xs font-semibold uppercase ${isCrossIndustry ? 'text-[#4f7f52]' : 'text-[#9b3d1e]'}`}>
                 <Calculator className="h-4 w-4" />
-                General Contractor AI ROI Calculator
+                {isProjectTeams ? 'Project-team AI ROI model' : isCrossIndustry ? 'Cross-industry AI ROI model' : 'General Contractor AI ROI Calculator'}
               </div>
               <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                Calculate your four-year ROI.
+                {isCrossIndustry ? 'Model the value of one recurring workflow.' : 'Calculate your four-year ROI.'}
               </h2>
+              {isCrossIndustry ? (
+                <p className="mt-5 max-w-3xl text-base leading-8 text-[#172019]/62">
+                  {isProjectTeams
+                    ? 'Use the same tested model for a general contractor or engineering firm. Describe the team and active projects—not the software category.'
+                    : 'Use the same tested model across contracting, food and beverage, or real estate operations. Describe the team and active work—not the software category.'}
+                </p>
+              ) : null}
             </div>
-            <div className="flex max-w-sm flex-wrap gap-3 md:self-end">
-              <button
-                type="button"
-                onClick={openShareDialog}
-                className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-white px-4 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#fffaf0]"
-              >
-                <Mail className="h-4 w-4" />
-                Email this ROI report
-              </button>
-              <button
-                type="button"
-                onClick={onBookReview}
-                className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1f5f7a]"
-              >
-                Book review
-                <ArrowRight className="h-4 w-4" />
-              </button>
+            <div className={isCrossIndustry ? 'rounded-[1.5rem] border border-[#172019]/15 bg-white/65 p-5 shadow-[0_18px_50px_rgba(23,32,25,.07)]' : ''}>
+              {isCrossIndustry ? <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.16em] text-[#4f7f52]">Model boundary</p> : null}
+              {isCrossIndustry ? <p className="mt-3 text-sm leading-6 text-[#172019]/62">Illustrative time value only. The model keeps current JasonAI commercial assumptions and excludes prevented errors, recovered billing, and future automation.</p> : null}
+              <div className={`flex flex-wrap gap-3 ${isCrossIndustry ? 'mt-5' : ''}`}>
+                <button
+                  type="button"
+                  onClick={openShareDialog}
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#141414] bg-white px-4 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#fffaf0]"
+                >
+                  <Mail className="h-4 w-4" />
+                  Email this ROI report
+                </button>
+                <button
+                  type="button"
+                  onClick={onBookReview}
+                  className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-4 py-2.5 text-sm font-semibold text-white transition-colors ${isCrossIndustry ? 'hover:bg-[#4f7f52]' : 'hover:bg-[#1f5f7a]'}`}
+                >
+                  Review assumptions
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
             </div>
           </div>
 
           <div className="grid items-start gap-6 xl:grid-cols-[minmax(19rem,0.72fr)_minmax(0,1.28fr)] xl:items-stretch">
-            <div className="border border-[#d9d2c3] bg-white p-5 md:p-6 xl:h-full">
-              <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Your business</p>
-              <h3 className="mt-2 text-2xl font-semibold leading-tight">Tell us what you are running.</h3>
+            <div className="rounded-[2rem] border border-[#d9d2c3] bg-white p-5 shadow-[0_22px_65px_rgba(20,20,20,.07)] md:p-6 xl:h-full">
+              <p className={`text-xs font-semibold uppercase ${isCrossIndustry ? 'text-[#4f7f52]' : 'text-[#9b3d1e]'}`}>Your operating profile</p>
+              <h3 className="mt-2 text-2xl font-semibold leading-tight">Describe the work as it operates today.</h3>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-1" role="radiogroup" aria-label="Business type">
                 <button
@@ -625,16 +646,16 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                   onClick={() => setType('contractor')}
                   role="radio"
                   aria-checked={scenario.type === 'contractor'}
-                  className={`border p-4 text-left transition-[border-color,box-shadow] hover:border-[#141414] ${
+                  className={`rounded-[1.25rem] border p-4 text-left transition-[border-color,box-shadow] hover:border-[#141414] ${
                     scenario.type === 'contractor'
-                      ? 'border-[#141414] bg-[#fffaf0] shadow-[5px_5px_0_#141414]'
+                      ? 'border-[#141414] bg-[#fffaf0] shadow-[0_14px_34px_rgba(20,20,20,.12)]'
                       : 'border-[#d9d2c3] bg-[#fffaf0]'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="flex items-center gap-3">
-                      <Building2 className="h-5 w-5 text-[#1f5f7a]" />
-                      <span className="font-semibold">General Contractor</span>
+                      <Building2 className={`h-5 w-5 ${isCrossIndustry ? 'text-[#4f7f52]' : 'text-[#1f5f7a]'}`} />
+                      <span className="font-semibold">{isProjectTeams ? 'General contractor' : isCrossIndustry ? 'Single operating business' : 'General Contractor'}</span>
                     </span>
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#141414] bg-white">
                       {scenario.type === 'contractor' ? (
@@ -642,7 +663,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                       ) : null}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs leading-5 text-[#6b6256]">One operating business.</p>
+                  <p className="mt-2 text-xs leading-5 text-[#6b6256]">{isProjectTeams ? 'One contractor team coordinating active jobs.' : 'One team coordinating one operating business.'}</p>
                 </button>
 
                 <button
@@ -650,30 +671,30 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                   onClick={() => setType('firm')}
                   role="radio"
                   aria-checked={scenario.type === 'firm'}
-                  className={`border p-4 text-left transition-[border-color,box-shadow] hover:border-[#141414] ${
+                  className={`rounded-[1.25rem] border p-4 text-left transition-[border-color,box-shadow] hover:border-[#141414] ${
                     scenario.type === 'firm'
-                      ? 'border-[#141414] bg-[#f4efe4] shadow-[5px_5px_0_#1f5f7a]'
+                      ? `border-[#141414] bg-[#f4efe4] ${isCrossIndustry ? 'shadow-[0_14px_34px_rgba(79,127,82,.16)]' : 'shadow-[0_14px_34px_rgba(31,95,122,.16)]'}`
                       : 'border-[#d9d2c3] bg-[#f4efe4]'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="flex items-center gap-3">
                       <BriefcaseBusiness className="h-5 w-5 text-[#9b3d1e]" />
-                      <span className="font-semibold">Contracting Firm</span>
+                      <span className="font-semibold">{isProjectTeams ? 'Engineering or project firm' : isCrossIndustry ? 'Multi-location or portfolio' : 'Contracting Firm'}</span>
                     </span>
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[#141414] bg-white">
-                      {scenario.type === 'firm' ? <span className="h-2.5 w-2.5 rounded-full bg-[#1f5f7a]" /> : null}
+                      {scenario.type === 'firm' ? <span className={`h-2.5 w-2.5 rounded-full ${isCrossIndustry ? 'bg-[#4f7f52]' : 'bg-[#1f5f7a]'}`} /> : null}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs leading-5 text-[#6b6256]">A unified view across businesses.</p>
+                  <p className="mt-2 text-xs leading-5 text-[#6b6256]">{isProjectTeams ? 'Several concurrent projects, disciplines, or delivery teams.' : 'Several jobs, locations, properties, or operating units.'}</p>
                 </button>
               </div>
 
               <div className="mt-7 border-t border-[#d9d2c3] pt-1">
                 <ProfileControl
                   id="employee-count"
-                  label="How many employees?"
-                  help={scenario.type === 'firm' ? 'Across the businesses in this operating model.' : 'Across the business today.'}
+                  label={isCrossIndustry ? 'How many people are on the team?' : 'How many employees?'}
+                  help={isProjectTeams && scenario.type === 'firm' ? 'Across the project and delivery teams in this model.' : scenario.type === 'firm' ? 'Across the locations or operating units in this model.' : 'Across the operating business today.'}
                   value={profile.employees}
                   min={1}
                   max={500}
@@ -681,8 +702,8 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 />
                 <ProfileControl
                   id="active-project-count"
-                  label="How many active projects?"
-                  help="Projects currently requiring team coordination."
+                  label={isCrossIndustry ? 'How many active jobs, projects, or locations?' : 'How many active projects?'}
+                  help="Active units of work currently requiring team coordination."
                   value={profile.activeProjects}
                   min={1}
                   max={250}
@@ -690,8 +711,8 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 />
                 <ProfileControl
                   id="average-project-weeks"
-                  label="Average time to complete a project?"
-                  help="Typical duration from start through closeout."
+                  label={isCrossIndustry ? 'What is the average operating work cycle?' : 'Average time to complete a project?'}
+                  help="Typical duration from intake or opening through completion."
                   value={profile.averageProjectWeeks}
                   min={1}
                   max={104}
@@ -702,22 +723,58 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
             </div>
 
             <div className="min-w-0 xl:flex xl:h-full xl:flex-col">
-              <div className="border border-[#141414] bg-[#141414] p-6 text-white md:p-8">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#f1b37b]">
-                  Estimated four-year ROI
-                </p>
-                <p className="mt-3 text-6xl font-semibold tracking-[-0.05em] text-[#7ee2ad] md:text-7xl">
-                  {percent.format(model.roi)}
-                </p>
+              <div className={`rounded-t-[2rem] border border-[#141414] p-6 text-white shadow-[0_22px_65px_rgba(20,20,20,.12)] md:p-8 ${isCrossIndustry ? 'bg-[#172019]' : 'bg-[#141414]'}`}>
+                <p className={`text-xs font-semibold uppercase tracking-wide ${isCrossIndustry ? 'text-[#9bc49f]' : 'text-[#f1b37b]'}`}>Estimated four-year return multiple</p>
+                <div className="mt-5 grid gap-5 sm:grid-cols-3 sm:items-end">
+                  <div className="sm:col-span-1" aria-live="polite">
+                    <p className="text-5xl font-semibold tracking-[-0.05em] text-[#7ee2ad] md:text-6xl">
+                      <DescrambleText
+                        key={model.roi.toFixed(4)}
+                        text={`${multiple.format(model.roi)}×`}
+                        animateOnMount
+                      />
+                    </p>
+                  </div>
+                  <div className="border-l border-white/15 pl-4">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-white/38">Net return</p>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.p
+                        key={Math.round(model.netReturn)}
+                        initial={shouldReduceMotion ? false : { opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={shouldReduceMotion ? undefined : { opacity: 0 }}
+                        transition={{ duration: shouldReduceMotion ? 0 : 0.24, ease: 'easeOut' }}
+                        className="mt-2 text-xl font-semibold"
+                      >
+                        {currency.format(model.netReturn)}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
+                  <div className="border-l border-white/15 pl-4">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.14em] text-white/38">Modeled value</p>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.p
+                        key={Math.round(model.totalValue)}
+                        initial={shouldReduceMotion ? false : { opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={shouldReduceMotion ? undefined : { opacity: 0 }}
+                        transition={{ duration: shouldReduceMotion ? 0 : 0.24, ease: 'easeOut' }}
+                        className="mt-2 text-xl font-semibold"
+                      >
+                        {currency.format(model.totalValue)}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
+                </div>
               </div>
 
-              <div className="border-x border-b border-[#d9d2c3] bg-white p-5 md:p-7 xl:flex-1">
+              <div className="rounded-b-[2rem] border-x border-b border-[#d9d2c3] bg-white p-5 shadow-[0_22px_65px_rgba(20,20,20,.07)] md:p-7 xl:flex-1">
                 <div>
-                  <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Year-by-year estimate</p>
+                  <p className={`text-xs font-semibold uppercase ${isCrossIndustry ? 'text-[#4f7f52]' : 'text-[#9b3d1e]'}`}>Year-by-year estimate</p>
                   <h3 className="mt-2 text-2xl font-semibold">Value, investment, and net return</h3>
                 </div>
 
-                <div className="mt-6 border border-[#d9d2c3]">
+                <div className="mt-6 overflow-hidden rounded-xl border border-[#d9d2c3]">
                   <table className="w-full table-fixed border-collapse text-xs sm:text-sm">
                     <thead className="bg-[#f8f3e8] text-left text-[0.6rem] uppercase text-[#6b6256] sm:text-xs">
                       <tr>
@@ -760,7 +817,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                             <ins className="font-semibold no-underline">{currency.format(model.totalInvestment)}</ins>
                           </span>
                         </td>
-                        <td className="px-2 py-4 text-right text-sm font-semibold text-[#1f5f7a] sm:px-4 sm:text-base">
+                        <td className={`px-2 py-4 text-right text-sm font-semibold sm:px-4 sm:text-base ${isCrossIndustry ? 'text-[#4f7f52]' : 'text-[#1f5f7a]'}`}>
                           {currency.format(model.netReturn)}
                         </td>
                       </tr>
@@ -773,20 +830,20 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
         </div>
       </section>
 
-      <section className="border-b border-[#d9d2c3] bg-white">
+      {variant === 'full' ? <section className="border-b border-[#d9d2c3] bg-white">
         <div className="mx-auto grid max-w-7xl gap-8 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.7fr_1fr]">
           <div>
             <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Pricing model</p>
             <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-              Simple standard pricing. A stronger pre-launch offer.
+              Simple standard pricing. A stronger founding offer.
             </h2>
             <p className="mt-5 text-base leading-8 text-[#4f463c]">
-              Standard JasonAI access is $99 per month with a one-time $2,000 setup fee. Pre-launch subscribers get the
+              Standard JasonAI access is $99 per month with a one-time $2,000 setup fee. Founding subscribers get the
               first year for $25 per month and pay no setup fee.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="flex flex-col border border-[#d9d2c3] bg-[#fffaf0] p-6">
+            <div className="flex flex-col rounded-[1.5rem] border border-[#d9d2c3] bg-[#fffaf0] p-6">
               <Building2 className="h-7 w-7 text-[#1f5f7a]" />
               <p className="mt-5 text-xs font-semibold uppercase text-[#9b3d1e]">Standard pricing</p>
               <p className="mt-2 text-3xl font-semibold">$99 <span className="text-base font-medium text-[#6b6256]">/ month</span></p>
@@ -797,9 +854,9 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 <p className="flex gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[#1f5f7a]" /> Job and communication summaries</p>
               </div>
             </div>
-            <div className="flex flex-col border border-[#141414] bg-[#141414] p-6 text-white">
+            <div className="flex flex-col rounded-[1.5rem] border border-[#141414] bg-[#141414] p-6 text-white">
               <BriefcaseBusiness className="h-7 w-7 text-[#f1b37b]" />
-              <p className="mt-5 text-xs font-semibold uppercase text-[#f1b37b]">Pre-launch subscriber offer</p>
+              <p className="mt-5 text-xs font-semibold uppercase text-[#f1b37b]">Founding subscriber offer</p>
               <p className="mt-2 text-3xl font-semibold">
                 <del className="mr-2 text-xl text-white/45 decoration-[#f1b37b]">$99</del>
                 <ins className="no-underline">$25</ins>{' '}
@@ -811,15 +868,15 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
               </p>
               <div className="mt-6 space-y-3 border-t border-white/15 pt-5 text-sm leading-6 text-white/72">
                 <p className="flex gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[#7ee2ad]" /> Save {currency.format(model.preLaunchFirstYearSavings)} in year one</p>
-                <p className="flex gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[#7ee2ad]" /> $0 setup fee during pre-launch</p>
+                <p className="flex gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[#7ee2ad]" /> $0 setup fee with the founding offer</p>
                 <p className="flex gap-2"><Check className="mt-1 h-4 w-4 shrink-0 text-[#7ee2ad]" /> Standard $99 monthly price begins in year two</p>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </section> : null}
 
-      <section className="bg-[#141414] text-white">
+      {variant === 'full' ? <section className="bg-[#141414] text-white">
         <div className="mx-auto flex max-w-5xl flex-col items-center px-5 py-16 text-center md:px-8 md:py-24">
           <p className="text-xs font-semibold uppercase text-[#f1b37b]">Make the model real</p>
           <h2 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">
@@ -832,13 +889,13 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
           <button
             type="button"
             onClick={onBookReview}
-            className="mt-9 inline-flex min-h-12 items-center justify-center gap-2 border border-white bg-white px-6 py-3 text-sm font-semibold text-[#141414] hover:bg-[#f8f3e8]"
+            className="mt-9 inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white bg-white px-6 py-3 text-sm font-semibold text-[#141414] hover:bg-[#f8f3e8]"
           >
             Book my free business review
             <ArrowRight className="h-4 w-4" />
           </button>
         </div>
-      </section>
+      </section> : null}
 
       {isShareOpen ? (
         <div
@@ -854,7 +911,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
             aria-modal="true"
             aria-labelledby="roi-report-title"
             aria-describedby="roi-report-description"
-            className="my-auto w-full max-w-2xl border border-[#141414] bg-white shadow-[10px_10px_0_#1f5f7a]"
+            className="my-auto w-full max-w-2xl overflow-hidden rounded-[2rem] border border-[#141414] bg-white shadow-[0_28px_90px_rgba(31,95,122,.24)]"
           >
             <div className="flex items-start justify-between gap-6 border-b border-[#d9d2c3] bg-[#fffaf0] p-5 md:p-6">
               <div>
@@ -868,7 +925,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                 onClick={closeShareDialog}
                 disabled={shareStatus === 'sending'}
                 aria-label="Close ROI report email form"
-                className="grid h-10 w-10 shrink-0 place-items-center border border-[#141414] bg-white transition-colors hover:bg-[#f8f3e8] disabled:cursor-not-allowed disabled:opacity-45"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#141414] bg-white transition-colors hover:bg-[#f8f3e8] disabled:cursor-not-allowed disabled:opacity-45"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -876,7 +933,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
 
             <form onSubmit={sendRoiReport} className="p-5 md:p-6">
               <p id="roi-report-description" className="text-sm leading-6 text-[#6b6256]">
-                We will send a dated JasonAI by B2W report with your inputs, {percent.format(model.roi)} ROI,
+                We will send a dated JasonAI by B2W report with your inputs, a {multiple.format(model.roi)}× return multiple,
                 {' '}{currency.format(model.netReturn)} estimated return, a four-year graph, and the full table.
               </p>
 
@@ -892,7 +949,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                     maxLength={80}
                     value={reportContact.firstName}
                     onChange={(event) => updateReportContact('firstName', event.target.value)}
-                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                    className="mt-2 min-h-12 w-full rounded-xl border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
                   />
                 </label>
                 <label className="block text-sm font-semibold text-[#141414]">
@@ -904,7 +961,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                     maxLength={80}
                     value={reportContact.lastName}
                     onChange={(event) => updateReportContact('lastName', event.target.value)}
-                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                    className="mt-2 min-h-12 w-full rounded-xl border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
                   />
                 </label>
                 <label className="block text-sm font-semibold text-[#141414]">
@@ -918,7 +975,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                     value={reportContact.businessEmail}
                     onChange={(event) => updateReportContact('businessEmail', event.target.value)}
                     placeholder="you@company.com"
-                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                    className="mt-2 min-h-12 w-full rounded-xl border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
                   />
                 </label>
                 <label className="block text-sm font-semibold text-[#141414]">
@@ -930,7 +987,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                     maxLength={200}
                     value={reportContact.companyName}
                     onChange={(event) => updateReportContact('companyName', event.target.value)}
-                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                    className="mt-2 min-h-12 w-full rounded-xl border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
                   />
                 </label>
                 <label className="block text-sm font-semibold text-[#141414] sm:col-span-2">
@@ -942,12 +999,12 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                     value={reportContact.companyLocation}
                     onChange={(event) => updateReportContact('companyLocation', event.target.value)}
                     placeholder="City, State / Province"
-                    className="mt-2 min-h-12 w-full border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
+                    className="mt-2 min-h-12 w-full rounded-xl border border-[#bfb6a8] bg-white px-4 text-base font-normal text-[#141414] outline-none placeholder:text-[#8a8176] focus:border-[#141414] focus:ring-2 focus:ring-[#1f5f7a]/20"
                   />
                 </label>
               </div>
 
-              <div className="mt-5 border border-[#d9d2c3] bg-[#fffaf0] p-4">
+              <div className="mt-5 rounded-xl border border-[#d9d2c3] bg-[#fffaf0] p-4">
                 <label className="flex cursor-pointer items-start gap-3 text-sm leading-6 text-[#4f463c]">
                   <input
                     type="checkbox"
@@ -992,7 +1049,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                   type="button"
                   onClick={closeShareDialog}
                   disabled={shareStatus === 'sending'}
-                  className="min-h-11 border border-[#141414] bg-white px-5 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#f8f3e8] disabled:cursor-not-allowed disabled:opacity-45"
+                  className="min-h-11 rounded-full border border-[#141414] bg-white px-5 py-2.5 text-sm font-semibold text-[#141414] transition-colors hover:bg-[#f8f3e8] disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   {shareStatus === 'success' ? 'Done' : 'Cancel'}
                 </button>
@@ -1000,7 +1057,7 @@ export default function JasonAIPricingCalculator({ onBookReview }: PricingCalcul
                   <button
                     type="submit"
                     disabled={shareStatus === 'sending'}
-                    className="inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1f5f7a] disabled:cursor-wait disabled:opacity-65"
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#1f5f7a] disabled:cursor-wait disabled:opacity-65"
                   >
                     <Send className="h-4 w-4" />
                     {shareStatus === 'sending' ? 'Sending report…' : 'Send ROI report'}

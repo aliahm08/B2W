@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { BarChart3, Mic, MessageSquareText } from 'lucide-react';
 import type { AiDemoMode } from '../../content/aiSolutions';
@@ -263,6 +263,11 @@ function FinancialModelsDemo() {
   const laborCost = monthlyRevenue * (laborLoad / 100);
   const operatingProfit = grossProfit - laborCost - 8600;
   const modeledRevenue = Math.round(monthlyRevenue * 1.123);
+  const controls: Array<[string, number, number, number, number, Dispatch<SetStateAction<number>>, string]> = [
+    ['Monthly revenue', monthlyRevenue, 60000, 220000, 5000, setMonthlyRevenue, '$'],
+    ['Gross margin', grossMargin, 35, 72, 1, setGrossMargin, '%'],
+    ['Labor load', laborLoad, 12, 45, 1, setLaborLoad, '%'],
+  ];
 
   return (
     <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)]">
@@ -273,11 +278,7 @@ function FinancialModelsDemo() {
         icon={<BarChart3 className="h-4 w-4" />}
       >
         <div className="grid gap-4">
-          {[
-            ['Monthly revenue', monthlyRevenue, 60000, 220000, 5000, setMonthlyRevenue, '$'],
-            ['Gross margin', grossMargin, 35, 72, 1, setGrossMargin, '%'],
-            ['Labor load', laborLoad, 12, 45, 1, setLaborLoad, '%'],
-          ].map(([label, value, min, max, step, setter, suffix]) => (
+          {controls.map(([label, value, min, max, step, setter, suffix]) => (
             <div key={label} className="rounded-[22px] bg-white/72 p-4">
               <div className="flex items-center justify-between gap-4">
                 <p className="text-sm font-medium text-neutral-900">{label}</p>

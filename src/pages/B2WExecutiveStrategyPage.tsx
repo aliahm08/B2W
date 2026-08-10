@@ -38,6 +38,7 @@ import {
 import { Link } from 'react-router-dom';
 import B2WIcon from '../components/logo/B2WIcon';
 import Seo from '../components/Seo';
+import InternalDocumentNav from '../components/internal/InternalDocumentNav';
 
 type SectionId =
   | 'map'
@@ -100,9 +101,9 @@ type NavigationGroupDefinition = {
 };
 
 const navigationGroupStarts: Partial<Record<SectionId, NavigationGroupDefinition>> = {
-  company: { label: 'Growth Map' },
-  revenue: { label: 'Optimization' },
-  ownership: { label: 'Diligence', subtitle: 'Accountability + tracking' },
+  company: { label: 'Strategy', subtitle: 'Direction + growth map' },
+  revenue: { label: 'Systems', subtitle: 'Optimization + commercial model' },
+  ownership: { label: 'Implementation', subtitle: 'Accountability + tracking' },
 };
 
 const trackerItems: TrackerItem[] = [
@@ -689,14 +690,14 @@ function StrategyWorkspace({
   return (
     <main className="min-h-screen bg-[#F7F4EC] text-[#17221E]">
       <Seo
-        title={isServices ? 'B2W Operating Map' : 'B2W Executive Strategy System'}
+        title={isServices ? 'B2W Business Plan' : 'B2W Executive Strategy System'}
         description={
           isServices
-            ? 'Private B2W operating map covering the growth map, optimization model, diligence, ownership, and execution tracking.'
+            ? 'Private B2W business plan and operating map covering growth, optimization, diligence, ownership, and execution tracking.'
             : 'Private B2W product, business, financial, and execution strategy system.'
         }
         robots="noindex, nofollow"
-        canonicalPath={isServices ? '/internal/services' : '/executive-strategy'}
+        canonicalPath={isServices ? '/internal/business-plan' : '/executive-strategy'}
       />
 
       <header className="sticky top-0 z-50 border-b border-[#223C33]/12 bg-[#F7F4EC]/92 backdrop-blur-xl">
@@ -713,7 +714,7 @@ function StrategyWorkspace({
             <div className="min-w-0">
               <p className="b2w-wordmark truncate text-xs font-semibold tracking-[0.16em]">B2W</p>
               <p className="truncate text-[8px] uppercase tracking-[0.18em] text-[#223C33]/42">
-                {isServices ? 'Operating map' : 'Executive strategy system'}
+                {isServices ? 'Business plan' : 'Executive strategy system'}
               </p>
             </div>
           </div>
@@ -776,10 +777,11 @@ function StrategyWorkspace({
             </button>
           </div>
         </div>
+        {isServices ? <InternalDocumentNav /> : null}
       </header>
 
       {mobileNavOpen ? (
-        <nav className="fixed inset-x-4 top-20 z-40 max-h-[calc(100vh-6rem)] overflow-auto rounded-2xl border border-[#223C33]/12 bg-[#F7F4EC] p-3 shadow-2xl lg:hidden">
+        <nav className="fixed inset-x-4 top-32 z-40 max-h-[calc(100vh-9rem)] overflow-auto rounded-2xl border border-[#223C33]/12 bg-[#F7F4EC] p-3 shadow-2xl lg:hidden">
           {sectionLinks.map((section) => {
             const groupLabel = navigationGroupStarts[section.id];
             return (
@@ -805,7 +807,7 @@ function StrategyWorkspace({
 
       <div className="mx-auto grid max-w-[1600px] lg:grid-cols-[238px_minmax(0,1fr)]">
         <aside className="hidden border-r border-[#223C33]/12 lg:block">
-          <nav className="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto px-5 py-8" aria-label="Strategy sections">
+          <nav className="sticky top-28 max-h-[calc(100vh-7rem)] overflow-y-auto px-5 py-8" aria-label="Strategy sections">
             <p className="px-3 text-[8px] font-semibold uppercase tracking-[0.22em] text-[#223C33]/35">
               Document sections
             </p>
@@ -860,7 +862,7 @@ function StrategyWorkspace({
             <div aria-hidden="true" className="absolute -right-40 -top-56 h-[40rem] w-[40rem] rounded-full bg-[#D8B56A]/16 blur-3xl" />
             <div className="relative mx-auto max-w-6xl">
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#D8B56A]">
-                {isServices ? 'B2W Operating Map' : 'B2W Product + Business Strategy'}
+                {isServices ? 'Business Plan · Operating Map' : 'B2W Product + Business Strategy'}
               </p>
               <h1 className="mt-7 max-w-5xl text-5xl font-medium leading-[0.96] tracking-[-0.055em] sm:text-7xl lg:text-8xl">
                 The operating layer for contracting businesses.
@@ -873,7 +875,7 @@ function StrategyWorkspace({
                   href="#company"
                   className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#D8B56A] px-5 text-sm font-semibold text-[#223C33] transition hover:bg-[#E5C77F]"
                 >
-                  {isServices ? 'Explore Operating Map' : 'Read the strategy'}
+                  {isServices ? 'Explore Business Plan' : 'Read the strategy'}
                   <ArrowDown className="h-4 w-4" />
                 </a>
                 {isServices ? (
@@ -900,13 +902,13 @@ function StrategyWorkspace({
                 </p>
               </header>
               <div className="mt-10 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] md:items-stretch">
-                {[
+                {([
                   ['WhatsApp', 'Assistant', MessageCircle],
                   ['Business', 'Context', Building2],
                   ['Document +', 'Workflow skills', FileText],
                   ['Approved', 'Actions', FileCheck2],
                   ['Project +', 'Contract systems', Layers3],
-                ].map(([eyebrow, title, Icon], index) => (
+                ] as const).map(([eyebrow, title, Icon], index) => (
                   <div className="contents" key={String(title)}>
                     {index > 0 ? <FlowArrow /> : null}
                     <div className={`rounded-2xl border p-5 ${
@@ -982,14 +984,14 @@ function StrategyWorkspace({
               />
               <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
                 <div className="grid grid-cols-2 gap-3">
-                  {[
+                  {([
                     ['WhatsApp', 'Conversations', MessageCircle],
                     ['Google Drive', 'Documents', FileText],
                     ['PDFs', 'Contracts', FileCheck2],
                     ['Spreadsheets', 'Project status', BarChart3],
                     ['CRM', 'Customers', UsersRound],
                     ['Accounting', 'Financials', CircleDollarSign],
-                  ].map(([title, label, Icon]) => (
+                  ] as const).map(([title, label, Icon]) => (
                     <div key={String(title)} className="rounded-2xl border border-[#223C33]/12 bg-white/60 p-4">
                       <Icon className="h-4 w-4 text-[#997022]" />
                       <p className="mt-5 text-sm font-semibold">{title}</p>
@@ -1840,7 +1842,7 @@ function StrategyWorkspace({
               <div>
                 <p className="b2w-wordmark text-sm font-semibold">B2W LLC</p>
                 <p className="mt-1 text-[10px] text-[#223C33]/42">
-                  {isServices ? 'Private operating map · direction, ownership, and execution' : 'Private executive strategy system'}
+                  {isServices ? 'Private business plan · direction, ownership, and execution' : 'Private executive strategy system'}
                 </p>
               </div>
               {isServices ? (

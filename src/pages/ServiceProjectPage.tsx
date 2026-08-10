@@ -11,7 +11,7 @@ export default function ServiceProjectPage() {
     () => servicePageContent[location.pathname] ?? servicePageContent['/services/marketing-advisory'],
     [location.pathname],
   );
-  const projectAreas = content.preselectedProjectAreas as PublicProjectArea[];
+  const projectAreas: PublicProjectArea[] = content.preselectedProjectAreas;
 
   return (
     <>

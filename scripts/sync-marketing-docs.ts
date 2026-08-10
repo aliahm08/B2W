@@ -13,6 +13,7 @@ const excludedStaticRoutes = new Set([
   '/app-test-1',
   '/home-test-1',
   '/solutions',
+  '/solutions/industries',
   '/solutions/how-it-works',
   '/solutions/questions',
   '/solutions/privacy',
@@ -33,7 +34,7 @@ const excludedStaticRoutes = new Set([
   '/uyghur-eats-valuation',
 ]);
 
-const excludedPrefixes = ['/client/'];
+const excludedPrefixes = ['/client/', '/preview'];
 
 function readStaticRoutesFromApp() {
   const appSource = fs.readFileSync(appPath, 'utf-8');

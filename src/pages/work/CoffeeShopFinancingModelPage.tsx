@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type Dispatch, type SetStateAction } from 'react';
 import { Download, LineChart, PiggyBank, Wallet } from 'lucide-react';
 import Seo from '../../components/Seo';
 
@@ -49,6 +49,11 @@ export default function CoffeeShopFinancingModelPage() {
   const [grossMargin, setGrossMargin] = useState(0.67);
   const [annualOperatingCosts, setAnnualOperatingCosts] = useState(255000);
   const [projectionYears, setProjectionYears] = useState(7);
+  const currencyControls: Array<[string, number, Dispatch<SetStateAction<number>>, number, number, number]> = [
+    ['Purchase Price', purchasePrice, setPurchasePrice, 250000, 1300000, 10000],
+    ['Starting Annual Revenue', baseRevenue, setBaseRevenue, 200000, 1500000, 10000],
+    ['Annual Operating Costs', annualOperatingCosts, setAnnualOperatingCosts, 100000, 700000, 5000],
+  ];
 
   const model = useMemo(() => {
     const downPayment = purchasePrice * clamp(downPaymentPct, 0.05, 0.9);
@@ -159,11 +164,7 @@ export default function CoffeeShopFinancingModelPage() {
           <section className="space-y-4 border border-neutral-200 bg-white p-5 md:p-6">
             <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-neutral-500">Assumptions</h2>
 
-            {[
-              ['Purchase Price', purchasePrice, setPurchasePrice, 250000, 1300000, 10000],
-              ['Starting Annual Revenue', baseRevenue, setBaseRevenue, 200000, 1500000, 10000],
-              ['Annual Operating Costs', annualOperatingCosts, setAnnualOperatingCosts, 100000, 700000, 5000],
-            ].map(([label, value, setter, min, max, step]) => (
+            {currencyControls.map(([label, value, setter, min, max, step]) => (
               <label key={String(label)} className="block">
                 <div className="mb-1 flex items-center justify-between text-xs text-neutral-600">
                   <span>{label}</span>

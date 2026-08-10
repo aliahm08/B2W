@@ -3,14 +3,14 @@ import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
   ArrowUpRight,
-  Building2,
   Check,
   ChevronDown,
-  CircleUserRound,
-  LayoutGrid,
 } from 'lucide-react';
 import { Link, useSearchParams } from 'react-router-dom';
 import B2WLogoMark from '../../components/B2WLogoMark';
+import GurgeIcon from '../../components/gurge/GurgeIcon';
+import { GurgeIconTile, GurgeStatusBadge } from '../../components/gurge/GurgeUI';
+import InternalDocumentNav from '../../components/internal/InternalDocumentNav';
 import Seo from '../../components/Seo';
 import {
   getGurgeBusiness,
@@ -100,14 +100,9 @@ function getExecutiveRole(value: string | null) {
 
 function StatusLabel({ status }: { status: GurgeProjectStatus }) {
   const style = statusStyles[status];
+  const tone = status === 'at-risk' ? 'red' : status === 'pending' || status === 'planned' ? 'gold' : 'green';
   return (
-    <span
-      className="inline-flex min-h-7 items-center gap-2 rounded-full px-3 text-[9px] font-semibold uppercase tracking-[0.15em]"
-      style={{ backgroundColor: style.background, color: style.foreground }}
-    >
-      <span className="h-1.5 w-1.5 rounded-full bg-current" />
-      {style.label}
-    </span>
+    <GurgeStatusBadge tone={tone}>{style.label}</GurgeStatusBadge>
   );
 }
 
@@ -177,9 +172,7 @@ function ClientMetricCard({
   return (
     <article className="flex min-h-72 flex-col border border-neutral-200 bg-white p-5 text-black">
       <div className="flex items-start justify-between gap-4">
-        <div className="grid h-10 w-10 place-items-center rounded-full border border-neutral-200 bg-neutral-50">
-          <Building2 className="h-4 w-4 text-neutral-600" />
-        </div>
+        <GurgeIconTile icon="report" />
         <StatusLabel status={project.status} />
       </div>
       <p className="mt-6 text-[9px] font-mono uppercase tracking-[0.18em] text-neutral-400">
@@ -234,11 +227,7 @@ function ClientAccountCard({
       }`}
     >
       <div className="flex items-start justify-between gap-4">
-        <span className={`grid h-10 w-10 place-items-center rounded-full border ${
-          selected ? 'border-white/15' : 'border-neutral-200'
-        }`}>
-          <Building2 className="h-4 w-4" />
-        </span>
+        <GurgeIconTile icon="account" inverse={selected} />
         <span
           className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.14em] text-white"
           style={{ backgroundColor: accountState.color }}
@@ -413,18 +402,18 @@ export default function InternalProjectIndexPage() {
   return (
     <article className="min-h-screen bg-[#FAFAF8] text-black">
       <Seo
-        title="B2W Tracking Tool"
-        description="Private B2W executive-strategy tracking tool built on the Gurge project-management concept."
+        title="B2W Product Direction"
+        description="Private B2W product-direction tracking tool built on the Gurge project-management concept."
         robots="noindex, nofollow"
         canonicalPath="/internal/portal"
       />
 
-      <nav className="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-[#FAFAF8]/92 backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-neutral-200 bg-[#FAFAF8]/92 backdrop-blur-xl">
         <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             <B2WLogoMark
               to="/internal"
-              label="Tracking Tool"
+              label="Product Direction"
               wordmark="Gurge"
               className="text-black"
             />
@@ -442,7 +431,7 @@ export default function InternalProjectIndexPage() {
               className="flex min-h-11 items-center gap-3 rounded-full border border-neutral-200 bg-white py-1.5 pl-1.5 pr-3 text-left shadow-sm transition hover:border-neutral-400"
             >
               <span className="grid h-8 w-8 place-items-center rounded-full bg-neutral-950 text-white">
-                <CircleUserRound className="h-4 w-4" />
+                <GurgeIcon name="account" className="h-4 w-4" />
               </span>
               <span className="hidden sm:block">
                 <span className="block text-[9px] uppercase tracking-[0.14em] text-neutral-400">
@@ -480,7 +469,7 @@ export default function InternalProjectIndexPage() {
                         <span className={`grid h-9 w-9 shrink-0 place-items-center rounded-full border ${
                           role.id === executiveRole.id ? 'border-white/15' : 'border-neutral-200'
                         }`}>
-                          <CircleUserRound className="h-4 w-4" />
+                          <GurgeIcon name="account" className="h-4 w-4" />
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-sm font-semibold">{role.title}</span>
@@ -499,14 +488,15 @@ export default function InternalProjectIndexPage() {
             </AnimatePresence>
           </div>
         </div>
-      </nav>
+        <InternalDocumentNav />
+      </header>
 
       <motion.main
         key={`${business.id}:${executiveRole.id}`}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
-        className="mx-auto max-w-7xl px-4 pb-20 pt-28 sm:px-6 sm:pt-32 lg:px-8"
+        className="mx-auto max-w-7xl px-4 pb-20 pt-40 sm:px-6 sm:pt-44 lg:px-8"
       >
         <header className="border-b border-neutral-200 pb-8 sm:pb-10">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-end">
@@ -563,11 +553,11 @@ export default function InternalProjectIndexPage() {
             </div>
 
             <div className="grid grid-cols-3 border border-neutral-200 bg-white">
-              {[
+              {([
                 ['Active', portfolioCounts.active, '#4F7F52'],
                 ['Complete', portfolioCounts.completed, '#4F7F52'],
                 ['Open gates', portfolioCounts.attention, '#D8B536'],
-              ].map(([label, value, color], index) => (
+              ] as const).map(([label, value, color], index) => (
                 <div key={label} className={`${index ? 'border-l border-neutral-200' : ''} p-4 sm:p-5`}>
                   <span className="block h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
                   <p className="mt-4 font-mono text-2xl text-black">{value}</p>
@@ -678,7 +668,7 @@ export default function InternalProjectIndexPage() {
         <section className="grid gap-7 border-b border-neutral-200 py-8 lg:grid-cols-[240px_minmax(0,1fr)] lg:py-10">
           <div>
             <div className="flex items-center gap-2 text-neutral-400">
-              <LayoutGrid className="h-4 w-4" />
+              <GurgeIcon name="overview" className="h-4 w-4" />
               <p className="text-[9px] font-mono uppercase tracking-[0.2em]">Client workspaces</p>
             </div>
             <p className="mt-3 text-sm leading-6 text-neutral-500">
@@ -746,11 +736,11 @@ export default function InternalProjectIndexPage() {
                   : 'A consolidated view of delivery signals reported across current B2W client workspaces.'}
               </p>
               <div className="mt-7 grid grid-cols-3 border-y border-white/10">
-                {[
+                {([
                   ['Active', clientMetricSummary.active, '#4F7F52'],
                   ['Complete', clientMetricSummary.completed, '#4F7F52'],
                   ['Attention', clientMetricSummary.attention, '#D8B536'],
-                ].map(([label, value, color], index) => (
+                ] as const).map(([label, value, color], index) => (
                   <div key={label} className={`${index ? 'border-l border-white/10' : ''} py-5 text-center`}>
                     <span className="mx-auto block h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
                     <p className="mt-3 font-mono text-2xl">{value}</p>

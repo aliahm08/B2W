@@ -10,7 +10,7 @@ export function useScrollSectionNav(
     onSelect: (id: string) => void,
 ) {
     const cooldownRef = useRef(false);
-    const cooldownTimer = useRef<ReturnType<typeof setTimeout>>();
+    const cooldownTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const handleWheel = useCallback(
         (event: WheelEvent) => {

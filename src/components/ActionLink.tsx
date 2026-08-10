@@ -1,6 +1,6 @@
-import { motion } from 'motion/react';
+import { motion, type HTMLMotionProps } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 type ActionLinkVariant = 'underline' | 'outline';
 
@@ -8,7 +8,7 @@ type ActionLinkProps = {
   href: string;
   children: ReactNode;
   variant?: ActionLinkVariant;
-} & Omit<ComponentPropsWithoutRef<'a'>, 'href' | 'children'>;
+} & Omit<HTMLMotionProps<'a'>, 'href' | 'children'>;
 
 const baseClassName =
   'group inline-flex items-center gap-2 text-lg font-medium text-black transition-colors';

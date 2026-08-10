@@ -55,7 +55,7 @@ const revenueStats = [
 ] as const;
 
 function RevenueContent() {
-    const [activeMetricLabel, setActiveMetricLabel] = useState(revenueStats[0].label);
+    const [activeMetricLabel, setActiveMetricLabel] = useState<string>(revenueStats[0].label);
     const mobileTooltipRefs = useRef<Record<string, HTMLDivElement | null>>({});
     const activeMetric = revenueStats.find((stat) => stat.label === activeMetricLabel) ?? revenueStats[0];
 

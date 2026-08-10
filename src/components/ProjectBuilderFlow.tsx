@@ -15,6 +15,7 @@ import type {
   GeneratedProjectBrief,
   ProjectBriefApiResponse,
   ProjectBriefRequestPayload,
+  ProjectBriefSection,
 } from '../lib/projectBrief';
 
 function toggleStringValue<T extends string>(current: T[], value: T): T[] {
@@ -168,9 +169,10 @@ export default function ProjectBuilderFlow() {
     }
 
     return {
-      businessType: businessType.trim(),
-      location: businessLocation.trim(),
+      businessName: businessType.trim(),
+      website: businessLocation.trim(),
       arr: arr.trim(),
+      email: 'info@b2w-ai.com',
       capabilityIds: selectedCapabilityIds,
       expertiseIds: selectedExpertiseIds,
       projectAreaId: selectedProjectAreaId,
@@ -179,8 +181,8 @@ export default function ProjectBuilderFlow() {
 
   const canGenerateBrief = Boolean(
     requestPayload &&
-      requestPayload.businessType &&
-      requestPayload.location &&
+      requestPayload.businessName &&
+      requestPayload.website &&
       requestPayload.capabilityIds.length > 0 &&
       requestPayload.expertiseIds.length > 0,
   );
@@ -633,11 +635,11 @@ export default function ProjectBuilderFlow() {
                     <p className="mt-4 max-w-3xl text-base leading-7 text-neutral-700">{generatedBrief.proposalSummary}</p>
 
                     <div className="mt-8 grid gap-4 md:grid-cols-3">
-                      {[
+                      {([
                         ['Profile', generatedBrief.profile],
                         ['Model', generatedBrief.model],
                         ['Documentation', generatedBrief.documentation],
-                      ].map(([label, section]) => (
+                      ] as Array<[string, ProjectBriefSection]>).map(([label, section]) => (
                         <div key={label} className="border border-black/10 bg-neutral-50 p-4">
                           <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-neutral-500">{label}</p>
                           <h4 className="mt-3 text-xl font-medium tracking-tight text-neutral-950">{section.headline}</h4>

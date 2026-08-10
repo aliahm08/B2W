@@ -13,7 +13,7 @@ export default function CapabilityPage() {
     if (!capability) {
         return (
             <article className="min-h-screen bg-[#0b1115] pt-24 pb-16 text-stone-100">
-                <div className="mx-auto max-w-7xl px-6">
+                <div className="mx-auto max-w-7xl px-5 sm:px-6">
                     <div className="mt-12 border border-white/10 p-8">
                         <Link
                             to="/#capabilities"
@@ -51,7 +51,7 @@ export default function CapabilityPage() {
         <article className="min-h-screen bg-[#0b1115] pt-24 pb-16 text-stone-100">
             <Seo />
 
-            <div className="mx-auto max-w-7xl px-6">
+            <div className="mx-auto max-w-7xl px-5 sm:px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -73,8 +73,8 @@ export default function CapabilityPage() {
                         </div>
 
                         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_320px]">
-                            <div>
-                                <h1 className="mb-5 text-4xl font-medium tracking-tight text-white md:text-6xl">
+                            <div className="min-w-0">
+                                <h1 className="mb-5 break-words text-[2.15rem] font-medium tracking-tight text-white sm:text-4xl md:text-6xl">
                                     {capability.title}
                                 </h1>
 

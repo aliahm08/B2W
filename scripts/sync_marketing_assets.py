@@ -7,21 +7,18 @@ the checked-in B2W brand assets.
 from __future__ import annotations
 
 import json
-import re
+import base64
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DIR = ROOT / "public"
 BRAND_DIR = PUBLIC_DIR / "brand"
-BRAND_VECTOR_SOURCE = BRAND_DIR / "b2w-icon.svg"
-
-ICON_SOURCE = BRAND_DIR / "verification" / "b2w-icon.png"
-WORDMARK_SOURCE = BRAND_DIR / "b2w-full-logo.png"
 CLARA_SOURCE = BRAND_DIR / "clara-logo-solid.png"
-MARKETING_ASSET_VERSION = "20260729.2"
+ICON_SOURCE = CLARA_SOURCE
+MARKETING_ASSET_VERSION = "20260801.3"
 
 FAVICON_OUTPUTS = {
     "favicon.png": 32,
@@ -34,9 +31,9 @@ FAVICON_OUTPUTS = {
 SITE_MANIFEST = {
     "name": "B2W",
     "short_name": "B2W",
-    "description": "B2W consulting, Clara, and JasonAI.",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "description": "B2W practical AI products and JasonAI.",
+    "background_color": "#f3f0e8",
+    "theme_color": "#111315",
     "display": "standalone",
     "icons": [
         {
@@ -79,24 +76,13 @@ def save_ico(image: Image.Image, path: Path) -> None:
 
 
 def write_vector_favicon(path: Path) -> None:
-    source = BRAND_VECTOR_SOURCE.read_text(encoding="utf-8")
-    view_box_match = re.search(r'viewBox="([^"]+)"', source)
-    path_match = re.search(r'<path\b[^>]*\bd="([^"]+)"', source)
-    if not view_box_match or not path_match:
-        raise RuntimeError(f"Could not read canonical SVG geometry from {BRAND_VECTOR_SOURCE}")
-
-    view_box = view_box_match.group(1)
-    vector_path = path_match.group(1)
+    encoded = base64.b64encode(ICON_SOURCE.read_bytes()).decode("ascii")
     path.write_text(
         "\n".join(
             [
-                f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{view_box}">',
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">',
                 "  <title>B2W marketing mark</title>",
-                "  <style>",
-                "    .mark { fill: #111111; }",
-                "    @media (prefers-color-scheme: dark) { .mark { fill: #ffffff; } }",
-                "  </style>",
-                f'  <path class="mark" d="{vector_path}" fill-rule="evenodd" clip-rule="evenodd"/>',
+                f'  <image href="data:image/png;base64,{encoded}" width="512" height="512" preserveAspectRatio="xMidYMid meet"/>',
                 "</svg>",
                 "",
             ]
@@ -107,8 +93,8 @@ def write_vector_favicon(path: Path) -> None:
 
 def draw_card_frame(canvas: Image.Image) -> None:
     draw = ImageDraw.Draw(canvas)
-    draw.rounded_rectangle((24, 24, 1176, 606), radius=30, outline="#d9d3ca", width=3)
-    draw.line((56, 532, 1144, 532), fill="#e8e2d8", width=2)
+    draw.rounded_rectangle((24, 24, 1176, 606), radius=30, outline="#d5d0c5", width=3)
+    draw.line((56, 532, 1144, 532), fill="#ded8cc", width=2)
 
 
 def compose_social_card(logo_path: Path, output_path: Path, max_size: tuple[int, int], background: str) -> None:
@@ -125,6 +111,33 @@ def compose_social_card(logo_path: Path, output_path: Path, max_size: tuple[int,
     save_png(canvas, output_path)
 
 
+def load_brand_font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    try:
+        return ImageFont.truetype("DejaVuSans.ttf", size)
+    except OSError:
+        return ImageFont.load_default(size=size)
+
+
+def compose_b2w_social_card(output_path: Path) -> None:
+    canvas = Image.new("RGBA", (1200, 630), "#f3f0e8")
+    draw = ImageDraw.Draw(canvas)
+    draw_card_frame(canvas)
+    draw.rounded_rectangle((58, 58, 1142, 506), radius=24, fill="#111315")
+
+    mark = open_rgba(CLARA_SOURCE)
+    mark.thumbnail((240, 240), Image.Resampling.LANCZOS)
+    mark_canvas = Image.new("RGBA", mark.size, (255, 255, 255, 0))
+    white_mark = Image.new("RGBA", mark.size, "white")
+    white_mark.putalpha(mark.getchannel("A"))
+    mark_canvas.alpha_composite(white_mark)
+    canvas.alpha_composite(mark_canvas, (155, 158))
+
+    draw.text((455, 145), "B2W", font=load_brand_font(150), fill="white", stroke_width=0)
+    draw.text((463, 330), "PRACTICAL AI PRODUCTS", font=load_brand_font(25), fill="#8fc2d7")
+    draw.text((58, 552), "Turn business noise into work that moves.", font=load_brand_font(24), fill="#315f79")
+    save_png(canvas, output_path)
+
+
 def write_manifest(path: Path) -> None:
     path.write_text(json.dumps(SITE_MANIFEST, indent=2) + "\n", encoding="utf-8")
 
@@ -137,10 +150,7 @@ def main() -> None:
         save_png(contain_square(icon, size), PUBLIC_DIR / filename)
 
     save_ico(icon, PUBLIC_DIR / "favicon.ico")
-    if WORDMARK_SOURCE.exists():
-        compose_social_card(WORDMARK_SOURCE, BRAND_DIR / "b2w-social-card.png", (760, 280), "#f7f3ec")
-    else:
-        print(f"Skipped B2W social card; source is not active: {WORDMARK_SOURCE.relative_to(ROOT)}")
+    compose_b2w_social_card(BRAND_DIR / "b2w-social-card.png")
 
     if CLARA_SOURCE.exists():
         compose_social_card(CLARA_SOURCE, BRAND_DIR / "clara-social-card.png", (320, 320), "#f5f6fb")
@@ -155,8 +165,7 @@ def main() -> None:
         print(f" - public/{filename}")
     print(" - public/favicon.ico")
     print(" - public/site.webmanifest")
-    if WORDMARK_SOURCE.exists():
-        print(" - public/brand/b2w-social-card.png")
+    print(" - public/brand/b2w-social-card.png")
     if CLARA_SOURCE.exists():
         print(" - public/brand/clara-social-card.png")
 

@@ -968,12 +968,12 @@ export default function AppTestOnePage() {
             </div>
 
             <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-              {[
+              {([
                 ['Walkthrough workspace', () => setActiveSection('capture')],
                 ['Open estimate', handleEstimateLaunch],
                 ['Build alternates', () => handleGenerateScenarioSet('Generated from the operations board.')],
                 ['Open delivery', () => setActiveSection('delivery')],
-              ].map(([label, onClick]) => (
+              ] as Array<[string, () => void]>).map(([label, onClick]) => (
                 <button
                   key={label}
                   type="button"
@@ -1016,12 +1016,12 @@ export default function AppTestOnePage() {
                 <Workflow className="h-4 w-4 text-[#d4af37]" />
               </div>
               <div className="mt-4 space-y-3">
-                {[
+                {([
                   ['Walkthrough captured', captureReady],
                   ['Estimate activated', isEstimateReady],
                   ['Alternates generated', versions.length > 0],
                   ['Client draft available', isEstimateReady && deliveryPreview.length > 0],
-                ].map(([label, done]) => (
+                ] as Array<[string, boolean]>).map(([label, done]) => (
                   <div key={label} className="flex items-center gap-3 border border-white/10 bg-white/[0.04] px-3 py-3">
                     <span className={`h-2.5 w-2.5 rounded-full ${done ? 'bg-[#d4af37]' : 'bg-white/20'}`} />
                     <span className="text-sm">{label}</span>

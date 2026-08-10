@@ -8,12 +8,17 @@ import {
   ChevronDown,
   FolderSearch,
   MessageSquareText,
+  Send,
+  Users,
   X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { JasonAIVectorMark } from '../components/BrandVectorMarks';
 import B2WIcon from '../components/logo/B2WIcon';
 import Seo from '../components/Seo';
+import { HomeSiteFooter } from '../components/HomeSiteChrome';
+import { LiveSiteHeader } from '../components/V2SiteChrome';
+import { jasonAIFaqs as faqs, jasonAIObjections as objections } from '../content/jasonAIQuestions';
 import JasonAIPricingCalculator from './JasonAIPricingCalculator';
 
 declare global {
@@ -29,7 +34,7 @@ const easeInOutCubic = (value: number) =>
   value < 0.5 ? 4 * value * value * value : 1 - Math.pow(-2 * value + 2, 3) / 2;
 const waitlistUrl = 'https://tally.so/embed/jaG0yY?alignLeft=1&hideTitle=1&dynamicHeight=1';
 const jasonAiCalendlyUrl =
-  'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=00ffc3';
+  'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=b24a24';
 
 const problemStatements = [
   {
@@ -135,82 +140,6 @@ const testimonials = [
   {
     quote: 'My guys will never use a dashboard. I stopped asking. This is different.',
     source: 'HVAC operator',
-  },
-] as const;
-
-const objections = [
-  {
-    question: 'Is this just another app my team has to use?',
-    answer:
-      'No. JasonAI is designed to work through WhatsApp and approved communication sources. Your team can search prior communication and request summaries without learning another dashboard.',
-  },
-  {
-    question: 'Will my crew have to learn anything?',
-    answer:
-      'Nothing. Your crew keeps texting, emailing, and making calls. Nobody downloads anything, logs into anything, or changes anything.',
-  },
-  {
-    question: 'I already use Jobber, ServiceTitan, or Buildertrend.',
-    answer:
-      'JasonAI does not replace those systems. It helps your team search and summarize the unstructured communication that usually sits around the formal project record.',
-  },
-  {
-    question: 'I do not want AI reading my job communications.',
-    answer:
-      'We understand. You control which channels JasonAI connects to. Approved data is used to support search and generate summaries for your business—never sold. During pre-launch, you work directly with our team so you know what is being reviewed and how.',
-  },
-  {
-    question: 'We have a PM who handles this.',
-    answer:
-      'Good—JasonAI gives your PM a faster way to search prior communication and prepare summaries, reducing time spent rereading threads.',
-  },
-] as const;
-
-const faqs = [
-  {
-    question: 'What tools does JasonAI connect to?',
-    answer:
-      'During pre-launch, we start with the communication sources you choose, including approved WhatsApp groups, email threads, text flows, call notes, or forwarded job communication.',
-  },
-  {
-    question: 'How does the weekly summary work?',
-    answer:
-      'JasonAI can summarize the approved communication for a job or time period. Automated action-item extraction and structured status reporting are still in development.',
-  },
-  {
-    question: 'How long does setup take?',
-    answer:
-      'The first review is 30 minutes. Setup depends on how your business communicates today, and pre-launch onboarding is intentionally hands-on so we can do the heavy lifting with you.',
-  },
-  {
-    question: 'What does it cost?',
-    answer:
-      'Standard pricing is $99 per month with a one-time $2,000 setup fee. Pre-launch subscribers pay $25 per month for the first year and the setup fee is removed.',
-  },
-  {
-    question: 'Is my data private?',
-    answer:
-      'You choose what JasonAI can review. Approved business communication is used for search and summaries. It is never sold.',
-  },
-  {
-    question: 'What if I already use project management tools?',
-    answer:
-      'Keep using it. JasonAI is for the conversations around the job - the places where promises, changes, and follow-ups often happen before anyone enters them somewhere else.',
-  },
-  {
-    question: 'What trades does it work for?',
-    answer:
-      'We are starting with plumbing, HVAC, remodeling, and GC businesses with active job communication spread across several people.',
-  },
-  {
-    question: 'Is it the same setup for every business?',
-    answer:
-      'No. JasonAI is set up around how your business already works, including your team structure, communication habits, and job flow.',
-  },
-  {
-    question: 'Can I cancel?',
-    answer:
-      'Yes. Pre-launch access is designed to prove value quickly. If it does not help your operation, you are not locked in.',
   },
 ] as const;
 
@@ -399,7 +328,7 @@ function ModalFrame({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative h-[min(760px,92vh)] w-full max-w-4xl overflow-hidden border border-[#d9d2c3] bg-white shadow-[0_24px_80px_rgba(20,20,20,0.24)]"
+        className="relative h-[min(760px,92vh)] w-full max-w-4xl overflow-hidden rounded-[2rem] border border-[#d9d2c3] bg-white shadow-[0_24px_80px_rgba(20,20,20,0.24)]"
       >
         <div className="flex items-center justify-between border-b border-[#d9d2c3] px-4 py-3">
           <div>
@@ -410,7 +339,7 @@ function ModalFrame({
             type="button"
             onClick={onClose}
             aria-label={`Close ${title}`}
-            className="grid h-9 w-9 place-items-center border border-[#d9d2c3] text-[#141414] transition hover:bg-[#fffaf0]"
+            className="grid h-9 w-9 place-items-center rounded-full border border-[#d9d2c3] text-[#141414] transition hover:bg-[#fffaf0]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -444,13 +373,13 @@ function WaitlistModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
     <ModalFrame
       isOpen={isOpen}
       onClose={onClose}
-      title="Get JasonAI pre-launch access"
+      title="Get JasonAI access"
       subtitle="Tell us where search and summaries should fit into your workflow."
     >
       <iframe
         src={waitlistUrl}
         data-tally-src={waitlistUrl}
-        title="Get JasonAI pre-launch access"
+        title="Get JasonAI access"
         className="h-[calc(100%-58px)] w-full"
         loading="lazy"
       />
@@ -873,41 +802,128 @@ function JasonAILockup() {
 }
 
 function HeroVisual() {
+  const shouldReduceMotion = useReducedMotion();
+  const [stage, setStage] = useState<'organize' | 'share'>(shouldReduceMotion ? 'share' : 'organize');
   const rows = [
     ['Mon 8:14 AM', 'Tech text', 'Customer asked about adding laundry sink.'],
     ['Mon 8:37 AM', 'Call note', 'Owner approved rough-in if price is sent today.'],
     ['Tue 4:10 PM', 'Email', 'Permit question still needs reply.'],
   ] as const;
 
+  useEffect(() => {
+    if (shouldReduceMotion) {
+      setStage('share');
+      return undefined;
+    }
+
+    const timer = window.setInterval(() => {
+      setStage((current) => current === 'organize' ? 'share' : 'organize');
+    }, 5200);
+
+    return () => window.clearInterval(timer);
+  }, [shouldReduceMotion]);
+
   return (
-    <div className="border border-[#d9d2c3] bg-[#f8f3e8] p-4 shadow-[12px_12px_0_#1f2937] sm:p-5">
+    <div className="h-[39rem] overflow-hidden rounded-[2rem] border border-[#d9d2c3] bg-[#f8f3e8] p-4 shadow-[0_28px_90px_rgba(31,41,55,.18)] sm:p-5">
       <div className="flex items-center justify-between border-b border-[#d9d2c3] pb-3">
         <div>
-          <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Friday owner summary</p>
+          <p className="text-xs font-semibold uppercase text-[#9b3d1e]">{stage === 'organize' ? 'Organizing owner summary' : 'Shared to work group'}</p>
           <p className="mt-1 text-sm font-semibold text-[#141414]">Maple Avenue Bath Remodel</p>
         </div>
-        <span className="border border-[#141414] bg-white px-2 py-1 text-xs font-semibold">Open</span>
+        <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[.08em] ${stage === 'organize' ? 'border-[#141414]/20 bg-white text-[#141414]' : 'border-[#2a8d65]/25 bg-[#e7f3eb] text-[#27694f]'}`}>
+          {stage === 'organize' ? <MessageSquareText className="h-3 w-3" /> : <Send className="h-3 w-3" />}
+          {stage === 'organize' ? 'Organize' : 'Sent'}
+        </span>
       </div>
-      <div className="mt-4 space-y-3">
-        {rows.map(([time, channel, note]) => (
-          <div key={note} className="grid gap-2 border border-[#d9d2c3] bg-white p-3 sm:grid-cols-[7rem_6rem_1fr]">
-            <p className="text-xs font-semibold text-[#6b6256]">{time}</p>
-            <p className="text-xs font-semibold text-[#1f5f7a]">{channel}</p>
-            <p className="text-sm leading-6 text-[#2f2a24]">{note}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        {[
-          ['Request mentioned', 'Laundry sink rough-in discussed.'],
-          ['Open question', 'Permit status appears in the thread.'],
-          ['Extra work', 'Additional work was discussed on-site.'],
-        ].map(([label, note]) => (
-          <div key={label} className="border border-[#141414] bg-[#fffaf0] p-3">
-            <p className="text-xs font-semibold uppercase text-[#9b3d1e]">{label}</p>
-            <p className="mt-2 text-sm leading-6 text-[#141414]">{note}</p>
-          </div>
-        ))}
+      <div className="relative min-h-[24rem]">
+        <AnimatePresence mode="wait" initial={false}>
+          {stage === 'organize' ? (
+            <motion.div
+              key="organized-signals"
+              initial={{ opacity: 0, y: 12, filter: 'blur(8px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, scale: 0.94, y: -14, filter: 'blur(10px)' }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="mt-4 space-y-3">
+                {rows.map(([time, channel, note], index) => (
+                  <motion.div
+                    key={note}
+                    initial={{ opacity: 0, x: 18 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.42, delay: index * 0.12 }}
+                    className="grid gap-2 rounded-xl border border-[#d9d2c3] bg-white p-3 sm:grid-cols-[7rem_6rem_1fr]"
+                  >
+                    <p className="text-xs font-semibold text-[#6b6256]">{time}</p>
+                    <p className="text-xs font-semibold text-[#1f5f7a]">{channel}</p>
+                    <p className="text-sm leading-6 text-[#2f2a24]">{note}</p>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                {[
+                  ['Request mentioned', 'Laundry sink rough-in discussed.'],
+                  ['Open question', 'Permit status appears in the thread.'],
+                  ['Extra work', 'Additional work was discussed on-site.'],
+                ].map(([label, note], index) => (
+                  <motion.div
+                    key={label}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.42, delay: 0.42 + index * 0.1 }}
+                    className="rounded-xl border border-[#141414]/18 bg-[#fffaf0] p-3"
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-[.08em] text-[#9b3d1e]">{label}</p>
+                    <p className="mt-2 text-sm leading-6 text-[#141414]">{note}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="work-group-message"
+              initial={{ opacity: 0, scale: 0.96, y: 18, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, scale: 1, y: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, scale: 0.97, y: 12, filter: 'blur(8px)' }}
+              transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-4 overflow-hidden rounded-[1.5rem] border border-[#d9d2c3] bg-[#e8efe9] shadow-[0_20px_55px_rgba(20,20,20,.1)]"
+            >
+              <div className="flex items-center gap-3 border-b border-[#cad8cd] bg-[#dce8df] px-4 py-3">
+                <span className="grid h-9 w-9 place-items-center rounded-full bg-[#27694f] text-white"><Users className="h-4 w-4" /></span>
+                <div>
+                  <p className="text-sm font-semibold text-[#172019]">Maple Avenue Work Group</p>
+                  <p className="text-[10px] text-[#53675a]">8 members · JasonAI connected</p>
+                </div>
+              </div>
+              <div className="bg-[#eef4ef] p-4 sm:p-5">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="grid h-8 w-8 place-items-center rounded-full bg-[#f4b28c] text-[10px] font-bold text-[#442416]">AM</span>
+                    <div><p className="text-xs font-semibold text-[#172019]">Alex Morgan · Owner</p><p className="text-[9px] text-[#6d7c71]">Friday · 4:30 PM</p></div>
+                  </div>
+                  <span className="text-[9px] font-semibold uppercase tracking-[.1em] text-[#27694f]">Owner update</span>
+                </div>
+                <div className="ml-10 rounded-2xl rounded-tl-sm bg-white p-4 text-[#253029] shadow-sm">
+                  <p className="text-sm font-semibold">Friday owner summary — Maple Avenue Bath Remodel</p>
+                  <div className="mt-3 space-y-2 text-xs leading-5 text-[#4c5a50] sm:text-sm sm:leading-6">
+                    {[
+                      ['Request', 'The customer asked to add a laundry sink rough-in.'],
+                      ['Decision', 'Rough-in is approved if pricing is sent today.'],
+                      ['Follow-up', 'Confirm permit status before the next field phase.'],
+                      ['Extra work', 'Price the additional on-site work separately.'],
+                    ].map(([label, text], index) => (
+                      <motion.p key={label} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.34, delay: 0.18 + index * 0.1 }}>
+                        <strong className="text-[#172019]">{label}:</strong> {text}
+                      </motion.p>
+                    ))}
+                  </div>
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="mt-4 border-t border-[#dfe6e0] pt-3 text-xs font-semibold text-[#27694f]">— JasonAI</motion.p>
+                </div>
+                <p className="mt-2 text-right text-[9px] text-[#6d7c71]">Delivered to 8 · Read by 5</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
@@ -948,7 +964,7 @@ function BookingPrompt({ onOpenBooking }: { onOpenBooking: () => void }) {
 function ObjectionCarousel({ initialAnswerDelay = 0 }: { initialAnswerDelay?: number }) {
   const shouldReduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [typedAnswer, setTypedAnswer] = useState(objections[0].answer);
+  const [typedAnswer, setTypedAnswer] = useState<string>(objections[0].answer);
   const objectionButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const hasStartedAnswer = useRef(false);
   const activeObjection = objections[activeIndex];
@@ -1077,7 +1093,7 @@ function ObjectionCarousel({ initialAnswerDelay = 0 }: { initialAnswerDelay?: nu
         })}
       </div>
 
-      <div className="min-h-[20rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 md:min-h-[22rem] md:p-7">
+      <div className="min-h-[20rem] rounded-[1.75rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 shadow-[0_22px_65px_rgba(20,20,20,.07)] md:min-h-[22rem] md:p-7">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeObjection.question}
@@ -1115,19 +1131,19 @@ function ProblemCostsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section id="problem" className="scroll-mt-24 border-b border-[#d9d2c3] bg-[#141414] text-white">
+    <section id="problem" data-header-theme="light" className="scroll-mt-24 border-b border-[#d9b7a5] bg-[#f6e7dc] text-[#14110f]">
       <div className="mx-auto max-w-5xl px-5 py-16 md:px-8 md:py-24">
         <div className="max-w-3xl">
           <h2 className="text-3xl font-semibold md:text-5xl">
             <ScrambleText text="You Already Know This Is Costing You" />
           </h2>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[#cfc6b7]">
+          <p className="mt-6 max-w-2xl text-base leading-7 text-[#62574d]">
             Scroll through the work your team is already doing. Each one is a real place where money, trust, or time
             leaks out of the business.
           </p>
         </div>
 
-        <div className="mt-10 divide-y divide-white/15 border-y border-white/15">
+        <div className="mt-10 divide-y divide-[#14110f]/12 border-y border-[#14110f]/12">
           {problemStatements.map((statement, index) => {
             const isActive = activeIndex === index;
 
@@ -1145,8 +1161,8 @@ function ProblemCostsSection() {
                   onClick={() => setActiveIndex(index)}
                   className="grid w-full gap-4 text-left md:grid-cols-[5rem_1fr] md:items-start"
                 >
-                  <span className="pt-1 text-xs font-semibold uppercase text-[#f1b37b]">Cost {index + 1}</span>
-                  <span className="text-xl leading-8 text-[#f8f3e8] md:text-2xl md:leading-10">
+                  <span className="pt-1 text-xs font-semibold uppercase text-[#a74422]">Cost {index + 1}</span>
+                  <span className="text-xl leading-8 text-[#201a16] md:text-2xl md:leading-10">
                     {statement.text}
                   </span>
                 </button>
@@ -1181,7 +1197,8 @@ function ProblemCostsSection() {
                       <img
                         src={statement.image}
                         alt={statement.alt}
-                        loading={index < 2 ? 'eager' : 'lazy'}
+                        loading="lazy"
+                        decoding="async"
                         className="aspect-[16/9] w-full object-cover"
                       />
                     </motion.div>
@@ -1364,7 +1381,7 @@ function TeamChatPhone() {
               );
             })}
           </div>
-          <div className="relative rounded-[2.4rem] border border-[#141414] bg-[#141414] p-2 shadow-[18px_22px_0_rgba(20,20,20,0.12)]">
+          <div className="relative rounded-[2.4rem] border border-[#141414] bg-[#141414] p-2 shadow-[0_28px_80px_rgba(20,20,20,0.16)]">
             <div className="min-h-[38rem] rounded-[1.85rem] bg-[#fffaf0] p-4">
               <div className="mx-auto mb-3 h-1.5 w-14 rounded-full bg-[#141414]/20" />
               <div className="flex items-center justify-between border-b border-[#d9d2c3] pb-3">
@@ -1453,7 +1470,7 @@ function TeamChatPhone() {
 
 function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="border-b border-[#d9d2c3]">
+    <section id="how-it-works" data-header-theme="light" className="border-b border-[#d9d2c3]">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
         <SectionLabel>How it works</SectionLabel>
         <div className="mt-4 grid gap-8 lg:grid-cols-[0.6fr_1fr]">
@@ -1462,7 +1479,7 @@ function HowItWorksSection() {
           </h2>
           <div className="grid gap-4 md:grid-cols-3">
             {howItWorks.map((step, index) => (
-              <Reveal key={step.title} delay={index * 0.08} className="border border-[#d9d2c3] bg-white p-5">
+              <Reveal key={step.title} delay={index * 0.08} className="rounded-[1.5rem] border border-[#d9d2c3] bg-white p-5 shadow-[0_18px_50px_rgba(20,20,20,.05)]">
                 <p className="text-sm font-semibold text-[#9b3d1e]">0{index + 1}</p>
                 <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
                 <p className="mt-4 text-sm leading-7 text-[#4f463c]">{step.body}</p>
@@ -1477,7 +1494,7 @@ function HowItWorksSection() {
 
 function UseCasesSection() {
   return (
-    <section className="border-b border-[#d9d2c3] bg-white">
+    <section data-header-theme="light" className="border-b border-[#d9d2c3] bg-white">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
         <div className="max-w-3xl">
           <SectionLabel>Product roadmap</SectionLabel>
@@ -1491,7 +1508,7 @@ function UseCasesSection() {
         </div>
         <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {useCases.map((useCase, index) => (
-            <Reveal key={useCase.title} delay={index * 0.06} className="border border-[#d9d2c3] bg-[#fffaf0] p-5">
+            <Reveal key={useCase.title} delay={index * 0.06} className="rounded-[1.5rem] border border-[#d9d2c3] bg-[#fffaf0] p-5 shadow-[0_18px_50px_rgba(20,20,20,.05)]">
               <p className={`text-xs font-semibold uppercase ${
                 useCase.stage === 'Available now' ? 'text-[#1f5f7a]' : useCase.stage === 'Future' ? 'text-[#6b6256]' : 'text-[#9b3d1e]'
               }`}>
@@ -1509,7 +1526,7 @@ function UseCasesSection() {
 
 function BusinessReviewSection({ onOpenBooking }: { onOpenBooking: () => void }) {
   return (
-    <section id="business-review" className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
+    <section id="business-review" data-header-theme="light" className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.7fr_1fr]">
         <div>
           <SectionLabel>Free 30-minute business review</SectionLabel>
@@ -1523,7 +1540,7 @@ function BusinessReviewSection({ onOpenBooking }: { onOpenBooking: () => void })
             </p>
           </Reveal>
         </div>
-        <Reveal className="border border-[#d9d2c3] bg-white p-5 md:p-6">
+        <Reveal className="rounded-[1.75rem] border border-[#d9d2c3] bg-white p-5 shadow-[0_22px_65px_rgba(20,20,20,.07)] md:p-6">
           <BookingPrompt onOpenBooking={onOpenBooking} />
         </Reveal>
       </div>
@@ -1533,16 +1550,16 @@ function BusinessReviewSection({ onOpenBooking }: { onOpenBooking: () => void })
 
 function QuestionsHeroSection() {
   return (
-    <section id="questions" className="border-b border-[#d9d2c3]">
-      <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+    <section id="questions" data-header-theme="light" className="border-b border-[#d9b7a5] bg-[#fff7ef] text-[#14110f]">
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-36 md:px-8 md:pb-24 md:pt-44">
         <div className="max-w-3xl">
-          <p className="text-sm font-semibold uppercase text-[#9b3d1e]">Questions</p>
-          <h1 className="mt-4 text-5xl font-semibold leading-[1.02] md:text-7xl">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#a74422]">JasonAI / Questions</p>
+          <h1 className="mt-7 text-[clamp(3.4rem,8vw,7.5rem)] font-medium leading-[0.9] tracking-[-0.065em]">
             <ScrambleText text="The things contractor owners ask first." />
           </h1>
-          <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
+          <p className="mt-8 max-w-3xl text-lg leading-8 text-[#62574d] md:text-xl md:leading-9">
             What changes for the crew, what JasonAI connects to, what happens to your data, and how to stay updated if
-            you want the pre-launch price before you are ready for a review.
+            you want the founding price before you are ready for a review.
           </p>
         </div>
         <Reveal delay={1.2}>
@@ -1555,7 +1572,7 @@ function QuestionsHeroSection() {
 
 function FaqSection() {
   return (
-    <section className="border-b border-[#d9d2c3]">
+    <section data-header-theme="light" className="border-b border-[#d9d2c3]">
       <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
         <div className="max-w-3xl">
           <SectionLabel>FAQ</SectionLabel>
@@ -1565,7 +1582,7 @@ function FaqSection() {
         </div>
         <div className="mt-10 grid gap-3 lg:grid-cols-2">
           {faqs.map((item, index) => (
-            <Reveal key={item.question} delay={index * 0.035} className="border border-[#d9d2c3] bg-white">
+            <Reveal key={item.question} delay={index * 0.035} className="overflow-hidden rounded-[1.25rem] border border-[#d9d2c3] bg-white">
               <details className="group">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold">
                   <span>{item.question}</span>
@@ -1583,22 +1600,22 @@ function FaqSection() {
 
 function WaitlistSection({ onOpenWaitlist }: { onOpenWaitlist: () => void }) {
   return (
-    <section id="waitlist" className="border-b border-[#d9d2c3] bg-[#141414] text-white">
+    <section id="waitlist" data-header-theme="light" className="border-b border-[#d9b7a5] bg-[#f4ded1] text-[#14110f]">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:px-8 md:py-24 lg:grid-cols-[0.65fr_1fr]">
         <div>
-          <p className="text-xs font-semibold uppercase text-[#f1b37b]">Pre-launch access</p>
+          <p className="text-xs font-semibold uppercase text-[#a74422]">JasonAI Admin assistant</p>
           <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
             <ScrambleText text="Not ready for a review yet?" />
           </h2>
           <Reveal>
-            <p className="mt-6 text-lg leading-8 text-[#f8f3e8]">
-              Subscribe before launch for $25 per month in your first year, with the standard $2,000 setup fee removed.
+            <p className="mt-6 text-lg leading-8 text-[#4f463c]">
+              Join the founding offer for $25 per month in your first year, with the standard $2,000 setup fee removed.
             </p>
           </Reveal>
         </div>
-        <Reveal className="flex items-center border border-white/15 bg-white p-6 text-[#141414]">
+        <Reveal className="flex items-center rounded-[1.75rem] border border-[#d9b7a5] bg-white p-6 text-[#141414] shadow-[0_22px_70px_rgba(90,48,30,0.09)]">
           <div>
-            <p className="text-xl font-semibold">Pre-launch onboarding is still limited.</p>
+            <p className="text-xl font-semibold">JasonAI setup is currently limited.</p>
             <p className="mt-3 text-sm leading-7 text-[#4f463c]">
               Tell us about your workflow and we will follow up as we open more contractor accounts.
             </p>
@@ -1606,9 +1623,9 @@ function WaitlistSection({ onOpenWaitlist }: { onOpenWaitlist: () => void }) {
               type="button"
               data-descramble-hover="true"
               onClick={onOpenWaitlist}
-              className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+              className="mt-6 inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
             >
-              Get pre-launch access
+              Request JasonAI access
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
@@ -1628,13 +1645,14 @@ function JasonAISubpageIntro({
   body: string;
 }) {
   return (
-    <section className="border-b border-[#d9d2c3]">
-      <div className="mx-auto max-w-5xl px-5 py-16 md:px-8 md:py-24">
-        <p className="text-sm font-semibold uppercase text-[#9b3d1e]">{label}</p>
-        <h1 className="mt-4 text-5xl font-semibold leading-[1.02] md:text-7xl">
+    <section data-header-theme="light" className="relative overflow-hidden border-b border-[#d9b7a5] bg-[#fff7ef] text-[#14110f]">
+      <div className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(rgba(20,17,15,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(20,17,15,.045)_1px,transparent_1px)] [background-size:72px_72px]" />
+      <div className="relative mx-auto max-w-7xl px-5 pb-20 pt-36 md:px-8 md:pb-24 md:pt-44">
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#a74422]">JasonAI / {label}</p>
+        <h1 className="mt-7 max-w-6xl text-[clamp(3.4rem,8vw,7.5rem)] font-medium leading-[0.9] tracking-[-0.065em]">
           <ScrambleText text={title} />
         </h1>
-        <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">{body}</p>
+        <p className="mt-8 max-w-3xl text-lg leading-8 text-[#62574d] md:text-xl md:leading-9">{body}</p>
       </div>
     </section>
   );
@@ -1642,22 +1660,22 @@ function JasonAISubpageIntro({
 
 function JasonAILandingLinks() {
   return (
-    <section className="border-b border-[#d9d2c3] bg-[#f8f3e8]">
+    <section data-header-theme="light" className="border-b border-[#d9d2c3] bg-[#f3efe6]">
       <div className="mx-auto grid max-w-7xl gap-4 px-5 py-12 md:px-8 md:py-16 lg:grid-cols-3">
         <Link
-          to="/jasonai/pricing"
+          to="/pricing"
           data-descramble-hover="false"
-          className="group border border-[#141414] bg-[#141414] p-6 text-white transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0_#1f5f7a]"
+          className="group rounded-[1.75rem] border border-[#14110f] bg-[#14110f] p-6 text-white transition-[box-shadow,transform] duration-200 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(178,74,36,.22)]"
         >
           <div className="flex items-center justify-between gap-4">
-            <p className="text-xs font-semibold uppercase text-[#f1b37b]">ROI &amp; Pricing</p>
+            <p className="text-xs font-semibold uppercase text-[#f4b28c]">ROI &amp; Pricing</p>
             <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-white/45 bg-white text-[#141414] transition-colors group-hover:bg-[#f8f3e8]">
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </span>
           </div>
           <h2 className="mt-4 text-3xl font-semibold">Run your four-year value scenario.</h2>
           <p className="mt-4 text-sm leading-7 text-white/68">
-            Model current search and summary value using the $25 pre-launch first-year offer.
+            Model current search and summary value using the $25 founding first-year offer.
           </p>
           <span data-descramble-hover-target className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white">
             Calculate my ROI
@@ -1667,7 +1685,7 @@ function JasonAILandingLinks() {
         <Link
           to="/jasonai/how-it-works"
           data-descramble-hover="false"
-          className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
+          className="group rounded-[1.75rem] border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[0_24px_65px_rgba(20,20,20,.12)]"
         >
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-semibold uppercase text-[#9b3d1e]">How it works</p>
@@ -1687,7 +1705,7 @@ function JasonAILandingLinks() {
         <Link
           to="/jasonai/questions"
           data-descramble-hover="false"
-          className="group border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[8px_8px_0_#141414]"
+          className="group rounded-[1.75rem] border border-[#d9d2c3] bg-white p-6 transition-[border-color,box-shadow,transform] duration-200 hover:-translate-y-1 hover:border-[#141414] hover:shadow-[0_24px_65px_rgba(20,20,20,.12)]"
         >
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-semibold uppercase text-[#9b3d1e]">Questions</p>
@@ -1717,11 +1735,11 @@ function JasonAIPrivacyPolicy() {
         title="How JasonAI handles fieldwork communication."
         body="JasonAI is built for businesses where the work happens in the field and the context lives across calls, messages, emails, job notes, and handoffs. This policy explains what we collect, how we use it, and the controls you have."
       />
-      <section className="border-b border-[#d9d2c3] bg-white">
+      <section data-header-theme="light" className="border-b border-[#d9d2c3] bg-white">
         <div className="mx-auto max-w-7xl px-5 py-12 md:px-8 md:py-16">
           <div className="grid gap-5 md:grid-cols-3">
             {privacyHighlights.map((item, index) => (
-              <Reveal key={item.title} delay={index * 0.06} className="border border-[#d9d2c3] bg-[#fffaf0] p-5">
+              <Reveal key={item.title} delay={index * 0.06} className="rounded-[1.5rem] border border-[#d9d2c3] bg-[#fffaf0] p-5">
                 <Check className="h-5 w-5 text-[#1f5f7a]" />
                 <h2 className="mt-4 text-2xl font-semibold leading-tight">{item.title}</h2>
                 <p className="mt-4 text-sm leading-7 text-[#4f463c]">{item.body}</p>
@@ -1730,7 +1748,7 @@ function JasonAIPrivacyPolicy() {
           </div>
         </div>
       </section>
-      <section className="border-b border-[#d9d2c3] bg-[#fffaf0]">
+      <section data-header-theme="light" className="border-b border-[#d9d2c3] bg-[#fffaf0]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:px-8 md:py-20 lg:grid-cols-[0.32fr_0.68fr]">
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <SectionLabel>Effective date</SectionLabel>
@@ -1741,7 +1759,7 @@ function JasonAIPrivacyPolicy() {
             </p>
             <a
               href="mailto:info@b2w-ai.com?subject=JasonAI%20Privacy%20Request"
-              className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+              className="mt-7 inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
             >
               Contact privacy
               <ArrowRight className="h-4 w-4" />
@@ -1749,7 +1767,7 @@ function JasonAIPrivacyPolicy() {
           </aside>
           <div className="space-y-5">
             {privacySections.map((section) => (
-              <Reveal key={section.title} className="border border-[#d9d2c3] bg-white p-6 md:p-8">
+              <Reveal key={section.title} className="rounded-[1.75rem] border border-[#d9d2c3] bg-white p-6 md:p-8">
                 <h2 className="text-2xl font-semibold leading-tight text-[#141414]">{section.title}</h2>
                 <div className="mt-5 space-y-4">
                   {section.body.map((paragraph) => (
@@ -1795,7 +1813,7 @@ function JasonAIFooter({ page }: { page: 'landing' | 'pricing' | 'how-it-works' 
             <ScrambleText text="How it works" />
           </Link>
           <Link
-            to="/jasonai/pricing"
+            to="/pricing"
             data-descramble-hover="true"
             aria-current={page === 'pricing' ? 'page' : undefined}
             className="hover:text-white aria-[current=page]:text-white"
@@ -1907,66 +1925,23 @@ export default function JasonAIPage({
         description={seoByPage.description}
         canonicalPath={seoByPage.canonicalPath}
       />
-      <div ref={pageRootRef} className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[#fffaf0] text-[#141414]">
-        <header
-          className={`sticky -top-px z-40 bg-[#fffaf0]/95 pt-[env(safe-area-inset-top)] backdrop-blur transition-[border-color,box-shadow] duration-300 ${
-            hasScrolled ? 'border-b border-[#d9d2c3] shadow-sm' : 'border-b border-transparent'
-          }`}
-        >
-          <Link
-            to="/jasonai/pricing"
-            className="block border-b border-[#141414] bg-[#1f5f7a] px-4 py-2 text-center text-xs font-semibold text-white transition-colors hover:bg-[#174b61] sm:text-sm"
-          >
-            <span className="text-[#dff5ff]">Pre-launch offer:</span>{' '}
-            <del className="text-white/55">$99</del> <ins className="no-underline">$25/month</ins> for the first year
-            <span className="hidden sm:inline"> · </span>
-            <span className="block text-white/72 sm:inline">
-              <del>$2,000</del> <ins className="no-underline">$0 setup</ins>
-            </span>
-          </Link>
-          <div
-            className={`mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 transition-[padding] duration-300 sm:px-5 md:px-8 ${
-              hasScrolled ? 'py-2.5' : 'py-3.5 md:py-5'
-            }`}
-          >
-            <JasonAILockup />
-            <div className="flex items-center gap-2">
-              <Link
-                to="/jasonai/pricing"
-                data-descramble-hover="true"
-                aria-current={page === 'pricing' ? 'page' : undefined}
-                className={`hidden min-h-9 items-center justify-center px-3 py-2 text-xs font-semibold underline-offset-4 hover:text-[#141414] hover:underline sm:inline-flex sm:min-h-10 sm:px-4 sm:text-sm ${
-                  page === 'pricing' ? 'text-[#141414] underline' : 'text-[#4f463c]'
-                }`}
-              >
-                Determine Your ROI
-              </Link>
-              <button
-                type="button"
-                data-descramble-hover="true"
-                onClick={() => setIsBookingOpen(true)}
-                className="inline-flex min-h-9 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-3 py-2 text-xs font-semibold text-white hover:bg-[#2f2a24] sm:min-h-10 sm:px-4 sm:text-sm"
-              >
-                <span className="hidden sm:inline">Book review</span>
-                <span className="sm:hidden">Review</span>
-                <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              </button>
-            </div>
-          </div>
-        </header>
+      <LiveSiteHeader followPageTheme />
+      <div ref={pageRootRef} className="min-h-screen w-full max-w-[100vw] overflow-x-clip bg-[#f3efe6] text-[#141414]">
 
         <main>
           {page === 'landing' ? (
             <>
-              <section className="border-b border-[#d9d2c3]">
-                <div className="mx-auto grid max-w-7xl gap-12 px-5 py-12 md:px-8 md:py-24 lg:grid-cols-[minmax(0,0.9fr)_minmax(22rem,0.7fr)] lg:items-center">
+              <section data-header-theme="light" className="relative overflow-hidden border-b border-[#d9b7a5] bg-[#fff7ef] text-[#14110f]">
+                <div className="pointer-events-none absolute inset-0 opacity-55 [background-image:linear-gradient(rgba(20,17,15,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(20,17,15,.045)_1px,transparent_1px)] [background-size:72px_72px]" />
+                <div className="pointer-events-none absolute -right-24 top-0 h-[34rem] w-[34rem] rounded-full bg-[#f4b28c]/50 blur-[120px]" />
+                <div className="relative mx-auto grid max-w-7xl gap-12 px-5 pb-20 pt-36 md:px-8 md:pb-28 md:pt-44 lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.7fr)] lg:items-center">
                   <div>
-                    <p className="text-sm font-semibold uppercase text-[#9b3d1e]">Accepting new accounts</p>
-                    <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.02] text-[#141414] md:text-7xl">
+                    <div className="flex flex-wrap items-center gap-3"><span className="rounded-full border border-[#b24a24]/30 bg-[#f4b28c]/20 px-3 py-1.5 font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#a74422]">JasonAI · Admin · Available now</span><span className="font-mono text-[9px] uppercase tracking-[0.18em] text-[#6b6256]">Search approved work messages</span></div>
+                    <h1 className="mt-8 max-w-5xl text-[clamp(3.5rem,7.7vw,7.4rem)] font-medium leading-[0.89] tracking-[-0.07em] text-[#14110f]">
                       <ScrambleText text="Built around your business. Not the other way around." />
                     </h1>
                     <Reveal delay={0.18}>
-                      <p className="mt-7 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
+                      <p className="mt-8 max-w-3xl text-lg leading-8 text-[#4f463c] md:text-xl md:leading-9">
                         JasonAI works through WhatsApp to search the business communication you approve and turn long
                         job threads into useful summaries. No new dashboard. Action extraction and status reporting
                         remain clearly labeled as in development.
@@ -1977,7 +1952,7 @@ export default function JasonAIPage({
                         type="button"
                         data-descramble-hover="true"
                         onClick={() => setIsBookingOpen(true)}
-                        className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#f4b28c] px-6 py-3 text-sm font-semibold text-[#14110f] transition hover:bg-[#ffd7bd]"
                       >
                         Book Your Free 30-Minute Business Review
                         <ArrowRight className="h-4 w-4" />
@@ -1986,16 +1961,16 @@ export default function JasonAIPage({
                         type="button"
                         data-descramble-hover="true"
                         onClick={() => setIsWaitlistOpen(true)}
-                        className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
+                        className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#14110f]/25 bg-white/60 px-6 py-3 text-sm font-semibold text-[#14110f] transition hover:bg-white"
                       >
-                        Get the pre-launch offer
+                        Get the founding offer
                         <ArrowRight className="h-4 w-4" />
                       </button>
                     </Reveal>
                     <Reveal className="mt-9 hidden gap-3 text-sm font-semibold text-[#4f463c] sm:grid sm:grid-cols-3" delay={0.36}>
                       {['Texts', 'Email', 'WhatsApp and calls'].map((item) => (
-                        <div key={item} className="flex items-center gap-2 border-l border-[#9b3d1e] pl-3">
-                          <Check className="h-4 w-4 text-[#1f5f7a]" />
+                        <div key={item} className="flex items-center gap-2 border-l border-[#f4b28c]/45 pl-3">
+                          <Check className="h-4 w-4 text-[#f4b28c]" />
                           {item}
                         </div>
                       ))}
@@ -2009,7 +1984,7 @@ export default function JasonAIPage({
 
               <ProblemCostsSection />
 
-              <section id="what-jasonai-does" className="scroll-mt-24 border-b border-[#d9d2c3] bg-white">
+              <section id="what-jasonai-does" data-header-theme="light" className="scroll-mt-24 border-b border-[#d9d2c3] bg-white">
                 <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
                   <div className="mx-auto max-w-3xl text-center">
                     <SectionLabel>What JasonAI does</SectionLabel>
@@ -2038,7 +2013,9 @@ export default function JasonAIPage({
           ) : null}
 
           {page === 'pricing' ? (
-            <JasonAIPricingCalculator onBookReview={() => setIsBookingOpen(true)} />
+            <div data-header-theme="light" className="pt-24">
+              <JasonAIPricingCalculator onBookReview={() => setIsBookingOpen(true)} />
+            </div>
           ) : null}
 
           {page === 'how-it-works' ? (
@@ -2066,17 +2043,17 @@ export default function JasonAIPage({
 
           {page !== 'privacy' && page !== 'pricing' ? (
             <>
-              <section className="border-b border-[#d9d2c3]">
+              <section data-header-theme="light" className="border-b border-[#d9d2c3]">
                 <div className="mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
                   <div className="max-w-3xl">
-                    <SectionLabel>Pre-launch contractors</SectionLabel>
+                    <SectionLabel>Founding contractor accounts</SectionLabel>
                     <h2 className="mt-3 text-4xl font-semibold leading-tight md:text-5xl">
-                      <ScrambleText text="We are onboarding a small group of contractor businesses before launch." />
+                      <ScrambleText text="We are onboarding a small group of contractor businesses now." />
                     </h2>
                   </div>
                   <div className="mt-10 grid gap-4 md:grid-cols-3">
                     {testimonials.map((testimonial, index) => (
-                      <Reveal key={testimonial.source} delay={index * 0.08} className="border border-[#d9d2c3] bg-white p-5">
+                      <Reveal key={testimonial.source} delay={index * 0.08} className="rounded-[1.5rem] border border-[#d9d2c3] bg-white p-5">
                         <figure>
                         <p className="text-lg leading-8 text-[#2f2a24]">"{testimonial.quote}"</p>
                         <figcaption className="mt-5 text-sm font-semibold text-[#9b3d1e]">{testimonial.source}</figcaption>
@@ -2087,7 +2064,7 @@ export default function JasonAIPage({
                 </div>
               </section>
 
-              <section className="bg-[#fffaf0]">
+              <section data-header-theme="light" className="bg-[#fffaf0]">
                 <div className="mx-auto max-w-5xl px-5 py-16 text-center md:px-8 md:py-24">
                   <p className="text-sm font-semibold uppercase text-[#9b3d1e]">A B2W Product</p>
                   <h2 className="mt-4 text-4xl font-semibold leading-tight md:text-6xl">
@@ -2104,7 +2081,7 @@ export default function JasonAIPage({
                       type="button"
                       data-descramble-hover="true"
                       onClick={() => setIsBookingOpen(true)}
-                      className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+                      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-5 py-3 text-sm font-semibold text-white hover:bg-[#2f2a24]"
                     >
                       Book My Free Business Review
                       <ArrowRight className="h-4 w-4" />
@@ -2113,9 +2090,9 @@ export default function JasonAIPage({
                       type="button"
                       data-descramble-hover="true"
                       onClick={() => setIsWaitlistOpen(true)}
-                      className="inline-flex min-h-12 items-center justify-center gap-2 border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
+                      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-[#141414] bg-transparent px-5 py-3 text-sm font-semibold text-[#141414] hover:bg-white"
                     >
-                      Get the pre-launch offer
+                      Get the founding offer
                       <ArrowRight className="h-4 w-4" />
                     </button>
                   </Reveal>
@@ -2125,23 +2102,25 @@ export default function JasonAIPage({
           ) : null}
         </main>
 
-        <div ref={footerRef}>
-          <JasonAIFooter page={page} />
+        <div
+          ref={footerRef}
+          data-header-theme={page === 'pricing' ? 'dark' : 'light'}
+          className={page === 'pricing' ? 'bg-[#141414]' : 'bg-[#fffaf0]'}
+        >
+          <HomeSiteFooter className={page === 'pricing' ? 'text-white/60' : 'text-[#172019]/65'} />
         </div>
 
         {hasScrolled && !isFooterApproaching && page !== 'privacy' && page !== 'pricing' ? (
           <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 flex justify-center px-4 md:bottom-10">
-            <div className="pointer-events-auto flex items-center gap-2 border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
-              <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">
-                <del className="mr-1">$99</del> <ins className="no-underline">$25/month</ins> for your first year
-              </span>
+            <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-[#d9d2c3] bg-white/92 p-2 shadow-[0_18px_60px_rgba(20,20,20,0.14)] backdrop-blur-md">
+              <span className="hidden px-2 text-sm font-semibold text-[#6b6256] sm:inline">Pre-Launch Discount Offer</span>
               <button
                 type="button"
                 data-descramble-hover="true"
-                onClick={() => setIsWaitlistOpen(true)}
-                className="inline-flex min-h-10 items-center justify-center gap-2 border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
+                onClick={() => setIsBookingOpen(true)}
+                className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-[#141414] bg-[#141414] px-4 py-2 text-sm font-semibold text-white hover:bg-[#2f2a24]"
               >
-                Get pre-launch access
+                Book a Free Demo
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>

@@ -243,7 +243,7 @@ export function useJasonAITracking() {
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
   const pendingChangeRef = useRef<ProgressChange | null>(null);
-  const syncTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const syncTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const stored = readTracking();

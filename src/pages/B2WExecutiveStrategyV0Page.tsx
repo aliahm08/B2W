@@ -764,13 +764,13 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
                 description="The assistant, document maker, and management system are components of one product—not separate bets."
               />
               <div className="mt-10 grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr_auto_1fr] md:items-stretch">
-                {[
+                {([
                   ['WhatsApp', 'Assistant', MessageCircle],
                   ['Business', 'Context', Building2],
                   ['Document +', 'Workflow skills', FileText],
                   ['Approved', 'Actions', FileCheck2],
                   ['Project +', 'Contract systems', Layers3],
-                ].map(([eyebrow, title, Icon], index) => (
+                ] as const).map(([eyebrow, title, Icon], index) => (
                   <div className="contents" key={String(title)}>
                     {index > 0 ? <FlowArrow /> : null}
                     <div className={`rounded-2xl border p-5 ${
@@ -846,14 +846,14 @@ function StrategyWorkspace({ onLock }: { onLock: () => void }) {
               />
               <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center">
                 <div className="grid grid-cols-2 gap-3">
-                  {[
+                  {([
                     ['WhatsApp', 'Conversations', MessageCircle],
                     ['Google Drive', 'Documents', FileText],
                     ['PDFs', 'Contracts', FileCheck2],
                     ['Spreadsheets', 'Project status', BarChart3],
                     ['CRM', 'Customers', UsersRound],
                     ['Accounting', 'Financials', CircleDollarSign],
-                  ].map(([title, label, Icon]) => (
+                  ] as const).map(([title, label, Icon]) => (
                     <div key={String(title)} className="rounded-2xl border border-[#223C33]/12 bg-white/60 p-4">
                       <Icon className="h-4 w-4 text-[#997022]" />
                       <p className="mt-5 text-sm font-semibold">{title}</p>

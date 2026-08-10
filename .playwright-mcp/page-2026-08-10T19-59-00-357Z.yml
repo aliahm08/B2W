@@ -1,0 +1,265 @@
+- main [ref=e4]:
+  - main [ref=e6]:
+    - generic [ref=e8]:
+      - link "B2W home" [ref=e9] [cursor=pointer]:
+        - /url: /
+      - navigation "Site navigation" [ref=e12]:
+        - button [ref=e14]:
+          - generic "Products" [ref=e15]:
+            - generic [ref=e17]:
+              - generic [ref=e18]: P
+              - generic [ref=e20]: r
+              - generic [ref=e22]: o
+              - generic [ref=e24]: d
+              - generic [ref=e26]: u
+              - generic [ref=e28]: c
+              - generic [ref=e30]: t
+              - generic [ref=e32]: s
+        - button [ref=e37]:
+          - generic "Solutions" [ref=e38]:
+            - generic [ref=e40]:
+              - generic [ref=e41]: S
+              - generic [ref=e43]: o
+              - generic [ref=e45]: l
+              - generic [ref=e47]: u
+              - generic [ref=e49]: t
+              - generic [ref=e51]: i
+              - generic [ref=e53]: o
+              - generic [ref=e55]: "n"
+              - generic [ref=e57]: s
+        - link [ref=e61] [cursor=pointer]:
+          - /url: /pricing
+          - generic "Pricing" [ref=e62]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: P
+              - generic [ref=e67]: r
+              - generic [ref=e69]: i
+              - generic [ref=e71]: c
+              - generic [ref=e73]: i
+              - generic [ref=e75]: "n"
+              - generic [ref=e77]: g
+      - generic [ref=e79]:
+        - link [ref=e80] [cursor=pointer]:
+          - /url: /about
+          - generic "About" [ref=e81]:
+            - generic [ref=e83]:
+              - generic [ref=e84]: A
+              - generic [ref=e86]: b
+              - generic [ref=e88]: o
+              - generic [ref=e90]: u
+              - generic [ref=e92]: t
+        - link [ref=e94] [cursor=pointer]:
+          - /url: https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=b24a24
+          - generic "Book a demo" [ref=e96]:
+            - generic [ref=e97]:
+              - generic [ref=e98]:
+                - generic [ref=e99]: B
+                - generic [ref=e101]: o
+                - generic [ref=e103]: o
+                - generic [ref=e105]: k
+              - generic [ref=e107]: a
+              - generic [ref=e110]:
+                - generic [ref=e111]: d
+                - generic [ref=e113]: e
+                - generic [ref=e115]: m
+                - generic [ref=e117]: o
+    - generic [ref=e122]:
+      - heading [level=1] [ref=e123]:
+        - text: We build
+        - link "tools" [ref=e124] [cursor=pointer]:
+          - /url: "#products"
+        - text: for
+        - link "contractors" [ref=e125] [cursor=pointer]:
+          - /url: /general-contractors
+        - text: to
+        - link "succeed." [ref=e126] [cursor=pointer]:
+          - /url: https://calendly.com/b2w-ai-info/30min
+      - generic [ref=e127]:
+        - button "Find a Solution" [ref=e128]
+        - link "See Products" [ref=e131] [cursor=pointer]:
+          - /url: "#products"
+      - generic [ref=e134]:
+        - article [ref=e135]:
+          - link "Contractor reading a source-aware JasonAI answer on a phone. Available now JasonAI Find approved job context from the phone your team already uses." [ref=e136] [cursor=pointer]:
+            - /url: /jasonai
+            - generic [ref=e137]:
+              - img "Contractor reading a source-aware JasonAI answer on a phone." [ref=e138]
+              - generic [ref=e139]: Available now
+            - generic [ref=e141]:
+              - paragraph [ref=e142]: JasonAI
+              - paragraph [ref=e143]: Find approved job context from the phone your team already uses.
+        - article [ref=e146]:
+          - link "Project manager speaking to Clara on a rugged job-site tablet. Concept phase Clara Create and review project documents from a job-site tablet." [ref=e147] [cursor=pointer]:
+            - /url: /clara
+            - generic [ref=e148]:
+              - img "Project manager speaking to Clara on a rugged job-site tablet." [ref=e149]
+              - generic [ref=e150]: Concept phase
+            - generic [ref=e152]:
+              - paragraph [ref=e153]: Clara
+              - paragraph [ref=e154]: Create and review project documents from a job-site tablet.
+    - generic [ref=e157]:
+      - article [ref=e158]:
+        - generic [ref=e160]:
+          - generic [ref=e161]: JasonAI · Available now
+          - generic [ref=e165]:
+            - heading "Turn daily messages into follow-up clarity." [level=2] [ref=e166]
+            - generic [ref=e167]:
+              - paragraph [ref=e168]: A WhatsApp-ready assistant that searches approved work communication and turns long job conversations into concise summaries.
+              - link "Explore JasonAI" [ref=e169] [cursor=pointer]:
+                - /url: /jasonai
+      - article [ref=e172]:
+        - generic [ref=e174]:
+          - generic [ref=e175]: Clara · Concept phase
+          - generic [ref=e180]:
+            - heading "Explore a concept for organized project documents." [level=2] [ref=e181]
+            - generic [ref=e182]:
+              - paragraph [ref=e183]: A customized AI document-workspace concept for turning approved project inputs into reviewable scopes, estimates, and reports.
+              - link "Explore Clara concept" [ref=e184] [cursor=pointer]:
+                - /url: /clara
+      - article [ref=e187]:
+        - generic [ref=e190]:
+          - generic [ref=e192]:
+            - paragraph [ref=e193]: Solutions
+            - generic [ref=e194]: For general contractors
+          - generic [ref=e201]:
+            - generic [ref=e202]:
+              - heading [level=2] [ref=e203]:
+                - generic "Solutions for general contractors." [ref=e204]:
+                  - generic [ref=e205]:
+                    - generic [ref=e206]:
+                      - generic [ref=e207]: S
+                      - generic [ref=e209]: o
+                      - generic [ref=e211]: l
+                      - generic [ref=e213]: u
+                      - generic [ref=e215]: t
+                      - generic [ref=e217]: i
+                      - generic [ref=e219]: o
+                      - generic [ref=e221]: "n"
+                      - generic [ref=e223]: s
+                    - generic [ref=e225]:
+                      - generic [ref=e226]: f
+                      - generic [ref=e228]: o
+                      - generic [ref=e230]: r
+                    - generic [ref=e232]:
+                      - generic [ref=e233]: g
+                      - generic [ref=e235]: e
+                      - generic [ref=e237]: "n"
+                      - generic [ref=e239]: e
+                      - generic [ref=e241]: r
+                      - generic [ref=e243]: a
+                      - generic [ref=e245]: l
+                    - generic [ref=e247]:
+                      - generic [ref=e248]: c
+                      - generic [ref=e250]: o
+                      - generic [ref=e252]: "n"
+                      - generic [ref=e254]: t
+                      - generic [ref=e256]: r
+                      - generic [ref=e258]: a
+                      - generic [ref=e260]: c
+                      - generic [ref=e262]: t
+                      - generic [ref=e264]: o
+                      - generic [ref=e266]: r
+                      - generic [ref=e268]: s
+                      - generic [ref=e270]: .
+              - paragraph [ref=e272]: Explore the solutions, use cases, and AI workflows designed around how contractors already communicate and deliver work.
+            - generic [ref=e273]:
+              - tablist "Contractor solution paths" [ref=e274]:
+                - tab "Solutions" [selected] [ref=e275]
+                - tab "Use Cases" [ref=e276]
+                - tab "Workflows" [ref=e277]
+              - generic [ref=e278]:
+                - paragraph [ref=e284]: Solutions
+                - heading "Choose the right starting point." [level=3] [ref=e285]
+                - paragraph [ref=e286]: See how B2W supports trade businesses, contracting firms, and AEC companies with practical AI systems.
+                - list [ref=e287]:
+                  - listitem [ref=e288]: Trade businesses
+                  - listitem [ref=e289]: Contracting firms
+                  - listitem [ref=e290]: AEC companies
+                - generic [ref=e291]:
+                  - link "Explore contractor solutions" [ref=e292] [cursor=pointer]:
+                    - /url: /industries/general-contracting
+                  - generic [ref=e295]:
+                    - button "Previous solution path" [ref=e296]
+                    - button "Next solution path" [ref=e299]
+    - generic [ref=e303]:
+      - generic [ref=e304]:
+        - generic [ref=e305]:
+          - link "B2W home" [ref=e306] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e308]: B2W
+          - paragraph [ref=e309]: B2W builds practical AI products for General Contracting businesses. JasonAI turns approved project communication into clear, reviewable answers in WhatsApp.
+          - link "info@b2w-ai.com" [ref=e310] [cursor=pointer]:
+            - /url: mailto:info@b2w-ai.com
+        - generic [ref=e311]:
+          - generic [ref=e312]:
+            - paragraph [ref=e313]: JasonAI
+            - list [ref=e314]:
+              - listitem [ref=e315]:
+                - link "Assistant" [ref=e316] [cursor=pointer]:
+                  - /url: /jasonai
+              - listitem [ref=e317]:
+                - link "How it works" [ref=e318] [cursor=pointer]:
+                  - /url: /jasonai/how-it-works
+              - listitem [ref=e319]:
+                - link "Questions" [ref=e320] [cursor=pointer]:
+                  - /url: /jasonai/questions
+              - listitem [ref=e321]:
+                - link "Privacy" [ref=e322] [cursor=pointer]:
+                  - /url: /jasonai/privacy
+          - generic [ref=e323]:
+            - paragraph [ref=e324]: Products
+            - list [ref=e325]:
+              - listitem [ref=e326]:
+                - link "Workflows" [ref=e327] [cursor=pointer]:
+                  - /url: /products/workflows
+              - listitem [ref=e328]:
+                - link "Document generation" [ref=e329] [cursor=pointer]:
+                  - /url: /resources#document-library
+              - listitem [ref=e330]:
+                - link "Pricing" [ref=e331] [cursor=pointer]:
+                  - /url: /products/pricing
+          - generic [ref=e332]:
+            - paragraph [ref=e333]: General contractors
+            - list [ref=e334]:
+              - listitem [ref=e335]:
+                - link "Role-based solutions" [ref=e336] [cursor=pointer]:
+                  - /url: /general-contractors
+              - listitem [ref=e337]:
+                - link "Use cases" [ref=e338] [cursor=pointer]:
+                  - /url: /solutions/business-use-cases
+              - listitem [ref=e339]:
+                - link "AI workflows" [ref=e340] [cursor=pointer]:
+                  - /url: /solutions/ai-workflows
+          - generic [ref=e341]:
+            - paragraph [ref=e342]: Resources
+            - list [ref=e343]:
+              - listitem [ref=e344]:
+                - link "Guides" [ref=e345] [cursor=pointer]:
+                  - /url: /resources/guides
+              - listitem [ref=e346]:
+                - link "Tools" [ref=e347] [cursor=pointer]:
+                  - /url: /resources/tools
+              - listitem [ref=e348]:
+                - link "Demonstrations" [ref=e349] [cursor=pointer]:
+                  - /url: /resources/demonstrations
+              - listitem [ref=e350]:
+                - link "Case Studies" [ref=e351] [cursor=pointer]:
+                  - /url: /resources/case-studies
+          - generic [ref=e352]:
+            - paragraph [ref=e353]: Company
+            - list [ref=e354]:
+              - listitem [ref=e355]:
+                - link "About" [ref=e356] [cursor=pointer]:
+                  - /url: /about
+              - listitem [ref=e357]:
+                - link "Contact" [ref=e358] [cursor=pointer]:
+                  - /url: /contact
+              - listitem [ref=e359]:
+                - link "Internal workspace" [ref=e360] [cursor=pointer]:
+                  - /url: /internal
+              - listitem [ref=e361]:
+                - link "JasonAI privacy" [ref=e362] [cursor=pointer]:
+                  - /url: /jasonai/privacy
+      - generic [ref=e363]:
+        - paragraph [ref=e364]: © 2026 B2W LLC. All rights reserved.
+        - paragraph [ref=e365]: Ask clearly · Find context · Move work forward

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Share2, Home, Layers, Sparkles, Send, Users, Activity, Lock, MessageSquare, CircleCheck, ExternalLink } from 'lucide-react';
+import { ArrowRight, ArrowLeft, FileText, Mic, CheckSquare, Square, Share2, Home, Layers, Sparkles, Send, Users, Activity, Lock, MessageSquare, CircleCheck } from 'lucide-react';
 import Seo from '../../components/Seo';
 import B2WLogoMark from '../../components/B2WLogoMark';
+import { HomeSiteFooter } from '../../components/HomeSiteChrome';
 
 const voiceNote =
   'I am repairing a 1200 square foot living room with 6 windows, 2 archways, and one door to the basement staircase. The ceilings are approximately 13 feet tall, and there are 12 spot lights. We need to replace all window frames, caulk all seals and fix the glass on 3 windows. The carpeting needs to be removed, trashed, and the original wood flooring needs to be sanded, buffed, and polished assuming no damage.';
@@ -132,7 +132,7 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
       {desktopPortal && createPortal(
         <>
           {/* Desktop Version: Horizontal Navigation Pill */}
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="hidden md:flex pointer-events-auto items-center gap-1 rounded-full border border-white/10 bg-black/60 p-1 backdrop-blur-md shadow-2xl">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="hidden md:flex pointer-events-auto items-center gap-1 rounded-full border border-[#7e4967]/15 bg-white/82 p-1 backdrop-blur-xl shadow-[0_12px_40px_rgba(61,31,51,0.14)]">
             {navItems.map((item) => (
               <button
                 key={item.step}
@@ -140,7 +140,7 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
                 className={`rounded-full px-4 py-1.5 text-[11px] font-semibold transition ${
                   currentStep === item.step
                     ? 'bg-[#f5dce8] text-black shadow-sm'
-                    : 'text-neutral-400 hover:text-white'
+                    : 'text-[#7e4967] hover:text-[#3d1f33]'
                 }`}
               >
                 {item.label}
@@ -149,12 +149,35 @@ function SectionNavigator({ currentStep, setStep }: { currentStep: number, setSt
           </motion.div>
 
           {/* Mobile Version: Same Nav pill containing ONLY the active step */}
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex md:hidden pointer-events-auto items-center rounded-full border border-[#e8cbd9]/20 bg-black/60 px-4 py-1.5 backdrop-blur-md shadow-2xl text-[11px] font-bold text-[#f5dce8]">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex md:hidden pointer-events-auto items-center rounded-full border border-[#7e4967]/15 bg-white/82 px-4 py-1.5 backdrop-blur-xl shadow-2xl text-[11px] font-bold text-[#3d1f33]">
             {currentLabel}
           </motion.div>
         </>,
         desktopPortal
       )}
+
+      {!desktopPortal ? (
+        <motion.nav
+          aria-label="Clara demonstration sections"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed left-1/2 top-24 z-40 flex -translate-x-1/2 items-center gap-1 rounded-full border border-[#7e4967]/15 bg-white/85 p-1 shadow-2xl backdrop-blur-xl"
+        >
+          {navItems.map((item) => (
+            <button
+              key={item.step}
+              onClick={() => setStep(item.step)}
+              className={`rounded-full px-4 py-1.5 text-[11px] font-semibold transition ${
+                currentStep === item.step
+                  ? 'bg-[#f5dce8] text-black shadow-sm'
+                  : 'text-[#7e4967] hover:text-[#3d1f33]'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </motion.nav>
+      ) : null}
 
       {mobilePortal && createPortal(
         <div className="flex md:hidden flex-col gap-4 py-4 w-full">
@@ -194,7 +217,7 @@ function Section0Hero({ onNext }: { onNext: () => void }) {
       <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.08 }} className="mt-6 text-[3rem] font-medium leading-[1.02] md:text-[5.5rem] md:leading-[0.94]">
         Estimate your project in seconds.
       </motion.h1>
-      <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.16 }} className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-neutral-400 md:text-xl">
+      <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.16 }} className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-[#7e4967] md:text-xl">
         Record a field note. Clara turns it into an organized scope, then generates a line-item estimate with contingency.
       </motion.p>
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.24 }} className="mt-10 flex flex-wrap justify-center items-center gap-4">
@@ -203,7 +226,7 @@ function Section0Hero({ onNext }: { onNext: () => void }) {
             <MiniRecordGlyph /> See How
           </span>
         </button>
-        <button onClick={onNext} className="relative z-[110] inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white/10 px-6 py-3 text-sm font-medium text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition-[box-shadow,opacity] duration-200 hover:bg-white/15 hover:shadow-[0_14px_38px_rgba(255,255,255,0.14)]">
+        <button onClick={onNext} className="relative z-[110] inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white px-6 py-3 text-sm font-medium text-[#3d1f33] shadow-[0_0_0_1px_rgba(126,73,103,0.2)] transition-[box-shadow,background-color] duration-200 hover:bg-[#fbf0f5] hover:shadow-[0_14px_38px_rgba(126,73,103,0.14)]">
           Test Demo <ArrowRight className="h-4 w-4" />
         </button>
       </motion.div>
@@ -227,8 +250,8 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
   return (
     <div className="flex w-full h-full flex-col items-center justify-center px-5 py-4 max-w-5xl">
       <div className="w-full text-center">
-        <h2 className="text-3xl font-medium text-white md:text-5xl">Speak your scope.</h2>
-        <p className="mt-2 text-neutral-400">Clara transcribes and tags your voice note in real time.</p>
+        <h2 className="text-3xl font-medium text-[#3d1f33] md:text-5xl">Speak your scope.</h2>
+        <p className="mt-2 text-[#7e4967]">Clara transcribes and tags your voice note in real time.</p>
       </div>
 
       <div className="w-full flex-1 flex flex-col justify-center my-3 max-h-[55vh]">
@@ -287,15 +310,15 @@ function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
   return (
     <div className="flex w-full flex-col items-center justify-center px-5 py-2 max-w-5xl">
       <div className="w-full text-center shrink-0 mb-4">
-        <h2 className="text-3xl font-medium text-white md:text-4xl">Organizing Scope...</h2>
-        <p className="mt-1 text-sm text-neutral-400">Context and line items mapped seamlessly.</p>
+        <h2 className="text-3xl font-medium text-[#3d1f33] md:text-4xl">Organizing Scope...</h2>
+        <p className="mt-1 text-sm text-[#7e4967]">Context and line items mapped seamlessly.</p>
       </div>
       <div className="w-full mb-4">
         <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
           {organizedScopeData.map((category, index) => {
             const isInfo = category.type === 'info';
             return (
-              <motion.div key={category.label} initial={{ opacity: 0, y: 15, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, delay: index * 0.1 }} className={`rounded-[1rem] border p-4 shadow-xl ${isInfo ? 'border-[#d9a9c2]/30 bg-[#d9a9c2]/5' : 'border-sky-500/20 bg-sky-500/5'}`}>
+              <motion.div key={category.label} initial={{ opacity: 0, y: 15, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, delay: index * 0.1 }} className={`rounded-[1rem] border p-4 shadow-xl ${isInfo ? 'border-[#d9a9c2]/30 bg-[#2b1724]' : 'border-sky-500/20 bg-[#251c28]'}`}>
                 <h3 className={`text-[11px] font-bold uppercase tracking-wider ${isInfo ? 'text-[#d9a9c2]' : 'text-sky-400'}`}>{category.label}</h3>
                 <ul className="mt-2 space-y-1">
                   {category.items.map((item, i) => (
@@ -655,14 +678,15 @@ export default function SolutionsLandingPage() {
 
   return (
     <>
-      <Seo title="Clara Project Estimates" description="Clara turns voice notes into organized project scopes and line-item estimates with contingency." canonicalPath="/clara" />
+      <Seo title="Clara Project Estimate Workflow" description="See how Clara turns a voice note into an organized project scope and a reviewable line-item estimate." canonicalPath="/solutions/ai-workflows/project-estimates" />
 
       {/* Section Navigator dynamically injected into SolutionsNavbar */}
       <SectionNavigator currentStep={currentStep} setStep={scrollToStep} />
 
       {/* Hero (Section 0) sits natively at the top of the page flow */}
       <div
-        className={`relative w-full min-h-[88vh] flex items-center justify-center bg-[#0a0608] text-white pt-10 ${currentStep === 0 ? 'z-10' : 'z-0'}`}
+        data-header-theme="light"
+        className={`relative w-full min-h-[88vh] flex items-center justify-center bg-[#fff8fb] text-[#3d1f33] pt-10 ${currentStep === 0 ? 'z-10' : 'z-0'}`}
         style={{
           transform: `translate3d(0, -${heroExitProgress * heroToCaptureOverlapVh}vh, 0)`,
           willChange: 'transform',
@@ -673,7 +697,7 @@ export default function SolutionsLandingPage() {
 
       {/* Second Section Frame: Interactive container (Steps 1 to 3) */}
       <div ref={containerRef} className={`relative w-full ${currentStep === 0 ? 'z-0' : 'z-20'}`} style={{ height: '240vh', marginTop: `-${heroToCaptureOverlap}` }}>
-        <div className={`sticky top-20 left-0 right-0 h-[calc(100vh-80px)] overflow-hidden flex items-center justify-center ${currentStep === 0 ? 'pointer-events-none bg-transparent' : 'bg-[#0a0608]'}`}>
+        <div data-header-theme="light" className={`sticky top-20 left-0 right-0 h-[calc(100vh-80px)] overflow-hidden flex items-center justify-center ${currentStep === 0 ? 'pointer-events-none bg-transparent' : 'bg-[#f8edf3]'}`}>
           <div className="relative w-full h-full flex items-center justify-center">
             <AnimatePresence mode="wait">
               {currentStep === 1 && (
@@ -700,7 +724,7 @@ export default function SolutionsLandingPage() {
                 className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto"
               >
                 <div className="w-full text-center shrink-0 mb-4">
-                  <h2 className="text-3xl font-medium text-white md:text-4xl">Your estimate.</h2>
+                  <h2 className="text-3xl font-medium text-[#3d1f33] md:text-4xl">Your estimate.</h2>
                 </div>
 
                 <motion.div
@@ -727,8 +751,8 @@ export default function SolutionsLandingPage() {
                     className="absolute inset-0 flex flex-col items-center justify-center px-5 py-4 max-w-5xl mx-auto"
                   >
                     <div className="w-full text-center shrink-0 mb-4 px-4">
-                      <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
-                      <p className="mt-2 text-neutral-400 text-xs max-w-2xl mx-auto leading-relaxed">
+                      <h2 className="text-3xl font-medium text-[#3d1f33] md:text-4xl">Your Estimate lives in the browser.</h2>
+                      <p className="mt-2 text-[#7e4967] text-xs max-w-2xl mx-auto leading-relaxed">
                         Generated from your pricing library and based on leading online suppliers. Line items can be toggled on/off and quantities can be edited.
                       </p>
                     </div>
@@ -760,8 +784,8 @@ export default function SolutionsLandingPage() {
                     className="absolute inset-0 flex flex-col items-center justify-center px-6 py-4 max-w-7xl mx-auto overflow-y-auto"
                   >
                     <div className="w-full text-center shrink-0 mb-4 px-4">
-                      <h2 className="text-3xl font-medium text-white md:text-4xl">Your Estimate lives in the browser.</h2>
-                      <p className="mt-2 text-neutral-400 text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
+                      <h2 className="text-3xl font-medium text-[#3d1f33] md:text-4xl">Your Estimate lives in the browser.</h2>
+                      <p className="mt-2 text-[#7e4967] text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
                         Generated from your pricing library and based on leading online suppliers. Line items can be toggled on/off and quantities can be edited.
                       </p>
                     </div>
@@ -944,7 +968,7 @@ export default function SolutionsLandingPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8 }}
                         href="mailto:info@b2w-ai.com?subject=B2W%20Clara%20Inquiry"
-                        className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white/10 px-8 py-3 text-sm font-bold text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)] transition hover:bg-white/15"
+                        className="relative inline-flex min-h-12 items-center gap-2 overflow-hidden rounded-full bg-white px-8 py-3 text-sm font-bold text-[#3d1f33] shadow-[0_0_0_1px_rgba(126,73,103,0.2)] transition hover:bg-[#fbf0f5]"
                       >
                         Get in Touch
                       </motion.a>
@@ -958,30 +982,9 @@ export default function SolutionsLandingPage() {
         </div>
       </div>
 
-      {/* Footer Block */}
-      <footer className="w-full border-t border-[#e8cbd9]/10 bg-[#0a0608] text-white py-12 relative z-[60] px-6">
-        <div className="mx-auto max-w-7xl flex flex-col items-center justify-between gap-6 sm:flex-row">
-          <div>
-            <h3 className="text-base font-semibold tracking-tight text-white">
-              <Link to="/" className="b2w-wordmark underline-offset-4 transition-colors hover:text-[#f5dce8] hover:underline">
-                B2W LLC
-              </Link>
-            </h3>
-            <p className="text-xs text-neutral-500 mt-2">&copy; {new Date().getFullYear()} All rights reserved.</p>
-          </div>
-          <div className="flex items-center gap-6 text-xs text-neutral-400">
-            <a href="mailto:info@b2w-ai.com?subject=Clara%20Inquiry" className="hover:text-[#f5dce8] transition-colors">
-              Contact Support
-            </a>
-            <a href="https://chat.b2w-ai.com" target="_blank" rel="noreferrer" className="hover:text-[#f5dce8] transition-colors">
-              Try Clara App
-            </a>
-            <Link to="/jasonai" className="inline-flex items-center gap-1.5 text-[11px] text-neutral-500 hover:text-[#f5dce8] transition-colors">
-              Get JasonAI <ExternalLink className="h-3 w-3" />
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <div data-header-theme="light" className="relative z-[60] border-t border-[#e8cbd9]/50 bg-[#f8edf3]">
+        <HomeSiteFooter className="text-[#3d1f33]/65" />
+      </div>
     </>
   );
 }

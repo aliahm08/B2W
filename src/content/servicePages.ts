@@ -6,7 +6,7 @@ export type ServicePageContent = {
   summary: string;
   outcomes: string[];
   scope: string[];
-  preselectedProjectAreas: ('Marketing' | 'Financials' | 'Operations')[];
+  preselectedProjectAreas: ('Growth' | 'Optimization' | 'Due Diligence')[];
 };
 
 export const servicePageContent: Record<string, ServicePageContent> = {
@@ -29,7 +29,7 @@ export const servicePageContent: Record<string, ServicePageContent> = {
       'Website and funnel conversion recommendations',
       'Performance measurement and reporting priorities',
     ],
-    preselectedProjectAreas: ['Marketing'],
+    preselectedProjectAreas: ['Growth'],
   },
   '/services/financial-review': {
     eyebrow: 'Financials',
@@ -50,7 +50,7 @@ export const servicePageContent: Record<string, ServicePageContent> = {
       'Pricing and margin diagnostics',
       'Decision memo with recommended next actions',
     ],
-    preselectedProjectAreas: ['Financials'],
+    preselectedProjectAreas: ['Due Diligence'],
   },
   '/services/operations-implementation': {
     eyebrow: 'Operations',
@@ -71,7 +71,7 @@ export const servicePageContent: Record<string, ServicePageContent> = {
       'Scheduling, dashboard, or automation recommendations',
       'Implementation roadmap tied to day-to-day operations',
     ],
-    preselectedProjectAreas: ['Operations'],
+    preselectedProjectAreas: ['Optimization'],
   },
   '/services/business-revamp': {
     eyebrow: 'Business Revamp',
@@ -92,6 +92,6 @@ export const servicePageContent: Record<string, ServicePageContent> = {
       'Revamp roadmap with sequenced priorities',
       'Advisory support for implementation decisions',
     ],
-    preselectedProjectAreas: ['Marketing', 'Financials', 'Operations'],
+    preselectedProjectAreas: ['Growth', 'Due Diligence', 'Optimization'],
   },
 };

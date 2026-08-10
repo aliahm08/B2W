@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, type Variants } from 'motion/react';
 
 type MobileMenuDrawerProps = {
   isOpen: boolean;
@@ -30,7 +30,7 @@ const ctaWrapperClassName = {
   dark: 'border-t border-white/10 pt-4',
 } as const;
 
-const itemVariants = {
+const itemVariants: Variants = {
   closed: { opacity: 0, y: -10, filter: 'blur(4px)' },
   open: {
     opacity: 1,

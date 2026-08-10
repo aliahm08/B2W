@@ -63,7 +63,7 @@ export const expertisePages: Record<string, ExpertisePageContent> = {
     ],
     engagementNote:
       'Growth work can stay advisory or extend into implementation depending on whether the client needs strategy, partner selection, or direct execution support.',
-    preselectedProjectAreas: ['Marketing'],
+    preselectedProjectAreas: ['Growth'],
     sections: [
       {
         title: 'What growth means at B2W',
@@ -125,7 +125,7 @@ export const expertisePages: Record<string, ExpertisePageContent> = {
     ],
     engagementNote:
       'Optimization work can produce a discrete decision model or continue into operational implementation once the preferred path is clear.',
-    preselectedProjectAreas: ['Financials'],
+    preselectedProjectAreas: ['Due Diligence'],
     sections: [
       {
         title: 'What optimization means at B2W',
@@ -187,7 +187,7 @@ export const expertisePages: Record<string, ExpertisePageContent> = {
     ],
     engagementNote:
       'Diligence work often overlaps operations and financial preparation, so engagements may preselect both areas when the business needs documentation and readiness support together.',
-    preselectedProjectAreas: ['Financials', 'Operations'],
+    preselectedProjectAreas: ['Due Diligence', 'Optimization'],
     sections: [
       {
         title: 'What diligence means at B2W',
