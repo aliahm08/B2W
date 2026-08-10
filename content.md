@@ -13,7 +13,7 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 ## Approved Messaging
 
-- `/` is the live, indexable B2W site. Its original-style hero leads with “We help contractors move projects *forward.*” and the Find a Solution / Calculate ROI actions. A smaller “some of the businesses we help.” section introduces the expanding contractor carousel. “take your work to the next stage.” introduces the image-led JasonAI and Clara cards whose hover states reveal each product promise and color the page. The shared footer mirrors the public Products, Solutions, JasonAI support, Resources, and Company architecture.
+- `/` is the live, indexable B2W site. Its original-style hero leads with “We help contractors move projects *forward.*” and See how it works / Talk to our team actions. “Some of the businesses we help.” introduces the expanding contractor carousel. “Take your work to the next stage.” introduces the image-led JasonAI and Clara cards, followed by a single-open getting-started FAQ. A final decision panel contains Find a solution and Calculate ROI. The shared footer mirrors the public Products, Solutions, JasonAI support, Resources, and Company architecture.
 - `/v1`, `/v2`, and `/v3` are stable, noindex review surfaces. V1 preserves the full product-company build, V2 uses the two-product project-team build with the shared contractor Solutions carousel, and V3 preserves the focused JasonAI / Workflows / Pricing contractor build.
 - A compact Live / V1 / V2 / V3 switcher is available only on the noindex versioned review surfaces; it is not shown on the production homepage or included in the product navigation hierarchy.
 - B2W should sound direct, technical, and operational. Avoid inflated transformation language.
@@ -69,6 +69,8 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 - Update this file only when the brand positioning or approved messaging actually changes.
 
 ## Revision History
+
+- **2026-08-10:** Changed the hero CTAs to JasonAI exploration and email contact, normalized homepage headings to sentence case, added a single-open getting-started FAQ, and moved Find a solution / Calculate ROI into a final decision section.
 
 - **2026-08-10:** Reframed the three homepage sections around moving contractor projects forward, the businesses B2W helps, and taking work to the next stage; restored the original oversized hero treatment and a smaller secondary-section header.
 

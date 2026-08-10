@@ -1,12 +1,35 @@
 import { motion } from 'motion/react';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calculator, MessageCircle, Mic } from 'lucide-react';
+import { ArrowRight, Calculator, ChevronDown, Mail, MessageCircle, Mic } from 'lucide-react';
 import PreviewFooter from '../components/PreviewFooter';
 import { LiveSiteHeader } from '../components/V2SiteChrome';
 import Seo from '../components/Seo';
 
 const VisitorFitQuiz = lazy(() => import('../components/VisitorFitQuiz'));
+
+const homepageQuestions = [
+  {
+    question: 'Where does B2W fit into the tools we already use?',
+    answer: 'JasonAI begins inside the communication channels your team already uses. It helps people find approved project context and turn long conversations into clear, reviewable answers without introducing another daily dashboard.',
+  },
+  {
+    question: 'What can we start using now?',
+    answer: 'JasonAI is available now. We start with one approved communication workflow, define the sources and permissions, and help your team use it on real project questions before expanding.',
+  },
+  {
+    question: 'What is Clara?',
+    answer: 'Clara is a coming-soon web workspace for teams that want a focused place to create and review project documents using the same approved company context and working methods.',
+  },
+  {
+    question: 'Does B2W replace our current software?',
+    answer: 'No. The first goal is to make the tools and project information you already have easier to use. New workspace functionality is added only when it creates a clearer, controlled way to complete the work.',
+  },
+  {
+    question: 'How do we choose the right starting point?',
+    answer: 'Use the solution finder for a tailored recommendation, or calculate the modeled value of reducing communication-search time before speaking with our team.',
+  },
+] as const;
 
 type HeroMode = 'consulting' | 'jasonai' | 'clara';
 
@@ -99,7 +122,7 @@ function ProductFrame({
   const image = heroProductImages.find((item) => item.product.toLowerCase() === mode)!;
   const Icon = mode === 'jasonai' ? MessageCircle : Mic;
   const isJasonAI = mode === 'jasonai';
-  const availability = isJasonAI ? 'Available Now' : 'Coming Soon';
+  const availability = isJasonAI ? 'Available now' : 'Coming soon';
   const contextHeading = isJasonAI ? 'In your existing tools' : 'Using your existing methods';
   const frameClass = isJasonAI
     ? 'border-[#f4b28c]/70 bg-[#14110f] text-white shadow-[0_28px_90px_rgba(178,74,36,0.22)]'
@@ -264,6 +287,7 @@ function ContractorHeroCarousel() {
 export default function HomeTestOnePage() {
   const [heroMode, setHeroMode] = useState<HeroMode>('consulting');
   const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [activeQuestion, setActiveQuestion] = useState(0);
   const activeHero = heroModes[heroMode];
 
   useEffect(() => {
@@ -307,28 +331,67 @@ export default function HomeTestOnePage() {
           </motion.h1>
 
           <div className="mx-auto mt-10 flex w-full max-w-xl flex-col justify-center gap-3 sm:flex-row">
-            <button id="visitor-fit" type="button" onClick={() => setIsQuizOpen(true)} className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-slate-950 bg-slate-950 px-5 py-3 text-base font-semibold text-white shadow-[0_18px_48px_rgba(15,23,42,0.14)] transition-colors hover:bg-[#24724f]">
-              Find a Solution
+            <Link to="/jasonai" className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-slate-950 bg-slate-950 px-5 py-3 text-base font-semibold text-white shadow-[0_18px_48px_rgba(15,23,42,0.14)] transition-colors hover:bg-[#24724f]">
+              See how it works
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" />
-            </button>
-            <Link to="/pricing#roi-calculator" className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-slate-950/16 bg-white/95 px-5 py-3 text-base font-semibold text-slate-950 shadow-[0_18px_48px_rgba(15,23,42,0.10)] transition-colors hover:bg-white">
-              Calculate ROI
-              <Calculator className="h-4 w-4" />
             </Link>
+            <a href="mailto:info@b2w-ai.com?subject=Talk%20to%20the%20B2W%20team" className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-slate-950/16 bg-white/95 px-5 py-3 text-base font-semibold text-slate-950 shadow-[0_18px_48px_rgba(15,23,42,0.10)] transition-colors hover:bg-white">
+              Talk to our team
+              <Mail className="h-4 w-4" />
+            </a>
           </div>
 
           <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-32 text-center text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>
-            some of the businesses we help.
+            Some of the businesses we help.
           </motion.h2>
           <ContractorHeroCarousel />
 
           <div className="mt-32 flex flex-col items-center text-center">
             <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`b2w-wordmark whitespace-nowrap text-[clamp(1.2rem,4.6vw,4.75rem)] font-medium leading-[0.9] tracking-[-0.075em] ${activeHero.textClass}`}>
-              take your work to the next stage.
+              Take your work to the next stage.
             </motion.h2>
             <div id="products" className="mt-10 grid w-full scroll-mt-28 gap-6 lg:grid-cols-2">
               <ProductFrame mode="jasonai" setActiveMode={setHeroMode} />
               <ProductFrame mode="clara" setActiveMode={setHeroMode} />
+            </div>
+
+            <div className="mt-20 w-full max-w-5xl text-left">
+              <p className="text-sm font-semibold text-slate-500">Questions about getting started</p>
+              <h3 className={`mt-3 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>What teams usually ask first.</h3>
+              <ul className="mt-8 overflow-hidden rounded-[28px] border border-slate-950/12 bg-white/72 shadow-[0_22px_65px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+                {homepageQuestions.map((item, index) => {
+                  const isOpen = activeQuestion === index;
+                  const panelId = `homepage-question-${index}`;
+                  return (
+                    <li key={item.question} className="border-b border-slate-950/10 last:border-b-0">
+                      <button type="button" aria-expanded={isOpen} aria-controls={panelId} onClick={() => setActiveQuestion(index)} className="flex w-full items-center justify-between gap-6 px-5 py-5 text-left sm:px-7">
+                        <span className="text-base font-semibold text-slate-950 sm:text-lg">{item.question}</span>
+                        <ChevronDown className={`h-5 w-5 shrink-0 text-slate-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <div id={panelId} role="region" className={`grid transition-[grid-template-rows,opacity] duration-300 ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                        <div className="overflow-hidden">
+                          <p className="max-w-3xl px-5 pb-6 text-sm leading-7 text-slate-600 sm:px-7 sm:text-base">{item.answer}</p>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+
+          <div className="mt-32 rounded-[32px] bg-[#10271c] px-6 py-12 text-center text-white shadow-[0_28px_90px_rgba(15,39,28,0.2)] sm:px-10 sm:py-16">
+            <p className="text-sm font-semibold text-[#a9c7a8]">Choose your next step</p>
+            <h2 className="mx-auto mt-3 max-w-3xl text-[clamp(2.25rem,5vw,5rem)] font-medium leading-[0.95] tracking-[-0.06em]">Find the right place to begin.</h2>
+            <div className="mx-auto mt-8 flex w-full max-w-xl flex-col justify-center gap-3 sm:flex-row">
+              <button id="visitor-fit" type="button" onClick={() => setIsQuizOpen(true)} className="group inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-base font-semibold text-[#10271c] transition-colors hover:bg-[#dcebd8]">
+                Find a solution
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+              </button>
+              <Link to="/pricing#roi-calculator" className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-full border border-white/22 bg-white/8 px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-white/14">
+                Calculate ROI
+                <Calculator className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
