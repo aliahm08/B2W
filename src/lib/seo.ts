@@ -145,6 +145,16 @@ const v3ArchiveRoutes = [
     .map((pathname) => pathname.replace(/^\/v2/, '/v3')),
 ];
 
+const v4ArchiveRoutes = [
+  '/v4',
+  '/v4/jasonai',
+  '/v4/how-it-works',
+  '/v4/solutions',
+  '/v4/why-jasonai',
+  '/v4/pricing',
+  '/v4/faq',
+];
+
 const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
@@ -169,6 +179,76 @@ const directRoutes = new Map<string, SeoDefinition>([
       title: 'B2W V2 — Tools for Contractors to Succeed',
       description: 'Archived B2W website featuring practical tools that help contractors improve job visibility, project coordination, operational handoffs, and company knowledge.',
       canonicalPath: '/',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4',
+    {
+      title: 'B2W V4 — JasonAI for Contractor Communication',
+      description: 'JasonAI reduces the cost of contractor communication by living inside the tools teams already use and turning existing project information into useful work.',
+      canonicalPath: '/',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4/jasonai',
+    {
+      title: 'JasonAI Capabilities for Contractors',
+      description: 'Explore how JasonAI finds project context, creates business documents, analyzes files, works across existing tools, and expands toward approved actions.',
+      canonicalPath: '/jasonai',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4/how-it-works',
+    {
+      title: 'How JasonAI Works',
+      description: 'See one contractor project move across WhatsApp, email, voice notes, files, answers, reviewed documents, and controlled actions.',
+      canonicalPath: '/jasonai/how-it-works',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4/solutions',
+    {
+      title: 'JasonAI Solutions for Contractors',
+      description: 'Use shared project context across coordination, estimating, client communication, operations, financial review, and field information.',
+      canonicalPath: '/solutions/business-use-cases',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4/why-jasonai',
+    {
+      title: 'Why JasonAI Reduces Communication Costs',
+      description: 'Compare manual work, standalone AI, and an assistant embedded where contractor project information is created.',
+      canonicalPath: '/jasonai',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4/pricing',
+    {
+      title: 'JasonAI Free Early-Access Pricing',
+      description: 'Review the V4 free early-access concept for project questions, search, summaries, document generation, and file analysis.',
+      canonicalPath: '/pricing',
+      robots: PRIVATE_ROBOTS,
+      imagePath: brandImages.b2wSocial,
+    },
+  ],
+  [
+    '/v4/faq',
+    {
+      title: 'JasonAI Frequently Asked Questions',
+      description: 'Direct answers about JasonAI fit, workflow changes, information access, documents, agent capabilities, and early-access pricing.',
+      canonicalPath: '/jasonai/questions',
       robots: PRIVATE_ROBOTS,
       imagePath: brandImages.b2wSocial,
     },
@@ -1047,6 +1127,7 @@ export function listStaticSeoRoutes() {
     ...retiredMainRedirectRoutes.keys(),
     ...versionedArchiveRoutes,
     ...v3ArchiveRoutes,
+    ...v4ArchiveRoutes,
     ...Object.keys(servicePageContent),
     ...Object.keys(expertisePages),
     ...Object.keys(explainerContent),

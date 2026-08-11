@@ -1,40 +1,29 @@
-# B2W API Inventory: Current vs Future
+# B2W API Inventory
 
 ## Current workspace inventory
 
-The current workspace has **12** top-level Vercel API entry files. The executive strategy consolidation is already present locally, so the previous two strategy files are no longer counted.
+The current workspace has **9** top-level Vercel API entry files. Routes remain separate when they have different authentication, data, runtime, or failure semantics.
 
-| Current API | Current responsibility | Future gateway and action |
+| API | Responsibility | Why it remains separate |
 | --- | --- | --- |
-| `business-intake-enrich` | Website/business enrichment | `gurge?action=intake.enrich` |
-| `client-communication` | Foster + Partners client form | `communications?action=client.submit` |
-| `consultations` | Availability and booking | `communications?action=consultation.availability` / `consultation.book` |
-| `contact-lead` | Public lead forms | `communications?action=lead.submit` |
-| `executive-strategy` | B2W and JasonAI strategy sessions | `strategy`; retain current URL during migration |
-| `gurge-copy` | Generated Gurge copy | `gurge?action=copy.generate` |
-| `gurge-today` | Today’s View statement | `gurge?action=today.generate` |
-| `jasonai-progress` | Versioned JasonAI roadmap | `jasonai?action=progress.state` / `progress.sync` |
-| `jasonai-roi-report` | JasonAI ROI report | `jasonai?action=roi.report` |
-| `project-brief` | Project brief generation | `jasonai?action=brief.generate` |
-| `proposal-signature` | Proposal acceptance/signature | `proposals?action=submit` |
-| `proposals` | Proposal retrieval and delivery | `proposals?action=document` / `status` / `resend` |
+| `client-communication` | Authenticated client messages to Supabase | Client-specific validation and rate-limit namespace |
+| `contact-lead` | Public lead forms to Supabase | Public validation, spam protection, and two-step budget update |
+| `executive-strategy` | B2W and JasonAI strategy sessions | Password/session security boundary; already consolidates two strategy scopes |
+| `gurge-copy` | Optional model-generated Gurge copy | AI timeout/fallback semantics; internal-only caller |
+| `gurge-today` | Optional model-generated Today’s View | Different payload, rate limit, and deterministic fallback from Gurge copy |
+| `jasonai-progress` | Versioned JasonAI roadmap in Supabase | Stateful reads/writes and private project-manager analysis |
+| `jasonai-roi-report` | Store and email a requested ROI report | Email is the explicit user-facing action, not a side effect of a contact form |
+| `proposal-signature` | Proposal responses to Supabase | Higher-value audit record with proposal-specific fields |
+| `proposals` | Proposal retrieval, signing transcript, and delivery | Signed-session and document-storage boundary |
 
-## Future inventory
+## Removed in the 2026-08 cleanup
 
-| Future API | Consolidates | Function count |
-| --- | --- | --- |
-| `communications` | 3 current APIs | 1 |
-| `gurge` | 3 current APIs | 1 |
-| `jasonai` | 3 current APIs | 1 |
-| `strategy` | 1 current API | 1 |
-| `proposals` | 2 current APIs | 1 |
+- `business-intake-enrich`: unused page scraping and unofficial Google Search scraping
+- `consultations`: unused Google Calendar booking endpoint; public booking remains a Calendly link
+- `project-brief`: unmounted Gemini/fallback prototype with no live-site caller
+- Google Sheets fan-out from forms: Supabase is now the sole system of record
+- direct form-notification email: notifications belong in Supabase automations
 
-**Target total: 5 Vercel Serverless Functions.**
+## Consolidation rule
 
-## Migration order
-
-1. Keep current APIs live while the new actions are implemented and tested.
-2. Move front-end callers one capability at a time.
-3. Verify production behavior and preserve response compatibility where needed.
-4. Delete an old top-level API entry only after no caller references it.
-5. Confirm the final deployment contains only the five listed top-level API files.
+Do not merge endpoints merely to reduce the file count. Consolidate only when callers share authentication, validation, persistence, rate limits, and failure behavior. A single catch-all API would increase coupling without reducing external providers or cost.

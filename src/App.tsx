@@ -6,23 +6,23 @@
 import { Suspense, lazy, useEffect, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
 import { Routes, Route, useLocation, Navigate, Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import Hero from './components/Hero';
-import Expertise from './components/Expertise';
-import CTA from './components/CTA';
-import Footer from './components/Footer';
 import PreviewFooter from './components/PreviewFooter';
-import AssistantWidget from './components/AssistantWidget';
 import Seo from './components/Seo';
-import NotFound from './components/NotFound';
-import ProjectBuilderDrawer from './components/ProjectBuilderDrawer';
 import VersionSwitcher from './components/VersionSwitcher';
 import { LiveSiteHeader } from './components/V2SiteChrome';
 import { ArrowUpRight } from 'lucide-react';
 import { scrollToHashTarget } from './lib/hashNavigation';
-import HomeTestOnePage from './pages/HomeTestOnePage';
 
 const OFFER_BANNER_STORAGE_KEY = 'b2w-offer-banner-dismissed';
 
+const Hero = lazy(() => import('./components/Hero'));
+const Expertise = lazy(() => import('./components/Expertise'));
+const CTA = lazy(() => import('./components/CTA'));
+const Footer = lazy(() => import('./components/Footer'));
+const AssistantWidget = lazy(() => import('./components/AssistantWidget'));
+const NotFound = lazy(() => import('./components/NotFound'));
+const ProjectBuilderDrawer = lazy(() => import('./components/ProjectBuilderDrawer'));
+const HomeTestOnePage = lazy(() => import('./pages/HomeTestOnePage'));
 const BorekGProfilePage = lazy(() => import('./pages/projects/borek-g/ProfilePage'));
 const BorekGProposalPage = lazy(() => import('./pages/projects/borek-g/ProposalPage'));
 const UyghurEatsProfilePage = lazy(() => import('./pages/projects/uyghur-eats/ProfilePage'));
@@ -78,6 +78,7 @@ const InternalAccessGate = lazy(() => import('./pages/internal/InternalAccessGat
 const LogoVerificationPage = lazy(() => import('./pages/LogoVerificationPage'));
 const MainExperiencePage = lazy(() => import('./pages/main/MainExperiencePage'));
 const V1HomePage = lazy(() => import('./pages/v1/V1HomePage'));
+const V4HomePage = lazy(() => import('./pages/v4/V4HomePage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -202,6 +203,7 @@ function RouteLoadingFallback() {
 const V1_BASE_PATH = '/v1';
 const V2_BASE_PATH = '/v2';
 const V3_BASE_PATH = '/v3';
+const V4_BASE_PATH = '/v4';
 
 function VersionedSiteFrame({ basePath, children }: { basePath: string; children: ReactNode }) {
   const navigate = useNavigate();
@@ -298,6 +300,7 @@ export default function App() {
   const isV1Site = location.pathname === V1_BASE_PATH || location.pathname.startsWith(`${V1_BASE_PATH}/`);
   const isV2Site = location.pathname === V2_BASE_PATH || location.pathname.startsWith(`${V2_BASE_PATH}/`);
   const isV3Site = location.pathname === V3_BASE_PATH || location.pathname.startsWith(`${V3_BASE_PATH}/`);
+  const isV4Site = location.pathname === V4_BASE_PATH || location.pathname.startsWith(`${V4_BASE_PATH}/`);
   const isDataRoom = location.pathname.includes('-data-room');
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
@@ -321,7 +324,7 @@ export default function App() {
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isMainExperience || isV1Site || isV2Site || isV3Site || isFullSiteLive || isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isAppTest || isClaraPage || isJasonAIPage || isGurgePage || isMarketDetailPage || isLogoVerification;
+    isMainExperience || isV1Site || isV2Site || isV3Site || isV4Site || isFullSiteLive || isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isAppTest || isClaraPage || isJasonAIPage || isGurgePage || isMarketDetailPage || isLogoVerification;
   const routeTransitionKey = isClaraPage ? '/clara' : isJasonAIPage ? '/jasonai' : location.pathname;
 
   let clientName: string | undefined = undefined;
@@ -464,6 +467,14 @@ export default function App() {
                 <Route path="/v3/capabilities/:slug" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><CapabilityPage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/expertise/:slug" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><ExpertisePage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/*" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><NotFound /></VersionedSiteFrame>} />
+                <Route path="/v4" element={<V4HomePage />} />
+                <Route path="/v4/jasonai" element={<V4HomePage page="product" />} />
+                <Route path="/v4/how-it-works" element={<V4HomePage page="how-it-works" />} />
+                <Route path="/v4/solutions" element={<V4HomePage page="solutions" />} />
+                <Route path="/v4/why-jasonai" element={<V4HomePage page="why-jasonai" />} />
+                <Route path="/v4/pricing" element={<V4HomePage page="pricing" />} />
+                <Route path="/v4/faq" element={<V4HomePage page="faq" />} />
+                <Route path="/v4/*" element={<Navigate to="/v4" replace />} />
                 <Route path="/preview/*" element={<Navigate to="/" replace />} />
                 <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />
                 <Route
@@ -652,9 +663,9 @@ export default function App() {
           </div>
         </Suspense>
       </main>
-      {!isIsolatedView && <Footer />}
-      {(isV1Site || isV2Site || isV3Site) && <VersionSwitcher />}
-      {!isLogoVerification && !isMainExperience && !isV1Site && !isV2Site && !isV3Site && <AssistantWidget />}
+      {!isIsolatedView ? <Suspense fallback={null}><Footer /></Suspense> : null}
+      {(isV1Site || isV2Site || isV3Site || isV4Site) && <VersionSwitcher />}
+      {!isLogoVerification && !isMainExperience && !isV1Site && !isV2Site && !isV3Site && !isV4Site ? <Suspense fallback={null}><AssistantWidget /></Suspense> : null}
     </div>
   );
 }

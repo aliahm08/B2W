@@ -70,8 +70,10 @@ This document is the stable reference for public marketing upkeep on the B2W web
 ## Version Archive Rules
 
 - `/v1` preserves the former main contractor-trust route family and `/v2` preserves the promoted live family. Both are `noindex, nofollow` and canonicalize to matching unprefixed paths.
-- The version switcher contains Live, V1, V2, and V3 and appears only on versioned routes.
+- The version switcher contains Live, V1, V2, V3, and V4 and appears only on versioned routes.
 - V3 mirrors the live information architecture and branding, using `AI Assistants` as the customer-facing replacement for Products and `Guidance` as the replacement for Solutions. Preview remains retired and redirects to Live.
+- V4 is a noindex homepage concept centered on one idea: JasonAI reduces the cost of contractor communication by living inside the tools teams already use. Its narrative moves from existing project information to answers, documents, analysis, and future approved actions, supported by free early-access framing and an illustrative standalone-versus-embedded value comparison. It does not change live pricing or product claims until deliberately promoted.
+- V4 uses a shallow service-site route family: `/v4` is the focused landing and decision hub; `/v4/jasonai` contains capabilities, integrations, and agent direction; `/v4/how-it-works` contains the project example, workflow, and controls; `/v4/solutions` contains contractor use cases; `/v4/why-jasonai` contains the functional and economic comparison; `/v4/pricing` contains the early-access offer; and `/v4/faq` resolves common objections. Shared V4 navigation and footer links route directly to those destinations.
 - Archived versions must not expose links to the private internal workspace.
 
 ## Business Plan Horizon Rules
@@ -119,11 +121,14 @@ Then:
 - Keep public indexable routes in the central SEO map or a central metadata builder. Do not rely only on page-local `<Seo />` overrides for pages that should have static SEO output.
 - Use the official B2W social card for route-level Open Graph and Twitter previews so every shared URL carries the company logo consistently.
 - Keep internal, prototype, client, and portal pages on `noindex, nofollow` unless there is a deliberate reason to expose them.
-- Keep `/v1`, `/v2`, and `/v3` on `noindex, nofollow`; retired Preview paths are not included in the static SEO route inventory.
+- Keep `/v1`, `/v2`, `/v3`, and `/v4` on `noindex, nofollow`; retired Preview paths are not included in the static SEO route inventory.
 - Treat `content.md` as a concise strategic reference, not a dumping ground for page-by-page copy.
 
 ## Revision History
 
+- **2026-08-11:** Reorganized V4 into a shallow seven-route service-site architecture with a focused homepage, shared JasonAI-first header and footer, and dedicated Product, How It Works, Solutions, Why JasonAI, Pricing, and FAQ destinations.
+- **2026-08-11:** Expanded V4 around the single cost-of-communication narrative with a JasonAI-first header, existing-information story, large capability demonstrations, channel integrations, economic explanation, project example, contractor use cases, future agents, controls, free pricing, FAQs, and a focused footer.
+- **2026-08-11:** Added V4 as a noindex JasonAI homepage concept using the live visual system, free early-access framing, capability demonstrations, and standalone-versus-embedded contractor value comparisons.
 - **2026-08-11:** Promoted V3 branding and presentation to the live unprefixed site while retaining `/v3` as its noindex review copy.
 - **2026-08-11:** Renamed the V3 Solutions category to Guidance across the header, footer, homepage link framing, related pages, and V3 SEO titles while leaving routes unchanged.
 - **2026-08-11:** Renamed the public “How B2W Works” label to “AI Workflows” across navigation, footer, page framing, About, and SEO metadata.

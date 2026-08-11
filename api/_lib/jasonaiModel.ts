@@ -17,10 +17,10 @@ function getEnv(name: string, fallback = '') {
 
 export function getJasonAIModelConfig() {
   return {
-    apiKey: getEnv('JASONAI_OSS_MODEL_API_KEY', getEnv('OLLAMA_API_KEY')),
-    baseUrl: getEnv('JASONAI_OSS_MODEL_BASE_URL', getEnv('OLLAMA_BASE_URL', 'http://127.0.0.1:11434')).replace(/\/$/, ''),
-    model: getEnv('JASONAI_OSS_MODEL_NAME', getEnv('OLLAMA_MODEL', 'llama3.1:8b')),
-    apiStyle: getEnv('JASONAI_OSS_MODEL_API_STYLE', getEnv('OLLAMA_API_STYLE', 'ollama')).toLowerCase(),
+    apiKey: getEnv('JASONAI_OSS_MODEL_API_KEY'),
+    baseUrl: getEnv('JASONAI_OSS_MODEL_BASE_URL').replace(/\/$/, ''),
+    model: getEnv('JASONAI_OSS_MODEL_NAME'),
+    apiStyle: getEnv('JASONAI_OSS_MODEL_API_STYLE', 'openai').toLowerCase(),
   };
 }
 

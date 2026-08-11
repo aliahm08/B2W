@@ -67,26 +67,20 @@ function ProductTray({
   const Icon = isJasonAI ? MessageCircle : Mic;
 
   return (
-    <motion.article
+    <article
       onMouseEnter={() => setActiveMode(mode)}
       onMouseLeave={() => setActiveMode('consulting')}
       onFocus={() => setActiveMode(mode)}
       onBlur={() => setActiveMode('consulting')}
-      initial={{ opacity: 0, y: 24, filter: 'blur(12px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
       className={`group relative flex min-h-[26rem] overflow-hidden rounded-[2rem] border p-6 sm:p-8 ${
         isJasonAI
           ? 'border-[#f4b28c]/70 bg-[#14110f] text-white shadow-[0_28px_90px_rgba(178,74,36,0.22)]'
           : 'border-[#0e7490]/35 bg-white/88 text-[#082f3a] shadow-[0_28px_90px_rgba(14,116,144,0.18)] backdrop-blur'
       }`}
     >
-      <motion.div
+      <div
         aria-hidden="true"
         className={`absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl ${isJasonAI ? 'bg-[#b24a24]/34' : 'bg-[#7dd3fc]/35'}`}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.72, 1, 0.72] }}
-        transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
       />
       <div className="relative z-10 flex flex-1 flex-col">
         <div className="flex items-center justify-between gap-4">
@@ -110,7 +104,7 @@ function ProductTray({
           </Link>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -140,7 +134,7 @@ export default function V1HomePage() {
 
         <LiveSiteHeader followPageTheme />
 
-        <section className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl items-center px-5 pb-20 pt-28 sm:px-8 sm:pt-32 lg:px-10">
+        <section className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl items-center px-5 pb-20 pt-28 sm:min-h-screen sm:px-8 sm:pt-32 lg:px-10">
           <div className="mx-auto flex max-w-6xl flex-col items-center text-center">
             <motion.p
               initial={{ opacity: 0, y: 12 }}
@@ -171,7 +165,7 @@ export default function V1HomePage() {
           </div>
         </section>
 
-        <section id="v1-products" className="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl scroll-mt-20 content-center gap-6 px-5 py-20 sm:px-8 lg:grid-cols-2 lg:px-10">
+        <section id="v1-products" className="relative z-10 mx-auto grid w-full max-w-7xl scroll-mt-20 content-center gap-6 px-5 py-16 sm:min-h-screen sm:px-8 sm:py-20 lg:grid-cols-2 lg:px-10">
           <ProductTray mode="jasonai" setActiveMode={setHeroMode} />
           <ProductTray mode="estimates" setActiveMode={setHeroMode} />
         </section>

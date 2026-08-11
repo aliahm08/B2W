@@ -1,9 +1,6 @@
 import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
-import { appendSheetRow } from './_common/googleSheets.js';
-import { insertClientFormSubmission } from './_common/formSubmissions.js';
+import { insertProposalSignatureSubmission } from './_common/formSubmissions.js';
 import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
-import { sendEmail } from './_common/resend.js';
-import { buildProposalSignatureEmails } from './_common/emailTemplates.js';
 import type { ProposalSignatureSubmission } from './_common/validation.js';
 import { validateHoneypot, validateProposalSignatureSubmission } from './_common/validation.js';
 
@@ -12,70 +9,8 @@ function getInternalEmail() {
 }
 
 async function processSubmission(submission: ProposalSignatureSubmission) {
-  const emails = buildProposalSignatureEmails(submission);
   const internalEmail = getInternalEmail();
-  const errors: string[] = [];
-
-  try {
-    await sendEmail({
-      to: internalEmail,
-      subject: emails.internal.subject,
-      text: emails.internal.text,
-      html: emails.internal.html,
-      replyTo: emails.internal.replyTo,
-    });
-  } catch (error) {
-    errors.push(`internal email: ${error instanceof Error ? error.message : 'unknown error'}`);
-  }
-
-  try {
-    await sendEmail({
-      to: submission.signerEmail,
-      subject: emails.confirmation.subject,
-      text: emails.confirmation.text,
-      html: emails.confirmation.html,
-    });
-  } catch (error) {
-    errors.push(`confirmation email: ${error instanceof Error ? error.message : 'unknown error'}`);
-  }
-
-  try {
-    await appendSheetRow('proposalSignature', [
-      submission.submittedAt,
-      submission.signerName,
-      submission.signerEmail,
-      submission.company,
-      submission.proposalName,
-      submission.proposalUrl || submission.proposalId,
-      submission.actionTaken,
-      submission.notes,
-      submission.sourcePage || submission.sourcePath,
-      submission.referrer,
-      errors.length === 0 ? 'received' : `partial_failure: ${errors.join(' | ')}`,
-    ]);
-  } catch (error) {
-    errors.push(`sheets: ${error instanceof Error ? error.message : 'unknown error'}`);
-  }
-
-  try {
-    await insertClientFormSubmission({
-      clientName: submission.signerName,
-      clientEmail: submission.signerEmail,
-      company: submission.company,
-      projectName: submission.proposalName,
-      messageCategory: `proposal_${submission.actionTaken}`.toLowerCase() || 'proposal_signature',
-      message: `Proposal action recorded.\n\nAction: ${submission.actionTaken}\nSelected Option: ${submission.selectedOptionTitle || 'N/A'}\nPrice: ${submission.selectedOptionPrice || 'N/A'}\nNotes: ${submission.notes || 'None'}`,
-      sourcePage: submission.sourcePage,
-      sourcePath: submission.sourcePath,
-      sourceUrl: submission.sourceUrl,
-      referrer: submission.referrer,
-      submittedAt: submission.submittedAt,
-    }, internalEmail);
-  } catch (error) {
-    errors.push(`supabase client form: ${error instanceof Error ? error.message : 'unknown error'}`);
-  }
-
-  return errors;
+  return insertProposalSignatureSubmission(submission, internalEmail);
 }
 
 export default async function handler(req: any, res: any) {
@@ -105,17 +40,8 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
-    const errors = await processSubmission(validated.value);
-    if (errors.length > 0) {
-      console.error('[proposal-signature] partial failure', { errors, sourcePath: validated.value.sourcePath });
-      sendJson(res, 202, {
-        ok: true,
-        warning: 'Proposal response received, but one or more follow-up actions need operator review.',
-      });
-      return;
-    }
-
-    sendJson(res, 200, { ok: true });
+    const submissionId = await processSubmission(validated.value);
+    sendJson(res, 200, { ok: true, submissionId });
   } catch (error) {
     console.error('[proposal-signature] unexpected failure', error);
     sendJson(res, 500, { ok: false, error: 'Unable to submit proposal response right now.' });

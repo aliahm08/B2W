@@ -43,14 +43,14 @@ type SubItem = {
   essential: boolean;
 };
 
-type Category = {
+export type Category = {
   label: string;
   subItems: SubItem[];
 };
 
 type EstimateCalloutTarget = 'edit' | 'share' | 'chat';
 
-const initialCategories: Category[] = [
+export const initialCategories: Category[] = [
   { label: 'Demolition & Prep', subItems: [
     { id: 'd1', desc: 'Remove & dispose of carpet', qty: 1200, unitPrice: 0.35, checked: true, essential: true },
     { id: 'd2', desc: 'General room masking', qty: 1, unitPrice: 150, checked: true, essential: false },
@@ -234,7 +234,7 @@ function Section0Hero({ onNext }: { onNext: () => void }) {
   );
 }
 
-function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
+export function Section1VoiceCapture({ onComplete, tone = 'light' }: { onComplete: () => void; tone?: 'light' | 'dark' }) {
   const [visibleWordCount, setVisibleWordCount] = useState(0);
   const words = useMemo(() => voiceNote.split(' '), []);
   const transcriptComplete = visibleWordCount >= words.length;
@@ -248,13 +248,13 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
   }, [transcriptComplete, words.length]);
 
   return (
-    <div className="flex w-full h-full flex-col items-center justify-center px-5 py-4 max-w-5xl">
+    <div className="flex h-full w-full max-w-5xl flex-col items-center justify-center px-3 py-3 sm:px-5 sm:py-4">
       <div className="w-full text-center">
-        <h2 className="text-3xl font-medium text-[#3d1f33] md:text-5xl">Speak your scope.</h2>
-        <p className="mt-2 text-[#7e4967]">Clara transcribes and tags your voice note in real time.</p>
+        <h2 className={`text-3xl font-medium md:text-5xl ${tone === 'dark' ? 'text-white' : 'text-[#3d1f33]'}`}>Speak your scope.</h2>
+        <p className={`mt-2 ${tone === 'dark' ? 'text-[#d9a9c2]' : 'text-[#7e4967]'}`}>Clara transcribes and tags your voice note in real time.</p>
       </div>
 
-      <div className="w-full flex-1 flex flex-col justify-center my-3 max-h-[55vh]">
+      <div className="my-2 flex max-h-[55vh] w-full flex-1 flex-col justify-center sm:my-3">
         <div className="relative rounded-[1.75rem] border border-[#e8cbd9]/12 bg-[#1a1118]/88 p-4 shadow-[0_34px_100px_rgba(0,0,0,0.34)] backdrop-blur md:p-6 w-full max-w-4xl mx-auto flex flex-col h-full">
           <div className="mb-4 flex flex-wrap items-center justify-between gap-4 shrink-0">
             <div className="flex items-center gap-4">
@@ -298,7 +298,7 @@ function Section1VoiceCapture({ onComplete }: { onComplete: () => void }) {
   );
 }
 
-function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
+export function Section2_1OrganizedScope({ onComplete, tone = 'light' }: { onComplete: () => void; tone?: 'light' | 'dark' }) {
   const [documentReady, setDocumentReady] = useState(false);
 
   useEffect(() => {
@@ -308,17 +308,17 @@ function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
   }, []);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center px-5 py-2 max-w-5xl">
+    <div className="flex w-full max-w-5xl flex-col items-center justify-center px-3 py-2 sm:px-5">
       <div className="w-full text-center shrink-0 mb-4">
-        <h2 className="text-3xl font-medium text-[#3d1f33] md:text-4xl">Organizing Scope...</h2>
-        <p className="mt-1 text-sm text-[#7e4967]">Context and line items mapped seamlessly.</p>
+        <h2 className={`text-3xl font-medium md:text-4xl ${tone === 'dark' ? 'text-white' : 'text-[#3d1f33]'}`}>Organizing Scope...</h2>
+        <p className={`mt-1 text-sm ${tone === 'dark' ? 'text-[#d9a9c2]' : 'text-[#7e4967]'}`}>Context and line items mapped seamlessly.</p>
       </div>
       <div className="w-full mb-4">
-        <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-3">
           {organizedScopeData.map((category, index) => {
             const isInfo = category.type === 'info';
             return (
-              <motion.div key={category.label} initial={{ opacity: 0, y: 15, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, delay: index * 0.1 }} className={`rounded-[1rem] border p-4 shadow-xl ${isInfo ? 'border-[#d9a9c2]/30 bg-[#2b1724]' : 'border-sky-500/20 bg-[#251c28]'}`}>
+              <motion.div key={category.label} initial={{ opacity: 0, y: 15, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.35, delay: index * 0.1 }} className={`rounded-[1rem] border p-3 shadow-xl sm:p-4 ${isInfo ? 'border-[#d9a9c2]/30 bg-[#2b1724]' : 'border-sky-500/20 bg-[#251c28]'}`}>
                 <h3 className={`text-[11px] font-bold uppercase tracking-wider ${isInfo ? 'text-[#d9a9c2]' : 'text-sky-400'}`}>{category.label}</h3>
                 <ul className="mt-2 space-y-1">
                   {category.items.map((item, i) => (
@@ -377,7 +377,7 @@ function Section2_1OrganizedScope({ onComplete }: { onComplete: () => void }) {
   );
 }
 
-function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal, onEditNote, onShare, activeCallout, setActiveCallout }: any) {
+export function EstimateDocumentContent({ categories, animatingCatIndex, animatingSubItemCount, estimateComplete, toggleCheck, updateQty, subtotal, contingencyPct, setContingencyPct, contingency, grandTotal, onEditNote, onShare, activeCallout, setActiveCallout }: any) {
   return (
     <div className="w-full h-full relative">
       <div className="border-b border-[#e8cbd9]/40 bg-[#f8f1f4] px-3 py-3 md:px-5">

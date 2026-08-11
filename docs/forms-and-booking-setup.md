@@ -1,4 +1,4 @@
-# Forms and Booking Setup
+# Forms and Supabase Setup
 
 This site now uses internal Vercel API routes for form submission.
 
@@ -16,42 +16,31 @@ Each route:
 - validates and sanitizes input
 - applies a honeypot spam check
 - rate-limits by IP
-- sends an internal email to `info@b2w-ai.com`
-- sends a confirmation email to the submitter
-- appends a row to Google Sheets
+- inserts one record into the Supabase `form_submissions` table
+- returns success only after Supabase confirms the insert
+- returns a submission ID for audit and follow-up
 
 ## Required environment variables
 
 ```bash
 VITE_CALENDLY_URL="https://calendly.com/your-team/consultation"
-RESEND_API_KEY="re_xxxxxxxxx"
-RESEND_FROM_EMAIL="B2W <info@b2w-ai.com>"
 INTERNAL_NOTIFICATION_EMAIL="info@b2w-ai.com"
-GOOGLE_SHEETS_SPREADSHEET_ID="your-google-sheet-id"
-GOOGLE_SERVICE_ACCOUNT_EMAIL="service-account@project.iam.gserviceaccount.com"
-GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-SHEET_TAB_LEADS="Lead Inquiries"
-SHEET_TAB_CLIENT_COMMUNICATIONS="Client Communications"
-SHEET_TAB_PROPOSAL_SIGNATURES="Proposal Signatures"
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_xxx"
+SUPABASE_SECRET_KEY="sb_secret_xxx"
 ```
 
-You can also keep using `GOOGLE_SERVICE_ACCOUNT_JSON` instead of `GOOGLE_SERVICE_ACCOUNT_EMAIL` and `GOOGLE_PRIVATE_KEY` if you prefer a single JSON credential.
+Prefer `SUPABASE_SECRET_KEY`. `SUPABASE_SERVICE_ROLE_KEY` remains a compatibility fallback.
 
-## Google Sheets workbook expectations
+## Notifications and exports
 
-Create one spreadsheet and add these tabs:
+Supabase is the system of record. Configure Database Webhooks or an Edge Function in Supabase for optional follow-up work such as:
 
-- `Lead Inquiries`
-- `Client Communications`
-- `Proposal Signatures`
+- notifying `info@b2w-ai.com`
+- sending submitter confirmations through an email provider
+- mirroring selected rows to another reporting system
 
-If you use different tab names, set them through:
-
-- `SHEET_TAB_LEADS`
-- `SHEET_TAB_CLIENT_COMMUNICATIONS`
-- `SHEET_TAB_PROPOSAL_SIGNATURES`
-
-If a tab is missing, the append call will fail and the server logs will show the Google Sheets error.
+These automations must not control whether the website reports a successful submission.
 
 ## Local testing
 
@@ -62,12 +51,11 @@ If a tab is missing, the append call will fail and the server logs will show the
    - a client communication form
    - a proposal signature flow
 4. Verify:
-   - internal email arrives at `info@b2w-ai.com`
-   - confirmation email arrives at the submitter email
-   - a row appears in the correct Google Sheets tab
+   - a row appears in Supabase `form_submissions`
+   - the browser receives `ok: true` and a `submissionId`
+   - any configured Supabase automation runs independently
 
 ## Notes
 
 - Rate limiting is intentionally lightweight and in-memory. It is appropriate for a small Vercel site but not a substitute for a distributed abuse-prevention service.
-- If email succeeds and Sheets fails, or vice versa, the API returns success with a warning and logs the partial failure server-side for operator follow-up.
 - Calendly is still optional and only used as a follow-on CTA after successful lead intake.

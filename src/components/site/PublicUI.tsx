@@ -173,6 +173,7 @@ export function CTASection({
   action,
   secondary,
   tone = 'forest',
+  compactMobile = false,
 }: {
   eyebrow: string;
   title: string;
@@ -180,6 +181,7 @@ export function CTASection({
   action: { label: string; to: string; variant?: 'primary' | 'product' };
   secondary?: { label: string; to: string };
   tone?: 'forest' | 'rust' | 'plum';
+  compactMobile?: boolean;
 }) {
   const shouldReduceMotion = useReducedMotion();
   const tones = {
@@ -189,20 +191,20 @@ export function CTASection({
   };
 
   return (
-    <section className={`${pageWidth} py-16 sm:py-24`}>
-      <motion.div initial={shouldReduceMotion ? false : { opacity: 0, y: 26, filter: 'blur(12px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .56, ease: [0.22, 1, 0.36, 1] }} className={`relative overflow-hidden grid gap-8 rounded-[2rem] p-7 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(260px,.5fr)] lg:items-end ${tones[tone]}`}>
+    <section className={`${pageWidth} ${compactMobile ? 'py-12' : 'py-16'} sm:py-24`}>
+      <motion.div initial={shouldReduceMotion ? false : { opacity: 0, y: 26, filter: 'blur(12px)' }} whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .56, ease: [0.22, 1, 0.36, 1] }} className={`relative grid overflow-hidden ${compactMobile ? 'gap-6 rounded-[1.5rem] p-5' : 'gap-8 rounded-[2rem] p-7'} sm:gap-8 sm:rounded-[2rem] sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(260px,.5fr)] lg:items-end ${tones[tone]}`}>
         <motion.div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" animate={shouldReduceMotion ? undefined : { scale: [1, 1.1, 1], opacity: [.45, .8, .45] }} transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }} />
         <div>
           <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--b2w-gold)]">{eyebrow}</p>
-          <h2 className="mt-4 max-w-[16ch] text-4xl font-medium leading-none tracking-[-0.045em] sm:text-5xl">{title}</h2>
+          <h2 className={`mt-4 max-w-[16ch] font-medium leading-none tracking-[-0.045em] ${compactMobile ? 'text-3xl' : 'text-4xl'} sm:text-5xl`}>{title}</h2>
         </div>
         <div>
           <p className="text-sm leading-7 text-white/65">{description}</p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <ButtonLink to={action.to} variant={action.variant ?? (tone === 'rust' ? 'product' : 'secondary')} className={tone !== 'rust' ? '!border-white/20 !bg-white !text-[#2b1724] hover:!bg-[#f8edf3]' : ''}>
+          <div className={`mt-6 flex gap-3 ${compactMobile ? 'flex-col sm:flex-row sm:flex-wrap' : 'flex-wrap'}`}>
+            <ButtonLink to={action.to} variant={action.variant ?? (tone === 'rust' ? 'product' : 'secondary')} className={`${compactMobile ? 'w-full sm:w-auto' : ''} ${tone !== 'rust' ? '!border-white/20 !bg-white !text-[#2b1724] hover:!bg-[#f8edf3]' : ''}`}>
               {action.label}
             </ButtonLink>
-            {secondary ? <ButtonLink to={secondary.to} variant="tertiary" className="text-white hover:text-[var(--b2w-gold)]">{secondary.label}</ButtonLink> : null}
+            {secondary ? <ButtonLink to={secondary.to} variant="tertiary" className={`${compactMobile ? 'w-full sm:w-auto' : ''} text-white hover:text-[var(--b2w-gold)]`}>{secondary.label}</ButtonLink> : null}
           </div>
         </div>
       </motion.div>

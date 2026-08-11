@@ -40,18 +40,12 @@ const v1Menus = [
     label: 'Consulting',
     layout: 'columns',
     items: [
-      { section: 'Start here', label: 'SMB Consulting', description: 'The original B2W consulting page for growing businesses.', to: '/v1/services', liveTo: '/v1/services' },
-      { section: 'Start here', label: 'Business Revamp', description: 'Assess growth, financials, and operations together, then sequence the reset.', to: '/v1/services/business-revamp', liveTo: '/v1/services/business-revamp' },
-      { section: 'Expertise', label: 'Growth', description: 'Find and improve the strongest path to sustainable growth.', to: '/v1/growth', liveTo: '/v1/growth' },
-      { section: 'Expertise', label: 'Optimization', description: 'Improve operations, handoffs, visibility, and execution consistency.', to: '/v1/capabilities/operational-performance', liveTo: '/v1/capabilities/operational-performance' },
-      { section: 'Expertise', label: 'Diligence', description: 'Review financial performance, risk, margin, and decision readiness.', to: '/v1/capabilities/financials', liveTo: '/v1/capabilities/financials' },
-      { section: 'Focused projects', label: 'Marketing Advisory', description: 'Clarify positioning, channels, demand generation, and conversion.', to: '/v1/services/marketing-advisory', liveTo: '/v1/services/marketing-advisory' },
-      { section: 'Focused projects', label: 'Operations Implementation', description: 'Turn workflow findings into practical systems, SOPs, and implementation.', to: '/v1/services/operations-implementation', liveTo: '/v1/services/operations-implementation' },
-      { section: 'Focused projects', label: 'Financial Review', description: 'Surface missed margin, pricing issues, and revenue leakage.', to: '/v1/services/financial-review', liveTo: '/v1/services/financial-review' },
-      { section: 'Engagements', label: 'Basic Advisory', description: 'A focused advisory starting point for a defined business question.', to: '/v1/tiers/basic-advisory', liveTo: '/v1/tiers/basic-advisory' },
-      { section: 'Engagements', label: 'Consulting', description: 'A broader consulting engagement for diagnosis and recommendations.', to: '/v1/tiers/consulting', liveTo: '/v1/tiers/consulting' },
-      { section: 'Engagements', label: 'Implementation', description: 'Hands-on support to put the recommended system into practice.', to: '/v1/tiers/implementation', liveTo: '/v1/tiers/implementation' },
-      { section: 'Engagements', label: 'Custom Tool', description: 'A scoped business tool built around the workflow that needs it.', to: '/v1/tiers/custom-tool', liveTo: '/v1/tiers/custom-tool' },
+      { section: 'Start here', label: 'Consulting Overview', description: 'See how B2W diagnoses the constraint and helps shape the right next move.', to: '/v1/services', liveTo: '/v1/services' },
+      { section: 'Start here', label: 'Business Revamp', description: 'Review growth, operations, and financials together when the business needs a coordinated reset.', to: '/v1/services/business-revamp', liveTo: '/v1/services/business-revamp' },
+      { section: 'Focus an area', label: 'Growth Strategy', description: 'Strengthen positioning, demand generation, and the path to sustainable growth.', to: '/v1/growth', liveTo: '/v1/growth' },
+      { section: 'Focus an area', label: 'Operations', description: 'Improve workflows, handoffs, visibility, and day-to-day execution.', to: '/v1/capabilities/operational-performance', liveTo: '/v1/capabilities/operational-performance' },
+      { section: 'Focus an area', label: 'Financial Performance', description: 'Find margin gaps, pricing issues, revenue leakage, and decision risks.', to: '/v1/capabilities/financials', liveTo: '/v1/capabilities/financials' },
+      { section: 'Start here', label: 'Talk to B2W', description: 'Bring us the problem. We’ll help determine the most useful way to work together.', to: '/v1/contact', liveTo: '/v1/contact' },
     ],
   },
   {
@@ -315,9 +309,9 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
                       exit={{ opacity: 0, y: -6, filter: 'blur(6px)' }}
                       onMouseEnter={cancelScheduledClose}
                       onMouseLeave={() => scheduleMenuClose(menu.label)}
-                      className={`fixed left-1/2 top-20 -translate-x-1/2 pt-2 text-black ${isColumnLayout ? 'w-[min(94vw,64rem)]' : 'w-[min(88vw,25rem)] md:absolute md:top-full'}`}
+                      className={`fixed left-1/2 top-20 -translate-x-1/2 pt-2 text-black ${isColumnLayout ? 'w-[min(94vw,52rem)]' : 'w-[min(88vw,25rem)] md:absolute md:top-full'}`}
                     >
-                      <div className={`overflow-hidden rounded-3xl border border-black/10 bg-white/96 p-2 shadow-[0_28px_90px_rgba(15,23,42,.22)] backdrop-blur-xl ${isColumnLayout ? 'grid md:grid-cols-2 lg:grid-cols-4' : ''}`}>
+                      <div className={`overflow-hidden rounded-3xl border border-black/10 bg-white/96 p-2 shadow-[0_28px_90px_rgba(15,23,42,.22)] backdrop-blur-xl ${isColumnLayout ? 'grid md:grid-cols-2' : ''}`}>
                         {isColumnLayout
                           ? menuSections.map((section) => (
                             <div key={section} className="min-w-0">

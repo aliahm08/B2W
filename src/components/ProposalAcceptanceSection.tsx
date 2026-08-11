@@ -411,7 +411,7 @@ export default function ProposalAcceptanceSection({
 
                   <div className="flex flex-col gap-3 border-t border-black/10 pt-5 md:flex-row md:items-center md:justify-between">
                     <p className="text-xs leading-5 text-neutral-500">
-                      This acceptance routes through the internal proposal-signature API and should notify info@b2w-ai.com plus the signer email.
+                      This acceptance is recorded securely in B2W's client submission ledger.
                     </p>
                     <button
                       type="submit"

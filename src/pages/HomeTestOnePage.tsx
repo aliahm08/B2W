@@ -134,23 +134,16 @@ function ProductFrame({
     : 'border-[#7e4967] bg-[#3d1f33] text-white hover:bg-[#7e4967]';
 
   return (
-    <motion.article
-      layout
+    <article
       onMouseEnter={() => setActiveMode(mode)}
       onMouseLeave={() => setActiveMode('consulting')}
       onFocus={() => setActiveMode(mode)}
       onBlur={() => setActiveMode('consulting')}
       className={`group relative flex min-h-[30rem] overflow-hidden rounded-[1.5rem] border p-6 transition-colors sm:min-h-[32rem] sm:rounded-[2rem] sm:p-8 lg:min-h-[34rem] ${frameClass}`}
-      initial={{ opacity: 0, y: 26, filter: 'blur(12px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, margin: '-120px' }}
-      transition={{ duration: 0.56, ease: [0.22, 1, 0.36, 1] }}
     >
-      <motion.div
+      <div
         aria-hidden="true"
         className={`absolute -right-24 -top-24 h-72 w-72 rounded-full blur-3xl ${isJasonAI ? 'bg-[#b24a24]/34' : 'bg-[#d9a9c2]/42'}`}
-        animate={{ scale: [1, 1.08, 1], opacity: [0.72, 1, 0.72] }}
-        transition={{ duration: 5.2, repeat: Infinity, ease: 'easeInOut' }}
       />
       <div className="relative z-10 flex h-full min-h-0 flex-col">
         <div className="flex items-center justify-between gap-4">
@@ -158,7 +151,7 @@ function ProductFrame({
           <Icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
         </div>
         <div className="relative mt-5 aspect-[16/10] overflow-hidden rounded-[22px] border border-white/12 bg-black/10">
-          <img src={image.src} srcSet={image.srcSet} sizes="(max-width: 1024px) 100vw, 38rem" alt={image.alt} decoding="async" className="h-full w-full object-cover" />
+          <img src={image.src} srcSet={image.srcSet} sizes="(max-width: 1024px) 100vw, 38rem" alt={image.alt} loading="lazy" decoding="async" className="h-full w-full object-cover" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
         <div className="mt-6 flex flex-1 flex-col justify-end">
@@ -176,7 +169,7 @@ function ProductFrame({
           </div>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
@@ -244,7 +237,7 @@ function ContractorHeroCarousel() {
   const isV3 = usesV3Branding(pathname);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [isCompact, setIsCompact] = useState(false);
+  const [isCompact, setIsCompact] = useState(() => typeof window !== 'undefined' && window.matchMedia('(max-width: 639px)').matches);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 639px)');
@@ -277,7 +270,7 @@ function ContractorHeroCarousel() {
               animate={{ flexGrow: isCompact ? 0 : isActive ? 4 : 1 }}
               transition={{ duration: .5, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img src={slide.src} srcSet={slide.srcSet} sizes={isActive ? '(max-width: 640px) 76vw, 58rem' : '(max-width: 640px) 12vw, 18rem'} alt="" decoding="async" className={`absolute inset-0 h-full w-full object-cover transition-[filter,transform] duration-500 ${isActive ? 'scale-100 brightness-[.72]' : 'scale-105 brightness-[.42]'}`} />
+              <img src={slide.src} srcSet={slide.srcSet} sizes={isActive ? '(max-width: 640px) 76vw, 58rem' : '(max-width: 640px) 12vw, 18rem'} alt="" loading="lazy" decoding="async" className={`absolute inset-0 h-full w-full object-cover transition-[filter,transform] duration-500 ${isActive ? 'scale-100 brightness-[.72]' : 'scale-105 brightness-[.42]'}`} />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
               <div className={`absolute inset-x-0 bottom-0 p-4 text-white transition-opacity sm:p-6 ${isActive ? 'opacity-100' : 'opacity-70'}`}>
                 <span className="font-mono text-[9px] uppercase tracking-[.16em] text-[#b8d3b8]">0{index + 1}</span>
@@ -363,7 +356,7 @@ export default function HomeTestOnePage() {
           </div>
 
           <div className="mt-24 flex flex-col items-center text-center sm:mt-32 lg:mt-36">
-            <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`b2w-wordmark text-[clamp(2rem,4.2vw,3.75rem)] font-medium leading-[0.94] tracking-[-0.065em] ${activeHero.textClass}`}>
+            <motion.h2 initial={false} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`b2w-wordmark text-[clamp(2rem,4.2vw,3.75rem)] font-medium leading-[0.94] tracking-[-0.065em] ${activeHero.textClass}`}>
               Take your work to the next stage.
             </motion.h2>
             <div id="products" className="mt-10 grid w-full scroll-mt-28 gap-6 sm:mt-12 lg:grid-cols-2 lg:gap-8">
@@ -372,7 +365,7 @@ export default function HomeTestOnePage() {
             </div>
           </div>
 
-          <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-24 text-center text-[clamp(2rem,4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.055em] sm:mt-32 lg:mt-36 ${activeHero.textClass}`}>
+          <motion.h2 initial={false} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-24 text-center text-[clamp(2rem,4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.055em] sm:mt-32 lg:mt-36 ${activeHero.textClass}`}>
             Optimizing growth for SMBs.
           </motion.h2>
           <ContractorHeroCarousel />

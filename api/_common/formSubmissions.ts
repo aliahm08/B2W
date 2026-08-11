@@ -5,6 +5,7 @@ import type {
   ClientCommunicationSubmission,
   JasonAiRoiReportSubmission,
   LeadSubmission,
+  ProposalSignatureSubmission,
 } from './validation.js';
 
 type FormAudience = 'landing' | 'client';
@@ -164,6 +165,36 @@ export async function insertClientFormSubmission(submission: ClientCommunication
     metadata: {
       messageCategory: submission.messageCategory,
       projectName: submission.projectName,
+    },
+  });
+}
+
+export async function insertProposalSignatureSubmission(
+  submission: ProposalSignatureSubmission,
+  notificationEmail: string,
+) {
+  return insertFormSubmission({
+    audience: 'client',
+    submission_type: 'proposal_signature',
+    template_key: 'proposal_signature',
+    notification_email: notificationEmail,
+    contact_name: submission.signerName,
+    contact_email: submission.signerEmail,
+    company: submission.company,
+    subject: submission.actionTaken,
+    message: submission.notes || 'Proposal action recorded.',
+    project_name: submission.proposalName,
+    source_page: submission.sourcePage,
+    source_path: submission.sourcePath,
+    source_url: submission.sourceUrl,
+    referrer: submission.referrer,
+    submitted_at: submission.submittedAt,
+    metadata: {
+      proposalId: submission.proposalId,
+      proposalUrl: submission.proposalUrl,
+      actionTaken: submission.actionTaken,
+      selectedOptionTitle: submission.selectedOptionTitle,
+      selectedOptionPrice: submission.selectedOptionPrice,
     },
   });
 }

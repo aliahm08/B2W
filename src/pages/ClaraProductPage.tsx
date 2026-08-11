@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import {
   ArrowRight,
@@ -13,6 +13,7 @@ import {
   SlidersHorizontal,
   Sparkles,
 } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import Seo from '../components/Seo';
 import {
   ButtonLink,
@@ -20,10 +21,19 @@ import {
   SectionHeading,
   pageWidth,
 } from '../components/site/PublicUI';
+import {
+  EstimateDocumentContent,
+  initialCategories,
+  Section1VoiceCapture,
+  Section2_1OrganizedScope,
+  type Category,
+} from './solutions/SolutionsLandingPage';
 
 const claraPink = '#a66589';
 const claraDark = '#3d1f33';
 const claraDemoUrl = 'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=b24a24';
+const claraWorkspaceWidth = 760;
+const claraWorkspaceHeight = 623;
 
 const promptExamples = [
   'Draft a project estimate from today’s site notes.',
@@ -95,7 +105,7 @@ function ClaraHero() {
   );
 }
 
-function ClaraFloatingCTA() {
+function ClaraFloatingCTA({ hideOnMobile = false }: { hideOnMobile?: boolean }) {
   const [isVisible, setIsVisible] = useState(false);
   const reduceMotion = useReducedMotion();
 
@@ -122,20 +132,211 @@ function ClaraFloatingCTA() {
           animate={{ opacity: 1, y: 0 }}
           exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
           transition={{ duration: .22 }}
-          className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4 sm:bottom-8"
+          className={`pointer-events-none fixed inset-x-0 bottom-16 z-40 justify-center px-4 sm:bottom-8 sm:flex ${hideOnMobile ? 'hidden' : 'flex'}`}
         >
-          <div className="pointer-events-auto flex items-center gap-1.5 rounded-full border border-[#d9a9c2]/70 bg-white/92 p-2 shadow-[0_18px_60px_rgba(61,31,51,.20)] backdrop-blur-md">
-            <a href="mailto:info@b2w-ai.com" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#3d1f33] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5a2c49]">
+          <div className="pointer-events-auto flex items-center gap-1 rounded-full border border-[#d9a9c2]/70 bg-white/92 p-1.5 shadow-[0_18px_60px_rgba(61,31,51,.20)] backdrop-blur-md sm:gap-1.5 sm:p-2">
+            <a href="mailto:info@b2w-ai.com" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#3d1f33] px-3.5 py-2 text-xs font-semibold text-white transition hover:bg-[#5a2c49] sm:px-4 sm:text-sm">
               Discuss Clara
               <ArrowRight className="h-4 w-4" />
             </a>
-            <a href={claraDemoUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center justify-center rounded-full px-4 py-2 text-sm font-semibold text-[#3d1f33] transition hover:bg-[#f5e4ed]">
-              Book Demo Call
+            <a href={claraDemoUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center justify-center rounded-full px-3.5 py-2 text-xs font-semibold text-[#3d1f33] transition hover:bg-[#f5e4ed] sm:px-4 sm:text-sm">
+              <span className="sm:hidden">Book Demo</span><span className="hidden sm:inline">Book Demo Call</span>
             </a>
           </div>
         </motion.div>
       ) : null}
     </AnimatePresence>
+  );
+}
+
+const estimateSteps = [
+  { step: 1, label: 'Capture', detail: 'Speak the field note', icon: Mic },
+  { step: 2, label: 'Scope', detail: 'Organize the work', icon: SlidersHorizontal },
+  { step: 3, label: 'Estimate', detail: 'Review every line', icon: FileSpreadsheet },
+] as const;
+
+function V1ClaraEstimateHero() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [categories, setCategories] = useState<Category[]>(() => initialCategories.map((category) => ({
+    ...category,
+    subItems: category.subItems.map((item) => ({ ...item })),
+  })));
+  const [contingencyPct, setContingencyPct] = useState<number | string>(15);
+  const [animatingCatIndex, setAnimatingCatIndex] = useState(-1);
+  const [animatingSubItemCount, setAnimatingSubItemCount] = useState(0);
+  const [estimateComplete, setEstimateComplete] = useState(false);
+
+  useEffect(() => {
+    if (currentStep !== 3 || estimateComplete) return undefined;
+
+    if (animatingCatIndex < categories.length) {
+      const category = categories[animatingCatIndex];
+      if (category && animatingSubItemCount < category.subItems.length) {
+        const timer = window.setTimeout(() => setAnimatingSubItemCount((count) => count + 1), 70);
+        return () => window.clearTimeout(timer);
+      }
+
+      const timer = window.setTimeout(() => {
+        setAnimatingCatIndex((index) => index + 1);
+        setAnimatingSubItemCount(0);
+      }, 150);
+      return () => window.clearTimeout(timer);
+    }
+
+    const timer = window.setTimeout(() => setEstimateComplete(true), 220);
+    return () => window.clearTimeout(timer);
+  }, [animatingCatIndex, animatingSubItemCount, categories, currentStep, estimateComplete]);
+
+  const totals = useMemo(() => {
+    const subtotal = categories.reduce((categoryTotal, category) => categoryTotal + category.subItems.reduce((lineTotal, item) => {
+      if (!item.checked) return lineTotal;
+      const quantity = typeof item.qty === 'string' ? Number.parseFloat(item.qty) || 0 : item.qty;
+      return lineTotal + quantity * item.unitPrice;
+    }, 0), 0);
+    const safeContingency = typeof contingencyPct === 'string' ? Number.parseFloat(contingencyPct) || 0 : contingencyPct;
+    const contingency = subtotal * (safeContingency / 100);
+    return { subtotal, contingency, grandTotal: subtotal + contingency };
+  }, [categories, contingencyPct]);
+
+  const toggleCheck = (categoryIndex: number, itemId: string) => {
+    if (!estimateComplete) return;
+    setCategories((current) => current.map((category, index) => index === categoryIndex
+      ? { ...category, subItems: category.subItems.map((item) => item.id === itemId ? { ...item, checked: !item.checked } : item) }
+      : category));
+  };
+
+  const updateQty = (categoryIndex: number, itemId: string, value: string) => {
+    setCategories((current) => current.map((category, index) => index === categoryIndex
+      ? { ...category, subItems: category.subItems.map((item) => item.id === itemId ? { ...item, qty: value } : item) }
+      : category));
+  };
+
+  const showStep = (step: number) => {
+    setCurrentStep(step);
+    if (step === 3 && animatingCatIndex < 0) setAnimatingCatIndex(0);
+  };
+
+  const enterWorkflow = () => {
+    showStep(1);
+    window.requestAnimationFrame(() => document.getElementById('clara-estimator-workflow')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+
+  return (
+    <section id="clara-estimator" data-header-theme="dark" className="relative isolate overflow-hidden border-b border-[#442638] bg-[#130d12] text-white">
+      <div aria-hidden="true" className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_10%_12%,rgba(166,101,137,.34),transparent_30%),radial-gradient(circle_at_88%_20%,rgba(23,105,255,.22),transparent_28%),linear-gradient(180deg,#130d12_0%,#21131d_58%,#160f15_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-25 [background-image:linear-gradient(rgba(255,255,255,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.04)_1px,transparent_1px)] [background-size:64px_64px]" />
+      <div className={`${pageWidth} pb-12 pt-24 sm:pb-24 sm:pt-36`}>
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,.65fr)] lg:items-end">
+          <motion.div initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: .55, ease: [0.22, 1, 0.36, 1] }}>
+            <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.18em] text-[#d9a9c2] sm:text-[10px] sm:tracking-[0.22em]">Clara · Expert · Concept phase</p>
+            <h1 className="mt-5 max-w-[13ch] text-[2.75rem] font-medium leading-[.94] tracking-[-.055em] text-white sm:mt-6 sm:text-7xl lg:text-[6.2rem]">Complete tasks on job sites.</h1>
+          </motion.div>
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .5, delay: .12 }} className="border-l border-[#d9a9c2]/65 pl-6 sm:pl-8">
+            <p className="text-[15px] leading-7 text-white/68 sm:text-lg sm:leading-8">Clara is a customized, private workspace concept where project teams could capture information, develop documents, complete tasks, and review work directly from the job site.</p>
+            <div className="mt-6 flex flex-col items-stretch gap-3 sm:mt-7 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+              <a href="mailto:info@b2w-ai.com" className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#f5dce8] px-5 py-3 text-sm font-semibold text-[#2b1724] shadow-[0_16px_44px_rgba(166,101,137,.24)] transition hover:bg-white">Discuss the concept</a>
+              <button type="button" onClick={enterWorkflow} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/18 px-5 py-3 text-sm font-semibold text-white transition hover:border-[#1769ff]/70 hover:bg-[#1769ff]/10">Try estimate workflow <ArrowRight className="h-4 w-4" /></button>
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.figure initial={{ opacity: 0, y: 22, scale: .99 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .68, delay: .16, ease: [0.22, 1, 0.36, 1] }} className="relative mt-8 overflow-hidden rounded-[1.5rem] border border-[#d9a9c2]/35 bg-[#2b1724] shadow-[0_34px_100px_rgba(0,0,0,.42)] sm:mt-10 sm:rounded-[2rem]">
+          <img
+            src="/images/clara/job-site-hero-1280.jpg"
+            srcSet="/images/clara/job-site-hero-640.jpg 640w, /images/clara/job-site-hero-1280.jpg 1280w, /images/clara/job-site-hero.jpg 1600w"
+            sizes="(max-width: 1440px) 100vw, (min-width: 2560px) 2240px, 80vw"
+            alt="Organized commercial construction site with a secure project tablet on a plan table."
+            className="aspect-[16/8] w-full object-cover opacity-80 saturate-[.82] sm:aspect-[16/7]"
+            fetchPriority="high"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(19,13,18,.12),rgba(39,19,31,.68))]" />
+          <figcaption className="absolute inset-x-3 bottom-3 flex items-center justify-center gap-2 rounded-full border border-white/20 bg-[#160f15]/78 px-3 py-2 text-center text-[8px] font-semibold uppercase leading-4 tracking-[.11em] text-white shadow-lg backdrop-blur-md sm:inset-x-auto sm:bottom-7 sm:left-7 sm:justify-start sm:gap-3 sm:px-4 sm:text-[10px] sm:tracking-[.14em]"><ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#f0cfe0] sm:h-4 sm:w-4" /> Secure workspace concept · Designed for site use</figcaption>
+        </motion.figure>
+
+        <div className="mb-5 mt-12 grid gap-4 sm:mb-7 sm:mt-20 sm:grid-cols-[minmax(0,1fr)_minmax(18rem,.52fr)] sm:items-end sm:gap-5">
+          <div><p className="font-mono text-[9px] font-semibold uppercase tracking-[.2em] text-[#79a7ff]">Voice to estimate</p><h2 className="mt-3 max-w-[16ch] text-3xl font-medium leading-[1] tracking-[-.045em] text-white sm:text-5xl">From site note to reviewed estimate.</h2></div>
+          <p className="text-sm leading-7 text-white/58">Move through the original Clara workflow. Each step keeps the job context visible while the document becomes more structured and ready for judgment.</p>
+        </div>
+
+        <motion.div id="clara-estimator-workflow" initial={{ opacity: 0, y: 24, scale: .99 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .65, delay: .18, ease: [0.22, 1, 0.36, 1] }} className="scroll-mt-24 overflow-hidden rounded-[2rem] border border-[#d9a9c2]/24 bg-[#160f15]/92 shadow-[0_42px_120px_rgba(0,0,0,.46)] backdrop-blur">
+          <div className="grid grid-cols-3 border-b border-white/10 bg-white/[.025]" aria-label="Clara estimate workflow steps">
+            {estimateSteps.map(({ step, label, detail, icon: Icon }) => {
+              const active = currentStep === step;
+              return (
+                <button key={step} type="button" aria-pressed={active} onClick={() => showStep(step)} className={`group relative flex min-h-[4.5rem] min-w-0 flex-col items-start gap-1.5 border-r border-white/8 px-2.5 py-2.5 text-left transition last:border-r-0 sm:min-h-20 sm:flex-row sm:items-center sm:gap-4 sm:px-5 sm:py-4 ${active ? 'bg-[#2b1724] text-white' : 'text-white/52 hover:bg-white/[.035] hover:text-white'}`}>
+                  {active ? <motion.span layoutId="v1-clara-step" className="absolute inset-x-0 bottom-0 h-[2px] bg-[#1769ff]" /> : null}
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border text-xs font-semibold transition sm:h-9 sm:w-9 sm:rounded-xl ${active ? 'border-[#1769ff]/55 bg-[#1769ff]/16 text-[#79a7ff]' : 'border-white/10 bg-white/[.025] text-[#d9a9c2]'}`}><Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" /></span>
+                  <span><span className="block text-[9px] font-semibold uppercase tracking-[.18em] text-[#d9a9c2]">0{step}</span><span className="mt-1 block text-sm font-semibold">{label}</span><span className="mt-0.5 hidden text-[10px] font-normal text-white/42 lg:block">{detail}</span></span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="relative min-h-[620px] overflow-hidden bg-[#130d12] sm:min-h-[720px]">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={createJourneySlides[currentStep - 1].image}
+                src={createJourneySlides[currentStep - 1].image}
+                alt=""
+                aria-hidden="true"
+                initial={{ opacity: 0, scale: 1.04 }}
+                animate={{ opacity: .42, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: .7, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            </AnimatePresence>
+            <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_82%_12%,rgba(23,105,255,.16),transparent_28%),linear-gradient(180deg,rgba(19,13,18,.62),rgba(19,13,18,.90))]" />
+            <AnimatePresence mode="wait">
+              {currentStep === 1 ? (
+                <motion.div key="capture" initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 18 }} transition={{ duration: .35 }} className="absolute inset-0 z-10 flex items-center justify-center py-5">
+                  <Section1VoiceCapture tone="dark" onComplete={() => showStep(2)} />
+                </motion.div>
+              ) : null}
+              {currentStep === 2 ? (
+                <motion.div key="scope" initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 18 }} transition={{ duration: .35 }} className="absolute inset-0 z-10 flex items-center justify-center py-5">
+                  <Section2_1OrganizedScope tone="dark" onComplete={() => showStep(3)} />
+                </motion.div>
+              ) : null}
+              {currentStep === 3 ? (
+                <motion.div key="estimate" initial={{ opacity: 0, x: -18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 18 }} transition={{ duration: .35 }} className="absolute inset-0 z-10 flex flex-col items-center justify-center px-5 py-6">
+                  <div className="mb-5 w-full text-center">
+                    <p className="font-mono text-[9px] font-semibold uppercase tracking-[.2em] text-[#79a7ff]">Step 03 · Review and adjust</p>
+                    <h2 className="mt-2 text-3xl font-medium text-white md:text-4xl">Your estimate, ready for judgment.</h2>
+                    <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-[#d9a9c2]">Toggle line items, edit quantities, and change contingency before anything leaves your hands.</p>
+                  </div>
+                  <div className="w-full max-w-[42rem] overflow-hidden rounded-[1.35rem] border border-[#1769ff]/28 bg-[#fdf9fb] shadow-[0_30px_90px_rgba(0,0,0,.45)]">
+                    <div className="max-h-[510px] overflow-y-auto">
+                      <EstimateDocumentContent
+                        categories={categories}
+                        animatingCatIndex={animatingCatIndex}
+                        animatingSubItemCount={animatingSubItemCount}
+                        estimateComplete={estimateComplete}
+                        toggleCheck={toggleCheck}
+                        updateQty={updateQty}
+                        subtotal={totals.subtotal}
+                        contingencyPct={contingencyPct}
+                        setContingencyPct={setContingencyPct}
+                        contingency={totals.contingency}
+                        grandTotal={totals.grandTotal}
+                        onEditNote={() => showStep(1)}
+                        onShare={() => { window.location.href = 'mailto:info@b2w-ai.com?subject=Clara%20estimate'; }}
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+
+        <div className="mt-5 flex items-center justify-between gap-5 text-[10px] text-white/38">
+          <p>Interactive concept · Review all generated work before use</p>
+          <p className="hidden text-right sm:block"><span className="text-[#d9a9c2]">Mauve</span> marks project context · <span className="text-[#79a7ff]">Blue</span> marks estimate-ready work</p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -203,6 +404,11 @@ function CreateJourneySection() {
 
 function ClaraWorkspaceDemo() {
   const shouldReduceMotion = useReducedMotion();
+  const demoRef = useRef<HTMLDivElement>(null);
+  const mockupViewportRef = useRef<HTMLDivElement>(null);
+  const [isDemoActive, setIsDemoActive] = useState(false);
+  const [mockupScale, setMockupScale] = useState(() => typeof window === 'undefined' ? 1 : Math.min(1, Math.max(0.1, (window.innerWidth - 80) / claraWorkspaceWidth)));
+  const [mockupCanvasWidth, setMockupCanvasWidth] = useState(claraWorkspaceWidth);
   const [scene, setScene] = useState(0);
   const [voiceRun, setVoiceRun] = useState(0);
   const [voiceStage, setVoiceStage] = useState(0);
@@ -211,7 +417,32 @@ function ClaraWorkspaceDemo() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (scene !== 0) return undefined;
+    const demo = demoRef.current;
+    if (!demo || !('IntersectionObserver' in window)) {
+      setIsDemoActive(true);
+      return undefined;
+    }
+    const observer = new IntersectionObserver(([entry]) => setIsDemoActive(entry.isIntersecting), { rootMargin: '240px 0px' });
+    observer.observe(demo);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const viewport = mockupViewportRef.current;
+    if (!viewport) return undefined;
+
+    const updateScale = () => {
+      setMockupScale(Math.min(1, viewport.clientWidth / claraWorkspaceWidth));
+      setMockupCanvasWidth(Math.max(claraWorkspaceWidth, viewport.clientWidth));
+    };
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (scene !== 0 || !isDemoActive) return undefined;
     setVoiceStage(0);
     if (shouldReduceMotion) {
       setVoiceStage(3);
@@ -223,7 +454,7 @@ function ClaraWorkspaceDemo() {
       window.setTimeout(() => setVoiceStage(3), 4800),
     ];
     return () => timers.forEach((timer) => window.clearTimeout(timer));
-  }, [scene, shouldReduceMotion, voiceRun]);
+  }, [isDemoActive, scene, shouldReduceMotion, voiceRun]);
 
   const selectScene = (nextScene: number) => {
     setScene(nextScene);
@@ -239,38 +470,36 @@ function ClaraWorkspaceDemo() {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-[2.25rem] border border-[#1769ff]/35 bg-[#e9dee4]/92 p-3 shadow-[0_38px_110px_rgba(38,20,32,.28)] sm:p-4">
+    <div ref={demoRef} className="relative overflow-hidden rounded-[2.25rem] border border-[#1769ff]/35 bg-[#e9dee4]/92 p-3 shadow-[0_38px_110px_rgba(38,20,32,.28)] sm:p-4">
       <span aria-hidden="true" className="absolute bottom-1.5 left-1/2 z-10 h-1 w-12 -translate-x-1/2 rounded-full bg-[#9f8794]/55" />
-      <div className="overflow-hidden rounded-[1.55rem] border border-[#cdbbc5] bg-white shadow-[0_20px_55px_rgba(61,31,51,.16)]">
-        <div className="border-b border-[#d9c8d1] bg-[#eee8ec] px-3 py-2.5 sm:px-4">
-          <div className="mx-auto grid max-w-4xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
-            <div className="hidden items-center gap-1.5 sm:flex" aria-hidden="true">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#d58c9f]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#d9bd83]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#83b99a]" />
+      <div ref={mockupViewportRef} className="relative w-full overflow-hidden rounded-[1.55rem]" style={{ height: `${Math.ceil(claraWorkspaceHeight * mockupScale)}px` }}>
+        <div className="absolute left-0 top-0 overflow-hidden rounded-[1.55rem] border border-[#cdbbc5] bg-white shadow-[0_20px_55px_rgba(61,31,51,.16)]" style={{ width: `${mockupCanvasWidth}px`, transform: `scale(${mockupScale})`, transformOrigin: 'top left' }}>
+          <div className="border-b border-[#d9c8d1] bg-[#eee8ec] px-4 py-2.5">
+            <div className="mx-auto grid max-w-4xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
+              <div className="flex items-center gap-1.5" aria-hidden="true">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#d58c9f]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#d9bd83]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#83b99a]" />
+              </div>
+              <div className="flex h-10 min-w-0 items-center gap-2.5 rounded-xl border border-[#d7cad1] bg-white/95 px-3 shadow-[inset_0_1px_2px_rgba(61,31,51,.05)]">
+                <img src="/brand/clara-logo-solid.png" alt="" className="h-5 w-5 shrink-0 object-contain" />
+                <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-emerald-700" />
+                <span className="min-w-0 truncate font-mono text-[11px] text-[#5f4253]">chat.b2w-ai.com</span>
+              </div>
+              <span className="inline-flex rounded-full border border-emerald-700/15 bg-emerald-50 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[.12em] text-emerald-800">Private</span>
             </div>
-            <div className="flex h-10 min-w-0 items-center gap-2.5 rounded-xl border border-[#d7cad1] bg-white/95 px-3 shadow-[inset_0_1px_2px_rgba(61,31,51,.05)]">
-              <img src="/brand/clara-logo-solid.png" alt="" className="h-5 w-5 shrink-0 object-contain" />
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-emerald-700" />
-              <span className="min-w-0 truncate font-mono text-[10px] text-[#5f4253] sm:text-[11px]">chat.b2w-ai.com</span>
-            </div>
-            <span className="hidden rounded-full border border-emerald-700/15 bg-emerald-50 px-2.5 py-1 text-[8px] font-semibold uppercase tracking-[.12em] text-emerald-800 sm:inline-flex">Private</span>
           </div>
-        </div>
-        <div className="grid min-h-[560px] md:grid-cols-[220px_minmax(0,1fr)]">
-          <aside className="border-b border-[#ead9e2] bg-[#fffafd] p-3 md:border-b-0 md:border-r md:p-4">
+          <div className="grid min-h-[560px] grid-cols-[220px_minmax(0,1fr)]">
+            <aside className="border-r border-[#ead9e2] bg-[#fffafd] p-4">
             <button type="button" onClick={() => selectScene(0)} className={`flex min-h-10 w-full cursor-pointer items-center gap-2 rounded-xl px-3 text-left text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1769ff]/45 ${scene === 0 ? 'bg-[#1769ff] text-white shadow-[0_8px_22px_rgba(23,105,255,.22)]' : 'text-[#5f4253] hover:bg-[#e8f0ff] hover:text-[#1256d8]'}`}><Mic className="h-4 w-4" /> New document</button>
-            <p className="mb-2 mt-5 hidden px-2 text-[9px] font-semibold uppercase tracking-[.17em] text-[#987386] md:block">Recent work</p>
-            <div className="mt-2 hidden space-y-1 md:block">
+            <p className="mb-2 mt-5 px-2 text-[9px] font-semibold uppercase tracking-[.17em] text-[#987386]">Recent work</p>
+            <div className="mt-2 space-y-1">
               {['Kitchen renovation estimate', 'Oak Street proposal', 'Vendor comparison'].map((item) => <button key={item} type="button" onClick={() => { setRecentWork(item); setScene(2); }} className={`block w-full cursor-pointer rounded-lg px-2 py-2 text-left text-[11px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1769ff]/40 ${scene === 2 && recentWork === item ? 'bg-[#e8f0ff] font-semibold text-[#1256d8] shadow-sm ring-1 ring-[#1769ff]/35' : 'text-[#7e5c70] hover:bg-[#eef4ff] hover:text-[#1256d8]'}`}>{item}</button>)}
             </div>
-            <button type="button" onClick={() => selectScene(1)} className={`mt-2 flex w-full cursor-pointer items-center gap-2 rounded-xl border-t border-[#ead9e2] px-2 py-3 text-left text-[10px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1769ff]/40 md:mt-7 ${scene === 1 ? 'bg-[#e8f0ff] font-semibold text-[#1256d8] ring-1 ring-[#1769ff]/25' : 'text-[#7e5c70] hover:bg-[#eef4ff] hover:text-[#1256d8]'}`}><FolderLock className="h-3.5 w-3.5" /> Company knowledge</button>
-            <div className="mt-3 grid grid-cols-3 gap-1 md:hidden">
-              {['Voice', 'Standards', 'Chat'].map((label, index) => <button key={label} type="button" onClick={() => selectScene(index)} className={`cursor-pointer rounded-lg px-2 py-2 text-[9px] font-semibold transition ${scene === index ? 'bg-[#1769ff] text-white' : 'bg-[#fbf3f7] text-[#7e5c70] hover:bg-[#e8f0ff] hover:text-[#1256d8]'}`}>{label}</button>)}
-            </div>
-          </aside>
-          <div className="flex min-w-0 flex-col bg-[#fdf9fb]">
-            <div className="flex-1 overflow-hidden p-5 sm:p-8">
+            <button type="button" onClick={() => selectScene(1)} className={`mt-7 flex w-full cursor-pointer items-center gap-2 rounded-xl border-t border-[#ead9e2] px-2 py-3 text-left text-[10px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1769ff]/40 ${scene === 1 ? 'bg-[#e8f0ff] font-semibold text-[#1256d8] ring-1 ring-[#1769ff]/25' : 'text-[#7e5c70] hover:bg-[#eef4ff] hover:text-[#1256d8]'}`}><FolderLock className="h-3.5 w-3.5" /> Company knowledge</button>
+            </aside>
+            <div className="flex min-w-0 flex-col bg-[#fdf9fb]">
+            <div className="flex-1 overflow-hidden p-8">
               <AnimatePresence mode="wait">
                 {scene === 0 ? (
                   <motion.div key="voice" initial={{ opacity: 0, y: 16, filter: 'blur(7px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} exit={{ opacity: 0, y: -10, filter: 'blur(5px)' }} transition={{ duration: .45 }} className="mx-auto max-w-xl">
@@ -305,8 +534,8 @@ function ClaraWorkspaceDemo() {
                     {recentWork === 'Kitchen renovation estimate' ? (
                       <>
                         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="ml-auto mt-4 max-w-[92%] overflow-hidden rounded-2xl rounded-tr-sm bg-[#f5dce8] shadow-sm">
-                          <div className="grid sm:grid-cols-[8.5rem_minmax(0,1fr)]">
-                            <img src="/images/clara/living-room-site-update.jpg" alt="Living room renovation site showing drywall, flooring, baseboard, and window-trim work." loading="lazy" decoding="async" className="h-32 w-full object-cover sm:h-full" />
+                          <div className="grid grid-cols-[8.5rem_minmax(0,1fr)]">
+                            <img src="/images/clara/living-room-site-update.jpg" alt="Living room renovation site showing drywall, flooring, baseboard, and window-trim work." loading="lazy" decoding="async" className="h-full w-full object-cover" />
                             <div className="p-4 text-[#3d1f33]">
                               <p className="text-[9px] font-semibold uppercase tracking-[.14em] text-[#a66589]">Site update · Living room</p>
                               <ul className="mt-2 space-y-1 text-[10px] leading-4 text-[#6f4a60]"><li>Repair damaged subfloor at window wall</li><li>Patch drywall and replace baseboard</li><li>Repair and refinish window trim</li></ul>
@@ -338,23 +567,32 @@ function ClaraWorkspaceDemo() {
                 <button type="button" onClick={submit} aria-label="Send message" className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl bg-[#1769ff] text-white shadow-[0_7px_18px_rgba(23,105,255,.24)] transition hover:bg-[#1256d8] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#1769ff]/25"><Send className="h-4 w-4" /></button>
               </div>
             </div>
+            </div>
           </div>
         </div>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2 sm:hidden" aria-label="SaaS mockup views">
+        {['Voice', 'Standards', 'Chat'].map((label, index) => (
+          <button key={label} type="button" onClick={() => selectScene(index)} aria-pressed={scene === index} className={`min-h-11 rounded-xl px-2 py-2 text-[10px] font-semibold transition ${scene === index ? 'bg-[#1769ff] text-white shadow-[0_8px_20px_rgba(23,105,255,.2)]' : 'border border-[#d9a9c2]/55 bg-white/72 text-[#6f4a60]'}`}>{label}</button>
+        ))}
       </div>
     </div>
   );
 }
 
 export default function ClaraProductPage() {
+  const location = useLocation();
+  const isV1EstimatePage = location.pathname === '/v1/estimates';
+  const isVersionedClaraPage = /^\/v[123]\//.test(location.pathname);
+  const estimatorLink = isV1EstimatePage ? '/v1/estimates#clara-estimator-workflow' : '/solutions/ai-workflows/project-estimates';
+
   return (
     <div className="min-h-screen bg-[#fff8fb] text-[#3d1f33] selection:bg-[#3d1f33] selection:text-white" style={{ '--b2w-plum': claraPink, '--b2w-plum-dark': claraDark } as React.CSSProperties}>
       <Seo />
       <main>
-        <ClaraHero />
+        {isV1EstimatePage ? <V1ClaraEstimateHero /> : <><ClaraHero /><CreateJourneySection /></>}
 
-        <CreateJourneySection />
-
-        <section className="relative isolate overflow-hidden border-y border-[#ead9e2]">
+        <section id="clara-saas-workspace" className="relative isolate scroll-mt-20 overflow-hidden border-y border-[#ead9e2]">
           <img
             src="/images/clara/job-site-demo-background-1280.jpg"
             srcSet="/images/clara/job-site-demo-background-640.jpg 640w, /images/clara/job-site-demo-background-1280.jpg 1280w, /images/clara/job-site-demo-background.jpg 1800w"
@@ -363,18 +601,18 @@ export default function ClaraProductPage() {
             aria-hidden="true"
             loading="lazy"
             decoding="async"
-            className="absolute inset-0 -z-20 h-full w-full scale-[1.015] object-cover object-center blur-[3px]"
+            className="absolute inset-0 -z-20 h-full w-full scale-[1.015] object-cover object-center sm:blur-[3px]"
           />
           <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(38,20,32,.38),rgba(63,34,52,.20)_42%,rgba(251,243,247,.52))]" />
-          <div className={`${pageWidth} py-16 sm:py-24`}>
-            <div className="w-full rounded-[1.5rem] border border-white/15 bg-[#2b1724]/92 p-5 text-white shadow-[0_18px_48px_rgba(31,14,25,.22)] backdrop-blur-sm sm:p-6">
-              <h2 className="max-w-[22ch] text-3xl font-medium leading-[1] tracking-[-.045em] sm:text-4xl">Clara is B2W’s AI expert concept.</h2>
+          <div className={`${pageWidth} py-12 sm:py-24`}>
+            <div className="w-full rounded-[1.35rem] border border-white/15 bg-[#2b1724]/92 p-4 text-white shadow-[0_18px_48px_rgba(31,14,25,.22)] backdrop-blur-sm sm:rounded-[1.5rem] sm:p-6">
+              <h2 className="max-w-[22ch] text-2xl font-medium leading-[1] tracking-[-.045em] sm:text-4xl">Clara is B2W’s AI expert concept.</h2>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-white/68">The web workspace keeps company knowledge, current drafts, and the conversation that shaped them together in one permissioned channel.</p>
             </div>
             <div className="mt-6">
               <ClaraWorkspaceDemo />
             </div>
-            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+            <div className="mt-4 grid gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4">
               {[
                 ['Private workspace', FolderLock, 'Company context stays inside the workspace and its approved access boundary.'],
                 ['Visible sources', ShieldCheck, 'See which preferences and company materials informed the draft.'],
@@ -382,10 +620,9 @@ export default function ClaraProductPage() {
               ].map(([title, Icon, body]) => {
                 const IconComponent = Icon as typeof ShieldCheck;
                 return (
-                  <article key={title as string} className="border-l-2 border-[#d9a9c2] bg-[#fff9fc]/90 p-5 shadow-lg backdrop-blur-md">
-                    <IconComponent className="h-5 w-5 text-[#a66589]" />
-                    <h3 className="mt-4 text-sm font-semibold">{title as string}</h3>
-                    <p className="mt-2 text-xs leading-6 text-[#7e5c70]">{body as string}</p>
+                  <article key={title as string} className="grid grid-cols-[auto_minmax(0,1fr)] gap-3 border-l-2 border-[#d9a9c2] bg-[#fff9fc]/90 p-4 shadow-lg backdrop-blur-md sm:block sm:p-5">
+                    <IconComponent className="mt-0.5 h-5 w-5 text-[#a66589] sm:mt-0" />
+                    <div><h3 className="text-sm font-semibold sm:mt-4">{title as string}</h3><p className="mt-1.5 text-xs leading-5 text-[#7e5c70] sm:mt-2 sm:leading-6">{body as string}</p></div>
                   </article>
                 );
               })}
@@ -393,11 +630,11 @@ export default function ClaraProductPage() {
           </div>
         </section>
 
-        <section className={`${pageWidth} py-16 sm:py-24`}><SectionHeading title="One workspace. Many company documents." description="Begin with the document your team produces most often, make the preferences reliable, and expand from a proven workflow." tone="plum" /><div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-[#ead9e2] bg-[#ead9e2] sm:grid-cols-2 lg:grid-cols-4">{[['Project estimates', 'Turn notes, quantities, and cost preferences into a reviewable estimate.'], ['Scopes of work', 'Organize requirements, assumptions, exclusions, and responsibilities.'], ['Client proposals', 'Develop persuasive, consistent proposals using company standards.'], ['Operating reports', 'Structure project inputs into status, decision, and follow-up documents.']].map(([title, body]) => <article key={title} className="flex min-h-64 flex-col bg-white p-6"><FileText className="h-5 w-5 text-[#a66589]" /><h3 className="mt-10 text-xl font-semibold tracking-[-.03em]">{title}</h3><p className="mt-3 text-sm leading-7 text-[#7e5c70]">{body}</p>{title === 'Project estimates' ? <ButtonLink to="/solutions/ai-workflows/project-estimates" variant="tertiary" className="mt-auto pt-7 text-[#7e4967]">View workflow demo</ButtonLink> : null}</article>)}</div></section>
+        <section className={`${pageWidth} py-12 sm:py-24`}><SectionHeading title="One workspace. Many company documents." description="Begin with the document your team produces most often, make the preferences reliable, and expand from a proven workflow." tone="plum" /><div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-[#ead9e2] bg-[#ead9e2] sm:grid-cols-2 lg:grid-cols-4">{[['Project estimates', 'Turn notes, quantities, and cost preferences into a reviewable estimate.'], ['Scopes of work', 'Organize requirements, assumptions, exclusions, and responsibilities.'], ['Client proposals', 'Develop persuasive, consistent proposals using company standards.'], ['Operating reports', 'Structure project inputs into status, decision, and follow-up documents.']].map(([title, body]) => <article key={title} className="flex flex-col bg-white p-5 sm:min-h-64 sm:p-6"><FileText className="h-5 w-5 text-[#a66589]" /><h3 className="mt-4 text-lg font-semibold tracking-[-.03em] sm:mt-10 sm:text-xl">{title}</h3><p className="mt-2 text-sm leading-6 text-[#7e5c70] sm:mt-3 sm:leading-7">{body}</p>{title === 'Project estimates' ? <ButtonLink to={estimatorLink} variant="tertiary" className="mt-2 pt-2 text-[#7e4967] sm:mt-auto sm:pt-7">{isV1EstimatePage ? 'Return to estimator' : 'View workflow demo'}</ButtonLink> : null}</article>)}</div></section>
 
-        <CTASection eyebrow="Explore the concept" title="Bring us one document your company creates repeatedly." description="We’ll map the source material, preferences, review rules, and output so you can evaluate how a customized Clara workspace could fit your team. Clara is not generally available or priced." action={{ label: 'Discuss the Clara concept', to: 'mailto:info@b2w-ai.com', variant: 'product' }} secondary={{ label: 'View the estimate concept', to: '/solutions/ai-workflows/project-estimates' }} tone="plum" />
+        <CTASection eyebrow="Explore the concept" title="Bring us one document your company creates repeatedly." description="We’ll map the source material, preferences, review rules, and output so you can evaluate how a customized Clara workspace could fit your team. Clara is not generally available or priced." action={{ label: 'Discuss the Clara concept', to: 'mailto:info@b2w-ai.com', variant: 'product' }} secondary={{ label: isV1EstimatePage ? 'Return to the estimator' : 'View the estimate concept', to: estimatorLink }} tone="plum" compactMobile />
       </main>
-      <ClaraFloatingCTA />
+      <ClaraFloatingCTA hideOnMobile={isVersionedClaraPage} />
     </div>
   );
 }

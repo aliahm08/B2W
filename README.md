@@ -43,40 +43,28 @@
 - Framer Motion (for animations)
 - Lucide React (for icons)
 
-## Website Assistant
-- The site now uses server-side `/api` routes for chat and consultation booking.
-- Ollama credentials stay in environment variables and are never exposed to the browser bundle.
-- Knowledge is pulled from local `.md` and `.json` files plus optional allowlisted Google Drive files/folders.
-- Calendar reads and event creation are restricted to `GOOGLE_ALLOWED_CALENDAR_IDS`, and Drive writes are restricted to `GOOGLE_DRIVE_BOOKING_FOLDER_ID` when that folder is also allowlisted.
-
 ## Booking and Forms Setup
 - Public landing pages, service pages, client communications, and proposal signatures now submit to internal Vercel API routes.
-- The API routes validate input, rate-limit requests, send email through Resend, and append rows to Google Sheets.
+- The API routes validate input, rate-limit requests, and write one authoritative record to Supabase.
+- Notifications and downstream exports should be triggered from Supabase; form success does not depend on email or Google Sheets.
 - Calendly remains optional as a follow-on CTA after successful lead submissions.
 - Add these environment variables locally and in Vercel:
 
 ```bash
 VITE_CALENDLY_URL="https://calendly.com/your-team/consultation"
-RESEND_API_KEY="re_xxxxxxxxx"
-RESEND_FROM_EMAIL="B2W <info@b2w-ai.com>"
 INTERNAL_NOTIFICATION_EMAIL="info@b2w-ai.com"
-GOOGLE_SHEETS_SPREADSHEET_ID="your-google-sheet-id"
-GOOGLE_SERVICE_ACCOUNT_EMAIL="service-account@project.iam.gserviceaccount.com"
-GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-SHEET_TAB_LEADS="Lead Inquiries"
-SHEET_TAB_CLIENT_COMMUNICATIONS="Client Communications"
-SHEET_TAB_PROPOSAL_SIGNATURES="Proposal Signatures"
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_xxx"
+SUPABASE_SECRET_KEY="sb_secret_xxx"
 ```
 
 - `VITE_CALENDLY_URL` is used in the Expertise section and in the success state after public lead submissions.
-- Replace `re_xxxxxxxxx` with your real Resend API key before running the email flows.
 - `/api/contact-lead` handles public lead inquiries.
 - `/api/client-communication` handles client portal / client communication forms.
 - `/api/proposal-signature` handles proposal acceptance and signature-related actions.
-- Resend credentials and Google credentials stay server-side only and are never exposed to the browser bundle.
+- Supabase secret credentials stay server-side only and are never exposed to the browser bundle.
 - All non-client landing pages now use the same `Tell us about your business` intake form, including ARR and multi-select project areas.
 - Selecting all three public project areas normalizes the lead to `End-to-End Rebuild`.
-- Google Sheets logging expects the workbook tabs to already exist or match the configured names.
 - Full operator setup is documented in [docs/forms-and-booking-setup.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/forms-and-booking-setup.md).
 
 ## Project Pipeline Sync
