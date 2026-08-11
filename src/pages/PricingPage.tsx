@@ -17,7 +17,7 @@ export default function PricingPage() {
     window.location.href = 'mailto:info@b2w-ai.com?subject=JasonAI%20pricing%20and%20ROI%20review';
   };
   const discussClara = () => {
-    window.location.href = '/contact?type=clara';
+    window.location.href = 'mailto:info@b2w-ai.com';
   };
 
   return (

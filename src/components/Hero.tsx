@@ -31,7 +31,7 @@ export default function Hero({
   const navigate = useNavigate();
   const primaryCtaTarget = hero.primaryCtaHref.replace('#capabilities', '#expertise');
   const primaryCtaHref = resolveAnchorTarget(basePath, primaryCtaTarget);
-  const contactHref = `${basePath}#contact`;
+  const contactHref = 'mailto:info@b2w-ai.com';
 
   const handleAnchorClick = (target: string) => (event: MouseEvent<HTMLAnchorElement>) => {
     const hashIndex = target.indexOf('#');
@@ -94,13 +94,12 @@ export default function Hero({
               >
                 <span>Explore Services</span>
               </Link>
-              <Link
-                to={contactHref}
-                onClick={handleAnchorClick(contactHref)}
+              <a
+                href={contactHref}
                 className="inline-flex min-h-12 w-full items-center justify-center border border-black/15 bg-white/70 px-5 py-3 text-base font-medium text-black transition-colors hover:border-black hover:text-neutral-600 sm:w-auto sm:border-b sm:border-x-0 sm:border-t-0 sm:bg-transparent sm:text-lg"
               >
                 <span>Get in Touch</span>
-              </Link>
+              </a>
             </div>
           </div>
         </motion.div>

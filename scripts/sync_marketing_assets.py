@@ -16,9 +16,10 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DIR = ROOT / "public"
 BRAND_DIR = PUBLIC_DIR / "brand"
+OFFICIAL_B2W_MARK_SOURCE = BRAND_DIR / "clara-logo.png"
 CLARA_SOURCE = BRAND_DIR / "clara-logo-solid.png"
-ICON_SOURCE = CLARA_SOURCE
-MARKETING_ASSET_VERSION = "20260801.3"
+ICON_SOURCE = OFFICIAL_B2W_MARK_SOURCE
+MARKETING_ASSET_VERSION = "20260811.1"
 
 FAVICON_OUTPUTS = {
     "favicon.png": 32,
@@ -81,7 +82,7 @@ def write_vector_favicon(path: Path) -> None:
         "\n".join(
             [
                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">',
-                "  <title>B2W marketing mark</title>",
+                "  <title>Official B2W logo</title>",
                 f'  <image href="data:image/png;base64,{encoded}" width="512" height="512" preserveAspectRatio="xMidYMid meet"/>',
                 "</svg>",
                 "",
@@ -124,7 +125,7 @@ def compose_b2w_social_card(output_path: Path) -> None:
     draw_card_frame(canvas)
     draw.rounded_rectangle((58, 58, 1142, 506), radius=24, fill="#111315")
 
-    mark = open_rgba(CLARA_SOURCE)
+    mark = open_rgba(OFFICIAL_B2W_MARK_SOURCE)
     mark.thumbnail((240, 240), Image.Resampling.LANCZOS)
     mark_canvas = Image.new("RGBA", mark.size, (255, 255, 255, 0))
     white_mark = Image.new("RGBA", mark.size, "white")
@@ -133,7 +134,7 @@ def compose_b2w_social_card(output_path: Path) -> None:
     canvas.alpha_composite(mark_canvas, (155, 158))
 
     draw.text((455, 145), "B2W", font=load_brand_font(150), fill="white", stroke_width=0)
-    draw.text((463, 330), "PRACTICAL AI PRODUCTS", font=load_brand_font(25), fill="#8fc2d7")
+    draw.text((463, 330), "PRACTICAL AI FOR CONTRACTORS", font=load_brand_font(25), fill="#8fc2d7")
     draw.text((58, 552), "Turn business noise into work that moves.", font=load_brand_font(24), fill="#315f79")
     save_png(canvas, output_path)
 
@@ -145,6 +146,8 @@ def write_manifest(path: Path) -> None:
 def main() -> None:
     icon = open_rgba(ICON_SOURCE)
     write_vector_favicon(PUBLIC_DIR / "favicon.svg")
+
+    save_png(contain_square(icon, 512), BRAND_DIR / "b2w-logo-512.png")
 
     for filename, size in FAVICON_OUTPUTS.items():
         save_png(contain_square(icon, size), PUBLIC_DIR / filename)
@@ -161,6 +164,7 @@ def main() -> None:
 
     print("Synced marketing assets:")
     print(" - public/favicon.svg")
+    print(" - public/brand/b2w-logo-512.png")
     for filename in sorted(FAVICON_OUTPUTS):
         print(f" - public/{filename}")
     print(" - public/favicon.ico")

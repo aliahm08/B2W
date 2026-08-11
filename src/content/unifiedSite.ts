@@ -19,15 +19,6 @@ export type WorkflowDefinition = {
   outcome: string;
 };
 
-export type ResourceDefinition = {
-  title: string;
-  category: 'Guides' | 'Tools' | 'Demonstrations' | 'Case Studies';
-  description: string;
-  decision: string;
-  href: string;
-  status: ProductStage | 'Published';
-};
-
 export type BusinessHorizon = {
   id: 'now' | 'next' | 'future';
   label: 'Now' | 'Up next' | 'In store';
@@ -60,15 +51,13 @@ export const publicNavigation = [
     children: [
       { label: 'Assistant', to: '/jasonai', description: 'The current B2W assistant for approved business communication' },
       { label: 'Product workflows', to: '/products/workflows', description: 'Available, developing, and future operating workflows' },
-      { label: 'Document generation', to: '/resources/demonstrations#example-flows', description: 'Capture, structure, review, and generate usable outputs' },
     ],
   },
   {
     label: 'General Contracting',
-    to: '/resources#document-library',
+    to: '/general-contractors',
   },
   { label: 'Pricing', to: '/products/pricing' },
-  { label: 'Resources', to: '/resources' },
   { label: 'Company', to: '/about' },
 ] as const;
 
@@ -82,7 +71,7 @@ export const services: ServiceDefinition[] = [
     output: 'A focused operating brief, decision model, and prioritized plan with clear owners and gates.',
     customer: 'Owners and operating leaders preparing to grow, reset, finance, or make a consequential decision.',
     nextAction: 'Discuss a strategy engagement',
-    href: '/contact?type=service&focus=Strategy',
+    href: 'mailto:info@b2w-ai.com',
   },
   {
     id: 'systems',
@@ -93,7 +82,7 @@ export const services: ServiceDefinition[] = [
     output: 'A system blueprint, operating workflow, prototype, and implementation-ready requirements.',
     customer: 'Growing teams losing time or revenue to fragmented communication, handoffs, and reporting.',
     nextAction: 'Map an operating system',
-    href: '/contact?type=service&focus=Systems',
+    href: 'mailto:info@b2w-ai.com',
   },
   {
     id: 'implementation',
@@ -104,7 +93,7 @@ export const services: ServiceDefinition[] = [
     output: 'A working system, implementation plan, team enablement, documentation, and a measurable operating cadence.',
     customer: 'Leaders who want one accountable path from approved scope through launch and adoption.',
     nextAction: 'Plan an implementation',
-    href: '/contact?type=service&focus=Implementation',
+    href: 'mailto:info@b2w-ai.com',
   },
 ];
 
@@ -228,41 +217,6 @@ export const workflows: WorkflowDefinition[] = [
   },
 ];
 
-export const resources: ResourceDefinition[] = [
-  {
-    category: 'Guides',
-    title: 'Operating friction review',
-    description: 'A short guide for separating a strategy problem from a workflow or implementation problem.',
-    decision: 'Decide where to intervene first.',
-    href: '/resources/guides',
-    status: 'Published',
-  },
-  {
-    category: 'Tools',
-    title: 'Engagement pathfinder',
-    description: 'Answer a few operating questions and review the B2W path that best fits the condition.',
-    decision: 'Choose a useful starting engagement.',
-    href: '/resources/tools#pathfinder',
-    status: 'Available now',
-  },
-  {
-    category: 'Demonstrations',
-    title: 'From capture to decision',
-    description: 'A guided demonstration of how unstructured input becomes a reviewable operating output.',
-    decision: 'See the interaction before discussing a build.',
-    href: '/resources/demonstrations',
-    status: 'Available now',
-  },
-  {
-    category: 'Case Studies',
-    title: 'General contracting estimation flow',
-    description: 'The previous Clara voice-to-scope workflow rebuilt as an animated B2W estimation demonstration.',
-    decision: 'Preview the coming-soon estimation sequence.',
-    href: '/resources/case-studies#example-flows',
-    status: 'Planned',
-  },
-];
-
 export const searchEntries = [
   { label: 'Services', description: 'Strategy, systems, and implementation', group: 'Services', to: '/services' },
   ...services.map((service) => ({
@@ -279,16 +233,9 @@ export const searchEntries = [
   { label: 'JasonAI privacy', description: 'Data boundaries, controls, retention, and review', group: 'Agents', to: '/jasonai/privacy' },
   { label: 'Workflows', description: 'Available, in-development, and future product workflows', group: 'Products', to: '/products/workflows' },
   { label: 'Pricing and ROI calculator', description: 'JasonAI subscription, WhatsApp setup, workflow consultation, and illustrative time-value modeling', group: 'Products', to: '/products/pricing' },
-  { label: 'General Contracting', description: 'Scopes, field reports, change orders, proposals, and contractor workflow demonstrations', group: 'Industry', to: '/resources#document-library' },
-  { label: 'Resources', description: 'Guides, tools, demonstrations, and case studies', group: 'Resources', to: '/resources' },
-  ...resources.map((resource) => ({
-    label: resource.title,
-    description: resource.description,
-    group: resource.category,
-    to: resource.href,
-  })),
+  { label: 'General Contracting', description: 'Project communication, contractor workflows, and practical AI assistants', group: 'Industry', to: '/general-contractors' },
   { label: 'About B2W', description: 'Why B2W combines strategy, systems, and AI products', group: 'Company', to: '/about' },
-  { label: 'Contact', description: 'Service, JasonAI, WhatsApp setup, partnership, and general inquiries', group: 'Company', to: '/contact' },
+  { label: 'Contact', description: 'Service, JasonAI, WhatsApp setup, partnership, and general inquiries', group: 'Company', to: 'mailto:info@b2w-ai.com' },
 ] as const;
 
 export const stageOrder: ProductStage[] = ['Available now', 'In development', 'Planned', 'Future'];

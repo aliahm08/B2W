@@ -17,7 +17,7 @@ const v2Menus = [
     label: 'Solutions',
     items: [
       { label: 'General Contractors', description: 'Connect field communication, job context, estimates, and follow-up.', to: '/v2/solutions/general-contractors', liveTo: '/workflows' },
-      { label: 'Engineering Firms', description: 'Organize technical context, project decisions, reporting, and review.', to: '/v2/solutions/engineering-firms', liveTo: '/contact?type=engineering-firm' },
+      { label: 'Engineering Firms', description: 'Organize technical context, project decisions, reporting, and review.', to: '/v2/solutions/engineering-firms', liveTo: 'mailto:info@b2w-ai.com' },
     ],
   },
 ] as const;
@@ -29,7 +29,7 @@ const liveMenus = [
     items: [
       { label: 'General Contractor', description: 'Switch between solutions for owners, project coordinators, and operations teams.', to: '/general-contractors', liveTo: '/general-contractors' },
       { label: 'Use Cases', description: 'Explore the communication, document, and operating problems B2W can help solve.', to: '/solutions/business-use-cases', liveTo: '/solutions/business-use-cases' },
-      { label: 'How B2W Works', description: 'Follow the five-step guide from one scoped problem to governed daily use.', to: '/solutions/ai-workflows', liveTo: '/solutions/ai-workflows' },
+      { label: 'AI Workflows', description: 'Follow the five-step guide from one scoped problem to governed daily use.', to: '/solutions/ai-workflows', liveTo: '/solutions/ai-workflows' },
     ],
   },
 ] as const;
@@ -44,6 +44,9 @@ type V2SiteHeaderProps = {
 
 export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = false }: V2SiteHeaderProps) {
   const location = useLocation();
+  const isV3 = location.pathname === '/v3' || location.pathname.startsWith('/v3/');
+  const productMenuLabel = isV3 ? 'AI Assistants' : 'Products';
+  const solutionsMenuLabel = isV3 ? 'Guidance' : 'Solutions';
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [pageTheme, setPageTheme] = useState<'light' | 'dark'>(theme);
@@ -64,7 +67,7 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     if (pinnedMenuRef.current) return;
     cancelScheduledClose();
-    if (label !== 'Products') setProductColorway(null);
+    if (label !== productMenuLabel) setProductColorway(null);
     setOpenMenu(label);
   };
 
@@ -169,7 +172,11 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
   }, [followPageTheme, theme]);
 
   const dark = pageTheme === 'dark';
-  const menus = live ? liveMenus : v2Menus;
+  const menus = (live ? liveMenus : v2Menus).map((menu, index) => {
+    if (index === 0) return { ...menu, label: productMenuLabel };
+    if (index === 1) return { ...menu, label: solutionsMenuLabel };
+    return menu;
+  });
 
   return (
     <>

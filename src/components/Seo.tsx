@@ -117,6 +117,21 @@ export default function Seo({
         content: metadata.imageUrl,
       });
 
+      upsertMeta('meta[property="og:image:type"]', {
+        property: 'og:image:type',
+        content: 'image/png',
+      });
+
+      upsertMeta('meta[property="og:image:width"]', {
+        property: 'og:image:width',
+        content: '1200',
+      });
+
+      upsertMeta('meta[property="og:image:height"]', {
+        property: 'og:image:height',
+        content: '630',
+      });
+
       upsertMeta('meta[name="twitter:image"]', {
         name: 'twitter:image',
         content: metadata.imageUrl,
@@ -138,6 +153,9 @@ export default function Seo({
       }
     } else {
       removeHeadTag('meta[property="og:image"]');
+      removeHeadTag('meta[property="og:image:type"]');
+      removeHeadTag('meta[property="og:image:width"]');
+      removeHeadTag('meta[property="og:image:height"]');
       removeHeadTag('meta[property="og:image:alt"]');
       removeHeadTag('meta[name="twitter:image"]');
       removeHeadTag('meta[name="twitter:image:alt"]');

@@ -7,9 +7,10 @@ import { explainerContent } from '../../content/dataExplainers';
 
 export default function DataExplainerPage() {
   const location = useLocation();
+  const contentPathname = location.pathname.replace(/^\/(?:preview|v[1-3])(?=\/)/, '') || '/';
   const content = useMemo(
-    () => explainerContent[location.pathname] ?? explainerContent['/growth'],
-    [location.pathname],
+    () => explainerContent[contentPathname] ?? explainerContent['/growth'],
+    [contentPathname],
   );
   const [openItem, setOpenItem] = useState(content.examples[0]?.label ?? '');
   const isGreenAccent = content.accent === 'green';
@@ -143,7 +144,7 @@ export default function DataExplainerPage() {
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/#contact"
+                to="mailto:info@b2w-ai.com"
                 className="inline-flex min-h-12 items-center justify-center border border-white px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-white hover:text-black"
               >
                 Tell us about your business

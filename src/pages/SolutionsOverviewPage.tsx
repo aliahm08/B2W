@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   Workflow,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import DescrambleText from '../components/DescrambleText';
 import PreviewFooter from '../components/PreviewFooter';
 import Seo from '../components/Seo';
@@ -26,7 +26,7 @@ const pageMeta = {
     description: 'Find the product or workflow that addresses the work slowing the team down today, then expand only when the first use case proves useful.',
   },
   'ai-workflows': {
-    eyebrow: 'How B2W works',
+    eyebrow: 'AI Workflows',
     title: 'Start with JasonAI. Add a workspace only when it helps.',
     description: 'Teach one approved source of company and project context, use it through the tools your team already has, and add Clara only when a dedicated document workspace creates more control.',
   },
@@ -36,7 +36,7 @@ const useCases = [
   { icon: MessageCircle, title: 'Find information in work communication', body: 'Ask a job, customer, vendor, or time-period question and search only the business communication approved during setup.', product: 'JasonAI · Available now', to: '/jasonai' },
   { icon: ClipboardList, title: 'Turn a long thread into a useful brief', body: 'Summarize what changed, what remains open, and what a responsible person should review before following up.', product: 'JasonAI · Available now', to: '/jasonai/how-it-works' },
   { icon: FileStack, title: 'Turn project inputs into scopes and estimates', body: 'Capture voice notes, site observations, quantities, assumptions, and approvals in a structured, editable document flow.', product: 'Clara · Concept phase', to: '/clara' },
-  { icon: Workflow, title: 'Standardize a repeated handoff', body: 'Map the approved signal, responsible person, review point, output, and next action before introducing automation.', product: 'Scoped with B2W', to: '/contact?type=workflow' },
+  { icon: Workflow, title: 'Standardize a repeated handoff', body: 'Map the approved signal, responsible person, review point, output, and next action before introducing automation.', product: 'Scoped with B2W', to: 'mailto:info@b2w-ai.com' },
 ] as const;
 
 const workflows = [
@@ -62,7 +62,7 @@ const workflows = [
     tone: 'border-sky-300/30 bg-sky-200/10 text-sky-100',
     resultTone: 'bg-sky-300/15 text-sky-50 ring-1 ring-inset ring-sky-300/35',
     steps: ['Choose one repeated operating problem', 'Define sources, permissions, owners, and exceptions', 'Prototype the reviewed handoff', 'Measure value before expanding'],
-    to: '/contact?type=workflow',
+    to: 'mailto:info@b2w-ai.com',
   },
 ] as const;
 
@@ -235,17 +235,20 @@ function HowB2WWorks() {
 
 export default function SolutionsOverviewPage({ page }: { page: SolutionsPage }) {
   const meta = pageMeta[page];
+  const { pathname } = useLocation();
+  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
+  const eyebrow = isV3 ? meta.eyebrow.replace('Solutions', 'Guidance') : meta.eyebrow;
 
   return (
     <div className="min-h-screen bg-[#f6f3eb] text-[#141714] selection:bg-[#141714] selection:text-white">
-      <Seo title={`${meta.eyebrow} — B2W`} description={meta.description} canonicalPath={`/solutions/${page}`} />
+      <Seo title={`${eyebrow} — B2W`} description={meta.description} canonicalPath={`/solutions/${page}`} />
       <LiveSiteHeader />
       <main>
         <section className="relative overflow-hidden border-b border-black/10 px-5 pb-24 pt-40 [contain:paint] sm:px-8 md:pb-32 md:pt-48">
           <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(20,23,20,.055)_1px,transparent_1px),linear-gradient(90deg,rgba(20,23,20,.055)_1px,transparent_1px)] [background-size:72px_72px]" />
           <div className="pointer-events-none absolute right-[-7rem] top-0 hidden h-[34rem] w-[34rem] rounded-full bg-[#d8e5cf] blur-[110px] sm:block" />
           <div className="relative mx-auto max-w-7xl">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[.22em] text-[#426149]">{meta.eyebrow}</p>
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[.22em] text-[#426149]">{eyebrow}</p>
             <h1 className="mt-8 max-w-[12ch] break-words text-[clamp(3.1rem,15vw,8.5rem)] font-medium leading-[.88] tracking-[-.07em] sm:text-[clamp(3.8rem,9vw,8.5rem)] sm:leading-[.86] sm:tracking-[-.075em]">
               <DescrambleText text={meta.title} animateOnMount delay={100} />
             </h1>
@@ -276,7 +279,7 @@ export default function SolutionsOverviewPage({ page }: { page: SolutionsPage })
         <section className="px-5 py-20 sm:px-8 md:py-28">
           <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 rounded-[2rem] bg-[#dfe9d8] p-6 sm:p-12 lg:flex-row lg:items-end">
             <div className="min-w-0"><p className="text-xs font-semibold uppercase tracking-[.18em] text-[#426149]">{page === 'ai-workflows' ? 'Ready to scope the first use case?' : 'Not sure where to start?'}</p><h2 className="mt-4 max-w-2xl break-words text-3xl font-semibold tracking-[-.045em] sm:text-6xl">{page === 'ai-workflows' ? 'Begin with one real problem and the context your team already trusts.' : 'Find your recommendation with our 1-minute quiz.'}</h2></div>
-            <Link to={page === 'ai-workflows' ? '/contact?type=workflow' : '/#visitor-fit'} className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full bg-[#141714] px-6 text-sm font-semibold text-white">{page === 'ai-workflows' ? 'Book a scoping call' : 'Build my recommendation'} <ArrowRight className="h-4 w-4" /></Link>
+            {page === 'ai-workflows' ? <a href="mailto:info@b2w-ai.com" className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full bg-[#141714] px-6 text-sm font-semibold text-white">Book a scoping call <ArrowRight className="h-4 w-4" /></a> : <Link to="/#visitor-fit" className="inline-flex min-h-12 shrink-0 items-center gap-2 rounded-full bg-[#141714] px-6 text-sm font-semibold text-white">Build my recommendation <ArrowRight className="h-4 w-4" /></Link>}
           </div>
         </section>
       </main>

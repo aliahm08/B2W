@@ -6,9 +6,10 @@ import { tierPageContent } from '../content/tierPages';
 
 export default function TierPage() {
   const location = useLocation();
+  const contentPathname = location.pathname.replace(/^\/(?:preview|v[1-3])(?=\/)/, '') || '/';
   const content = useMemo(
-    () => tierPageContent[location.pathname] ?? tierPageContent['/tiers/basic-advisory'],
-    [location.pathname],
+    () => tierPageContent[contentPathname] ?? tierPageContent['/tiers/basic-advisory'],
+    [contentPathname],
   );
 
   return (

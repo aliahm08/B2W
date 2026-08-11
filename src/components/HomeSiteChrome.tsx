@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LockKeyhole, Mail } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import DescrambleText from './DescrambleText';
 import B2WIcon from './logo/B2WIcon';
 
@@ -115,7 +115,7 @@ export function HomeSiteHeader({
 export function HomeSiteFooter({ className = 'text-slate-500' }: { className?: string }) {
   return (
     <motion.footer
-      className={`relative z-20 -mt-12 mx-auto grid w-full max-w-7xl gap-8 bg-inherit px-5 pb-8 pt-20 text-sm backdrop-blur-3xl sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end sm:px-8 lg:px-10 ${className}`}
+      className={`relative z-20 -mt-12 mx-auto grid w-full max-w-7xl gap-8 bg-inherit px-5 pb-8 pt-20 text-sm backdrop-blur-3xl sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end sm:px-8 lg:px-10 ${className}`}
       initial={{ opacity: 0, y: 96, filter: 'blur(30px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, amount: 0.18 }}
@@ -143,13 +143,6 @@ export function HomeSiteFooter({ className = 'text-slate-500' }: { className?: s
         </div>
         <a href="mailto:info@b2w-ai.com" className="mt-5 inline-flex text-xs font-semibold underline-offset-4 transition hover:underline">Contact</a>
       </nav>
-      <Link
-        to="/internal"
-        className="inline-flex min-h-10 items-center gap-2 rounded-full border border-current/15 px-4 text-xs font-semibold transition hover:bg-white/15"
-      >
-        <LockKeyhole className="h-3.5 w-3.5" />
-        Internal
-      </Link>
     </motion.footer>
   );
 }

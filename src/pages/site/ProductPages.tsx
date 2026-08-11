@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Bot, Calculator, Check, Clock3, DollarSign, Layers3, LockKeyhole, MessageSquareText, RotateCcw, ShieldCheck, TrendingUp, Users, Workflow } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Seo from '../../components/Seo';
 import BusinessHorizonExplorer from '../../components/site/BusinessHorizonExplorer';
 import { ButtonLink, CTASection, EvidenceBlock, PageIntro, SectionHeading, StatusBadge, pageWidth } from '../../components/site/PublicUI';
 import { stageOrder, workflows } from '../../content/unifiedSite';
 
 export function ProductsIndexPage() {
+  const isV3 = useLocation().pathname.startsWith('/v3');
   return (
     <div className="min-h-screen bg-[var(--b2w-canvas)]">
-      <Seo title="B2W Products: Now, Next, and Future" description="See JasonAI as B2W's current assistant, the workflows planned next, and the longer-term governed agent platform direction." canonicalPath="/products" />
+      <Seo title={isV3 ? 'B2W AI Assistants: Now, Next, and Future' : 'B2W Products: Now, Next, and Future'} description="See JasonAI as B2W's current assistant, the workflows planned next, and the longer-term governed agent platform direction." canonicalPath="/products" />
       <PageIntro
-        eyebrow="Products"
+        eyebrow={isV3 ? 'AI Assistants' : 'Products'}
         title="One useful assistant now. A governed platform only after proof."
         description="JasonAI is the current commercial assistant for general contractors. Clara and Gurge remain clearly labeled directions inside the Business Plan—not available products."
         primary={{ label: 'Explore JasonAI', to: '/jasonai', variant: 'product' }}
@@ -48,10 +49,11 @@ export function ProductsIndexPage() {
 }
 
 export function AgentsPage() {
+  const isV3 = useLocation().pathname.startsWith('/v3');
   return (
     <div className="min-h-screen bg-[var(--b2w-canvas)]">
       <Seo title="B2W Agents and JasonAI" description="JasonAI is B2W's current commercial agent for searching approved contractor communication and creating job summaries." canonicalPath="/products/agents" />
-      <PageIntro eyebrow="Products · Agents" title="One current agent. Clear boundaries." description="JasonAI is the agent B2W currently offers. Future agents may extend the system into other workflows, but they are not presented as available products." primary={{ label: 'Open JasonAI', to: '/jasonai', variant: 'product' }} tone="rust" />
+      <PageIntro eyebrow={`${isV3 ? 'AI Assistants' : 'Products'} · Agents`} title="One current agent. Clear boundaries." description="JasonAI is the agent B2W currently offers. Future agents may extend the system into other workflows, but they are not presented as available products." primary={{ label: 'Open JasonAI', to: '/jasonai', variant: 'product' }} tone="rust" />
       <section className="border-y border-[var(--b2w-line)] bg-white">
         <div className={`${pageWidth} py-16 sm:py-24`}>
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(300px,.75fr)]">
@@ -72,16 +74,17 @@ export function AgentsPage() {
           </div>
         </div>
       </section>
-      <CTASection eyebrow="Agent fit" title="See whether JasonAI fits the way your team communicates." description="A fit review starts with the sources your team uses, the job questions they lose time answering, and the controls the business requires." action={{ label: 'Request a JasonAI review', to: '/contact?type=jasonai', variant: 'product' }} secondary={{ label: 'Read the privacy model', to: '/jasonai/privacy' }} tone="rust" />
+      <CTASection eyebrow="Agent fit" title="See whether JasonAI fits the way your team communicates." description="A fit review starts with the sources your team uses, the job questions they lose time answering, and the controls the business requires." action={{ label: 'Request a JasonAI review', to: 'mailto:info@b2w-ai.com', variant: 'product' }} secondary={{ label: 'Read the privacy model', to: '/jasonai/privacy' }} tone="rust" />
     </div>
   );
 }
 
 export function WorkflowsPage() {
+  const isV3 = useLocation().pathname.startsWith('/v3');
   return (
     <div className="min-h-screen bg-[var(--b2w-canvas)]">
       <Seo title="B2W Product Workflows" description="See the product workflows B2W supports now, is developing, and may add later, explained through user actions and outcomes." canonicalPath="/products/workflows" />
-      <PageIntro eyebrow="Products · Workflows" title="Understand what the product helps people do." description="Workflow stages make the product boundary explicit. Available work is usable today; development and future work remain promises to test—not capabilities to imply." primary={{ label: 'Review JasonAI', to: '/jasonai', variant: 'product' }} tone="rust" />
+      <PageIntro eyebrow={`${isV3 ? 'AI Assistants' : 'Products'} · Workflows`} title="Understand what the product helps people do." description="Workflow stages make the product boundary explicit. Available work is usable today; development and future work remain promises to test—not capabilities to imply." primary={{ label: 'Review JasonAI', to: '/jasonai', variant: 'product' }} tone="rust" />
       <section className="border-y border-[var(--b2w-line)] bg-white">
         <div className={`${pageWidth} py-16 sm:py-24`}>
           {stageOrder.filter((stage) => workflows.some((workflow) => workflow.stage === stage)).map((stage, groupIndex) => (
@@ -103,7 +106,7 @@ export function WorkflowsPage() {
           ))}
         </div>
       </section>
-      <CTASection eyebrow="Workflow fit" title="Start with one urgent, reviewable workflow." description="B2W begins with a narrow outcome the business can verify before adding more sources, reporting, or action capability." action={{ label: 'Discuss workflow fit', to: '/contact?type=jasonai', variant: 'product' }} tone="rust" />
+      <CTASection eyebrow="Workflow fit" title="Start with one urgent, reviewable workflow." description="B2W begins with a narrow outcome the business can verify before adding more sources, reporting, or action capability." action={{ label: 'Discuss workflow fit', to: 'mailto:info@b2w-ai.com', variant: 'product' }} tone="rust" />
     </div>
   );
 }
@@ -168,7 +171,7 @@ export function PricingPage() {
   return (
     <div className="min-h-screen bg-[var(--b2w-canvas)]">
       <Seo title="JasonAI Pricing and WhatsApp Setup" description="JasonAI is $99 per month, with a one-time $2,000 WhatsApp integration and founder-led setup fee. Model the current workflow with the ROI calculator." canonicalPath="/products/pricing" />
-      <PageIntro eyebrow="JasonAI · Pricing" title="One monthly product. One hands-on setup." description="The $99 subscription covers JasonAI access. The one-time $2,000 setup covers the WhatsApp integration, approved-source mapping, onboarding, and validation required to make the first workflow useful." primary={{ label: 'Book a founder review', to: '/contact?type=jasonai', variant: 'product' }} tone="rust" />
+      <PageIntro eyebrow="JasonAI · Pricing" title="One monthly product. One hands-on setup." description="The $99 subscription covers JasonAI access. The one-time $2,000 setup covers the WhatsApp integration, approved-source mapping, onboarding, and validation required to make the first workflow useful." primary={{ label: 'Book a founder review', to: 'mailto:info@b2w-ai.com', variant: 'product' }} tone="rust" />
       <section className="border-y border-[var(--b2w-line)] bg-white">
         <div className={`${pageWidth} py-16 sm:py-24`}>
           <SectionHeading index="01 · Launch offer" title="Know what is recurring, what is implementation, and what is custom." description="The launch structure keeps the product, the WhatsApp setup, and founder-led contracting workflow work commercially distinct." tone="rust" />
@@ -180,7 +183,7 @@ export function PricingPage() {
               <ul className="mt-8 space-y-4">
                 {['JasonAI assistant access', 'Approved communication search', 'Job and thread summaries', 'WhatsApp interaction after setup', 'Current release updates within the agreed product boundary'].map((item) => <li key={item} className="flex items-start gap-3 text-sm leading-6"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--b2w-green)]" />{item}</li>)}
               </ul>
-              <ButtonLink to="/contact?type=jasonai" variant="secondary" className="mt-10" eventLabel="JasonAI pricing inquiry">Discuss JasonAI</ButtonLink>
+              <ButtonLink to="mailto:info@b2w-ai.com" variant="secondary" className="mt-10" eventLabel="JasonAI pricing inquiry">Discuss JasonAI</ButtonLink>
             </article>
             <article className="flex flex-col rounded-[2rem] bg-[var(--b2w-rust-dark)] p-7 text-white sm:p-9">
               <div className="flex items-center justify-between"><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8fc2d7]">WhatsApp integration</p><span className="rounded-full bg-white px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[var(--b2w-rust-dark)]">Founder-led</span></div>
@@ -189,7 +192,7 @@ export function PricingPage() {
               <ul className="mt-8 space-y-4 text-white/75">
                 {['Approved-source and access mapping', 'WhatsApp workflow configuration', 'Founder-led business and workflow review', 'Team onboarding and first-use support', 'Validation of the first useful search and summary flow'].map((item) => <li key={item} className="flex items-start gap-3 text-sm leading-6"><Check className="mt-0.5 h-4 w-4 shrink-0 text-[#8fc2d7]" />{item}</li>)}
               </ul>
-              <Link to="/contact?type=jasonai" className="mt-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[var(--b2w-rust-dark)]">Plan the integration<ArrowRight className="h-4 w-4" /></Link>
+              <a href="mailto:info@b2w-ai.com" className="mt-10 inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-[var(--b2w-rust-dark)]">Plan the integration<ArrowRight className="h-4 w-4" /></a>
             </article>
           </div>
           <div className="mt-6 grid gap-5 lg:grid-cols-3">
@@ -203,7 +206,7 @@ export function PricingPage() {
         <SectionHeading index="02 · ROI calculator" title="Model the value of recovering context faster." description="Use your own time and labor assumptions. The calculator stays inside JasonAI’s current search-and-summary boundary and separates potential time value from price." tone="rust" />
         <ROICalculator />
       </section>
-      <CTASection eyebrow="Commercial next step" title="Confirm the first useful workflow before setup." description="B2W will review the communication problem, approved sources, current product boundary, and WhatsApp integration requirements before asking for a commitment." action={{ label: 'Book a founder review', to: '/contact?type=jasonai', variant: 'product' }} secondary={{ label: 'Read common questions', to: '/jasonai/questions' }} tone="rust" />
+      <CTASection eyebrow="Commercial next step" title="Confirm the first useful workflow before setup." description="B2W will review the communication problem, approved sources, current product boundary, and WhatsApp integration requirements before asking for a commitment." action={{ label: 'Book a founder review', to: 'mailto:info@b2w-ai.com', variant: 'product' }} secondary={{ label: 'Read common questions', to: '/jasonai/questions' }} tone="rust" />
     </div>
   );
 }

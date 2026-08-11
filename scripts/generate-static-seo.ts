@@ -112,6 +112,21 @@ function replaceSeoTags(html: string, metadata: SeoMetadata) {
       /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/i,
       `<meta name="twitter:image" content="${escapeHtml(metadata.imageUrl)}" />`,
     );
+    nextHtml = upsertTag(
+      nextHtml,
+      /<meta\s+property="og:image:type"\s+content="[^"]*"\s*\/?>/i,
+      '<meta property="og:image:type" content="image/png" />',
+    );
+    nextHtml = upsertTag(
+      nextHtml,
+      /<meta\s+property="og:image:width"\s+content="[^"]*"\s*\/?>/i,
+      '<meta property="og:image:width" content="1200" />',
+    );
+    nextHtml = upsertTag(
+      nextHtml,
+      /<meta\s+property="og:image:height"\s+content="[^"]*"\s*\/?>/i,
+      '<meta property="og:image:height" content="630" />',
+    );
 
     if (metadata.imageAlt) {
       nextHtml = upsertTag(
@@ -130,6 +145,9 @@ function replaceSeoTags(html: string, metadata: SeoMetadata) {
     }
   } else {
     nextHtml = removeTag(nextHtml, /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>\s*/i);
+    nextHtml = removeTag(nextHtml, /<meta\s+property="og:image:type"\s+content="[^"]*"\s*\/?>\s*/i);
+    nextHtml = removeTag(nextHtml, /<meta\s+property="og:image:width"\s+content="[^"]*"\s*\/?>\s*/i);
+    nextHtml = removeTag(nextHtml, /<meta\s+property="og:image:height"\s+content="[^"]*"\s*\/?>\s*/i);
     nextHtml = removeTag(nextHtml, /<meta\s+property="og:image:alt"\s+content="[^"]*"\s*\/?>\s*/i);
     nextHtml = removeTag(nextHtml, /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>\s*/i);
     nextHtml = removeTag(nextHtml, /<meta\s+name="twitter:image:alt"\s+content="[^"]*"\s*\/?>\s*/i);

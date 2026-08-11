@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import type { ProductStage } from '../../content/unifiedSite';
 import { trackSiteEvent } from '../../lib/siteAnalytics';
+import { isContactEmailHref } from '../../lib/contact';
 import DescrambleText from '../DescrambleText';
 
 export const pageWidth = 'mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10';
@@ -39,16 +40,12 @@ export function ButtonLink({
     tertiary: 'border-transparent bg-transparent px-0 text-[var(--b2w-ink)] hover:text-[var(--b2w-rust)]',
   };
 
-  return (
-    <Link
-      to={to}
-      onClick={() => trackSiteEvent('cta_selected', { label: eventLabel ?? String(children), destination: to })}
-      className={`group inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--b2w-gold)] focus-visible:ring-offset-2 ${variants[variant]} ${className}`}
-    >
-      {typeof children === 'string' ? <DescrambleText text={children} /> : children}
-      <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" />
-    </Link>
-  );
+  const linkClassName = `group inline-flex min-h-11 items-center justify-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--b2w-gold)] focus-visible:ring-offset-2 ${variants[variant]} ${className}`;
+  const handleClick = () => trackSiteEvent('cta_selected', { label: eventLabel ?? String(children), destination: to });
+  const content = <>{typeof children === 'string' ? <DescrambleText text={children} /> : children}<ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-focus-visible:translate-x-1" /></>;
+  return isContactEmailHref(to)
+    ? <a href={to} onClick={handleClick} className={linkClassName}>{content}</a>
+    : <Link to={to} onClick={handleClick} className={linkClassName}>{content}</Link>;
 }
 
 export function PageIntro({

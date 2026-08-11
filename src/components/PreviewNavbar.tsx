@@ -26,7 +26,7 @@ export default function Navbar({ basePath = '' }: NavbarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const shouldReduceMotion = useReducedMotion();
-  const routeTo = (to: string) => `${basePath}${to === '/' ? '' : to}` || '/';
+  const routeTo = (to: string) => to.startsWith('mailto:') ? to : (`${basePath}${to === '/' ? '' : to}` || '/');
 
   const results = useMemo(() => {
     const normalized = query.trim().toLowerCase();
@@ -87,7 +87,8 @@ export default function Navbar({ basePath = '' }: NavbarProps) {
     trackSiteEvent('site_search_result_selected', { label, query });
     setSearchOpen(false);
     setQuery('');
-    navigate(routeTo(to));
+    if (to.startsWith('mailto:')) window.location.href = to;
+    else navigate(routeTo(to));
   };
 
   const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -191,23 +192,18 @@ export default function Navbar({ basePath = '' }: NavbarProps) {
             >
               <Search className="h-4 w-4" />
             </button>
-            {publicNavigation.slice(3).map((item) => (
-              <Link
-                key={item.to}
-                to={routeTo(item.to)}
-                onClick={() => trackSiteEvent('navigation_selected', { label: item.label })}
-                className="hidden min-h-10 items-center rounded-full px-3 text-[15px] font-medium text-[var(--b2w-ink)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--b2w-gold)] lg:inline-flex xl:px-4"
-              >
-                <DescrambleText text={item.label} />
-              </Link>
+            {publicNavigation.slice(3).map((item) => item.to.startsWith('mailto:') ? (
+              <a key={item.to} href={item.to} onClick={() => trackSiteEvent('navigation_selected', { label: item.label })} className="hidden min-h-10 items-center rounded-full px-3 text-[15px] font-medium text-[var(--b2w-ink)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--b2w-gold)] lg:inline-flex xl:px-4"><DescrambleText text={item.label} /></a>
+            ) : (
+              <Link key={item.to} to={routeTo(item.to)} onClick={() => trackSiteEvent('navigation_selected', { label: item.label })} className="hidden min-h-10 items-center rounded-full px-3 text-[15px] font-medium text-[var(--b2w-ink)] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--b2w-gold)] lg:inline-flex xl:px-4"><DescrambleText text={item.label} /></Link>
             ))}
-            <Link
-              to={routeTo('/contact')}
+            <a
+              href="mailto:info@b2w-ai.com"
               onClick={() => trackSiteEvent('navigation_selected', { label: 'Contact' })}
               className="hidden min-h-11 items-center rounded-full bg-[var(--b2w-rust-dark)] px-6 text-sm font-semibold text-white transition hover:bg-[var(--b2w-rust)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--b2w-rust)] focus-visible:ring-offset-2 sm:inline-flex"
             >
               <DescrambleText text="Contact" />
-            </Link>
+            </a>
             <button
               type="button"
               onClick={() => setMobileOpen((current) => !current)}
@@ -232,9 +228,11 @@ export default function Navbar({ basePath = '' }: NavbarProps) {
               <div className="mx-auto max-w-[1440px] px-5 py-5 sm:px-8">
                 {publicNavigation.map((item) => (
                   <div key={item.label} className="border-b border-[var(--b2w-line)] last:border-b-0">
-                    <Link to={routeTo(item.to)} className="flex min-h-12 items-center justify-between text-base font-semibold">
+                    {item.to.startsWith('mailto:') ? <a href={item.to} className="flex min-h-12 items-center justify-between text-base font-semibold">
                       <DescrambleText text={item.label} /><ArrowRight className="h-4 w-4 text-[var(--b2w-ink-faint)]" />
-                    </Link>
+                    </a> : <Link to={routeTo(item.to)} className="flex min-h-12 items-center justify-between text-base font-semibold">
+                      <DescrambleText text={item.label} /><ArrowRight className="h-4 w-4 text-[var(--b2w-ink-faint)]" />
+                    </Link>}
                     {'children' in item ? (
                       <div className="grid gap-2 pb-4 pl-4">
                         {item.children.map((child) => <Link key={child.to} to={routeTo(child.to)} className="text-sm text-[var(--b2w-ink-muted)]"><DescrambleText text={child.label} /></Link>)}
@@ -242,7 +240,7 @@ export default function Navbar({ basePath = '' }: NavbarProps) {
                     ) : null}
                   </div>
                 ))}
-                <Link to={routeTo('/contact')} className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[var(--b2w-forest)] px-5 text-sm font-semibold text-white"><DescrambleText text="Contact B2W" /></Link>
+                <a href="mailto:info@b2w-ai.com" className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-[var(--b2w-forest)] px-5 text-sm font-semibold text-white"><DescrambleText text="Contact B2W" /></a>
               </div>
             </motion.nav>
           ) : null}
@@ -279,7 +277,7 @@ export default function Navbar({ basePath = '' }: NavbarProps) {
                     if (event.target.value.trim().length === 2) trackSiteEvent('site_search_query', { length: event.target.value.length });
                   }}
                   onKeyDown={handleSearchKeyDown}
-                  placeholder="Search services, products, workflows, and resources"
+                  placeholder="Search services, products, workflows, and company"
                   aria-label="Search site"
                   aria-controls="site-search-results"
                   className="min-w-0 flex-1 bg-transparent text-base text-[var(--b2w-ink)] outline-none placeholder:text-[var(--b2w-ink-faint)]"

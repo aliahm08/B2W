@@ -15,7 +15,6 @@ import {
   Route,
   Search,
   ShieldCheck,
-  Sparkles,
   Workflow,
 } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -47,7 +46,7 @@ const publicLayers: ArchitectureLayer[] = [
     route: '/',
     Icon: Landmark,
     states: [
-      { label: 'Have now', summary: 'A unified company-level homepage.', items: ['Strategy, Systems, Implementation framing', 'JasonAI identified as the current product', 'Resources and trust language connected to the same system'] },
+      { label: 'Have now', summary: 'A unified company-level homepage.', items: ['Strategy, Systems, Implementation framing', 'JasonAI identified as the current product', 'Trust language connected to the same system'] },
       { label: 'Intend next', summary: 'Make the homepage the reliable orientation layer.', items: ['Validate message clarity with prospects', 'Measure service and JasonAI routing', 'Refine proof using verified customer evidence'] },
       { label: 'Should plan', summary: 'Personalize orientation only when evidence supports it.', items: ['Industry-aware entry points', 'Returning-visitor continuity', 'No personalization that weakens privacy or clarity'] },
     ],
@@ -60,7 +59,7 @@ const publicLayers: ArchitectureLayer[] = [
     Icon: Compass,
     states: [
       { label: 'Have now', summary: 'Three clear intervention categories.', items: ['Strategy', 'Systems', 'Implementation', 'Condition, work, output, customer, and next action for each'] },
-      { label: 'Intend next', summary: 'Connect services to repeatable commercial scopes.', items: ['Evidence-backed examples for each category', 'Scope ranges and decision gates', 'Case studies mapped to service outcomes'] },
+      { label: 'Intend next', summary: 'Connect services to repeatable commercial scopes.', items: ['Evidence-backed examples for each category', 'Scope ranges and decision gates', 'Verified delivery evidence mapped to service outcomes'] },
       { label: 'Should plan', summary: 'Build a governed service catalog.', items: ['Owner and review cadence for service content', 'Reusable engagement templates', 'Performance feedback from delivery into service design'] },
     ],
   },
@@ -74,18 +73,6 @@ const publicLayers: ArchitectureLayer[] = [
       { label: 'Have now', summary: 'JasonAI is the current commercial agent.', items: ['Agents index', 'Workflow stage map', '$99 subscription and $2,000 WhatsApp setup', 'Overview, How It Works, Questions, and Privacy'] },
       { label: 'Intend next', summary: 'Prove the current product wedge.', items: ['Communication search and summaries', 'Action extraction and source-linked reporting in development', 'Measured activation, answer quality, and trust'] },
       { label: 'Should plan', summary: 'Expand only after the wedge is trusted.', items: ['Governed actions across approved systems', 'Additional agents only after validation', 'Tiering tied to real capability and service cost'] },
-    ],
-  },
-  {
-    id: 'resources',
-    title: 'Resources',
-    purpose: 'Help users participate in a decision through guides, tools, demonstrations, and case studies.',
-    route: '/resources',
-    Icon: Sparkles,
-    states: [
-      { label: 'Have now', summary: 'A four-part resource system and guided pathfinder.', items: ['Guides', 'Tools', 'Demonstrations', 'Case Studies', 'Input → transform → review → complete interaction'] },
-      { label: 'Intend next', summary: 'Turn current operating artifacts into useful public resources.', items: ['Publish decision-ready guides', 'Add verified demonstrations', 'Connect case studies to services and product workflows'] },
-      { label: 'Should plan', summary: 'Run resources as a measurable learning system.', items: ['Resource editorial calendar', 'Named owner and review status', 'Search and engagement feedback into content priorities'] },
     ],
   },
   {
@@ -280,7 +267,7 @@ export default function WebsiteArchitectureDocumentsPage() {
             <div className="grid gap-px overflow-hidden border border-[#223C33]/12 bg-[#223C33]/12 sm:grid-cols-2">
               {[
                 ['Shared components', 'The public header, footer, logo, buttons, search, layout patterns, status indicators, and calls to action are canonical. Review system changes centrally before creating variants.'],
-                ['Content ownership', 'Services belongs to the service owner; product claims and pricing to the product and commercial owners; Resources to a named editorial owner; company and trust pages to the executive owner.'],
+                ['Content ownership', 'Services belongs to the service owner; product claims and pricing to the product and commercial owners; company and trust pages to the executive owner.'],
                 ['Claim review', 'Before publishing, compare every capability statement with Product Direction. Label it Available now, In development, Planned, or Future. Do not use future capability to justify current pricing.'],
                 ['Canonical routes', 'The new sitemap is canonical. Legacy URLs redirect to the closest current route. Client and internal routes remain preserved and noindex unless an owner explicitly changes access and indexing.'],
                 ['New-page rule', 'Every new page must declare its parent, audience, business condition, primary objective, evidence, status, owner, canonical URL, search entry, and one primary next action.'],

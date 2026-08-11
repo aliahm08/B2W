@@ -14,7 +14,7 @@ export default function AboutPage() {
         eyebrow="About B2W"
         title="Make AI useful by starting with how the business works."
         description="B2W is a product company focused on General Contracting. We build practical AI around project communication, job context, and reviewed operating workflows so contractors can recover what happened without surrendering judgment or adopting another heavy system."
-        primary={{ label: 'Discuss a business condition', to: '/contact' }}
+        primary={{ label: 'Discuss a business condition', to: 'mailto:info@b2w-ai.com' }}
       />
 
       <section className="border-y border-[var(--b2w-line)] bg-white">
@@ -32,7 +32,7 @@ export default function AboutPage() {
       </section>
 
       <section className={`${pageWidth} py-16 sm:py-24`}>
-        <SectionHeading index="02 · How B2W works" title="Strategy, systems, and AI belong in one operating sequence." description="The combination matters because no single layer resolves the full condition." />
+        <SectionHeading index="02 · AI Workflows" title="Strategy, systems, and AI belong in one operating sequence." description="The combination matters because no single layer resolves the full condition." />
         <div className="grid gap-5 lg:grid-cols-3">
           {[
             ['Strategy defines the decision', 'B2W frames the condition, tests assumptions, and identifies the few decisions that change the operating path.'],
@@ -48,7 +48,7 @@ export default function AboutPage() {
           <div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-[var(--b2w-line)] bg-[var(--b2w-line)] lg:grid-cols-3">
             {[
               ['Job communication', 'Recover project context', 'JasonAI begins with approved communication so owners can find what changed without rereading every project thread.', 'Current product'],
-              ['Project documents', 'Structure field evidence', 'Scopes, field reports, change orders, punch lists, and work packages translate job evidence into reviewable records.', 'Available resources'],
+              ['Project documents', 'Structure field evidence', 'Scopes, field reports, change orders, punch lists, and work packages translate job evidence into reviewable records.', 'Workflow capability'],
               ['Contractor workflows', 'Advance with control', 'Estimation and broader project workflows develop only after sources, human review, and operating responsibility are proven.', 'Product direction'],
             ].map(([area, priority, body, status], index) => <article key={area} className={`min-h-80 p-7 ${index === 2 ? 'bg-[var(--b2w-rust-dark)] text-white' : 'bg-[var(--b2w-canvas)]'}`}><p className={`font-mono text-[9px] uppercase tracking-[0.17em] ${index === 2 ? 'text-[var(--b2w-gold)]' : 'text-[var(--b2w-gold-dark)]'}`}>{status}</p><h2 className="mt-10 text-3xl font-medium tracking-[-0.04em]">{area}</h2><p className={`mt-3 text-sm font-semibold ${index === 2 ? 'text-white' : 'text-[var(--b2w-ink)]'}`}>{priority}</p><p className={`mt-5 text-sm leading-7 ${index === 2 ? 'text-white/65' : 'text-[var(--b2w-ink-muted)]'}`}>{body}</p></article>)}
           </div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
         <div className="mt-7 flex justify-end"><a href="mailto:info@b2w-ai.com?subject=B2W%20Partnership%20Inquiry" className="group inline-flex min-h-12 items-center justify-between gap-8 rounded-full border border-[var(--b2w-line)] bg-white px-5 text-sm font-semibold">Introduce your practice<ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" /></a></div>
       </section>
 
-      <CTASection eyebrow="Advance" title="Bring B2W a condition worth resolving." description="Share what changed, where the friction is visible, and what decision or outcome matters next. B2W will route the conversation to the right path." action={{ label: 'Contact B2W', to: '/contact' }} secondary={{ label: 'Explore services', to: '/services' }} />
+      <CTASection eyebrow="Advance" title="Bring B2W a condition worth resolving." description="Share what changed, where the friction is visible, and what decision or outcome matters next. B2W will route the conversation to the right path." action={{ label: 'Contact B2W', to: 'mailto:info@b2w-ai.com' }} secondary={{ label: 'Explore services', to: '/services' }} />
     </div>
   );
 }

@@ -522,13 +522,12 @@ export default function Navbar({
           <JasonAIDescrambleLink
             className={`font-medium transition-colors ${isSearchOpen ? 'text-neutral-300 hover:text-white' : 'text-neutral-600 hover:text-black'}`}
           />
-          <Link
-            to={`${basePath}#contact`}
-            onClick={handleNavigation(`${basePath}#contact`)}
+          <a
+            href="mailto:info@b2w-ai.com"
             className="rounded-full border border-black bg-black px-4 py-2 font-medium text-white transition-colors hover:bg-neutral-800"
           >
             Start using Clara
-          </Link>
+          </a>
         </div>
 
         <button

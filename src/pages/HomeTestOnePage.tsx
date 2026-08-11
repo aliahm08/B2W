@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Calculator, ChevronDown, Mail, MessageCircle, Mic } from 'lucide-react';
 import PreviewFooter from '../components/PreviewFooter';
 import { LiveSiteHeader } from '../components/V2SiteChrome';
@@ -239,6 +239,8 @@ const contractorHeroSlides = [
 ] as const;
 
 function ContractorHeroCarousel() {
+  const { pathname } = useLocation();
+  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
@@ -287,13 +289,15 @@ function ContractorHeroCarousel() {
       </div>
       <div className="mt-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-4">
         <p className="text-xs text-slate-500">We help trade businesses, design-build firms, and consulting companies.</p>
-        <Link to="/general-contractors" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">Explore contractor solutions <ArrowRight className="h-4 w-4" /></Link>
+        <Link to="/general-contractors" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">Explore contractor {isV3 ? 'guidance' : 'solutions'} <ArrowRight className="h-4 w-4" /></Link>
       </div>
     </div>
   );
 }
 
 export default function HomeTestOnePage() {
+  const { pathname } = useLocation();
+  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
   const [heroMode, setHeroMode] = useState<HeroMode>('consulting');
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);
@@ -336,7 +340,14 @@ export default function HomeTestOnePage() {
 
         <section className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-32 sm:px-8 sm:pb-32 sm:pt-44 lg:px-10 lg:pt-48">
           <motion.h1 initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className={`b2w-wordmark b2w-hero-wordmark mx-auto text-center text-[clamp(2.35rem,6vw,5rem)] font-medium leading-[0.92] tracking-[-0.06em] ${activeHero.textClass}`}>
-            We help<br className="sm:hidden" /> contractors<br className="hidden sm:block" /> move<br className="sm:hidden" /> projects<br className="hidden sm:block" /> <em className="italic">forward.</em>
+            {isV3 ? (
+              <>
+                <span className="block sm:whitespace-nowrap">We help contractors</span>
+                <span className="block sm:whitespace-nowrap">move projects <em className="italic">forward.</em></span>
+              </>
+            ) : (
+              <>We help<br className="sm:hidden" /> contractors<br className="hidden sm:block" /> move<br className="sm:hidden" /> projects<br className="hidden sm:block" /> <em className="italic">forward.</em></>
+            )}
           </motion.h1>
 
           <div className="mx-auto mt-10 flex w-full max-w-xl flex-col justify-center gap-3 sm:flex-row">

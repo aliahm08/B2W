@@ -74,7 +74,7 @@ function ClaraHero() {
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: .52, delay: .1, ease: [0.22, 1, 0.36, 1] }} className="border-l border-[#d9a9c2] pl-6 sm:pl-8">
             <p className="text-base leading-8 text-[#7e5c70] sm:text-lg">Clara is a customized, private workspace concept where project teams could capture information, develop documents, complete tasks, and review work directly from the job site.</p>
-            <div className="mt-7 flex flex-wrap items-center gap-4"><ButtonLink to="/contact?type=clara" variant="product">Discuss the concept</ButtonLink><ButtonLink to="/solutions/ai-workflows/project-estimates" variant="tertiary">View estimate concept</ButtonLink></div>
+            <div className="mt-7 flex flex-wrap items-center gap-4"><ButtonLink to="mailto:info@b2w-ai.com" variant="product">Discuss the concept</ButtonLink><ButtonLink to="/solutions/ai-workflows/project-estimates" variant="tertiary">View estimate concept</ButtonLink></div>
           </motion.div>
         </div>
         <motion.figure initial={{ opacity: 0, y: 22, scale: .99 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .68, delay: .16, ease: [0.22, 1, 0.36, 1] }} className="relative mt-10 overflow-hidden rounded-[2rem] border border-[#d9a9c2]/45 bg-[#ead9e2] shadow-[0_34px_100px_rgba(61,31,51,.14)]">
@@ -125,7 +125,7 @@ function ClaraFloatingCTA() {
           className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4 sm:bottom-8"
         >
           <div className="pointer-events-auto flex items-center gap-1.5 rounded-full border border-[#d9a9c2]/70 bg-white/92 p-2 shadow-[0_18px_60px_rgba(61,31,51,.20)] backdrop-blur-md">
-            <a href="/contact?type=clara" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#3d1f33] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5a2c49]">
+            <a href="mailto:info@b2w-ai.com" className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full bg-[#3d1f33] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#5a2c49]">
               Discuss Clara
               <ArrowRight className="h-4 w-4" />
             </a>
@@ -395,7 +395,7 @@ export default function ClaraProductPage() {
 
         <section className={`${pageWidth} py-16 sm:py-24`}><SectionHeading title="One workspace. Many company documents." description="Begin with the document your team produces most often, make the preferences reliable, and expand from a proven workflow." tone="plum" /><div className="grid gap-px overflow-hidden rounded-[1.5rem] border border-[#ead9e2] bg-[#ead9e2] sm:grid-cols-2 lg:grid-cols-4">{[['Project estimates', 'Turn notes, quantities, and cost preferences into a reviewable estimate.'], ['Scopes of work', 'Organize requirements, assumptions, exclusions, and responsibilities.'], ['Client proposals', 'Develop persuasive, consistent proposals using company standards.'], ['Operating reports', 'Structure project inputs into status, decision, and follow-up documents.']].map(([title, body]) => <article key={title} className="flex min-h-64 flex-col bg-white p-6"><FileText className="h-5 w-5 text-[#a66589]" /><h3 className="mt-10 text-xl font-semibold tracking-[-.03em]">{title}</h3><p className="mt-3 text-sm leading-7 text-[#7e5c70]">{body}</p>{title === 'Project estimates' ? <ButtonLink to="/solutions/ai-workflows/project-estimates" variant="tertiary" className="mt-auto pt-7 text-[#7e4967]">View workflow demo</ButtonLink> : null}</article>)}</div></section>
 
-        <CTASection eyebrow="Explore the concept" title="Bring us one document your company creates repeatedly." description="We’ll map the source material, preferences, review rules, and output so you can evaluate how a customized Clara workspace could fit your team. Clara is not generally available or priced." action={{ label: 'Discuss the Clara concept', to: '/contact?type=clara', variant: 'product' }} secondary={{ label: 'View the estimate concept', to: '/solutions/ai-workflows/project-estimates' }} tone="plum" />
+        <CTASection eyebrow="Explore the concept" title="Bring us one document your company creates repeatedly." description="We’ll map the source material, preferences, review rules, and output so you can evaluate how a customized Clara workspace could fit your team. Clara is not generally available or priced." action={{ label: 'Discuss the Clara concept', to: 'mailto:info@b2w-ai.com', variant: 'product' }} secondary={{ label: 'View the estimate concept', to: '/solutions/ai-workflows/project-estimates' }} tone="plum" />
       </main>
       <ClaraFloatingCTA />
     </div>

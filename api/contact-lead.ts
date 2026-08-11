@@ -23,6 +23,15 @@ async function processLeadSubmission(submission: LeadSubmission) {
   const emails = buildLeadEmails(submission);
   const internalEmail = getInternalEmail();
   const errors: string[] = [];
+  let submissionId = '';
+  let delivered = false;
+
+  try {
+    submissionId = await insertLeadFormSubmission(submission, internalEmail);
+    delivered = true;
+  } catch (error) {
+    errors.push(`supabase: ${error instanceof Error ? error.message : 'unknown error'}`);
+  }
 
   if (hasResendConfig()) {
     try {
@@ -33,9 +42,12 @@ async function processLeadSubmission(submission: LeadSubmission) {
         html: emails.internal.html,
         replyTo: emails.internal.replyTo,
       });
+      delivered = true;
     } catch (error) {
       errors.push(`internal email: ${error instanceof Error ? error.message : 'unknown error'}`);
     }
+  } else {
+    errors.push('internal email: RESEND_API_KEY is not configured');
   }
 
   if (hasResendConfig()) {
@@ -66,12 +78,15 @@ async function processLeadSubmission(submission: LeadSubmission) {
         submission.referrer,
         errors.length === 0 ? 'received' : `partial_failure: ${errors.join(' | ')}`,
       ]);
+      delivered = true;
     } catch (error) {
       errors.push(`sheets: ${error instanceof Error ? error.message : 'unknown error'}`);
     }
+  } else {
+    errors.push('sheets: GOOGLE_SHEETS_SPREADSHEET_ID is not configured');
   }
 
-  return errors;
+  return { delivered, errors, submissionId };
 }
 
 export default async function handler(req: any, res: any) {
@@ -110,22 +125,25 @@ export default async function handler(req: any, res: any) {
       return;
     }
 
-    const submissionInsertId = await insertLeadFormSubmission(validated.value, getInternalEmail()).catch((error) => {
-      console.error('[contact-lead] insert failure', error);
-      throw error;
-    });
-    const errors = await processLeadSubmission(validated.value);
+    const { delivered, errors, submissionId: leadSubmissionId } = await processLeadSubmission(validated.value);
+
+    if (!delivered) {
+      console.error('[contact-lead] delivery failure', { errors, sourcePath: validated.value.sourcePath });
+      sendJson(res, 500, { ok: false, error: 'Unable to submit inquiry right now.' });
+      return;
+    }
+
     if (errors.length > 0) {
       console.error('[contact-lead] partial failure', { errors, sourcePath: validated.value.sourcePath });
       sendJson(res, 202, {
         ok: true,
-        submissionId: submissionInsertId,
+        submissionId: leadSubmissionId || undefined,
         warning: 'Inquiry received, but one or more follow-up actions need operator review.',
       });
       return;
     }
 
-    sendJson(res, 200, { ok: true, submissionId: submissionInsertId });
+    sendJson(res, 200, { ok: true, submissionId: leadSubmissionId });
   } catch (error) {
     console.error('[contact-lead] unexpected failure', error);
     sendJson(res, 500, { ok: false, error: 'Unable to submit inquiry right now.' });

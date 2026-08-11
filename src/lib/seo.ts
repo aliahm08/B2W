@@ -37,8 +37,8 @@ const SITE_NAME = 'B2W';
 const FALLBACK_SITE_URL = 'https://www.b2w-ai.com';
 const DEFAULT_ROBOTS = 'index, follow';
 const PRIVATE_ROBOTS = 'noindex, nofollow';
-const DEFAULT_PUBLIC_IMAGE_ALT = 'B2W product company mark for JasonAI and practical AI products.';
-const MARKETING_ASSET_VERSION = '20260801.3';
+const DEFAULT_PUBLIC_IMAGE_ALT = 'Official B2W logo for practical AI assistants and contractor workflows.';
+const MARKETING_ASSET_VERSION = '20260811.1';
 
 const brandImages = {
   b2wSocial: `/brand/b2w-social-card.png?v=${MARKETING_ASSET_VERSION}`,
@@ -49,6 +49,40 @@ const jasonAiImages = {
   contractorSignals: '/images/jasonai/scattered-communication.jpg',
 } as const;
 
+const mainExperienceRoutes = new Map<string, SeoDefinition>([
+  ['/', { title: 'AI Assistant for Contractors', description: 'JasonAI helps contractor teams search approved job communication and summarize project conversations through WhatsApp.', imagePath: brandImages.b2wSocial }],
+  ['/jasonai', { title: 'JasonAI Contractor Assistant', description: 'See how JasonAI searches approved WhatsApp work-group communication and creates concise job or time-period summaries.', imagePath: jasonAiImages.contractorSignals }],
+  ['/jasonai/how-it-works', { title: 'How JasonAI Works for Contractors', description: 'Follow the JasonAI workflow from approved WhatsApp sources through natural questions, reviewed answers, and careful expansion.', imagePath: jasonAiImages.contractorSignals }],
+  ['/jasonai/integrations', { title: 'JasonAI Integrations and Availability', description: 'Review the current approved WhatsApp workflow and clearly labeled configurable or planned JasonAI integrations.', imagePath: jasonAiImages.contractorSignals }],
+  ['/jasonai/security', { title: 'JasonAI Security and Privacy Controls', description: 'Understand approved access, AI processing, retention, deletion, human review, and current JasonAI security boundaries.', imagePath: jasonAiImages.contractorSignals }],
+  ['/contractors', { title: 'AI Assistant for Contracting Businesses', description: 'See how JasonAI supports general contractors, design-build firms, and specialty contractors with approved communication search and summaries.', imagePath: brandImages.b2wSocial }],
+  ['/contractors/general-contractors', { title: 'General Contractor Workflow and Job Coordination', description: 'JasonAI helps general contractors find approved project communication, summarize job context, and reduce repeated status searches.', imagePath: '/images/contractor-audiences/business-owners.png' }],
+  ['/contractors/general-contractors/project-communication', { title: 'Project Communication for General Contractors', description: 'Find contractor job decisions, commitments, questions, and context without rereading every approved message.', imagePath: jasonAiImages.contractorSignals }],
+  ['/contractors/general-contractors/job-tracking', { title: 'Job Tracking for General Contractors', description: 'Use approved job communication to find outstanding work, commitments, changes, blockers, and decisions.', imagePath: jasonAiImages.contractorSignals }],
+  ['/contractors/general-contractors/workflow-automation', { title: 'Workflow Automation for General Contractors', description: 'See which JasonAI contractor workflows are available, configurable, in development, or planned.', imagePath: jasonAiImages.contractorSignals }],
+  ['/contractors/design-build', { title: 'JasonAI for Design-Build Firms', description: 'Keep approved design decisions, client approvals, handoffs, and field changes easier to find and summarize.', imagePath: '/images/contractor-audiences/project-managers.png' }],
+  ['/contractors/specialty-contractors', { title: 'JasonAI for Specialty Contractors', description: 'Search approved GC communication, crew updates, schedule changes, commitments, and inspection details across jobs.', imagePath: '/images/contractor-audiences/operations-teams.png' }],
+  ['/pricing', { title: 'JasonAI Pricing for Contractors', description: 'JasonAI standard pricing is $99 per month plus a one-time $2,000 approved-source mapping, onboarding, and setup fee.', imagePath: brandImages.b2wSocial }],
+  ['/get-started', { title: 'Try JasonAI With One Contractor Workflow', description: 'Share one active contractor workflow so B2W can assess whether the current JasonAI WhatsApp assistant is a fit.', imagePath: brandImages.b2wSocial }],
+  ['/book-demo', { title: 'Book a JasonAI Contractor Walkthrough', description: 'Show B2W one existing contractor workflow and see where JasonAI approved communication search and summaries could help.', imagePath: brandImages.b2wSocial }],
+  ['/about', { title: 'About B2W', description: 'B2W builds practical tools that reduce contractor coordination overhead and turn approved job communication into useful answers.', imagePath: brandImages.b2wSocial }],
+  ['/contact', { title: 'Contact B2W About JasonAI', description: 'Contact B2W about JasonAI fit, one active contractor workflow, pricing, setup, privacy, or a walkthrough.', imagePath: brandImages.b2wSocial }],
+  ['/legal/privacy', { title: 'B2W and JasonAI Privacy Policy', description: 'Read how B2W collects, uses, shares, retains, and protects information for JasonAI.', imagePath: brandImages.b2wSocial }],
+  ['/legal', { title: 'B2W Legal Information', description: 'Review B2W privacy information and current terms.', canonicalPath: '/legal/privacy', robots: PRIVATE_ROBOTS }],
+  ['/legal/terms', { title: 'B2W Terms', description: 'Current B2W terms placeholder pending publication of finalized general website and JasonAI terms.', robots: PRIVATE_ROBOTS }],
+]);
+
+const retiredMainRedirectRoutes = new Map<string, SeoDefinition>([
+  ['/book-demo', { title: 'Book a B2W Demo', description: 'Contact B2W to discuss the right next step.', canonicalPath: '/contact', robots: PRIVATE_ROBOTS }],
+  ['/contractors', { title: 'Contractor Solutions', description: 'Explore B2W solutions for general contractors.', canonicalPath: '/general-contractors', robots: PRIVATE_ROBOTS }],
+  ['/get-started', { title: 'Contact B2W', description: 'Contact B2W to discuss JasonAI, services, or a project workflow.', canonicalPath: '/contact', robots: PRIVATE_ROBOTS }],
+  ['/jasonai/integrations', { title: 'JasonAI', description: 'Explore the current JasonAI assistant and supported workflow.', canonicalPath: '/jasonai', robots: PRIVATE_ROBOTS }],
+  ['/jasonai/security', { title: 'JasonAI Privacy', description: 'Review JasonAI privacy, access, and information-handling details.', canonicalPath: '/jasonai/privacy', robots: PRIVATE_ROBOTS }],
+  ['/legal', { title: 'B2W Privacy', description: 'Review B2W and JasonAI privacy information.', canonicalPath: '/jasonai/privacy', robots: PRIVATE_ROBOTS }],
+  ['/legal/privacy', { title: 'B2W Privacy', description: 'Review B2W and JasonAI privacy information.', canonicalPath: '/jasonai/privacy', robots: PRIVATE_ROBOTS }],
+  ['/legal/terms', { title: 'Contact B2W', description: 'Contact B2W for current service terms and documentation.', canonicalPath: '/contact', robots: PRIVATE_ROBOTS }],
+]);
+
 const uyghurImages = {
   main: '/images/uyghur-eats/interior.jpg',
   plating: '/images/uyghur-eats/platter.jpg',
@@ -56,46 +90,58 @@ const uyghurImages = {
 } as const;
 
 const versionedArchiveRoutes = [
-  '/v1/about',
-  '/v1/contact',
-  '/v1/jasonai',
-  '/v1/jasonai/how-it-works',
-  '/v1/jasonai/pricing',
-  '/v1/jasonai/privacy',
-  '/v1/jasonai/questions',
-  '/v1/products',
-  '/v1/products/agents',
-  '/v1/products/pricing',
-  '/v1/products/workflows',
-  '/v1/resources',
-  '/v1/resources/case-studies',
-  '/v1/resources/demonstrations',
-  '/v1/resources/guides',
-  '/v1/resources/tools',
-  '/v1/services',
-  '/v3/jasonai',
-  '/v3/jasonai/how-it-works',
-  '/v3/jasonai/privacy',
-  '/v3/jasonai/questions',
-  '/v3/pricing',
-  '/v3/workflows',
-] as const;
+  ...Array.from(mainExperienceRoutes.keys(), (pathname) => `/v1${pathname === '/' ? '' : pathname}`),
+  '/v2/about',
+  '/v2/clara',
+  '/v2/contact',
+  '/v2/general-contractors',
+  '/v2/growth',
+  '/v2/gurge',
+  '/v2/industries/food-and-beverage',
+  '/v2/industries/general-contracting',
+  '/v2/industries/real-estate-management',
+  '/v2/jasonai',
+  '/v2/jasonai/how-it-works',
+  '/v2/jasonai/pricing',
+  '/v2/jasonai/privacy',
+  '/v2/jasonai/questions',
+  '/v2/pricing',
+  '/v2/products',
+  '/v2/products/agents',
+  '/v2/products/pricing',
+  '/v2/products/workflows',
+  '/v2/services',
+  '/v2/services/business-revamp',
+  '/v2/services/financial-review',
+  '/v2/services/marketing-advisory',
+  '/v2/services/operations-implementation',
+  '/v2/solutions/ai-workflows',
+  '/v2/solutions/ai-workflows/project-estimates',
+  '/v2/solutions/business-use-cases',
+  '/v2/workflows',
+];
+
+const v3ArchiveRoutes = [
+  '/v3',
+  ...versionedArchiveRoutes
+    .filter((pathname) => pathname.startsWith('/v2/'))
+    .map((pathname) => pathname.replace(/^\/v2/, '/v3')),
+];
 
 const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
     {
       title: 'Tools for Contractors to Succeed',
-      description:
-        'B2W builds practical tools that help contractors improve job visibility, project coordination, operational handoffs, and company knowledge.',
+      description: 'B2W builds practical tools that help contractors improve job visibility, project coordination, operational handoffs, and company knowledge.',
       imagePath: brandImages.b2wSocial,
     },
   ],
   [
     '/v1',
     {
-      title: 'B2W V1 — Product Company Site',
-      description: 'Archived B2W product-company website concept featuring the full public sitemap and JasonAI launch story.',
+      title: 'B2W V1 — Contractor Trust Experience',
+      description: 'Archived B2W contractor-trust experience focused on JasonAI communication search, summaries, workflow fit, controls, and adoption.',
       robots: PRIVATE_ROBOTS,
       imagePath: brandImages.b2wSocial,
     },
@@ -103,62 +149,9 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/v2',
     {
-      title: 'B2W V2 — AI Products for Project Teams',
-      description: 'Explore B2W products and practical AI solutions for general contractors and engineering firms.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v2/products/jasonai',
-    {
-      title: 'JasonAI — B2W V2',
-      description: 'Search approved business communication and turn long project conversations into useful answers and summaries through WhatsApp.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: jasonAiImages.contractorSignals,
-    },
-  ],
-  [
-    '/v2/products/clara',
-    {
-      title: 'Clara — B2W V2',
-      description: 'Turn voice notes and project context into organized scopes, estimates, and reviewable project documents.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.claraSocial,
-    },
-  ],
-  [
-    '/v2/solutions/general-contractors',
-    {
-      title: 'AI Solutions for General Contractors — B2W V2',
-      description: 'Connect contractor communication, scopes, estimates, job decisions, and follow-up with focused AI agents.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v2/solutions/engineering-firms',
-    {
-      title: 'AI Solutions for Engineering Firms — B2W V2',
-      description: 'Connect technical correspondence, field observations, design decisions, deliverables, and review with focused AI agents.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v2/pricing',
-    {
-      title: 'JasonAI AI Assistant Pricing and ROI',
-      description: 'Calculate potential ROI and review current JasonAI AI-assistant pricing, plus the planned roles for Clara and Gurge.',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v3',
-    {
-      title: 'B2W V3 — AI Workflows for Contractors',
-      description: 'Focused B2W contractor website concept featuring JasonAI, contractor workflows, and pricing.',
+      title: 'B2W V2 — Tools for Contractors to Succeed',
+      description: 'Archived B2W website featuring practical tools that help contractors improve job visibility, project coordination, operational handoffs, and company knowledge.',
+      canonicalPath: '/',
       robots: PRIVATE_ROBOTS,
       imagePath: brandImages.b2wSocial,
     },
@@ -281,7 +274,7 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/solutions/ai-workflows',
     {
-      title: 'How B2W Works — Five-Step User Guide',
+      title: 'AI Workflows — Five-Step User Guide',
       description: 'Follow the B2W process from scoping and approved project context to JasonAI, optional Clara document workspaces, human review, and diligence.',
       imagePath: brandImages.b2wSocial,
     },
@@ -338,46 +331,6 @@ const directRoutes = new Map<string, SeoDefinition>([
       canonicalPath: '/pricing',
       robots: PRIVATE_ROBOTS,
       imagePath: jasonAiImages.contractorSignals,
-    },
-  ],
-  [
-    '/resources',
-    {
-      title: 'General Contracting Document Library',
-      description: 'Explore scopes, proposals, field reports, change orders, punch lists, work packages, and interactive project workflows for General Contracting businesses.',
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/resources/guides',
-    {
-      title: 'General Contracting Document Types',
-      description: 'Browse source-backed project documents B2W can generate for General Contracting businesses using field and office evidence with human review.',
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/resources/tools',
-    {
-      title: 'B2W Interactive Tools',
-      description: 'Interactive tools that turn General Contracting project conditions and communication inputs into a reviewable starting workflow.',
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/resources/demonstrations',
-    {
-      title: 'B2W Product and Workflow Demonstrations',
-      description: 'Interactive General Contracting examples showing how B2W captures job evidence, structures scope, supports human review, and generates a usable project document.',
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/resources/case-studies',
-    {
-      title: 'General Contracting Workflow Demonstrations',
-      description: 'Animated General Contracting workflows showing how site evidence becomes a reviewed scope, project record, or future estimate document.',
-      imagePath: brandImages.b2wSocial,
     },
   ],
   [
@@ -888,8 +841,7 @@ function toAbsoluteUrl(pathname: string) {
 function buildMetadata(pathname: string, definition: SeoDefinition): SeoMetadata {
   const canonicalPath = normalizePathname(definition.canonicalPath ?? pathname);
   const robots = definition.robots ?? DEFAULT_ROBOTS;
-  const isIndexable = !robots.toLowerCase().includes('noindex');
-  const resolvedImagePath = definition.imagePath ?? (isIndexable ? brandImages.b2wSocial : undefined);
+  const resolvedImagePath = brandImages.b2wSocial;
   const imageUrl = resolvedImagePath ? toAbsoluteUrl(resolvedImagePath) : undefined;
 
   return {
@@ -900,7 +852,7 @@ function buildMetadata(pathname: string, definition: SeoDefinition): SeoMetadata
     robots,
     type: definition.type ?? 'website',
     imageUrl,
-    imageAlt: imageUrl ? definition.imageAlt ?? DEFAULT_PUBLIC_IMAGE_ALT : undefined,
+    imageAlt: imageUrl ? DEFAULT_PUBLIC_IMAGE_ALT : undefined,
     twitterCard: imageUrl ? 'summary_large_image' : 'summary',
   };
 }
@@ -975,35 +927,33 @@ function buildTierMetadata(pathname: string) {
 export function resolveSeoMetadata(pathname: string): SeoMetadata {
   const normalizedPathname = normalizePathname(pathname);
 
-  if (normalizedPathname === '/preview' || normalizedPathname.startsWith('/preview/')) {
-    const livePathname = normalizePathname(normalizedPathname.replace(/^\/preview/, '') || '/');
-    const liveMetadata = resolveSeoMetadata(livePathname);
+  const versionPrefix = ['/v1', '/v2', '/v3'].find((prefix) => normalizedPathname === prefix || normalizedPathname.startsWith(`${prefix}/`));
+  if (versionPrefix) {
+    const livePathname = normalizePathname(normalizedPathname.replace(versionPrefix, '') || '/');
+    const archivedDefinition = versionPrefix === '/v1'
+      ? mainExperienceRoutes.get(livePathname)
+      : directRoutes.get(livePathname);
+    const liveMetadata = archivedDefinition
+      ? buildMetadata(livePathname, archivedDefinition)
+      : resolveSeoMetadata(livePathname);
 
     return {
       ...liveMetadata,
       pathname: normalizedPathname,
       canonicalPath: livePathname,
       robots: PRIVATE_ROBOTS,
+      title: versionPrefix === '/v3'
+        ? livePathname === '/'
+          ? withBrand('V3 — AI Assistants for Contractors')
+          : liveMetadata.title.replace('Products', 'AI Assistants').replace('Product Workflows', 'AI Assistant Workflows').replace('Solutions', 'Guidance')
+        : liveMetadata.title,
     };
   }
 
-  const directDefinition = directRoutes.get(normalizedPathname);
+  const directDefinition = directRoutes.get(normalizedPathname) ?? retiredMainRedirectRoutes.get(normalizedPathname);
 
   if (directDefinition) {
     return buildMetadata(normalizedPathname, directDefinition);
-  }
-
-  const versionPrefix = ['/v1', '/v2', '/v3'].find((prefix) => normalizedPathname.startsWith(`${prefix}/`));
-  if (versionPrefix) {
-    const livePathname = normalizePathname(normalizedPathname.replace(versionPrefix, '') || '/');
-    const liveMetadata = resolveSeoMetadata(livePathname);
-
-    return {
-      ...liveMetadata,
-      pathname: normalizedPathname,
-      canonicalPath: livePathname,
-      robots: PRIVATE_ROBOTS,
-    };
   }
 
   const serviceMetadata = buildServiceMetadata(normalizedPathname);
@@ -1056,14 +1006,18 @@ export function mergeSeoMetadata(pathname: string, override?: SeoOverride): SeoM
     ...definedOverride,
     canonicalPath: normalizePathname(definedOverride.canonicalPath ?? base.canonicalPath),
     title: withBrand(definedOverride.title ?? base.title),
-    twitterCard: definedOverride.twitterCard ?? (definedOverride.imageUrl ?? base.imageUrl ? 'summary_large_image' : 'summary'),
+    imageUrl: base.imageUrl,
+    imageAlt: base.imageAlt,
+    twitterCard: base.imageUrl ? 'summary_large_image' : 'summary',
   };
 }
 
 export function listStaticSeoRoutes() {
   const paths = new Set<string>([
     ...directRoutes.keys(),
+    ...retiredMainRedirectRoutes.keys(),
     ...versionedArchiveRoutes,
+    ...v3ArchiveRoutes,
     ...Object.keys(servicePageContent),
     ...Object.keys(expertisePages),
     ...Object.keys(explainerContent),

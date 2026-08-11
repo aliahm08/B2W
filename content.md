@@ -6,24 +6,25 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 ## Core Positioning
 
-- `B2W`: a product company building practical AI for food and beverage, general contracting, and real estate management businesses.
+- `B2W`: a product company building practical tools for project-driven contracting businesses.
 - `JasonAI`: **the Admin**—B2W’s only available product, an AI assistant that searches approved work communication and returns concise answers through WhatsApp.
 - `Clara`: **the Expert**—a customized AI chat workspace concept for developing estimates, proposals, scopes, reports, and other company documents from approved preferences and review rules; it is not available or priced.
 - `Gurge`: **the Operator**—a concept for managing jobs, locations, accountability, and reports; it is not available or priced.
 
 ## Approved Messaging
 
-- `/` is the live, indexable B2W site. Its original-style hero leads with “We help contractors move projects *forward.*” and See how it works / Talk to our team actions. “Take your work to the next stage.” introduces the image-led JasonAI and Clara cards. “Optimizing growth for SMBs.” then introduces the expanding contractor carousel, followed by a single-open getting-started FAQ. A final decision panel contains Find a solution and Calculate ROI. The shared footer mirrors the public Products, Solutions, JasonAI support, Resources, and Company architecture.
-- `/v1`, `/v2`, and `/v3` are stable, noindex review surfaces. V1 preserves the full product-company build, V2 uses the two-product project-team build with the shared contractor Solutions carousel, and V3 preserves the focused JasonAI / Workflows / Pricing contractor build.
-- A compact Live / V1 / V2 / V3 switcher is available only on the noindex versioned review surfaces; it is not shown on the production homepage or included in the product navigation hierarchy.
+- `/` is the live, indexable project-team experience formerly reviewed at `/v2`, with JasonAI, Clara, contractor solutions, pricing, and the solution finder.
+- `/v1` preserves the former main contractor-trust experience. `/v2` preserves the experience promoted to Live. Both are stable, noindex review surfaces.
+- `/v3` is a noindex V2/live variation that calls the Products category `AI Assistants` and the Solutions category `Guidance` across navigation, footer labeling, and related page framing.
+- A compact Live / V1 / V2 / V3 switcher is available only on versioned routes. Preview remains retired and redirects to Live.
 - B2W should sound direct, technical, and operational. Avoid inflated transformation language.
-- The homepage leads with what JasonAI is and what it can do. Founder-led setup and workflow consultation support the product; they are not presented as separate service-company offers.
+- The live public hierarchy uses Products, Solutions, Pricing, About, and Book a demo. The former contractor-trust hierarchy remains available only inside `/v1`.
 - The homepage hero demonstrates JasonAI with three automatically rotating WhatsApp cards—Personal chat, Project group, and Daily brief—rebuilt from the former pricing-page interaction in the shared B2W visual system. Each example must remain inside current search-and-summary capability.
 - The brand identity uses an ink-and-paper parent system with the Clara-derived B2W mark, oversized Inter typography, document-like grids, and mineral blue as the active JasonAI signal. The canonical rationale lives in `docs/b2w-jasonai-brand-identity.md`.
-- Every live public page uses one shared header: Products and Solutions dropdowns, a direct Pricing link, About on the right, and a Calendly Book a demo CTA. The Solutions tray presents three direct entries without category labels: General Contractor, Use Cases, and How B2W Works. Versioned and private experiences keep their own navigation.
+- Public headers and footers never link to `/internal`; the private workspace remains accessible only by direct URL.
 - `/general-contractors` uses the original industry promise—find job information faster and keep field work moving—in a fixed hero. Its first content section switches between Business owners, Project coordinators, and Operations teams, pairing each function's image with where its work breaks down. Final outcome cards use transparent planning assumptions rather than guaranteed ROI claims.
 - “Find a Solution” is the squared-off homepage CTA for the on-page solution finder. It collects business size, type, primary goal, and current tools, then recommends relevant products and solution pages with transparent availability, pricing, and illustrative time-value estimates.
-- The Assistants dropdown and shared footer expose JasonAI’s three public supporting pages: How It Works, Questions, and Privacy. All four JasonAI pages use the shared B2W header/footer and mineral-blue product styling.
+- The JasonAI dropdown and shared footer expose How It Works, Integrations, and Security & Privacy. The former Questions and Privacy routes redirect to FAQ and Security.
 - The live `/services` page organizes the offer as Strategy, Systems, and Implementation around business conditions, outputs, intended customers, and one next action.
 - The August 2026 Business Plan is translated publicly as three horizons: `NOW` becomes **Now**, `FUTURE` becomes **Up next**, and `IDEAL` becomes **In store**. Each horizon covers Product, Pricing, Success, and the gate required before B2W advances.
 - **Now:** one JasonAI admin assistant, one introductory offer, and one primary customer type—general contractors.
@@ -34,10 +35,9 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 - `/gurge` is the public Gurge product page and demonstrates its management command center across overview, jobs, locations, and detailed reports.
 - Dedicated public pages at `/industries/food-and-beverage`, `/industries/general-contracting`, and `/industries/real-estate-management` explain the relevant operating conditions and workflow opportunities without implying that roadmap capabilities are already available.
 - General Contracting includes trade businesses, contracting firms, and AEC companies. Food & Beverage includes restaurants, cafes, franchises, and supermarkets.
-- `/pricing` combines the illustrative ROI calculator, clear workflow summaries for JasonAI, Clara, and Gurge, and JasonAI AI-assistant pricing. There are no agent, platform, or bundle prices. The former AI ROI, Agentic Workflows, Compare Agents, and JasonAI pricing URLs redirect into this page.
-- `/resources` is a General Contracting document library containing scopes, proposals, field reports, change orders, punch lists, subcontractor packages, and a coming-soon estimation workflow. It uses Clara-derived capture → structure → review → generate flows instead of static case-study links.
+- `/pricing` publishes only the documented JasonAI standard offer: `$99/month` plus the one-time `$2,000` setup. No invented bundles, trial terms, or guaranteed ROI appear.
 - `/solutions/business-use-cases` combines operating-problem cards with explicit current, concept-stage, and custom workflow patterns. The Clara estimate demonstration is linked from this catalog as **Project Estimates**.
-- `/solutions/ai-workflows` is the public five-step **How B2W Works** guide: scope one problem, teach JasonAI approved context, work through existing tools, add Clara only when a dedicated document workspace helps, then review and expand through diligence.
+- `/solutions/ai-workflows` is the public five-step **AI Workflows** guide: scope one problem, teach JasonAI approved context, work through existing tools, add Clara only when a dedicated document workspace helps, then review and expand through diligence.
 - `/clara` is the public Clara product page. The prior voice-to-estimate animation lives at `/solutions/ai-workflows/project-estimates` and is linked from the Use Cases workflow catalog as **Project Estimates**.
 - Estimates and rehabilitation estimates are labeled `Concept phase`; they must not be presented as an available B2W or JasonAI capability.
 - `/contact` routes service, JasonAI, WhatsApp setup, partnership, and general inquiries through one shared form.
@@ -70,6 +70,8 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 ## Revision History
 
+- **2026-08-11:** Added V3 as a copy of V2 that calls the Products category `AI Assistants` and restored V3 in the version switcher.
+- **2026-08-11:** Promoted the former V2 experience to Live, archived the former main experience at V1, retained V2, retired V3 and Preview, removed public internal links, and updated the footer phrase.
 - **2026-08-10:** Changed the hero CTAs to JasonAI exploration and email contact, normalized homepage headings to sentence case, added a single-open getting-started FAQ, and moved Find a solution / Calculate ROI into a final decision section.
 - **2026-08-10:** Moved the product-and-FAQ section ahead of the contractor carousel and reframed the carousel as “Optimizing growth for SMBs.”
 - **2026-08-10:** Split the homepage into distinct product, business, questions, and next-step sections, placing the FAQ after the business carousel.

@@ -15,7 +15,7 @@ export default function ServicesPage() {
     <div className="min-h-screen bg-[var(--b2w-canvas)]">
       <Seo title="Strategy, Systems, and Implementation" description="B2W helps businesses decide what matters, organize how the work moves, and implement the right intervention with accountable ownership." canonicalPath="/services" />
 
-      <PageIntro eyebrow="B2W · Services" title="One operating sequence. Three ways to enter it." description="The service architecture follows the Business Plan: Strategy sets direction, Systems makes the direction usable, and Implementation carries it into the business. A customer can begin at the layer where the condition is visible." primary={{ label: 'Discuss the business condition', to: '/contact?type=service' }} secondary={{ label: 'See JasonAI', to: '/jasonai' }} />
+      <PageIntro eyebrow="B2W · Services" title="One operating sequence. Three ways to enter it." description="The service architecture follows the Business Plan: Strategy sets direction, Systems makes the direction usable, and Implementation carries it into the business. A customer can begin at the layer where the condition is visible." primary={{ label: 'Discuss the business condition', to: 'mailto:info@b2w-ai.com' }} secondary={{ label: 'See JasonAI', to: '/jasonai' }} />
 
       <section className="border-y border-[var(--b2w-line)] bg-[var(--b2w-ink)] text-white">
         <div className={`${pageWidth} py-12 sm:py-16`}>
@@ -74,7 +74,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <CTASection eyebrow="Begin with the condition" title="Do not buy the solution before the problem is clear." description="Tell us what changed, where the work is breaking down, and what the business needs to understand or accomplish next." action={{ label: 'Book a founder conversation', to: '/contact?type=service' }} secondary={{ label: 'Review JasonAI', to: '/jasonai' }} />
+      <CTASection eyebrow="Begin with the condition" title="Do not buy the solution before the problem is clear." description="Tell us what changed, where the work is breaking down, and what the business needs to understand or accomplish next." action={{ label: 'Book a founder conversation', to: 'mailto:info@b2w-ai.com' }} secondary={{ label: 'Review JasonAI', to: '/jasonai' }} />
     </div>
   );
 }

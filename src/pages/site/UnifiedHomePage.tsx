@@ -212,7 +212,7 @@ export default function UnifiedHomePage() {
               <p className="max-w-xl text-lg leading-8 text-white/68">B2W builds practical AI products for General Contracting businesses. JasonAI is our launch product—an assistant that finds useful job context in approved business communication and delivers a clear answer in WhatsApp.</p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <ButtonLink to="/jasonai" variant="secondary" className="border-white bg-white text-[var(--b2w-ink)]">Meet JasonAI</ButtonLink>
-                <ButtonLink to="/contact?type=jasonai" variant="tertiary" className="text-white hover:text-[#8fc2d7]">Book a founder review</ButtonLink>
+                <ButtonLink to="mailto:info@b2w-ai.com" variant="tertiary" className="text-white hover:text-[#8fc2d7]">Book a founder review</ButtonLink>
               </div>
             </div>
           </div>
@@ -291,7 +291,7 @@ export default function UnifiedHomePage() {
         </div>
       </section>
 
-      <CTASection eyebrow="Start with JasonAI" title="Ask the question your messages should already answer." description="See whether JasonAI can recover the context your team needs, then configure the approved communication it can use through a guided WhatsApp setup." action={{ label: 'Book a founder review', to: '/contact?type=jasonai', variant: 'product' }} secondary={{ label: 'See product workflows', to: '/products/workflows' }} tone="rust" />
+      <CTASection eyebrow="Start with JasonAI" title="Ask the question your messages should already answer." description="See whether JasonAI can recover the context your team needs, then configure the approved communication it can use through a guided WhatsApp setup." action={{ label: 'Book a founder review', to: 'mailto:info@b2w-ai.com', variant: 'product' }} secondary={{ label: 'See product workflows', to: '/products/workflows' }} tone="rust" />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, type ComponentType } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   AlertTriangle,
@@ -114,14 +114,16 @@ const audienceConfigs: Record<ContractorAudience, AudienceConfig> = {
 const audienceOrder: ContractorAudience[] = ['business-owners', 'project-coordinators', 'operations-teams'];
 
 export default function ContractorAudiencePage() {
+  const { pathname } = useLocation();
+  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
   const [audience, setAudience] = useState<ContractorAudience>('business-owners');
   const config = audienceConfigs[audience];
 
   return (
     <div className="min-h-screen bg-[#0b0f0d] text-white selection:bg-[#a9c7a8] selection:text-[#0b0f0d]">
       <Seo
-        title="AI Solutions for General Contractors"
-        description="Find job information faster, keep field work moving, and explore practical AI solutions for general contracting owners, project coordinators, and operations teams."
+        title={isV3 ? 'AI Guidance for General Contractors' : 'AI Solutions for General Contractors'}
+        description={isV3 ? 'Find job information faster, keep field work moving, and explore practical AI guidance for general contracting owners, project coordinators, and operations teams.' : 'Find job information faster, keep field work moving, and explore practical AI solutions for general contracting owners, project coordinators, and operations teams.'}
         canonicalPath="/general-contractors"
       />
       <LiveSiteHeader theme="dark" followPageTheme />
@@ -149,7 +151,7 @@ export default function ContractorAudiencePage() {
 
         <section id="by-function" data-header-theme="dark" className="scroll-mt-24 border-b border-white/10 px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
           <div className="mx-auto max-w-7xl">
-            <div className="max-w-4xl"><p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#a9c7a8]">Solutions by function</p><h2 className="mt-5 text-4xl font-medium leading-[.98] tracking-[-.05em] sm:text-6xl">See where work breaks down for each team.</h2></div>
+            <div className="max-w-4xl"><p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#a9c7a8]">{isV3 ? 'Guidance by function' : 'Solutions by function'}</p><h2 className="mt-5 text-4xl font-medium leading-[.98] tracking-[-.05em] sm:text-6xl">See where work breaks down for each team.</h2></div>
             <nav aria-label="General contractor functions" className="mt-10 grid gap-2 sm:grid-cols-3">
               {audienceOrder.map((item) => <button key={item} type="button" onClick={() => setAudience(item)} aria-pressed={item === audience} className={`cursor-pointer rounded-[1rem] border px-5 py-4 text-left text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a9c7a8]/55 ${item === audience ? 'border-[#a9c7a8] bg-[#a9c7a8] text-[#101511]' : 'border-white/15 bg-white/[.025] text-white/62 hover:border-white/40 hover:text-white'}`}>{audienceConfigs[item].navLabel}</button>)}
             </nav>
@@ -188,7 +190,7 @@ export default function ContractorAudiencePage() {
         <section data-header-theme="dark" className="px-5 py-20 sm:px-8 sm:py-28 lg:px-10">
           <div className="mx-auto max-w-7xl rounded-[2rem] border border-[#a9c7a8]/25 bg-[linear-gradient(135deg,#19241d,#101511)] p-7 sm:p-12">
             <p className="font-mono text-[10px] uppercase tracking-[.2em] text-[#a9c7a8]">Choose one recurring problem</p>
-            <div className="mt-5 grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end"><div><h2 className="max-w-[14ch] text-4xl font-medium leading-[.98] tracking-[-.05em] sm:text-6xl">{config.closingTitle}</h2><p className="mt-6 max-w-2xl text-base leading-8 text-white/58">{config.closingBody}</p></div><div className="flex flex-col gap-3 sm:flex-row lg:justify-end"><Link to="/contact?type=contractor-solution" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#c6ddc4] px-6 text-sm font-semibold text-[#101511] transition hover:bg-white">Map the problem <ArrowRight className="h-4 w-4" /></Link><Link to="/jasonai" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-semibold text-white/78 transition hover:border-white/45 hover:text-white">Explore communication clarity</Link></div></div>
+            <div className="mt-5 grid gap-10 lg:grid-cols-[1.15fr_.85fr] lg:items-end"><div><h2 className="max-w-[14ch] text-4xl font-medium leading-[.98] tracking-[-.05em] sm:text-6xl">{config.closingTitle}</h2><p className="mt-6 max-w-2xl text-base leading-8 text-white/58">{config.closingBody}</p></div><div className="flex flex-col gap-3 sm:flex-row lg:justify-end"><Link to="mailto:info@b2w-ai.com" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#c6ddc4] px-6 text-sm font-semibold text-[#101511] transition hover:bg-white">Map the problem <ArrowRight className="h-4 w-4" /></Link><Link to="/jasonai" className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/18 px-6 text-sm font-semibold text-white/78 transition hover:border-white/45 hover:text-white">Explore communication clarity</Link></div></div>
           </div>
         </section>
       </main>

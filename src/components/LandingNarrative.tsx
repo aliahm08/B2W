@@ -427,13 +427,12 @@ function SectionStackCard({
             >
               <span>Explore Services</span>
             </Link>
-            <Link
-              to={contactHref}
-              onClick={handleAnchorClick(contactHref)}
+            <a
+              href={contactHref}
               className="inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:text-neutral-600"
             >
               <span>Get in Touch</span>
-            </Link>
+            </a>
           </div>
         ) : null}
       </div>
@@ -456,7 +455,7 @@ export default function LandingNarrative({
 
   const primaryCtaTarget = hero.primaryCtaHref.replace('#capabilities', '#expertise');
   const primaryCtaHref = resolveAnchorTarget(basePath, primaryCtaTarget);
-  const contactHref = `${basePath}#contact`;
+  const contactHref = 'mailto:info@b2w-ai.com';
 
   const stepList = useMemo(() => narrativeSteps, []);
 
@@ -595,13 +594,12 @@ export default function LandingNarrative({
                     >
                       <span>Explore Services</span>
                     </Link>
-                    <Link
-                      to={contactHref}
-                      onClick={handleAnchorClick(contactHref)}
+                    <a
+                      href={contactHref}
                       className="inline-flex min-h-12 items-center border-b border-black px-5 py-3 text-lg font-medium text-black transition-colors hover:text-neutral-600"
                     >
                       <span>Get in Touch</span>
-                    </Link>
+                    </a>
                   </div>
                 ) : null}
                 <NarrativeAnimation activeIndex={index} />

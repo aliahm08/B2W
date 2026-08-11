@@ -7,9 +7,10 @@ import { servicePageContent } from '../content/servicePages';
 
 export default function ServiceProjectPage() {
   const location = useLocation();
+  const contentPathname = location.pathname.replace(/^\/(?:preview|v[1-3])(?=\/)/, '') || '/';
   const content = useMemo(
-    () => servicePageContent[location.pathname] ?? servicePageContent['/services/marketing-advisory'],
-    [location.pathname],
+    () => servicePageContent[contentPathname] ?? servicePageContent['/services/marketing-advisory'],
+    [contentPathname],
   );
   const projectAreas: PublicProjectArea[] = content.preselectedProjectAreas;
 

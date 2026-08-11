@@ -92,7 +92,7 @@ export default function Expertise() {
       >
         <p className="text-base text-neutral-600">Need customized expertise?</p>
         <Link
-          to="/#contact"
+          to="mailto:info@b2w-ai.com"
           className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black"
         >
           Get a project estimate today.

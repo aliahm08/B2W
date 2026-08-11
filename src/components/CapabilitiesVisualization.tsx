@@ -72,7 +72,7 @@ export default function CapabilitiesVisualization() {
           Need help capturing better business data?
         </p>
         <Link
-          to="/#contact"
+          to="mailto:info@b2w-ai.com"
           className="inline-flex items-center gap-2 text-sm font-medium text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-black hover:decoration-black"
         >
           Schedule a Business Audit
