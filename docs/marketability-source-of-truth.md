@@ -52,9 +52,10 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 - The live landing page centers its header on Overview, Examples, and Why JasonAI, with dropdowns linking to relevant anchored subsections. Overview leads to the capability summary and includes How it works, the project example, and security controls. Pricing sits beside the header actions rather than in the primary navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
 - The live and V4 header uses scroll-aware highlighting: Overview remains active across its product and process sections, Examples across all example subsections, Why JasonAI across the value section, and Pricing across pricing and FAQs.
+- At the top of the live/V4 hero, the header collapses to a lower, tighter centered brand pill containing only the B2W mark and `JasonAI by B2W`; the complete navigation returns as soon as the visitor begins scrolling.
 - The live and V4 header lockup pairs the B2W mark with `JasonAI by B2W` on tablet and desktop. Mobile shows the mark alone while retaining the full accessible home label.
-- The peach header CTA is `Book demo` and opens B2W’s Calendly booking link. `Try JasonAI free` and the hero’s primary `Get JasonAI free` remain email contact actions; `See the value` remains the secondary on-page action.
-- The live and V4 hero eyebrow is `General Contractor's Newest Assistant`; its primary headline is `Contractors, meet your latest AI assistant.`
+- The peach header CTA is `Book demo`; the hero’s primary CTA is `Book a demo`. Both open B2W’s Calendly booking link. `Try JasonAI free` remains an email contact action; `See the value` remains the secondary on-page action.
+- The live and V4 hero eyebrow is `The AI assistant for general contractors`; its primary headline is `Contractors, meet your integrated AI assistant.`, with `your` italicized. Its supporting sentence explains integration without workflow change, followed by four compact check-mark items: Find information, Create documents, Analyze project files, and Act on conversations. The previous `For free.` message is omitted.
 - Current JasonAI framing includes search and summaries across connected project context, reviewable document drafting, and uploaded-file analysis. Human review remains required. Autonomous actions and expanded agent capabilities must be labeled as in development or future work.
 - Opening a homepage navigation menu keeps the header and menu in focus while applying a Clara-inspired blur to the page behind it.
 - The Products tray describes JasonAI as “An intelligent assistant that works through your existing communication channels.” with a “Pre-Launch Discount” offer label. Clara has no adjacent status or offer label. Hovering either product applies its established homepage product colorway to the page behind the tray.
@@ -102,8 +103,8 @@ This document is the stable reference for public marketing upkeep on the B2W web
 - The live `/` homepage is the visual source of truth for public marketing pages: warm paper or product-tinted canvases, oversized Inter typography, restrained grid fields, rounded product frames, soft ambient shadows, and pill-shaped primary controls.
 - JasonAI, Clara, Gurge, ROI/pricing, industry pages, and agent-comparison pages keep their product colorways while sharing the homepage frame radius, control shape, shadow softness, floating header, and footer behavior.
 - Embedded software demonstrations may use tighter internal geometry when it helps them read as product interfaces; the surrounding marketing cards and controls should still follow the shared homepage system.
-- The live and V4 experiences use the reduced-motion-aware descramble effect on navigation and button-style CTA labels during hover or keyboard focus. The hero’s inline underlined `For free.` link remains stable. Header animation is limited to the short `Connect. Ask. Act.` process heading; all other hero, section, and body copy remains stable.
-- The live and V4 hero centers its messaging over a reduced-motion-aware abstract project-flow background. The animation contains no visible labels: blueprint/worksite traces carry inbound signals toward the primary `Get JasonAI free` button, which occupies the graphic’s JasonAI convergence point. Do not use a generated workplace image in this hero.
+- The live and V4 experiences use the reduced-motion-aware descramble effect on navigation and button-style CTA labels during hover or keyboard focus. Header animation is limited to the short `Connect. Ask. Act.` process heading; all other hero, section, and body copy remains stable.
+- The live and V4 hero centers its messaging over a reduced-motion-aware abstract project-flow background. The animation contains no visible labels: blueprint/worksite traces carry inbound signals toward the primary `Book demo` button, which occupies the graphic’s JasonAI convergence point. Do not use a generated workplace image in this hero.
 
 ## Cheapest Update Loop
 
@@ -132,8 +133,12 @@ Then:
 ## Revision History
 
 - **2026-08-11:** Added scroll-aware live/V4 header highlighting for Overview, Examples, Why JasonAI, and Pricing across their related subsections.
+- **2026-08-11:** Collapsed the live/V4 header over the hero to the centered brand lockup and restored the complete navigation after the hero.
 - **2026-08-11:** Updated the live/V4 hero eyebrow to `General Contractor's Newest Assistant` and headline to `Contractors, meet your latest AI assistant.`
 - **2026-08-11:** Moved the live/V4 hero animation into the full hero background, removed its visible labels, and made `Get JasonAI free` the signal convergence point and primary action.
+- **2026-08-11:** Changed the live/V4 hero headline to `Contractors, meet your integrated AI assistant.` with `your` italicized, and changed its primary CTA to the Calendly-linked `Book demo`.
+- **2026-08-11:** Reframed the live/V4 hero with `The AI assistant for general contractors`, consolidated the supporting message into one paragraph, removed `For free.`, and renamed the primary CTA `Book a demo`.
+- **2026-08-11:** Converted the hero capabilities to four check-mark items, realigned its animated signal lines with the demo CTA, tightened and lowered the minimized header, and made the complete navigation expand near the start of scrolling.
 - **2026-08-11:** Simplified the live/V4 mobile header to the B2W symbol alone and aligned the complete favicon/app-icon stack with the exact `B2WIcon` mark used in that header.
 - **2026-08-11:** Reduced live/V4 header descrambling to the single short `Connect. Ask. Act.` process heading while retaining link hover and focus interactions.
 - **2026-08-11:** Replaced the generated live/V4 hero workplace image with a centered message hierarchy and an animated contractor project-flow graphic that connects field and office inputs to useful JasonAI outputs.

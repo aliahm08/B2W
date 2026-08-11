@@ -232,6 +232,7 @@ function V4Header({ basePath }: { basePath: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<(typeof NAV_SECTION_IDS)[number]>('overview');
+  const [heroMinimal, setHeroMinimal] = useState(true);
   const { pathname } = useLocation();
   const homePath = basePath || '/';
   const anchor = (id: string) => `${homePath}#${id}`;
@@ -241,6 +242,7 @@ function V4Header({ basePath }: { basePath: string }) {
 
     const updateActiveSection = () => {
       animationFrame = 0;
+      setHeroMinimal(window.scrollY < 40);
       const readingLine = window.innerHeight * .38;
       let currentSection: (typeof NAV_SECTION_IDS)[number] = 'overview';
 
@@ -296,11 +298,18 @@ function V4Header({ basePath }: { basePath: string }) {
   ] as const;
   const pricingActive = activeSection === 'pricing' || activeSection === 'faq';
 
+  useEffect(() => {
+    if (heroMinimal) {
+      setMenuOpen(false);
+      setOpenDropdown(null);
+    }
+  }, [heroMinimal]);
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full border border-white/12 bg-[#14110f]/78 px-4 text-white shadow-[0_16px_50px_rgba(0,0,0,.16)] backdrop-blur-2xl sm:px-5">
+    <header className={`fixed inset-x-0 top-0 z-50 px-3 transition-[padding] duration-500 sm:px-5 ${heroMinimal ? 'pt-7 sm:pt-8' : 'pt-3'}`}>
+      <div className={`mx-auto flex items-center rounded-full border border-white/12 bg-[#14110f]/78 text-white shadow-[0_16px_50px_rgba(0,0,0,.16)] backdrop-blur-2xl transition-[height,max-width,padding] duration-500 ${heroMinimal ? 'h-12 max-w-[13.5rem] justify-center px-3' : 'h-16 max-w-7xl justify-between px-4 sm:px-5'}`}>
         <Link to={homePath} aria-label="JasonAI by B2W home" className="inline-flex items-center gap-2.5"><B2WIcon title="" className="h-9 w-10 text-white sm:h-8 sm:w-9" /><span className="hidden whitespace-nowrap text-sm font-semibold tracking-[-.03em] sm:inline sm:text-base"><DescrambleText text="JasonAI" /> <span className="font-normal text-white/48">by</span> B2W</span></Link>
-        <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
+        {!heroMinimal ? <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
           {navigation.map((item) => {
             const active = (item.activeSections as readonly string[]).includes(activeSection);
             if (!('items' in item)) {
@@ -326,14 +335,14 @@ function V4Header({ basePath }: { basePath: string }) {
               </div>
             );
           })}
-        </nav>
-        <div className="flex items-center gap-2">
+        </nav> : null}
+        {!heroMinimal ? <div className="flex items-center gap-2">
           <Link to={anchor('pricing')} aria-current={pricingActive ? 'location' : undefined} className={`hidden min-h-10 items-center justify-center rounded-full px-3 text-sm font-medium transition hover:bg-white/7 hover:text-white lg:inline-flex ${pricingActive ? 'bg-white/8 text-[#f4b28c]' : 'text-white/58'}`}><DescrambleText text="Pricing" /></Link>
           <a href={BOOK_DEMO_URL} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center justify-center rounded-full bg-[#f4b28c] px-4 text-sm font-semibold text-[#14110f] transition hover:bg-[#ffd9c0]"><DescrambleText text="Book demo" /></a>
           <button type="button" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)} className="grid h-10 w-10 place-items-center rounded-full border border-white/15 lg:hidden">{menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}</button>
-        </div>
+        </div> : null}
       </div>
-      {menuOpen ? <nav aria-label="Mobile primary navigation" className="mx-auto mt-2 max-h-[calc(100vh-6.5rem)] max-w-7xl overflow-y-auto rounded-[1.5rem] border border-white/12 bg-[#14110f]/95 p-3 text-white shadow-2xl backdrop-blur-2xl lg:hidden">{navigation.map((item) => { const active = (item.activeSections as readonly string[]).includes(activeSection); return <div key={item.label} className="border-b border-white/8 py-2"><Link to={item.href} aria-current={active ? 'location' : undefined} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white/8 hover:text-white ${active ? 'bg-white/8 text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text={item.label} /></Link>{'items' in item ? <div className="grid pl-3">{item.items.slice(1).map((subitem) => <Link key={subitem[0]} to={subitem[1]} onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-2 text-xs text-white/48 hover:bg-white/8 hover:text-white"><DescrambleText text={subitem[0]} /></Link>)}</div> : null}</div>; })}<Link to={anchor('pricing')} aria-current={pricingActive ? 'location' : undefined} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-white/8 ${pricingActive ? 'bg-white/8 text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text="Pricing" /></Link></nav> : null}
+      {!heroMinimal && menuOpen ? <nav aria-label="Mobile primary navigation" className="mx-auto mt-2 max-h-[calc(100vh-6.5rem)] max-w-7xl overflow-y-auto rounded-[1.5rem] border border-white/12 bg-[#14110f]/95 p-3 text-white shadow-2xl backdrop-blur-2xl lg:hidden">{navigation.map((item) => { const active = (item.activeSections as readonly string[]).includes(activeSection); return <div key={item.label} className="border-b border-white/8 py-2"><Link to={item.href} aria-current={active ? 'location' : undefined} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white/8 hover:text-white ${active ? 'bg-white/8 text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text={item.label} /></Link>{'items' in item ? <div className="grid pl-3">{item.items.slice(1).map((subitem) => <Link key={subitem[0]} to={subitem[1]} onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-2 text-xs text-white/48 hover:bg-white/8 hover:text-white"><DescrambleText text={subitem[0]} /></Link>)}</div> : null}</div>; })}<Link to={anchor('pricing')} aria-current={pricingActive ? 'location' : undefined} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-white/8 ${pricingActive ? 'bg-white/8 text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text="Pricing" /></Link></nav> : null}
     </header>
   );
 }
@@ -396,16 +405,16 @@ function ContractorFlowBackground() {
         <motion.path d="M28 724V430L210 306L392 430V724M92 724V478H328V724M151 478V392H269V478M842 724V382H1138V724M900 724V468H1080V724M842 382L990 286L1138 382" fill="none" stroke="#f4b28c" strokeOpacity=".11" strokeWidth="1.4" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: .5, duration: reduceMotion ? 0 : 2, ease: 'easeOut' }} />
         <motion.path d="M234 342V270M203 306H265M930 344V268M899 306H961M496 724H704M544 724V676H656V724" fill="none" stroke="#a9c7a8" strokeOpacity=".1" strokeWidth="1.2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: .72, duration: reduceMotion ? 0 : 1.6 }} />
 
-        <path d="M92 390C298 390 410 505 548 606" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
-        <path d="M116 694C326 694 424 645 548 624" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
-        <path d="M1108 390C902 390 790 505 652 606" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
-        <path d="M1084 694C874 694 776 645 652 624" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M92 390C298 390 410 515 548 626" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M116 714C326 714 424 665 548 644" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M1108 390C902 390 790 515 652 626" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M1084 714C874 714 776 665 652 644" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
 
-        <motion.path d="M92 390C298 390 410 505 548 606M116 694C326 694 424 645 548 624" fill="none" stroke="url(#hero-signal-inbound)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
-        <motion.path d="M1108 390C902 390 790 505 652 606M1084 694C874 694 776 645 652 624" fill="none" stroke="url(#hero-signal-inbound-reverse)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
+        <motion.path d="M92 390C298 390 410 515 548 626M116 714C326 714 424 665 548 644" fill="none" stroke="url(#hero-signal-inbound)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
+        <motion.path d="M1108 390C902 390 790 515 652 626M1084 714C874 714 776 665 652 644" fill="none" stroke="url(#hero-signal-inbound-reverse)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
 
-        <circle cx="600" cy="616" r="118" fill="url(#hero-node-glow)" />
-        <motion.circle cx="600" cy="616" r="62" fill="none" stroke="#f4b28c" strokeOpacity=".28" strokeWidth="1" animate={reduceMotion ? undefined : { r: [48, 78], opacity: [.5, 0] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'easeOut' }} />
+        <circle cx="600" cy="636" r="118" fill="url(#hero-node-glow)" />
+        <motion.circle cx="600" cy="636" r="62" fill="none" stroke="#f4b28c" strokeOpacity=".28" strokeWidth="1" animate={reduceMotion ? undefined : { r: [48, 78], opacity: [.5, 0] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'easeOut' }} />
       </svg>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,17,15,.96)_0%,rgba(20,17,15,.68)_28%,transparent_58%)]" />
     </motion.div>
@@ -475,17 +484,19 @@ export default function V4HomePage({
 
           <div className="relative mx-auto w-full max-w-7xl px-5 text-center sm:px-8 lg:px-10">
             <div className="mx-auto max-w-5xl">
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-semibold uppercase tracking-[.2em] text-[#f4b28c]">General Contractor&apos;s Newest Assistant</motion.p>
+              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-semibold uppercase tracking-[.2em] text-[#f4b28c]">The AI assistant for general contractors</motion.p>
               <motion.h1 initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: .58, ease: [0.22, 1, 0.36, 1] }} className="mx-auto mt-7 max-w-[16ch] text-[clamp(2.7rem,7vw,6.5rem)] font-medium leading-[.94] tracking-[-.06em]">
-                <span className="inline-block whitespace-nowrap">Contractors,</span>{' '}<span className="inline-block whitespace-nowrap">meet your latest</span>{' '}<span className="inline-block whitespace-nowrap">AI assistant.</span>
+                <span className="inline-block whitespace-nowrap">Contractors,</span>{' '}<span className="inline-block whitespace-nowrap">meet <em className="font-normal">your</em></span>{' '}<span className="inline-block whitespace-nowrap">integrated AI</span>{' '}<span className="inline-block whitespace-nowrap">assistant.</span>
               </motion.h1>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .35 }} className="mx-auto mt-8 max-w-3xl text-[clamp(1.15rem,2vw,1.65rem)] leading-[1.45] text-white/68">
-                Integrate JasonAI into WhatsApp, Gmail, or <em className="text-white">anywhere</em> you want. <a href="mailto:info@b2w-ai.com?subject=JasonAI%20free%20early%20access" className="font-semibold text-white underline decoration-[#f4b28c] decoration-2 underline-offset-8">For free.</a>
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .35 }} className="mx-auto mt-8 max-w-4xl text-[clamp(1.05rem,1.7vw,1.4rem)] leading-[1.55] text-white/64">
+                Integrate JasonAI into WhatsApp, Gmail, or anywhere your business works—without changing your existing workflow.
               </motion.p>
-              <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-white/48 sm:text-base">Find information, create documents, analyze project files, and act on conversations without changing the way your business already works.</p>
-              <div className="relative mt-9 flex flex-col items-center">
+              <motion.ul initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .45 }} className="mx-auto mt-6 grid w-fit grid-cols-1 gap-x-8 gap-y-2 text-left text-sm font-medium text-white/72 sm:grid-cols-2">
+                {['Find information', 'Create documents', 'Analyze project files', 'Act on conversations'].map((item) => <li key={item} className="flex items-center gap-2"><Check className="h-4 w-4 shrink-0 text-[#25D366]" />{item}</li>)}
+              </motion.ul>
+              <div className="relative mt-7 flex flex-col items-center">
                 <motion.span aria-hidden="true" animate={reduceMotion ? undefined : { scale: [1, 1.22, 1], opacity: [.18, .42, .18] }} transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }} className="absolute top-1/2 h-20 w-64 -translate-y-1/2 rounded-full bg-[#f4b28c]/30 blur-2xl" />
-                <a href="mailto:info@b2w-ai.com?subject=Get%20JasonAI%20free" className="group relative inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-[#ffd9c0]/45 bg-[#f4b28c] px-8 py-3.5 text-lg font-semibold text-[#14110f] shadow-[0_18px_60px_rgba(244,178,140,.24)] transition hover:bg-[#ffd9c0]"><DescrambleText text="Get JasonAI free" /> <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></a>
+                <a href={BOOK_DEMO_URL} target="_blank" rel="noreferrer" className="group relative inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-[#ffd9c0]/45 bg-[#f4b28c] px-8 py-3.5 text-lg font-semibold text-[#14110f] shadow-[0_18px_60px_rgba(244,178,140,.24)] transition hover:bg-[#ffd9c0]"><DescrambleText text="Book a demo" /> <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></a>
                 <Link to={anchor('why-jasonai')} className="relative mt-5 inline-flex items-center justify-center gap-2 text-sm font-semibold text-white/58 underline decoration-white/18 underline-offset-4 transition hover:text-white"><DescrambleText text="See the value" /> <ArrowRight className="h-3.5 w-3.5" /></Link>
               </div>
               <p className="mt-5 flex items-center justify-center gap-2 text-xs text-white/40"><Check className="h-3.5 w-3.5 text-[#25D366]" /> No new project-management system required.</p>
