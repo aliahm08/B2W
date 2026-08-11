@@ -247,7 +247,7 @@ function V4Header({ basePath }: { basePath: string }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between rounded-full border border-white/12 bg-[#14110f]/78 px-4 text-white shadow-[0_16px_50px_rgba(0,0,0,.16)] backdrop-blur-2xl sm:px-5">
-        <Link to={homePath} aria-label="JasonAI by B2W home" className="inline-flex items-center gap-2.5"><B2WIcon title="" className="h-9 w-10 text-white sm:h-8 sm:w-9" /><span className="hidden whitespace-nowrap text-sm font-semibold tracking-[-.03em] sm:inline sm:text-base">JasonAI <span className="font-normal text-white/48">by</span> B2W</span></Link>
+        <Link to={homePath} aria-label="JasonAI by B2W home" className="inline-flex items-center gap-2.5"><B2WIcon title="" className="h-9 w-10 text-white sm:h-8 sm:w-9" /><span className="hidden whitespace-nowrap text-sm font-semibold tracking-[-.03em] sm:inline sm:text-base"><DescrambleText text="JasonAI" /> <span className="font-normal text-white/48">by</span> B2W</span></Link>
         <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
           {navigation.map((item) => {
             const active = isActivePath(item.activePaths as readonly string[]);
