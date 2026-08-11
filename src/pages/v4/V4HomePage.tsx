@@ -308,7 +308,7 @@ function V4Header({ basePath }: { basePath: string }) {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 px-3 transition-[padding] duration-500 sm:px-5 ${heroMinimal ? 'pt-7 sm:pt-8' : 'pt-3'}`}>
       <div className={`mx-auto flex items-center rounded-full border border-white/12 bg-[#14110f]/78 text-white shadow-[0_16px_50px_rgba(0,0,0,.16)] backdrop-blur-2xl transition-[height,max-width,padding] duration-500 ${heroMinimal ? 'h-12 max-w-[13.5rem] justify-center px-3' : 'h-16 max-w-7xl justify-between px-4 sm:px-5'}`}>
-        <Link to={homePath} aria-label="JasonAI by B2W home" className="inline-flex items-center gap-2.5"><B2WIcon title="" className="h-9 w-10 text-white sm:h-8 sm:w-9" /><span className="hidden whitespace-nowrap text-sm font-semibold tracking-[-.03em] sm:inline sm:text-base"><DescrambleText text="JasonAI" /> <span className="font-normal text-white/48">by</span> B2W</span></Link>
+        <Link to={homePath} aria-label="JasonAI by B2W home" className="inline-flex items-center gap-2.5"><B2WIcon title="" className="h-9 w-10 text-white sm:h-8 sm:w-9" /><span className="hidden whitespace-nowrap text-sm font-semibold tracking-[-.03em] sm:inline sm:text-base"><DescrambleText text="JasonAI" autoRepeatInterval={11000} /> <span className="font-normal text-white/48">by</span> B2W</span></Link>
         {!heroMinimal ? <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
           {navigation.map((item) => {
             const active = (item.activeSections as readonly string[]).includes(activeSection);
@@ -405,16 +405,23 @@ function ContractorFlowBackground() {
         <motion.path d="M28 724V430L210 306L392 430V724M92 724V478H328V724M151 478V392H269V478M842 724V382H1138V724M900 724V468H1080V724M842 382L990 286L1138 382" fill="none" stroke="#f4b28c" strokeOpacity=".11" strokeWidth="1.4" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: .5, duration: reduceMotion ? 0 : 2, ease: 'easeOut' }} />
         <motion.path d="M234 342V270M203 306H265M930 344V268M899 306H961M496 724H704M544 724V676H656V724" fill="none" stroke="#a9c7a8" strokeOpacity=".1" strokeWidth="1.2" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: .72, duration: reduceMotion ? 0 : 1.6 }} />
 
-        <path d="M92 390C298 390 410 515 548 626" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
-        <path d="M116 714C326 714 424 665 548 644" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
-        <path d="M1108 390C902 390 790 515 652 626" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
-        <path d="M1084 714C874 714 776 665 652 644" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M92 390C298 390 430 500 600 566" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M116 714C326 714 450 625 600 566" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M1108 390C902 390 770 500 600 566" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
+        <path d="M1084 714C874 714 750 625 600 566" fill="none" stroke="white" strokeOpacity=".08" strokeWidth="1.3" />
 
-        <motion.path d="M92 390C298 390 410 515 548 626M116 714C326 714 424 665 548 644" fill="none" stroke="url(#hero-signal-inbound)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
-        <motion.path d="M1108 390C902 390 790 515 652 626M1084 714C874 714 776 665 652 644" fill="none" stroke="url(#hero-signal-inbound-reverse)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
+        <motion.path d="M92 390C298 390 430 500 600 566M116 714C326 714 450 625 600 566" fill="none" stroke="url(#hero-signal-inbound)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
+        <motion.path d="M1108 390C902 390 770 500 600 566M1084 714C874 714 750 625 600 566" fill="none" stroke="url(#hero-signal-inbound-reverse)" strokeWidth="2.2" strokeLinecap="round" pathLength="1" strokeDasharray=".022 .14" animate={reduceMotion ? undefined : { strokeDashoffset: [0, -1] }} transition={signalTransition} />
 
-        <circle cx="600" cy="636" r="118" fill="url(#hero-node-glow)" />
-        <motion.circle cx="600" cy="636" r="62" fill="none" stroke="#f4b28c" strokeOpacity=".28" strokeWidth="1" animate={reduceMotion ? undefined : { r: [48, 78], opacity: [.5, 0] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'easeOut' }} />
+        {!reduceMotion ? <>
+          <circle r="4" fill="#f4b28c"><animateMotion dur="3.2s" repeatCount="indefinite" path="M92 390C298 390 430 500 600 566" /><animate attributeName="opacity" values="0;1;1;0" dur="3.2s" repeatCount="indefinite" /></circle>
+          <circle r="4" fill="#f4b28c"><animateMotion dur="3.2s" begin="1.6s" repeatCount="indefinite" path="M1108 390C902 390 770 500 600 566" /><animate attributeName="opacity" values="0;1;1;0" dur="3.2s" begin="1.6s" repeatCount="indefinite" /></circle>
+          <circle r="3.5" fill="#a9c7a8"><animateMotion dur="3.8s" begin=".8s" repeatCount="indefinite" path="M116 714C326 714 450 625 600 566" /><animate attributeName="opacity" values="0;1;1;0" dur="3.8s" begin=".8s" repeatCount="indefinite" /></circle>
+          <circle r="3.5" fill="#f4b28c"><animateMotion dur="3.8s" begin="2.7s" repeatCount="indefinite" path="M1084 714C874 714 750 625 600 566" /><animate attributeName="opacity" values="0;1;1;0" dur="3.8s" begin="2.7s" repeatCount="indefinite" /></circle>
+        </> : null}
+
+        <circle cx="600" cy="566" r="118" fill="url(#hero-node-glow)" />
+        <motion.circle cx="600" cy="566" r="62" fill="none" stroke="#f4b28c" strokeOpacity=".28" strokeWidth="1" animate={reduceMotion ? undefined : { r: [48, 78], opacity: [.5, 0] }} transition={{ duration: 2.8, repeat: Infinity, ease: 'easeOut' }} />
       </svg>
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,17,15,.96)_0%,rgba(20,17,15,.68)_28%,transparent_58%)]" />
     </motion.div>

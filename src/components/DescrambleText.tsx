@@ -9,17 +9,23 @@ export default function DescrambleText({
   animateOnMount = false,
   animateOnView = false,
   delay = 0,
+  autoRepeatInterval = 0,
+  autoRepeatDelay = 5500,
 }: {
   text: string;
   className?: string;
   animateOnMount?: boolean;
   animateOnView?: boolean;
   delay?: number;
+  autoRepeatInterval?: number;
+  autoRepeatDelay?: number;
 }) {
   const rootRef = useRef<HTMLSpanElement | null>(null);
   const timerRef = useRef<number | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const shouldReduceMotion = useReducedMotion();
   const [displayText, setDisplayText] = useState(text);
+  const [isScrambling, setIsScrambling] = useState(false);
   const segments = useMemo(() => text.split(/(\s+)/), [text]);
 
   const clearTimer = useCallback(() => {
@@ -34,9 +40,11 @@ export default function DescrambleText({
 
     if (shouldReduceMotion) {
       setDisplayText(text);
+      setIsScrambling(false);
       return;
     }
 
+    setIsScrambling(true);
     let frame = 0;
     const totalFrames = Math.max(14, Math.min(28, Math.round(text.length * 1.1)));
 
@@ -54,6 +62,7 @@ export default function DescrambleText({
       if (frame < totalFrames) timerRef.current = window.setTimeout(tick, 24);
       else {
         setDisplayText(text);
+        setIsScrambling(false);
         timerRef.current = null;
       }
     };
@@ -81,6 +90,23 @@ export default function DescrambleText({
   }, [animateOnMount, clearTimer, delay, runDescramble, shouldReduceMotion]);
 
   useEffect(() => {
+    if (!autoRepeatInterval || shouldReduceMotion) return undefined;
+
+    const startTimer = window.setTimeout(() => {
+      runDescramble();
+      intervalRef.current = window.setInterval(runDescramble, autoRepeatInterval);
+    }, autoRepeatDelay);
+
+    return () => {
+      window.clearTimeout(startTimer);
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [autoRepeatDelay, autoRepeatInterval, runDescramble, shouldReduceMotion]);
+
+  useEffect(() => {
     const root = rootRef.current;
     if (!root || !animateOnView || shouldReduceMotion) return undefined;
 
@@ -103,7 +129,7 @@ export default function DescrambleText({
   useEffect(() => () => clearTimer(), [clearTimer]);
 
   return (
-    <span ref={rootRef} className={className} aria-label={text} data-descramble-text>
+    <span ref={rootRef} className={`inline-block transition-[color,filter,transform] duration-300 ${isScrambling ? 'scale-[1.04] text-[#f4b28c] drop-shadow-[0_0_9px_rgba(244,178,140,.5)]' : ''} ${className}`} aria-label={text} data-descramble-text>
       <span aria-hidden="true">
         {(() => {
           let cursor = 0;
