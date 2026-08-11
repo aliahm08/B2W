@@ -19,6 +19,7 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 - `/v4` is the noindex review copy of the current live landing page. A compact Live / V1 / V2 / V3 / V4 switcher is available only on versioned routes. Preview remains retired and redirects to Live.
 - B2W should sound direct, technical, and operational. Avoid inflated transformation language.
 - The live public hierarchy uses Overview, Examples, and Why JasonAI as its primary navigation. Overview links to the capability summary and exposes How it works, the project example, and controls in its dropdown. Pricing is a secondary header link, Book demo opens Calendly, and free-access CTAs open an email to B2W. The previous multi-page hierarchy remains available inside `/v3`.
+- The live and V4 header uses scroll-aware highlighting: Overview remains active across its product and process sections, Examples across all example subsections, Why JasonAI across the value section, and Pricing across pricing and FAQs.
 - The live and V4 header lockup reads `JasonAI by B2W` beside the B2W mark on tablet and desktop; mobile shows the mark alone with the full accessible home label retained.
 - The homepage hero uses the eyebrow `General Contractor's Newest Assistant` and the headline `Contractors, meet your latest AI assistant.` over a reduced-motion-aware abstract project-flow background. Unlabeled worksite and blueprint traces carry signals inward to the primary `Get JasonAI free` button, which serves as the graphic’s JasonAI convergence point; generated workplace imagery is not used.
 - The brand identity uses an ink-and-paper parent system with the Clara-derived B2W mark, oversized Inter typography, document-like grids, and mineral blue as the active JasonAI signal. The canonical rationale lives in `docs/b2w-jasonai-brand-identity.md`.
@@ -71,6 +72,7 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 ## Revision History
 
+- **2026-08-11:** Added scroll-aware live/V4 header highlighting for Overview, Examples, Why JasonAI, and Pricing across their related subsections.
 - **2026-08-11:** Updated the live/V4 hero eyebrow to `General Contractor's Newest Assistant` and headline to `Contractors, meet your latest AI assistant.`
 - **2026-08-11:** Moved the live/V4 hero animation into the full hero background, removed its visible labels, and made `Get JasonAI free` the signal convergence point and primary action.
 - **2026-08-11:** Simplified the live/V4 mobile header to the B2W symbol alone and regenerated the favicon stack from that exact mark.

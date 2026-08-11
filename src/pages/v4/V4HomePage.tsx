@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -209,20 +209,71 @@ const faqItems = [
 ] as const;
 
 const BOOK_DEMO_URL = 'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=b24a24';
+const NAV_SECTION_IDS = [
+  'overview',
+  'capabilities',
+  'agents',
+  'how-it-works',
+  'project-example',
+  'control',
+  'use-cases',
+  'project-coordination',
+  'estimating',
+  'field-information',
+  'client-communication',
+  'operations',
+  'financial-review',
+  'why-jasonai',
+  'pricing',
+  'faq',
+] as const;
 
 function V4Header({ basePath }: { basePath: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const { pathname, hash } = useLocation();
+  const [activeSection, setActiveSection] = useState<(typeof NAV_SECTION_IDS)[number]>('overview');
+  const { pathname } = useLocation();
   const homePath = basePath || '/';
   const anchor = (id: string) => `${homePath}#${id}`;
-  const currentTarget = `${pathname}${hash}`;
-  const isActivePath = (paths: readonly string[]) => paths.includes(currentTarget);
+
+  useEffect(() => {
+    let animationFrame = 0;
+
+    const updateActiveSection = () => {
+      animationFrame = 0;
+      const readingLine = window.innerHeight * .38;
+      let currentSection: (typeof NAV_SECTION_IDS)[number] = 'overview';
+
+      for (const id of NAV_SECTION_IDS) {
+        const section = document.getElementById(id);
+        if (!section) continue;
+        if (section.getBoundingClientRect().top <= readingLine) currentSection = id;
+        else break;
+      }
+
+      setActiveSection((current) => current === currentSection ? current : currentSection);
+    };
+
+    const scheduleUpdate = () => {
+      if (!animationFrame) animationFrame = window.requestAnimationFrame(updateActiveSection);
+    };
+
+    scheduleUpdate();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    return () => {
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+    };
+  }, [pathname]);
+
   const navigation = [
     {
       label: 'Overview',
       href: anchor('capabilities'),
-      activePaths: [anchor('capabilities'), anchor('how-it-works'), anchor('project-example'), anchor('control')],
+      activeSections: ['overview', 'capabilities', 'agents', 'how-it-works', 'project-example', 'control'],
       items: [
         ['Overview', anchor('capabilities'), 'See what JasonAI can understand, create, and review.'],
         ['How it works', anchor('how-it-works'), 'Connect project context, ask naturally, and review the result.'],
@@ -233,7 +284,7 @@ function V4Header({ basePath }: { basePath: string }) {
     {
       label: 'Examples',
       href: anchor('use-cases'),
-      activePaths: [anchor('use-cases'), anchor('project-coordination'), anchor('estimating'), anchor('field-information')],
+      activeSections: ['use-cases', 'project-coordination', 'estimating', 'field-information', 'client-communication', 'operations', 'financial-review'],
       items: [
         ['Example overview', anchor('use-cases'), 'Start with the work contractors handle every day.'],
         ['Project coordination', anchor('project-coordination'), 'Decisions, commitments, and open items.'],
@@ -241,8 +292,9 @@ function V4Header({ basePath }: { basePath: string }) {
         ['Field information', anchor('field-information'), 'Review drawings, photos, and updates.'],
       ],
     },
-    { label: 'Why JasonAI', href: anchor('why-jasonai'), activePaths: [anchor('why-jasonai')] },
+    { label: 'Why JasonAI', href: anchor('why-jasonai'), activeSections: ['why-jasonai'] },
   ] as const;
+  const pricingActive = activeSection === 'pricing' || activeSection === 'faq';
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5">
@@ -250,9 +302,9 @@ function V4Header({ basePath }: { basePath: string }) {
         <Link to={homePath} aria-label="JasonAI by B2W home" className="inline-flex items-center gap-2.5"><B2WIcon title="" className="h-9 w-10 text-white sm:h-8 sm:w-9" /><span className="hidden whitespace-nowrap text-sm font-semibold tracking-[-.03em] sm:inline sm:text-base"><DescrambleText text="JasonAI" /> <span className="font-normal text-white/48">by</span> B2W</span></Link>
         <nav aria-label="Primary navigation" className="hidden items-center gap-1 lg:flex">
           {navigation.map((item) => {
-            const active = isActivePath(item.activePaths as readonly string[]);
+            const active = (item.activeSections as readonly string[]).includes(activeSection);
             if (!('items' in item)) {
-              return <Link key={item.label} to={item.href} aria-current={active ? 'page' : undefined} className={`rounded-full px-3 py-2 text-sm font-medium transition hover:bg-white/7 hover:text-white ${active ? 'text-[#f4b28c]' : 'text-white/62'}`}><DescrambleText text={item.label} /></Link>;
+              return <Link key={item.label} to={item.href} aria-current={active ? 'location' : undefined} className={`rounded-full px-3 py-2 text-sm font-medium transition hover:bg-white/7 hover:text-white ${active ? 'bg-white/8 text-[#f4b28c]' : 'text-white/62'}`}><DescrambleText text={item.label} /></Link>;
             }
             const open = openDropdown === item.label;
             return (
@@ -263,7 +315,7 @@ function V4Header({ basePath }: { basePath: string }) {
                 onMouseLeave={() => setOpenDropdown(null)}
                 onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node)) setOpenDropdown(null); }}
               >
-                <Link to={item.href} aria-haspopup="true" aria-expanded={open} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition hover:bg-white/7 hover:text-white ${active ? 'text-[#f4b28c]' : 'text-white/62'}`} onFocus={() => setOpenDropdown(item.label)} onClick={() => setOpenDropdown(null)}>
+                <Link to={item.href} aria-current={active ? 'location' : undefined} aria-haspopup="true" aria-expanded={open} className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium transition hover:bg-white/7 hover:text-white ${active ? 'bg-white/8 text-[#f4b28c]' : 'text-white/62'}`} onFocus={() => setOpenDropdown(item.label)} onClick={() => setOpenDropdown(null)}>
                   <DescrambleText text={item.label} /><ChevronDown className={`h-3.5 w-3.5 transition ${open ? 'rotate-180' : ''}`} />
                 </Link>
                 <div className={`absolute left-1/2 top-full w-[22rem] -translate-x-1/2 pt-3 transition ${open ? 'visible translate-y-0 opacity-100' : 'invisible -translate-y-2 opacity-0'}`}>
@@ -276,12 +328,12 @@ function V4Header({ basePath }: { basePath: string }) {
           })}
         </nav>
         <div className="flex items-center gap-2">
-          <Link to={anchor('pricing')} className="hidden min-h-10 items-center justify-center rounded-full px-3 text-sm font-medium text-white/58 transition hover:bg-white/7 hover:text-white lg:inline-flex"><DescrambleText text="Pricing" /></Link>
+          <Link to={anchor('pricing')} aria-current={pricingActive ? 'location' : undefined} className={`hidden min-h-10 items-center justify-center rounded-full px-3 text-sm font-medium transition hover:bg-white/7 hover:text-white lg:inline-flex ${pricingActive ? 'bg-white/8 text-[#f4b28c]' : 'text-white/58'}`}><DescrambleText text="Pricing" /></Link>
           <a href={BOOK_DEMO_URL} target="_blank" rel="noreferrer" className="inline-flex min-h-10 items-center justify-center rounded-full bg-[#f4b28c] px-4 text-sm font-semibold text-[#14110f] transition hover:bg-[#ffd9c0]"><DescrambleText text="Book demo" /></a>
           <button type="button" aria-label="Toggle navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)} className="grid h-10 w-10 place-items-center rounded-full border border-white/15 lg:hidden">{menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}</button>
         </div>
       </div>
-      {menuOpen ? <nav aria-label="Mobile primary navigation" className="mx-auto mt-2 max-h-[calc(100vh-6.5rem)] max-w-7xl overflow-y-auto rounded-[1.5rem] border border-white/12 bg-[#14110f]/95 p-3 text-white shadow-2xl backdrop-blur-2xl lg:hidden">{navigation.map((item) => <div key={item.label} className="border-b border-white/8 py-2"><Link to={item.href} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white/8 hover:text-white ${isActivePath(item.activePaths as readonly string[]) ? 'text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text={item.label} /></Link>{'items' in item ? <div className="grid pl-3">{item.items.slice(1).map((subitem) => <Link key={subitem[0]} to={subitem[1]} onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-2 text-xs text-white/48 hover:bg-white/8 hover:text-white"><DescrambleText text={subitem[0]} /></Link>)}</div> : null}</div>)}<Link to={anchor('pricing')} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-sm font-semibold text-[#f4b28c] hover:bg-white/8"><DescrambleText text="Pricing" /></Link></nav> : null}
+      {menuOpen ? <nav aria-label="Mobile primary navigation" className="mx-auto mt-2 max-h-[calc(100vh-6.5rem)] max-w-7xl overflow-y-auto rounded-[1.5rem] border border-white/12 bg-[#14110f]/95 p-3 text-white shadow-2xl backdrop-blur-2xl lg:hidden">{navigation.map((item) => { const active = (item.activeSections as readonly string[]).includes(activeSection); return <div key={item.label} className="border-b border-white/8 py-2"><Link to={item.href} aria-current={active ? 'location' : undefined} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-2.5 text-sm font-semibold hover:bg-white/8 hover:text-white ${active ? 'bg-white/8 text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text={item.label} /></Link>{'items' in item ? <div className="grid pl-3">{item.items.slice(1).map((subitem) => <Link key={subitem[0]} to={subitem[1]} onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-2 text-xs text-white/48 hover:bg-white/8 hover:text-white"><DescrambleText text={subitem[0]} /></Link>)}</div> : null}</div>; })}<Link to={anchor('pricing')} aria-current={pricingActive ? 'location' : undefined} onClick={() => setMenuOpen(false)} className={`block rounded-xl px-4 py-3 text-sm font-semibold hover:bg-white/8 ${pricingActive ? 'bg-white/8 text-[#f4b28c]' : 'text-white/82'}`}><DescrambleText text="Pricing" /></Link></nav> : null}
     </header>
   );
 }

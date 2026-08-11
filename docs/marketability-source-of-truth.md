@@ -51,6 +51,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 ## JasonAI Product And Offer Rules
 
 - The live landing page centers its header on Overview, Examples, and Why JasonAI, with dropdowns linking to relevant anchored subsections. Overview leads to the capability summary and includes How it works, the project example, and security controls. Pricing sits beside the header actions rather than in the primary navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
+- The live and V4 header uses scroll-aware highlighting: Overview remains active across its product and process sections, Examples across all example subsections, Why JasonAI across the value section, and Pricing across pricing and FAQs.
 - The live and V4 header lockup pairs the B2W mark with `JasonAI by B2W` on tablet and desktop. Mobile shows the mark alone while retaining the full accessible home label.
 - The peach header CTA is `Book demo` and opens B2W’s Calendly booking link. `Try JasonAI free` and the hero’s primary `Get JasonAI free` remain email contact actions; `See the value` remains the secondary on-page action.
 - The live and V4 hero eyebrow is `General Contractor's Newest Assistant`; its primary headline is `Contractors, meet your latest AI assistant.`
@@ -130,6 +131,7 @@ Then:
 
 ## Revision History
 
+- **2026-08-11:** Added scroll-aware live/V4 header highlighting for Overview, Examples, Why JasonAI, and Pricing across their related subsections.
 - **2026-08-11:** Updated the live/V4 hero eyebrow to `General Contractor's Newest Assistant` and headline to `Contractors, meet your latest AI assistant.`
 - **2026-08-11:** Moved the live/V4 hero animation into the full hero background, removed its visible labels, and made `Get JasonAI free` the signal convergence point and primary action.
 - **2026-08-11:** Simplified the live/V4 mobile header to the B2W symbol alone and aligned the complete favicon/app-icon stack with the exact `B2WIcon` mark used in that header.
