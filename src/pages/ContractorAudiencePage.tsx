@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import Seo from '../components/Seo';
 import PreviewFooter from '../components/PreviewFooter';
+import { usesV3Branding } from '../lib/siteVersion';
 import { LiveSiteHeader } from '../components/V2SiteChrome';
 
 export type ContractorAudience = 'business-owners' | 'project-coordinators' | 'operations-teams';
@@ -115,7 +116,7 @@ const audienceOrder: ContractorAudience[] = ['business-owners', 'project-coordin
 
 export default function ContractorAudiencePage() {
   const { pathname } = useLocation();
-  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
+  const isV3 = usesV3Branding(pathname);
   const [audience, setAudience] = useState<ContractorAudience>('business-owners');
   const config = audienceConfigs[audience];
 

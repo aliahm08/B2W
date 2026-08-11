@@ -13,10 +13,10 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## Public Route Structure
 
-- `/`: the live, indexable project-team experience formerly reviewed at `/v2`, with JasonAI, Clara, contractor solutions, pricing, and the solution finder.
+- `/`: the live, indexable V3 experience, with JasonAI, Clara, contractor guidance, pricing, and the solution finder.
 - `/v1`: noindex archive of the former contractor-trust main experience, including its complete nested route family.
 - `/v2`: noindex archive of the experience now promoted to the live unprefixed routes.
-- `/v3`: noindex variation of the promoted V2/live experience that renames the Products category to `AI Assistants` and the Solutions category to `Guidance` across navigation, footer labeling, and related page framing.
+- `/v3`: noindex review copy of the live experience, using `AI Assistants` and `Guidance` across navigation, footer labeling, and related page framing.
 - `/preview`: retired route family that redirects to `/` and is excluded from static SEO generation.
 - `/services`: Strategy, Systems, and Implementation organized around business conditions and decisions.
 - `/products`: the product system, with `/products/agents`, `/products/workflows`, and `/products/pricing`.
@@ -49,7 +49,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## JasonAI Product And Offer Rules
 
-- The live public family uses the promoted Products, Solutions, Pricing, About, and Book a demo navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
+- The live public family uses AI Assistants, Guidance, Pricing, About, and Book a demo navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
 - Primary CTA language is `Try JasonAI` to `/get-started`; secondary is `See How It Works`; tertiary is `Book a Walkthrough`. Context-specific tool and demo labels are allowed when the destination action genuinely differs.
 - JasonAI pages and capability statuses distinguish `Available`, `Configurable`, and `Planned`. Search and summaries are current; source-linked answers, action extraction, structured status reporting, and autonomous actions must not be presented as live.
 - Opening a homepage navigation menu keeps the header and menu in focus while applying a Clara-inspired blur to the page behind it.
@@ -71,7 +71,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 - `/v1` preserves the former main contractor-trust route family and `/v2` preserves the promoted live family. Both are `noindex, nofollow` and canonicalize to matching unprefixed paths.
 - The version switcher contains Live, V1, V2, and V3 and appears only on versioned routes.
-- V3 retains the V2/live information architecture while testing `AI Assistants` as the customer-facing replacement for Products and `Guidance` as the replacement for Solutions. Preview remains retired and redirects to Live.
+- V3 mirrors the live information architecture and branding, using `AI Assistants` as the customer-facing replacement for Products and `Guidance` as the replacement for Solutions. Preview remains retired and redirects to Live.
 - Archived versions must not expose links to the private internal workspace.
 
 ## Business Plan Horizon Rules
@@ -124,6 +124,7 @@ Then:
 
 ## Revision History
 
+- **2026-08-11:** Promoted V3 branding and presentation to the live unprefixed site while retaining `/v3` as its noindex review copy.
 - **2026-08-11:** Renamed the V3 Solutions category to Guidance across the header, footer, homepage link framing, related pages, and V3 SEO titles while leaving routes unchanged.
 - **2026-08-11:** Renamed the public “How B2W Works” label to “AI Workflows” across navigation, footer, page framing, About, and SEO metadata.
 - **2026-08-11:** Removed the public Resources section, its Guides, Tools, Demonstrations, and Case Studies pages, all associated Live/V1/V2/V3 routes, and their navigation, footer, search, and SEO entries. The private `/internal/resources` workspace remains unchanged.

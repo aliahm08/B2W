@@ -132,7 +132,7 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
     {
-      title: 'Tools for Contractors to Succeed',
+      title: 'AI Assistants for Contractors',
       description: 'B2W builds practical tools that help contractors improve job visibility, project coordination, operational handoffs, and company knowledge.',
       imagePath: brandImages.b2wSocial,
     },
@@ -235,8 +235,8 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/general-contractors',
     {
-      title: 'AI Solutions for General Contractors',
-      description: 'Find job information faster, keep field work moving, and explore practical AI solutions for general contracting owners, project coordinators, and operations teams.',
+      title: 'AI Guidance for General Contractors',
+      description: 'Find job information faster, keep field work moving, and explore practical AI guidance for general contracting owners, project coordinators, and operations teams.',
       imagePath: '/images/contractor-audiences/business-owners.png',
       imageAlt: 'General contractor reviewing active project plans and job records.',
     },
@@ -302,7 +302,7 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/products',
     {
-      title: 'B2W Products: Now, Next, and Future',
+      title: 'B2W AI Assistants: Now, Next, and Future',
       description: "See JasonAI as B2W's current assistant, the workflows planned next, and the longer-term governed agent platform direction.",
       imagePath: brandImages.b2wSocial,
     },
@@ -318,7 +318,7 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/products/workflows',
     {
-      title: 'B2W Product Workflows',
+      title: 'B2W AI Assistant Workflows',
       description: 'See the product workflows B2W supports now, is developing, and may add later, explained through user actions and outcomes.',
       imagePath: jasonAiImages.contractorSignals,
     },
@@ -942,10 +942,17 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
       pathname: normalizedPathname,
       canonicalPath: livePathname,
       robots: PRIVATE_ROBOTS,
+      description: versionPrefix === '/v2'
+        ? liveMetadata.description.replace('AI guidance', 'AI solutions')
+        : liveMetadata.description,
       title: versionPrefix === '/v3'
         ? livePathname === '/'
           ? withBrand('V3 — AI Assistants for Contractors')
           : liveMetadata.title.replace('Products', 'AI Assistants').replace('Product Workflows', 'AI Assistant Workflows').replace('Solutions', 'Guidance')
+        : versionPrefix === '/v2'
+          ? livePathname === '/'
+            ? withBrand('Tools for Contractors to Succeed')
+            : liveMetadata.title.replace('AI Assistants', 'Products').replace('AI Assistant Workflows', 'Product Workflows').replace('Guidance', 'Solutions')
         : liveMetadata.title,
     };
   }

@@ -16,6 +16,7 @@ import DescrambleText from '../components/DescrambleText';
 import PreviewFooter from '../components/PreviewFooter';
 import Seo from '../components/Seo';
 import { LiveSiteHeader } from '../components/V2SiteChrome';
+import { usesV3Branding } from '../lib/siteVersion';
 
 type SolutionsPage = 'business-use-cases' | 'ai-workflows';
 
@@ -236,7 +237,7 @@ function HowB2WWorks() {
 export default function SolutionsOverviewPage({ page }: { page: SolutionsPage }) {
   const meta = pageMeta[page];
   const { pathname } = useLocation();
-  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
+  const isV3 = usesV3Branding(pathname);
   const eyebrow = isV3 ? meta.eyebrow.replace('Solutions', 'Guidance') : meta.eyebrow;
 
   return (

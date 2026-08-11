@@ -5,6 +5,7 @@ import { ArrowRight, Calculator, ChevronDown, Mail, MessageCircle, Mic } from 'l
 import PreviewFooter from '../components/PreviewFooter';
 import { LiveSiteHeader } from '../components/V2SiteChrome';
 import Seo from '../components/Seo';
+import { usesV3Branding } from '../lib/siteVersion';
 
 const VisitorFitQuiz = lazy(() => import('../components/VisitorFitQuiz'));
 
@@ -240,7 +241,7 @@ const contractorHeroSlides = [
 
 function ContractorHeroCarousel() {
   const { pathname } = useLocation();
-  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
+  const isV3 = usesV3Branding(pathname);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
@@ -297,7 +298,7 @@ function ContractorHeroCarousel() {
 
 export default function HomeTestOnePage() {
   const { pathname } = useLocation();
-  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
+  const isV3 = usesV3Branding(pathname);
   const [heroMode, setHeroMode] = useState<HeroMode>('consulting');
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [activeQuestion, setActiveQuestion] = useState(0);

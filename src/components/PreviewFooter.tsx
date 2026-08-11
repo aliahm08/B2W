@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import B2WIcon from './logo/B2WIcon';
+import { usesV3Branding } from '../lib/siteVersion';
 
 const groups = [
   { title: 'Products', links: [['JasonAI', '/jasonai'], ['Clara', '/clara'], ['Pricing', '/pricing']] },
@@ -10,7 +11,7 @@ const groups = [
 
 export default function Footer({ basePath = '' }: { basePath?: string }) {
   const { pathname } = useLocation();
-  const isV3 = pathname === '/v3' || pathname.startsWith('/v3/');
+  const isV3 = usesV3Branding(pathname);
   const productGroupTitle = isV3 ? 'AI Assistants' : 'Products';
   const solutionsGroupTitle = isV3 ? 'Guidance' : 'Solutions';
   const routeTo = (to: string) => to.startsWith('mailto:') ? to : (`${basePath}${to === '/' ? '' : to}` || '/');

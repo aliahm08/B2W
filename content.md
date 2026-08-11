@@ -13,12 +13,12 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 ## Approved Messaging
 
-- `/` is the live, indexable project-team experience formerly reviewed at `/v2`, with JasonAI, Clara, contractor solutions, pricing, and the solution finder.
+- `/` is the live, indexable V3 experience, with JasonAI, Clara, contractor guidance, pricing, and the solution finder.
 - `/v1` preserves the former main contractor-trust experience. `/v2` preserves the experience promoted to Live. Both are stable, noindex review surfaces.
-- `/v3` is a noindex V2/live variation that calls the Products category `AI Assistants` and the Solutions category `Guidance` across navigation, footer labeling, and related page framing.
+- `/v3` is the noindex review copy of the live experience, using `AI Assistants` and `Guidance` across navigation, footer labeling, and related page framing.
 - A compact Live / V1 / V2 / V3 switcher is available only on versioned routes. Preview remains retired and redirects to Live.
 - B2W should sound direct, technical, and operational. Avoid inflated transformation language.
-- The live public hierarchy uses Products, Solutions, Pricing, About, and Book a demo. The former contractor-trust hierarchy remains available only inside `/v1`.
+- The live public hierarchy uses AI Assistants, Guidance, Pricing, About, and Book a demo. The former contractor-trust hierarchy remains available only inside `/v1`.
 - The homepage hero demonstrates JasonAI with three automatically rotating WhatsApp cards—Personal chat, Project group, and Daily brief—rebuilt from the former pricing-page interaction in the shared B2W visual system. Each example must remain inside current search-and-summary capability.
 - The brand identity uses an ink-and-paper parent system with the Clara-derived B2W mark, oversized Inter typography, document-like grids, and mineral blue as the active JasonAI signal. The canonical rationale lives in `docs/b2w-jasonai-brand-identity.md`.
 - Public headers and footers never link to `/internal`; the private workspace remains accessible only by direct URL.
@@ -70,6 +70,7 @@ This file is a concise strategic reference for Codex. For route-by-route metadat
 
 ## Revision History
 
+- **2026-08-11:** Promoted V3 branding and presentation to the live unprefixed site while retaining `/v3` as its noindex review copy.
 - **2026-08-11:** Added V3 as a copy of V2 that calls the Products category `AI Assistants` and restored V3 in the version switcher.
 - **2026-08-11:** Promoted the former V2 experience to Live, archived the former main experience at V1, retained V2, retired V3 and Preview, removed public internal links, and updated the footer phrase.
 - **2026-08-10:** Changed the hero CTAs to JasonAI exploration and email contact, normalized homepage headings to sentence case, added a single-open getting-started FAQ, and moved Find a solution / Calculate ROI into a final decision section.

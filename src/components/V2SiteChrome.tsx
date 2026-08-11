@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, CalendarDays, ChevronDown, Menu, X } from 'lucide-react';
 import B2WIcon from './logo/B2WIcon';
 import DescrambleText from './DescrambleText';
+import { usesV3Branding } from '../lib/siteVersion';
 
 const v2Menus = [
   {
@@ -44,7 +45,7 @@ type V2SiteHeaderProps = {
 
 export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = false }: V2SiteHeaderProps) {
   const location = useLocation();
-  const isV3 = location.pathname === '/v3' || location.pathname.startsWith('/v3/');
+  const isV3 = usesV3Branding(location.pathname);
   const productMenuLabel = isV3 ? 'AI Assistants' : 'Products';
   const solutionsMenuLabel = isV3 ? 'Guidance' : 'Solutions';
   const [openMenu, setOpenMenu] = useState<string | null>(null);
