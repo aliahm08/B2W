@@ -37,8 +37,8 @@ const SITE_NAME = 'B2W';
 const FALLBACK_SITE_URL = 'https://www.b2w-ai.com';
 const DEFAULT_ROBOTS = 'index, follow';
 const PRIVATE_ROBOTS = 'noindex, nofollow';
-const DEFAULT_PUBLIC_IMAGE_ALT = 'Official B2W logo for practical AI assistants and contractor workflows.';
-const MARKETING_ASSET_VERSION = '20260811.2';
+const DEFAULT_PUBLIC_IMAGE_ALT = 'Official B2W logo beside the B2W-ai wordmark.';
+const MARKETING_ASSET_VERSION = '20260811.3';
 
 const brandImages = {
   b2wSocial: `/brand/b2w-social-card.png?v=${MARKETING_ASSET_VERSION}`,

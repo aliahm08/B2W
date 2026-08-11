@@ -19,7 +19,7 @@ OFFICIAL_B2W_MARK_VECTOR = BRAND_DIR / "b2w-icon.svg"
 OFFICIAL_B2W_MARK_SOURCE = BRAND_DIR / "verification" / "b2w-icon.png"
 CLARA_SOURCE = BRAND_DIR / "clara-logo-solid.png"
 ICON_SOURCE = OFFICIAL_B2W_MARK_SOURCE
-MARKETING_ASSET_VERSION = "20260811.2"
+MARKETING_ASSET_VERSION = "20260811.3"
 
 FAVICON_OUTPUTS = {
     "favicon.png": 32,
@@ -110,20 +110,29 @@ def load_brand_font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
 def compose_b2w_social_card(output_path: Path) -> None:
     canvas = Image.new("RGBA", (1200, 630), "#f3f0e8")
     draw = ImageDraw.Draw(canvas)
-    draw_card_frame(canvas)
-    draw.rounded_rectangle((58, 58, 1142, 506), radius=24, fill="#111315")
 
     mark = open_rgba(OFFICIAL_B2W_MARK_SOURCE)
-    mark.thumbnail((240, 240), Image.Resampling.LANCZOS)
-    mark_canvas = Image.new("RGBA", mark.size, (255, 255, 255, 0))
-    white_mark = Image.new("RGBA", mark.size, "white")
-    white_mark.putalpha(mark.getchannel("A"))
-    mark_canvas.alpha_composite(white_mark)
-    canvas.alpha_composite(mark_canvas, (155, 158))
+    mark = mark.crop(mark.getbbox())
+    mark.thumbnail((210, 210), Image.Resampling.LANCZOS)
+    black_mark = Image.new("RGBA", mark.size, "#111315")
+    black_mark.putalpha(mark.getchannel("A"))
 
-    draw.text((455, 145), "B2W", font=load_brand_font(150), fill="white", stroke_width=0)
-    draw.text((463, 330), "PRACTICAL AI FOR CONTRACTORS", font=load_brand_font(25), fill="#8fc2d7")
-    draw.text((58, 552), "Turn business noise into work that moves.", font=load_brand_font(24), fill="#315f79")
+    wordmark = "B2W-ai"
+    font = load_brand_font(112)
+    text_box = draw.textbbox((0, 0), wordmark, font=font)
+    text_width = text_box[2] - text_box[0]
+    text_height = text_box[3] - text_box[1]
+    gap = 46
+    group_width = black_mark.width + gap + text_width
+    group_x = (canvas.width - group_width) // 2
+
+    canvas.alpha_composite(black_mark, (group_x, (canvas.height - black_mark.height) // 2))
+    draw.text(
+        (group_x + black_mark.width + gap, (canvas.height - text_height) // 2 - text_box[1]),
+        wordmark,
+        font=font,
+        fill="#111315",
+    )
     save_png(canvas, output_path)
 
 

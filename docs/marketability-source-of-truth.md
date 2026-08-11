@@ -91,7 +91,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## Canonical Marketing Files
 
-- The canonical public B2W symbol is `public/brand/b2w-icon.svg`, rendered in headers through `src/components/logo/B2WIcon.tsx`. That exact vector mark must generate the SVG favicon; its verified raster counterpart generates every PNG favicon, app icon, Organization logo, and B2W social card. The solid inner Clara mark remains product-specific.
+- The canonical public B2W symbol is `public/brand/b2w-icon.svg`, rendered in headers through `src/components/logo/B2WIcon.tsx`. That exact vector mark must generate the SVG favicon; its verified raster counterpart generates every PNG favicon, app icon, Organization logo, and the minimal B2W social card, where it appears beside only the `B2W-ai` wordmark. The solid inner Clara mark remains product-specific.
 - Route-level SEO, canonicals, robots, and share images live in [src/lib/seo.ts](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/src/lib/seo.ts).
 - Runtime head-tag updates live in [src/components/Seo.tsx](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/src/components/Seo.tsx).
 - Static SEO HTML generation lives in [scripts/generate-static-seo.ts](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/scripts/generate-static-seo.ts).
@@ -133,6 +133,7 @@ Then:
 
 ## Revision History
 
+- **2026-08-11:** Simplified the default B2W social share image to the canonical header mark beside only the `B2W-ai` wordmark.
 - **2026-08-11:** Added scroll-aware live/V4 header highlighting for Overview, Examples, Why JasonAI, and Pricing across their related subsections.
 - **2026-08-11:** Collapsed the live/V4 header over the hero to the centered brand lockup and restored the complete navigation after the hero.
 - **2026-08-11:** Updated the live/V4 hero eyebrow to `General Contractor's Newest Assistant` and headline to `Contractors, meet your latest AI assistant.`
