@@ -340,7 +340,7 @@ export default function App() {
         <Suspense fallback={<RouteLoadingFallback />}>
           <div key={routeTransitionKey}>
             <Routes location={location}>
-                <Route path="/" element={<HomeTestOnePage />} />
+                <Route path="/" element={<V4HomePage basePath="" isArchive={false} />} />
                 <Route path="/products" element={<FullSiteFrame><ProductsIndexPage /></FullSiteFrame>} />
                 <Route path="/products/agents" element={<FullSiteFrame><AgentsPage /></FullSiteFrame>} />
                 <Route path="/products/workflows" element={<FullSiteFrame><WorkflowsPage /></FullSiteFrame>} />
@@ -468,12 +468,12 @@ export default function App() {
                 <Route path="/v3/expertise/:slug" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><ExpertisePage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/*" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><NotFound /></VersionedSiteFrame>} />
                 <Route path="/v4" element={<V4HomePage />} />
-                <Route path="/v4/jasonai" element={<V4HomePage page="product" />} />
-                <Route path="/v4/how-it-works" element={<V4HomePage page="how-it-works" />} />
-                <Route path="/v4/solutions" element={<V4HomePage page="solutions" />} />
-                <Route path="/v4/why-jasonai" element={<V4HomePage page="why-jasonai" />} />
-                <Route path="/v4/pricing" element={<V4HomePage page="pricing" />} />
-                <Route path="/v4/faq" element={<V4HomePage page="faq" />} />
+                <Route path="/v4/jasonai" element={<Navigate to="/v4#capabilities" replace />} />
+                <Route path="/v4/how-it-works" element={<Navigate to="/v4#how-it-works" replace />} />
+                <Route path="/v4/solutions" element={<Navigate to="/v4#use-cases" replace />} />
+                <Route path="/v4/why-jasonai" element={<Navigate to="/v4#why-jasonai" replace />} />
+                <Route path="/v4/pricing" element={<Navigate to="/v4#pricing" replace />} />
+                <Route path="/v4/faq" element={<Navigate to="/v4#faq" replace />} />
                 <Route path="/v4/*" element={<Navigate to="/v4" replace />} />
                 <Route path="/preview/*" element={<Navigate to="/" replace />} />
                 <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />

@@ -38,7 +38,7 @@ const FALLBACK_SITE_URL = 'https://www.b2w-ai.com';
 const DEFAULT_ROBOTS = 'index, follow';
 const PRIVATE_ROBOTS = 'noindex, nofollow';
 const DEFAULT_PUBLIC_IMAGE_ALT = 'Official B2W logo for practical AI assistants and contractor workflows.';
-const MARKETING_ASSET_VERSION = '20260811.1';
+const MARKETING_ASSET_VERSION = '20260811.2';
 
 const brandImages = {
   b2wSocial: `/brand/b2w-social-card.png?v=${MARKETING_ASSET_VERSION}`,
@@ -159,8 +159,8 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/',
     {
-      title: 'AI Assistants for Contractors',
-      description: 'B2W builds practical tools that help contractors improve job visibility, project coordination, operational handoffs, and company knowledge.',
+      title: 'JasonAI for Contractor Communication',
+      description: 'JasonAI reduces the cost of contractor communication by turning existing project conversations, documents, and field information into useful work.',
       imagePath: brandImages.b2wSocial,
     },
   ],
@@ -193,66 +193,16 @@ const directRoutes = new Map<string, SeoDefinition>([
       imagePath: brandImages.b2wSocial,
     },
   ],
-  [
-    '/v4/jasonai',
+  ...v4ArchiveRoutes.slice(1).map((pathname): [string, SeoDefinition] => [
+    pathname,
     {
-      title: 'JasonAI Capabilities for Contractors',
-      description: 'Explore how JasonAI finds project context, creates business documents, analyzes files, works across existing tools, and expands toward approved actions.',
-      canonicalPath: '/jasonai',
+      title: 'B2W V4 — JasonAI for Contractor Communication',
+      description: 'This former V4 subpage redirects to its matching section in the single JasonAI contractor communication landing page.',
+      canonicalPath: '/',
       robots: PRIVATE_ROBOTS,
       imagePath: brandImages.b2wSocial,
     },
-  ],
-  [
-    '/v4/how-it-works',
-    {
-      title: 'How JasonAI Works',
-      description: 'See one contractor project move across WhatsApp, email, voice notes, files, answers, reviewed documents, and controlled actions.',
-      canonicalPath: '/jasonai/how-it-works',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v4/solutions',
-    {
-      title: 'JasonAI Solutions for Contractors',
-      description: 'Use shared project context across coordination, estimating, client communication, operations, financial review, and field information.',
-      canonicalPath: '/solutions/business-use-cases',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v4/why-jasonai',
-    {
-      title: 'Why JasonAI Reduces Communication Costs',
-      description: 'Compare manual work, standalone AI, and an assistant embedded where contractor project information is created.',
-      canonicalPath: '/jasonai',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v4/pricing',
-    {
-      title: 'JasonAI Free Early-Access Pricing',
-      description: 'Review the V4 free early-access concept for project questions, search, summaries, document generation, and file analysis.',
-      canonicalPath: '/pricing',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
-  [
-    '/v4/faq',
-    {
-      title: 'JasonAI Frequently Asked Questions',
-      description: 'Direct answers about JasonAI fit, workflow changes, information access, documents, agent capabilities, and early-access pricing.',
-      canonicalPath: '/jasonai/questions',
-      robots: PRIVATE_ROBOTS,
-      imagePath: brandImages.b2wSocial,
-    },
-  ],
+  ]),
   [
     '/services',
     {
@@ -1044,9 +994,11 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
       pathname: normalizedPathname,
       canonicalPath: livePathname,
       robots: PRIVATE_ROBOTS,
-      description: versionPrefix === '/v2'
-        ? liveMetadata.description.replace('AI guidance', 'AI solutions')
-        : liveMetadata.description,
+      description: versionPrefix === '/v3' && livePathname === '/'
+        ? 'Archived B2W experience featuring AI assistants, contractor guidance, pricing, and the solution finder.'
+        : versionPrefix === '/v2'
+          ? liveMetadata.description.replace('AI guidance', 'AI solutions')
+          : liveMetadata.description,
       title: versionPrefix === '/v3'
         ? livePathname === '/'
           ? withBrand('V3 — AI Assistants for Contractors')

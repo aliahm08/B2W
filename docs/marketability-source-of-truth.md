@@ -7,16 +7,17 @@ This document is the stable reference for public marketing upkeep on the B2W web
 ## Current Brand Stack
 
 - `B2W`: a product company building practical tools for project-driven contracting businesses.
-- `JasonAI`: **the Admin**—B2W’s only currently available product, an AI assistant for searching approved work communication and returning concise answers through WhatsApp.
+- `JasonAI`: **the Admin**—B2W’s currently available assistant for searching and summarizing project communication, drafting reviewable business documents, and analyzing project files through connected channels such as WhatsApp, Gmail, and the web.
 - `Clara`: **the Expert**—a customized AI document-workspace concept where companies develop estimates, proposals, scopes, reports, and other working documents using approved preferences and review rules. It is not available or priced.
 - `Gurge`: **the Operator**—a concept for managing jobs, locations, accountability, and reports. It is not available or priced.
 
 ## Public Route Structure
 
-- `/`: the live, indexable V3 experience, with JasonAI, Clara, contractor guidance, pricing, and the solution finder.
+- `/`: the live, indexable JasonAI landing page centered on reducing the cost of contractor communication. Product capabilities, workflow, project example, controls, contractor solutions, the economic comparison, pricing, and FAQs are anchored sections on this page.
 - `/v1`: noindex archive of the former contractor-trust main experience, including its complete nested route family.
 - `/v2`: noindex archive of the experience now promoted to the live unprefixed routes.
-- `/v3`: noindex review copy of the live experience, using `AI Assistants` and `Guidance` across navigation, footer labeling, and related page framing.
+- `/v3`: noindex archive of the previous live experience, with JasonAI, Clara, contractor guidance, pricing, and the solution finder.
+- `/v4`: noindex review copy of the current JasonAI landing page. Its former subpage URLs redirect to matching anchors inside `/v4`.
 - `/preview`: retired route family that redirects to `/` and is excluded from static SEO generation.
 - `/services`: Strategy, Systems, and Implementation organized around business conditions and decisions.
 - `/products`: the product system, with `/products/agents`, `/products/workflows`, and `/products/pricing`.
@@ -24,7 +25,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 - `/gurge`: the public Gurge management-software page, demonstrating its high-level operating view across jobs, locations, accountability, and detailed reports.
 - `/industries/food-and-beverage`, `/industries/general-contracting`, and `/industries/real-estate-management`: dedicated industry pages connecting each operating environment to relevant B2W systems, workflows, controls, and outcomes.
 - `/contractors` and its former nested paths redirect to the live `/general-contractors` audience page.
-- `/pricing`: the documented standard JasonAI offer: `$99/month` plus a one-time `$2,000` setup. No unsupported trial terms, bundles, or savings guarantees are published.
+- `/#pricing`: the current JasonAI free early-access offer, subject to fit and availability. More powerful integrations, customization, and agent capabilities are described as future additions rather than included promises.
 - `/get-started` and `/book-demo` are legacy paths from V1 that redirect to their closest live destinations.
 - `/about` and `/contact`: the promoted company and contact routes.
 - `/legal`, `/legal/privacy`, and `/legal/terms` redirect to the closest live privacy or contact destination.
@@ -49,31 +50,32 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## JasonAI Product And Offer Rules
 
-- The live public family uses AI Assistants, Guidance, Pricing, About, and Book a demo navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
-- Primary CTA language is `Try JasonAI` to `/get-started`; secondary is `See How It Works`; tertiary is `Book a Walkthrough`. Context-specific tool and demo labels are allowed when the destination action genuinely differs.
-- JasonAI pages and capability statuses distinguish `Available`, `Configurable`, and `Planned`. Search and summaries are current; source-linked answers, action extraction, structured status reporting, and autonomous actions must not be presented as live.
+- The live landing page centers its header on Overview, Examples, and Why JasonAI, with dropdowns linking to relevant anchored subsections. Overview leads to the capability summary and includes How it works, the project example, and security controls. Pricing sits beside the header actions rather than in the primary navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
+- The live and V4 header lockup pairs the B2W mark with `JasonAI by B2W` on tablet and desktop. Mobile shows the mark alone while retaining the full accessible home label.
+- The peach header CTA is `Book demo` and opens B2W’s Calendly booking link. `Try JasonAI free` and the hero’s primary `Get JasonAI free` remain email contact actions; `See the value` remains the secondary on-page action.
+- The live and V4 hero eyebrow is `General Contractor's Newest Assistant`; its primary headline is `Contractors, meet your latest AI assistant.`
+- Current JasonAI framing includes search and summaries across connected project context, reviewable document drafting, and uploaded-file analysis. Human review remains required. Autonomous actions and expanded agent capabilities must be labeled as in development or future work.
 - Opening a homepage navigation menu keeps the header and menu in focus while applying a Clara-inspired blur to the page behind it.
 - The Products tray describes JasonAI as “An intelligent assistant that works through your existing communication channels.” with a “Pre-Launch Discount” offer label. Clara has no adjacent status or offer label. Hovering either product applies its established homepage product colorway to the page behind the tray.
-- Available now: JasonAI, the Admin AI assistant, for communication search and summaries.
+- Available now: JasonAI, the Admin AI assistant, for communication search and summaries, reviewable document drafting, and uploaded-file analysis.
 - In development: action-item extraction, status reporting, and source-linked answers.
 - Future only: financial or contractual automation, added after the core workflow is trusted.
 - The future workflow layer is described through two contractor job directions: inbound jobs turn approved customer requests into structured, reviewable intake; outbound jobs carry approved job context from the office into the field. Both remain future-only until controls and demand are proven.
-- Current price: `$99/month` for JasonAI’s AI assistant, plus a one-time `$2,000` WhatsApp setup fee. There are no agent, platform, or bundle prices.
-- WhatsApp implementation: one-time `$2,000` fee for integration, approved-source mapping, onboarding, and first-workflow validation.
-- General contracting workflows beyond the current assistant begin with a founder consultation and a separate scope.
-- The Pricing ROI calculator uses the `$99/month` subscription plus the one-time `$2,000` setup fee and may model only time potentially recovered from the available communication-search and summary workflow. It must identify results as illustrative, never guaranteed, and exclude billing recovery, prevented errors, action extraction, automation, and future capabilities.
+- Current price: `$0` for the JasonAI early-access offer, subject to fit and availability. There are no published agent, platform, or bundle prices.
+- General contracting workflows beyond the current early-access assistant begin with a founder conversation and a separate scope.
+- The live economic comparison uses transparent illustrative ranges for time saved and annual owner value. It must identify results as illustrative, never guaranteed, and must not imply that future autonomous actions are available.
 - Never present roadmap capabilities as current or include future financial or contractual automation in current ROI calculations.
-- Estimates, event estimates, project estimates, and rehabilitation estimates are in the `Concept phase`. Public demonstrations may show the reviewed workflow but must not imply that automated estimation is currently available.
+- JasonAI may draft estimates and related documents from provided context for human review. Public demonstrations must not imply autonomous approval, pricing authority, or contractual execution.
 - General Contracting is presented as a range of project businesses: trade businesses, contracting firms, and AEC companies.
 - Food & Beverage is presented across restaurants, cafes, franchises, and supermarkets.
 
 ## Version Archive Rules
 
-- `/v1` preserves the former main contractor-trust route family and `/v2` preserves the promoted live family. Both are `noindex, nofollow` and canonicalize to matching unprefixed paths.
+- `/v1` preserves the former main contractor-trust route family, `/v2` preserves a prior product-led family, and `/v3` preserves the previous live multi-page experience. All are `noindex, nofollow` and canonicalize to matching unprefixed paths.
 - The version switcher contains Live, V1, V2, V3, and V4 and appears only on versioned routes.
-- V3 mirrors the live information architecture and branding, using `AI Assistants` as the customer-facing replacement for Products and `Guidance` as the replacement for Solutions. Preview remains retired and redirects to Live.
-- V4 is a noindex homepage concept centered on one idea: JasonAI reduces the cost of contractor communication by living inside the tools teams already use. Its narrative moves from existing project information to answers, documents, analysis, and future approved actions, supported by free early-access framing and an illustrative standalone-versus-embedded value comparison. It does not change live pricing or product claims until deliberately promoted.
-- V4 uses a shallow service-site route family: `/v4` is the focused landing and decision hub; `/v4/jasonai` contains capabilities, integrations, and agent direction; `/v4/how-it-works` contains the project example, workflow, and controls; `/v4/solutions` contains contractor use cases; `/v4/why-jasonai` contains the functional and economic comparison; `/v4/pricing` contains the early-access offer; and `/v4/faq` resolves common objections. Shared V4 navigation and footer links route directly to those destinations.
+- V3 preserves the former live information architecture and branding, using `AI Assistants` as the customer-facing replacement for Products and `Guidance` as the replacement for Solutions. Preview remains retired and redirects to Live.
+- V4 is the noindex review copy of the JasonAI landing page now promoted to `/`. It retains the same cost-of-communication narrative, free early-access framing, and illustrative standalone-versus-embedded value comparison.
+- Live and V4 each use one focused landing route. Product capabilities, workflow, project example, controls, contractor solutions, the economic comparison, pricing, and FAQs are substantive anchored sections. Shared desktop, mobile, footer, and journey links target the correct live or V4 anchors directly.
 - Archived versions must not expose links to the private internal workspace.
 
 ## Business Plan Horizon Rules
@@ -87,7 +89,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## Canonical Marketing Files
 
-- The canonical public B2W logo component is `src/components/B2WLogoMark.tsx`, using the open triangular B2W mark from `public/brand/clara-logo.png` paired with the B2W wordmark. That same mark must generate every favicon, app icon, the Organization logo used by search engines, and the B2W social card. The solid inner Clara mark is product-specific, and the legacy silhouette remains available only for internal and verification surfaces until those uses are reviewed.
+- The canonical public B2W symbol is `public/brand/b2w-icon.svg`, rendered in headers through `src/components/logo/B2WIcon.tsx`. That exact vector mark must generate the SVG favicon; its verified raster counterpart generates every PNG favicon, app icon, Organization logo, and B2W social card. The solid inner Clara mark remains product-specific.
 - Route-level SEO, canonicals, robots, and share images live in [src/lib/seo.ts](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/src/lib/seo.ts).
 - Runtime head-tag updates live in [src/components/Seo.tsx](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/src/components/Seo.tsx).
 - Static SEO HTML generation lives in [scripts/generate-static-seo.ts](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/scripts/generate-static-seo.ts).
@@ -99,6 +101,8 @@ This document is the stable reference for public marketing upkeep on the B2W web
 - The live `/` homepage is the visual source of truth for public marketing pages: warm paper or product-tinted canvases, oversized Inter typography, restrained grid fields, rounded product frames, soft ambient shadows, and pill-shaped primary controls.
 - JasonAI, Clara, Gurge, ROI/pricing, industry pages, and agent-comparison pages keep their product colorways while sharing the homepage frame radius, control shape, shadow softness, floating header, and footer behavior.
 - Embedded software demonstrations may use tighter internal geometry when it helps them read as product interfaces; the surrounding marketing cards and controls should still follow the shared homepage system.
+- The live and V4 experiences use the reduced-motion-aware descramble effect on navigation and button-style CTA labels during hover or keyboard focus. The hero’s inline underlined `For free.` link remains stable. Header animation is limited to the short `Connect. Ask. Act.` process heading; all other hero, section, and body copy remains stable.
+- The live and V4 hero centers its messaging over a reduced-motion-aware abstract project-flow background. The animation contains no visible labels: blueprint/worksite traces carry inbound signals toward the primary `Get JasonAI free` button, which occupies the graphic’s JasonAI convergence point. Do not use a generated workplace image in this hero.
 
 ## Cheapest Update Loop
 
@@ -126,6 +130,19 @@ Then:
 
 ## Revision History
 
+- **2026-08-11:** Updated the live/V4 hero eyebrow to `General Contractor's Newest Assistant` and headline to `Contractors, meet your latest AI assistant.`
+- **2026-08-11:** Moved the live/V4 hero animation into the full hero background, removed its visible labels, and made `Get JasonAI free` the signal convergence point and primary action.
+- **2026-08-11:** Simplified the live/V4 mobile header to the B2W symbol alone and aligned the complete favicon/app-icon stack with the exact `B2WIcon` mark used in that header.
+- **2026-08-11:** Reduced live/V4 header descrambling to the single short `Connect. Ask. Act.` process heading while retaining link hover and focus interactions.
+- **2026-08-11:** Replaced the generated live/V4 hero workplace image with a centered message hierarchy and an animated contractor project-flow graphic that connects field and office inputs to useful JasonAI outputs.
+- **2026-08-11:** Added the descramble effect to live/V4 navigation and CTA links and selectively to short primary section headings, with reduced-motion support and stable long-form copy.
+- **2026-08-11:** Renamed the first live/V4 navigation group to Overview and linked it to the capability summary while retaining How it works and related detail in its dropdown.
+- **2026-08-11:** Updated the live/V4 header lockup from B2W to `JasonAI by B2W` while retaining the B2W mark and homepage link.
+- **2026-08-11:** Renamed the live/V4 customer-facing Use cases category to Examples while retaining existing compatibility anchors and routes.
+- **2026-08-11:** Removed the Explore JasonAI journey-card section, simplified the live/V4 header around How it works, Use cases, and Why JasonAI, moved Pricing beside the header actions, connected Book demo to Calendly, and kept free-access CTAs as email contact actions.
+- **2026-08-11:** Promoted the completed V4 JasonAI landing page to `/`, retained the previous live multi-page experience under `/v3`, kept `/v4` as its noindex review copy, and aligned live metadata and the free early-access offer.
+- **2026-08-11:** Consolidated V4 into one anchor-driven landing page, removed repeated subpage hero introductions, expanded Solutions into dedicated Project Coordination, Estimating, and Field Information sections, and placed FAQs inside Pricing while retaining the former V4 URLs as section redirects.
+- **2026-08-11:** Refined V4 with grouped desktop dropdowns, an expanded mobile sitemap, anchored solution categories, more relaxed display typography, balanced/pretty wrapping, and a custom traced contractor-workplace hero image that blends into the landing-page background.
 - **2026-08-11:** Reorganized V4 into a shallow seven-route service-site architecture with a focused homepage, shared JasonAI-first header and footer, and dedicated Product, How It Works, Solutions, Why JasonAI, Pricing, and FAQ destinations.
 - **2026-08-11:** Expanded V4 around the single cost-of-communication narrative with a JasonAI-first header, existing-information story, large capability demonstrations, channel integrations, economic explanation, project example, contractor use cases, future agents, controls, free pricing, FAQs, and a focused footer.
 - **2026-08-11:** Added V4 as a noindex JasonAI homepage concept using the live visual system, free early-access framing, capability demonstrations, and standalone-versus-embedded contractor value comparisons.

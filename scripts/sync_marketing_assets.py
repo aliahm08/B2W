@@ -7,7 +7,6 @@ the checked-in B2W brand assets.
 from __future__ import annotations
 
 import json
-import base64
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -16,10 +15,11 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_DIR = ROOT / "public"
 BRAND_DIR = PUBLIC_DIR / "brand"
-OFFICIAL_B2W_MARK_SOURCE = BRAND_DIR / "clara-logo.png"
+OFFICIAL_B2W_MARK_VECTOR = BRAND_DIR / "b2w-icon.svg"
+OFFICIAL_B2W_MARK_SOURCE = BRAND_DIR / "verification" / "b2w-icon.png"
 CLARA_SOURCE = BRAND_DIR / "clara-logo-solid.png"
 ICON_SOURCE = OFFICIAL_B2W_MARK_SOURCE
-MARKETING_ASSET_VERSION = "20260811.1"
+MARKETING_ASSET_VERSION = "20260811.2"
 
 FAVICON_OUTPUTS = {
     "favicon.png": 32,
@@ -77,19 +77,7 @@ def save_ico(image: Image.Image, path: Path) -> None:
 
 
 def write_vector_favicon(path: Path) -> None:
-    encoded = base64.b64encode(ICON_SOURCE.read_bytes()).decode("ascii")
-    path.write_text(
-        "\n".join(
-            [
-                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">',
-                "  <title>Official B2W logo</title>",
-                f'  <image href="data:image/png;base64,{encoded}" width="512" height="512" preserveAspectRatio="xMidYMid meet"/>',
-                "</svg>",
-                "",
-            ]
-        ),
-        encoding="utf-8",
-    )
+    path.write_text(OFFICIAL_B2W_MARK_VECTOR.read_text(encoding="utf-8"), encoding="utf-8")
 
 
 def draw_card_frame(canvas: Image.Image) -> None:
