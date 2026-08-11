@@ -77,6 +77,7 @@ const B2WExecutiveStrategyPage = lazy(() => import('./pages/B2WExecutiveStrategy
 const InternalAccessGate = lazy(() => import('./pages/internal/InternalAccessGate'));
 const LogoVerificationPage = lazy(() => import('./pages/LogoVerificationPage'));
 const MainExperiencePage = lazy(() => import('./pages/main/MainExperiencePage'));
+const V1HomePage = lazy(() => import('./pages/v1/V1HomePage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -356,11 +357,28 @@ export default function App() {
                 <Route path="/legal/privacy" element={<Navigate to="/jasonai/privacy" replace />} />
                 <Route path="/legal/terms" element={<Navigate to="/contact" replace />} />
 
-                <Route path="/v1" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="home" /></VersionedSiteFrame>} />
-                <Route path="/v1/jasonai" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="jasonai" /></VersionedSiteFrame>} />
-                <Route path="/v1/jasonai/how-it-works" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="jasonai-how" /></VersionedSiteFrame>} />
-                <Route path="/v1/jasonai/integrations" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="jasonai-integrations" /></VersionedSiteFrame>} />
-                <Route path="/v1/jasonai/security" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="jasonai-security" /></VersionedSiteFrame>} />
+                <Route path="/v1" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><V1HomePage /></VersionedSiteFrame>} />
+                <Route path="/v1/services" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><LandingPage onHeroVisibilityChange={setIsLandingHeroVisible} onOfferClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} onOfferClose={dismissOfferBanner} openBuilderOnLoad={searchParams.get('project-builder') === 'open'} /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/services/marketing-advisory" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/services/financial-review" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/services/operations-implementation" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/services/business-revamp" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/growth" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><DataExplainerPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/capabilities/financials" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><DataExplainerPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/capabilities/operational-performance" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><DataExplainerPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/capabilities/:slug" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><CapabilityPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/expertise/:slug" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><ExpertisePage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/tiers/:slug" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><DefaultSiteFrame><TierPage /></DefaultSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/jasonai" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><JasonAIPage /></VersionedSiteFrame>} />
+                <Route path="/v1/jasonai/how-it-works" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><JasonAIPage page="how-it-works" /></VersionedSiteFrame>} />
+                <Route path="/v1/jasonai/questions" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><JasonAIPage page="questions" /></VersionedSiteFrame>} />
+                <Route path="/v1/jasonai/privacy" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><JasonAIPage page="privacy" /></VersionedSiteFrame>} />
+                <Route path="/v1/jasonai/integrations" element={<Navigate to="/v1/jasonai" replace />} />
+                <Route path="/v1/jasonai/security" element={<Navigate to="/v1/jasonai/privacy" replace />} />
+                <Route path="/v1/jasonai/pricing" element={<Navigate to="/v1/pricing" replace />} />
+                <Route path="/v1/estimates" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><FullSiteFrame><ClaraProductPage /></FullSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/clara" element={<Navigate to="/v1/estimates" replace />} />
+                <Route path="/v1/clara/:slug" element={<Navigate to="/v1/estimates" replace />} />
                 <Route path="/v1/contractors" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="contractors" /></VersionedSiteFrame>} />
                 <Route path="/v1/contractors/general-contractors" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="general-contractors" /></VersionedSiteFrame>} />
                 <Route path="/v1/contractors/general-contractors/project-communication" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="project-communication" /></VersionedSiteFrame>} />
@@ -368,12 +386,12 @@ export default function App() {
                 <Route path="/v1/contractors/general-contractors/workflow-automation" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="workflow-automation" /></VersionedSiteFrame>} />
                 <Route path="/v1/contractors/design-build" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="design-build" /></VersionedSiteFrame>} />
                 <Route path="/v1/contractors/specialty-contractors" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="specialty-contractors" /></VersionedSiteFrame>} />
-                <Route path="/v1/pricing" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="pricing" /></VersionedSiteFrame>} />
-                <Route path="/v1/get-started" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="get-started" /></VersionedSiteFrame>} />
-                <Route path="/v1/book-demo" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="book-demo" /></VersionedSiteFrame>} />
-                <Route path="/v1/about" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="about" /></VersionedSiteFrame>} />
-                <Route path="/v1/contact" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="contact" /></VersionedSiteFrame>} />
-                <Route path="/v1/legal/privacy" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="privacy" /></VersionedSiteFrame>} />
+                <Route path="/v1/pricing" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><UnifiedPricingPage /></VersionedSiteFrame>} />
+                <Route path="/v1/get-started" element={<Navigate to="/v1/contact" replace />} />
+                <Route path="/v1/book-demo" element={<Navigate to="/v1/contact" replace />} />
+                <Route path="/v1/about" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><FullSiteFrame><AboutPage /></FullSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/contact" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><FullSiteFrame><ContactPage /></FullSiteFrame></VersionedSiteFrame>} />
+                <Route path="/v1/legal/privacy" element={<Navigate to="/v1/jasonai/privacy" replace />} />
                 <Route path="/v1/legal/terms" element={<VersionedSiteFrame basePath={V1_BASE_PATH}><MainExperiencePage page="terms" /></VersionedSiteFrame>} />
                 <Route path="/v1/*" element={<Navigate to="/v1" replace />} />
                 <Route path="/v2" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><HomeTestOnePage /></VersionedSiteFrame>} />

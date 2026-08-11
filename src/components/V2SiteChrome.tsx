@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, CalendarDays, ChevronDown, Menu, X } from 'lucide-react';
 import B2WIcon from './logo/B2WIcon';
@@ -35,6 +35,39 @@ const liveMenus = [
   },
 ] as const;
 
+const v1Menus = [
+  {
+    label: 'Consulting',
+    layout: 'columns',
+    items: [
+      { section: 'Start here', label: 'SMB Consulting', description: 'The original B2W consulting page for growing businesses.', to: '/v1/services', liveTo: '/v1/services' },
+      { section: 'Start here', label: 'Business Revamp', description: 'Assess growth, financials, and operations together, then sequence the reset.', to: '/v1/services/business-revamp', liveTo: '/v1/services/business-revamp' },
+      { section: 'Expertise', label: 'Growth', description: 'Find and improve the strongest path to sustainable growth.', to: '/v1/growth', liveTo: '/v1/growth' },
+      { section: 'Expertise', label: 'Optimization', description: 'Improve operations, handoffs, visibility, and execution consistency.', to: '/v1/capabilities/operational-performance', liveTo: '/v1/capabilities/operational-performance' },
+      { section: 'Expertise', label: 'Diligence', description: 'Review financial performance, risk, margin, and decision readiness.', to: '/v1/capabilities/financials', liveTo: '/v1/capabilities/financials' },
+      { section: 'Focused projects', label: 'Marketing Advisory', description: 'Clarify positioning, channels, demand generation, and conversion.', to: '/v1/services/marketing-advisory', liveTo: '/v1/services/marketing-advisory' },
+      { section: 'Focused projects', label: 'Operations Implementation', description: 'Turn workflow findings into practical systems, SOPs, and implementation.', to: '/v1/services/operations-implementation', liveTo: '/v1/services/operations-implementation' },
+      { section: 'Focused projects', label: 'Financial Review', description: 'Surface missed margin, pricing issues, and revenue leakage.', to: '/v1/services/financial-review', liveTo: '/v1/services/financial-review' },
+      { section: 'Engagements', label: 'Basic Advisory', description: 'A focused advisory starting point for a defined business question.', to: '/v1/tiers/basic-advisory', liveTo: '/v1/tiers/basic-advisory' },
+      { section: 'Engagements', label: 'Consulting', description: 'A broader consulting engagement for diagnosis and recommendations.', to: '/v1/tiers/consulting', liveTo: '/v1/tiers/consulting' },
+      { section: 'Engagements', label: 'Implementation', description: 'Hands-on support to put the recommended system into practice.', to: '/v1/tiers/implementation', liveTo: '/v1/tiers/implementation' },
+      { section: 'Engagements', label: 'Custom Tool', description: 'A scoped business tool built around the workflow that needs it.', to: '/v1/tiers/custom-tool', liveTo: '/v1/tiers/custom-tool' },
+    ],
+  },
+  {
+    label: 'JasonAI',
+    layout: 'columns',
+    items: [
+      { section: 'Product', label: 'JasonAI Overview', description: 'See the assistant, current capability, and intended contractor workflow.', to: '/v1/jasonai', liveTo: '/v1/jasonai', colorway: 'jasonai' },
+      { section: 'Product', label: 'How It Works', description: 'Follow the current communication-search workflow step by step.', to: '/v1/jasonai/how-it-works', liveTo: '/v1/jasonai/how-it-works', colorway: 'jasonai' },
+      { section: 'Product', label: 'Pricing & ROI', description: 'Review pricing and model the value of reducing communication-search time.', to: '/v1/pricing', liveTo: '/v1/pricing', colorway: 'jasonai' },
+      { section: 'Resources', label: 'Common Questions', description: 'Get direct answers on fit, scope, availability, and limitations.', to: '/v1/jasonai/questions', liveTo: '/v1/jasonai/questions', colorway: 'jasonai' },
+      { section: 'Resources', label: 'Privacy', description: 'Review access, processing, human control, retention, and deletion.', to: '/v1/jasonai/privacy', liveTo: '/v1/jasonai/privacy', colorway: 'jasonai' },
+      { section: 'Resources', label: 'Talk to B2W', description: 'Share one workflow and discuss whether JasonAI is a fit.', to: '/v1/contact', liveTo: '/v1/contact', colorway: 'jasonai' },
+    ],
+  },
+] as const;
+
 const demoUrl = 'https://calendly.com/b2w-ai-info/30min?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=b24a24';
 
 type V2SiteHeaderProps = {
@@ -45,6 +78,7 @@ type V2SiteHeaderProps = {
 
 export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = false }: V2SiteHeaderProps) {
   const location = useLocation();
+  const isV1 = location.pathname === '/v1' || location.pathname.startsWith('/v1/');
   const isV3 = usesV3Branding(location.pathname);
   const productMenuLabel = isV3 ? 'AI Assistants' : 'Products';
   const solutionsMenuLabel = isV3 ? 'Guidance' : 'Solutions';
@@ -173,11 +207,12 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
   }, [followPageTheme, theme]);
 
   const dark = pageTheme === 'dark';
-  const menus = (live ? liveMenus : v2Menus).map((menu, index) => {
+  const menus = isV1 ? v1Menus : (live ? liveMenus : v2Menus).map((menu, index) => {
     if (index === 0) return { ...menu, label: productMenuLabel };
     if (index === 1) return { ...menu, label: solutionsMenuLabel };
     return menu;
   });
+  const homePath = isV1 ? '/v1' : live ? '/' : '/v2';
 
   return (
     <>
@@ -207,13 +242,39 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
             : 'top-0 w-full max-w-7xl px-5 py-4 sm:px-8 sm:py-5 lg:px-10'
         }`}
       >
-        <Link to={live ? '/' : '/v2'} aria-label={live ? 'B2W home' : 'B2W V2 home'} className="col-start-1 row-start-1 inline-flex min-h-11 min-w-11 items-center justify-start justify-self-start">
+        <Link to={homePath} aria-label={isV1 ? 'B2W V1 home' : live ? 'B2W home' : 'B2W V2 home'} className="col-start-1 row-start-1 inline-flex min-h-11 min-w-11 items-center justify-start justify-self-start">
           <B2WIcon title="" className="h-8 w-9 overflow-visible sm:h-9 sm:w-10" />
         </Link>
 
         <nav aria-label={live ? 'Site navigation' : 'V2 site navigation'} className="hidden items-center justify-center gap-2 md:col-start-2 md:row-start-1 md:flex">
           {menus.map((menu, index) => {
             const isOpen = openMenu === menu.label;
+            const isColumnLayout = 'layout' in menu && menu.layout === 'columns';
+            const menuSections: string[] = isColumnLayout
+              ? Array.from(new Set<string>(menu.items.map((item) => 'section' in item && typeof item.section === 'string' ? item.section : ''))).filter(Boolean)
+              : [];
+            const renderMenuItem = (item: (typeof menu.items)[number]) => (
+              <Link
+                key={item.label}
+                role="menuitem"
+                to={isV1 ? item.to : live ? item.liveTo : item.to}
+                onMouseEnter={() => setProductColorway('colorway' in item ? item.colorway : null)}
+                onFocus={() => setProductColorway('colorway' in item ? item.colorway : null)}
+                onMouseLeave={() => setProductColorway(null)}
+                onBlur={() => setProductColorway(null)}
+                onClick={() => { pinnedMenuRef.current = null; setOpenMenu(null); setProductColorway(null); }}
+                className={`group flex items-center justify-between gap-5 rounded-2xl p-4 transition ${'colorway' in item && item.colorway === 'jasonai' ? 'hover:bg-[#21120f] hover:text-white focus-visible:bg-[#21120f] focus-visible:text-white' : 'colorway' in item && item.colorway === 'clara' ? 'hover:bg-[#fff1f8] focus-visible:bg-[#fff1f8]' : 'hover:bg-[#f2f4ed] focus-visible:bg-[#f2f4ed]'}`}
+              >
+                <span>
+                  <span className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+                    <DescrambleText text={item.label} animateOnMount delay={60} />
+                    {'status' in item ? <span className="rounded-full bg-[#f4b28c] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[.11em] text-[#51200f]">{item.status}</span> : null}
+                  </span>
+                  <span className="mt-1 block text-xs leading-5 text-slate-500 transition-colors group-hover:text-current/65 group-focus-visible:text-current/65">{item.description}</span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-current" />
+              </Link>
+            );
             return (
               <div
                 key={menu.label}
@@ -254,42 +315,19 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
                       exit={{ opacity: 0, y: -6, filter: 'blur(6px)' }}
                       onMouseEnter={cancelScheduledClose}
                       onMouseLeave={() => scheduleMenuClose(menu.label)}
-                      className="fixed left-1/2 top-28 w-[min(88vw,25rem)] -translate-x-1/2 pt-2 text-black md:absolute md:top-full"
+                      className={`fixed left-1/2 top-20 -translate-x-1/2 pt-2 text-black ${isColumnLayout ? 'w-[min(94vw,64rem)]' : 'w-[min(88vw,25rem)] md:absolute md:top-full'}`}
                     >
-                      <div className="overflow-hidden rounded-3xl border border-black/10 bg-white/96 p-2 shadow-[0_28px_90px_rgba(15,23,42,.22)] backdrop-blur-xl">
-                        {menu.items.map((item, itemIndex) => {
-                          const itemSection = 'section' in item ? item.section : null;
-                          const previousItem = itemIndex > 0 ? menu.items[itemIndex - 1] : null;
-                          const previousSection = previousItem && 'section' in previousItem ? previousItem.section : null;
-
-                          return (
-                          <Fragment key={item.label}>
-                            {itemSection && itemSection !== previousSection ? (
-                              <p className="px-4 pb-1 pt-3 font-mono text-[9px] font-semibold uppercase tracking-[.18em] text-slate-400 first:pt-1">{itemSection}</p>
-                            ) : null}
-                            <Link
-                            key={item.label}
-                            role="menuitem"
-                            to={live ? item.liveTo : item.to}
-                            onMouseEnter={() => setProductColorway('colorway' in item ? item.colorway : null)}
-                            onFocus={() => setProductColorway('colorway' in item ? item.colorway : null)}
-                            onMouseLeave={() => setProductColorway(null)}
-                            onBlur={() => setProductColorway(null)}
-                            onClick={() => { pinnedMenuRef.current = null; setOpenMenu(null); setProductColorway(null); }}
-                            className={`group flex items-center justify-between gap-5 rounded-2xl p-4 transition ${'colorway' in item && item.colorway === 'jasonai' ? 'hover:bg-[#21120f] hover:text-white focus-visible:bg-[#21120f] focus-visible:text-white' : 'colorway' in item && item.colorway === 'clara' ? 'hover:bg-[#fff1f8] focus-visible:bg-[#fff1f8]' : 'hover:bg-[#f2f4ed] focus-visible:bg-[#f2f4ed]'}`}
-                          >
-                            <span>
-                              <span className="flex flex-wrap items-center gap-2 text-sm font-semibold">
-                                <DescrambleText text={item.label} animateOnMount delay={60} />
-                                {'status' in item ? <span className="rounded-full bg-[#f4b28c] px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[.11em] text-[#51200f]">{item.status}</span> : null}
-                              </span>
-                              <span className="mt-1 block text-xs leading-5 text-slate-500 transition-colors group-hover:text-current/65 group-focus-visible:text-current/65">{item.description}</span>
-                            </span>
-                            <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-1 group-hover:text-current" />
-                          </Link>
-                          </Fragment>
-                          );
-                        })}
+                      <div className={`overflow-hidden rounded-3xl border border-black/10 bg-white/96 p-2 shadow-[0_28px_90px_rgba(15,23,42,.22)] backdrop-blur-xl ${isColumnLayout ? 'grid md:grid-cols-2 lg:grid-cols-4' : ''}`}>
+                        {isColumnLayout
+                          ? menuSections.map((section) => (
+                            <div key={section} className="min-w-0">
+                              <p className="px-4 pb-1 pt-3 font-mono text-[9px] font-semibold uppercase tracking-[.18em] text-slate-400">{section}</p>
+                              {menu.items
+                                .filter((item) => 'section' in item && item.section === section)
+                                .map(renderMenuItem)}
+                            </div>
+                          ))
+                          : menu.items.map(renderMenuItem)}
                       </div>
                     </motion.div>
                   ) : null}
@@ -297,8 +335,8 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
               </div>
             );
           })}
-          <Link to={live ? '/pricing' : '/v2/pricing'} className="inline-flex min-h-9 items-center rounded-full px-3 text-xs font-semibold transition hover:bg-white hover:text-black sm:text-sm">
-            <DescrambleText text="Pricing" animateOnMount delay={300} />
+          <Link to={isV1 ? '/v1/estimates' : live ? '/pricing' : '/v2/pricing'} className="inline-flex min-h-9 items-center rounded-full px-3 text-xs font-semibold transition hover:bg-white hover:text-black sm:text-sm">
+            <DescrambleText text={isV1 ? 'Estimates' : 'Pricing'} animateOnMount delay={300} />
           </Link>
         </nav>
 
@@ -353,7 +391,7 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
                       {menu.items.map((item) => (
                         <Link
                           key={item.label}
-                          to={live ? item.liveTo : item.to}
+                          to={isV1 ? item.to : live ? item.liveTo : item.to}
                           onClick={() => setMobileMenuOpen(false)}
                           className="flex min-h-12 items-center justify-between gap-4 rounded-2xl px-3 py-2 text-sm font-semibold transition hover:bg-[#f2f4ed] focus-visible:bg-[#f2f4ed]"
                         >
@@ -364,8 +402,14 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
                     </div>
                   </section>
                 ))}
+                {isV1 ? (
+                  <Link to="/v1/estimates" onClick={() => setMobileMenuOpen(false)} className="flex min-h-14 items-center justify-between gap-4 rounded-[1.25rem] bg-white px-5 py-3 text-sm font-semibold transition hover:bg-[#eef8f8]">
+                    <span><span className="block">Estimates</span><span className="mt-1 block text-xs font-normal text-slate-500">Open the original Clara estimating workspace.</span></span>
+                    <ArrowRight className="h-4 w-4 shrink-0 text-slate-400" />
+                  </Link>
+                ) : null}
                 <div className="grid grid-cols-2 gap-2 px-1 pb-1 pt-1">
-                  <Link to={live ? '/pricing' : '/v2/pricing'} onClick={() => setMobileMenuOpen(false)} className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#141714] px-4 text-sm font-semibold text-white">Pricing</Link>
+                  <Link to={isV1 ? '/v1/contact' : live ? '/pricing' : '/v2/pricing'} onClick={() => setMobileMenuOpen(false)} className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#141714] px-4 text-sm font-semibold text-white">{isV1 ? 'Contact' : 'Pricing'}</Link>
                   <Link to="/about" onClick={() => setMobileMenuOpen(false)} className="inline-flex min-h-12 items-center justify-center rounded-full border border-black/15 px-4 text-sm font-semibold">About</Link>
                 </div>
               </nav>

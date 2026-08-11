@@ -91,6 +91,21 @@ const uyghurImages = {
 
 const versionedArchiveRoutes = [
   ...Array.from(mainExperienceRoutes.keys(), (pathname) => `/v1${pathname === '/' ? '' : pathname}`),
+  '/v1/capabilities/financials',
+  '/v1/capabilities/operational-performance',
+  '/v1/estimates',
+  '/v1/growth',
+  '/v1/jasonai/privacy',
+  '/v1/jasonai/questions',
+  '/v1/services',
+  '/v1/services/business-revamp',
+  '/v1/services/financial-review',
+  '/v1/services/marketing-advisory',
+  '/v1/services/operations-implementation',
+  '/v1/tiers/basic-advisory',
+  '/v1/tiers/consulting',
+  '/v1/tiers/custom-tool',
+  '/v1/tiers/implementation',
   '/v2/about',
   '/v2/clara',
   '/v2/contact',
@@ -140,8 +155,8 @@ const directRoutes = new Map<string, SeoDefinition>([
   [
     '/v1',
     {
-      title: 'B2W V1 — Contractor Trust Experience',
-      description: 'Archived B2W contractor-trust experience focused on JasonAI communication search, summaries, workflow fit, controls, and adoption.',
+      title: 'B2W V1 — Consulting, JasonAI, and Estimates',
+      description: 'Archived B2W business-first experience featuring SMB consulting, JasonAI communication support, and the original Clara estimating workspace.',
       robots: PRIVATE_ROBOTS,
       imagePath: brandImages.b2wSocial,
     },
@@ -929,9 +944,14 @@ export function resolveSeoMetadata(pathname: string): SeoMetadata {
 
   const versionPrefix = ['/v1', '/v2', '/v3'].find((prefix) => normalizedPathname === prefix || normalizedPathname.startsWith(`${prefix}/`));
   if (versionPrefix) {
-    const livePathname = normalizePathname(normalizedPathname.replace(versionPrefix, '') || '/');
+    const versionlessPathname = normalizePathname(normalizedPathname.replace(versionPrefix, '') || '/');
+    const livePathname = versionPrefix === '/v1' && versionlessPathname === '/estimates'
+      ? '/clara'
+      : versionlessPathname;
     const archivedDefinition = versionPrefix === '/v1'
-      ? mainExperienceRoutes.get(livePathname)
+      ? normalizedPathname === '/v1'
+        ? directRoutes.get('/v1')
+        : mainExperienceRoutes.get(livePathname)
       : directRoutes.get(livePathname);
     const liveMetadata = archivedDefinition
       ? buildMetadata(livePathname, archivedDefinition)
