@@ -12,13 +12,13 @@ export default function VersionSwitcher() {
   const activePath = pathname === '/' ? '/' : versions.find((version) => pathname === version.to || pathname.startsWith(`${version.to}/`))?.to;
 
   return (
-    <nav aria-label="Website versions" className="fixed bottom-4 right-4 z-[80] flex items-center gap-1 rounded-full border border-black/15 bg-white/88 p-1.5 text-slate-950 shadow-[0_16px_50px_rgba(15,23,42,.18)] backdrop-blur-2xl">
+    <nav aria-label="Website versions" className="fixed bottom-3 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-0.5 rounded-full border border-black/15 bg-white/92 p-1 text-slate-950 shadow-[0_16px_50px_rgba(15,23,42,.18)] backdrop-blur-2xl sm:bottom-4 sm:left-auto sm:right-4 sm:translate-x-0 sm:gap-1 sm:p-1.5">
       {versions.map((version) => (
         <Link
           key={version.to}
           to={version.to}
           aria-current={activePath === version.to ? 'page' : undefined}
-          className={`rounded-full px-3 py-2 text-[11px] font-semibold transition ${activePath === version.to ? 'bg-slate-950 text-white' : 'hover:bg-black/5'}`}
+          className={`rounded-full px-2.5 py-2 text-[10px] font-semibold transition sm:px-3 sm:text-[11px] ${activePath === version.to ? 'bg-slate-950 text-white' : 'hover:bg-black/5'}`}
         >
           {version.label}
         </Link>

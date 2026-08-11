@@ -14,7 +14,7 @@ export default function Footer({ basePath = '' }: { basePath?: string }) {
 
   return (
     <footer className="border-t border-white/10 bg-[var(--b2w-forest-deep)] text-white">
-      <div className="mx-auto max-w-[1440px] px-5 py-12 sm:px-8 sm:py-14 lg:px-10">
+      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-14 lg:px-10">
         <div className="grid gap-10 lg:grid-cols-[minmax(250px,.8fr)_minmax(0,1.6fr)]">
           <div>
             <Link to={routeTo('/')} aria-label="B2W home" className="group inline-flex items-center gap-3">

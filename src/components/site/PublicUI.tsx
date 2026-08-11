@@ -6,7 +6,7 @@ import type { ProductStage } from '../../content/unifiedSite';
 import { trackSiteEvent } from '../../lib/siteAnalytics';
 import DescrambleText from '../DescrambleText';
 
-export const pageWidth = 'mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-10';
+export const pageWidth = 'mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10';
 
 export function Eyebrow({ children, tone = 'gold' }: { children: ReactNode; tone?: 'gold' | 'rust' | 'plum' | 'green' }) {
   const colors = {

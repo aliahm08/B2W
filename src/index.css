@@ -170,40 +170,15 @@ select {
   }
 }
 
-/* Ultra-wide presentation: keep the existing page hierarchy, but scale the
-   design system and shared rails for true 4K canvases instead of leaving a
-   desktop-sized island in the middle of the viewport. */
-@media (min-width: 1920px) {
-  html {
-    font-size: clamp(16px, calc(0.625vw + 4px), 28px);
-  }
-
-  :root {
-    --b2w-ultrawide-rail: 80rem;
-    --b2w-ultrawide-reading: 48rem;
-  }
-
-  [class~="max-w-7xl"],
-  [class~="max-w-[1440px]"] {
-    max-width: var(--b2w-ultrawide-rail) !important;
-  }
-
-  [class~="max-w-3xl"] {
-    max-width: var(--b2w-ultrawide-reading) !important;
-  }
-
-  img,
-  video,
-  canvas,
-  svg {
-    image-rendering: auto;
-  }
-}
-
 .b2w-wordmark {
   display: inline-block;
   transform: scaleY(0.96);
   transform-origin: center;
+}
+
+.b2w-hero-wordmark {
+  display: block;
+  width: 100%;
 }
 
 .b2w-logo-link {

@@ -139,7 +139,7 @@ function ProductFrame({
       onMouseLeave={() => setActiveMode('consulting')}
       onFocus={() => setActiveMode(mode)}
       onBlur={() => setActiveMode('consulting')}
-      className={`group relative flex min-h-[34rem] overflow-hidden rounded-[32px] border p-5 transition-colors sm:p-7 ${frameClass}`}
+      className={`group relative flex min-h-[30rem] overflow-hidden rounded-[1.5rem] border p-6 transition-colors sm:min-h-[32rem] sm:rounded-[2rem] sm:p-8 lg:min-h-[34rem] ${frameClass}`}
       initial={{ opacity: 0, y: 26, filter: 'blur(12px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-120px' }}
@@ -161,11 +161,11 @@ function ProductFrame({
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
         </div>
         <div className="mt-6 flex flex-1 flex-col justify-end">
-          <h2 className="whitespace-nowrap text-[clamp(1rem,2.7vw,2.5rem)] font-semibold leading-[1.05] tracking-[-0.04em]">{contextHeading}.</h2>
+          <h2 className="text-[clamp(1.35rem,5.5vw,2.5rem)] font-semibold leading-[1.05] tracking-[-0.04em] sm:whitespace-nowrap">{contextHeading}.</h2>
           <div className="grid grid-rows-[1fr] opacity-100 transition-all duration-500 ease-out lg:grid-rows-[0fr] lg:opacity-0 lg:group-hover:grid-rows-[1fr] lg:group-hover:opacity-100 lg:group-focus-within:grid-rows-[1fr] lg:group-focus-within:opacity-100">
             <div className="overflow-hidden">
               <div className="pt-3">
-                <p className={`whitespace-nowrap text-[clamp(.72rem,1.05vw,1rem)] font-medium leading-6 ${eyebrowClass}`}>{hero.label}</p>
+                <p className={`text-sm font-medium leading-6 sm:whitespace-nowrap sm:text-[clamp(.72rem,1.05vw,1rem)] ${eyebrowClass}`}>{hero.label}</p>
                 <Link to={hero.href} className={`mt-7 inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-full border px-5 text-sm font-semibold transition-colors ${buttonClass}`}>
                   {mode === 'jasonai' ? 'Explore JasonAI' : 'Explore Clara concept'}
                   <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -241,16 +241,25 @@ const contractorHeroSlides = [
 function ContractorHeroCarousel() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isCompact, setIsCompact] = useState(false);
 
   useEffect(() => {
-    if (isPaused) return undefined;
+    const mediaQuery = window.matchMedia('(max-width: 639px)');
+    const updateLayout = () => setIsCompact(mediaQuery.matches);
+    updateLayout();
+    mediaQuery.addEventListener('change', updateLayout);
+    return () => mediaQuery.removeEventListener('change', updateLayout);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused || isCompact) return undefined;
     const interval = window.setInterval(() => setActiveSlide((current) => (current + 1) % contractorHeroSlides.length), 4600);
     return () => window.clearInterval(interval);
-  }, [isPaused]);
+  }, [isCompact, isPaused]);
 
   return (
-    <div className="mt-8 w-full" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)} onFocusCapture={() => setIsPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsPaused(false); }}>
-      <div className="flex h-[23rem] gap-2 overflow-hidden rounded-[2rem] border border-slate-950/10 bg-white/70 p-2 shadow-[0_24px_70px_rgba(15,23,42,.10)] sm:h-[30rem] sm:gap-3 sm:p-3">
+    <div className="mt-8 w-full sm:mt-10" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)} onFocusCapture={() => setIsPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setIsPaused(false); }}>
+      <div className="flex h-[25rem] snap-x snap-mandatory gap-2 overflow-x-auto rounded-[1.5rem] border border-slate-950/10 bg-white/70 p-2 shadow-[0_24px_70px_rgba(15,23,42,.10)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:h-[30rem] sm:snap-none sm:gap-3 sm:overflow-hidden sm:rounded-[2rem] sm:p-3">
         {contractorHeroSlides.map((slide, index) => {
           const isActive = activeSlide === index;
           return (
@@ -261,22 +270,22 @@ function ContractorHeroCarousel() {
               onClick={() => setActiveSlide(index)}
               onMouseEnter={() => setActiveSlide(index)}
               onFocus={() => setActiveSlide(index)}
-              className="group relative min-w-0 overflow-hidden rounded-[1.45rem] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#24724f]"
-              animate={{ flexGrow: isActive ? 4 : 1 }}
+              className="group relative w-[82%] shrink-0 snap-center overflow-hidden rounded-[1.15rem] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#24724f] sm:w-auto sm:min-w-0 sm:shrink sm:[scroll-snap-align:none] sm:rounded-[1.45rem]"
+              animate={{ flexGrow: isCompact ? 0 : isActive ? 4 : 1 }}
               transition={{ duration: .5, ease: [0.22, 1, 0.36, 1] }}
             >
               <img src={slide.src} srcSet={slide.srcSet} sizes={isActive ? '(max-width: 640px) 76vw, 58rem' : '(max-width: 640px) 12vw, 18rem'} alt="" decoding="async" className={`absolute inset-0 h-full w-full object-cover transition-[filter,transform] duration-500 ${isActive ? 'scale-100 brightness-[.72]' : 'scale-105 brightness-[.42]'}`} />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
               <div className={`absolute inset-x-0 bottom-0 p-4 text-white transition-opacity sm:p-6 ${isActive ? 'opacity-100' : 'opacity-70'}`}>
                 <span className="font-mono text-[9px] uppercase tracking-[.16em] text-[#b8d3b8]">0{index + 1}</span>
-                <h3 className={`${isActive ? 'mt-2 text-2xl sm:text-4xl' : 'mt-3 text-sm [writing-mode:vertical-rl] sm:text-base'} font-semibold tracking-[-.035em]`}>{slide.label}</h3>
+                <h3 className={`${isActive ? 'mt-2 text-2xl sm:text-4xl' : isCompact ? 'mt-2 text-lg' : 'mt-3 text-base [writing-mode:vertical-rl]'} font-semibold tracking-[-.035em]`}>{slide.label}</h3>
                 {isActive ? <p className="mt-3 max-w-lg text-sm leading-6 text-white/68 sm:text-base sm:leading-7">{slide.body}</p> : null}
               </div>
             </motion.button>
           );
         })}
       </div>
-      <div className="mt-4 flex items-center justify-between gap-4">
+      <div className="mt-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center sm:gap-4">
         <p className="text-xs text-slate-500">We help trade businesses, design-build firms, and consulting companies.</p>
         <Link to="/general-contractors" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">Explore contractor solutions <ArrowRight className="h-4 w-4" /></Link>
       </div>
@@ -325,9 +334,9 @@ export default function HomeTestOnePage() {
 
         <LiveSiteHeader followPageTheme />
 
-        <section className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-44 sm:px-8 sm:pb-32 sm:pt-56 lg:px-10">
-          <motion.h1 initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className={`b2w-wordmark mx-auto max-w-[11ch] text-center text-[clamp(4.25rem,10vw,10rem)] font-medium leading-[0.82] tracking-[-0.08em] ${activeHero.textClass}`}>
-            We help contractors move projects <em className="italic">forward.</em>
+        <section className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-24 pt-32 sm:px-8 sm:pb-32 sm:pt-44 lg:px-10 lg:pt-48">
+          <motion.h1 initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }} animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }} transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }} className={`b2w-wordmark b2w-hero-wordmark mx-auto text-center text-[clamp(2.35rem,6vw,5rem)] font-medium leading-[0.92] tracking-[-0.06em] ${activeHero.textClass}`}>
+            We help<br className="sm:hidden" /> contractors<br className="hidden sm:block" /> move<br className="sm:hidden" /> projects<br className="hidden sm:block" /> <em className="italic">forward.</em>
           </motion.h1>
 
           <div className="mx-auto mt-10 flex w-full max-w-xl flex-col justify-center gap-3 sm:flex-row">
@@ -341,25 +350,25 @@ export default function HomeTestOnePage() {
             </a>
           </div>
 
-          <div className="mt-32 flex flex-col items-center text-center">
-            <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`b2w-wordmark whitespace-nowrap text-[clamp(1.2rem,4.6vw,4.75rem)] font-medium leading-[0.9] tracking-[-0.075em] ${activeHero.textClass}`}>
+          <div className="mt-24 flex flex-col items-center text-center sm:mt-32 lg:mt-36">
+            <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`b2w-wordmark text-[clamp(2rem,4.2vw,3.75rem)] font-medium leading-[0.94] tracking-[-0.065em] ${activeHero.textClass}`}>
               Take your work to the next stage.
             </motion.h2>
-            <div id="products" className="mt-10 grid w-full scroll-mt-28 gap-6 lg:grid-cols-2">
+            <div id="products" className="mt-10 grid w-full scroll-mt-28 gap-6 sm:mt-12 lg:grid-cols-2 lg:gap-8">
               <ProductFrame mode="jasonai" setActiveMode={setHeroMode} />
               <ProductFrame mode="clara" setActiveMode={setHeroMode} />
             </div>
           </div>
 
-          <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-32 text-center text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>
+          <motion.h2 initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-100px' }} transition={{ duration: .45 }} className={`mx-auto mt-24 text-center text-[clamp(2rem,4vw,3.75rem)] font-medium leading-[1.02] tracking-[-0.055em] sm:mt-32 lg:mt-36 ${activeHero.textClass}`}>
             Optimizing growth for SMBs.
           </motion.h2>
           <ContractorHeroCarousel />
 
-          <section className="mx-auto mt-32 w-full max-w-5xl text-left" aria-labelledby="homepage-questions-heading">
+          <section className="mx-auto mt-24 w-full max-w-5xl text-left sm:mt-32 lg:mt-36" aria-labelledby="homepage-questions-heading">
             <p className="text-sm font-semibold text-slate-500">Questions about getting started</p>
             <h2 id="homepage-questions-heading" className={`mt-3 text-[clamp(2rem,4vw,4rem)] font-medium leading-[1.02] tracking-[-0.055em] ${activeHero.textClass}`}>What teams usually ask first.</h2>
-            <ul className="mt-8 overflow-hidden rounded-[28px] border border-slate-950/12 bg-white/72 shadow-[0_22px_65px_rgba(15,23,42,0.08)] backdrop-blur-sm">
+            <ul className="mt-10 overflow-hidden rounded-[28px] border border-slate-950/12 bg-white/72 shadow-[0_22px_65px_rgba(15,23,42,0.08)] backdrop-blur-sm">
               {homepageQuestions.map((item, index) => {
                 const isOpen = activeQuestion === index;
                 const panelId = `homepage-question-${index}`;
@@ -380,7 +389,7 @@ export default function HomeTestOnePage() {
             </ul>
           </section>
 
-          <div className="mt-32 rounded-[32px] bg-[#10271c] px-6 py-12 text-center text-white shadow-[0_28px_90px_rgba(15,39,28,0.2)] sm:px-10 sm:py-16">
+          <div className="mt-24 rounded-[1.5rem] bg-[#10271c] px-5 py-12 text-center text-white shadow-[0_28px_90px_rgba(15,39,28,0.2)] sm:mt-32 sm:rounded-[2rem] sm:px-10 sm:py-16 lg:mt-36">
             <p className="text-sm font-semibold text-[#a9c7a8]">Choose your next step</p>
             <h2 className="mx-auto mt-3 max-w-3xl text-[clamp(2.25rem,5vw,5rem)] font-medium leading-[0.95] tracking-[-0.06em]">Find the right place to begin.</h2>
             <div className="mx-auto mt-8 flex w-full max-w-xl flex-col justify-center gap-3 sm:flex-row">
