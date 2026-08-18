@@ -7,6 +7,7 @@ import {
   Camera,
   Check,
   ChevronDown,
+  CircleHelp,
   CircleDollarSign,
   ClipboardList,
   FileChartColumn,
@@ -23,10 +24,12 @@ import {
   Radio,
   Search,
   Send,
+  Settings,
   ShieldCheck,
   Sparkles,
   SquareTerminal,
   Upload,
+  UsersRound,
   Workflow,
   X,
   Zap,
@@ -573,8 +576,11 @@ function CleanedCommunicationTable({ reduceMotion, feedOffset }: { reduceMotion:
 }
 
 function AccountabilityDashboard({ reduceMotion, showLog }: { reduceMotion: boolean | null; showLog: () => void }) {
+  type DashboardScreen = 'accountability' | 'projects' | 'performance' | 'log' | 'settings' | 'help';
+  const [activeScreen, setActiveScreen] = useState<DashboardScreen>('accountability');
   const [messageQuery, setMessageQuery] = useState('');
   const [searchSummary, setSearchSummary] = useState('Search every approved message, call, email, and project update.');
+  const [enabledSources, setEnabledSources] = useState(['Email', 'Texts / SMS', 'Phone calls', 'WhatsApp']);
   const projects = [
     {
       name: '214 King Street', client: 'King Street Holdings', owner: 'Elena Park', status: 'Attention needed',
@@ -601,12 +607,23 @@ function AccountabilityDashboard({ reduceMotion, showLog }: { reduceMotion: bool
       measures: [['Schedule', 94], ['Decisions', 88], ['Actions', 86]],
     },
   ] as const;
-  const accountabilityViews = [
-    { label: 'Projects', icon: ClipboardList, active: true },
-    { label: 'Attention', icon: ShieldCheck, active: false },
-    { label: 'Actions', icon: Check, active: false },
-    { label: 'Messages', icon: MessageCircle, active: false },
-  ] as const;
+  const accountabilityViews: Array<{ id: DashboardScreen; label: string; icon: typeof ClipboardList }> = [
+    { id: 'accountability', label: 'Accountability', icon: ShieldCheck },
+    { id: 'projects', label: 'Projects', icon: ClipboardList },
+    { id: 'performance', label: 'Performance', icon: UsersRound },
+    { id: 'log', label: 'Information log', icon: SquareTerminal },
+    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'help', label: 'Help', icon: CircleHelp },
+  ];
+
+  const screenMeta: Record<DashboardScreen, { eyebrow: string; title: string; description: string }> = {
+    accountability: { eyebrow: 'RB Contracting / owner overview', title: 'Accountability', description: 'Actions, risks, and the questions worth asking right now.' },
+    projects: { eyebrow: 'RB Contracting / project portfolio', title: 'Projects', description: 'Every project, its current health, and the communication behind it.' },
+    performance: { eyebrow: 'RB Contracting / service delivery', title: 'Team & service performance', description: 'See delivery health without turning activity into surveillance.' },
+    log: { eyebrow: 'RB Contracting / communication record', title: 'Information log', description: 'The source-linked record across every approved communication channel.' },
+    settings: { eyebrow: 'RB Contracting / workspace controls', title: 'Settings', description: 'Control sources, permissions, notifications, and review rules.' },
+    help: { eyebrow: 'RB Contracting / support', title: 'Help center', description: 'Get answers, learn the workspace, or reach the B2W team.' },
+  };
 
   const searchMessages = () => {
     const query = messageQuery.trim();
@@ -619,13 +636,17 @@ function AccountabilityDashboard({ reduceMotion, showLog }: { reduceMotion: bool
       <div className="flex min-h-[38rem] flex-col lg:grid lg:grid-cols-[9rem_1fr]">
         <aside className="flex border-b border-white/10 bg-[#101713] lg:flex-col lg:border-b-0 lg:border-r">
           <div className="flex items-center gap-2 border-r border-white/10 px-3 py-3 lg:border-b lg:border-r-0 lg:px-4"><span className="grid h-7 w-7 place-items-center bg-[#dfe9d8] text-[#17321f]"><Sparkles className="h-3.5 w-3.5" /></span><div className="hidden lg:block"><p className="text-[10px] font-semibold text-white">RB Contracting</p><p className="font-mono text-[6px] uppercase tracking-[.14em] text-[#9fc2a2]">Owner workspace</p></div></div>
-          <nav className="grid min-w-0 flex-1 grid-cols-4 p-1.5 lg:block lg:space-y-1 lg:p-2.5">{accountabilityViews.map(({ label, icon: Icon, active }) => <button key={label} type="button" className={`flex min-h-9 min-w-0 items-center justify-center gap-1 px-1 text-[7px] font-semibold transition sm:gap-2 sm:text-[8px] lg:w-full lg:justify-start lg:px-3 ${active ? 'bg-[#dfe9d8] text-[#17321f]' : 'text-white/42 hover:bg-white/[.05] hover:text-white'}`}><Icon className={`hidden h-3.5 w-3.5 sm:block ${active ? 'text-[#4f7f52]' : 'text-[#9fc2a2]/55'}`} /><span className="truncate">{label}</span></button>)}</nav>
+          <nav className="flex min-w-0 flex-1 gap-1 overflow-x-auto p-1.5 lg:block lg:space-y-1 lg:overflow-visible lg:p-2.5">{accountabilityViews.map(({ id, label, icon: Icon }) => {
+            const active = activeScreen === id;
+            return <button key={id} type="button" onClick={() => setActiveScreen(id)} className={`flex min-h-9 shrink-0 items-center justify-center gap-1.5 px-2.5 text-[7px] font-semibold transition sm:text-[8px] lg:w-full lg:justify-start lg:px-3 ${active ? 'bg-[#dfe9d8] text-[#17321f]' : 'text-white/42 hover:bg-white/[.05] hover:text-white'}`}><Icon className={`h-3.5 w-3.5 ${active ? 'text-[#4f7f52]' : 'text-[#9fc2a2]/55'}`} /><span className="whitespace-nowrap">{label}</span></button>;
+          })}</nav>
           <div className="hidden border-t border-white/10 p-3 lg:block"><p className="flex items-center gap-2 font-mono text-[7px] uppercase text-[#9fc2a2]"><span className="h-1.5 w-1.5 rounded-full bg-[#8fbd9b]" />All projects live</p><p className="mt-2 text-[7px] leading-4 text-white/28">Every action and risk stays linked to its communication source.</p></div>
         </aside>
 
         <main className="relative min-w-0 p-3 pb-32 sm:p-4 sm:pb-32 lg:p-5 lg:pb-32">
-          <header className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-[7px] uppercase tracking-[.16em] text-[#4f7f52]">RB Contracting / project portfolio</p><h2 className="mt-1.5 text-xl font-semibold tracking-[-.04em] sm:text-2xl">Projects overview</h2><p className="mt-1 text-[9px] text-black/42">Every project, its current health, and the communication behind it.</p></div><button type="button" onClick={showLog} className="inline-flex min-h-9 items-center gap-2 border border-black/10 bg-white px-3 text-[8px] font-semibold text-black/48 transition hover:border-[#4f7f52]/35 hover:text-[#315e3a]"><SquareTerminal className="h-3.5 w-3.5" />View communication register</button></header>
+          <header className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-[7px] uppercase tracking-[.16em] text-[#4f7f52]">{screenMeta[activeScreen].eyebrow}</p><h2 className="mt-1.5 text-xl font-semibold tracking-[-.04em] sm:text-2xl">{screenMeta[activeScreen].title}</h2><p className="mt-1 text-[9px] text-black/42">{screenMeta[activeScreen].description}</p></div><button type="button" onClick={activeScreen === 'log' ? showLog : () => setActiveScreen('log')} className="inline-flex min-h-9 items-center gap-2 border border-black/10 bg-white px-3 text-[8px] font-semibold text-black/48 transition hover:border-[#4f7f52]/35 hover:text-[#315e3a]"><SquareTerminal className="h-3.5 w-3.5" />{activeScreen === 'log' ? 'Watch live intake' : 'Open information log'}</button></header>
 
+          {activeScreen === 'projects' ? <>
           <section className="mt-4 grid grid-cols-2 gap-px border border-[#d7dcd6] bg-[#d7dcd6] sm:grid-cols-4">{[
             ['Active projects', '12', '$1.8m contracted'], ['Attention needed', '2', 'Cost · access'], ['Open decisions', '5', '2 owner approvals'], ['On track', '10', '83% of portfolio'],
           ].map(([label, value, detail], index) => <motion.div key={label} initial={reduceMotion ? undefined : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .08 + index * .06 }} className="bg-white p-3"><p className="text-[7px] font-semibold uppercase tracking-[.12em] text-black/32">{label}</p><p className={`mt-2 font-mono text-lg font-semibold ${index === 1 ? 'text-[#a24321]' : 'text-[#172019]'}`}>{value}</p><p className="mt-1 text-[7px] text-black/36">{detail}</p></motion.div>)}</section>
@@ -638,11 +659,37 @@ function AccountabilityDashboard({ reduceMotion, showLog }: { reduceMotion: bool
               <div className="mt-3 flex items-center justify-between gap-3 border-t border-black/[.07] pt-2.5"><span className="inline-flex min-w-0 items-center gap-1.5 truncate font-mono text-[6px] uppercase tracking-[.05em] text-black/34"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#56825a]" />{project.update}</span><ArrowRight className="h-3 w-3 shrink-0 text-black/24 transition group-hover:translate-x-0.5 group-hover:text-[#315e3a]" /></div>
             </motion.button>)}
           </section>
+          </> : null}
 
-          <motion.form onSubmit={(event) => { event.preventDefault(); searchMessages(); }} initial={reduceMotion ? undefined : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .38 }} className="absolute inset-x-3 bottom-16 z-10 border border-[#b9c9b7] bg-[#172019] p-2 shadow-[0_18px_45px_rgba(23,32,25,.24)] sm:inset-x-4 lg:inset-x-5">
+          {activeScreen === 'accountability' ? <div className="mt-4 grid gap-3 lg:grid-cols-[1.15fr_.85fr]">
+            <section className="border border-[#d7dcd6] bg-white">
+              <div className="flex items-center justify-between border-b border-[#e2e5e0] p-3"><div><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Owner action queue</p><h3 className="mt-1 text-sm font-semibold">What needs to move today</h3></div><span className="bg-[#f4e8df] px-2 py-1 font-mono text-[6px] uppercase text-[#a24321]">3 priority</span></div>
+              {[['214 King Street', 'Assign an owner to CO-014 before client review', 'Cost + schedule · due now'], ['Harbor Dental', 'Confirm site access with the field lead', 'Schedule · due 2:00 PM'], ['Easton Retail', 'Approve the revised owner update', 'Client waiting · due 3:00 PM']].map(([project, action, detail], index) => <motion.button key={project} type="button" onClick={() => setActiveScreen('projects')} initial={reduceMotion ? undefined : { opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: .1 + index * .06 }} className="flex w-full items-center gap-3 border-b border-[#e2e5e0] p-3 text-left last:border-b-0 hover:bg-[#fafbf8]"><span className="grid h-7 w-7 shrink-0 place-items-center border border-[#d7dcd6] font-mono text-[8px] text-[#4f7f52]">0{index + 1}</span><span className="min-w-0 flex-1"><span className="block font-mono text-[6px] uppercase tracking-[.1em] text-[#4f7f52]">{project}</span><span className="mt-1 block truncate text-[9px] font-semibold text-black/70">{action}</span><span className="mt-1 block text-[7px] text-black/34">{detail}</span></span><ArrowRight className="h-3 w-3 text-black/25" /></motion.button>)}
+            </section>
+            <div className="grid gap-3">
+              <section className="border border-[#e2c7b7] bg-[#fff8f3] p-3"><div className="flex items-start justify-between gap-3"><div><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#a24321]">Highest potential risk</p><h3 className="mt-1.5 text-xs font-semibold">214 King · unapproved exposure</h3></div><span className="bg-[#f1ddd2] px-2 py-1 font-mono text-[6px] uppercase text-[#a24321]">High</span></div><p className="mt-2 text-[8px] leading-4 text-black/52">Messages confirm a $2,840 finish change and two added days. The change order still has no accountable owner.</p><button type="button" onClick={() => setActiveScreen('projects')} className="mt-3 text-[7px] font-semibold text-[#8f3e25]">Open project →</button></section>
+              <section className="border border-[#c9d9c9] bg-[#e9f0e7] p-3"><div className="flex items-center gap-2"><Sparkles className="h-3.5 w-3.5 text-[#4f7f52]" /><div><p className="text-[9px] font-semibold">Suggested things to ask</p><p className="font-mono text-[6px] uppercase tracking-[.1em] text-[#4f7f52]">Based on today’s communication</p></div></div><div className="mt-3 grid gap-1.5">{['Which commitments still need an owner?', 'What could affect this week’s schedule?', 'Who is waiting for a response?'].map((question) => <button key={question} type="button" onClick={() => { setMessageQuery(question); setSearchSummary('Ready to search the complete communication record.'); }} className="flex items-center justify-between gap-3 border border-[#c9d9c9] bg-white px-3 py-2 text-left text-[7px] font-semibold text-[#315e3a]"><span>{question}</span><ArrowRight className="h-3 w-3 shrink-0" /></button>)}</div></section>
+            </div>
+          </div> : null}
+
+          {activeScreen === 'performance' ? <div className="mt-4 grid gap-3">
+            <section className="grid grid-cols-2 gap-px border border-[#d7dcd6] bg-[#d7dcd6] sm:grid-cols-4">{[['On-time actions', '91%', '+4% this month'], ['Client response', '2.1h', '38 min faster'], ['First-time complete', '87%', 'Across 12 projects'], ['Open handoffs', '3', '1 needs attention']].map(([label, value, detail], index) => <div key={label} className="bg-white p-3"><p className="text-[7px] font-semibold uppercase tracking-[.1em] text-black/32">{label}</p><p className={`mt-2 font-mono text-lg font-semibold ${index === 3 ? 'text-[#a24321]' : ''}`}>{value}</p><p className="mt-1 text-[7px] text-black/34">{detail}</p></div>)}</section>
+            <section className="grid gap-3 sm:grid-cols-[1.1fr_.9fr]">
+              <div className="border border-[#d7dcd6] bg-white"><div className="border-b border-[#e2e5e0] p-3"><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Team delivery</p><h3 className="mt-1 text-sm font-semibold">Work moving as promised</h3></div>{[['Elena Park', 'Project management', 92], ['Malik Reed', 'Field coordination', 84], ['Avery Cole', 'Client service', 89]].map(([name, service, score]) => <div key={name} className="grid grid-cols-[1fr_6rem] items-center gap-3 border-b border-[#e2e5e0] p-3 last:border-b-0"><div><p className="text-[9px] font-semibold">{name}</p><p className="mt-1 text-[7px] text-black/35">{service} · confirmed outcomes</p></div><div><div className="flex justify-between font-mono text-[6px] uppercase text-black/30"><span>Delivery</span><span>{score}%</span></div><div className="mt-1.5 h-1 bg-black/[.07]"><div className="h-full bg-[#56825a]" style={{ width: `${score}%` }} /></div></div></div>)}</div>
+              <div className="border border-[#d7dcd6] bg-[#f8faf6] p-3"><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Service health</p><h3 className="mt-1 text-sm font-semibold">Where operations need support</h3><div className="mt-3 space-y-3">{[['Change management', 74, '2 approvals open'], ['Field coordination', 88, 'Access is the main delay'], ['Client updates', 93, 'All current']].map(([label, value, detail]) => <div key={label as string}><div className="flex items-end justify-between gap-3"><div><p className="text-[8px] font-semibold">{label}</p><p className="mt-0.5 text-[6px] text-black/34">{detail}</p></div><span className="font-mono text-[8px]">{value}%</span></div><div className="mt-1.5 h-1.5 bg-black/[.07]"><div className="h-full bg-[#56825a]" style={{ width: `${value}%` }} /></div></div>)}</div></div>
+            </section>
+          </div> : null}
+
+          {activeScreen === 'log' ? <section className="mt-4 overflow-hidden border border-[#d7dcd6] bg-white"><div className="grid grid-cols-[3.5rem_5.5rem_minmax(0,1fr)_5.5rem] gap-2 border-b border-[#d7dcd6] bg-[#e9ede6] px-3 py-2 font-mono text-[6px] uppercase tracking-[.1em] text-black/36"><span>Time</span><span>Source</span><span>Original message</span><span>Project</span></div>{rawCommunicationLog.slice(0, 7).map(({ time, channel, message, project, from }, index) => <motion.div key={`${time}-${message}`} initial={reduceMotion ? undefined : { opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * .035 }} className="grid grid-cols-[3.5rem_5.5rem_minmax(0,1fr)_5.5rem] items-center gap-2 border-b border-[#e2e5e0] px-3 py-2.5 last:border-b-0"><span className="font-mono text-[7px] text-[#4f7f52]">{time.slice(0, 5)}</span><span className="truncate text-[7px] text-black/48">{channel}</span><span className="min-w-0 truncate text-[8px] text-black/66"><strong className="mr-1 font-semibold text-black/78">{from}:</strong>{message}</span><span className="truncate text-[7px] text-black/38">{project}</span></motion.div>)}</section> : null}
+
+          {activeScreen === 'settings' ? <div className="mt-4 grid gap-3 sm:grid-cols-2"><section className="border border-[#d7dcd6] bg-white"><div className="border-b border-[#e2e5e0] p-3"><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Connected sources</p><h3 className="mt-1 text-sm font-semibold">Communication channels</h3></div>{['Email', 'Texts / SMS', 'Phone calls', 'WhatsApp', 'Google Drive'].map((source) => { const enabled = enabledSources.includes(source); return <button key={source} type="button" onClick={() => setEnabledSources((current) => enabled ? current.filter((item) => item !== source) : [...current, source])} className="flex w-full items-center justify-between border-b border-[#e2e5e0] px-3 py-3 text-left last:border-b-0"><span><span className="block text-[9px] font-semibold">{source}</span><span className="mt-0.5 block text-[6px] text-black/34">{enabled ? 'Approved and receiving' : 'Not connected'}</span></span><span className={`relative h-4 w-7 rounded-full transition ${enabled ? 'bg-[#56825a]' : 'bg-black/15'}`}><span className={`absolute top-0.5 h-3 w-3 rounded-full bg-white transition ${enabled ? 'left-3.5' : 'left-0.5'}`} /></span></button>; })}</section><section className="grid gap-3"><div className="border border-[#d7dcd6] bg-white p-3"><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Review controls</p><h3 className="mt-1 text-sm font-semibold">Human approval required</h3><p className="mt-2 text-[8px] leading-4 text-black/46">Documents, external messages, and project changes remain drafts until an approved person reviews them.</p><span className="mt-3 inline-flex bg-[#dce9dc] px-2 py-1 font-mono text-[6px] uppercase text-[#315e3a]">Enabled</span></div><div className="border border-[#d7dcd6] bg-white p-3"><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Workspace access</p><h3 className="mt-1 text-sm font-semibold">6 approved team members</h3><p className="mt-2 text-[8px] leading-4 text-black/46">Owners control which projects, sources, and actions each person can access.</p><button type="button" className="mt-3 text-[7px] font-semibold text-[#315e3a]">Manage permissions →</button></div></section></div> : null}
+
+          {activeScreen === 'help' ? <div className="mt-4 grid gap-3 sm:grid-cols-2"><section className="border border-[#d7dcd6] bg-white p-4"><CircleHelp className="h-5 w-5 text-[#4f7f52]" /><h3 className="mt-3 text-sm font-semibold">Learn the workspace</h3><p className="mt-2 text-[8px] leading-4 text-black/46">Short guides for reviewing accountability, tracing information to its source, and controlling connected channels.</p><div className="mt-3 grid gap-1.5">{['Start with Accountability', 'Understand project health', 'Search the information log'].map((item) => <button key={item} type="button" className="flex items-center justify-between border border-[#e2e5e0] px-3 py-2 text-left text-[7px] font-semibold">{item}<ArrowRight className="h-3 w-3 text-black/25" /></button>)}</div></section><section className="border border-[#d7dcd6] bg-[#172019] p-4 text-white"><MessageCircle className="h-5 w-5 text-[#9fc2a2]" /><h3 className="mt-3 text-sm font-semibold">Talk to B2W support</h3><p className="mt-2 text-[8px] leading-4 text-white/42">Get help with a connected source, permissions, or the way your company’s workspace is configured.</p><button type="button" className="mt-4 bg-[#f4b28c] px-3 py-2 text-[7px] font-semibold text-[#172019]">Start a support conversation</button><p className="mt-3 font-mono text-[6px] uppercase tracking-[.08em] text-white/25">Typical response · under one business day</p></section></div> : null}
+
+          {!['settings', 'help'].includes(activeScreen) ? <motion.form onSubmit={(event) => { event.preventDefault(); searchMessages(); }} initial={reduceMotion ? undefined : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .38 }} className="absolute inset-x-3 bottom-16 z-10 border border-[#b9c9b7] bg-[#172019] p-2 shadow-[0_18px_45px_rgba(23,32,25,.24)] sm:inset-x-4 lg:inset-x-5">
             <div className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center bg-[#dfe9d8] text-[#17321f]"><Search className="h-3.5 w-3.5" /></span><label className="min-w-0 flex-1"><span className="sr-only">Search project messages</span><input value={messageQuery} onChange={(event) => setMessageQuery(event.target.value)} placeholder="Ask across every project message…" className="w-full bg-transparent text-[9px] text-white outline-none placeholder:text-white/35" /></label><button type="submit" aria-label="Search messages" className="grid h-8 w-8 shrink-0 place-items-center bg-[#f4b28c] text-[#172019] transition hover:bg-[#ffc29f]"><Send className="h-3.5 w-3.5" /></button></div>
             <p className="mt-1.5 truncate px-10 font-mono text-[6px] uppercase tracking-[.06em] text-white/35">{searchSummary}</p>
-          </motion.form>
+          </motion.form> : null}
         </main>
       </div>
     </motion.div>
