@@ -573,25 +573,46 @@ function CleanedCommunicationTable({ reduceMotion, feedOffset }: { reduceMotion:
 }
 
 function AccountabilityDashboard({ reduceMotion, showLog }: { reduceMotion: boolean | null; showLog: () => void }) {
-  const [completedActions, setCompletedActions] = useState<string[]>([]);
-  const [activeQuestion, setActiveQuestion] = useState('What needs my attention today?');
-  const [riskAssigned, setRiskAssigned] = useState(false);
-  const actionItems = [
-    { project: '214 King', action: 'Review CO-014 before it reaches the owner', owner: 'You', due: 'Due today', signal: '+$2,840 · +2 days' },
-    { project: 'Harbor Dental', action: 'Confirm building access with field lead', owner: 'Malik', due: 'Due 2:00 PM', signal: 'Schedule risk' },
-    { project: 'Easton Retail', action: 'Send the revised total to the client', owner: 'Elena', due: 'Due 3:00 PM', signal: 'Client waiting' },
-  ];
-  const answers: Record<string, string> = {
-    'What needs my attention today?': 'Three actions need attention. CO-014 carries the largest exposure: +$2,840 and two schedule days. Harbor Dental access is still unconfirmed.',
-    'Which projects are at risk?': '214 King has cost and schedule exposure. Harbor Dental has an access dependency. Easton Retail is waiting on a client-facing update.',
-    'Who is waiting on me?': 'Elena needs your CO-014 review. Malik needs an access decision. The Easton Retail client is waiting for the revised total.',
-  };
-  const accountabilityViews = [
-    { label: 'Accountability', icon: ClipboardList, active: true },
-    { label: 'Actions', icon: Check, active: false },
-    { label: 'Risks', icon: ShieldCheck, active: false },
-    { label: 'Ask', icon: Bot, active: false },
+  const [messageQuery, setMessageQuery] = useState('');
+  const [searchSummary, setSearchSummary] = useState('Search every approved message, call, email, and project update.');
+  const projects = [
+    {
+      name: '214 King Street', client: 'King Street Holdings', owner: 'Elena Park', status: 'Attention needed',
+      detail: 'Change order CO-014 is approved in messages but still needs an accountable owner.', update: 'Client email · 18 min ago',
+      tone: 'border-[#e7c9bb] bg-[#fff7f2]', badge: 'bg-[#f1ddd2] text-[#963b24]', bar: 'bg-[#bf5a38]',
+      measures: [['Schedule', 68], ['Decisions', 42], ['Actions', 36]],
+    },
+    {
+      name: 'Harbor Dental', client: 'Harbor Dental Group', owner: 'Malik Reed', status: 'Needs review',
+      detail: 'Thursday access is unconfirmed. The field team is waiting before locking the schedule.', update: 'Phone call · 31 min ago',
+      tone: 'border-[#dfd2a9] bg-[#fffdf3]', badge: 'bg-[#f0e4bd] text-[#75570f]', bar: 'bg-[#c79b29]',
+      measures: [['Schedule', 54], ['Decisions', 72], ['Actions', 58]],
+    },
+    {
+      name: 'Easton Retail', client: 'Easton Retail Partners', owner: 'Avery Cole', status: 'On track',
+      detail: 'The revised client total was sent. Finish selections and delivery dates are confirmed.', update: 'Text message · 46 min ago',
+      tone: 'border-[#cbdac8] bg-[#f6faf4]', badge: 'bg-[#dce9dc] text-[#315e3a]', bar: 'bg-[#56825a]',
+      measures: [['Schedule', 84], ['Decisions', 92], ['Actions', 78]],
+    },
+    {
+      name: 'Linden Offices', client: 'Linden Property Co.', owner: 'Jordan Ellis', status: 'On track',
+      detail: 'Inspection passed and closeout photos are linked. Final owner update is queued.', update: 'Photo upload · 1 hr ago',
+      tone: 'border-[#d5ddd2] bg-white', badge: 'bg-[#dce9dc] text-[#315e3a]', bar: 'bg-[#56825a]',
+      measures: [['Schedule', 94], ['Decisions', 88], ['Actions', 86]],
+    },
   ] as const;
+  const accountabilityViews = [
+    { label: 'Projects', icon: ClipboardList, active: true },
+    { label: 'Attention', icon: ShieldCheck, active: false },
+    { label: 'Actions', icon: Check, active: false },
+    { label: 'Messages', icon: MessageCircle, active: false },
+  ] as const;
+
+  const searchMessages = () => {
+    const query = messageQuery.trim();
+    if (!query) return;
+    setSearchSummary(`Found 8 related messages across 3 projects for “${query}”. Most recent: Harbor Dental phone call, 31 minutes ago.`);
+  };
 
   return (
     <motion.div key="accountability-dashboard" initial={reduceMotion ? undefined : { opacity: .4, y: 10, scale: .995 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 6 }} transition={{ duration: reduceMotion ? 0 : .3, ease: [0.22, 1, 0.36, 1] }} className="min-h-[38rem] bg-[#eef1ec] text-[#172019]">
@@ -602,35 +623,26 @@ function AccountabilityDashboard({ reduceMotion, showLog }: { reduceMotion: bool
           <div className="hidden border-t border-white/10 p-3 lg:block"><p className="flex items-center gap-2 font-mono text-[7px] uppercase text-[#9fc2a2]"><span className="h-1.5 w-1.5 rounded-full bg-[#8fbd9b]" />All projects live</p><p className="mt-2 text-[7px] leading-4 text-white/28">Every action and risk stays linked to its communication source.</p></div>
         </aside>
 
-        <main className="min-w-0 p-3 sm:p-4 lg:p-5">
-          <header className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-[7px] uppercase tracking-[.16em] text-[#4f7f52]">RB Contracting / all projects</p><h2 className="mt-1.5 text-xl font-semibold tracking-[-.04em] sm:text-2xl">Accountability center</h2><p className="mt-1 text-[9px] text-black/42">Know what needs attention, who owns it, and what could go wrong.</p></div><button type="button" onClick={showLog} className="inline-flex min-h-9 items-center gap-2 border border-black/10 bg-white px-3 text-[8px] font-semibold text-black/48 transition hover:border-[#4f7f52]/35 hover:text-[#315e3a]"><SquareTerminal className="h-3.5 w-3.5" />View communication register</button></header>
+        <main className="relative min-w-0 p-3 pb-32 sm:p-4 sm:pb-32 lg:p-5 lg:pb-32">
+          <header className="flex flex-wrap items-start justify-between gap-3"><div><p className="font-mono text-[7px] uppercase tracking-[.16em] text-[#4f7f52]">RB Contracting / project portfolio</p><h2 className="mt-1.5 text-xl font-semibold tracking-[-.04em] sm:text-2xl">Projects overview</h2><p className="mt-1 text-[9px] text-black/42">Every project, its current health, and the communication behind it.</p></div><button type="button" onClick={showLog} className="inline-flex min-h-9 items-center gap-2 border border-black/10 bg-white px-3 text-[8px] font-semibold text-black/48 transition hover:border-[#4f7f52]/35 hover:text-[#315e3a]"><SquareTerminal className="h-3.5 w-3.5" />View communication register</button></header>
 
           <section className="mt-4 grid grid-cols-2 gap-px border border-[#d7dcd6] bg-[#d7dcd6] sm:grid-cols-4">{[
-            ['Open actions', String(7 - completedActions.length), '3 due today'], ['Potential risks', riskAssigned ? '3' : '4', 'Cost · schedule · client'], ['Awaiting owner', '2', 'Approvals needed'], ['Unassigned', riskAssigned ? '2' : '3', 'Need an accountable owner'],
-          ].map(([label, value, detail], index) => <motion.div key={label} initial={reduceMotion ? undefined : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .08 + index * .07 }} className="bg-white p-3"><p className="text-[7px] font-semibold uppercase tracking-[.12em] text-black/32">{label}</p><p className={`mt-2 font-mono text-lg font-semibold ${index === 1 && !riskAssigned ? 'text-[#a24321]' : 'text-[#172019]'}`}>{value}</p><p className="mt-1 text-[7px] text-black/36">{detail}</p></motion.div>)}</section>
+            ['Active projects', '12', '$1.8m contracted'], ['Attention needed', '2', 'Cost · access'], ['Open decisions', '5', '2 owner approvals'], ['On track', '10', '83% of portfolio'],
+          ].map(([label, value, detail], index) => <motion.div key={label} initial={reduceMotion ? undefined : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .08 + index * .06 }} className="bg-white p-3"><p className="text-[7px] font-semibold uppercase tracking-[.12em] text-black/32">{label}</p><p className={`mt-2 font-mono text-lg font-semibold ${index === 1 ? 'text-[#a24321]' : 'text-[#172019]'}`}>{value}</p><p className="mt-1 text-[7px] text-black/36">{detail}</p></motion.div>)}</section>
 
-          <section className="mt-3 grid gap-3 xl:grid-cols-[1.15fr_.85fr]">
-            <div className="border border-[#d7dcd6] bg-white">
-              <div className="flex items-center justify-between gap-3 border-b border-[#e2e5e0] p-3"><div><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#4f7f52]">Owner action queue</p><h3 className="mt-1 text-sm font-semibold">What needs to move today</h3></div><span className="bg-[#f4e8df] px-2 py-1 font-mono text-[7px] uppercase text-[#a24321]">3 priority</span></div>
-              <div className="divide-y divide-[#e2e5e0]">{actionItems.map(({ project, action, owner, due, signal }, index) => {
-                const completed = completedActions.includes(project);
-                return <motion.div key={project} initial={reduceMotion ? undefined : { opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: .15 + index * .08 }} className={`grid gap-3 p-3 sm:grid-cols-[1fr_auto] sm:items-center ${completed ? 'bg-[#f1f5ef]' : ''}`}><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><span className="font-mono text-[7px] uppercase tracking-[.1em] text-[#4f7f52]">{project}</span><span className={`px-1.5 py-0.5 font-mono text-[6px] uppercase ${signal.includes('$') ? 'bg-[#f4e8df] text-[#a24321]' : 'bg-[#edf1ea] text-[#315e3a]'}`}>{signal}</span></div><p className={`mt-1.5 text-[10px] font-semibold leading-4 ${completed ? 'text-black/34 line-through' : 'text-black/72'}`}>{action}</p><p className="mt-1 text-[7px] text-black/36">Owner: {owner} · {due}</p></div><button type="button" onClick={() => setCompletedActions((current) => completed ? current.filter((item) => item !== project) : [...current, project])} className={`min-h-8 px-3 text-[7px] font-semibold transition ${completed ? 'bg-[#e3ede0] text-[#315e3a]' : 'border border-black/10 bg-white text-black/52 hover:border-[#4f7f52]/45 hover:text-[#315e3a]'}`}>{completed ? 'Completed' : 'Mark done'}</button></motion.div>;
-              })}</div>
-            </div>
-
-            <div className="grid gap-3">
-              <div className="border border-[#e2c7b7] bg-[#fff8f3] p-3">
-                <div className="flex items-start justify-between gap-3"><div><p className="font-mono text-[7px] uppercase tracking-[.14em] text-[#a24321]">Potential risk</p><h3 className="mt-1.5 text-xs font-semibold">214 King · unapproved exposure</h3></div><span className="bg-[#f1ddd2] px-2 py-1 font-mono text-[6px] uppercase text-[#a24321]">High</span></div>
-                <p className="mt-2 text-[9px] leading-4 text-black/52">The approved finish adds $2,840 and two days, but no owner has accepted the change order.</p>
-                <div className="mt-3 flex items-center justify-between border-t border-[#ead6ca] pt-3"><p className="text-[7px] text-black/36">{riskAssigned ? 'Assigned to Elena' : 'No accountable owner'}</p><button type="button" onClick={() => setRiskAssigned((current) => !current)} className="bg-[#172019] px-3 py-2 text-[7px] font-semibold text-white">{riskAssigned ? 'Reassign' : 'Assign owner'}</button></div>
-              </div>
-
-              <div className="border border-[#c9d9c9] bg-[#e9f0e7]">
-                <div className="flex items-center gap-2 border-b border-[#c9d9c9] p-3"><span className="grid h-7 w-7 place-items-center bg-[#172019] text-[#dfe9d8]"><Bot className="h-3.5 w-3.5" /></span><div><p className="text-[9px] font-semibold">Ask JasonAI</p><p className="font-mono text-[6px] uppercase tracking-[.12em] text-[#4f7f52]">Across every project</p></div><span className="ml-auto h-1.5 w-1.5 rounded-full bg-[#4f7f52]" /></div>
-                <div className="p-3"><div className="ml-auto max-w-[92%] bg-white px-3 py-2 text-[9px] leading-4 text-black/58 shadow-sm">{activeQuestion}</div><motion.div key={activeQuestion} initial={reduceMotion ? undefined : { opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="mt-2 border border-[#c9d9c9] bg-[#f8faf6] p-3 text-[9px] leading-[1.1rem] text-black/55">{answers[activeQuestion]}</motion.div><div className="mt-2 flex flex-wrap gap-1">{Object.keys(answers).filter((question) => question !== activeQuestion).map((question) => <button key={question} type="button" onClick={() => setActiveQuestion(question)} className="border border-[#b8cab7] bg-white px-2 py-1.5 text-left text-[6px] font-semibold text-[#315e3a]">{question}</button>)}</div></div>
-              </div>
-            </div>
+          <section className="mt-3 grid gap-2.5 sm:grid-cols-2">
+            {projects.map((project, index) => <motion.button key={project.name} type="button" initial={reduceMotion ? undefined : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .14 + index * .06 }} className={`group min-w-0 border p-3 text-left transition hover:-translate-y-0.5 hover:shadow-[0_12px_28px_rgba(23,32,25,.08)] ${project.tone}`}>
+              <div className="flex items-start justify-between gap-3"><div className="min-w-0"><p className="truncate text-[11px] font-semibold">{project.name}</p><p className="mt-1 truncate text-[7px] text-black/36">{project.client} · {project.owner}</p></div><span className={`shrink-0 px-2 py-1 font-mono text-[6px] font-semibold uppercase tracking-[.06em] ${project.badge}`}>{project.status}</span></div>
+              <p className="mt-3 line-clamp-2 min-h-8 text-[8px] leading-4 text-black/54">{project.detail}</p>
+              <div className="mt-3 grid grid-cols-3 gap-2">{project.measures.map(([label, value]) => <div key={label}><div className="flex items-center justify-between gap-1 font-mono text-[6px] uppercase text-black/32"><span>{label}</span><span>{value}%</span></div><div className="mt-1.5 h-1 overflow-hidden bg-black/[.07]"><motion.div initial={reduceMotion ? undefined : { width: 0 }} animate={{ width: `${value}%` }} transition={{ delay: .24 + index * .06, duration: .55 }} className={`h-full ${project.bar}`} /></div></div>)}</div>
+              <div className="mt-3 flex items-center justify-between gap-3 border-t border-black/[.07] pt-2.5"><span className="inline-flex min-w-0 items-center gap-1.5 truncate font-mono text-[6px] uppercase tracking-[.05em] text-black/34"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#56825a]" />{project.update}</span><ArrowRight className="h-3 w-3 shrink-0 text-black/24 transition group-hover:translate-x-0.5 group-hover:text-[#315e3a]" /></div>
+            </motion.button>)}
           </section>
+
+          <motion.form onSubmit={(event) => { event.preventDefault(); searchMessages(); }} initial={reduceMotion ? undefined : { opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .38 }} className="absolute inset-x-3 bottom-16 z-10 border border-[#b9c9b7] bg-[#172019] p-2 shadow-[0_18px_45px_rgba(23,32,25,.24)] sm:inset-x-4 lg:inset-x-5">
+            <div className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center bg-[#dfe9d8] text-[#17321f]"><Search className="h-3.5 w-3.5" /></span><label className="min-w-0 flex-1"><span className="sr-only">Search project messages</span><input value={messageQuery} onChange={(event) => setMessageQuery(event.target.value)} placeholder="Ask across every project message…" className="w-full bg-transparent text-[9px] text-white outline-none placeholder:text-white/35" /></label><button type="submit" aria-label="Search messages" className="grid h-8 w-8 shrink-0 place-items-center bg-[#f4b28c] text-[#172019] transition hover:bg-[#ffc29f]"><Send className="h-3.5 w-3.5" /></button></div>
+            <p className="mt-1.5 truncate px-10 font-mono text-[6px] uppercase tracking-[.06em] text-white/35">{searchSummary}</p>
+          </motion.form>
         </main>
       </div>
     </motion.div>
