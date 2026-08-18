@@ -28,17 +28,19 @@ INTERNAL_NOTIFICATION_EMAIL="info@b2w-ai.com"
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="sb_publishable_xxx"
 SUPABASE_SECRET_KEY="sb_secret_xxx"
+RESEND_API_KEY="re_xxx"
+RESEND_FROM_EMAIL="B2W <info@b2w-ai.com>"
+# Optional: defaults to this Supabase project's table editor.
+SUPABASE_CRM_URL="https://supabase.com/dashboard/project/your-project-ref/editor"
 ```
 
 Prefer `SUPABASE_SECRET_KEY`. `SUPABASE_SERVICE_ROLE_KEY` remains a compatibility fallback.
 
-## Notifications and exports
+## Lead notifications
 
-Supabase is the system of record. Configure Database Webhooks or an Edge Function in Supabase for optional follow-up work such as:
+After Supabase confirms a contact lead insert, the API emails `INTERNAL_NOTIFICATION_EMAIL` through Resend. The email contains the submitted contact information and a button linking to the Supabase CRM/table editor. If email delivery fails, the saved lead remains successful and the API logs a notification warning rather than asking the visitor to resubmit.
 
-- notifying `info@b2w-ai.com`
-- sending submitter confirmations through an email provider
-- mirroring selected rows to another reporting system
+To use a custom CRM view instead of the table editor, set `SUPABASE_CRM_URL` to that view's URL.
 
 These automations must not control whether the website reports a successful submission.
 
@@ -53,7 +55,8 @@ These automations must not control whether the website reports a successful subm
 4. Verify:
    - a row appears in Supabase `form_submissions`
    - the browser receives `ok: true` and a `submissionId`
-   - any configured Supabase automation runs independently
+   - the notification arrives at `INTERNAL_NOTIFICATION_EMAIL`
+   - **Open Supabase CRM** opens the intended project or custom CRM view
 
 ## Notes
 

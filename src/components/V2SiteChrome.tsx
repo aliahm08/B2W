@@ -12,6 +12,7 @@ const v2Menus = [
     items: [
       { label: 'JasonAI', status: 'Pre-Launch Discount', colorway: 'jasonai', description: 'An intelligent assistant that works through your existing communication channels.', to: '/v2/products/jasonai', liveTo: '/jasonai' },
       { label: 'Clara', colorway: 'clara', description: 'Turn field notes into structured scopes and estimates.', to: '/v2/products/clara', liveTo: '/clara' },
+      { label: 'Gurge', status: 'Private Beta', description: 'An AI-maintained operating system for jobs, schedules, communication, and custom business views.', to: '/v2/gurge', liveTo: '/v3/gurge' },
     ],
   },
   {
@@ -23,16 +24,9 @@ const v2Menus = [
   },
 ] as const;
 
-const liveMenus = [
-  v2Menus[0],
-  {
-    label: 'Solutions',
-    items: [
-      { label: 'General Contractor', description: 'Switch between solutions for owners, project coordinators, and operations teams.', to: '/general-contractors', liveTo: '/general-contractors' },
-      { label: 'Use Cases', description: 'Explore the communication, document, and operating problems B2W can help solve.', to: '/solutions/business-use-cases', liveTo: '/solutions/business-use-cases' },
-      { label: 'AI Workflows', description: 'Follow the five-step guide from one scoped problem to governed daily use.', to: '/solutions/ai-workflows', liveTo: '/solutions/ai-workflows' },
-    ],
-  },
+const liveNavigation = [
+  { label: 'Project Intelligence', to: '/intelligence' },
+  { label: 'Workflows', to: '/workflows' },
 ] as const;
 
 const v1Menus = [
@@ -74,8 +68,8 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
   const location = useLocation();
   const isV1 = location.pathname === '/v1' || location.pathname.startsWith('/v1/');
   const isV3 = usesV3Branding(location.pathname);
-  const productMenuLabel = isV3 ? 'AI Assistants' : 'Products';
-  const solutionsMenuLabel = isV3 ? 'Guidance' : 'Solutions';
+  const productMenuLabel = live ? 'Project Intelligence' : isV3 ? 'AI Assistants' : 'Products';
+  const solutionsMenuLabel = live ? 'Workflows' : isV3 ? 'Guidance' : 'Solutions';
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [pageTheme, setPageTheme] = useState<'light' | 'dark'>(theme);
@@ -201,7 +195,7 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
   }, [followPageTheme, theme]);
 
   const dark = pageTheme === 'dark';
-  const menus = isV1 ? v1Menus : (live ? liveMenus : v2Menus).map((menu, index) => {
+  const menus = isV1 ? v1Menus : v2Menus.map((menu, index) => {
     if (index === 0) return { ...menu, label: productMenuLabel };
     if (index === 1) return { ...menu, label: solutionsMenuLabel };
     return menu;
@@ -241,7 +235,11 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
         </Link>
 
         <nav aria-label={live ? 'Site navigation' : 'V2 site navigation'} className="hidden items-center justify-center gap-2 md:col-start-2 md:row-start-1 md:flex">
-          {menus.map((menu, index) => {
+          {live ? liveNavigation.map((item, index) => (
+            <Link key={item.label} to={item.to} className="inline-flex min-h-9 items-center rounded-full px-3 text-xs font-semibold transition hover:bg-white hover:text-black sm:text-sm">
+              <DescrambleText text={item.label} animateOnMount delay={120 + index * 90} />
+            </Link>
+          )) : menus.map((menu, index) => {
             const isOpen = openMenu === menu.label;
             const isColumnLayout = 'layout' in menu && menu.layout === 'columns';
             const menuSections: string[] = isColumnLayout
@@ -339,8 +337,8 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
             <DescrambleText text="About" animateOnMount delay={390} />
           </Link>
           <a href={demoUrl} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full border border-current/25 px-3 text-sm font-semibold transition hover:bg-white hover:text-black sm:min-h-10 sm:px-4">
-            <span className="md:hidden">Demo</span>
-            <span className="hidden md:inline"><DescrambleText text="Book a demo" animateOnMount delay={450} /></span>
+            <span className="md:hidden">{live ? 'Review' : 'Demo'}</span>
+            <span className="hidden md:inline"><DescrambleText text={live ? 'Book a review' : 'Book a demo'} animateOnMount delay={450} /></span>
             <CalendarDays className="h-4 w-4" />
           </a>
           <button
@@ -378,7 +376,14 @@ export function V2SiteHeader({ theme = 'light', live = false, followPageTheme = 
               transition={{ duration: .22, ease: [0.22, 1, 0.36, 1] }}
             >
               <nav className="grid gap-2" aria-label="Mobile navigation links">
-                {menus.map((menu) => (
+                {live ? (
+                  <section className="rounded-[1.25rem] bg-white p-2">
+                    <p className="px-3 pb-2 pt-1 font-mono text-[9px] font-semibold uppercase tracking-[.18em] text-slate-400">Explore</p>
+                    <div className="grid gap-1">
+                      {liveNavigation.map((item) => <Link key={item.label} to={item.to} onClick={() => setMobileMenuOpen(false)} className="flex min-h-12 items-center justify-between gap-4 rounded-2xl px-3 py-2 text-sm font-semibold transition hover:bg-[#f2f4ed] focus-visible:bg-[#f2f4ed]"><span>{item.label}</span><ArrowRight className="h-4 w-4 shrink-0 text-slate-400" /></Link>)}
+                    </div>
+                  </section>
+                ) : menus.map((menu) => (
                   <section key={menu.label} className="rounded-[1.25rem] bg-white p-2">
                     <p className="px-3 pb-2 pt-1 font-mono text-[9px] font-semibold uppercase tracking-[.18em] text-slate-400">{menu.label}</p>
                     <div className="grid gap-1">
@@ -442,7 +447,7 @@ export function V2SiteFooter({ dark = false }: { dark?: boolean }) {
     <footer className={`border-t px-5 py-12 sm:px-8 ${dark ? 'border-white/10 bg-[#111714] text-white/70' : 'border-black/10 bg-[#f6f3eb] text-[#49504a]'}`}>
       <div className="mx-auto grid max-w-7xl gap-10 sm:grid-cols-[1fr_auto_auto_auto]">
         <div><p className="font-semibold">B2W LLC</p><p className="mt-2 max-w-sm text-sm opacity-75">Practical AI products and workflows built around how operating teams already work.</p></div>
-        <div><p className="text-xs font-semibold uppercase tracking-[.16em]">Products</p><div className="mt-3 grid gap-2 text-sm"><Link to="/v2/products/jasonai">JasonAI</Link><Link to="/v2/products/clara">Clara</Link></div></div>
+        <div><p className="text-xs font-semibold uppercase tracking-[.16em]">Products</p><div className="mt-3 grid gap-2 text-sm"><Link to="/v2/products/jasonai">JasonAI</Link><Link to="/v2/products/clara">Clara</Link><Link to="/v2/gurge">Gurge</Link></div></div>
         <div><p className="text-xs font-semibold uppercase tracking-[.16em]">Solutions</p><div className="mt-3 grid gap-2 text-sm"><Link to="/v2/solutions/general-contractors">General Contractors</Link><Link to="/v2/solutions/engineering-firms">Engineering Firms</Link></div></div>
         <div><p className="text-xs font-semibold uppercase tracking-[.16em]">Plan</p><div className="mt-3 grid gap-2 text-sm"><Link to="/v2/pricing">Pricing &amp; ROI</Link><a href="mailto:info@b2w-ai.com">Contact</a></div></div>
       </div>

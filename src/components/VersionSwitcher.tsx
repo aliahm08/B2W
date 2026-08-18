@@ -6,6 +6,7 @@ const versions = [
   { label: 'V2', to: '/v2' },
   { label: 'V3', to: '/v3' },
   { label: 'V4', to: '/v4' },
+  { label: 'V5', to: '/v5' },
 ] as const;
 
 export default function VersionSwitcher() {

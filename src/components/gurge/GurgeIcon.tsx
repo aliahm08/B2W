@@ -35,11 +35,10 @@ export default function GurgeIcon({ name, title, ...props }: GurgeIconProps) {
       {title ? <title>{title}</title> : null}
       {name === 'brand' ? (
         <>
-          <path d="M12 2.75 18.25 6.4v7.2L12 17.25 5.75 13.6V6.4L12 2.75Z" />
-          <path d="m12 7.1 2.8 1.62v3.24L12 13.58l-2.8-1.62V8.72L12 7.1Z" />
-          <path d="M12 17.25v4M5.75 13.6l-3.1 1.8M18.25 13.6l3.1 1.8" />
+          <path fill="currentColor" stroke="none" fillRule="evenodd" d="M12 1.9c4.05 3.15 7.25 7.04 7.25 11.05A7.25 7.25 0 1 1 4.75 13C4.75 8.94 7.95 5.05 12 1.9Zm0 5.05c-2.05 1.92-3.35 4.08-3.35 6.03a3.35 3.35 0 1 0 6.7 0c0-1.95-1.3-4.11-3.35-6.03Z" />
         </>
       ) : null}
+      {name !== 'brand' ? <path d="M12 2.25c3.5 2.8 6.15 6.15 6.15 9.62A6.15 6.15 0 1 1 5.85 11.9C5.85 8.4 8.5 5.05 12 2.25Z" opacity=".18" /> : null}
       {name === 'overview' ? (
         <>
           <rect x="3" y="3" width="7.25" height="7.25" rx="1.6" />

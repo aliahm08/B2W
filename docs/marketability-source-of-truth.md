@@ -1,6 +1,6 @@
 # Marketability Source Of Truth
 
-Last updated: 2026-08-11
+Last updated: 2026-08-17
 
 This document is the stable reference for public marketing upkeep on the B2W website. Use it with the generated [docs/seo-route-inventory.md](/Users/ali/Library/CloudStorage/GoogleDrive-aliahm1208@gmail.com/My%20Drive/B2W/Website/docs/seo-route-inventory.md) file.
 
@@ -9,31 +9,37 @@ This document is the stable reference for public marketing upkeep on the B2W web
 - `B2W`: a product company building practical tools for project-driven contracting businesses.
 - `JasonAI`: **the Admin**—B2W’s currently available assistant for searching and summarizing project communication, drafting reviewable business documents, and analyzing project files through connected channels such as WhatsApp, Gmail, and the web.
 - `Clara`: **the Expert**—a customized AI document-workspace concept where companies develop estimates, proposals, scopes, reports, and other working documents using approved preferences and review rules. It is not available or priced.
-- `Gurge`: **the Operator**—a concept for managing jobs, locations, accountability, and reports. It is not available or priced.
+- `Gurge`: **the Operator**—AI job-management software for service businesses, available through a limited private beta as downloadable desktop and mobile apps. Pricing is not public.
+- The live public hierarchy presents three connected contractor service areas: **Communication** through JasonAI, **Documentation** through Clara, and **Optimization** through a source-linked B2W dashboard surface based on the Gurge private-beta operating model.
 
 ## Public Route Structure
 
-- `/`: the live, indexable JasonAI landing page centered on reducing the cost of contractor communication. Product capabilities, workflow, project example, controls, contractor solutions, the economic comparison, pricing, and FAQs are anchored sections on this page.
+- `/`: the deployed, indexable JasonAI landing page from `origin/main`, centered on reducing the cost of contractor communication. Its established Overview, Examples, Why JasonAI, Pricing, project example, controls, early-access offer, and FAQ flow remain unchanged.
+- `/intelligence`: the unified Project Intelligence piece with JasonAI, Clara, and B2W Dashboard as the three proper product titles.
+- `/communication`: legacy redirect to `/`. `/clara` and `/dashboard` redirect to their matching `/intelligence` anchors. All three legacy metadata entries remain noindex.
+- `/workflows`: the single unified workflow piece. It carries representative contractor signals through communication, a reviewable sample document, and an illustrative dashboard view; maps reviewed fields into status, owner, due date, impact, and retained sources; and contains Business owner, Project coordinator, and Operations perspectives. Do not label these patterns as customer case studies or completed customer deliverables.
+- `/v5`: the unlinked, `noindex` unified contractor-platform preview. It presents approved communication, documents, app workflows, and service-line dashboards as one private program; includes the five-step setup process, a $1,500 one-time setup fee, $99 monthly subscription, cancel-any-time language, money-back guarantee language, and a seasonal DMV contractor discount. Its custom booking flow saves intake to Supabase, sends the connected internal email notification, and then reveals the B2W Calendly scheduler. `/platform` redirects to `/v5`.
+
 - `/v1`: noindex archive of the former contractor-trust main experience, including its complete nested route family.
 - `/v2`: noindex archive of the experience now promoted to the live unprefixed routes.
 - `/v3`: noindex archive of the previous live experience, with JasonAI, Clara, contractor guidance, pricing, and the solution finder.
-- `/v4`: noindex review copy of the current JasonAI landing page. Its former subpage URLs redirect to matching anchors inside `/v4`.
+- `/v4`: noindex JasonAI communication-intelligence concept. Its former subpage URLs redirect to matching anchors inside `/v4`; the main sequence moves multi-channel communication through an all-project log and normalized register into an owner accountability center.
 - `/preview`: retired route family that redirects to `/` and is excluded from static SEO generation.
 - `/services`: Strategy, Systems, and Implementation organized around business conditions and decisions.
 - `/products`: the product system, with `/products/agents`, `/products/workflows`, and `/products/pricing`.
 - `/jasonai`: the current assistant, with nested `/jasonai/how-it-works`, `/jasonai/questions`, and `/jasonai/privacy` pages. Integrations and Security URLs from the former main experience redirect into this live family.
-- `/gurge`: the public Gurge management-software page, demonstrating its high-level operating view across jobs, locations, accountability, and detailed reports.
+- `/v3/gurge`: the primary Gurge AI job-management page, with `/v2/gurge` as its alternate service-business review surface. Both demonstrate the source-linked operating dashboard, live change stream, jobs, schedules, communication evidence, read-only job detail, and AI-generated custom views across desktop and mobile. `/gurge` redirects to V3; Gurge is not placed in the main site.
+- Gurge is not a manually maintained dashboard with an AI chatbot attached. Approved texts, email, client messages, team updates, schedules, and connected systems maintain its source-linked operating records in real time. AI appears directly only when a user asks for a new business view; Gurge generates the view, selects its update rules and sources, and maintains it after the user saves it.
+- The versioned Gurge pages keep their established B2W website header. Inside the page, every Gurge desktop and mobile frame uses the dark-green product shell, official Gurge mark, hover navigation, live reconciliation state, and `fieldstone-services / active-screen` filepath. V2 includes Gurge in its Products navigation.
 - `/industries/food-and-beverage`, `/industries/general-contracting`, and `/industries/real-estate-management`: dedicated industry pages connecting each operating environment to relevant B2W systems, workflows, controls, and outcomes.
-- `/contractors` and its former nested paths redirect to the live `/general-contractors` audience page.
+- `/contractors`, `/general-contractors`, and their former role-specific paths redirect to the contractor-function section of `/workflows`.
 - `/#pricing`: the current JasonAI free early-access offer, subject to fit and availability. More powerful integrations, customization, and agent capabilities are described as future additions rather than included promises.
 - `/get-started` and `/book-demo` are legacy paths from V1 that redirect to their closest live destinations.
 - `/about` and `/contact`: the promoted company and contact routes.
 - `/legal`, `/legal/privacy`, and `/legal/terms` redirect to the closest live privacy or contact destination.
 - `/solutions/industries`: legacy redirect to the General Contracting industry page. Industries are surfaced as a section inside the Solutions navigation tray rather than through a separate overview page.
-- `/solutions/business-use-cases`: operating problems mapped to current and concept-stage B2W products, followed by explicit current, concept-stage, and custom workflow patterns.
-- `/general-contractors`: the canonical live contractor-audience page.
+- `/solutions` and `/solutions/business-use-cases`: legacy redirects to the representative examples inside `/workflows`.
 - `/solutions/ai-workflows`: the five-step **AI Workflows** user guide. It starts with a scoped problem and JasonAI using approved context in existing tools, presents Clara as an optional concept-stage document workspace using that same context, and closes with human review, measured expansion, and diligence. The existing Clara estimate animation remains at `/solutions/ai-workflows/project-estimates` and is linked from the Use Cases catalog.
-- `/clara`: the public Clara product page, presenting the customized chat workspace, company-document use cases, private approved-source model, preference configuration, and next actions without implying general availability or pricing.
 - `/jasonai/pricing`: a legacy redirect to canonical `/pricing`.
 
 ## Services Route Structure
@@ -50,12 +56,9 @@ This document is the stable reference for public marketing upkeep on the B2W web
 
 ## JasonAI Product And Offer Rules
 
-- The live landing page centers its header on Overview, Examples, and Why JasonAI, with dropdowns linking to relevant anchored subsections. Overview leads to the capability summary and includes How it works, the project example, and security controls. Pricing sits beside the header actions rather than in the primary navigation. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
-- The live and V4 header uses scroll-aware highlighting: Overview remains active across its product and process sections, Examples across all example subsections, Why JasonAI across the value section, and Pricing across pricing and FAQs.
-- At the top of the live/V4 hero, the header collapses to a lower, tighter centered brand pill containing only the B2W mark and `JasonAI by B2W`; the complete navigation returns as soon as the visitor begins scrolling.
-- The live and V4 header lockup pairs the B2W mark with `JasonAI by B2W` on tablet and desktop. Mobile shows the mark alone while retaining the full accessible home label.
-- The peach header CTA is `Book demo`; the hero’s primary CTA is `Book a demo`. Both open B2W’s Calendly booking link. `Try JasonAI free` remains an email contact action; `See the value` remains the secondary on-page action.
-- The live and V4 hero eyebrow is `The AI assistant for general contractors`; its primary headline is `Contractors, meet your integrated AI assistant.`, with `your` italicized. Its supporting sentence explains integration without workflow change, followed by four compact check-mark items: Find information, Create documents, Analyze project files, and Act on conversations. The previous `For free.` message is omitted.
+- The live homepage uses the JasonAI-first anchor navigation for Overview, Examples, Why JasonAI, and Pricing, with a persistent `Book demo` action. Public headers and footers never link to `/internal`; private routes remain available only by direct URL.
+- The V4 hero CTA hierarchy is the filled `Turn this into useful work` interaction first and an underlined `Book a demo` text link second. The primary action demonstrates product value in place; the secondary link opens B2W's 30-minute Calendly page.
+- The V4 hero uses the eyebrow `The AI assistant for general contractors`, the headline `Contractors, meet your integrated AI assistant.`, and a reduced-motion-aware scroll sequence in which four ambient signals converge into the primary CTA, five labeled communication channels and their converging paths appear above the minimal high-contrast live feed as the copy exits, and continued scrolling resolves that feed through the structured register into a source-linked owner accountability center for actions, questions, and potential risks.
 - Current JasonAI framing includes search and summaries across connected project context, reviewable document drafting, and uploaded-file analysis. Human review remains required. Autonomous actions and expanded agent capabilities must be labeled as in development or future work.
 - Opening a homepage navigation menu keeps the header and menu in focus while applying a Clara-inspired blur to the page behind it.
 - The Products tray describes JasonAI as “An intelligent assistant that works through your existing communication channels.” with a “Pre-Launch Discount” offer label. Clara has no adjacent status or offer label. Hovering either product applies its established homepage product colorway to the page behind the tray.
@@ -103,9 +106,9 @@ This document is the stable reference for public marketing upkeep on the B2W web
 - The live `/` homepage is the visual source of truth for public marketing pages: warm paper or product-tinted canvases, oversized Inter typography, restrained grid fields, rounded product frames, soft ambient shadows, and pill-shaped primary controls.
 - JasonAI, Clara, Gurge, ROI/pricing, industry pages, and agent-comparison pages keep their product colorways while sharing the homepage frame radius, control shape, shadow softness, floating header, and footer behavior.
 - Embedded software demonstrations may use tighter internal geometry when it helps them read as product interfaces; the surrounding marketing cards and controls should still follow the shared homepage system.
-- The live and V4 experiences use the reduced-motion-aware descramble effect on navigation and button-style CTA labels during hover or keyboard focus. Header animation is limited to the short `Connect. Ask. Act.` process heading; all other hero, section, and body copy remains stable.
-- The `JasonAI` word in the live/V4 header briefly pulses and re-scrambles about every eleven seconds without user input. The hero’s signal paths and traveling particles stream from both sides directly into the `Book a demo` CTA. Both behaviors stop when reduced motion is requested.
-- The live and V4 hero centers its messaging over a reduced-motion-aware abstract project-flow background. The animation contains no visible labels: blueprint/worksite traces carry inbound signals toward the primary `Book demo` button, which occupies the graphic’s JasonAI convergence point. Do not use a generated workplace image in this hero.
+- The live homepage uses the reduced-motion-aware descramble effect on navigation and button-style CTA labels during hover or keyboard focus.
+- Homepage motion communicates causality and state: project-source borders pulse in sequence, signals travel into the intelligence layer, and workflow tabs transition between representative use cases. Reduced-motion preferences stop continuous effects without hiding essential content.
+- The hero graphic is a labeled, responsive interface diagram rather than decorative imagery. It must retain a clear reading order on mobile: sources, intelligence layer, reviewable outputs, and human-control boundary.
 
 ## Cheapest Update Loop
 
@@ -132,6 +135,17 @@ Then:
 - Treat `content.md` as a concise strategic reference, not a dumping ground for page-by-page copy.
 
 ## Revision History
+
+- **2026-08-17:** Kept the established JasonAI hero in place, embedded the custom communication-to-document visualization within it, made the main CTA reveal the document on hover/focus/tap, and restyled `Book a demo` as a secondary text link.
+- **2026-08-17:** Restored the JasonAI landing page as the live homepage, rebuilt its hero around a click- and scroll-triggered missed-communication transformation, and retained the unified Project Intelligence page at `/intelligence`.
+- **2026-08-17:** Consolidated the live public architecture into one Project Intelligence page and one Workflows page, adopted the JasonAI page's long-form structure for the homepage, moved contractor-role perspectives into Workflows, simplified navigation, and converted redundant public routes into noindex anchor redirects.
+- **2026-08-17:** Repositioned the live B2W public surface around contractor project intelligence, moved the former JasonAI homepage experience to `/communication`, added the `/dashboard` Optimization page, and aligned `/workflows`, navigation, footer, metadata, and CTAs around Communication / Documentation / Optimization.
+- **2026-08-17:** Refined the homepage promise to `Every project signal. One clear next move.`, added product-specific interface graphics and interactive workflow examples, and standardized the primary conversion path around a 30-minute workflow review.
+- **2026-08-17:** Extended every unified workflow with a representative document and its dashboard translation, keeping the human-review and source-retention boundary visible in the interface.
+
+- **2026-08-12:** Restored the established site header, added Gurge to the V2 Products menu, and moved the dedicated Gurge shell into the embedded app frames with hover navigation, reconciliation status, mobile screen switching, and an active-screen filepath.
+- **2026-08-12:** Merged the public Gurge product demonstration more directly with the existing internal Gurge UI and reframed the product as an AI-maintained, source-linked operating record with generated, saveable custom views.
+- **2026-08-12:** Rebuilt `/gurge` as a full AI job-management product page and interactive service-business workspace, placed it in the V2 and V3 versioned sites, and framed desktop/mobile access as a limited private beta.
 
 - **2026-08-11:** Simplified the default B2W social share image to the canonical header mark beside only the `B2W-ai` wordmark.
 - **2026-08-11:** Added scroll-aware live/V4 header highlighting for Overview, Examples, Why JasonAI, and Pricing across their related subsections.
