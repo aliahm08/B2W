@@ -561,7 +561,15 @@ export default function App() {
                     </InternalAccessGate>
                   }
                 />
-                <Route path="/internal/workspace" element={<Navigate to="/internal/resources" replace />} />
+                {/* The internal workspace mirrors the live homepage as the current product vision. */}
+                <Route
+                  path="/internal/workspace"
+                  element={
+                    <InternalAccessGate>
+                      <MainExperiencePage page="home" />
+                    </InternalAccessGate>
+                  }
+                />
                 <Route
                   path="/internal/products/clara"
                   element={
