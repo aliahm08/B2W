@@ -1,6 +1,7 @@
 import { allowMethods, readJsonBody, sendJson } from './_lib/http.js';
 import { insertLeadFormSubmission, saveLeadSubmissionBudget } from './_common/formSubmissions.js';
 import { checkRateLimit, getClientIp } from './_common/rateLimit.js';
+import { sendLeadNotification } from './_common/leadNotification.js';
 import type { LeadSubmission } from './_common/validation.js';
 import { validateHoneypot, validateLeadSubmission } from './_common/validation.js';
 
@@ -50,7 +51,19 @@ export default async function handler(req: any, res: any) {
     }
 
     const leadSubmissionId = await processLeadSubmission(validated.value);
-    sendJson(res, 200, { ok: true, submissionId: leadSubmissionId });
+
+    try {
+      await sendLeadNotification(validated.value, leadSubmissionId, getInternalEmail());
+      sendJson(res, 200, { ok: true, submissionId: leadSubmissionId });
+    } catch (notificationError) {
+      // The lead is already safely stored. Do not make the visitor retry and create a duplicate.
+      console.error('[contact-lead] notification failure', notificationError);
+      sendJson(res, 200, {
+        ok: true,
+        submissionId: leadSubmissionId,
+        warning: 'Submission saved, but the internal email notification could not be sent.',
+      });
+    }
   } catch (error) {
     console.error('[contact-lead] unexpected failure', error);
     sendJson(res, 500, { ok: false, error: 'Unable to submit inquiry right now.' });

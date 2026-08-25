@@ -79,6 +79,10 @@ const LogoVerificationPage = lazy(() => import('./pages/LogoVerificationPage'));
 const MainExperiencePage = lazy(() => import('./pages/main/MainExperiencePage'));
 const V1HomePage = lazy(() => import('./pages/v1/V1HomePage'));
 const V4HomePage = lazy(() => import('./pages/v4/V4HomePage'));
+const V4ArchivePage = lazy(() => import('./pages/v4/V4ArchivePage'));
+const ContractorIntelligenceHomePage = lazy(() => import('./pages/site/ContractorIntelligenceHomePage'));
+const ContractorWorkflowsPage = lazy(() => import('./pages/site/ContractorWorkflowsPage'));
+const UnifiedPlatformPage = lazy(() => import('./pages/UnifiedPlatformPage'));
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -204,6 +208,7 @@ const V1_BASE_PATH = '/v1';
 const V2_BASE_PATH = '/v2';
 const V3_BASE_PATH = '/v3';
 const V4_BASE_PATH = '/v4';
+const V5_BASE_PATH = '/v5';
 
 function VersionedSiteFrame({ basePath, children }: { basePath: string; children: ReactNode }) {
   const navigate = useNavigate();
@@ -301,14 +306,17 @@ export default function App() {
   const isV2Site = location.pathname === V2_BASE_PATH || location.pathname.startsWith(`${V2_BASE_PATH}/`);
   const isV3Site = location.pathname === V3_BASE_PATH || location.pathname.startsWith(`${V3_BASE_PATH}/`);
   const isV4Site = location.pathname === V4_BASE_PATH || location.pathname.startsWith(`${V4_BASE_PATH}/`);
+  const isV5Site = location.pathname === V5_BASE_PATH || location.pathname.startsWith(`${V5_BASE_PATH}/`);
   const isDataRoom = location.pathname.includes('-data-room');
   const isAppTest = location.pathname === '/app-test-1';
   const isClaraPage = location.pathname.startsWith('/clara');
   const isJasonAIPage = location.pathname.startsWith('/jasonai');
+  const isCommunicationPage = location.pathname === '/communication';
   const isGurgePage = location.pathname === '/gurge';
   const isMarketDetailPage = location.pathname === '/general-contractors' || location.pathname.startsWith('/industries/') || location.pathname.startsWith('/solutions/');
-  const isFullSiteLive = location.pathname === '/pricing' || location.pathname === '/workflows' || location.pathname.startsWith('/products') || location.pathname === '/contact' || location.pathname === '/about';
+  const isFullSiteLive = location.pathname === '/intelligence' || location.pathname === '/pricing' || location.pathname === '/workflows' || location.pathname === '/dashboard' || location.pathname.startsWith('/products') || location.pathname === '/contact' || location.pathname === '/about';
   const isLogoVerification = location.pathname === '/brand/logo-verification';
+  const isUnifiedPlatform = location.pathname === '/platform' || isV5Site;
   const isLiveServices = location.pathname === '/services';
   const isArchivedServices = location.pathname === '/services/archive/2026-07-29';
   const isServicesLanding = isLiveServices || isArchivedServices;
@@ -324,7 +332,7 @@ export default function App() {
                         location.pathname === '/work/coffeeshop-financing/model';
   const hasReturnParam = searchParams.has('return');
   const isIsolatedView =
-    isMainExperience || isV1Site || isV2Site || isV3Site || isV4Site || isFullSiteLive || isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isAppTest || isClaraPage || isJasonAIPage || isGurgePage || isMarketDetailPage || isLogoVerification;
+    isMainExperience || isV1Site || isV2Site || isV3Site || isV4Site || isV5Site || isFullSiteLive || isClientPortal || isInternalPortal || isDataRoom || isProjectPage || hasReturnParam || isAppTest || isClaraPage || isJasonAIPage || isCommunicationPage || isGurgePage || isMarketDetailPage || isLogoVerification || isUnifiedPlatform;
   const routeTransitionKey = isClaraPage ? '/clara' : isJasonAIPage ? '/jasonai' : location.pathname;
 
   let clientName: string | undefined = undefined;
@@ -341,6 +349,10 @@ export default function App() {
           <div key={routeTransitionKey}>
             <Routes location={location}>
                 <Route path="/" element={<V4HomePage basePath="" isArchive={false} />} />
+                <Route path="/intelligence" element={<FullSiteFrame><ContractorIntelligenceHomePage /></FullSiteFrame>} />
+                <Route path="/communication" element={<Navigate to="/" replace />} />
+                <Route path="/dashboard" element={<Navigate to="/intelligence#optimization" replace />} />
+                <Route path="/platform" element={<Navigate to="/v5" replace />} />
                 <Route path="/products" element={<FullSiteFrame><ProductsIndexPage /></FullSiteFrame>} />
                 <Route path="/products/agents" element={<FullSiteFrame><AgentsPage /></FullSiteFrame>} />
                 <Route path="/products/workflows" element={<FullSiteFrame><WorkflowsPage /></FullSiteFrame>} />
@@ -352,8 +364,8 @@ export default function App() {
                 <Route path="/jasonai/how-it-works" element={<JasonAIPage page="how-it-works" />} />
                 <Route path="/jasonai/integrations" element={<Navigate to="/jasonai" replace />} />
                 <Route path="/jasonai/security" element={<Navigate to="/jasonai/privacy" replace />} />
-                <Route path="/contractors" element={<Navigate to="/general-contractors" replace />} />
-                <Route path="/contractors/*" element={<Navigate to="/general-contractors" replace />} />
+                <Route path="/contractors" element={<Navigate to="/workflows#by-function" replace />} />
+                <Route path="/contractors/*" element={<Navigate to="/workflows#by-function" replace />} />
                 <Route path="/get-started" element={<Navigate to="/contact" replace />} />
                 <Route path="/book-demo" element={<Navigate to="/contact" replace />} />
                 <Route path="/legal" element={<Navigate to="/jasonai/privacy" replace />} />
@@ -422,7 +434,7 @@ export default function App() {
                 <Route path="/v2/jasonai/questions" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><JasonAIPage page="questions" /></VersionedSiteFrame>} />
                 <Route path="/v2/jasonai/privacy" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><JasonAIPage page="privacy" /></VersionedSiteFrame>} />
                 <Route path="/v2/clara" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><FullSiteFrame><ClaraProductPage /></FullSiteFrame></VersionedSiteFrame>} />
-                <Route path="/v2/gurge" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><GurgePage /></VersionedSiteFrame>} />
+                <Route path="/v2/gurge" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><GurgePage canonicalPath="/v2/gurge" /></VersionedSiteFrame>} />
                 <Route path="/v2/services/marketing-advisory" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v2/services/financial-review" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v2/services/operations-implementation" element={<VersionedSiteFrame basePath={V2_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
@@ -457,7 +469,7 @@ export default function App() {
                 <Route path="/v3/jasonai/questions" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><JasonAIPage page="questions" /></VersionedSiteFrame>} />
                 <Route path="/v3/jasonai/privacy" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><JasonAIPage page="privacy" /></VersionedSiteFrame>} />
                 <Route path="/v3/clara" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><FullSiteFrame><ClaraProductPage /></FullSiteFrame></VersionedSiteFrame>} />
-                <Route path="/v3/gurge" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><GurgePage /></VersionedSiteFrame>} />
+                <Route path="/v3/gurge" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><GurgePage canonicalPath="/v3/gurge" /></VersionedSiteFrame>} />
                 <Route path="/v3/services/marketing-advisory" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/services/financial-review" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/services/operations-implementation" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><ServiceProjectPage /></DefaultSiteFrame></VersionedSiteFrame>} />
@@ -467,7 +479,7 @@ export default function App() {
                 <Route path="/v3/capabilities/:slug" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><CapabilityPage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/expertise/:slug" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><DefaultSiteFrame><ExpertisePage /></DefaultSiteFrame></VersionedSiteFrame>} />
                 <Route path="/v3/*" element={<VersionedSiteFrame basePath={V3_BASE_PATH}><NotFound /></VersionedSiteFrame>} />
-                <Route path="/v4" element={<V4HomePage />} />
+                <Route path="/v4" element={<V4ArchivePage basePath="/v4" canonicalPath="/" isArchive />} />
                 <Route path="/v4/jasonai" element={<Navigate to="/v4#capabilities" replace />} />
                 <Route path="/v4/how-it-works" element={<Navigate to="/v4#how-it-works" replace />} />
                 <Route path="/v4/solutions" element={<Navigate to="/v4#use-cases" replace />} />
@@ -475,6 +487,8 @@ export default function App() {
                 <Route path="/v4/pricing" element={<Navigate to="/v4#pricing" replace />} />
                 <Route path="/v4/faq" element={<Navigate to="/v4#faq" replace />} />
                 <Route path="/v4/*" element={<Navigate to="/v4" replace />} />
+                <Route path="/v5" element={<UnifiedPlatformPage />} />
+                <Route path="/v5/*" element={<Navigate to="/v5" replace />} />
                 <Route path="/preview/*" element={<Navigate to="/" replace />} />
                 <Route path="/brand/logo-verification" element={<LogoVerificationPage />} />
                 <Route
@@ -507,14 +521,14 @@ export default function App() {
                 />
                 <Route path="/home-test-1" element={<Navigate to="/" replace />} />
                 <Route path="/app-test-1" element={<AppTestOnePage />} />
-                <Route path="/solutions" element={<Navigate to="/solutions/business-use-cases" replace />} />
+                <Route path="/solutions" element={<Navigate to="/workflows#workflow-examples" replace />} />
                 <Route path="/solutions/industries" element={<Navigate to="/industries/general-contracting" replace />} />
-                <Route path="/solutions/business-use-cases" element={<SolutionsOverviewPage page="business-use-cases" />} />
-                <Route path="/general-contractors" element={<ContractorAudiencePage />} />
-                <Route path="/solutions/general-contractors" element={<Navigate to="/general-contractors" replace />} />
-                <Route path="/solutions/general-contractors/business-owners" element={<Navigate to="/general-contractors" replace />} />
-                <Route path="/solutions/general-contractors/project-managers" element={<Navigate to="/general-contractors" replace />} />
-                <Route path="/solutions/general-contractors/operations-teams" element={<Navigate to="/general-contractors" replace />} />
+                <Route path="/solutions/business-use-cases" element={<Navigate to="/workflows#workflow-examples" replace />} />
+                <Route path="/general-contractors" element={<Navigate to="/workflows#by-function" replace />} />
+                <Route path="/solutions/general-contractors" element={<Navigate to="/workflows#by-function" replace />} />
+                <Route path="/solutions/general-contractors/business-owners" element={<Navigate to="/workflows#by-function" replace />} />
+                <Route path="/solutions/general-contractors/project-managers" element={<Navigate to="/workflows#by-function" replace />} />
+                <Route path="/solutions/general-contractors/operations-teams" element={<Navigate to="/workflows#by-function" replace />} />
                 <Route path="/solutions/ai-workflows" element={<SolutionsOverviewPage page="ai-workflows" />} />
                 <Route path="/solutions/ai-workflows/project-estimates" element={<SolutionsLayout />}>
                   <Route index element={<SolutionsLandingPage />} />
@@ -522,7 +536,7 @@ export default function App() {
                 <Route path="/solutions/how-it-works" element={<Navigate to="/jasonai/how-it-works" replace />} />
                 <Route path="/solutions/questions" element={<Navigate to="/jasonai/questions" replace />} />
                 <Route path="/solutions/privacy" element={<Navigate to="/jasonai/privacy" replace />} />
-                <Route path="/workflows" element={<MarketDetailPage page="general-contracting" />} />
+                <Route path="/workflows" element={<FullSiteFrame><ContractorWorkflowsPage /></FullSiteFrame>} />
                 <Route path="/solutions/ai-roi" element={<Navigate to="/pricing#roi-calculator" replace />} />
                 <Route path="/solutions/agentic-workflows" element={<Navigate to="/pricing#workflows" replace />} />
                 <Route path="/solutions/compare-agents" element={<Navigate to="/pricing#jasonai-pricing" replace />} />
@@ -532,7 +546,7 @@ export default function App() {
                 <Route path="/jasonai/pricing" element={<Navigate to="/pricing" replace />} />
                 <Route path="/jasonai/questions" element={<JasonAIPage page="questions" />} />
                 <Route path="/jasonai/privacy" element={<JasonAIPage page="privacy" />} />
-                <Route path="/gurge" element={<GurgePage />} />
+                <Route path="/gurge" element={<Navigate to="/v3/gurge" replace />} />
                 <Route path="/executive-strategy" element={<Navigate to="/internal" replace />} />
                 <Route path="/strategy-v1/executive-strategy" element={<Navigate to="/internal" replace />} />
                 <Route path="/internal" element={<InternalAccessGate />} />
@@ -608,8 +622,8 @@ export default function App() {
                 <Route path="/borek-g-operations" element={<BorekGProposalPage />} />
                 <Route path="/borek-g" element={<Navigate to="/borek-g-social-media-management" replace />} />
                 <Route path="/capabilities" element={<Navigate to="/growth" replace />} />
-                <Route path="/clara" element={<FullSiteFrame><ClaraProductPage /></FullSiteFrame>} />
-                <Route path="/clara/:slug" element={<Navigate to="/clara" replace />} />
+                <Route path="/clara" element={<Navigate to="/intelligence#documentation" replace />} />
+                <Route path="/clara/:slug" element={<Navigate to="/intelligence#documentation" replace />} />
                 <Route path="/kitchen" element={<Navigate to="/growth" replace />} />
                 <Route path="/kitchen/*" element={<Navigate to="/growth" replace />} />
                 <Route path="/tiers/basic-advisory" element={<TierPage />} />
@@ -664,8 +678,8 @@ export default function App() {
         </Suspense>
       </main>
       {!isIsolatedView ? <Suspense fallback={null}><Footer /></Suspense> : null}
-      {(isV1Site || isV2Site || isV3Site || isV4Site) && <VersionSwitcher />}
-      {!isLogoVerification && !isMainExperience && !isV1Site && !isV2Site && !isV3Site && !isV4Site ? <Suspense fallback={null}><AssistantWidget /></Suspense> : null}
+      {(isV1Site || isV2Site || isV3Site || isV4Site || isV5Site) && <VersionSwitcher />}
+      {!isLogoVerification && !isMainExperience && !isV1Site && !isV2Site && !isV3Site && !isV4Site && !isV5Site ? <Suspense fallback={null}><AssistantWidget /></Suspense> : null}
     </div>
   );
 }
