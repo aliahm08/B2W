@@ -55,7 +55,7 @@ This document is the stable reference for public marketing upkeep on the B2W web
 - At the top of the live/V4 hero, the header collapses to a lower, tighter centered brand pill containing only the B2W mark and `JasonAI by B2W`; the complete navigation returns as soon as the visitor begins scrolling.
 - The live and V4 header lockup pairs the B2W mark with `JasonAI by B2W` on tablet and desktop. Mobile shows the mark alone while retaining the full accessible home label.
 - The peach header CTA is `Book demo`; the hero’s primary CTA is `Book a demo`. Both open B2W’s Calendly booking link. `Try JasonAI free` remains an email contact action; `See the value` remains the secondary on-page action.
-- The live and V4 hero eyebrow is `The AI assistant for general contractors`; its primary headline is `Contractors, meet your integrated AI assistant.`, with `your` italicized. Its supporting sentence explains integration without workflow change, followed by four compact check-mark items: Find information, Create documents, Analyze project files, and Act on conversations. The previous `For free.` message is omitted.
+- The live and V4 hero eyebrow is `The AI assistant for general contractors`; its primary headline is `JasonAI catches information before it slips through.` Its supporting sentence explains integration without workflow change, followed by four compact check-mark items: Find information, Create documents, Analyze project files, and Act on conversations. The previous `For free.` message is omitted.
 - Current JasonAI framing includes search and summaries across connected project context, reviewable document drafting, and uploaded-file analysis. Human review remains required. Autonomous actions and expanded agent capabilities must be labeled as in development or future work.
 - Opening a homepage navigation menu keeps the header and menu in focus while applying a Clara-inspired blur to the page behind it.
 - The Products tray describes JasonAI as “An intelligent assistant that works through your existing communication channels.” with a “Pre-Launch Discount” offer label. Clara has no adjacent status or offer label. Hovering either product applies its established homepage product colorway to the page behind the tray.
@@ -133,6 +133,7 @@ Then:
 
 ## Revision History
 
+- **2026-08-27:** Updated the live homepage product-vision headline to `JasonAI catches information before it slips through.`
 - **2026-08-11:** Simplified the default B2W social share image to the canonical header mark beside only the `B2W-ai` wordmark.
 - **2026-08-11:** Added scroll-aware live/V4 header highlighting for Overview, Examples, Why JasonAI, and Pricing across their related subsections.
 - **2026-08-11:** Collapsed the live/V4 header over the hero to the centered brand lockup and restored the complete navigation after the hero.
